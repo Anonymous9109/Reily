@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>Log in or sign up to MyDrugs</title>
+
+  <style>
+
+    * {
+
+      box-sizing: border-box;
+
+    }
+
+    body {
+
+      margin: 0;
+
+      font-family: Arial, sans-serif;
+
+      background-color: black;
+
+      color: white;
+
+      height: 100vh;
+
+      width: 100vw;
+
+      display: flex;
+
+      justify-content: center;
+
+      align-items: center;
+
+      padding: 20px;
+
+    }
+
+    .login-box {
+
+      background: rgba(0, 0, 0, 0.75);
+
+      padding: 30px;
+
+      border-radius: 10px;
+
+      width: 100%;
+
+      max-width: 400px;
+
+      box-sizing: border-box;
+
+      display: flex;
+
+      flex-direction: column;
+
+      align-items: center;
+
+    }
+
+    .login-box h1 {
+
+      margin-bottom: 20px;
+
+      text-align: center;
+
+      color: white;
+
+    }
+
+    .login-box input {
+
+      width: 100%;
+
+      padding: 12px;
+
+      margin-bottom: 12px;
+
+      border: none;
+
+      border-radius: 6px;
+
+      font-size: 16px;
+
+    }
+
+    .login-box button {
+
+      width: 48%;
+
+      padding: 10px;
+
+      background-color: #e50914;
+
+      border: none;
+
+      color: white;
+
+      font-size: 16px;
+
+      border-radius: 4px;
+
+      cursor: pointer;
+
+      margin-top: 10px;
+
+    }
+
+    .login-box button:hover {
+
+      background-color: #f40612;
+
+    }
+
+    .button-container {
+
+      display: flex;
+
+      justify-content: space-between;
+
+      gap: 4%;
+
+      width: 100%;
+
+    }
+
+    #message {
+
+      color: #ff8080;
+
+      font-size: 14px;
+
+      margin-top: 10px;
+
+      min-height: 18px;
+
+      text-align: center;
+
+    }
+
+    .note {
+
+      color: red;
+
+      font-size: 13px;
+
+      margin-top: 15px;
+
+      text-align: center;
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+  <div class="login-box">
+
+    <h1>Welcome to MyDrugs</h1>
+
+    <input type="email" id="email" placeholder="Email" />
+
+    <input type="password" id="password" placeholder="Password (min 6 chars)" />
+
+    <div class="button-container">
+
+      <button onclick="signIn()">Log In</button>
+
+      <button onclick="signUp()">Sign Up</button>
+
+    </div>
+
+    <div id="message"></div>
+
+    <div class="note">
+
+      *Remember that you need to contact us to change your password — you certainly cannot change it on your own for security reasons.
+
+    </div>
+
+  </div>
+
+  <script type="module">
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+
+    import {
+
+      getAuth,
+
+      signInWithEmailAndPassword,
+
+      createUserWithEmailAndPassword
+
+    } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+
+    const firebaseConfig = {
+
+      apiKey: "AIzaSyCExki28m1NNepVQEIjmcQzR8z8O68LqIc",
+
+      authDomain: "rinolski-notifications.firebaseapp.com",
+
+      databaseURL: "https://rinolski-notifications-default-rtdb.firebaseio.com",
+
+      projectId: "rinolski-notifications",
+
+      storageBucket: "rinolski-notifications.firebasestorage.app",
+
+      messagingSenderId: "355554579853",
+
+      appId: "1:355554579853:web:3caa961653c0cdc0a359c4",
+
+      measurementId: "G-WZ84970GST"
+
+    };
+
+    const app = initializeApp(firebaseConfig);
+
+    const auth = getAuth(app);
+
+    const messageBox = document.getElementById("message");
+
+    function clearMsg() {
+
+      messageBox.textContent = "";
+
+    }
+
+    window.signIn = async function () {
+
+      clearMsg();
+
+      const email = document.getElementById("email").value.trim();
+
+      const password = document.getElementById("password").value;
+
+      if (!email || password.length < 6) {
+
+        messageBox.textContent = "Enter a valid email and a password of at least 6 characters.";
+
+        return;
+
+      }
+
+      try {
+
+        await signInWithEmailAndPassword(auth, email, password);
+
+        window.location.href = "Home.html";
+
+      } catch (err) {
+
+        if (err.code === "auth/wrong-password") {
+
+          messageBox.textContent = "Incorrect password. Please try again.";
+
+        } else if (err.code === "auth/user-not-found") {
+
+          messageBox.textContent = "No account found with this email.";
+
+        } else {
+
+          messageBox.textContent = "Incorrect password or invalid login credentials.";
+
+        }
+
+      }
+
+    };
+
+    window.signUp = async function () {
+
+      clearMsg();
+
+      const email = document.getElementById("email").value.trim();
+
+      const password = document.getElementById("password").value;
+
+      if (!email || password.length < 6) {
+
+        messageBox.textContent = "Enter a valid email and a password of at least 6 characters.";
+
+        return;
+
+      }
+
+      try {
+
+        await createUserWithEmailAndPassword(auth, email, password);
+
+        window.location.href = "Home.html";
+
+      } catch (err) {
+
+        if (err.code === "auth/email-already-in-use") {
+
+          messageBox.textContent = "This email is already registered. Please log in.";
+
+        } else {
+
+          messageBox.textContent = "Signup error: " + err.message;
+
+        }
+
+      }
+
+    };
+
+  </script>
+
+</body>
+
+</html>

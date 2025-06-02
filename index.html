@@ -1,1 +1,160 @@
-<h1>hi</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sign In - Rinolski</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: black;
+      color: white;
+      height: 100%;
+    }
+    html, body {
+      height: 100%;
+      overflow: hidden;
+    }
+    .auth-container {
+      background: rgba(0, 0, 0, 0.8);
+      width: 100%;
+      height: 100%;
+      padding: 10px;
+      box-sizing: border-box;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .auth-title {
+      font-size: 50px;
+      font-weight: bold;
+      color: white;
+      text-transform: uppercase;
+      margin-bottom: 5px;
+      letter-spacing: 2px;
+    }
+    .auth-subtitle {
+      font-size: 28px;
+      font-weight: normal;
+      margin-bottom: 20px;
+    }
+    .auth-container h2 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    .auth-input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+    }
+    .auth-input::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+    .auth-button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 5px;
+      font-size: 18px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .sign-in {
+      background: #e50914;
+      color: white;
+    }
+    .sign-in:hover {
+      background: #b20710;
+    }
+    .sign-up {
+      background: #333;
+      color: white;
+    }
+    .sign-up:hover {
+      background: #555;
+    }
+    .logged-in {
+      text-align: center;
+      color: white;
+      font-size: 20px;
+    }
+  </style>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCExki28m1NNepVQEIjmcQzR8z8O68LqIc",
+      authDomain: "rinolski-notifications.firebaseapp.com",
+      projectId: "rinolski-notifications",
+      storageBucket: "rinolski-notifications.appspot.com",
+      messagingSenderId: "355554579853",
+      appId: "1:355554579853:web:3caa961653c0cdc0a359c4",
+      measurementId: "G-WZ84970GST"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    window.signInOrSignUp = () => {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      signInWithEmailAndPassword(auth, email, password)
+        .then(() => {
+          localStorage.setItem("email", email);
+          window.location.reload();
+        })
+        .catch(() => {
+          createUserWithEmailAndPassword(auth, email, password)
+            .then(() => {
+              localStorage.setItem("email", email);
+              window.location.reload();
+            })
+            .catch(() => {
+              alert("Error: Could not sign up or sign in. Please try again.");
+            });
+        });
+    };
+
+    window.onload = () => {
+      const email = localStorage.getItem("email");
+      if (email) {
+        document.getElementById("auth-container").innerHTML = `
+          <div class="logged-in">
+            Logged in as: ${email}<br><br>
+            <button class="auth-button sign-up" onclick="signOutUser()">Sign Out</button>
+          </div>
+        `;
+      }
+    };
+
+    window.signOutUser = () => {
+      signOut(auth).then(() => {
+        localStorage.removeItem("email");
+        window.location.reload();
+      }).catch((error) => {
+        console.error("Sign out error:", error);
+      });
+    };
+  </script>
+</head>
+<body>
+  <div class="auth-container" id="auth-container">
+    <h1 class="auth-title"></h1>
+    <h2 class="auth-subtitle">Sign In</h2>
+    <input type="email" id="email" class="auth-input" placeholder="Email">
+    <input type="password" id="password" class="auth-input" placeholder="Password">
+    <button class="auth-button sign-in" onclick="signInOrSignUp()">Sign In / Sign Up</button>
+  </div>
+</body>
+</html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>Rinolski Login Status</title>
+
+  <style>
+
+    body {
+
+      background-color: #000;
+
+      color: #fff;
+
+      font-family: Arial, sans-serif;
+
+      margin: 0;
+
+      padding: 20px;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+    
+
+    }
+
+    #authStatus {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 15px;
+
+    }
+
+    a.login-link {
+
+      padding: 10px 20px;
+
+      background-color: #e50914;
+
+      color: #fff;
+
+      text-decoration: none;
+
+      border-radius: 5px;
+
+      font-size: 1rem;
+
+      font-weight: bold;
+
+      display: inline-block;
+
+      transition: background-color 0.3s ease;
+
+    }
+
+    a.login-link:hover {
+
+      background-color: #f40612;
+
+    }
+
+    img.profile-pic {
+
+      width: 50px;
+
+      height: 50px;
+
+      border-radius: 50%;
+
+      border: 2px solid #e50914;
+
+      object-fit: cover;
+
+    }
+
+    span.username {
+
+      font-size: 1.2rem;
+
+      font-weight: bold;
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+  <div id="authStatus">Checking login...</div>
+
+  <script type="module">
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+    const firebaseConfig = {
+
+      apiKey: "AIzaSyCExki28m1NNepVQEIjmcQzR8z8O68LqIc",
+
+      authDomain: "rinolski-notifications.firebaseapp.com",
+
+      projectId: "rinolski-notifications",
+
+      storageBucket: "rinolski-notifications.appspot.com",
+
+      messagingSenderId: "355554579853",
+
+      appId: "1:355554579853:web:3caa961653c0cdc0a359c4",
+
+      measurementId: "G-WZ84970GST"
+
+    };
+
+    const app = initializeApp(firebaseConfig);
+
+    const auth = getAuth(app);
+
+    const authStatus = document.getElementById("authStatus");
+
+    onAuthStateChanged(auth, user => {
+
+      authStatus.innerHTML = ''; // Clear current status
+
+      if (user) {
+
+        const username = user.email?.split('@')[0] || 'User';
+
+        const img = document.createElement("img");
+
+        img.src = user.photoURL || "https://via.placeholder.com/50";
+
+        img.alt = "Profile Picture";
+
+        img.className = "profile-pic";
+
+        const span = document.createElement("span");
+
+        span.textContent = username;
+
+        span.className = "username";
+
+        authStatus.appendChild(img);
+
+        authStatus.appendChild(span);
+
+      } else {
+
+        const loginLink = document.createElement("a");
+
+        loginLink.textContent = "Please log in or sign up";
+
+        loginLink.href = "https://rinolski.neocities.org/watch-history.html";
+
+        loginLink.target = "_blank";
+
+        loginLink.className = "login-link";
+
+        authStatus.appendChild(loginLink);
+
+      }
+
+    });
+
+  </script>
+
+</body>
+
+</html>

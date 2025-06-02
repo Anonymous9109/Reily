@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8" />
+
+  <title>Rinolski</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+
+    :root {
+
+      --bg-color: black;
+
+      --accent: #e50914;
+
+      --text: #ffffff;
+
+      --input-bg: #333;
+
+      --error-color: #ff4c4c;
+
+    }
+
+    body {
+
+      margin: 0;
+
+      font-family: 'Segoe UI', sans-serif;
+
+      background-color: var(--bg-color);
+
+      color: var(--text);
+
+      display: flex;
+
+      justify-content: center;
+
+      align-items: center;
+
+      min-height: 100vh;
+
+    }
+
+    .container {
+
+      width: 100%;
+
+      max-width: 500px;
+
+      padding: 20px;
+
+    }
+
+    h2 {
+
+      color: white;
+
+      text-align: center;
+
+      margin-bottom: 20px;
+
+    }
+
+    input {
+
+      width: 95%;
+
+      padding: 12px;
+
+      margin: 8px 0 4px;
+
+      border: none;
+
+      border-radius: 5px;
+
+      background-color: var(--input-bg);
+
+      color: var(--text);
+
+    }
+
+    .error-message {
+
+      color: var(--error-color);
+
+      font-size: 0.9em;
+
+      margin-bottom: 8px;
+
+    }
+
+    button {
+
+      width: 100%;
+
+      padding: 12px;
+
+      margin: 10px 0;
+
+      background-color: var(--accent);
+
+      color: white;
+
+      border: none;
+
+      border-radius: 5px;
+
+      font-weight: bold;
+
+      cursor: pointer;
+
+      transition: 0.2s;
+
+    }
+
+    button:hover {
+
+      background-color: #bf0810;
+
+    }
+
+    #messages {
+
+      height: 435px;
+
+      overflow-y: auto;
+
+      background-color: #1f1f1f;
+
+      border-radius: 5px;
+
+      padding: 10px;
+
+      margin-bottom: 10px;
+
+    }
+
+    #messages div {
+
+      padding: 6px 0;
+
+      border-bottom: 1px solid #333;
+
+    }
+
+    @media screen and (max-width: 600px) {
+
+      .container {
+
+        padding: 10px;
+
+      }
+
+    }
+
+  </style>
+
+  <script type="module">
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+
+    import {
+
+      getAuth, onAuthStateChanged,
+
+      signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut
+
+    } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+
+    import {
+
+      getDatabase, ref, push, onChildAdded,
+
+      query, orderByChild, limitToLast
+
+    } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
+
+    const firebaseConfig = {
+
+      apiKey: "AIzaSyCExki28m1NNepVQEIjmcQzR8z8O68LqIc",
+
+      authDomain: "rinolski-notifications.firebaseapp.com",
+
+      databaseURL: "https://rinolski-notifications-default-rtdb.firebaseio.com",
+
+      projectId: "rinolski-notifications",
+
+      storageBucket: "rinolski-notifications.appspot.com",
+
+      messagingSenderId: "355554579853",
+
+      appId: "1:355554579853:web:3caa961653c0cdc0a359c4",
+
+      measurementId: "G-WZ84970GST"
+
+    };
+
+    const app = initializeApp(firebaseConfig);
+
+    const auth = getAuth(app);
+
+    const db = getDatabase(app);
+
+    const authSection = document.getElementById('auth-section');
+
+    const chatSection = document.getElementById('chat-section');
+
+    const messagesDiv = document.getElementById('messages');
+
+    onAuthStateChanged(auth, user => {
+
+      if (user) {
+
+        authSection.style.display = 'none';
+
+        chatSection.style.display = 'block';
+
+        loadMessages();
+
+      } else {
+
+        authSection.style.display = 'block';
+
+        chatSection.style.display = 'none';
+
+      }
+
+    });
+
+    function showError(id, message) {
+
+      document.getElementById(id).innerText = message;
+
+    }
+
+    function clearErrors() {
+
+      showError("emailError", "");
+
+      showError("passwordError", "");
+
+    }
+
+    window.login = () => {
+
+      clearErrors();
+
+      const email = document.getElementById('email').value.trim();
+
+      const password = document.getElementById('password').value.trim();
+
+      signInWithEmailAndPassword(auth, email, password).catch(e => {
+
+        switch (e.code) {
+
+          case 'auth/invalid-login-credentials':
+
+            showError("passwordError", "Incorrect email or password.");
+
+            break;
+
+          case 'auth/user-disabled':
+
+            showError("emailError", "Your account has been banned.");
+
+            break;
+
+          case 'auth/invalid-email':
+
+            showError("emailError", "Invalid input. Please enter a valid email.");
+
+            break;
+
+          case 'auth/missing-password':
+
+            showError("passwordError", "Please type your password.");
+
+            break;
+
+          default:
+
+            showError("passwordError", e.message);
+
+        }
+
+      });
+
+    };
+
+    window.signup = () => {
+
+      clearErrors();
+
+      const email = document.getElementById('email').value.trim();
+
+      const password = document.getElementById('password').value.trim();
+
+      createUserWithEmailAndPassword(auth, email, password).catch(e => {
+
+        switch (e.code) {
+
+          case 'auth/email-already-in-use':
+
+            showError("emailError", "Email is already in use. Please log in or use another email to sign up.");
+
+            break;
+
+          case 'auth/invalid-email':
+
+            showError("emailError", "Invalid input. Please enter a valid email.");
+
+            break;
+
+          case 'auth/weak-password':
+
+            showError("passwordError", "Password should be at least 6 characters.");
+
+            break;
+
+          case 'auth/missing-password':
+
+            showError("passwordError", "Please type your password.");
+
+            break;
+
+          default:
+
+            showError("emailError", e.message);
+
+        }
+
+      });
+
+    };
+
+    window.logout = () => signOut(auth);
+
+    window.sendMessage = () => {
+
+      const input = document.getElementById('messageInput');
+
+      const message = input.value.trim();
+
+      const user = auth.currentUser;
+
+      if (message && user) {
+
+        push(ref(db, 'messages'), {
+
+          name: user.email,
+
+          text: message,
+
+          timestamp: Date.now()
+
+        });
+
+        input.value = '';
+
+      }
+
+    };
+
+    function loadMessages() {
+
+      messagesDiv.innerHTML = '';
+
+      const msgRef = query(ref(db, 'messages'), orderByChild('timestamp'), limitToLast(100));
+
+      onChildAdded(msgRef, snapshot => {
+
+        const msg = snapshot.val();
+
+        const msgEl = document.createElement('div');
+
+        const date = new Date(msg.timestamp);
+
+        const formattedTime = date.toLocaleString();
+
+        msgEl.innerHTML = `${msg.name}: ${msg.text} <span style="font-size: 12px; color: #bbb;">(${formattedTime})</span>`;
+
+        messagesDiv.appendChild(msgEl);
+
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+      });
+
+    }
+
+  </script>
+
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div id="auth-section">
+
+      <h2>Rinolski Login</h2>
+
+      <input type="email" id="email" placeholder="Email" />
+
+      <div id="emailError" class="error-message"></div>
+
+      <input type="password" id="password" placeholder="Password" />
+
+      <div id="passwordError" class="error-message"></div>
+
+      <button onclick="login()">Login</button>
+
+      <button onclick="signup()">Sign Up</button>
+
+    </div>
+
+    <div id="chat-section" style="display: none;">
+
+      <h2>Rinolski</h2>
+
+      <div id="messages"></div>
+
+      <input type="text" id="messageInput" placeholder="Type your message..." />
+
+      <button onclick="sendMessage()">Send</button>
+
+      <button onclick="logout()">Logout</button>
+
+    </div>
+
+  </div>
+
+</body>
+
+</html>

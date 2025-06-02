@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>Rinolski</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+
+  <style>
+
+    body {
+
+      font-family: 'Roboto', sans-serif;
+
+      background-color: black;
+
+      color: #fff;
+
+      margin: 0;
+
+      padding: 0;
+
+    }
+
+    header {
+
+      background-color: black;
+
+      padding: 1rem;
+
+      text-align: center;
+
+      font-size: 1.5rem;
+
+      font-weight: bold;
+
+    }
+
+    .container {
+
+      max-width: 800px;
+
+      margin: 2rem auto;
+
+      padding: 1rem;
+
+      background: black;
+
+      border-radius: 8px;
+
+    }
+
+    .image-post {
+
+      margin-bottom: 2rem;
+
+    }
+
+    .image-post img {
+
+      max-width: 100%;
+
+      border-radius: 8px;
+
+      cursor: pointer;
+
+      transition: transform 0.3s ease;
+
+    }
+
+    .image-post img.fullscreen {
+
+      width: 100vw;
+
+      height: 100vh;
+
+      object-fit: contain;
+
+      position: fixed;
+
+      top: 0;
+
+      left: 0;
+
+      z-index: 1000;
+
+      background-color: rgba(0,0,0,0.9);
+
+      animation: fadeZoomIn 0.5s ease forwards;
+
+    }
+
+    .image-post img.fade-out {
+
+      animation: fadeZoomOut 0.4s ease forwards;
+
+    }
+
+    .image-post .title {
+
+      text-align: center;
+
+      margin-top: 10px;
+
+      font-size: 1.2rem;
+
+      color: white;
+
+    }
+
+    .comment-toggle {
+
+      text-align: center;
+
+      margin: 10px 0;
+
+    }
+
+    .comment-toggle button {
+
+      padding: 0.4rem 0.8rem;
+
+      background: #4da6ff;
+
+      border: none;
+
+      color: white;
+
+      border-radius: 4px;
+
+      cursor: pointer;
+
+    }
+
+    .comments-wrapper {
+
+      display: none;
+
+      margin-top: 1rem;
+
+    }
+
+    .comment {
+
+      background: white;
+
+      padding: 0.5rem;
+
+      border-radius: 5px;
+
+      margin-bottom: 0.5rem;
+
+      color: black;
+
+    }
+
+    .form-group {
+
+      margin-bottom: 1rem;
+
+    }
+
+    input, textarea {
+
+      width: 100%;
+
+      padding: 0.5rem;
+
+      border: none;
+
+      border-radius: 4px;
+
+    }
+
+    button {
+
+      padding: 0.5rem 1rem;
+
+      background: cyan;
+
+      border: none;
+
+      border-radius: 4px;
+
+      cursor: pointer;
+
+    }
+
+    .error, .info {
+
+      margin: 1rem 0;
+
+      padding: 0.5rem;
+
+      border-radius: 4px;
+
+    }
+
+    .error { background: #ff4d4d; color: white; }
+
+    .info { background: #4da6ff; color: white; }
+
+    #auth { text-align: center; margin-top: 2rem; }
+
+    #comment-section { display: none; }
+
+    @keyframes fadeZoomIn {
+
+      0% { transform: scale(0.95); opacity: 0; }
+
+      100% { transform: scale(1); opacity: 1; }
+
+    }
+
+    @keyframes fadeZoomOut {
+
+      0% { transform: scale(1); opacity: 1; }
+
+      100% { transform: scale(0.95); opacity: 0; }
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+  <header>Rinolski</header>
+
+  <div id="auth">
+
+    <div id="user-info" style="display: none;"></div>
+
+    <div id="auth-forms">
+
+      <div class="form-group">
+
+        <input type="email" id="email" placeholder="Email" />
+
+      </div>
+
+      <div class="form-group">
+
+        <input type="password" id="password" placeholder="Password" />
+
+      </div>
+
+      <button onclick="login()">Login</button>
+
+      <button onclick="signup()">Sign Up</button>
+
+      <div id="auth-msg"></div>
+
+    </div>
+
+  </div>
+
+  <div class="container" id="wire" style="display: none;"></div>
+
+  <script type="module">
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+
+    import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+
+    import { getDatabase, ref, push, onChildAdded } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-database.js";
+
+    const firebaseConfig = {
+
+      apiKey: "AIzaSyCExki28m1NNepVQEIjmcQzR8z8O68LqIc",
+
+      authDomain: "rinolski-notifications.firebaseapp.com",
+
+      databaseURL: "https://rinolski-notifications-default-rtdb.firebaseio.com",
+
+      projectId: "rinolski-notifications",
+
+      storageBucket: "rinolski-notifications.appspot.com",
+
+      messagingSenderId: "355554579853",
+
+      appId: "1:355554579853:web:3caa961653c0cdc0a359c4",
+
+      measurementId: "G-WZ84970GST"
+
+    };
+
+    const app = initializeApp(firebaseConfig);
+
+    const auth = getAuth(app);
+
+    const db = getDatabase(app);
+
+    const wire = document.getElementById("wire");
+
+    const authMsg = document.getElementById("auth-msg");
+
+    const authForms = document.getElementById("auth-forms");
+
+    const userInfo = document.getElementById("user-info");
+
+    const images = [
+{ id: "post4", url: "https://rinolski.neocities.org/Moana.jpg", title: "Streaming now on Rinolski" },
+      { id: "post3", url: "https://rinolski.neocities.org/GravityFalls.jpg", title: "Coming soon : Jun 1 2025" },
+{ id: "post2", url: "https://rinolski.neocities.org/8664365464335.jpg", title: "New Game" }
+
+
+    ];
+
+    function renderPosts(user) {
+
+      wire.innerHTML = "";
+
+      images.forEach(image => {
+
+        const post = document.createElement("div");
+
+        post.className = "image-post";
+
+        post.innerHTML = `
+
+          <img src="${image.url}" alt="${image.title}" onclick="toggleFullScreen(this)" />
+
+          <div class="title">${image.title}</div>
+
+          <div class="comment-toggle">
+
+            <button onclick="toggleComments('${image.id}')">Show/Hide Comments</button>
+
+          </div>
+
+          <div class="comments-wrapper" id="wrapper-${image.id}">
+
+            <div class="comments" id="comments-${image.id}"></div>
+
+            <div class="form-group">
+
+              <textarea id="comment-${image.id}" placeholder="Write a comment..."></textarea>
+
+              <button onclick="submitComment('${image.id}')">Post</button>
+
+            </div>
+
+          </div>
+
+        `;
+
+        wire.appendChild(post);
+
+        const commentsRef = ref(db, `comments/${image.id}`);
+
+        onChildAdded(commentsRef, (snapshot) => {
+
+          const commentData = snapshot.val();
+
+          const commentEl = document.createElement("div");
+
+          commentEl.className = "comment";
+
+          const commentDate = new Date(commentData.timestamp).toLocaleString();
+
+          const emailWithoutDomain = commentData.email.split('@')[0];
+
+          commentEl.innerHTML = `${emailWithoutDomain} <small>(${commentDate})</small>: ${commentData.text}`;
+
+          document.getElementById(`comments-${image.id}`).appendChild(commentEl);
+
+        });
+
+      });
+
+    }
+
+    window.toggleFullScreen = function(img) {
+
+      if (!img.classList.contains("fullscreen")) {
+
+        img.classList.add("fullscreen");
+
+      } else {
+
+        img.classList.add("fade-out");
+
+        img.addEventListener("animationend", function handler() {
+
+          img.classList.remove("fullscreen", "fade-out");
+
+          img.removeEventListener("animationend", handler);
+
+        });
+
+      }
+
+    }
+
+    window.toggleComments = function(postId) {
+
+      const wrapper = document.getElementById(`wrapper-${postId}`);
+
+      wrapper.style.display = wrapper.style.display === "none" || wrapper.style.display === "" ? "block" : "none";
+
+    }
+
+    window.submitComment = function(imageId) {
+
+      const textArea = document.getElementById(`comment-${imageId}`);
+
+      const text = textArea.value.trim();
+
+      if (!text) return;
+
+      const user = auth.currentUser;
+
+      if (user) {
+
+        const commentsRef = ref(db, `comments/${imageId}`);
+
+        const timestamp = Date.now();
+
+        push(commentsRef, {
+
+          text,
+
+          email: user.email,
+
+          timestamp
+
+        });
+
+        textArea.value = "";
+
+      }
+
+    }
+
+    window.signup = function() {
+
+      const email = document.getElementById("email").value;
+
+      const password = document.getElementById("password").value;
+
+      createUserWithEmailAndPassword(auth, email, password)
+
+        .then(() => authMsg.innerHTML = "")
+
+        .catch(err => {
+
+          let msg = "An error occurred.";
+
+          switch (err.code) {
+
+            case "auth/email-already-in-use":
+
+              msg = "email already in use"; break;
+
+            case "auth/invalid-email":
+
+              msg = "you need to enter a valid email"; break;
+
+            case "auth/weak-password":
+
+              msg = "password should be at least 6 characters"; break;
+
+          }
+
+          authMsg.innerHTML = `<div class='error'>${msg}</div>`;
+
+        });
+
+    }
+
+    window.login = function() {
+
+      const email = document.getElementById("email").value;
+
+      const password = document.getElementById("password").value;
+
+      signInWithEmailAndPassword(auth, email, password)
+
+        .then(() => authMsg.innerHTML = "")
+
+        .catch(err => {
+
+          let msg = "wrong password";
+
+          switch (err.code) {
+
+            case "auth/wrong-password":
+
+              msg = "wrong password"; break;
+
+            case "auth/user-not-found":
+
+              msg = "account not found please sign up"; break;
+
+            case "auth/invalid-email":
+
+              msg = "you need to enter a valid email"; break;
+
+            case "auth/too-many-requests":
+
+              msg = "too many attempts, try again later"; break;
+
+          }
+
+          authMsg.innerHTML = `<div class='error'>${msg}</div>`;
+
+        });
+
+    }
+
+    onAuthStateChanged(auth, user => {
+
+      if (user) {
+
+        authForms.style.display = "none";
+
+        userInfo.style.display = "block";
+
+        userInfo.innerHTML = `Welcome, ${user.email} <button onclick="logout()">Logout</button>`;
+
+        wire.style.display = "block";
+
+        renderPosts(user);
+
+      } else {
+
+        wire.style.display = "none";
+
+        userInfo.style.display = "none";
+
+        authForms.style.display = "block";
+
+      }
+
+    });
+
+    window.logout = function() {
+
+      signOut(auth);
+
+    }
+
+  </script>
+
+</body>
+
+</html>

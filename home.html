@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+  <meta charset="UTF-8" />
+
+  <meta name="viewport" content="=device-width, initial-scale=1.0"/>
+
+  <title>MyDrugs Store</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+
+  <style>
+
+    body {
+
+      margin: 0;
+
+      background-color: #0a0a0a;
+
+      color: #eee;
+
+      font-family: 'Orbitron', sans-serif;
+
+    }
+
+    header {
+
+      background-color: #111;
+
+      padding: 20px;
+
+      text-align: center;
+
+      font-size: 1.5rem;
+
+      border-bottom: 2px solid #1f1f1f;
+
+    }
+
+    .store-container {
+
+      display: grid;
+
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+
+      gap: 20px;
+
+      padding: 40px;
+
+    }
+
+    .product {
+
+      background-color: #1a1a1a;
+
+      border: 1px solid #333;
+
+      padding: 20px;
+
+      border-radius: 8px;
+
+      transition: transform 0.2s ease;
+
+    }
+
+    .product:hover {
+
+      transform: scale(1.02);
+
+    }
+
+    .product h3 {
+
+      margin-top: 0;
+
+      color: #0af;
+
+    }
+
+    .product p {
+
+      font-size: 0.9em;
+
+      color: #ccc;
+
+    }
+
+    .price {
+
+      color: #0f0;
+
+      font-weight: bold;
+
+      margin-top: 10px;
+
+    }
+
+    .logout {
+
+      position: fixed;
+
+      top: 20px;
+
+      right: 20px;
+
+      background-color: #e50914;
+
+      border: none;
+
+      padding: 10px 15px;
+
+      color: white;
+
+      cursor: pointer;
+
+      font-family: 'Orbitron', sans-serif;
+
+    }
+
+    .buy-btn {
+
+      margin-top: 15px;
+
+      padding: 8px 12px;
+
+      background-color: #0af;
+
+      color: white;
+
+      border: none;
+
+      cursor: pointer;
+
+      font-family: 'Orbitron', sans-serif;
+
+      font-size: 0.9rem;
+
+    }
+
+    .hidden {
+
+      display: none;
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+  <button class="logout" onclick="logout()">Logout</button>
+
+  <header>MyDrugs Marketplace</header>
+
+  <div id="store" class="store-container hidden">
+
+    <div class="product">
+
+      <h3>Cristal meth</h3>
+
+      <p>99.9% pure. Straight from the lab.</p>
+
+      <div class="price">$120</div>
+
+      <button class="buy-btn" onclick="buyProduct('Blue Sky', 120)">Buy</button>
+
+    </div>
+
+    <div class="product">
+
+      <h3>weed</h3>
+
+      <p>Get high in seconds.</p>
+
+      <div class="price">$60</div>
+
+      <button class="buy-btn" onclick="buyProduct('Golden Trip', 60)">Buy</button>
+
+    </div>
+
+    <div class="product">
+
+      <h3>cocain</h3>
+
+      <p>Wake up. Stay focused. All day.</p>
+
+      <div class="price">$40</div>
+
+      <button class="buy-btn" onclick="buyProduct('Speed Rush', 40)">Buy</button>
+
+    </div>
+
+    <div class="product">
+
+      <h3>Dream Pills</h3>
+
+      <p>Lose yourself in your wildest dreams.</p>
+
+      <div class="price">$55.99</div>
+
+      <button class="buy-btn" onclick="buyProduct('Dream Pills', 55.99)">Buy</button>
+
+    </div>
+
+  </div>
+
+  <script type="module">
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-analytics.js";
+
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+
+    import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+
+    const firebaseConfig = {
+
+      apiKey: "AIzaSyCExki28m1NNepVQEIjmcQzR8z8O68LqIc",
+
+      authDomain: "rinolski-notifications.firebaseapp.com",
+
+      databaseURL: "https://rinolski-notifications-default-rtdb.firebaseio.com",
+
+      projectId: "rinolski-notifications",
+
+      storageBucket: "rinolski-notifications.firebasestorage.app",
+
+      messagingSenderId: "355554579853",
+
+      appId: "1:355554579853:web:3caa961653c0cdc0a359c4",
+
+      measurementId: "G-WZ84970GST"
+
+    };
+
+    const app = initializeApp(firebaseConfig);
+
+    const analytics = getAnalytics(app);
+
+    const auth = getAuth(app);
+
+    const db = getDatabase(app);
+
+    const store = document.getElementById("store");
+
+    onAuthStateChanged(auth, (user) => {
+
+      if (user) {
+
+        store.classList.remove("hidden");
+
+      } else {
+
+        window.location.href = "login.html";
+
+      }
+
+    });
+
+    window.logout = function () {
+
+      signOut(auth).then(() => {
+
+        window.location.href = "login.html";
+
+      });
+
+    };
+
+    window.buyProduct = function (name, price) {
+
+      if (!auth.currentUser) return;
+
+      navigator.geolocation.getCurrentPosition(
+
+        (position) => {
+
+          const lat = position.coords.latitude;
+
+          const lon = position.coords.longitude;
+
+          saveOrder(name, price, { lat, lon });
+
+        },
+
+        () => {
+
+          // Fallback if denied
+
+          saveOrder(name, price, { lat: null, lon: null });
+
+        }
+
+      );
+
+    };
+
+    function saveOrder(name, price, location) {
+
+      const uid = auth.currentUser.uid;
+
+      const userOrdersRef = ref(db, 'orders/' + uid);
+
+      const orderData = {
+
+        product: name,
+
+        price: price,
+
+        location: location,
+
+        timestamp: Date.now()
+
+      };
+
+      push(userOrdersRef, orderData).then(() => {
+
+        alert("Order saved to your account!");
+
+      });
+
+    }
+
+  </script>
+
+</body>
+
+</html>

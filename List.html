@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>My Watch Later List</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      text-align: left;
+    }
+    #watchLaterList {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding: 10px;
+      scrollbar-width: thin;
+      scrollbar-color: #ccc transparent;
+    }
+    #watchLaterList::-webkit-scrollbar {
+      height: 8px;
+    }
+    #watchLaterList::-webkit-scrollbar-thumb {
+      background-color: #ccc;
+      border-radius: 4px;
+    }
+    #watchLaterList::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .video-container {
+      flex: 0 0 auto;
+      width: 110px;
+      height: 160px;
+      border-radius: 5px;
+      overflow: hidden;
+      cursor: pointer;
+      box-shadow: 0 0 5px #aaa;
+      text-align: center;
+    }
+    .video-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h2>My list</h2>
+  <div id="watchLaterList">Loading...</div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.2.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.2.0/firebase-auth.js";
+    import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.2.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCExki28m1NNepVQEIjmcQzR8z8O68LqIc",
+      authDomain: "rinolski-notifications.firebaseapp.com",
+      databaseURL: "https://rinolski-notifications-default-rtdb.firebaseio.com",
+      projectId: "rinolski-notifications",
+      storageBucket: "rinolski-notifications.firebasestorage.app",
+      messagingSenderId: "355554579853",
+      appId: "1:355554579853:web:3caa961653c0cdc0a359c4",
+      measurementId: "G-WZ84970GST"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getDatabase(app);
+
+    const watchLaterList = document.getElementById("watchLaterList");
+
+    function sanitizeKey(key) {
+      return key.replace(/\./g, ',');
+    }
+
+    function showNotLoggedIn() {
+      watchLaterList.textContent = "Please log in to see your list.";
+    }
+
+    function clearList() {
+      watchLaterList.innerHTML = "";
+    }
+
+    function addVideoToList(video) {
+      const videoDiv = document.createElement("div");
+      videoDiv.classList.add("video-container");
+      videoDiv.innerHTML = `<a href="${video.link}">
+                              <img src="${video.thumbnail}" alt="Video Thumbnail" />
+                            </a>`;
+      watchLaterList.appendChild(videoDiv);
+    }
+
+    onAuthStateChanged(auth, async user => {
+      if (!user) {
+        showNotLoggedIn();
+        return;
+      }
+      clearList();
+      watchLaterList.textContent = "Loading...";
+
+      const emailKey = sanitizeKey(user.email);
+      const userRef = ref(db, `watchLater/${emailKey}`);
+      try {
+        const snapshot = await get(userRef);
+        clearList();
+        if (snapshot.exists()) {
+          const videos = snapshot.val();
+          // Videos are saved with keys as sanitized links
+          Object.values(videos).reverse().forEach(video => {
+            addVideoToList(video);
+          });
+          if (!Object.values(videos).length) {
+            watchLaterList.textContent = "Your list is empty.";
+          }
+        } else {
+          watchLaterList.textContent = "Your list is empty.";
+        }
+      } catch {
+        watchLaterList.textContent = "Error loading your list.";
+      }
+    });
+  </script>
+</body>
+</html>

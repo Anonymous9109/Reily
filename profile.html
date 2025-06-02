@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <title>Rinolski - Upload PFP</title>
+
+  <style>
+
+    body {
+
+      margin: 0;
+
+      font-family: 'Helvetica Neue', sans-serif;
+
+      background-color: #141414;
+
+      color: #fff;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      height: 100vh;
+
+    }
+
+    #container {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 20px;
+
+      background-color: #1f1f1f;
+
+      padding: 30px;
+
+      border-radius: 12px;
+
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+
+    }
+
+    #preview {
+
+      width: 100px;
+
+      height: 100px;
+
+      border-radius: 50%;
+
+      object-fit: cover;
+
+      border: 2px solid #e50914;
+
+      display: none;
+
+    }
+
+    #info {
+
+      display: flex;
+
+      flex-direction: column;
+
+      gap: 10px;
+
+    }
+
+    #email {
+
+      font-size: 1.3rem;
+
+      font-weight: bold;
+
+    }
+
+    button {
+
+      padding: 10px 20px;
+
+      background-color: #e50914;
+
+      border: none;
+
+      color: white;
+
+      font-size: 1rem;
+
+      cursor: pointer;
+
+      transition: background 0.3s ease;
+
+      border-radius: 5px;
+
+    }
+
+    button:hover {
+
+      background-color: #f40612;
+
+    }
+
+    #status {
+
+      text-align: center;
+
+      color: #bbb;
+
+      font-size: 1.2rem;
+
+    }
+
+    #updateMessage {
+
+      margin-top: 10px;
+
+      color: #00FF00;
+
+      font-size: 1rem;
+
+      display: none;
+
+    }
+
+    #errorMessage {
+
+      margin-top: 10px;
+
+      color: #FF0000;
+
+      font-size: 1rem;
+
+      display: none;
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <div id="status">Checking login status...</div>
+
+  <div id="container" style="display:none;">
+
+    <img id="preview" alt="Profile Picture">
+
+    <div id="info">
+
+      <div id="email"></div>
+
+      <button id="uploadBtn">Upload New Profile Picture</button>
+
+      <div id="updateMessage">Profile updated successfully!</div>
+
+      <div id="errorMessage">Upload failed. Please try again.</div>
+
+    </div>
+
+  </div>
+
+  <input type="file" id="fileInput" accept="image/*" style="display:none;">
+
+  <!-- Firebase SDK -->
+
+  <script type="module">
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+
+    import {
+
+      getAuth,
+
+      onAuthStateChanged,
+
+      updateProfile
+
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+    const firebaseConfig = {
+
+      apiKey: "AIzaSyCExki28m1NNepVQEIjmcQzR8z8O68LqIc",
+
+      authDomain: "rinolski-notifications.firebaseapp.com",
+
+      projectId: "rinolski-notifications",
+
+      storageBucket: "rinolski-notifications.appspot.com",
+
+      messagingSenderId: "355554579853",
+
+      appId: "1:355554579853:web:3caa961653c0cdc0a359c4",
+
+      measurementId: "G-WZ84970GST"
+
+    };
+
+    const app = initializeApp(firebaseConfig);
+
+    const auth = getAuth(app);
+
+    const status = document.getElementById("status");
+
+    const container = document.getElementById("container");
+
+    const emailDisplay = document.getElementById("email");
+
+    const preview = document.getElementById("preview");
+
+    const fileInput = document.getElementById("fileInput");
+
+    const uploadBtn = document.getElementById("uploadBtn");
+
+    const updateMessage = document.getElementById("updateMessage");
+
+    const errorMessage = document.getElementById("errorMessage");
+
+    let currentUser = null;
+
+    onAuthStateChanged(auth, user => {
+
+      if (user) {
+
+        currentUser = user;
+
+        status.style.display = "none";
+
+        container.style.display = "flex";
+
+        const username = user.email.replace(/@.*$/, '');
+
+        emailDisplay.textContent = username;
+
+        if (user.photoURL) {
+
+          preview.src = user.photoURL;
+
+          preview.style.display = "block";
+
+        }
+
+      } else {
+
+        status.textContent = "You have to log in to upload your profile picture.";
+
+        container.style.display = "none";
+
+      }
+
+    });
+
+    uploadBtn.addEventListener('click', () => {
+
+      fileInput.click();
+
+    });
+
+    fileInput.addEventListener('change', async () => {
+
+      const file = fileInput.files[0];
+
+      if (!file || !currentUser) return;
+
+      const formData = new FormData();
+
+      formData.append("file", file);
+
+      formData.append("upload_preset", "Facemash");
+
+      try {
+
+        const res = await fetch("https://api.cloudinary.com/v1_1/djwuz2q85/image/upload", {
+
+          method: "POST",
+
+          body: formData
+
+        });
+
+        const data = await res.json();
+
+        const imageUrl = data.secure_url;
+
+        await updateProfile(currentUser, { photoURL: imageUrl });
+
+        preview.src = imageUrl;
+
+        preview.style.display = "block";
+
+        // Show success message
+
+        updateMessage.style.display = "block";
+
+        setTimeout(() => {
+
+          updateMessage.style.display = "none"; // Hide after 3 seconds
+
+        }, 3000);
+
+        // Hide error message if the upload is successful
+
+        errorMessage.style.display = "none";
+
+      } catch (err) {
+
+        console.error("Upload failed", err);
+
+        // Show error message
+
+        errorMessage.style.display = "block";
+
+      }
+
+    });
+
+  </script>
+
+</body>
+
+</html>
