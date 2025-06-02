@@ -24,12 +24,12 @@
   </style>
 </head>
 <body>
-  <button id="watchLaterBtn">Add to My List</button>
+  <button id="watchLaterBtn">Loading...</button>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { getDatabase, ref, set, remove, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-    import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCExki28m1NNepVQEIjmcQzR8z8O68LqIc",
@@ -45,15 +45,39 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
     const auth = getAuth(app);
-    const provider = new GoogleAuthProvider();
 
-    const videoName = "StevenUniverse"; // manual name
+    const videoName = "StevenUniverse";
     const videoData = {
       thumbnail: "https://rinolski.neocities.org/StevenUniverseImage.jpg",
       link: "https://rinolski.neocities.org/StevenUniverse.html"
     };
 
     const btn = document.getElementById("watchLaterBtn");
+
+    onAuthStateChanged(auth, user => {
+      if (!user) {
+        btn.textContent = "Sign in to save";
+        btn.onclick = () => {
+          window.location.href = "https://rinolski.neocities.org/watch-history.html";
+        };
+        return;
+      }
+
+      const username = user.email.split("@")[0];
+      const videoRef = ref(db, `watchLater/${username}/${videoName}`);
+
+      get(videoRef).then(snapshot => {
+        const isSaved = snapshot.exists();
+        updateButton(isSaved);
+        btn.onclick = () => {
+          if (isSaved) {
+            remove(videoRef).then(() => updateButton(false));
+          } else {
+            set(videoRef, videoData).then(() => updateButton(true));
+          }
+        };
+      });
+    });
 
     function updateButton(isSaved) {
       if (isSaved) {
@@ -64,30 +88,6 @@
         btn.classList.remove("saved");
       }
     }
-
-    onAuthStateChanged(auth, user => {
-      if (!user) {
-        signInWithPopup(auth, provider).catch(console.error);
-        return;
-      }
-
-      const username = user.email.split("@")[0];
-      const videoRef = ref(db, `watchLater/${username}/${videoName}`);
-
-      get(videoRef).then(snapshot => {
-        updateButton(snapshot.exists());
-      });
-
-      btn.onclick = () => {
-        get(videoRef).then(snapshot => {
-          if (snapshot.exists()) {
-            remove(videoRef).then(() => updateButton(false));
-          } else {
-            set(videoRef, videoData).then(() => updateButton(true));
-          }
-        });
-      };
-    });
   </script>
 </body>
 </html>
