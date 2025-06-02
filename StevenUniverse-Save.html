@@ -9,7 +9,7 @@
       font-family: Arial, sans-serif;
       margin: 20px;
     }
-    #watchLaterBtn, #watchNowBtn {
+    #watchLaterBtn {
       background-color: white;
       color: black;
       border: 1px solid black;
@@ -20,13 +20,12 @@
       margin-right: 10px;
     }
     #watchLaterBtn.saved {
-      background-color: lightgreen;
+      background-color: white;
     }
   </style>
 </head>
 <body>
   <button id="watchLaterBtn">Loading...</button>
-  <button id="watchNowBtn">Watch Now</button>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
@@ -55,11 +54,6 @@
     };
 
     const btn = document.getElementById("watchLaterBtn");
-    const watchBtn = document.getElementById("watchNowBtn");
-
-    watchBtn.onclick = () => {
-      window.open(videoData.link, '_blank', 'noopener,noreferrer');
-    };
 
     onAuthStateChanged(auth, user => {
       if (!user) {
