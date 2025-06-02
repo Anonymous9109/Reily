@@ -49,7 +49,7 @@
       color: white; 
     }
     div {
-      colir: white;
+      color: white;
     }
   </style>
 </head>
@@ -94,9 +94,11 @@
     function addVideoToList(video) {
       const videoDiv = document.createElement("div");
       videoDiv.classList.add("video-container");
-      videoDiv.innerHTML = `<a href="${video.link}">
-                              <img src="${video.thumbnail}" alt="Video Thumbnail" />
-                            </a>`;
+      videoDiv.innerHTML = `
+        <a href="${video.link}" target="_top" rel="noopener noreferrer">
+          <img src="${video.thumbnail}" alt="Video Thumbnail" />
+        </a>
+      `;
       watchLaterList.appendChild(videoDiv);
     }
 
@@ -115,7 +117,6 @@
         clearList();
         if (snapshot.exists()) {
           const videos = snapshot.val();
-          // Videos are saved with keys as sanitized links
           Object.values(videos).reverse().forEach(video => {
             addVideoToList(video);
           });
@@ -127,6 +128,15 @@
         }
       } catch {
         watchLaterList.textContent = "Error loading your list.";
+      }
+    });
+
+    // Optional safety: enforce top-level navigation in JS
+    document.addEventListener('click', function (e) {
+      const a = e.target.closest('a');
+      if (a && a.href) {
+        e.preventDefault();
+        window.top.location.href = a.href;
       }
     });
   </script>
