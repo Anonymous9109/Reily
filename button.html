@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Watch Later Button</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 50px;
+    }
+    .watch-later-btn {
+      background-color: white;
+      color: black;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+    .watch-later-btn.saved {
+      background-color: #a4d4a5;
+    }
+    .watch-later-btn.unsaved {
+      background-color: white;
+    }
+  </style>
+</head>
+<body>
+  <button id="watchLaterBtn" class="watch-later-btn">Loading...</button>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.2.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.2.0/firebase-auth.js";
+    import { getDatabase, ref, set, remove, get, child } from "https://www.gstatic.com/firebasejs/10.2.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCExki28m1NNepVQEIjmcQzR8z8O68LqIc",
+      authDomain: "rinolski-notifications.firebaseapp.com",
+      databaseURL: "https://rinolski-notifications-default-rtdb.firebaseio.com",
+      projectId: "rinolski-notifications",
+      storageBucket: "rinolski-notifications.firebasestorage.app",
+      messagingSenderId: "355554579853",
+      appId: "1:355554579853:web:3caa961653c0cdc0a359c4",
+      measurementId: "G-WZ84970GST"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getDatabase(app);
+
+    const watchLaterBtn = document.getElementById("watchLaterBtn");
+
+    // Example video data — change accordingly for each video page
+    const videoData = {
+      thumbnail: 'https://rinolski.neocities.org/TheAmazingWorldofGumball.jpg',
+      link: 'https://rinolski.neocities.org/AlRawabiSchoolforGirls',
+    };
+
+    function sanitizeKey(key) {
+      return key.replace(/\./g, ',');
+    }
+
+    // Disable button and set text when not logged in
+    function setLoggedOutState() {
+      watchLaterBtn.textContent = "Log in to save";
+      watchLaterBtn.disabled = true;
+      watchLaterBtn.classList.remove("saved");
+      watchLaterBtn.classList.add("unsaved");
+    }
+
+    // Update button UI based on saved state
+    function setSavedState(saved) {
+      if (saved) {
+        watchLaterBtn.textContent = "Saved";
+        watchLaterBtn.classList.add("saved");
+        watchLaterBtn.classList.remove("unsaved");
+      } else {
+        watchLaterBtn.textContent = "Add to my list";
+        watchLaterBtn.classList.remove("saved");
+        watchLaterBtn.classList.add("unsaved");
+      }
+      watchLaterBtn.disabled = false;
+    }
+
+    // Check if video saved in Firebase
+    async function checkIfSaved(userKey) {
+      const videoKey = sanitizeKey(videoData.link);
+      const videoRef = ref(db, `watchLater/${userKey}/${videoKey}`);
+      const snapshot = await get(videoRef);
+      return snapshot.exists();
+      }async function saveVideo(userKey) {
+      const videoKey = sanitizeKey(videoData.link);
+      const videoRef = ref(db, `watchLater/${userKey}/${videoKey}`);
+      await set(videoRef, videoData);
+    }
+
+    // Remove video from Firebase
+    async function removeVideo(userKey) {
+      const videoKey = sanitizeKey(videoData.link);
+      const videoRef = ref(db, `watchLater/${userKey}/${videoKey}`);
+      await remove(videoRef);
+    }
+
+    onAuthStateChanged(auth, async user => {
+      if (!user) {
+        setLoggedOutState();
+        return;
+      }
+
+      const emailKey = sanitizeKey(user.email);
+
+      // Initialize button state
+      watchLaterBtn.disabled = true;
+      watchLaterBtn.textContent = "Checking...";
+      let saved = false;
+      try {
+        saved = await checkIfSaved(emailKey);
+      } catch {
+        saved = false;
+    }setSavedState(saved);
+
+      watchLaterBtn.onclick = async () => {
+        watchLaterBtn.disabled = true;
+        if (saved) {
+          try {
+            await removeVideo(emailKey);
+            saved = false;
+          } catch {}
+        } else {
+          try {
+            await saveVideo(emailKey);
+            saved = true;
+          } catch {}
+        }
+        setSavedState(saved);
+      };
+    });
+  </script>
+</body>
+</html>
