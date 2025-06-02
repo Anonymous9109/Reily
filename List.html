@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Watch Later</title>
   <style>
     body {
       font-family: Arial, sans-serif;
+      text-align: left;
       margin-top: 20px;
     }
     h2 {
@@ -26,24 +27,15 @@
     .video-container img {
       width: 110px;
       height: 160px;
-      object-fit: cover;
       border-radius: 5px;
       cursor: pointer;
-    }
-    .video-container a {
-      text-decoration: none;
-      color: black;
-      font-size: 14px;
+      object-fit: cover;
     }
   </style>
-</head>
-<body>
-  <h2>My list</h2>
-  <div id="watchLaterList"></div>
-
+  <!-- Firebase SDK -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
     const firebaseConfig = {
@@ -51,44 +43,47 @@
       authDomain: "rinolski-notifications.firebaseapp.com",
       databaseURL: "https://rinolski-notifications-default-rtdb.firebaseio.com",
       projectId: "rinolski-notifications",
-      storageBucket: "rinolski-notifications.firebasestorage.app",
+      storageBucket: "rinolski-notifications.appspot.com",
       messagingSenderId: "355554579853",
       appId: "1:355554579853:web:3caa961653c0cdc0a359c4",
       measurementId: "G-WZ84970GST"
     };
 
     const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
+    const database = getDatabase(app);
     const auth = getAuth();
 
     const watchLaterList = document.getElementById('watchLaterList');
 
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, user => {
       if (user) {
-        const username = user.email.replace('@gmail.com', '');
-        const userRef = ref(db, `watchLater/${username}`);
-
-        get(userRef).then(snapshot => {
-          if (snapshot.exists()) {
-            const savedVideos = Object.values(snapshot.val()).reverse();
-            savedVideos.forEach(video => {
+        const username = user.email.replace("@gmail.com", "");
+        const userRef = ref(database, `watchLater/${username}`);
+        onValue(userRef, (snapshot) => {
+          watchLaterList.innerHTML = ""; // clear before loading
+          const data = snapshot.val();
+          if (data) {
+            const videos = Object.values(data);
+            videos.reverse().forEach(video => {
               const videoDiv = document.createElement('div');
               videoDiv.classList.add('video-container');
               videoDiv.innerHTML = `
-                <a href="${video.link}">
+                <a href="${video.link}" target="_top">
                   <img src="${video.thumbnail}" alt="Video Thumbnail">
                 </a>
               `;
               watchLaterList.appendChild(videoDiv);
             });
-          } else {
-            watchLaterList.innerHTML = 'No videos saved.';
           }
         });
       } else {
-        watchLaterList.innerHTML = 'Please sign in to view your list.';
+        watchLaterList.innerHTML = "<p>Please sign in to view your list.</p>";
       }
     });
   </script>
+</head>
+<body>
+  <h2>My List</h2>
+  <div id="watchLaterList"></div>
 </body>
 </html>
