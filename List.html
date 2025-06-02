@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>My Watch Later List</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Watch Later</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      margin: 20px;
-      text-align: left;
-      background-color: black;
+      margin-top: 20px;
+    }
+    h2 {
+      margin-bottom: 20px;
     }
     #watchLaterList {
       display: flex;
@@ -20,47 +21,30 @@
       scrollbar-color: #ccc transparent;
     }
     #watchLaterList::-webkit-scrollbar {
-      height: 8px;
-    }
-    #watchLaterList::-webkit-scrollbar-thumb {
-      background-color: #ccc;
-      border-radius: 4px;
-    }
-    #watchLaterList::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    .video-container {
-      flex: 0 0 auto;
-      width: 110px;
-      height: 160px;
-      border-radius: 5px;
-      overflow: hidden;
-      cursor: pointer;
-      box-shadow: 0 0 5px #aaa;
-      text-align: center;
+      height: 0px;
     }
     .video-container img {
-      width: 100%;
-      height: 100%;
+      width: 110px;
+      height: 160px;
       object-fit: cover;
       border-radius: 5px;
+      cursor: pointer;
     }
-    h2 {
-      color: white; 
-    }
-    div {
-      color: white;
+    .video-container a {
+      text-decoration: none;
+      color: black;
+      font-size: 14px;
     }
   </style>
 </head>
 <body>
   <h2>My list</h2>
-  <div id="watchLaterList">Loading...</div>
+  <div id="watchLaterList"></div>
 
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.2.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.2.0/firebase-auth.js";
-    import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.2.0/firebase-database.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCExki28m1NNepVQEIjmcQzR8z8O68LqIc",
@@ -74,69 +58,35 @@
     };
 
     const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
     const db = getDatabase(app);
+    const auth = getAuth();
 
-    const watchLaterList = document.getElementById("watchLaterList");
+    const watchLaterList = document.getElementById('watchLaterList');
 
-    function sanitizeKey(key) {
-      return key.replace(/\./g, ',');
-    }
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const username = user.email.replace('@gmail.com', '');
+        const userRef = ref(db, `watchLater/${username}`);
 
-    function showNotLoggedIn() {
-      watchLaterList.textContent = "Please log in to see your list.";
-    }
-
-    function clearList() {
-      watchLaterList.innerHTML = "";
-    }
-
-    function addVideoToList(video) {
-      const videoDiv = document.createElement("div");
-      videoDiv.classList.add("video-container");
-      videoDiv.innerHTML = `
-        <a href="${video.link}" target="_top" rel="noopener noreferrer">
-          <img src="${video.thumbnail}" alt="Video Thumbnail" />
-        </a>
-      `;
-      watchLaterList.appendChild(videoDiv);
-    }
-
-    onAuthStateChanged(auth, async user => {
-      if (!user) {
-        showNotLoggedIn();
-        return;
-      }
-      clearList();
-      watchLaterList.textContent = "Loading...";
-
-      const emailKey = sanitizeKey(user.email);
-      const userRef = ref(db, `watchLater/${emailKey}`);
-      try {
-        const snapshot = await get(userRef);
-        clearList();
-        if (snapshot.exists()) {
-          const videos = snapshot.val();
-          Object.values(videos).reverse().forEach(video => {
-            addVideoToList(video);
-          });
-          if (!Object.values(videos).length) {
-            watchLaterList.textContent = "Your list is empty.";
+        get(userRef).then(snapshot => {
+          if (snapshot.exists()) {
+            const savedVideos = Object.values(snapshot.val()).reverse();
+            savedVideos.forEach(video => {
+              const videoDiv = document.createElement('div');
+              videoDiv.classList.add('video-container');
+              videoDiv.innerHTML = `
+                <a href="${video.link}">
+                  <img src="${video.thumbnail}" alt="Video Thumbnail">
+                </a>
+              `;
+              watchLaterList.appendChild(videoDiv);
+            });
+          } else {
+            watchLaterList.innerHTML = 'No videos saved.';
           }
-        } else {
-          watchLaterList.textContent = "Your list is empty.";
-        }
-      } catch {
-        watchLaterList.textContent = "Error loading your list.";
-      }
-    });
-
-    // Optional safety: enforce top-level navigation in JS
-    document.addEventListener('click', function (e) {
-      const a = e.target.closest('a');
-      if (a && a.href) {
-        e.preventDefault();
-        window.top.location.href = a.href;
+        });
+      } else {
+        watchLaterList.innerHTML = 'Please sign in to view your list.';
       }
     });
   </script>
