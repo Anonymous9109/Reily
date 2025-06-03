@@ -34,7 +34,7 @@
       object-fit: cover;
     }
   </style>
-  <!-- Firebase SDK -->
+
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
@@ -62,11 +62,14 @@
         const username = user.email.replace("@gmail.com", "");
         const userRef = ref(database, `watchLater/${username}`);
         onValue(userRef, (snapshot) => {
-          watchLaterList.innerHTML = ""; // clear before loading
+          watchLaterList.innerHTML = ""; // Clear before loading
           const data = snapshot.val();
           if (data) {
-            const videos = Object.values(data);
-            videos.reverse().forEach(video => {
+            const videos = Object.entries(data)
+              .sort((a, b) => b[1].timestamp - a[1].timestamp) // Newest to oldest
+              .map(entry => entry[1]);
+
+            videos.forEach(video => {
               const videoDiv = document.createElement('div');
               videoDiv.classList.add('video-container');
               videoDiv.innerHTML = `
@@ -79,7 +82,7 @@
           }
         });
       } else {
-        watchLaterList.innerHTML = "<p>Please sign in to view your list.</p>";
+        watchLaterList.innerHTML = "<p style='color:white;'>Please sign in to view your list.</p>";
       }
     });
   </script>
