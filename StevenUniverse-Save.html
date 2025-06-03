@@ -3,33 +3,38 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Steven Universe</title>
+  <title></title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      margin: 20px;
+      background-color: #000;
+      color: white;
+      text-align: center;
+      padding: 50px;
     }
-    #watchLaterBtn {
-      background-color: white;
-      color: black;
-      border: 1px solid black;
+    button {
+      background-color: #e50914;
+      border: none;
+      color: white;
       padding: 10px 20px;
       font-size: 16px;
-      cursor: pointer;
       border-radius: 5px;
-      margin-right: 10px;
+      cursor: pointer;
     }
-    #watchLaterBtn.saved {
-      background-color: white;
+    button:disabled {
+      background-color: #888;
     }
   </style>
 </head>
 <body>
-  <button id="watchLaterBtn">Loading...</button>
+
+  <h1>Steven Universe</h1>
+  <p>Click the button below to save this to your watch later list.</p>
+  <button id="saveButton">Save to My List</button>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getDatabase, ref, set, remove, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+    import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
     const firebaseConfig = {
@@ -44,62 +49,37 @@
     };
 
     const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-    const auth = getAuth(app);
+    const database = getDatabase(app);
+    const auth = getAuth();
 
-    const videoName = "StevenUniverse";
-    const videoData = {
-      thumbnail: "https://rinolski.neocities.org/StevenUniverseImage.jpg",
-      link: "https://rinolski.neocities.org/StevenUniverse.html"
-    };
-
-    const btn = document.getElementById("watchLaterBtn");
-
-    let videoRef;
-    let username;
+    const saveButton = document.getElementById('saveButton');
+    const videoTitle = "Steven Universe";
+    const videoLink = "https://rinolski.neocities.org/StevenUniverse.html";
+    const videoThumbnail = "https://rinolski.neocities.org/StevenUniverseImage.jpg";
 
     onAuthStateChanged(auth, user => {
-      if (!user) {
-        btn.textContent = "Sign in to save";
-        btn.onclick = () => {
-          window.open("https://rinolski.neocities.org/watch-history.html", "_blank");
-        };
-        return;
-      }
+      if (user) {
+        const username = user.email.replace("@gmail.com", "");
+        const userRef = ref(database, `watchLater/${username}`);
 
-      username = user.email.split("@")[0];
-      videoRef = ref(db, `watchLater/${username}/${videoName}`);
-
-      refreshStatus();
-
-      btn.onclick = async () => {
-        const snapshot = await get(videoRef);
-        const isSaved = snapshot.exists();
-
-        if (isSaved) {
-          await remove(videoRef);
-          updateButton(false);
-        } else {
-          await set(videoRef, videoData);
-          updateButton(true);
-        }
-      };
-    });
-
-    async function refreshStatus() {
-      const snapshot = await get(videoRef);
-      updateButton(snapshot.exists());
-    }
-
-    function updateButton(isSaved) {
-      if (isSaved) {
-        btn.textContent = "Saved";
-        btn.classList.add("saved");
+        saveButton.addEventListener('click', () => {
+          push(userRef, {
+            title: videoTitle,
+            link: videoLink,
+            thumbnail: videoThumbnail,
+            timestamp: Date.now()
+          });
+          saveButton.textContent = "Saved!";
+          saveButton.disabled = true;
+        });
       } else {
-        btn.textContent = "Add to My List";
-        btn.classList.remove("saved");
+        saveButton.textContent = "Sign in to save";
+        saveButton.addEventListener('click', () => {
+          window.location.href = "https://rinolski.neocities.org/watch-history.html";
+        });
       }
-    }
+    });
   </script>
+
 </body>
 </html>
