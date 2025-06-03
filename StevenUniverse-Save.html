@@ -2,84 +2,107 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title></title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #000;
-      color: white;
-      text-align: center;
-      padding: 50px;
-    }
-    button {
-      background-color: #e50914;
+    .watch-later-btn {
+      background-color: white;
+      color: black;
       border: none;
-      color: white;
       padding: 10px 20px;
       font-size: 16px;
-      border-radius: 5px;
       cursor: pointer;
+      border-radius: 5px;
+      transition: background-color 0.3s, transform 0.2s;
     }
-    button:disabled {
-      background-color: #888;
+    .watch-later-btn.saved {
+      background-color: white;
     }
   </style>
 </head>
 <body>
 
-  <h1>Steven Universe</h1>
-  <p>Click the button below to save this to your watch later list.</p>
-  <button id="saveButton">Save to My List</button>
+<button id="watchLaterBtn" class="watch-later-btn">Add to my list</button>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getDatabase, ref, set, get, child, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyCExki28m1NNepVQEIjmcQzR8z8O68LqIc",
-      authDomain: "rinolski-notifications.firebaseapp.com",
-      databaseURL: "https://rinolski-notifications-default-rtdb.firebaseio.com",
-      projectId: "rinolski-notifications",
-      storageBucket: "rinolski-notifications.appspot.com",
-      messagingSenderId: "355554579853",
-      appId: "1:355554579853:web:3caa961653c0cdc0a359c4",
-      measurementId: "G-WZ84970GST"
-    };
+  const firebaseConfig = {
+    apiKey: "AIzaSyCExki28m1NNepVQEIjmcQzR8z8O68LqIc",
+    authDomain: "rinolski-notifications.firebaseapp.com",
+    databaseURL: "https://rinolski-notifications-default-rtdb.firebaseio.com",
+    projectId: "rinolski-notifications",
+    storageBucket: "rinolski-notifications.appspot.com",
+    messagingSenderId: "355554579853",
+    appId: "1:355554579853:web:3caa961653c0cdc0a359c4",
+    measurementId: "G-WZ84970GST"
+  };
 
-    const app = initializeApp(firebaseConfig);
-    const database = getDatabase(app);
-    const auth = getAuth();
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+  const auth = getAuth();
 
-    const saveButton = document.getElementById('saveButton');
-    const videoTitle = "Steven Universe";
-    const videoLink = "https://rinolski.neocities.org/StevenUniverse.html";
-    const videoThumbnail = "https://rinolski.neocities.org/StevenUniverseImage.jpg";
+  const watchLaterBtn = document.getElementById('watchLaterBtn');
 
-    onAuthStateChanged(auth, user => {
-      if (user) {
-        const username = user.email.replace("@gmail.com", "");
-        const userRef = ref(database, `watchLater/${username}`);
+  const videoData = {
+    thumbnail: 'https://rinolski.neocities.org/StevenUniverse.jpg',
+    link: 'https://rinolski.neocities.org/StevenUniverse.html',
+    id: 'StevenUniverse' // Use id same as file name without .html
+  };
 
-        saveButton.addEventListener('click', () => {
-          push(userRef, {
-            title: videoTitle,
-            link: videoLink,
-            thumbnail: videoThumbnail,
-            timestamp: Date.now()
-          });
-          saveButton.textContent = "Saved!";
-          saveButton.disabled = true;
-        });
-      } else {
-        saveButton.textContent = "Sign in to save";
-        saveButton.addEventListener('click', () => {
-          window.location.href = "https://rinolski.neocities.org/watch-history.html";
-        });
-      }
-    });
-  </script>
+  let username = null;
+
+  onAuthStateChanged(auth, user => {
+    if (user) {
+      username = user.email.replace("@gmail.com", "");
+      checkIfSaved();
+    } else {
+      username = null;
+      watchLaterBtn.textContent = 'You have to sign in to save';
+      watchLaterBtn.onclick = () => {
+        window.top.location.href = "https://rinolski.neocities.org/watch-history.html";
+      };
+    }
+  });
+
+  async function checkIfSaved() {
+    const videoRef = ref(db, `watchLater/${username}/${videoData.id}`);
+    const snapshot = await get(videoRef);
+    if (snapshot.exists()) {
+      watchLaterBtn.textContent = 'Saved';
+      watchLaterBtn.classList.add('saved');
+    } else {
+      watchLaterBtn.textContent = 'Add to my list';
+      watchLaterBtn.classList.remove('saved');
+    }
+    watchLaterBtn.onclick = toggleSave;
+  }
+
+  async function toggleSave() {
+    if (!username) return;
+
+    const videoRef = ref(db, `watchLater/${username}/${videoData.id}`);
+
+    const snapshot = await get(videoRef);
+    if (snapshot.exists()) {
+      // Remove video
+      await remove(videoRef);
+      watchLaterBtn.textContent = 'Add to my list';
+      watchLaterBtn.classList.remove('saved');
+    } else {
+      // Save video as newest by removing and adding it again
+      // But since we use id as key, just set it - it overwrites and keeps order from fetching reverse
+      await set(videoRef, {
+        thumbnail: videoData.thumbnail,
+        link: videoData.link
+      });
+      watchLaterBtn.textContent = 'Saved';
+      watchLaterBtn.classList.add('saved');
+    }
+  }
+</script>
 
 </body>
 </html>
