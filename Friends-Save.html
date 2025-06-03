@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Friends</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    #watchLaterBtn {
+      background-color: white;
+      color: black;
+      border: 1px solid black;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+      margin-right: 10px;
+    }
+    #watchLaterBtn.saved {
+      background-color: white;
+    }
+  </style>
+</head>
+<body>
+  <button id="watchLaterBtn">Loading...</button>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getDatabase, ref, set, remove, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCExki28m1NNepVQEIjmcQzR8z8O68LqIc",
+      authDomain: "rinolski-notifications.firebaseapp.com",
+      databaseURL: "https://rinolski-notifications-default-rtdb.firebaseio.com",
+      projectId: "rinolski-notifications",
+      storageBucket: "rinolski-notifications.appspot.com",
+      messagingSenderId: "355554579853",
+      appId: "1:355554579853:web:3caa961653c0cdc0a359c4",
+      measurementId: "G-WZ84970GST"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const auth = getAuth(app);
+
+    const videoName = "Friends";
+    const videoData = {
+      thumbnail: "https://rinolski.neocities.org/Friends.jpg",
+      link: "https://rinolski.neocities.org/Friends.html"
+    };
+
+    const btn = document.getElementById("watchLaterBtn");
+
+    let videoRef;
+    let username;
+
+    onAuthStateChanged(auth, user => {
+      if (!user) {
+        btn.textContent = "Sign in to save";
+        btn.onclick = () => {
+          window.open("https://rinolski.neocities.org/watch-history.html", "_blank");
+        };
+        return;
+      }
+
+      username = user.email.split("@")[0];
+      videoRef = ref(db, `watchLater/${username}/${videoName}`);
+
+      refreshStatus();
+
+      btn.onclick = async () => {
+        const snapshot = await get(videoRef);
+        const isSaved = snapshot.exists();
+
+        if (isSaved) {
+          await remove(videoRef);
+          updateButton(false);
+        } else {
+          await set(videoRef, videoData);
+          updateButton(true);
+        }
+      };
+    });
+
+    async function refreshStatus() {
+      const snapshot = await get(videoRef);
+      updateButton(snapshot.exists());
+    }
+
+    function updateButton(isSaved) {
+      if (isSaved) {
+        btn.textContent = "Saved";
+        btn.classList.add("saved");
+      } else {
+        btn.textContent = "Add to My List";
+        btn.classList.remove("saved");
+      }
+    }
+  </script>
+</body>
+</html> 
