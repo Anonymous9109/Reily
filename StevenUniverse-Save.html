@@ -55,6 +55,9 @@
 
     const btn = document.getElementById("watchLaterBtn");
 
+    let videoRef;
+    let username;
+
     onAuthStateChanged(auth, user => {
       if (!user) {
         btn.textContent = "Sign in to save";
@@ -64,21 +67,29 @@
         return;
       }
 
-      const username = user.email.split("@")[0];
-      const videoRef = ref(db, `watchLater/${username}/${videoName}`);
+      username = user.email.split("@")[0];
+      videoRef = ref(db, `watchLater/${username}/${videoName}`);
 
-      get(videoRef).then(snapshot => {
+      refreshStatus();
+
+      btn.onclick = async () => {
+        const snapshot = await get(videoRef);
         const isSaved = snapshot.exists();
-        updateButton(isSaved);
-        btn.onclick = () => {
-          if (isSaved) {
-            remove(videoRef).then(() => updateButton(false));
-          } else {
-            set(videoRef, videoData).then(() => updateButton(true));
-          }
-        };
-      });
+
+        if (isSaved) {
+          await remove(videoRef);
+          updateButton(false);
+        } else {
+          await set(videoRef, videoData);
+          updateButton(true);
+        }
+      };
     });
+
+    async function refreshStatus() {
+      const snapshot = await get(videoRef);
+      updateButton(snapshot.exists());
+    }
 
     function updateButton(isSaved) {
       if (isSaved) {
