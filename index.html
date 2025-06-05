@@ -160,6 +160,23 @@
         console.error("Sign out error:", error);
       });
     };
+    //R
+    onAuthStateChanged(auth, user => {
+  if (user) {
+    const email = user.email;
+    const username = email.replace("@gmail.com", "");
+
+    // Send to parent (Rinolski)
+    window.parent.postMessage(
+      {
+        type: 'firebase-auth',
+        username: username,
+        email: email
+      },
+      '*'
+    );
+  }
+});
   </script>
 </head>
 <body>
