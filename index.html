@@ -161,7 +161,23 @@
       });
     };
     //R
-    
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+const auth = getAuth();
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    const username = user.email.replace('@gmail.com', '');
+    window.parent.postMessage(
+      { type: 'auth-status', loggedIn: true, username },
+      'https://rinolski.neocities.org' // your Rinolski domain
+    );
+  } else {
+    window.parent.postMessage(
+      { type: 'auth-status', loggedIn: false },
+      'https://rinolski.neocities.org'
+    );
+  }
+});
     
   </script>
 </head>
