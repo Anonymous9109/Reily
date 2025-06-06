@@ -37,7 +37,7 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+    import { getDatabase, ref, onValue, off } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
     const firebaseConfig = {
@@ -57,11 +57,12 @@
 
     const watchLaterList = document.getElementById('watchLaterList');
 
-    onAuthStateChanged(auth, user => {
-      if (user) {
-        const username = user.email.replace("@gmail.com", "");
-        const userRef = ref(database, `watchLater/${username}`);
-        onValue(userRef, (snapshot) => {
+    let currentUserRef = null;
+    let listenerAttached = false;
+
+    function attachListener() {
+      if (!listenerAttached && currentUserRef) {
+        onValue(currentUserRef, (snapshot) => {
           watchLaterList.innerHTML = ""; // Clear before loading
           const data = snapshot.val();
           if (data) {
@@ -81,8 +82,46 @@
             });
           }
         });
+        listenerAttached = true;
+        console.log('Listener attached');
+      }
+    }
+
+    function detachListener() {
+      if (listenerAttached && currentUserRef) {
+        off(currentUserRef);
+        listenerAttached = false;
+        console.log('Listener detached');
+      }
+    }
+
+    onAuthStateChanged(auth, user => {
+      // Detach previous listener if any
+      detachListener();
+      currentUserRef = null;
+      
+      if (user) {
+        const username = user.email.replace("@gmail.com", "");
+        currentUserRef = ref(database, `watchLater/${username}`);
+
+        if (document.visibilityState === 'visible') {
+          attachListener();
+        } else {
+          watchLaterList.innerHTML = "<p style='color:white;'>Page hidden, listener paused.</p>";
+        }
       } else {
         watchLaterList.innerHTML = "<p style='color:white;'>Please sign in to view your list.</p>";
+      }
+    });
+
+    // Attach or detach listener based on tab visibility
+    document.addEventListener('visibilitychange', () => {
+      if (currentUserRef) {
+        if (document.visibilityState === 'visible') {
+          attachListener();
+        } else {
+          detachListener();
+        }
       }
     });
   </script>
