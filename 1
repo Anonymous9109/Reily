@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head><title>Test Google Sign-In</title></head>
+<body>
+<button id="loginBtn">Sign in with Google</button>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCExki28m1NNepVQEIjmcQzR8z8O68LqIc",
+  authDomain: "rinolski-notifications.firebaseapp.com",
+  projectId: "rinolski-notifications",
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
+
+document.getElementById('loginBtn').onclick = () => {
+  signInWithPopup(auth, provider)
+  .then(result => {
+    alert("Signed in as " + result.user.email);
+  })
+  .catch(err => {
+    alert("Sign-in error: " + err.message);
+  });
+};
+</script>
+</body>
+</html>
