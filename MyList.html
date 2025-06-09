@@ -6,27 +6,43 @@
   <title>My List</title>
   <style>
     body {
-      background: black;
+      background-color: #000;
+      color: #fff;
       font-family: Arial, sans-serif;
-      color: white;
       margin: 0;
       padding: 20px;
     }
+
     h2 {
       margin-bottom: 10px;
     }
+
     #watchLaterList {
       display: flex;
       gap: 10px;
       overflow-x: auto;
-      padding: 10px;
+      padding: 10px 0;
     }
+
+    .video-container {
+      flex: 0 0 auto;
+    }
+
     .video-container img {
       width: 110px;
       height: 160px;
       border-radius: 5px;
       object-fit: cover;
       cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .video-container img:hover {
+      transform: scale(1.05);
+    }
+
+    p {
+      font-size: 16px;
     }
   </style>
 </head>
@@ -52,7 +68,7 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
     const auth = getAuth();
-    const listDiv = document.getElementById("favorite");
+    const listDiv = document.getElementById("watchLaterList");
 
     onAuthStateChanged(auth, async (user) => {
       if (!user) {
@@ -64,7 +80,12 @@
       const q = query(savesRef, orderBy("timestamp", "desc"));
       const snapshot = await getDocs(q);
 
-      listDiv.innerHTML = snapshot.empty ? "<p>No saved videos.</p>" : "";
+      if (snapshot.empty) {
+        listDiv.innerHTML = "<p>No saved videos.</p>";
+        return;
+      }
+
+      listDiv.innerHTML = "";
 
       snapshot.forEach(doc => {
         const data = doc.data();
