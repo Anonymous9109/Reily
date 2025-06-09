@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Save Button</title>
+  <style>
+    .watch-later-btn {
+      background-color: white;
+      color: black;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: 0.3s;
+    }
+    .watch-later-btn:hover {
+      transform: scale(1.05);
+    }
+    .watch-later-btn.saved {
+      background-color: white;
+      color: black;
+    }
+  </style>
+</head>
+<body>
+  <button id="watchLaterBtn" class="watch-later-btn">Add to my list</button>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, doc, getDoc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCExki28m1NNepVQEIjmcQzR8z8O68LqIc",
+      authDomain: "rinolski-notifications.firebaseapp.com",
+      projectId: "rinolski-notifications",
+      storageBucket: "rinolski-notifications.appspot.com",
+      messagingSenderId: "355554579853",
+      appId: "1:355554579853:web:3caa961653c0cdc0a359c4",
+      measurementId: "G-WZ84970GST"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth();
+    const button = document.getElementById("watchLaterBtn");
+
+    const videoData = {
+      thumbnail: "https://rinolski.neocities.org/Butterfly2018.jpg",
+      link: "https://rinolski.neocities.org/Butterfly2018.html",
+      name: "Butterfly"
+    };
+
+    function updateButton(saved) {
+      button.textContent = saved ? "Saved" : "Add to my list";
+      button.classList.toggle("saved", saved);
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        button.textContent = "Sign in to save";
+        button.onclick = () => window.top.location.href = "https://rinolski.neocities.org/watch-history.html";
+        return;
+      }
+
+      const docRef = doc(db, "favorite", user.email, "Saves", videoData.name);
+      const snap = await getDoc(docRef);
+      updateButton(snap.exists());
+
+      button.onclick = async () => {
+        const current = (await getDoc(docRef)).exists();
+        if (current) {
+          await deleteDoc(docRef);
+          updateButton(false);
+        } else {
+          await setDoc(docRef, { ...videoData, timestamp: Date.now() });
+          updateButton(true);
+        }
+      };
+    });
+  </script>
+</body>
+</html>
