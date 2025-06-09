@@ -3,47 +3,45 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Watch Later</title>
+  <title>My List</title>
   <style>
     body {
+      background: black;
       font-family: Arial, sans-serif;
-      text-align: left;
-      margin-top: 20px;
-      background-color: black;
+      color: white;
+      margin: 0;
+      padding: 20px;
     }
     h2 {
-      margin-bottom: 20px;
-      color: white;
+      margin-bottom: 10px;
     }
     #watchLaterList {
       display: flex;
       gap: 10px;
       overflow-x: auto;
       padding: 10px;
-      scrollbar-width: thin;
-      scrollbar-color: #ccc transparent;
-    }
-    #watchLaterList::-webkit-scrollbar {
-      height: 0px;
     }
     .video-container img {
       width: 110px;
       height: 160px;
       border-radius: 5px;
-      cursor: pointer;
       object-fit: cover;
+      cursor: pointer;
     }
   </style>
+</head>
+<body>
+  <h2>My List</h2>
+  <div id="watchLaterList"></div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getDatabase, ref, onValue, off } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+    import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCExki28m1NNepVQEIjmcQzR8z8O68LqIc",
       authDomain: "rinolski-notifications.firebaseapp.com",
-      databaseURL: "https://rinolski-notifications-default-rtdb.firebaseio.com",
       projectId: "rinolski-notifications",
       storageBucket: "rinolski-notifications.appspot.com",
       messagingSenderId: "355554579853",
@@ -52,82 +50,34 @@
     };
 
     const app = initializeApp(firebaseConfig);
-    const database = getDatabase(app);
+    const db = getFirestore(app);
     const auth = getAuth();
+    const listDiv = document.getElementById("watchLaterList");
 
-    const watchLaterList = document.getElementById('watchLaterList');
-
-    let currentUserRef = null;
-    let listenerAttached = false;
-
-    function attachListener() {
-      if (!listenerAttached && currentUserRef) {
-        onValue(currentUserRef, (snapshot) => {
-          watchLaterList.innerHTML = ""; // Clear before loading
-          const data = snapshot.val();
-          if (data) {
-            const videos = Object.entries(data)
-              .sort((a, b) => b[1].timestamp - a[1].timestamp) // Newest to oldest
-              .map(entry => entry[1]);
-
-            videos.forEach(video => {
-              const videoDiv = document.createElement('div');
-              videoDiv.classList.add('video-container');
-              videoDiv.innerHTML = `
-                <a href="${video.link}" target="_top">
-                  <img src="${video.thumbnail}" alt="Video Thumbnail">
-                </a>
-              `;
-              watchLaterList.appendChild(videoDiv);
-            });
-          }
-        });
-        listenerAttached = true;
-        console.log('Listener attached');
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        listDiv.innerHTML = "<p>Please sign in to view your list.</p>";
+        return;
       }
-    }
 
-    function detachListener() {
-      if (listenerAttached && currentUserRef) {
-        off(currentUserRef);
-        listenerAttached = false;
-        console.log('Listener detached');
-      }
-    }
+      const savesRef = collection(db, "favorite", user.email, "Saves");
+      const q = query(savesRef, orderBy("timestamp", "desc"));
+      const snapshot = await getDocs(q);
 
-    onAuthStateChanged(auth, user => {
-      // Detach previous listener if any
-      detachListener();
-      currentUserRef = null;
-      
-      if (user) {
-        const username = user.email.replace("@gmail.com", "");
-        currentUserRef = ref(database, `watchLater/${username}`);
+      listDiv.innerHTML = snapshot.empty ? "<p>No saved videos.</p>" : "";
 
-        if (document.visibilityState === 'visible') {
-          attachListener();
-        } else {
-          watchLaterList.innerHTML = "<p style='color:white;'>Page hidden, listener paused.</p>";
-        }
-      } else {
-        watchLaterList.innerHTML = "<p style='color:white;'>Please sign in to view your list.</p>";
-      }
-    });
-
-    // Attach or detach listener based on tab visibility
-    document.addEventListener('visibilitychange', () => {
-      if (currentUserRef) {
-        if (document.visibilityState === 'visible') {
-          attachListener();
-        } else {
-          detachListener();
-        }
-      }
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        const container = document.createElement("div");
+        container.classList.add("video-container");
+        container.innerHTML = `
+          <a href="${data.link}" target="_top">
+            <img src="${data.thumbnail}" alt="${data.name}" />
+          </a>
+        `;
+        listDiv.appendChild(container);
+      });
     });
   </script>
-</head>
-<body>
-  <h2>My List</h2>
-  <div id="watchLaterList"></div>
 </body>
 </html>
