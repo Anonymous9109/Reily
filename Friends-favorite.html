@@ -15,17 +15,22 @@
       border-radius: 5px;
       transition: 0.3s;
     }
-    .watch-later-btn:hover {
+    .watch-later-btn:hover:not(:disabled) {
       transform: scale(1.05);
     }
     .watch-later-btn.saved {
       background-color: white;
       color: black;
     }
+    .watch-later-btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+      transform: none !important;
+    }
   </style>
 </head>
 <body>
-  <button id="watchLaterBtn" class="watch-later-btn">Add to my list</button>
+  <button id="watchLaterBtn" class="watch-later-btn" disabled>Checking login...</button>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
@@ -56,29 +61,51 @@
     function updateButton(saved) {
       button.textContent = saved ? "Saved" : "Add to my list";
       button.classList.toggle("saved", saved);
+      button.disabled = false;
     }
 
     onAuthStateChanged(auth, async (user) => {
+      console.log("Auth state changed. User:", user);
       if (!user) {
         button.textContent = "Sign in to save";
+        button.disabled = false;
         button.onclick = () => window.top.location.href = "https://rinolski.neocities.org/watch-history.html";
         return;
       }
 
       const docRef = doc(db, "favorite", user.email, "Saves", videoData.name);
-      const snap = await getDoc(docRef);
-      updateButton(snap.exists());
 
-      button.onclick = async () => {
-        const current = (await getDoc(docRef)).exists();
-        if (current) {
-          await deleteDoc(docRef);
+      async function refreshState() {
+        try {
+          const snap = await getDoc(docRef);
+          const isSaved = snap.exists();
+          updateButton(isSaved);
+
+          button.onclick = async () => {
+            button.disabled = true;
+            try {
+              const snapAgain = await getDoc(docRef);
+              if (snapAgain.exists()) {
+                await deleteDoc(docRef);
+                updateButton(false);
+              } else {
+                await setDoc(docRef, { ...videoData, timestamp: Date.now() });
+                updateButton(true);
+              }
+            } catch (error) {
+              console.error("Error saving/removing document:", error);
+              await refreshState(); // recover state
+            } finally {
+              button.disabled = false;
+            }
+          };
+        } catch (error) {
+          console.error("Error fetching document:", error);
           updateButton(false);
-        } else {
-          await setDoc(docRef, { ...videoData, timestamp: Date.now() });
-          updateButton(true);
         }
-      };
+      }
+
+      await refreshState();
     });
   </script>
 </body>
