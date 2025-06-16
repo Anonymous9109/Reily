@@ -1,96 +1,150 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" >
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
   <title>Sign In - Rinolski</title>
   <style>
-    body {
-      margin: 0;
-      padding: 0;
+    /* Reset & base */
+    * {
+      box-sizing: border-box;
+    }
+    body, html {
+      margin: 0; padding: 0;
+      height: 100%;
       font-family: Arial, sans-serif;
       background: black;
       color: white;
-      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 15px;
     }
-    html, body {
-      height: 100%;
-      overflow: hidden;
-    }
+    /* Container */
     .auth-container {
-      background: rgba(0, 0, 0, 0.8);
+      background: rgba(0,0,0,0.85);
+      border-radius: 12px;
+      padding: 30px 25px;
+      max-width: 400px;
       width: 100%;
-      height: 100%;
-      padding: 10px;
-      box-sizing: border-box;
-      text-align: center;
+      box-shadow: 0 0 20px rgba(229,9,20,0.7);
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      align-items: center;
     }
-    .auth-title {
-      font-size: 50px;
-      font-weight: bold;
-      color: white;
-      text-transform: uppercase;
-      margin-bottom: 5px;
-      letter-spacing: 2px;
-    }
-    .auth-subtitle {
-      font-size: 28px;
+    h2 {
+      margin-bottom: 24px;
       font-weight: normal;
-      margin-bottom: 20px;
+      font-size: 28px;
+      letter-spacing: 1.2px;
+      text-align: center;
     }
-    .auth-container h2 {
-      font-size: 24px;
-      margin-bottom: 20px;
-    }
-    .auth-input {
+    input {
       width: 100%;
-      padding: 10px;
+      padding: 14px 15px;
       margin: 10px 0;
+      border-radius: 8px;
       border: none;
-      border-radius: 5px;
-      font-size: 16px;
-      background: rgba(255, 255, 255, 0.2);
+      background: rgba(255,255,255,0.1);
       color: white;
+      font-size: 17px;
+      transition: background 0.3s;
     }
-    .auth-input::placeholder {
-      color: rgba(255, 255, 255, 0.6);
+    input::placeholder {
+      color: rgba(255,255,255,0.6);
     }
-    .auth-button {
+    input:focus {
+      background: rgba(255,255,255,0.2);
+      outline: none;
+    }
+    button {
       width: 100%;
-      padding: 10px;
-      margin-top: 10px;
+      padding: 14px 0;
+      margin-top: 20px;
       border: none;
-      border-radius: 5px;
-      font-size: 18px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-    .sign-in {
+      border-radius: 10px;
       background: #e50914;
       color: white;
+      font-size: 20px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      user-select: none;
     }
-    .sign-in:hover {
+    button:hover:not(:disabled) {
       background: #b20710;
     }
-    .sign-up {
-      background: #333;
-      color: white;
+    button:disabled {
+      background: #770000;
+      cursor: not-allowed;
     }
-    .sign-up:hover {
-      background: #555;
+    /* Smaller button for reset */
+    #resetPasswordBtn {
+      background: #444;
+      margin-top: 12px;
+      font-size: 16px;
     }
+    #resetPasswordBtn:hover:not(:disabled) {
+      background: #666;
+    }
+    /* Logged in box */
     .logged-in {
       text-align: center;
-      color: white;
-      font-size: 20px;
+      font-size: 18px;
+      line-height: 1.4;
+    }
+    .logged-in button {
+      margin-top: 25px;
+      max-width: 200px;
+    }
+    /* Message box */
+    .message {
+      margin-top: 15px;
+      min-height: 24px;
+      font-size: 16px;
+      color: #f0f0f0;
+      text-align: center;
+      user-select: none;
+    }
+    .message.error {
+      color: #ff4c4c;
+    }
+    .message.success {
+      color: #4caf50;
+    }
+    /* Responsive */
+    @media (max-width: 440px) {
+      .auth-container {
+        padding: 25px 20px;
+      }
+      h2 {
+        font-size: 24px;
+      }
+      input {
+        font-size: 16px;
+      }
+      button {
+        font-size: 18px;
+      }
+      #resetPasswordBtn {
+        font-size: 16px;
+      }
     }
   </style>
+</head>
+<body>
+  <div class="auth-container" id="auth-container">
+    <h2>Sign In / Sign Up</h2>
+    <input type="email" id="email" placeholder="Email" autocomplete="username" />
+    <input type="password" id="password" placeholder="Password" autocomplete="current-password" />
+    <button id="submitBtn">Sign In / Sign Up</button>
+    <button id="resetPasswordBtn">Reset Password</button>
+    <div class="message" id="message"></div>
+  </div>
+
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
     import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -107,71 +161,154 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    async function saveCredentials(email, password) {
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const submitBtn = document.getElementById("submitBtn");
+    const resetBtn = document.getElementById("resetPasswordBtn");
+    const messageDiv = document.getElementById("message");
+    const container = document.getElementById("auth-container");
+
+    function setMessage(text, type = "") {
+      messageDiv.textContent = text;
+      messageDiv.className = "message " + (type || "");
+    }
+
+    function getDeviceId() {
+      let id = localStorage.getItem("deviceId");
+      if (!id) {
+        id = crypto.randomUUID();
+        localStorage.setItem("deviceId", id);
+      }
+      return id;
+    }
+
+    function getDeviceName() {
+      const userAgent = navigator.userAgent;
+      if (/Android/.test(userAgent)) {
+        const androidVersion = userAgent.match(/Android\s([\d\.]+)/)?.[1] || "Unknown";
+        const model = userAgent.match(/;\s([^;]*?)\sBuild/)?.[1] || "Unknown Android Device";
+        return `${model} (Android ${androidVersion})`;
+      } else if (/iPhone|iPad|iPod/.test(userAgent)) {
+        return "iOS Device";
+      } else if (/Windows/.test(userAgent)) {
+        return "Windows PC";
+      } else if (/Macintosh/.test(userAgent)) {
+        return "Mac";
+      }
+      return "Unknown Device";
+    }
+
+    async function saveDeviceSession(email) {
+      const deviceId = getDeviceId();
+      const deviceName = getDeviceName();
+      const userAgent = navigator.userAgent;
+
+      const deviceInfo = {
+        deviceId,
+        deviceName,
+        userAgent,
+        screen: `${screen.width}x${screen.height}`,
+        lastLogin: new Date().toISOString()
+      };
+
       try {
-        await setDoc(doc(db, "Credentials", email), {
-          email: email,
-          password: password
-        });
-        console.log("Credentials saved");
+        await setDoc(doc(db, "Users", email, "Devices", deviceId), deviceInfo);
+        console.log("Device session saved:", deviceInfo);
       } catch (error) {
-        console.error("Error saving credentials:", error);
+        console.error("Error saving device session:", error);
       }
     }
 
-    window.signInOrSignUp = async () => {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
+    async function signInOrSignUp() {
+      const email = emailInput.value.trim();
+      const password = passwordInput.value;
+
+      if (!email || !password) {
+        setMessage("Please enter both email and password.", "error");
+        return;
+      }
+
+      submitBtn.disabled = true;
+      resetBtn.disabled = true;
+      setMessage("Signing in...");
 
       try {
         await signInWithEmailAndPassword(auth, email, password);
-        await saveCredentials(email, password);
+        await saveDeviceSession(email);
         localStorage.setItem("email", email);
-        window.location.reload();
-      } catch {
+        setMessage("Signed in successfully!", "success");
+        setTimeout(() => location.reload(), 1000);
+      } catch (signInError) {
+        setMessage("Sign in failed, trying to create account...");
         try {
           await createUserWithEmailAndPassword(auth, email, password);
-          await saveCredentials(email, password);
+          await saveDeviceSession(email);
           localStorage.setItem("email", email);
-          window.location.reload();
-        } catch {
-          alert("Error: Could not sign up or sign in. Please try again.");
+          setMessage("Account created and signed in!", "success");
+          setTimeout(() => location.reload(), 1000);
+        } catch (signUpError) {
+          setMessage("Could not sign in or sign up. Check your credentials.", "error");
+          console.error("Sign in error:", signInError);
+          console.error("Sign up error:", signUpError);
+          submitBtn.disabled = false;
+          resetBtn.disabled = false;
         }
       }
-    };
+    }
+
+    async function resetPassword() {
+      const email = emailInput.value.trim();
+      if (!email) {
+        setMessage("Please enter your email to reset password.", "error");
+        return;
+      }
+
+      submitBtn.disabled = true;
+      resetBtn.disabled = true;
+      setMessage("Sending password reset email...");
+
+      try {
+        await sendPasswordResetEmail(auth, email);
+        setMessage("Password reset email sent! Check your inbox.", "success");
+      } catch (error) {
+        console.error("Reset password error:", error);
+        setMessage("Error sending reset email. Check the email address.", "error");
+      } finally {
+        submitBtn.disabled = false;
+        resetBtn.disabled = false;
+      }
+    }
+
+    async function signOutUser() {
+      try {
+        await signOut(auth);
+        localStorage.removeItem("email");
+        setMessage("Signed out successfully.", "success");
+        setTimeout(() => location.reload(), 1000);
+      } catch (error) {
+        setMessage("Error signing out.", "error");
+        console.error("Sign out error:", error);
+      }
+    }
 
     window.onload = () => {
       const email = localStorage.getItem("email");
+
       if (email) {
-        document.getElementById("auth-container").innerHTML = `
+        container.innerHTML = `
           <div class="logged-in">
-            Logged in as: ${email}<br><br>
-            <button class="auth-button sign-up" onclick="signOutUser()">Sign Out</button>
+            Logged in as: <strong>${email}</strong><br/>
+            <button id="signOutBtn">Sign Out</button>
+            <div class="message" id="message"></div>
           </div>
         `;
+
+        document.getElementById("signOutBtn").onclick = signOutUser;
+      } else {
+        submitBtn.onclick = signInOrSignUp;
+        resetBtn.onclick = resetPassword;
       }
     };
-
-    window.signOutUser = () => {
-      signOut(auth).then(() => {
-        localStorage.removeItem("email");
-        window.location.reload();
-      }).catch((error) => {
-        console.error("Sign out error:", error);
-      });
-    };
-    //R
-    
-    
   </script>
-</head>
-<body>
-  <div class="auth-container" id="auth-container">
-    <h1 class="auth-title"></h1>
-    <h2 class="auth-subtitle">Sign In</h2>
-    <input type="email" id="email" class="auth-input" placeholder="Email" />
-    <input type="password" id="password" class="auth-input" placeholder="Password" />
-    <button class="auth-button sign-in" onclick="signInOrSignUp()">Sign In / Sign Up</button>
-  </div>
 </body>
 </html>
