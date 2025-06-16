@@ -1,158 +1,89 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-  <title>Sign In - Rinolski</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Rinolski - Login</title>
   <style>
-    /* Reset & base */
-    * {
-      box-sizing: border-box;
-    }
-    body, html {
-      margin: 0; padding: 0;
-      height: 100%;
+    body {
+      margin: 0;
+      padding: 0;
       font-family: Arial, sans-serif;
-      background: black;
-      color: white;
+      background: #000;
+      color: #fff;
+      height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 15px;
     }
-    /* Container */
     .auth-container {
-      background: rgba(0,0,0,0.85);
-      border-radius: 12px;
-      padding: 30px 25px;
-      max-width: 400px;
       width: 100%;
-      box-shadow: 0 0 20px rgba(229,9,20,0.7);
+      max-width: 600px;
+      padding: 20px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 10px;
       display: flex;
       flex-direction: column;
-      align-items: center;
+      gap: 20px;
     }
-    h2 {
-      margin-bottom: 24px;
-      font-weight: normal;
-      font-size: 28px;
-      letter-spacing: 1.2px;
-      text-align: center;
+    .auth-row {
+      display: flex;
+      flex-direction: row;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
     }
-    input {
-      width: 100%;
-      padding: 14px 15px;
-      margin: 10px 0;
-      border-radius: 8px;
+    .auth-input {
+      padding: 10px;
       border: none;
-      background: rgba(255,255,255,0.1);
+      border-radius: 5px;
+      font-size: 16px;
+      background: rgba(255, 255, 255, 0.2);
       color: white;
-      font-size: 17px;
-      transition: background 0.3s;
+      flex: 1 1 200px;
     }
-    input::placeholder {
-      color: rgba(255,255,255,0.6);
+    .auth-input::placeholder {
+      color: rgba(255, 255, 255, 0.6);
     }
-    input:focus {
-      background: rgba(255,255,255,0.2);
-      outline: none;
-    }
-    button {
-      width: 100%;
-      padding: 14px 0;
-      margin-top: 20px;
+    .auth-button {
+      padding: 10px 20px;
       border: none;
-      border-radius: 10px;
+      border-radius: 5px;
+      font-size: 16px;
       background: #e50914;
       color: white;
-      font-size: 20px;
-      font-weight: 600;
       cursor: pointer;
-      transition: background-color 0.3s;
-      user-select: none;
     }
-    button:hover:not(:disabled) {
+    .auth-button:hover {
       background: #b20710;
-      width: 100%;
     }
-    button:disabled {
-      background: #770000;
-      cursor: not-allowed;
+    .reset-button {
+      background: #333;
     }
-    /* Smaller button for reset */
-    #resetPasswordBtn {
-      background: #444;
-      margin-top: 12px;
-      font-size: 16px;
-      width: 100%;
+    .reset-button:hover {
+      background: #555;
     }
-    #resetPasswordBtn:hover:not(:disabled) {
-      background: #666;
-    }
-    /* Logged in box */
-    .logged-in {
+    .status {
       text-align: center;
-      font-size: 18px;
-      line-height: 1.4;
-    }
-    .logged-in button {
-      margin-top: 25px;
-      max-width: 200px;
-      width: 100%;
-    }
-    /* Message box */
-    .message {
-      margin-top: 15px;
-      min-height: 24px;
       font-size: 16px;
-      color: #f0f0f0;
-      text-align: center;
-      user-select: none;
-    }
-    .message.error {
-      color: #ff4c4c;
-    }
-    .message.success {
-      color: #4caf50;
-    }
-    /* Responsive */
-    @media (max-width: 440px) {
-      .auth-container {
-        padding: 25px 20px;
-        width: 100%;
-      }
-      h2 {
-        font-size: 24px;
-      }
-      input {
-        font-size: 16px;
-        width: 100%;
-      }
-      button {
-        font-size: 18px;
-        width: 100%;
-      }
-      #resetPasswordBtn {
-        font-size: 16px;
-        width: 100%;
-      }
+      color: lightgreen;
     }
   </style>
-</head>
-<body>
-  <div class="auth-container" id="auth-container">
-    
-    <input type="email" id="email" placeholder="Email" autocomplete="username" />
-    <input type="password" id="password" placeholder="Password" autocomplete="current-password" />
-    <button id="submitBtn">Sign In / Sign Up</button>
-    <button id="resetPasswordBtn">Reset Password</button>
-    <div class="message" id="message"></div>
-  </div>
-
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
-    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+    import {
+      getAuth,
+      signInWithEmailAndPassword,
+      createUserWithEmailAndPassword,
+      sendPasswordResetEmail,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
+    import {
+      getFirestore,
+      doc,
+      setDoc,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCExki28m1NNepVQEIjmcQzR8z8O68LqIc",
@@ -168,154 +99,87 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    const emailInput = document.getElementById("email");
-    const passwordInput = document.getElementById("password");
-    const submitBtn = document.getElementById("submitBtn");
-    const resetBtn = document.getElementById("resetPasswordBtn");
-    const messageDiv = document.getElementById("message");
-    const container = document.getElementById("auth-container");
-
-    function setMessage(text, type = "") {
-      messageDiv.textContent = text;
-      messageDiv.className = "message " + (type || "");
-    }
-
-    function getDeviceId() {
-      let id = localStorage.getItem("deviceId");
-      if (!id) {
-        id = crypto.randomUUID();
-        localStorage.setItem("deviceId", id);
-      }
-      return id;
-    }
-
-    function getDeviceName() {
+    async function saveDevice(email) {
+      const deviceId = crypto.randomUUID();
       const userAgent = navigator.userAgent;
-      if (/Android/.test(userAgent)) {
-        const androidVersion = userAgent.match(/Android\s([\d\.]+)/)?.[1] || "Unknown";
-        const model = userAgent.match(/;\s([^;]*?)\sBuild/)?.[1] || "Unknown Android Device";
-        return `${model} (Android ${androidVersion})`;
-      } else if (/iPhone|iPad|iPod/.test(userAgent)) {
-        return "iOS Device";
-      } else if (/Windows/.test(userAgent)) {
-        return "Windows PC";
-      } else if (/Macintosh/.test(userAgent)) {
-        return "Mac";
-      }
-      return "Unknown Device";
+      const platform = navigator.platform;
+
+      await setDoc(doc(db, "Devices", `${email}_${deviceId}`), {
+        email: email,
+        platform: platform,
+        userAgent: userAgent,
+        timestamp: serverTimestamp()
+      });
     }
 
-    async function saveDeviceSession(email) {
-      const deviceId = getDeviceId();
-      const deviceName = getDeviceName();
-      const userAgent = navigator.userAgent;
-
-      const deviceInfo = {
-        deviceId,
-        deviceName,
-        userAgent,
-        screen: `${screen.width}x${screen.height}`,
-        lastLogin: new Date().toISOString()
-      };
-
-      try {
-        await setDoc(doc(db, "Users", email, "Devices", deviceId), deviceInfo);
-        console.log("Device session saved:", deviceInfo);
-      } catch (error) {
-        console.error("Error saving device session:", error);
-      }
-    }
-
-    async function signInOrSignUp() {
-      const email = emailInput.value.trim();
-      const password = passwordInput.value;
-
-      if (!email || !password) {
-        setMessage("Please enter both email and password.", "error");
-        return;
-      }
-
-      submitBtn.disabled = true;
-      resetBtn.disabled = true;
-      setMessage("Signing in...");
+    window.signInOrSignUp = async () => {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      const status = document.getElementById("status");
 
       try {
         await signInWithEmailAndPassword(auth, email, password);
-        await saveDeviceSession(email);
-        localStorage.setItem("email", email);
-        setMessage("Signed in successfully!", "success");
-        setTimeout(() => location.reload(), 1000);
-      } catch (signInError) {
-        setMessage("Sign in failed, trying to create account...");
+      } catch {
         try {
           await createUserWithEmailAndPassword(auth, email, password);
-          await saveDeviceSession(email);
-          localStorage.setItem("email", email);
-          setMessage("Account created and signed in!", "success");
-          setTimeout(() => location.reload(), 1000);
-        } catch (signUpError) {
-          setMessage("Could not sign in or sign up. Check your credentials.", "error");
-          console.error("Sign in error:", signInError);
-          console.error("Sign up error:", signUpError);
-          submitBtn.disabled = false;
-          resetBtn.disabled = false;
+        } catch (error) {
+          status.textContent = "Could not sign in or sign up.";
+          return;
         }
       }
-    }
 
-    async function resetPassword() {
-      const email = emailInput.value.trim();
+      localStorage.setItem("email", email);
+      await saveDevice(email);
+      window.location.reload();
+    };
+
+    window.resetPassword = async () => {
+      const email = document.getElementById("email").value;
+      const status = document.getElementById("status");
+
       if (!email) {
-        setMessage("Please enter your email to reset password.", "error");
+        status.textContent = "Enter your email to reset password.";
         return;
       }
 
-      submitBtn.disabled = true;
-      resetBtn.disabled = true;
-      setMessage("Sending password reset email...");
-
       try {
         await sendPasswordResetEmail(auth, email);
-        setMessage("Password reset email sent! Check your inbox.", "success");
+        status.textContent = "Password reset email sent.";
       } catch (error) {
-        console.error("Reset password error:", error);
-        setMessage("Error sending reset email. Check the email address.", "error");
-      } finally {
-        submitBtn.disabled = false;
-        resetBtn.disabled = false;
+        status.textContent = "Failed to send reset email.";
       }
-    }
+    };
 
-    async function signOutUser() {
-      try {
-        await signOut(auth);
+    window.signOutUser = () => {
+      signOut(auth).then(() => {
         localStorage.removeItem("email");
-        setMessage("Signed out successfully.", "success");
-        setTimeout(() => location.reload(), 1000);
-      } catch (error) {
-        setMessage("Error signing out.", "error");
-        console.error("Sign out error:", error);
-      }
-    }
+        window.location.reload();
+      });
+    };
 
     window.onload = () => {
       const email = localStorage.getItem("email");
-
+      const container = document.getElementById("auth-container");
       if (email) {
         container.innerHTML = `
-          <div class="logged-in">
-            Logged in as: <strong>${email}</strong><br/>
-            <button id="signOutBtn">Sign Out</button>
-            <div class="message" id="message"></div>
-          </div>
+          <div class="status">Logged in as: ${email}</div>
+          <button class="auth-button reset-button" onclick="signOutUser()">Sign Out</button>
         `;
-
-        document.getElementById("signOutBtn").onclick = signOutUser;
-      } else {
-        submitBtn.onclick = signInOrSignUp;
-        resetBtn.onclick = resetPassword;
       }
     };
   </script>
+</head>
+<body>
+  <div class="auth-container" id="auth-container">
+    <div class="auth-row">
+      <input type="email" id="email" class="auth-input" placeholder="Email" />
+      <input type="password" id="password" class="auth-input" placeholder="Password" />
+      <button class="auth-button" onclick="signInOrSignUp()">Login</button>
+    </div>
+    <div class="auth-row">
+      <button class="auth-button reset-button" onclick="resetPassword()">Reset Password</button>
+    </div>
+    <div class="status" id="status"></div>
+  </div>
 </body>
 </html>
