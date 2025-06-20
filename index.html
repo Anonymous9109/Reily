@@ -76,7 +76,8 @@
       signInWithEmailAndPassword,
       createUserWithEmailAndPassword,
       sendPasswordResetEmail,
-      signOut
+      signOut,
+      onAuthStateChanged
     } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
     import {
       getFirestore,
@@ -128,7 +129,6 @@
         }
       }
 
-      localStorage.setItem("email", email);
       await saveDevice(email);
       window.location.reload();
     };
@@ -152,21 +152,20 @@
 
     window.signOutUser = () => {
       signOut(auth).then(() => {
-        localStorage.removeItem("email");
         window.location.reload();
       });
     };
 
-    window.onload = () => {
-      const email = localStorage.getItem("email");
+    onAuthStateChanged(auth, (user) => {
       const container = document.getElementById("auth-container");
-      if (email) {
+      if (user) {
+        const email = user.email;
         container.innerHTML = `
           <div class="status">Logged in as: ${email}</div>
           <button class="auth-button reset-button" onclick="signOutUser()">Sign Out</button>
         `;
       }
-    };
+    });
   </script>
 </head>
 <body>
