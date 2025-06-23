@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Save Button</title>
+  <style>
+    .watch-later-btn {
+      background-color: white;
+      color: black;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: 0.3s;
+    }
+    .watch-later-btn:hover:not(:disabled) {
+      transform: scale(1.05);
+    }
+    .watch-later-btn.saved {
+      background-color: white;
+      color: black;
+    }
+    .watch-later-btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+      transform: none !important;
+    }
+  </style>
+</head>
+<body>
+  <button id="watchLaterBtn" class="watch-later-btn" disabled>Checking login...</button>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, doc, getDoc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCExki28m1NNepVQEIjmcQzR8z8O68LqIc",
+      authDomain: "rinolski-notifications.firebaseapp.com",
+      projectId: "rinolski-notifications",
+      storageBucket: "rinolski-notifications.appspot.com",
+      messagingSenderId: "355554579853",
+      appId: "1:355554579853:web:3caa961653c0cdc0a359c4",
+      measurementId: "G-WZ84970GST"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth();
+    const button = document.getElementById("watchLaterBtn");
+
+    const videoData = {
+      thumbnail: "https://rinolski.neocities.org/Soul.jpg",
+      link: "https://rinolski.neocities.org/Soul.html",
+      name: "Soul"
+    };
+
+    function updateButton(saved) {
+      button.textContent = saved ? "Saved" : "Add to my list";
+      button.classList.toggle("saved", saved);
+      button.disabled = false;
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+      console.log("Auth state changed. User:", user);
+      if (!user) {
+        button.textContent = "Sign in to save";
+        button.disabled = false;
+        button.onclick = () => window.top.location.href = "https://rinolski.neocities.org/watch-history.html";
+        return;
+      }
+
+      const docRef = doc(db, "favorite", user.email, "Saves", videoData.name);
+
+      async function refreshState() {
+        try {
+          const snap = await getDoc(docRef);
+          const isSaved = snap.exists();
+          updateButton(isSaved);
+
+          button.onclick = async () => {
+            button.disabled = true;
+            try {
+              const snapAgain = await getDoc(docRef);
+              if (snapAgain.exists()) {
+                await deleteDoc(docRef);
+                updateButton(false);
+              } else {
+                await setDoc(docRef, { ...videoData, timestamp: Date.now() });
+                updateButton(true);
+              }
+            } catch (error) {
+              console.error("Error saving/removing document:", error);
+              await refreshState(); // recover state
+            } finally {
+              button.disabled = false;
+            }
+          };
+        } catch (error) {
+          console.error("Error fetching document:", error);
+          updateButton(false);
+        }
+      }
+
+      await refreshState();
+    });
+  </script>
+</body>
+</html>
