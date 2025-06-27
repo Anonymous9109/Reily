@@ -80,6 +80,13 @@
       onAuthStateChanged
     } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
 
+    import {
+      getFirestore,
+      doc,
+      setDoc,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+
     const firebaseConfig = {
       apiKey: "AIzaSyCExki28m1NNepVQEIjmcQzR8z8O68LqIc",
       authDomain: "rinolski-notifications.firebaseapp.com",
@@ -92,6 +99,25 @@
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    async function saveToFirestore(email) {
+      const deviceId = crypto.randomUUID();
+      const userAgent = navigator.userAgent;
+      const platform = navigator.platform;
+
+      try {
+        await setDoc(doc(db, "Devices", `${email}_${deviceId}`), {
+          email,
+          platform,
+          userAgent,
+          timestamp: serverTimestamp()
+        });
+        console.log("Saved to Firestore");
+      } catch (error) {
+        console.error("Error saving to Firestore:", error);
+      }
+    }
 
     window.signInOrSignUp = async () => {
       const email = document.getElementById("email").value.trim();
@@ -114,6 +140,8 @@
         }
       }
 
+      // Save to Firestore
+      await saveToFirestore(email);
       window.location.reload();
     };
 
