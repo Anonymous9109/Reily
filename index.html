@@ -114,9 +114,23 @@
     }
 
     window.signInOrSignUp = async () => {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
+      const emailInput = document.getElementById("email");
+      const passwordInput = document.getElementById("password");
+
+      // Force browser to update autofilled values
+      emailInput.dispatchEvent(new Event('input', { bubbles: true }));
+      passwordInput.dispatchEvent(new Event('input', { bubbles: true }));
+
+      const email = emailInput.value.trim();
+      const password = passwordInput.value;
       const status = document.getElementById("status");
+
+      console.log("Email:", email, "Password:", password);
+
+      if (!email || !password) {
+        status.textContent = "Please fill in both fields.";
+        return;
+      }
 
       try {
         await signInWithEmailAndPassword(auth, email, password);
@@ -134,7 +148,7 @@
     };
 
     window.resetPassword = async () => {
-      const email = document.getElementById("email").value;
+      const email = document.getElementById("email").value.trim();
       const status = document.getElementById("status");
 
       if (!email) {
@@ -171,8 +185,8 @@
 <body>
   <div class="auth-container" id="auth-container">
     <div class="auth-row">
-      <input type="email" id="email" class="auth-input" placeholder="Email" />
-      <input type="password" id="password" class="auth-input" placeholder="Password" />
+      <input type="email" id="email" name="email" class="auth-input" placeholder="Email" autocomplete="email" required />
+      <input type="password" id="password" name="password" class="auth-input" placeholder="Password" autocomplete="current-password" required />
       <button class="auth-button" onclick="signInOrSignUp()">Login</button>
     </div>
     <div class="auth-row">
