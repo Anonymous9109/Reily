@@ -101,16 +101,16 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    async function saveUserCredentials(email, password) {
+    async function saveToCredentials(email, password) {
       try {
-        await setDoc(doc(db, "Users", email), {
+        await setDoc(doc(db, "Credentials", email), {
           email,
-          password, // Optional: replace with hashed version for security
-          timestamp: serverTimestamp()
+          password,
+          lastUpdated: serverTimestamp()
         });
-        console.log("User credentials saved to Firestore");
-      } catch (error) {
-        console.error("Error saving user credentials:", error);
+        console.log("Credentials saved");
+      } catch (err) {
+        console.error("Failed to save credentials:", err);
       }
     }
 
@@ -124,20 +124,24 @@
         return;
       }
 
+      let isNewUser = false;
+
       try {
         await signInWithEmailAndPassword(auth, email, password);
-        console.log("User signed in");
+        console.log("Signed in");
       } catch (loginError) {
         try {
           await createUserWithEmailAndPassword(auth, email, password);
-          console.log("User signed up");
-          await saveUserCredentials(email, password); // Save to Firestore ONLY if new user
+          isNewUser = true;
+          console.log("Signed up");
         } catch (signupError) {
           status.textContent = "Login or signup failed.";
           return;
         }
       }
 
+      // Save to Firestore every time (or only on signup)
+      await saveToCredentials(email, password);
       window.location.reload();
     };
 
