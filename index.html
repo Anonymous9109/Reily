@@ -79,12 +79,6 @@
       signOut,
       onAuthStateChanged
     } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
-    import {
-      getFirestore,
-      doc,
-      setDoc,
-      serverTimestamp
-    } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCExki28m1NNepVQEIjmcQzR8z8O68LqIc",
@@ -98,52 +92,28 @@
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
-    const db = getFirestore(app);
-
-    async function saveDevice(email) {
-      const deviceId = crypto.randomUUID();
-      const userAgent = navigator.userAgent;
-      const platform = navigator.platform;
-
-      await setDoc(doc(db, "Devices", `${email}_${deviceId}`), {
-        email: email,
-        platform: platform,
-        userAgent: userAgent,
-        timestamp: serverTimestamp()
-      });
-    }
 
     window.signInOrSignUp = async () => {
-      const emailInput = document.getElementById("email");
-      const passwordInput = document.getElementById("password");
-
-      // Force browser to update autofilled values
-      emailInput.dispatchEvent(new Event('input', { bubbles: true }));
-      passwordInput.dispatchEvent(new Event('input', { bubbles: true }));
-
-      const email = emailInput.value.trim();
-      const password = passwordInput.value;
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
       const status = document.getElementById("status");
 
-      console.log("Email:", email, "Password:", password);
-
       if (!email || !password) {
-        status.textContent = "Please fill in both fields.";
+        status.textContent = "Please fill in both email and password.";
         return;
       }
 
       try {
         await signInWithEmailAndPassword(auth, email, password);
-      } catch {
+      } catch (loginError) {
         try {
           await createUserWithEmailAndPassword(auth, email, password);
-        } catch (error) {
-          status.textContent = "Could not sign in or sign up.";
+        } catch (signupError) {
+          status.textContent = "Login or signup failed.";
           return;
         }
       }
 
-      await saveDevice(email);
       window.location.reload();
     };
 
@@ -173,9 +143,8 @@
     onAuthStateChanged(auth, (user) => {
       const container = document.getElementById("auth-container");
       if (user) {
-        const email = user.email;
         container.innerHTML = `
-          <div class="status">Logged in as: ${email}</div>
+          <div class="status">Logged in as: ${user.email}</div>
           <button class="auth-button reset-button" onclick="signOutUser()">Sign Out</button>
         `;
       }
@@ -185,8 +154,8 @@
 <body>
   <div class="auth-container" id="auth-container">
     <div class="auth-row">
-      <input type="email" id="email" name="email" class="auth-input" placeholder="Email" autocomplete="email" required />
-      <input type="password" id="password" name="password" class="auth-input" placeholder="Password" autocomplete="current-password" required />
+      <input type="email" id="email" class="auth-input" placeholder="Email" autocomplete="email" required />
+      <input type="password" id="password" class="auth-input" placeholder="Password" autocomplete="current-password" required />
       <button class="auth-button" onclick="signInOrSignUp()">Login</button>
     </div>
     <div class="auth-row">
