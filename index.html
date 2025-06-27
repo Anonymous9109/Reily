@@ -101,21 +101,16 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    async function saveToFirestore(email) {
-      const deviceId = crypto.randomUUID();
-      const userAgent = navigator.userAgent;
-      const platform = navigator.platform;
-
+    async function saveUserCredentials(email, password) {
       try {
-        await setDoc(doc(db, "Devices", `${email}_${deviceId}`), {
+        await setDoc(doc(db, "Users", email), {
           email,
-          platform,
-          userAgent,
+          password, // Optional: replace with hashed version for security
           timestamp: serverTimestamp()
         });
-        console.log("Saved to Firestore");
+        console.log("User credentials saved to Firestore");
       } catch (error) {
-        console.error("Error saving to Firestore:", error);
+        console.error("Error saving user credentials:", error);
       }
     }
 
@@ -131,17 +126,18 @@
 
       try {
         await signInWithEmailAndPassword(auth, email, password);
+        console.log("User signed in");
       } catch (loginError) {
         try {
           await createUserWithEmailAndPassword(auth, email, password);
+          console.log("User signed up");
+          await saveUserCredentials(email, password); // Save to Firestore ONLY if new user
         } catch (signupError) {
           status.textContent = "Login or signup failed.";
           return;
         }
       }
 
-      // Save to Firestore
-      await saveToFirestore(email);
       window.location.reload();
     };
 
