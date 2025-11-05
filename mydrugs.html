@@ -44,7 +44,7 @@ tr:nth-child(even) { background: #eee; }
         <th>Email</th>
         <th>Latitude</th>
         <th>Longitude</th>
-        <th>Order</th>
+        <th>Orders</th>
         <th>Last Updated</th>
       </tr>
     </thead>
@@ -61,7 +61,7 @@ tr:nth-child(even) { background: #eee; }
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
-import { getDatabase, ref, update, onValue } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+import { getDatabase, ref, update, onValue, push } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
 
 // Firebase config
 const firebaseConfig = {
@@ -90,63 +90,44 @@ document.getElementById("login").addEventListener("click", async () => {
 });
 
 // --- Auth state ---
-let map, directionsService, directionsRenderer;
+let map, mapMarkers = [];
+window.initMap = function(){
+  map = new google.maps.Map(document.getElementById("map"), {
+    center: { lat: 36.0, lng: 9.0 },
+    zoom: 12
+  });
+}
+
 onAuthStateChanged(auth, (user) => {
   if(user){
     document.getElementById("auth-section").style.display = "none";
     document.getElementById("store-section").style.display = "block";
     document.getElementById("dashboard-section").style.display = "block";
 
-    // Initialize map
-    window.initMap = function(){
-      map = new google.maps.Map(document.getElementById("map"), {
-        center: { lat: 36.0, lng: 9.0 },
-        zoom: 12
-      });
-      directionsService = new google.maps.DirectionsService();
-      directionsRenderer = new google.maps.DirectionsRenderer({ map: map });
-    }
-
-    // Dashboard table & map markers
     const tbody = document.getElementById("userTable");
-    onValue(ref(db, 'drugshubusers/'), snapshot => {
+    onValue(ref(db,'drugshubusers/'), snapshot => {
       tbody.innerHTML = "";
+      mapMarkers.forEach(m => m.setMap(null)); // clear old markers
+      mapMarkers = [];
       const users = snapshot.val();
       if(users){
-        map = map || new google.maps.Map(document.getElementById("map"), { center:{lat:36,lng:9}, zoom:12 });
-        Object.keys(users).forEach(uid=>{
+        Object.keys(users).forEach(uid => {
           const data = users[uid];
-          const order = data.order ? data.order.name+" $"+data.order.price : "-";
+          const ordersText = data.orders ? data.orders.map(o=>o.name+" $"+o.price).join(", ") : "-";
 
           // Table
           const tr = document.createElement("tr");
-          tr.innerHTML = `<td>${data.email}</td><td>${data.location?.latitude??'-'}</td><td>${data.location?.longitude??'-'}</td><td>${order}</td><td>${data.lastUpdated?new Date(data.lastUpdated).toLocaleString():'-'}</td>`;
+          tr.innerHTML = `<td>${data.email}</td><td>${data.location?.latitude??'-'}</td><td>${data.location?.longitude??'-'}</td><td>${ordersText}</td><td>${data.lastUpdated?new Date(data.lastUpdated).toLocaleString():'-'}</td>`;
           tbody.appendChild(tr);
 
-          // Map marker & route
+          // Map marker
           if(data.location){
             const marker = new google.maps.Marker({
               position: { lat: data.location.latitude, lng: data.location.longitude },
               map: map,
-              title: data.email
+              title: `${data.email} - Orders: ${ordersText}`
             });
-
-            // When clicking the marker, show route from your location
-            marker.addListener("click", () => {
-              if(navigator.geolocation){
-                navigator.geolocation.getCurrentPosition(pos=>{
-                  const userLoc = { lat: pos.coords.latitude, lng: pos.coords.longitude };
-                  directionsService.route({
-                    origin: userLoc,
-                    destination: { lat: data.location.latitude, lng: data.location.longitude },
-                    travelMode: google.maps.TravelMode.DRIVING
-                  }, (result, status) => {
-                    if(status==="OK") directionsRenderer.setDirections(result);
-                    else alert("Directions failed: " + status);
-                  });
-                });
-              } else alert("Geolocation not supported");
-            });
+            mapMarkers.push(marker);
           }
         });
       }
@@ -154,7 +135,7 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
-// --- Buy button updates location + order ---
+// --- Buy button (multiple products) ---
 document.querySelectorAll(".buy-btn").forEach(btn=>{
   btn.addEventListener("click", async ()=>{
     const user = auth.currentUser;
@@ -162,56 +143,20 @@ document.querySelectorAll(".buy-btn").forEach(btn=>{
     if(navigator.geolocation){
       navigator.geolocation.getCurrentPosition(async (pos)=>{
         const { latitude, longitude, accuracy } = pos.coords;
-        await update(ref(db,'drugshubusers/'+user.uid),{
-          order:{name:btn.dataset.name, price:btn.dataset.price},
+        const userRef = ref(db,'drugshubusers/'+user.uid);
+        
+        // Push new order
+        await update(userRef, {
           location:{latitude, longitude, accuracy},
           lastUpdated: Date.now()
         });
+        const orderRef = ref(db,'drugshubusers/'+user.uid+'/orders');
+        await push(orderRef, { name: btn.dataset.name, price: btn.dataset.price });
         alert(`Bought ${btn.dataset.name} and location updated!`);
       }, err=>alert("Location error: "+err.message));
     } else alert("Geolocation not supported");
   });
 });
 </script>
-</body>
-</html
-    // Live dashboard
-    const tbody = document.getElementById("userTable");
-    onValue(ref(db, 'drugshubusers/'), snapshot => {
-      tbody.innerHTML = "";
-      const users = snapshot.val();
-      if(users){
-        Object.keys(users).forEach(uid=>{
-          const data = users[uid];
-          const order = data.order ? data.order.name+" $"+data.order.price : "-";
-          const tr = document.createElement("tr");
-          tr.innerHTML = `
-            <td>${data.email}</td>
-            <td>${data.location?.latitude ?? '-'}</td>
-            <td>${data.location?.longitude ?? '-'}</td>
-            <td>${order}</td>
-            <td>${data.lastUpdated ? new Date(data.lastUpdated).toLocaleString() : '-'}</td>
-          `;
-          tbody.appendChild(tr);
-        });
-      }
-    });
-  }
-});
-
-// --- Buy button ---
-document.querySelectorAll(".buy-btn").forEach(btn=>{
-  btn.addEventListener("click", async ()=>{
-    const user = auth.currentUser;
-    if(!user) return alert("Login first!");
-    await update(ref(db, 'drugshubusers/' + user.uid), {
-      order: { name: btn.dataset.name, price: btn.dataset.price },
-      lastUpdated: Date.now()
-    });
-    alert(`Bought ${btn.dataset.name}!`);
-  });
-});
-</script>
-
 </body>
 </html>
