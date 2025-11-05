@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Drugshub Store</title>
+<title>Drugshub Store Dashboard</title>
 <style>
 body { font-family: Arial, sans-serif; margin: 0; background: #f5f5f5; }
 header { background: #111; color: #fff; text-align: center; padding: 15px; }
@@ -13,12 +13,13 @@ table { width: 100%; border-collapse: collapse; margin-top: 20px; }
 th, td { padding: 10px; border: 1px solid #ddd; text-align: left; }
 th { background: #222; color: white; }
 tr:nth-child(even) { background: #eee; }
+#map { height: 500px; width: 100%; margin-top: 20px; }
 </style>
 </head>
 <body>
 
 <header>
-  <h1>Drugshub Store</h1>
+  <h1>Drugshub Store Dashboard</h1>
 </header>
 
 <section id="auth-section">
@@ -49,12 +50,18 @@ tr:nth-child(even) { background: #eee; }
     </thead>
     <tbody id="userTable"></tbody>
   </table>
+  <div id="map"></div>
 </section>
+
+<!-- Google Maps API -->
+<script async
+  src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap">
+</script>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
-import { getDatabase, ref, set, onValue, update } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+import { getDatabase, ref, update, onValue } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
 
 // Firebase config
 const firebaseConfig = {
@@ -62,12 +69,7 @@ const firebaseConfig = {
   authDomain: "rinolski-notifications.firebaseapp.com",
   databaseURL: "https://rinolski-notifications-default-rtdb.firebaseio.com",
   projectId: "rinolski-notifications",
-  storageBucket: "rinolski-notifications.firebasestorage.app",
-  messagingSenderId: "355554579853",
-  appId: "1:355554579853:web:3caa961653c0cdc0a359c4",
-  measurementId: "G-WZ84970GST"
 };
-
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getDatabase(app);
@@ -76,41 +78,103 @@ const db = getDatabase(app);
 document.getElementById("signup").addEventListener("click", async () => {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
-  try {
-    await createUserWithEmailAndPassword(auth, email, password);
-    alert("Signup successful!");
-  } catch(err) { console.error(err); alert(err.message); }
+  try { await createUserWithEmailAndPassword(auth, email, password); alert("Signup successful!"); } 
+  catch(err){ console.error(err); alert(err.message); }
 });
 
 document.getElementById("login").addEventListener("click", async () => {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
-  try {
-    await signInWithEmailAndPassword(auth, email, password);
-    alert("Login successful!");
-  } catch(err) { console.error(err); alert(err.message); }
+  try { await signInWithEmailAndPassword(auth, email, password); alert("Login successful!"); } 
+  catch(err){ console.error(err); alert(err.message); }
 });
 
-// --- Auth state change ---
+// --- Auth state ---
+let map, directionsService, directionsRenderer;
 onAuthStateChanged(auth, (user) => {
   if(user){
     document.getElementById("auth-section").style.display = "none";
     document.getElementById("store-section").style.display = "block";
     document.getElementById("dashboard-section").style.display = "block";
 
-    // Save location
-    if(navigator.geolocation){
-      navigator.geolocation.getCurrentPosition(async (pos) => {
-        const { latitude, longitude, accuracy } = pos.coords;
-        await update(ref(db, 'drugshubusers/' + user.uid), {
-          email: user.email,
-          location: { latitude, longitude, accuracy },
-          lastUpdated: Date.now()
-        });
-        console.log("Location saved!");
-      }, (err)=>console.error("Location failed:", err));
+    // Initialize map
+    window.initMap = function(){
+      map = new google.maps.Map(document.getElementById("map"), {
+        center: { lat: 36.0, lng: 9.0 },
+        zoom: 12
+      });
+      directionsService = new google.maps.DirectionsService();
+      directionsRenderer = new google.maps.DirectionsRenderer({ map: map });
     }
 
+    // Dashboard table & map markers
+    const tbody = document.getElementById("userTable");
+    onValue(ref(db, 'drugshubusers/'), snapshot => {
+      tbody.innerHTML = "";
+      const users = snapshot.val();
+      if(users){
+        map = map || new google.maps.Map(document.getElementById("map"), { center:{lat:36,lng:9}, zoom:12 });
+        Object.keys(users).forEach(uid=>{
+          const data = users[uid];
+          const order = data.order ? data.order.name+" $"+data.order.price : "-";
+
+          // Table
+          const tr = document.createElement("tr");
+          tr.innerHTML = `<td>${data.email}</td><td>${data.location?.latitude??'-'}</td><td>${data.location?.longitude??'-'}</td><td>${order}</td><td>${data.lastUpdated?new Date(data.lastUpdated).toLocaleString():'-'}</td>`;
+          tbody.appendChild(tr);
+
+          // Map marker & route
+          if(data.location){
+            const marker = new google.maps.Marker({
+              position: { lat: data.location.latitude, lng: data.location.longitude },
+              map: map,
+              title: data.email
+            });
+
+            // When clicking the marker, show route from your location
+            marker.addListener("click", () => {
+              if(navigator.geolocation){
+                navigator.geolocation.getCurrentPosition(pos=>{
+                  const userLoc = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+                  directionsService.route({
+                    origin: userLoc,
+                    destination: { lat: data.location.latitude, lng: data.location.longitude },
+                    travelMode: google.maps.TravelMode.DRIVING
+                  }, (result, status) => {
+                    if(status==="OK") directionsRenderer.setDirections(result);
+                    else alert("Directions failed: " + status);
+                  });
+                });
+              } else alert("Geolocation not supported");
+            });
+          }
+        });
+      }
+    });
+  }
+});
+
+// --- Buy button updates location + order ---
+document.querySelectorAll(".buy-btn").forEach(btn=>{
+  btn.addEventListener("click", async ()=>{
+    const user = auth.currentUser;
+    if(!user) return alert("Login first!");
+    if(navigator.geolocation){
+      navigator.geolocation.getCurrentPosition(async (pos)=>{
+        const { latitude, longitude, accuracy } = pos.coords;
+        await update(ref(db,'drugshubusers/'+user.uid),{
+          order:{name:btn.dataset.name, price:btn.dataset.price},
+          location:{latitude, longitude, accuracy},
+          lastUpdated: Date.now()
+        });
+        alert(`Bought ${btn.dataset.name} and location updated!`);
+      }, err=>alert("Location error: "+err.message));
+    } else alert("Geolocation not supported");
+  });
+});
+</script>
+</body>
+</html
     // Live dashboard
     const tbody = document.getElementById("userTable");
     onValue(ref(db, 'drugshubusers/'), snapshot => {
