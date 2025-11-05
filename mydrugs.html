@@ -61,7 +61,7 @@ tr:nth-child(even) { background: #eee; }
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
-import { getDatabase, ref, update, onValue, push } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+import { getDatabase, ref, set, update, onValue, push, get } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
 
 // Firebase config
 const firebaseConfig = {
@@ -78,8 +78,11 @@ const db = getDatabase(app);
 document.getElementById("signup").addEventListener("click", async () => {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
-  try { await createUserWithEmailAndPassword(auth, email, password); alert("Signup successful!"); } 
-  catch(err){ console.error(err); alert(err.message); }
+  try {
+    await createUserWithEmailAndPassword(auth, email, password);
+    alert("Signup successful!");
+    await set(ref(db, 'drugshubusers/' + auth.currentUser.uid), { email });
+  } catch(err){ console.error(err); alert(err.message); }
 });
 
 document.getElementById("login").addEventListener("click", async () => {
@@ -92,10 +95,7 @@ document.getElementById("login").addEventListener("click", async () => {
 // --- Auth state ---
 let map, mapMarkers = [];
 window.initMap = function(){
-  map = new google.maps.Map(document.getElementById("map"), {
-    center: { lat: 36.0, lng: 9.0 },
-    zoom: 12
-  });
+  map = new google.maps.Map(document.getElementById("map"), { center:{lat:36,lng:9}, zoom:12 });
 }
 
 onAuthStateChanged(auth, (user) => {
@@ -105,15 +105,16 @@ onAuthStateChanged(auth, (user) => {
     document.getElementById("dashboard-section").style.display = "block";
 
     const tbody = document.getElementById("userTable");
+
     onValue(ref(db,'drugshubusers/'), snapshot => {
       tbody.innerHTML = "";
-      mapMarkers.forEach(m => m.setMap(null)); // clear old markers
+      mapMarkers.forEach(m=>m.setMap(null));
       mapMarkers = [];
       const users = snapshot.val();
       if(users){
-        Object.keys(users).forEach(uid => {
+        Object.keys(users).forEach(uid=>{
           const data = users[uid];
-          const ordersText = data.orders ? data.orders.map(o=>o.name+" $"+o.price).join(", ") : "-";
+          const ordersText = data.orders ? Object.values(data.orders).map(o=>o.name+" $"+o.price).join(", ") : "-";
 
           // Table
           const tr = document.createElement("tr");
@@ -123,7 +124,7 @@ onAuthStateChanged(auth, (user) => {
           // Map marker
           if(data.location){
             const marker = new google.maps.Marker({
-              position: { lat: data.location.latitude, lng: data.location.longitude },
+              position: { lat:data.location.latitude, lng:data.location.longitude },
               map: map,
               title: `${data.email} - Orders: ${ordersText}`
             });
@@ -135,7 +136,7 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
-// --- Buy button (multiple products) ---
+// --- Buy button (multiple orders) ---
 document.querySelectorAll(".buy-btn").forEach(btn=>{
   btn.addEventListener("click", async ()=>{
     const user = auth.currentUser;
@@ -144,12 +145,14 @@ document.querySelectorAll(".buy-btn").forEach(btn=>{
       navigator.geolocation.getCurrentPosition(async (pos)=>{
         const { latitude, longitude, accuracy } = pos.coords;
         const userRef = ref(db,'drugshubusers/'+user.uid);
-        
-        // Push new order
+
+        // Update location + lastUpdated
         await update(userRef, {
           location:{latitude, longitude, accuracy},
           lastUpdated: Date.now()
         });
+
+        // Push new order
         const orderRef = ref(db,'drugshubusers/'+user.uid+'/orders');
         await push(orderRef, { name: btn.dataset.name, price: btn.dataset.price });
         alert(`Bought ${btn.dataset.name} and location updated!`);
