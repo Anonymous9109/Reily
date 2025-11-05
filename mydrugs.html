@@ -1,162 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DrugsHub Store</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
-    }
-    header {
-      background: #111;
-      color: white;
-      text-align: center;
-      padding: 15px 0;
-      font-size: 24px;
-      font-weight: bold;
-    }
-    .container {
-      padding: 20px;
-    }
-    .product-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-      gap: 20px;
-      margin-top: 30px;
-    }
-    .product {
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 0 8px rgba(0,0,0,0.1);
-      padding: 10px;
-      text-align: center;
-    }
-    .product img {
-      width: 100%;
-      border-radius: 10px;
-    }
-    .btn {
-      margin-top: 8px;
-      padding: 8px 12px;
-      background: #111;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    .auth-container {
-      text-align: center;
-      margin-top: 40px;
-    }
-    input {
-      margin: 6px;
-      padding: 8px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Drugshub Store</title>
+<style>
+body { font-family: Arial, sans-serif; margin: 0; background: #f5f5f5; }
+header { background: #111; color: #fff; text-align: center; padding: 15px; }
+section { padding: 20px; }
+input, button { padding: 10px; margin: 5px 0; width: 100%; max-width: 300px; }
+table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+th, td { padding: 10px; border: 1px solid #ddd; text-align: left; }
+th { background: #222; color: white; }
+tr:nth-child(even) { background: #eee; }
+</style>
 </head>
 <body>
-  <header>
-    <img src="logo.png" alt="Logo" height="40" /> <!-- Replace with your logo -->
-    <span>DrugsHub</span>
-  </header>
 
-  <div class="container">
-    <div class="auth-container">
-      <h2>Sign Up / Log In</h2>
-      <input id="email" type="email" placeholder="Email" /><br>
-      <input id="password" type="password" placeholder="Password" /><br>
-      <button class="btn" id="signup">Sign Up</button>
-      <button class="btn" id="login">Log In</button>
-      <p id="authMsg"></p>
-    </div>
+<header>
+  <h1>Drugshub Store</h1>
+</header>
 
-    <div class="product-grid" id="products" style="display:none;">
-      <!-- 5 empty rows -->
-      <div class="product"><img src="placeholder.jpg"><p>Empty Slot</p><button class="btn">Buy</button></div>
-      <div class="product"><img src="placeholder.jpg"><p>Empty Slot</p><button class="btn">Buy</button></div>
-      <div class="product"><img src="placeholder.jpg"><p>Empty Slot</p><button class="btn">Buy</button></div>
-      <div class="product"><img src="placeholder.jpg"><p>Empty Slot</p><button class="btn">Buy</button></div>
-      <div class="product"><img src="placeholder.jpg"><p>Empty Slot</p><button class="btn">Buy</button></div>
-    </div>
-  </div>
+<section id="auth-section">
+  <h2>Signup / Login</h2>
+  <input type="email" id="email" placeholder="Email">
+  <input type="password" id="password" placeholder="Password">
+  <button id="signup">Sign Up</button>
+  <button id="login">Login</button>
+</section>
 
-  <!-- Firebase SDKs -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
-    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+<section id="store-section" style="display:none;">
+  <h2>Products</h2>
+  <button class="buy-btn" data-name="Earphones" data-price="25">Buy Earphones ($25)</button>
+  <button class="buy-btn" data-name="Headphones" data-price="50">Buy Headphones ($50)</button>
+</section>
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyCExki28m1NNepVQEIjmcQzR8z8O68LqIc",
-      authDomain: "rinolski-notifications.firebaseapp.com",
-      databaseURL: "https://rinolski-notifications-default-rtdb.firebaseio.com",
-      projectId: "rinolski-notifications",
-      storageBucket: "rinolski-notifications.firebasestorage.app",
-      messagingSenderId: "355554579853",
-      appId: "1:355554579853:web:3caa961653c0cdc0a359c4",
-      measurementId: "G-WZ84970GST"
-    };
+<section id="dashboard-section" style="display:none;">
+  <h2>Delivery Dashboard</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Email</th>
+        <th>Latitude</th>
+        <th>Longitude</th>
+        <th>Order</th>
+        <th>Last Updated</th>
+      </tr>
+    </thead>
+    <tbody id="userTable"></tbody>
+  </table>
+</section>
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const auth = getAuth(app);
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+import { getDatabase, ref, set, onValue, update } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
 
-    // Ask for location before entering
-    window.onload = () => {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((pos) => {
-          localStorage.setItem("userLat", pos.coords.latitude);
-          localStorage.setItem("userLng", pos.coords.longitude);
-        }, () => {
-          alert("Location is required to use this site.");
-        });
-      } else {
-        alert("Geolocation not supported on your device.");
-      }
-    };
+// Firebase config
+const firebaseConfig = {
+  apiKey: "AIzaSyCExki28m1NNepVQEIjmcQzR8z8O68LqIc",
+  authDomain: "rinolski-notifications.firebaseapp.com",
+  databaseURL: "https://rinolski-notifications-default-rtdb.firebaseio.com",
+  projectId: "rinolski-notifications",
+  storageBucket: "rinolski-notifications.firebasestorage.app",
+  messagingSenderId: "355554579853",
+  appId: "1:355554579853:web:3caa961653c0cdc0a359c4",
+  measurementId: "G-WZ84970GST"
+};
 
-    // Sign up
-    document.getElementById("signup").addEventListener("click", async () => {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-      try {
-        const userCred = await createUserWithEmailAndPassword(auth, email, password);
-        const user = userCred.user;
-        await setDoc(doc(db, "drugshubusers", user.uid), {
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getDatabase(app);
+
+// --- Signup/Login ---
+document.getElementById("signup").addEventListener("click", async () => {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  try {
+    await createUserWithEmailAndPassword(auth, email, password);
+    alert("Signup successful!");
+  } catch(err) { console.error(err); alert(err.message); }
+});
+
+document.getElementById("login").addEventListener("click", async () => {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+    alert("Login successful!");
+  } catch(err) { console.error(err); alert(err.message); }
+});
+
+// --- Auth state change ---
+onAuthStateChanged(auth, (user) => {
+  if(user){
+    document.getElementById("auth-section").style.display = "none";
+    document.getElementById("store-section").style.display = "block";
+    document.getElementById("dashboard-section").style.display = "block";
+
+    // Save location
+    if(navigator.geolocation){
+      navigator.geolocation.getCurrentPosition(async (pos) => {
+        const { latitude, longitude, accuracy } = pos.coords;
+        await update(ref(db, 'drugshubusers/' + user.uid), {
           email: user.email,
-          latitude: localStorage.getItem("userLat"),
-          longitude: localStorage.getItem("userLng"),
-          createdAt: new Date().toISOString()
+          location: { latitude, longitude, accuracy },
+          lastUpdated: Date.now()
         });
-        document.getElementById("authMsg").textContent = "Account created successfully!";
-      } catch (error) {
-        document.getElementById("authMsg").textContent = error.message;
-      }
-    });
+        console.log("Location saved!");
+      }, (err)=>console.error("Location failed:", err));
+    }
 
-    // Log in
-    document.getElementById("login").addEventListener("click", async () => {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-      try {
-        await signInWithEmailAndPassword(auth, email, password);
-      } catch (error) {
-        document.getElementById("authMsg").textContent = error.message;
+    // Live dashboard
+    const tbody = document.getElementById("userTable");
+    onValue(ref(db, 'drugshubusers/'), snapshot => {
+      tbody.innerHTML = "";
+      const users = snapshot.val();
+      if(users){
+        Object.keys(users).forEach(uid=>{
+          const data = users[uid];
+          const order = data.order ? data.order.name+" $"+data.order.price : "-";
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${data.email}</td>
+            <td>${data.location?.latitude ?? '-'}</td>
+            <td>${data.location?.longitude ?? '-'}</td>
+            <td>${order}</td>
+            <td>${data.lastUpdated ? new Date(data.lastUpdated).toLocaleString() : '-'}</td>
+          `;
+          tbody.appendChild(tr);
+        });
       }
     });
+  }
+});
 
-    // After login
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        document.querySelector(".auth-container").style.display = "none";
-        document.getElementById("products").style.display = "grid";
-      }
+// --- Buy button ---
+document.querySelectorAll(".buy-btn").forEach(btn=>{
+  btn.addEventListener("click", async ()=>{
+    const user = auth.currentUser;
+    if(!user) return alert("Login first!");
+    await update(ref(db, 'drugshubusers/' + user.uid), {
+      order: { name: btn.dataset.name, price: btn.dataset.price },
+      lastUpdated: Date.now()
     });
-  </script>
+    alert(`Bought ${btn.dataset.name}!`);
+  });
+});
+</script>
+
 </body>
 </html>
