@@ -1,1 +1,208 @@
-<h1>hi:)</h1>
+<!DOCTYPE html><html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rinolski Auth</title>
+<style>
+    body {
+        margin: 0;
+        font-family: 'Helvetica Neue', sans-serif;
+        background: #141414;
+        color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+    .container, .account-container {
+        background: #1f1f1f;
+        padding: 40px;
+        border-radius: 8px;
+        width: 350px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.7);
+        text-align: center;
+    }
+    h1 { margin-bottom: 30px; }
+    input {
+        width: 100%;
+        padding: 12px;
+        margin: 8px 0;
+        border-radius: 4px;
+        border: none;
+        background: #333;
+        color: #fff;
+    }
+    button {
+        width: 100%;
+        padding: 12px;
+        margin-top: 10px;
+        border: none;
+        border-radius: 4px;
+        background: #e50914;
+        color: #fff;
+        font-size: 16px;
+        cursor: pointer;
+    }
+    button:hover { background: #f6121d; }
+    .switch, .forgot {
+        margin-top: 10px;
+        font-size: 14px;
+        cursor: pointer;
+        color: #bbb;
+    }
+    .switch:hover, .forgot:hover { color: #fff; }
+    #message { margin-top: 10px; font-size: 14px; color: #f6121d; }
+</style>
+</head>
+<body><div id="login-container" class="container">
+    <h1 id="form-title">Login</h1>
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="password" placeholder="Password">
+    <button id="submit-btn">Login</button>
+    <div class="forgot" id="forgot-btn">Forgot Password?</div>
+    <div class="switch" id="switch-form">Don't have an account? Sign Up</div>
+    <div id="message"></div>
+</div><div id="account-container" class="account-container" style="display:none;">
+    <h1 id="user-display">Hello, User</h1>
+    <button id="logout-btn">Logout</button>
+</div><script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut, setPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js";
+
+// Firebase config
+const firebaseConfig = {
+  apiKey: "AIzaSyCExki28m1NNepVQEIjmcQzR8z8O68LqIc",
+  authDomain: "rinolski-notifications.firebaseapp.com",
+  databaseURL: "https://rinolski-notifications-default-rtdb.firebaseio.com",
+  projectId: "rinolski-notifications",
+  storageBucket: "rinolski-notifications.firebasestorage.app",
+  messagingSenderId: "355554579853",
+  appId: "1:355554579853:web:3caa961653c0cdc0a359c4",
+  measurementId: "G-WZ84970GST"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+// Optional: session-only persistence
+setPersistence(auth, browserSessionPersistence);
+
+const loginContainer = document.getElementById("login-container");
+const accountContainer = document.getElementById("account-container");
+const userDisplay = document.getElementById("user-display");
+const logoutBtn = document.getElementById("logout-btn");
+
+const formTitle = document.getElementById("form-title");
+const submitBtn = document.getElementById("submit-btn");
+const switchForm = document.getElementById("switch-form");
+const forgotBtn = document.getElementById("forgot-btn");
+const emailInput = document.getElementById("email");
+const passwordInput = document.getElementById("password");
+const messageDiv = document.getElementById("message");
+
+let isLogin = true;
+
+// Friendly error messages
+function getFriendlyErrorMessage(error) {
+    switch (error.code) {
+        case 'auth/invalid-email':
+            return "Invalid email format";
+        case 'auth/user-not-found':
+            return "No account found with this email";
+        case 'auth/wrong-password':
+            return "Incorrect password";
+        case 'auth/email-already-in-use':
+            return "This email is already registered";
+        case 'auth/weak-password':
+            return "Password should be at least 6 characters";
+        case 'auth/missing-password':
+            return "Please enter a password";
+        default:
+            return "An error occurred. Please try again.";
+    }
+}
+
+// Auth state listener
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        let username = user.email.split("@")[0];
+        userDisplay.textContent = `Hello, ${username}`;
+        loginContainer.style.display = "none";
+        accountContainer.style.display = "block";
+    } else {
+        loginContainer.style.display = "block";
+        accountContainer.style.display = "none";
+        emailInput.value = "";
+        passwordInput.value = "";
+        messageDiv.textContent = "";
+    }
+});
+
+// Login / Sign Up
+submitBtn.addEventListener("click", async () => {
+    const email = emailInput.value;
+    const password = passwordInput.value;
+
+    if (!email || !password) {
+        messageDiv.textContent = "Please fill all fields";
+        return;
+    }
+
+    try {
+        if (isLogin) {
+            await signInWithEmailAndPassword(auth, email, password);
+            messageDiv.style.color = "lime";
+            messageDiv.textContent = "Logged in successfully!";
+        } else {
+            await createUserWithEmailAndPassword(auth, email, password);
+            messageDiv.style.color = "lime";
+            messageDiv.textContent = "Account created successfully!";
+        }
+    } catch (error) {
+        messageDiv.style.color = "#f6121d";
+        messageDiv.textContent = getFriendlyErrorMessage(error);
+    }
+});
+
+// Switch between login/signup
+switchForm.addEventListener("click", () => {
+    isLogin = !isLogin;
+    formTitle.textContent = isLogin ? "Login" : "Sign Up";
+    submitBtn.textContent = isLogin ? "Login" : "Sign Up";
+    switchForm.textContent = isLogin ? "Don't have an account? Sign Up" : "Already have an account? Login";
+    messageDiv.textContent = "";
+});
+
+// Forgot password
+forgotBtn.addEventListener("click", async () => {
+    const email = emailInput.value;
+    if (!email) {
+        messageDiv.textContent = "Enter your email to reset password";
+        return;
+    }
+    try {
+        await sendPasswordResetEmail(auth, email);
+        messageDiv.style.color = "lime";
+        messageDiv.textContent = "Password reset email sent!";
+    } catch (error) {
+        messageDiv.style.color = "#f6121d";
+        // Friendly message for forgot password
+        if (error.code === 'auth/user-not-found') {
+            messageDiv.textContent = "No account found with this email";
+        } else if (error.code === 'auth/invalid-email') {
+            messageDiv.textContent = "Invalid email format";
+        } else {
+            messageDiv.textContent = "Unable to send reset email. Try again.";
+        }
+    }
+});
+
+// Logout
+logoutBtn.addEventListener("click", async () => {
+    await signOut(auth);
+    emailInput.value = "";
+    passwordInput.value = "";
+    messageDiv.textContent = "";
+});
+</script></body>
+        </html>
