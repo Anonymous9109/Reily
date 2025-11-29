@@ -1,0 +1,32 @@
+[
+  {
+    "title": "Itadaki Seieki",
+    "thumbnail": "images/Itadakiseieki.jpg",
+    "link": "series/itadaki-seieki.html"
+  },
+  {
+    "title": "Otome Hime",
+    "thumbnail": "images/Otome-Hime.jpg",
+    "link": "series/OtomeHime.html"
+  },
+  {
+    "title": "Kakushi Dere",
+    "thumbnail": "images/Kakashidere.jpg",
+    "link": "series/Kakushidere.html"
+  },
+  {
+    "title": "Mou Hasamazu Ni Wa Irarenai",
+    "thumbnail": "images/MouHasamazuNiWaIrarenai.jpg",
+    "link": "series/MouHasamazuNiWaIrarenai.html"
+  },
+  {
+    "title": "Koi Maguwai",
+    "thumbnail": "images/KoiMaguwai.jpg",
+    "link": "series/KoiMaguwai.html"
+  },
+  {
+    "title": "Shoujo-tachi no Sadism",
+    "thumbnail": "images/Shoujo-tachinoSadism.jpg",
+    "link": "series/Shoujo-tachinoSadism.html"
+  }
+]

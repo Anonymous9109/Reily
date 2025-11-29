@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>itadaki seieki Episode 2</title>
+<link rel="stylesheet" href="/css/player.css">
+<head>
+  <meta charset="UTF-8">
+  <meta name="force-landscape" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+  <div id="videoPlayer">
+    <button class="back-button" onclick="location.href=''">← </button>
+    <button class="next-episode-button" onclick="location.href=''">Next episode</button>
+    <div class="controls-text">"episode 2"</div>
+    <video id="videoElement" preload="auto">
+      <source src="https://res.cloudinary.com/dn8w9kttq/video/upload/v1761851103/vomiiaqdz5id8pgwbrmf.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+    <div class="controls">
+      <button id="rewindButton">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M11 19V5L2 12L11 19ZM22 5V19L13 12L22 5Z"/>
+        </svg>
+      </button>
+      <button id="playPauseButton">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M5 3L19 12L5 21V3Z"/>
+        </svg>
+      </button>
+      <button id="skipButton">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M13 5V19L22 12L13 5ZM2 5V19L11 12L2 5Z"/>
+        </svg>
+      </button>
+    </div>
+    <div class="progress-container" id="progressContainer">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+    <div class="countdown-timer" id="countdownTimer">00:00</div>
+  </div>
+
+
+
+  <script>
+  window.backEpisodeLink = 'series/itadaki-seieki.html';
+  window.nextEpisodeLink = 'itadaki-seieki.html';
+</script>
+<script src="/js/player.js" defer></script>
+
+</body>
+</html>

