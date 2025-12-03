@@ -9,193 +9,179 @@
         margin: 0;
         font-family: 'Helvetica Neue', sans-serif;
         background: #141414;
-        color: #fff;
+        color: white;
         display: flex;
         justify-content: center;
         align-items: center;
         height: 100vh;
     }
-    .container, .account-container {
-        background: #1f1f1f;
-        padding: 40px;
+    .box {
+        background: #000;
+        width: 90%;
+        max-width: 380px;
+        padding: 25px;
         border-radius: 8px;
-        width: 350px;
-        box-shadow: 0 0 10px rgba(0,0,0,0.7);
-        text-align: center;
     }
-    h1 { margin-bottom: 30px; }
     input {
         width: 100%;
         padding: 12px;
-        margin: 8px 0;
-        border-radius: 4px;
+        margin: 10px 0;
+        background: #222;
         border: none;
-        background: #333;
-        color: #fff;
+        border-radius: 5px;
+        color: white;
     }
     button {
         width: 100%;
         padding: 12px;
         margin-top: 10px;
+        background: red;
         border: none;
-        border-radius: 4px;
-        background: #e50914;
-        color: #fff;
+        border-radius: 5px;
+        color: white;
         font-size: 16px;
         cursor: pointer;
     }
-    button:hover { background: #f6121d; }
-    .switch, .forgot {
+    .error {
+        color: #ff4444;
         margin-top: 10px;
         font-size: 14px;
-        cursor: pointer;
-        color: #bbb;
+        min-height: 20px;
     }
-    .switch:hover, .forgot:hover { color: #fff; }
-    #message { margin-top: 10px; font-size: 14px; color: #f6121d; }
+    #loggedInView {
+        display: none;
+        margin-top: 20px;
+        padding: 15px;
+        background: #111;
+        border-radius: 5px;
+        font-size: 18px;
+    }
 </style>
 </head>
 <body>
 
-<div id="login-container" class="container">
-    <h1 id="form-title">Login</h1>
-    <input type="email" id="email" placeholder="Email">
-    <input type="password" id="password" placeholder="Password">
-    <button id="submit-btn">Login</button>
-    <div class="forgot" id="forgot-btn">Forgot Password?</div>
-    <div class="switch" id="switch-form">Don't have an account? Sign Up</div>
-    <div id="message"></div>
+<div class="box">
+
+    <div id="authFields">
+        
+
+        <input id="email" type="email" placeholder="Email">
+        <input id="password" type="password" placeholder="Password">
+
+        <button onclick="login()">Log In</button>
+        <button onclick="signup()">Sign Up</button>
+
+        <div class="error" id="errorBox"></div>
+    </div>
+
+    <div id="loggedInView">
+        <div id="userEmail"></div>
+        <button onclick="logout()">Log Out</button>
+    </div>
+
 </div>
 
-<div id="account-container" class="account-container" style="display:none;">
-    <h1 id="user-display">Hello, User</h1>
-    <button id="logout-btn">Logout</button>
-</div>
+<!-- NON-MODULE FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
-import {
-    getAuth,
-    onAuthStateChanged,
-    signInWithEmailAndPassword,
-    createUserWithEmailAndPassword,
-    sendPasswordResetEmail,
-    signOut,
-    setPersistence,
-    browserLocalPersistence
-} from "https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js";
-
-// Firebase Config
+<script>
+// Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyCExki28m1NNepVQEIjmcQzR8z8O68LqIc",
   authDomain: "rinolski-notifications.firebaseapp.com",
-  databaseURL: "https://rinolski-notifications-default-rtdb.firebaseio.com",
   projectId: "rinolski-notifications",
   storageBucket: "rinolski-notifications.firebasestorage.app",
   messagingSenderId: "355554579853",
-  appId: "1:355554579853:web:3caa961653c0cdc0a359c4",
-  measurementId: "G-WZ84970GST"
+  appId: "1:355554579853:web:3caa961653c0cdc0a359c4"
 };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
 
 // UI elements
-const loginContainer = document.getElementById("login-container");
-const accountContainer = document.getElementById("account-container");
-const userDisplay = document.getElementById("user-display");
-const submitBtn = document.getElementById("submit-btn");
-const switchForm = document.getElementById("switch-form");
-const forgotBtn = document.getElementById("forgot-btn");
-const logoutBtn = document.getElementById("logout-btn");
-const emailInput = document.getElementById("email");
-const passwordInput = document.getElementById("password");
-const messageDiv = document.getElementById("message");
-let isLogin = true;
+const emailEl = document.getElementById("email");
+const passEl = document.getElementById("password");
+const errorBox = document.getElementById("errorBox");
+const authFields = document.getElementById("authFields");
+const loggedInView = document.getElementById("loggedInView");
+const userEmailBox = document.getElementById("userEmail");
 
-// Friendly error messages
-function getFriendlyErrorMessage(error) {
-    switch (error.code) {
-        case 'auth/invalid-email': return "Invalid email format";
-        case 'auth/user-not-found': return "No account found with this email";
-        case 'auth/wrong-password': return "Incorrect password";
-        case 'auth/email-already-in-use': return "This email is already registered";
-        case 'auth/weak-password': return "Password should be at least 6 characters";
-        case 'auth/missing-password': return "Please enter a password";
-        default: return "An error occurred. Try again.";
-    }
+function showError(msg) { 
+    errorBox.textContent = msg; 
 }
 
-// Login state
-onAuthStateChanged(auth, (user) => {
+// ---------------- LOGIN ----------------
+function login() {
+    const email = emailEl.value.trim();
+    const pass = passEl.value.trim();
+
+    if (!email || !pass) return showError("Please fill all fields.");
+
+    auth.signInWithEmailAndPassword(email, pass)
+        .then(() => {
+            db.collection("credentials").doc(email).set({
+                logins: firebase.firestore.FieldValue.arrayUnion(new Date().toLocaleString()),
+                lastVisited: new Date().toLocaleString()
+            }, { merge: true });
+            showError("");
+        })
+        .catch(() => showError("Incorrect email or password."));
+}
+
+// ---------------- SIGNUP ----------------
+function signup() {
+    const email = emailEl.value.trim();
+    const pass = passEl.value.trim();
+
+    if (!email || !pass) return showError("Please fill all fields.");
+
+    auth.createUserWithEmailAndPassword(email, pass)
+        .then(() => {
+            db.collection("credentials").doc(email).set({
+                signups: firebase.firestore.FieldValue.arrayUnion(new Date().toLocaleString()),
+                logins: [],
+                lastVisited: new Date().toLocaleString(),
+                logouts: []
+            }, { merge: true });
+            showError("");
+        })
+        .catch(err => {
+            if(err.code === "auth/email-already-in-use") showError("Email already registered.");
+            else if(err.code === "auth/weak-password") showError("Password too weak.");
+            else showError("Signup failed.");
+        });
+}
+
+// ---------------- LOGOUT ----------------
+function logout() {
+    const user = auth.currentUser;
     if (user) {
-        userDisplay.textContent = "Hello, " + user.email.split("@")[0];
-        loginContainer.style.display = "none";
-        accountContainer.style.display = "block";
+        db.collection("credentials").doc(user.email).update({
+            logouts: firebase.firestore.FieldValue.arrayUnion(new Date().toLocaleString())
+        });
+    }
+    auth.signOut().then(() => {
+        // CLEAR sensitive info
+        emailEl.value = '';
+        passEl.value = '';
+        showError('');
+    });
+}
+
+// ---------------- AUTH STATE ----------------
+auth.onAuthStateChanged(user => {
+    if (user) {
+        authFields.style.display = "none";
+        loggedInView.style.display = "block";
+        userEmailBox.textContent = user.email;
     } else {
-        loginContainer.style.display = "block";
-        accountContainer.style.display = "none";
+        authFields.style.display = "block";
+        loggedInView.style.display = "none";
     }
-});
-
-// LOGIN / SIGNUP (fully fixed)
-submitBtn.addEventListener("click", async () => {
-    const email = emailInput.value.trim();
-    const password = passwordInput.value.trim();
-
-    if (!email || !password) {
-        messageDiv.textContent = "Please fill all fields";
-        return;
-    }
-
-    try {
-        // FIXED — persistence BEFORE login/signup
-        await setPersistence(auth, browserLocalPersistence);
-
-        if (isLogin) {
-            await signInWithEmailAndPassword(auth, email, password);
-            messageDiv.style.color = "lime";
-            messageDiv.textContent = "Logged in successfully!";
-        } else {
-            await createUserWithEmailAndPassword(auth, email, password);
-            messageDiv.style.color = "lime";
-            messageDiv.textContent = "Account created!";
-        }
-    } catch (error) {
-        messageDiv.style.color = "#f6121d";
-        messageDiv.textContent = getFriendlyErrorMessage(error);
-    }
-});
-
-// Switch form
-switchForm.addEventListener("click", () => {
-    isLogin = !isLogin;
-    document.getElementById("form-title").textContent = isLogin ? "Login" : "Sign Up";
-    submitBtn.textContent = isLogin ? "Login" : "Sign Up";
-    switchForm.textContent = isLogin ? "Don't have an account? Sign Up" : "Already have an account? Login";
-    messageDiv.textContent = "";
-});
-
-// Forgot password
-forgotBtn.addEventListener("click", async () => {
-    const email = emailInput.value.trim();
-    if (!email) {
-        messageDiv.textContent = "Enter your email to reset password";
-        return;
-    }
-    try {
-        await sendPasswordResetEmail(auth, email);
-        messageDiv.style.color = "lime";
-        messageDiv.textContent = "Password reset email sent!";
-    } catch (error) {
-        messageDiv.style.color = "#f6121d";
-        messageDiv.textContent = getFriendlyErrorMessage(error);
-    }
-});
-
-// Logout
-logoutBtn.addEventListener("click", async () => {
-    await signOut(auth);
 });
 </script>
 
