@@ -74,7 +74,7 @@
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
-import { 
+import {
     getAuth,
     onAuthStateChanged,
     signInWithEmailAndPassword,
@@ -97,26 +97,20 @@ const firebaseConfig = {
   measurementId: "G-WZ84970GST"
 };
 
-// Init
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-// FIXED: Save login forever (until logout)
-setPersistence(auth, browserLocalPersistence);
-
+// UI elements
 const loginContainer = document.getElementById("login-container");
 const accountContainer = document.getElementById("account-container");
 const userDisplay = document.getElementById("user-display");
-const logoutBtn = document.getElementById("logout-btn");
-
-const formTitle = document.getElementById("form-title");
 const submitBtn = document.getElementById("submit-btn");
 const switchForm = document.getElementById("switch-form");
 const forgotBtn = document.getElementById("forgot-btn");
+const logoutBtn = document.getElementById("logout-btn");
 const emailInput = document.getElementById("email");
 const passwordInput = document.getElementById("password");
 const messageDiv = document.getElementById("message");
-
 let isLogin = true;
 
 // Friendly error messages
@@ -128,30 +122,26 @@ function getFriendlyErrorMessage(error) {
         case 'auth/email-already-in-use': return "This email is already registered";
         case 'auth/weak-password': return "Password should be at least 6 characters";
         case 'auth/missing-password': return "Please enter a password";
-        default: return "An error occurred. Please try again.";
+        default: return "An error occurred. Try again.";
     }
 }
 
-// Listen for login
+// Login state
 onAuthStateChanged(auth, (user) => {
     if (user) {
-        let username = user.email.split("@")[0];
-        userDisplay.textContent = `Hello, ${username}`;
+        userDisplay.textContent = "Hello, " + user.email.split("@")[0];
         loginContainer.style.display = "none";
         accountContainer.style.display = "block";
     } else {
         loginContainer.style.display = "block";
         accountContainer.style.display = "none";
-        emailInput.value = "";
-        passwordInput.value = "";
-        messageDiv.textContent = "";
     }
 });
 
-// Login / Signup button
+// LOGIN / SIGNUP (fully fixed)
 submitBtn.addEventListener("click", async () => {
     const email = emailInput.value.trim();
-    const password = passwordInput.value;
+    const password = passwordInput.value.trim();
 
     if (!email || !password) {
         messageDiv.textContent = "Please fill all fields";
@@ -159,6 +149,9 @@ submitBtn.addEventListener("click", async () => {
     }
 
     try {
+        // FIXED — persistence BEFORE login/signup
+        await setPersistence(auth, browserLocalPersistence);
+
         if (isLogin) {
             await signInWithEmailAndPassword(auth, email, password);
             messageDiv.style.color = "lime";
@@ -166,7 +159,7 @@ submitBtn.addEventListener("click", async () => {
         } else {
             await createUserWithEmailAndPassword(auth, email, password);
             messageDiv.style.color = "lime";
-            messageDiv.textContent = "Account created successfully!";
+            messageDiv.textContent = "Account created!";
         }
     } catch (error) {
         messageDiv.style.color = "#f6121d";
@@ -174,10 +167,10 @@ submitBtn.addEventListener("click", async () => {
     }
 });
 
-// Switch Login / Signup
+// Switch form
 switchForm.addEventListener("click", () => {
     isLogin = !isLogin;
-    formTitle.textContent = isLogin ? "Login" : "Sign Up";
+    document.getElementById("form-title").textContent = isLogin ? "Login" : "Sign Up";
     submitBtn.textContent = isLogin ? "Login" : "Sign Up";
     switchForm.textContent = isLogin ? "Don't have an account? Sign Up" : "Already have an account? Login";
     messageDiv.textContent = "";
@@ -195,19 +188,16 @@ forgotBtn.addEventListener("click", async () => {
         messageDiv.style.color = "lime";
         messageDiv.textContent = "Password reset email sent!";
     } catch (error) {
-        if (error.code === 'auth/user-not-found')
-            messageDiv.textContent = "No account found with this email";
-        else if (error.code === 'auth/invalid-email')
-            messageDiv.textContent = "Invalid email";
-        else
-            messageDiv.textContent = "Error sending email. Try again.";
+        messageDiv.style.color = "#f6121d";
+        messageDiv.textContent = getFriendlyErrorMessage(error);
     }
 });
 
-// Logout button
+// Logout
 logoutBtn.addEventListener("click", async () => {
     await signOut(auth);
 });
 </script>
+
 </body>
 </html>
