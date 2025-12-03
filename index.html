@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -54,7 +55,9 @@
     #message { margin-top: 10px; font-size: 14px; color: #f6121d; }
 </style>
 </head>
-<body><div id="login-container" class="container">
+<body>
+
+<div id="login-container" class="container">
     <h1 id="form-title">Login</h1>
     <input type="email" id="email" placeholder="Email">
     <input type="password" id="password" placeholder="Password">
@@ -62,14 +65,27 @@
     <div class="forgot" id="forgot-btn">Forgot Password?</div>
     <div class="switch" id="switch-form">Don't have an account? Sign Up</div>
     <div id="message"></div>
-</div><div id="account-container" class="account-container" style="display:none;">
+</div>
+
+<div id="account-container" class="account-container" style="display:none;">
     <h1 id="user-display">Hello, User</h1>
     <button id="logout-btn">Logout</button>
-</div><script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
-import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut, setPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js";
+</div>
 
-// Firebase config
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
+import { 
+    getAuth,
+    onAuthStateChanged,
+    signInWithEmailAndPassword,
+    createUserWithEmailAndPassword,
+    sendPasswordResetEmail,
+    signOut,
+    setPersistence,
+    browserLocalPersistence
+} from "https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js";
+
+// Firebase Config
 const firebaseConfig = {
   apiKey: "AIzaSyCExki28m1NNepVQEIjmcQzR8z8O68LqIc",
   authDomain: "rinolski-notifications.firebaseapp.com",
@@ -81,11 +97,12 @@ const firebaseConfig = {
   measurementId: "G-WZ84970GST"
 };
 
+// Init
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-// Optional: session-only persistence
-setPersistence(auth, browserSessionPersistence);
+// FIXED: Save login forever (until logout)
+setPersistence(auth, browserLocalPersistence);
 
 const loginContainer = document.getElementById("login-container");
 const accountContainer = document.getElementById("account-container");
@@ -105,12 +122,95 @@ let isLogin = true;
 // Friendly error messages
 function getFriendlyErrorMessage(error) {
     switch (error.code) {
-        case 'auth/invalid-email':
-            return "Invalid email format";
-        case 'auth/user-not-found':
-            return "No account found with this email";
-        case 'auth/wrong-password':
-            return "Incorrect password";
+        case 'auth/invalid-email': return "Invalid email format";
+        case 'auth/user-not-found': return "No account found with this email";
+        case 'auth/wrong-password': return "Incorrect password";
+        case 'auth/email-already-in-use': return "This email is already registered";
+        case 'auth/weak-password': return "Password should be at least 6 characters";
+        case 'auth/missing-password': return "Please enter a password";
+        default: return "An error occurred. Please try again.";
+    }
+}
+
+// Listen for login
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        let username = user.email.split("@")[0];
+        userDisplay.textContent = `Hello, ${username}`;
+        loginContainer.style.display = "none";
+        accountContainer.style.display = "block";
+    } else {
+        loginContainer.style.display = "block";
+        accountContainer.style.display = "none";
+        emailInput.value = "";
+        passwordInput.value = "";
+        messageDiv.textContent = "";
+    }
+});
+
+// Login / Signup button
+submitBtn.addEventListener("click", async () => {
+    const email = emailInput.value.trim();
+    const password = passwordInput.value;
+
+    if (!email || !password) {
+        messageDiv.textContent = "Please fill all fields";
+        return;
+    }
+
+    try {
+        if (isLogin) {
+            await signInWithEmailAndPassword(auth, email, password);
+            messageDiv.style.color = "lime";
+            messageDiv.textContent = "Logged in successfully!";
+        } else {
+            await createUserWithEmailAndPassword(auth, email, password);
+            messageDiv.style.color = "lime";
+            messageDiv.textContent = "Account created successfully!";
+        }
+    } catch (error) {
+        messageDiv.style.color = "#f6121d";
+        messageDiv.textContent = getFriendlyErrorMessage(error);
+    }
+});
+
+// Switch Login / Signup
+switchForm.addEventListener("click", () => {
+    isLogin = !isLogin;
+    formTitle.textContent = isLogin ? "Login" : "Sign Up";
+    submitBtn.textContent = isLogin ? "Login" : "Sign Up";
+    switchForm.textContent = isLogin ? "Don't have an account? Sign Up" : "Already have an account? Login";
+    messageDiv.textContent = "";
+});
+
+// Forgot password
+forgotBtn.addEventListener("click", async () => {
+    const email = emailInput.value.trim();
+    if (!email) {
+        messageDiv.textContent = "Enter your email to reset password";
+        return;
+    }
+    try {
+        await sendPasswordResetEmail(auth, email);
+        messageDiv.style.color = "lime";
+        messageDiv.textContent = "Password reset email sent!";
+    } catch (error) {
+        if (error.code === 'auth/user-not-found')
+            messageDiv.textContent = "No account found with this email";
+        else if (error.code === 'auth/invalid-email')
+            messageDiv.textContent = "Invalid email";
+        else
+            messageDiv.textContent = "Error sending email. Try again.";
+    }
+});
+
+// Logout button
+logoutBtn.addEventListener("click", async () => {
+    await signOut(auth);
+});
+</script>
+</body>
+</html>            return "Incorrect password";
         case 'auth/email-already-in-use':
             return "This email is already registered";
         case 'auth/weak-password':
