@@ -18,11 +18,19 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 
+// send login status and ID token to parent
 auth.onAuthStateChanged(user => {
-  window.parent.postMessage(
-    user ? { loggedIn: true, email: user.email } : { loggedIn: false },
-    "*"
-  );
+  if (user) {
+    user.getIdToken(true).then(token => {
+      window.parent.postMessage({
+        loggedIn: true,
+        email: user.email,
+        token: token
+      }, "*");
+    });
+  } else {
+    window.parent.postMessage({ loggedIn: false }, "*");
+  }
 });
 </script>
 </body>
