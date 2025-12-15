@@ -41,13 +41,12 @@ body{
 #app{display:none;}
 </style>
 
-<!-- ================= FULL NIKK FLIX STYLES (UNCHANGED) ================= -->
+<!-- ================= FULL NIKK FLIX STYLES ================= -->
 <style>
-
   :root{
     --bg:#071017; --card:#0f1720; --muted:#9fb0bb; --accent:#ff3b6b; 
     --accent-hover:#ff5b84; --glass:rgba(255,255,255,0.02);
-    --success:#00d4aa; --warning:#ffb347;
+    --success:#00d4aa; --warning:#ffb347; --genre-btn:#1a2634;
   }
   *{box-sizing:border-box}
   body{
@@ -110,27 +109,34 @@ body{
     align-items:center;
     flex-wrap:wrap;
   }
+  
+  /* Autocomplete Search */
   .search-container{
     position:relative;
     flex:1;
     min-width:200px;
     max-width:400px;
   }
-  input[type="text"]{
+  .search-wrapper{
+    position:relative;
     background:rgba(15,23,32,0.8);
     border:1px solid rgba(255,255,255,0.08);
+    border-radius:12px;
+    transition:all 0.2s;
+  }
+  .search-wrapper:focus-within{
+    border-color:var(--accent);
+    box-shadow:0 0 0 3px rgba(255,59,107,0.2);
+  }
+  input[type="text"]{
+    background:transparent;
+    border:none;
     color:inherit;
     padding:12px 16px;
     padding-left:40px;
-    border-radius:12px;
     width:100%;
     font-size:15px;
-    transition:all 0.2s;
-  }
-  input[type="text"]:focus{
     outline:none;
-    border-color:var(--accent);
-    box-shadow:0 0 0 3px rgba(255,59,107,0.2);
   }
   .search-icon{
     position:absolute;
@@ -138,7 +144,184 @@ body{
     top:50%;
     transform:translateY(-50%);
     color:var(--muted);
+    z-index:1;
   }
+  
+  /* Autocomplete Dropdown */
+  .autocomplete-dropdown{
+    position:absolute;
+    top:100%;
+    left:0;
+    right:0;
+    background:var(--card);
+    border-radius:12px;
+    margin-top:5px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.5);
+    max-height:400px;
+    overflow-y:auto;
+    display:none;
+    z-index:1000;
+    border:1px solid rgba(255,255,255,0.1);
+  }
+  .autocomplete-dropdown.active{
+    display:block;
+  }
+  .autocomplete-item{
+    display:flex;
+    align-items:center;
+    padding:10px;
+    cursor:pointer;
+    transition:all 0.2s;
+    border-bottom:1px solid rgba(255,255,255,0.05);
+  }
+  .autocomplete-item:hover{
+    background:rgba(255,59,107,0.1);
+  }
+  .autocomplete-item:last-child{
+    border-bottom:none;
+  }
+  .autocomplete-poster{
+    width:40px;
+    height:60px;
+    object-fit:cover;
+    border-radius:6px;
+    margin-right:12px;
+    flex-shrink:0;
+  }
+  .autocomplete-info{
+    flex:1;
+  }
+  .autocomplete-title{
+    font-weight:600;
+    font-size:14px;
+    margin-bottom:4px;
+    color:#e6eef3;
+  }
+  .autocomplete-meta{
+    font-size:12px;
+    color:var(--muted);
+    display:flex;
+    justify-content:space-between;
+  }
+  .autocomplete-rating{
+    color:#ffd700;
+    display:flex;
+    align-items:center;
+    gap:3px;
+  }
+  .no-suggestions{
+    padding:20px;
+    text-align:center;
+    color:var(--muted);
+    font-style:italic;
+  }
+  .search-loading{
+    padding:20px;
+    text-align:center;
+    color:var(--accent);
+  }
+  .search-loading i{
+    animation:spin 1s linear infinite;
+    margin-right:8px;
+  }
+  
+  /* Genre Filter */
+  .genre-filter{
+    background:var(--card);
+    padding:15px;
+    border-radius:12px;
+    margin-bottom:24px;
+    border:1px solid rgba(255,255,255,0.05);
+  }
+  .genre-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:12px;
+  }
+  .genre-header h3{
+    font-size:16px;
+    margin:0;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    color:#e6eef3;
+  }
+  .genre-header h3 i{
+    color:var(--accent);
+  }
+  .clear-filter{
+    background:transparent;
+    border:1px solid rgba(255,255,255,0.1);
+    color:var(--muted);
+    padding:6px 12px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:12px;
+    transition:all 0.2s;
+  }
+  .clear-filter:hover{
+    background:rgba(255,255,255,0.05);
+    color:#fff;
+  }
+  .genre-buttons{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  .genre-btn{
+    padding:6px 14px;
+    background:var(--genre-btn);
+    color:var(--muted);
+    border:1px solid rgba(255,255,255,0.1);
+    border-radius:20px;
+    cursor:pointer;
+    transition:all 0.2s;
+    font-size:13px;
+    white-space:nowrap;
+  }
+  .genre-btn:hover{
+    background:rgba(255,59,107,0.15);
+    border-color:var(--accent);
+    color:#fff;
+  }
+  .genre-btn.active{
+    background:var(--accent);
+    color:#fff;
+    border-color:var(--accent);
+  }
+  
+  /* Navigation Tabs */
+  .nav-tabs{
+    display:flex;
+    gap:10px;
+    margin-bottom:20px;
+    border-bottom:1px solid rgba(255,255,255,0.05);
+    padding-bottom:10px;
+  }
+  .nav-tab{
+    background:transparent;
+    border:none;
+    color:var(--muted);
+    padding:8px 16px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:14px;
+    transition:all 0.2s;
+    display:flex;
+    align-items:center;
+    gap:6px;
+  }
+  .nav-tab:hover{
+    background:rgba(255,255,255,0.05);
+    color:#fff;
+  }
+  .nav-tab.active{
+    background:rgba(255,59,107,0.15);
+    color:var(--accent);
+    font-weight:600;
+  }
+  
   button{
     background:var(--accent);
     border:none;
@@ -174,6 +357,34 @@ body{
   main{
     margin-top:24px;
   }
+  .section-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:16px;
+    margin-top:30px;
+  }
+  .section-header h2{
+    font-size:20px;
+    margin:0;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    color:#e6eef3;
+  }
+  .section-header h2 i{
+    color:var(--accent);
+  }
+  .view-all{
+    color:var(--accent);
+    text-decoration:none;
+    font-size:14px;
+    transition:all 0.2s;
+  }
+  .view-all:hover{
+    text-decoration:underline;
+  }
+  
   .cards{
     display:grid;
     grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
@@ -186,6 +397,7 @@ body{
     cursor:pointer;
     transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     border:1px solid rgba(255,255,255,0.03);
+    position:relative;
   }
   .card:hover{
     transform:translateY(-8px) scale(1.02);
@@ -221,6 +433,29 @@ body{
     font-size:11px;
     font-weight:600;
   }
+  .watchlist-btn{
+    position:absolute;
+    top:10px;
+    right:10px;
+    background:rgba(0,0,0,0.7);
+    border:none;
+    color:#fff;
+    width:36px;
+    height:36px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    z-index:2;
+    transition:all 0.2s;
+  }
+  .watchlist-btn:hover{
+    background:var(--accent);
+  }
+  .watchlist-btn.active{
+    background:var(--accent);
+  }
   
   /* Footer */
   footer{
@@ -232,7 +467,7 @@ body{
     text-align:center;
   }
   
-  /* Modal */
+  /* Modal with Improved Loading */
   .modal{
     position:fixed;
     inset:0;
@@ -307,12 +542,42 @@ body{
     color:#fff;
     border-color:var(--accent);
   }
+  
+  /* Improved Player Loading */
   .player-iframe{
     flex:1;
     border:0;
     width:100%;
     background:#000;
+    opacity:0;
+    transition:opacity 0.5s ease;
   }
+  .player-iframe.loaded{
+    opacity:1;
+  }
+  .player-loading{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    text-align:center;
+    z-index:10;
+  }
+  .player-loading-spinner{
+    width:60px;
+    height:60px;
+    border:4px solid rgba(255,59,107,0.3);
+    border-top:4px solid var(--accent);
+    border-radius:50%;
+    animation:spin 1s linear infinite;
+    margin:0 auto 20px;
+  }
+  .player-loading-text{
+    color:#fff;
+    font-size:16px;
+    font-weight:600;
+  }
+  
   .modal-close{
     position:absolute;
     right:20px;
@@ -355,9 +620,28 @@ body{
     to{transform:rotate(360deg)}
   }
   
+  /* No Results */
+  .no-results{
+    text-align:center;
+    padding:60px 20px;
+    color:var(--muted);
+  }
+  .no-results i{
+    font-size:48px;
+    margin-bottom:16px;
+    color:var(--genre-btn);
+  }
+  
+  /* Content Sections */
+  .content-section{
+    display:none;
+  }
+  .content-section.active{
+    display:block;
+  }
+  
   /* Responsive Design */
   @media (max-width: 768px){
-    /* Tablet View */
     header{
       flex-direction:column;
       align-items:stretch;
@@ -389,10 +673,15 @@ body{
       font-size:16px;
       text-align:center;
     }
+    .genre-buttons{
+      justify-content:center;
+    }
+    .nav-tabs{
+      justify-content:center;
+    }
   }
   
   @media (max-width: 480px){
-    /* Mobile View */
     body{
       padding:12px;
     }
@@ -426,9 +715,12 @@ body{
       width:36px;
       height:36px;
     }
+    .genre-btn{
+      padding:5px 10px;
+      font-size:12px;
+    }
   }
   
-  /* Large Desktop View */
   @media (min-width: 1200px){
     .cards{
       grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
@@ -438,7 +730,6 @@ body{
       height:280px;
     }
   }
-
 </style>
 </head>
 
@@ -455,439 +746,1042 @@ body{
 
 <!-- ================= MAIN APP ================= -->
 <div id="app">
-
-
-<header>
-  <div class="brand">
-    <div class="logo">N</div>
-    <div class="brand-text">
-      <h1>NIKK FLIX</h1>
-      <div class="brand-subtitle">Search → Pick season/episode → Full-screen player</div>
+  <header>
+    <div class="brand">
+      <div class="logo">N</div>
+      <div class="brand-text">
+        <h1>NIKK FLIX</h1>
+        <div class="brand-subtitle">Search → Pick season/episode → Full-screen player</div>
+      </div>
     </div>
+
+    <div class="controls">
+      <!-- Autocomplete Search -->
+      <div class="search-container">
+        <div class="search-wrapper">
+          <div class="search-icon">🔍</div>
+          <input id="nameInput" placeholder="Search movies & series..." />
+        </div>
+        <div class="autocomplete-dropdown" id="autocompleteDropdown">
+          <div class="search-loading" style="display:none;">
+            <i class="fas fa-spinner"></i> Searching...
+          </div>
+          <div class="no-suggestions" style="display:none;">
+            No movies found
+          </div>
+        </div>
+      </div>
+      
+      <button id="searchBtn">Search & Play</button>
+      <button id="watchlistBtn" class="ghost">
+        <i class="fas fa-bookmark"></i> Watchlist
+      </button>
+    </div>
+  </header>
+
+  <!-- Navigation Tabs -->
+  <div class="nav-tabs">
+    <button class="nav-tab active" data-tab="home">
+      <i class="fas fa-home"></i> Home
+    </button>
+    <button class="nav-tab" data-tab="movies">
+      <i class="fas fa-film"></i> Movies
+    </button>
+    <button class="nav-tab" data-tab="genres">
+      <i class="fas fa-list"></i> Genres
+    </button>
+    <button class="nav-tab" data-tab="trending">
+      <i class="fas fa-fire"></i> Trending
+    </button>
   </div>
 
-  <div class="controls">
-    <div class="search-container">
-      <div class="search-icon">🔍</div>
-      <input id="nameInput" placeholder="Search movies & series..." />
+  <!-- Genre Filter -->
+  <div class="genre-filter" id="genreFilter">
+    <div class="genre-header">
+      <h3><i class="fas fa-filter"></i> Browse by Genre</h3>
+      <button class="clear-filter" id="clearFilter">
+        <i class="fas fa-times"></i> Clear
+      </button>
     </div>
-    <button id="searchBtn">Search & Play</button>
-    <button id="downloadBtn" class="ghost">Download HTML</button>
-  </div>
-</header>
-
-<main>
-  <section id="resultsContainer">
-    <div id="results" class="cards">
+    <div class="genre-buttons" id="genreButtons">
       <div class="loading">
         <div class="spinner"></div>
       </div>
     </div>
-  </section>
-</main>
-
-<footer>© NIKK FLIX — Stream your favorite content</footer>
-
-<!-- Modal with Season/Episode Selection -->
-<div id="modal" class="modal" role="dialog" aria-modal="true">
-  <button id="modalClose" class="modal-close" title="Close (Esc)">✕</button>
-  <div class="player-container">
-    <div class="player-header">
-      <div id="playerTitle" class="player-title"></div>
-    </div>
-    <div id="seasonSelector" class="season-selector" style="display:none;">
-      <div class="selector-label">Season:</div>
-      <div id="seasonButtons" class="selector-buttons"></div>
-      <div class="selector-label">Episode:</div>
-      <div id="episodeButtons" class="selector-buttons"></div>
-    </div>
-    <iframe id="playerFrame" class="player-iframe" src="about:blank" 
-            allow="autoplay; fullscreen; picture-in-picture" 
-            allowfullscreen></iframe>
   </div>
-</div>
 
-<script>
-/* ======== Config ======== */
-const TMDB_API_KEY = '1e374bc8121421e6862f641c6b29d489';
-const EMBED_BASE = 'https://www.vidking.net/embed/';
-/* ========================= */
+  <main>
+    <!-- Home Content with ALL Sections -->
+    <div class="content-section active" id="homeContent">
+      <!-- Trending Section -->
+      <div class="section-header">
+        <h2><i class="fas fa-fire"></i> Trending This Week</h2>
+        <a href="#" class="view-all" data-type="trending">View All</a>
+      </div>
+      <div id="trendingCards" class="cards">
+        <div class="loading">
+          <div class="spinner"></div>
+        </div>
+      </div>
 
-/* DOM Elements */
-const nameInput = document.getElementById('nameInput');
-const searchBtn = document.getElementById('searchBtn');
-const resultsEl = document.getElementById('results');
-const downloadBtn = document.getElementById('downloadBtn');
-const modal = document.getElementById('modal');
-const playerFrame = document.getElementById('playerFrame');
-const modalClose = document.getElementById('modalClose');
-const playerTitle = document.getElementById('playerTitle');
-const seasonSelector = document.getElementById('seasonSelector');
-const seasonButtons = document.getElementById('seasonButtons');
-const episodeButtons = document.getElementById('episodeButtons');
+      <!-- Popular Movies Section -->
+      <div class="section-header">
+        <h2><i class="fas fa-film"></i> Popular Movies</h2>
+        <a href="#" class="view-all" data-type="popular">View All</a>
+      </div>
+      <div id="popularMoviesCards" class="cards">
+        <div class="loading">
+          <div class="spinner"></div>
+        </div>
+      </div>
 
-/* State */
-let currentItem = null;
-let seasonsData = null;
+      <!-- Top Rated Section -->
+      <div class="section-header">
+        <h2><i class="fas fa-star"></i> Top Rated Movies</h2>
+        <a href="#" class="view-all" data-type="toprated">View All</a>
+      </div>
+      <div id="topRatedCards" class="cards">
+        <div class="loading">
+          <div class="spinner"></div>
+        </div>
+      </div>
 
-/* Helper Functions */
-function escapeHtml(s) {
-  if (!s) return '';
-  const div = document.createElement('div');
-  div.textContent = s;
-  return div.innerHTML;
-}
-
-function showNotice(message, type = 'info') {
-  const colors = {
-    info: '#073b32',
-    error: '#4a1a1a',
-    success: '#1a4a2e'
-  };
-  
-  const notice = document.createElement('div');
-  notice.textContent = message;
-  notice.style.cssText = `
-    background: ${colors[type] || colors.info};
-    color: #fff;
-    padding: 12px 20px;
-    border-radius: 10px;
-    position: fixed;
-    right: 20px;
-    bottom: 20px;
-    z-index: 1000;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    animation: slideIn 0.3s ease;
-  `;
-  
-  document.body.appendChild(notice);
-  setTimeout(() => {
-    notice.style.animation = 'slideOut 0.3s ease';
-    setTimeout(() => notice.remove(), 300);
-  }, 2000);
-  
-  // Add animation keyframes
-  if (!document.querySelector('#notice-animations')) {
-    const style = document.createElement('style');
-    style.id = 'notice-animations';
-    style.textContent = `
-      @keyframes slideIn {
-        from { transform: translateX(100%); opacity: 0; }
-        to { transform: translateX(0); opacity: 1; }
-      }
-      @keyframes slideOut {
-        from { transform: translateX(0); opacity: 1; }
-        to { transform: translateX(100%); opacity: 0; }
-      }
-    `;
-    document.head.appendChild(style);
-  }
-}
-
-/* TMDb API Functions */
-function tmdbUrl(path, params = {}) {
-  if (!TMDB_API_KEY) return null;
-  const u = new URL('https://api.themoviedb.org/3/' + path);
-  u.searchParams.set('api_key', TMDB_API_KEY);
-  u.searchParams.set('language', 'en-US');
-  for (const k in params) {
-    if (params[k] !== undefined && params[k] !== null) {
-      u.searchParams.set(k, params[k]);
-    }
-  }
-  return u.toString();
-}
-
-async function safeFetch(url) {
-  try {
-    const response = await fetch(url);
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    return await response.json();
-  } catch (error) {
-    console.error('Fetch error:', error);
-    throw error;
-  }
-}
-
-/* Fetch Seasons Data */
-async function fetchSeasons(tvId) {
-  try {
-    const url = tmdbUrl(`tv/${tvId}`);
-    const data = await safeFetch(url);
-    seasonsData = data.seasons || [];
-    return seasonsData;
-  } catch (error) {
-    console.error('Error fetching seasons:', error);
-    return [];
-  }
-}
-
-/* Build Embed URL */
-function buildEmbedUrl({ id, mediaType = 'movie', season = 1, episode = 1, autoplay = true }) {
-  if (!id) return null;
-  let path = mediaType === 'tv' 
-    ? `tv/${encodeURIComponent(id)}/${season}/${episode}` 
-    : `movie/${encodeURIComponent(id)}`;
-  const params = new URLSearchParams();
-  if (autoplay) params.set('autoPlay', 'true');
-  return EMBED_BASE + path + (params.toString() ? '?' + params.toString() : '');
-}
-
-/* Create Season/Episode Selector */
-function createSeasonSelector(seasons, currentSeason = 1, currentEpisode = 1) {
-  // Clear previous buttons
-  seasonButtons.innerHTML = '';
-  episodeButtons.innerHTML = '';
-  
-  // Create season buttons
-  seasons.forEach(season => {
-    if (season.season_number > 0) { // Skip special seasons
-      const btn = document.createElement('button');
-      btn.className = `selector-btn ${season.season_number === currentSeason ? 'active' : ''}`;
-      btn.textContent = `S${season.season_number}`;
-      btn.dataset.season = season.season_number;
-      btn.addEventListener('click', () => loadEpisodesForSeason(season.season_number));
-      seasonButtons.appendChild(btn);
-    }
-  });
-  
-  // Load episodes for current season
-  loadEpisodes(currentSeason, currentEpisode);
-}
-
-async function loadEpisodes(seasonNumber, defaultEpisode = 1) {
-  if (!currentItem || currentItem.media_type !== 'tv') return;
-  
-  try {
-    const url = tmdbUrl(`tv/${currentItem.id}/season/${seasonNumber}`);
-    const seasonData = await safeFetch(url);
-    const episodes = seasonData.episodes || [];
-    
-    // Clear episode buttons
-    episodeButtons.innerHTML = '';
-    
-    // Create episode buttons (limit to first 20 for performance)
-    episodes.slice(0, 20).forEach(episode => {
-      const btn = document.createElement('button');
-      btn.className = `selector-btn ${episode.episode_number === defaultEpisode ? 'active' : ''}`;
-      btn.textContent = `E${episode.episode_number}`;
-      btn.dataset.episode = episode.episode_number;
-      btn.addEventListener('click', () => playEpisode(seasonNumber, episode.episode_number));
-      episodeButtons.appendChild(btn);
-    });
-    
-    // Update active season button
-    document.querySelectorAll('#seasonButtons .selector-btn').forEach(btn => {
-      btn.classList.toggle('active', parseInt(btn.dataset.season) === seasonNumber);
-    });
-  } catch (error) {
-    console.error('Error loading episodes:', error);
-  }
-}
-
-function loadEpisodesForSeason(seasonNumber) {
-  loadEpisodes(seasonNumber, 1);
-}
-
-async function playEpisode(seasonNumber, episodeNumber) {
-  if (!currentItem) return;
-  
-  // Update active buttons
-  document.querySelectorAll('#seasonButtons .selector-btn').forEach(btn => {
-    btn.classList.toggle('active', parseInt(btn.dataset.season) === seasonNumber);
-  });
-  document.querySelectorAll('#episodeButtons .selector-btn').forEach(btn => {
-    btn.classList.toggle('active', parseInt(btn.dataset.episode) === episodeNumber);
-  });
-  
-  // Play the episode
-  const url = buildEmbedUrl({
-    id: currentItem.id,
-    mediaType: 'tv',
-    season: seasonNumber,
-    episode: episodeNumber,
-    autoplay: true
-  });
-  
-  if (url) {
-    playerFrame.src = url;
-    playerTitle.textContent = `${currentItem.name} - S${seasonNumber}E${episodeNumber}`;
-    showNotice(`Playing Season ${seasonNumber}, Episode ${episodeNumber}`, 'success');
-  }
-}
-
-/* Create Movie/Show Card */
-function createCard(item) {
-  const mediaType = item.media_type || (item.title ? 'movie' : 'tv');
-  const title = item.title || item.name || 'Untitled';
-  const year = (item.release_date || item.first_air_date || '').slice(0, 4);
-  const poster = item.poster_path 
-    ? `https://image.tmdb.org/t/p/w500${item.poster_path}`
-    : 'https://via.placeholder.com/500x750/0f1720/9fb0bb?text=No+Image';
-  const rating = item.vote_average ? item.vote_average.toFixed(1) : 'N/A';
-  
-  const card = document.createElement('div');
-  card.className = 'card';
-  card.innerHTML = `
-    <img src="${poster}" class="poster" alt="${title}" loading="lazy">
-    <div class="title">${escapeHtml(title)}</div>
-    <div class="meta">
-      <span class="type-badge">${mediaType.toUpperCase()}</span>
-      ${year ? `<span>• ${year}</span>` : ''}
-      <span>• ⭐ ${rating}</span>
+      <!-- Now Playing Section -->
+      <div class="section-header">
+        <h2><i class="fas fa-play-circle"></i> Now Playing</h2>
+        <a href="#" class="view-all" data-type="nowplaying">View All</a>
+      </div>
+      <div id="nowPlayingCards" class="cards">
+        <div class="loading">
+          <div class="spinner"></div>
+        </div>
+      </div>
     </div>
-  `;
-  
-  card.addEventListener('click', () => {
-    nameInput.value = title;
-    playItem(item);
-  });
-  
-  return card;
-}
 
-/* Play Item */
-async function playItem(item) {
-  try {
-    currentItem = item;
-    const mediaType = item.media_type || (item.title ? 'movie' : 'tv');
-    const title = item.title || item.name || 'Untitled';
+    <!-- Movies Content -->
+    <div class="content-section" id="moviesContent">
+      <div class="section-header">
+        <h2><i class="fas fa-film"></i> All Popular Movies</h2>
+        <a href="#" class="view-all" data-type="allmovies">View All</a>
+      </div>
+      <div id="moviesCards" class="cards">
+        <div class="loading">
+          <div class="spinner"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Genres Content -->
+    <div class="content-section" id="genresContent">
+      <div id="genreMoviesContainer">
+        <div class="section-header">
+          <h2><i class="fas fa-list"></i> <span id="currentGenreTitle">Action</span> Movies</h2>
+          <span id="genreMovieCount">Loading...</span>
+        </div>
+        <div id="genreMovies" class="cards">
+          <div class="loading">
+            <div class="spinner"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Trending Content -->
+    <div class="content-section" id="trendingContent">
+      <div class="section-header">
+        <h2><i class="fas fa-chart-line"></i> Weekly Trending</h2>
+        <a href="#" class="view-all" data-type="weeklytrending">View All</a>
+      </div>
+      <div id="weeklyTrendingCards" class="cards">
+        <div class="loading">
+          <div class="spinner"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Search Results -->
+    <div class="content-section" id="searchContent">
+      <div class="section-header">
+        <h2><i class="fas fa-search"></i> Search Results</h2>
+        <button class="clear-filter" id="clearSearch">Clear Search</button>
+      </div>
+      <div id="searchResults" class="cards"></div>
+    </div>
+
+    <!-- Watchlist Content -->
+    <div class="content-section" id="watchlistContent">
+      <div class="section-header">
+        <h2><i class="fas fa-bookmark"></i> My Watchlist</h2>
+        <button class="clear-filter" id="clearWatchlist">Clear All</button>
+      </div>
+      <div id="watchlistCards" class="cards">
+        <div class="no-results">
+          <i class="fas fa-bookmark"></i>
+          <h3>Your watchlist is empty</h3>
+          <p>Add movies by clicking the bookmark icon</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>© NIKK FLIX — Stream your favorite content</footer>
+
+  <!-- Modal with Improved Loading -->
+  <div id="modal" class="modal" role="dialog" aria-modal="true">
+    <button id="modalClose" class="modal-close" title="Close (Esc)">✕</button>
+    <div class="player-container">
+      <div class="player-header">
+        <div id="playerTitle" class="player-title"></div>
+      </div>
+      <div id="seasonSelector" class="season-selector" style="display:none;">
+        <div class="selector-label">Season:</div>
+        <div id="seasonButtons" class="selector-buttons"></div>
+        <div class="selector-label">Episode:</div>
+        <div id="episodeButtons" class="selector-buttons"></div>
+      </div>
+      <div class="player-loading" id="playerLoading">
+        <div class="player-loading-spinner"></div>
+        <div class="player-loading-text">Loading player...</div>
+      </div>
+      <iframe id="playerFrame" class="player-iframe" src="about:blank" 
+              allow="autoplay; fullscreen; picture-in-picture" 
+              allowfullscreen
+              onload="handlePlayerLoad()"></iframe>
+    </div>
+  </div>
+
+  <script>
+  /* ======== Config ======== */
+  const TMDB_API_KEY = '1e374bc8121421e6862f641c6b29d489';
+  const EMBED_BASE = 'https://www.vidking.net/embed/';
+  const IMG_BASE_URL = 'https://image.tmdb.org/t/p';
+  
+  /* TMDb Genre IDs */
+  const GENRES = {
+    28: "Action", 12: "Adventure", 16: "Animation", 35: "Comedy",
+    80: "Crime", 99: "Documentary", 18: "Drama", 10751: "Family",
+    14: "Fantasy", 36: "History", 27: "Horror", 10402: "Music",
+    9648: "Mystery", 10749: "Romance", 878: "Science Fiction",
+    10770: "TV Movie", 53: "Thriller", 10752: "War", 37: "Western"
+  };
+  /* ========================= */
+
+  /* DOM Elements */
+  const nameInput = document.getElementById('nameInput');
+  const searchBtn = document.getElementById('searchBtn');
+  const watchlistBtn = document.getElementById('watchlistBtn');
+  const modal = document.getElementById('modal');
+  const playerFrame = document.getElementById('playerFrame');
+  const modalClose = document.getElementById('modalClose');
+  const playerTitle = document.getElementById('playerTitle');
+  const playerLoading = document.getElementById('playerLoading');
+  const seasonSelector = document.getElementById('seasonSelector');
+  const seasonButtons = document.getElementById('seasonButtons');
+  const episodeButtons = document.getElementById('episodeButtons');
+  const autocompleteDropdown = document.getElementById('autocompleteDropdown');
+  const genreButtons = document.getElementById('genreButtons');
+  const clearFilter = document.getElementById('clearFilter');
+  const currentGenreTitle = document.getElementById('currentGenreTitle');
+  const genreMovieCount = document.getElementById('genreMovieCount');
+  const navTabs = document.querySelectorAll('.nav-tab');
+  const contentSections = document.querySelectorAll('.content-section');
+  
+  /* State */
+  let currentItem = null;
+  let seasonsData = null;
+  let watchlist = JSON.parse(localStorage.getItem('nikkflix_watchlist')) || [];
+  let searchTimeout = null;
+  let currentSuggestions = [];
+  let selectedSuggestionIndex = -1;
+  let currentGenreId = null;
+  
+  /* Helper Functions */
+  function escapeHtml(s) {
+    if (!s) return '';
+    const div = document.createElement('div');
+    div.textContent = s;
+    return div.innerHTML;
+  }
+
+  function showNotice(message, type = 'info') {
+    const colors = {
+      info: '#073b32',
+      error: '#4a1a1a',
+      success: '#1a4a2e'
+    };
     
-    // Update player title
-    playerTitle.textContent = title;
+    const notice = document.createElement('div');
+    notice.textContent = message;
+    notice.style.cssText = `
+      background: ${colors[type] || colors.info};
+      color: #fff;
+      padding: 12px 20px;
+      border-radius: 10px;
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      z-index: 1000;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      animation: slideIn 0.3s ease;
+    `;
     
-    // Show/hide season selector
-    if (mediaType === 'tv') {
-      seasonSelector.style.display = 'flex';
-      const seasons = await fetchSeasons(item.id);
-      if (seasons.length > 0) {
-        createSeasonSelector(seasons, 1, 1);
-        // Play first episode of first season
-        await playEpisode(1, 1);
-      } else {
-        seasonSelector.style.display = 'none';
-        const url = buildEmbedUrl({ id: item.id, mediaType: 'tv', season: 1, episode: 1 });
-        if (url) playerFrame.src = url;
-      }
-    } else {
-      seasonSelector.style.display = 'none';
-      const url = buildEmbedUrl({ id: item.id, mediaType: 'movie' });
-      if (url) playerFrame.src = url;
+    document.body.appendChild(notice);
+    setTimeout(() => {
+      notice.style.animation = 'slideOut 0.3s ease';
+      setTimeout(() => notice.remove(), 300);
+    }, 2000);
+    
+    // Add animation keyframes
+    if (!document.querySelector('#notice-animations')) {
+      const style = document.createElement('style');
+      style.id = 'notice-animations';
+      style.textContent = `
+        @keyframes slideIn {
+          from { transform: translateX(100%); opacity: 0; }
+          to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideOut {
+          from { transform: translateX(0); opacity: 1; }
+          to { transform: translateX(100%); opacity: 0; }
+        }
+      `;
+      document.head.appendChild(style);
     }
-    
-    // Open modal
-    modal.classList.add('open');
-    showNotice('Player opened', 'success');
-    
-  } catch (error) {
-    console.error('Play error:', error);
-    showNotice('Failed to play: ' + error.message, 'error');
-  }
-}
-
-/* Search and Display Results */
-async function searchAndPlay(query) {
-  if (!query.trim()) {
-    loadTrending();
-    return;
   }
   
-  resultsEl.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+  /* Improved Player Loading Handler */
+  function handlePlayerLoad() {
+    playerFrame.classList.add('loaded');
+    playerLoading.style.display = 'none';
+    showNotice('Player ready!', 'success');
+  }
   
-  try {
-    const url = tmdbUrl('search/multi', {
-      query: query,
-      include_adult: false,
-      page: 1
-    });
+  /* Autocomplete Functions */
+  function handleSearchInput() {
+    const query = nameInput.value.trim();
     
-    const data = await safeFetch(url);
-    resultsEl.innerHTML = '';
+    if (searchTimeout) clearTimeout(searchTimeout);
     
-    if (!data.results || data.results.length === 0) {
-      resultsEl.innerHTML = '<div style="text-align:center;color:var(--muted);padding:40px;">No results found</div>';
+    if (query.length < 2) {
+      autocompleteDropdown.classList.remove('active');
       return;
     }
     
-    // Display results
-    data.results.slice(0, 24).forEach(item => {
-      if (item.media_type !== 'person') { // Skip actor results
-        resultsEl.appendChild(createCard(item));
+    autocompleteDropdown.querySelector('.search-loading').style.display = 'block';
+    autocompleteDropdown.querySelector('.no-suggestions').style.display = 'none';
+    autocompleteDropdown.classList.add('active');
+    
+    searchTimeout = setTimeout(() => fetchAutocompleteSuggestions(query), 300);
+  }
+  
+  async function fetchAutocompleteSuggestions(query) {
+    try {
+      const url = tmdbUrl('search/multi', { query: query });
+      const data = await safeFetch(url);
+      
+      autocompleteDropdown.querySelector('.search-loading').style.display = 'none';
+      
+      if (data.results && data.results.length > 0) {
+        currentSuggestions = data.results.filter(item => 
+          item.media_type !== 'person'
+        ).slice(0, 8);
+        
+        displayAutocompleteSuggestions(currentSuggestions);
+        autocompleteDropdown.querySelector('.no-suggestions').style.display = 'none';
+      } else {
+        currentSuggestions = [];
+        autocompleteDropdown.innerHTML = '<div class="no-suggestions">No movies found. Try a different search.</div>';
+      }
+    } catch (error) {
+      console.error('Autocomplete error:', error);
+      autocompleteDropdown.innerHTML = '<div class="no-suggestions">Error loading suggestions</div>';
+    }
+  }
+  
+  function displayAutocompleteSuggestions(movies) {
+    autocompleteDropdown.innerHTML = '';
+    selectedSuggestionIndex = -1;
+    
+    movies.forEach((movie, index) => {
+      const suggestionItem = document.createElement('div');
+      suggestionItem.className = 'autocomplete-item';
+      suggestionItem.dataset.index = index;
+      
+      const posterPath = movie.poster_path 
+        ? `${IMG_BASE_URL}/w92${movie.poster_path}`
+        : 'https://via.placeholder.com/92x138/0f1720/9fb0bb?text=No+Image';
+      
+      const releaseYear = (movie.release_date || movie.first_air_date || '').slice(0, 4);
+      
+      suggestionItem.innerHTML = `
+        <img src="${posterPath}" alt="${movie.title || movie.name}" class="autocomplete-poster">
+        <div class="autocomplete-info">
+          <div class="autocomplete-title">${escapeHtml(movie.title || movie.name || 'Untitled')}</div>
+          <div class="autocomplete-meta">
+            <span>${releaseYear || 'N/A'}</span>
+            <span class="autocomplete-rating">
+              ⭐ ${movie.vote_average ? movie.vote_average.toFixed(1) : 'N/A'}
+            </span>
+          </div>
+        </div>
+      `;
+      
+      suggestionItem.addEventListener('click', () => selectSuggestion(movie));
+      suggestionItem.addEventListener('mouseenter', () => setSelectedSuggestion(index));
+      
+      autocompleteDropdown.appendChild(suggestionItem);
+    });
+  }
+  
+  function setSelectedSuggestion(index) {
+    document.querySelectorAll('.autocomplete-item').forEach(item => {
+      item.classList.remove('selected');
+    });
+    
+    const items = document.querySelectorAll('.autocomplete-item');
+    if (items[index]) {
+      items[index].classList.add('selected');
+      selectedSuggestionIndex = index;
+    }
+  }
+  
+  function navigateSuggestions(direction) {
+    const items = document.querySelectorAll('.autocomplete-item');
+    if (items.length === 0) return;
+    
+    let newIndex = selectedSuggestionIndex + direction;
+    if (newIndex < 0) newIndex = items.length - 1;
+    if (newIndex >= items.length) newIndex = 0;
+    
+    setSelectedSuggestion(newIndex);
+    items[newIndex].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  }
+  
+  function selectSuggestion(movie) {
+    nameInput.value = movie.title || movie.name;
+    autocompleteDropdown.classList.remove('active');
+    searchAndPlay(movie.title || movie.name);
+  }
+  
+  /* Genre Functions */
+  function loadGenres() {
+    genreButtons.innerHTML = '';
+    
+    Object.entries(GENRES).forEach(([id, name]) => {
+      const button = document.createElement('button');
+      button.className = 'genre-btn';
+      button.dataset.genreId = id;
+      button.textContent = name;
+      
+      button.addEventListener('click', () => {
+        document.querySelectorAll('.genre-btn').forEach(btn => {
+          btn.classList.remove('active');
+        });
+        button.classList.add('active');
+        showGenreContent(parseInt(id), name);
+        showContentSection('genres');
+      });
+      
+      genreButtons.appendChild(button);
+    });
+  }
+  
+  async function showGenreContent(genreId, genreName) {
+    currentGenreId = genreId;
+    currentGenreTitle.textContent = genreName;
+    genreMovieCount.textContent = 'Loading...';
+    
+    const genreMoviesEl = document.getElementById('genreMovies');
+    genreMoviesEl.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+    
+    try {
+      const data = await fetchMoviesByGenre(genreId);
+      if (data && data.results && data.results.length > 0) {
+        genreMovieCount.textContent = `${data.total_results.toLocaleString()} movies`;
+        displayCards(data.results.slice(0, 24), genreMoviesEl, true);
+      } else {
+        genreMoviesEl.innerHTML = `
+          <div class="no-results">
+            <i class="fas fa-film"></i>
+            <h3>No movies found in this genre</h3>
+            <p>Try selecting a different genre</p>
+          </div>
+        `;
+        genreMovieCount.textContent = '0 movies';
+      }
+    } catch (error) {
+      console.error('Genre error:', error);
+      genreMovieCount.textContent = 'Error loading';
+    }
+  }
+  
+  /* Content Navigation */
+  function showContentSection(sectionId) {
+    // Update tabs
+    navTabs.forEach(tab => {
+      tab.classList.toggle('active', tab.dataset.tab === sectionId);
+    });
+    
+    // Show section
+    contentSections.forEach(section => {
+      section.classList.toggle('active', section.id === sectionId + 'Content');
+    });
+  }
+  
+  /* TMDb API Functions */
+  function tmdbUrl(path, params = {}) {
+    if (!TMDB_API_KEY) return null;
+    const u = new URL('https://api.themoviedb.org/3/' + path);
+    u.searchParams.set('api_key', TMDB_API_KEY);
+    u.searchParams.set('language', 'en-US');
+    for (const k in params) {
+      if (params[k] !== undefined && params[k] !== null) {
+        u.searchParams.set(k, params[k]);
+      }
+    }
+    return u.toString();
+  }
+
+  async function safeFetch(url) {
+    try {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      return await response.json();
+    } catch (error) {
+      console.error('Fetch error:', error);
+      throw error;
+    }
+  }
+  
+  /* Home Page API Functions */
+  async function fetchTrendingMovies() {
+    const url = tmdbUrl('trending/movie/week');
+    return await safeFetch(url);
+  }
+  
+  async function fetchPopularMovies() {
+    const url = tmdbUrl('movie/popular', { page: 1 });
+    return await safeFetch(url);
+  }
+  
+  async function fetchTopRatedMovies() {
+    const url = tmdbUrl('movie/top_rated', { page: 1 });
+    return await safeFetch(url);
+  }
+  
+  async function fetchNowPlayingMovies() {
+    const url = tmdbUrl('movie/now_playing', { page: 1 });
+    return await safeFetch(url);
+  }
+  
+  async function fetchAllPopularMovies() {
+    const url = tmdbUrl('movie/popular', { page: 1 });
+    return await safeFetch(url);
+  }
+  
+  async function fetchWeeklyTrending() {
+    const url = tmdbUrl('trending/all/week');
+    return await safeFetch(url);
+  }
+  
+  async function fetchMoviesByGenre(genreId, page = 1) {
+    const url = tmdbUrl('discover/movie', {
+      with_genres: genreId,
+      page: page,
+      sort_by: 'popularity.desc'
+    });
+    return await safeFetch(url);
+  }
+
+  /* Load Home Page Content */
+  async function loadHomeContent() {
+    showContentSection('home');
+    
+    // Load all sections in parallel
+    try {
+      // Trending
+      const trendingCardsEl = document.getElementById('trendingCards');
+      trendingCardsEl.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+      const trendingData = await fetchTrendingMovies();
+      displayCards(trendingData.results.slice(0, 12), trendingCardsEl, true);
+      
+      // Popular Movies
+      const popularCardsEl = document.getElementById('popularMoviesCards');
+      popularCardsEl.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+      const popularData = await fetchPopularMovies();
+      displayCards(popularData.results.slice(0, 12), popularCardsEl, true);
+      
+      // Top Rated
+      const topRatedCardsEl = document.getElementById('topRatedCards');
+      topRatedCardsEl.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+      const topRatedData = await fetchTopRatedMovies();
+      displayCards(topRatedData.results.slice(0, 12), topRatedCardsEl, true);
+      
+      // Now Playing
+      const nowPlayingCardsEl = document.getElementById('nowPlayingCards');
+      nowPlayingCardsEl.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+      const nowPlayingData = await fetchNowPlayingMovies();
+      displayCards(nowPlayingData.results.slice(0, 12), nowPlayingCardsEl, true);
+      
+    } catch (error) {
+      console.error('Home load error:', error);
+      showNotice('Failed to load some content', 'error');
+    }
+  }
+  
+  async function loadMoviesContent() {
+    showContentSection('movies');
+    const moviesCardsEl = document.getElementById('moviesCards');
+    moviesCardsEl.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+    
+    try {
+      const data = await fetchAllPopularMovies();
+      displayCards(data.results.slice(0, 24), moviesCardsEl, true);
+    } catch (error) {
+      console.error('Movies load error:', error);
+      moviesCardsEl.innerHTML = '<div class="no-results">Failed to load movies</div>';
+    }
+  }
+  
+  async function loadTrendingContent() {
+    showContentSection('trending');
+    const trendingContentEl = document.getElementById('weeklyTrendingCards');
+    trendingContentEl.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+    
+    try {
+      const data = await fetchWeeklyTrending();
+      displayCards(data.results.slice(0, 24), trendingContentEl, true);
+    } catch (error) {
+      console.error('Trending load error:', error);
+      trendingContentEl.innerHTML = '<div class="no-results">Failed to load trending</div>';
+    }
+  }
+
+  /* Fetch Seasons Data */
+  async function fetchSeasons(tvId) {
+    try {
+      const url = tmdbUrl(`tv/${tvId}`);
+      const data = await safeFetch(url);
+      seasonsData = data.seasons || [];
+      return seasonsData;
+    } catch (error) {
+      console.error('Error fetching seasons:', error);
+      return [];
+    }
+  }
+
+  /* Build Embed URL */
+  function buildEmbedUrl({ id, mediaType = 'movie', season = 1, episode = 1, autoplay = true }) {
+    if (!id) return null;
+    let path = mediaType === 'tv' 
+      ? `tv/${encodeURIComponent(id)}/${season}/${episode}` 
+      : `movie/${encodeURIComponent(id)}`;
+    const params = new URLSearchParams();
+    if (autoplay) params.set('autoPlay', 'true');
+    return EMBED_BASE + path + (params.toString() ? '?' + params.toString() : '');
+  }
+
+  /* Create Season/Episode Selector */
+  function createSeasonSelector(seasons, currentSeason = 1, currentEpisode = 1) {
+    seasonButtons.innerHTML = '';
+    episodeButtons.innerHTML = '';
+    
+    seasons.forEach(season => {
+      if (season.season_number > 0) {
+        const btn = document.createElement('button');
+        btn.className = `selector-btn ${season.season_number === currentSeason ? 'active' : ''}`;
+        btn.textContent = `S${season.season_number}`;
+        btn.dataset.season = season.season_number;
+        btn.addEventListener('click', () => loadEpisodesForSeason(season.season_number));
+        seasonButtons.appendChild(btn);
       }
     });
     
-    // Auto-play the first result
-    const firstResult = data.results.find(item => item.media_type !== 'person');
-    if (firstResult) {
-      playItem(firstResult);
+    loadEpisodes(currentSeason, currentEpisode);
+  }
+
+  async function loadEpisodes(seasonNumber, defaultEpisode = 1) {
+    if (!currentItem || currentItem.media_type !== 'tv') return;
+    
+    try {
+      const url = tmdbUrl(`tv/${currentItem.id}/season/${seasonNumber}`);
+      const seasonData = await safeFetch(url);
+      const episodes = seasonData.episodes || [];
+      
+      episodeButtons.innerHTML = '';
+      
+      episodes.slice(0, 20).forEach(episode => {
+        const btn = document.createElement('button');
+        btn.className = `selector-btn ${episode.episode_number === defaultEpisode ? 'active' : ''}`;
+        btn.textContent = `E${episode.episode_number}`;
+        btn.dataset.episode = episode.episode_number;
+        btn.addEventListener('click', () => playEpisode(seasonNumber, episode.episode_number));
+        episodeButtons.appendChild(btn);
+      });
+      
+      document.querySelectorAll('#seasonButtons .selector-btn').forEach(btn => {
+        btn.classList.toggle('active', parseInt(btn.dataset.season) === seasonNumber);
+      });
+    } catch (error) {
+      console.error('Error loading episodes:', error);
+    }
+  }
+
+  function loadEpisodesForSeason(seasonNumber) {
+    loadEpisodes(seasonNumber, 1);
+  }
+
+  async function playEpisode(seasonNumber, episodeNumber) {
+    if (!currentItem) return;
+    
+    document.querySelectorAll('#seasonButtons .selector-btn').forEach(btn => {
+      btn.classList.toggle('active', parseInt(btn.dataset.season) === seasonNumber);
+    });
+    document.querySelectorAll('#episodeButtons .selector-btn').forEach(btn => {
+      btn.classList.toggle('active', parseInt(btn.dataset.episode) === episodeNumber);
+    });
+    
+    const url = buildEmbedUrl({
+      id: currentItem.id,
+      mediaType: 'tv',
+      season: seasonNumber,
+      episode: episodeNumber,
+      autoplay: true
+    });
+    
+    if (url) {
+      playerLoading.style.display = 'block';
+      playerFrame.classList.remove('loaded');
+      playerFrame.src = url;
+      playerTitle.textContent = `${currentItem.title || currentItem.name} - S${seasonNumber}E${episodeNumber}`;
+    }
+  }
+
+  /* Create Movie/Show Card */
+  function createCard(item, showWatchlistBtn = true) {
+    const mediaType = item.media_type || (item.title ? 'movie' : 'tv');
+    const title = item.title || item.name || 'Untitled';
+    const year = (item.release_date || item.first_air_date || '').slice(0, 4);
+    const poster = item.poster_path 
+      ? `https://image.tmdb.org/t/p/w500${item.poster_path}`
+      : 'https://via.placeholder.com/500x750/0f1720/9fb0bb?text=No+Image';
+    const rating = item.vote_average ? item.vote_average.toFixed(1) : 'N/A';
+    const isInWatchlist = watchlist.some(w => w.id === item.id);
+    
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      ${showWatchlistBtn ? `
+        <button class="watchlist-btn ${isInWatchlist ? 'active' : ''}" data-id="${item.id}" 
+                title="${isInWatchlist ? 'Remove from watchlist' : 'Add to watchlist'}">
+          <i class="fas ${isInWatchlist ? 'fa-check' : 'fa-plus'}"></i>
+        </button>
+      ` : ''}
+      <img src="${poster}" class="poster" alt="${title}" loading="lazy">
+      <div class="title">${escapeHtml(title)}</div>
+      <div class="meta">
+        <span class="type-badge">${mediaType.toUpperCase()}</span>
+        ${year ? `<span>• ${year}</span>` : ''}
+        <span>• ⭐ ${rating}</span>
+      </div>
+    `;
+    
+    card.addEventListener('click', (e) => {
+      if (!e.target.closest('.watchlist-btn')) {
+        nameInput.value = title;
+        playItem(item);
+      }
+    });
+    
+    if (showWatchlistBtn) {
+      const watchlistBtn = card.querySelector('.watchlist-btn');
+      watchlistBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleWatchlistItem(item);
+        watchlistBtn.classList.toggle('active');
+        watchlistBtn.innerHTML = `<i class="fas ${watchlistBtn.classList.contains('active') ? 'fa-check' : 'fa-plus'}"></i>`;
+        updateWatchlistButton();
+      });
     }
     
-  } catch (error) {
-    console.error('Search error:', error);
-    resultsEl.innerHTML = `<div style="text-align:center;color:#ff6b6b;padding:40px;">Search failed: ${escapeHtml(error.message)}</div>`;
+    return card;
   }
-}
-
-/* Load Trending Content */
-async function loadTrending() {
-  resultsEl.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
   
-  try {
-    const url = tmdbUrl('trending/all/week');
-    const data = await safeFetch(url);
-    resultsEl.innerHTML = '';
+  function displayCards(items, container, showWatchlistBtn = true) {
+    if (!items || items.length === 0) {
+      container.innerHTML = '<div class="no-results">No content found</div>';
+      return;
+    }
     
-    (data.results || []).slice(0, 24).forEach(item => {
+    container.innerHTML = '';
+    items.forEach(item => {
       if (item.media_type !== 'person') {
-        resultsEl.appendChild(createCard(item));
+        container.appendChild(createCard(item, showWatchlistBtn));
       }
     });
-  } catch (error) {
-    console.error('Trending load error:', error);
-    resultsEl.innerHTML = '<div style="text-align:center;color:#ff6b6b;padding:40px;">Failed to load trending content</div>';
   }
-}
 
-/* Event Listeners */
-searchBtn.addEventListener('click', () => searchAndPlay(nameInput.value.trim()));
-nameInput.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter') searchAndPlay(nameInput.value.trim());
-});
+  /* Watchlist Functions */
+  function toggleWatchlistItem(item) {
+    const index = watchlist.findIndex(w => w.id === item.id);
+    
+    if (index === -1) {
+      watchlist.push({
+        id: item.id,
+        title: item.title || item.name,
+        poster_path: item.poster_path,
+        release_date: item.release_date || item.first_air_date,
+        vote_average: item.vote_average,
+        media_type: item.media_type || (item.title ? 'movie' : 'tv')
+      });
+      showNotice('Added to watchlist', 'success');
+    } else {
+      watchlist.splice(index, 1);
+      showNotice('Removed from watchlist', 'info');
+    }
+    
+    localStorage.setItem('nikkflix_watchlist', JSON.stringify(watchlist));
+    updateWatchlistDisplay();
+  }
+  
+  function updateWatchlistDisplay() {
+    const watchlistCardsEl = document.getElementById('watchlistCards');
+    
+    if (watchlist.length === 0) {
+      watchlistCardsEl.innerHTML = `
+        <div class="no-results">
+          <i class="fas fa-bookmark"></i>
+          <h3>Your watchlist is empty</h3>
+          <p>Add movies by clicking the bookmark icon</p>
+        </div>
+      `;
+    } else {
+      displayCards(watchlist, watchlistCardsEl, false);
+    }
+    
+    updateWatchlistButton();
+  }
+  
+  function updateWatchlistButton() {
+    watchlistBtn.innerHTML = `<i class="fas fa-bookmark"></i> Watchlist ${watchlist.length > 0 ? `(${watchlist.length})` : ''}`;
+  }
 
-modalClose.addEventListener('click', () => {
-  playerFrame.src = 'about:blank';
-  modal.classList.remove('open');
-  seasonSelector.style.display = 'none';
-  seasonButtons.innerHTML = '';
-  episodeButtons.innerHTML = '';
-  currentItem = null;
-});
+  /* Play Item with Improved Loading */
+  async function playItem(item) {
+    try {
+      currentItem = item;
+      const mediaType = item.media_type || (item.title ? 'movie' : 'tv');
+      const title = item.title || item.name || 'Untitled';
+      
+      playerTitle.textContent = title;
+      playerLoading.style.display = 'block';
+      playerFrame.classList.remove('loaded');
+      
+      if (mediaType === 'tv') {
+        seasonSelector.style.display = 'flex';
+        const seasons = await fetchSeasons(item.id);
+        if (seasons.length > 0) {
+          createSeasonSelector(seasons, 1, 1);
+          await playEpisode(1, 1);
+        } else {
+          seasonSelector.style.display = 'none';
+          const url = buildEmbedUrl({ id: item.id, mediaType: 'tv', season: 1, episode: 1 });
+          if (url) playerFrame.src = url;
+        }
+      } else {
+        seasonSelector.style.display = 'none';
+        const url = buildEmbedUrl({ id: item.id, mediaType: 'movie' });
+        if (url) playerFrame.src = url;
+      }
+      
+      modal.classList.add('open');
+      
+    } catch (error) {
+      console.error('Play error:', error);
+      playerLoading.style.display = 'none';
+      showNotice('Failed to play: ' + error.message, 'error');
+    }
+  }
 
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') modalClose.click();
-});
+  /* Search and Display Results */
+  async function searchAndPlay(query) {
+    if (!query.trim()) {
+      loadHomeContent();
+      return;
+    }
+    
+    showContentSection('search');
+    const searchResultsEl = document.getElementById('searchResults');
+    searchResultsEl.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+    
+    try {
+      const url = tmdbUrl('search/multi', {
+        query: query,
+        include_adult: false,
+        page: 1
+      });
+      
+      const data = await safeFetch(url);
+      
+      if (!data.results || data.results.length === 0) {
+        searchResultsEl.innerHTML = '<div class="no-results">No results found</div>';
+        return;
+      }
+      
+      const validResults = data.results.filter(item => item.media_type !== 'person');
+      displayCards(validResults.slice(0, 24), searchResultsEl, true);
+      
+      if (validResults.length > 0) {
+        playItem(validResults[0]);
+      }
+      
+    } catch (error) {
+      console.error('Search error:', error);
+      searchResultsEl.innerHTML = '<div class="no-results">Search failed</div>';
+    }
+  }
 
-downloadBtn.addEventListener('click', () => {
-  const html = '<!doctype html>\n' + document.documentElement.outerHTML;
-  const blob = new Blob([html], { type: 'text/html' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'nikk-flix-enhanced.html';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-  showNotice('Page downloaded successfully!', 'success');
-});
+  /* Event Listeners */
+  nameInput.addEventListener('input', handleSearchInput);
+  nameInput.addEventListener('focus', () => {
+    if (nameInput.value.trim().length >= 2) {
+      autocompleteDropdown.classList.add('active');
+    }
+  });
+  
+  nameInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      if (selectedSuggestionIndex >= 0 && currentSuggestions.length > 0) {
+        selectSuggestion(currentSuggestions[selectedSuggestionIndex]);
+      } else {
+        searchAndPlay(nameInput.value.trim());
+      }
+    }
+    
+    if (autocompleteDropdown.classList.contains('active')) {
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        navigateSuggestions(1);
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        navigateSuggestions(-1);
+      } else if (e.key === 'Escape') {
+        autocompleteDropdown.classList.remove('active');
+      }
+    }
+  });
+  
+  searchBtn.addEventListener('click', () => searchAndPlay(nameInput.value.trim()));
+  
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.search-container')) {
+      autocompleteDropdown.classList.remove('active');
+    }
+  });
+  
+  // Navigation tabs
+  navTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const tabId = tab.dataset.tab;
+      showContentSection(tabId);
+      
+      if (tabId === 'home') loadHomeContent();
+      else if (tabId === 'movies') loadMoviesContent();
+      else if (tabId === 'genres') {
+        if (!currentGenreId) {
+          showGenreContent(28, 'Action');
+        }
+      }
+      else if (tabId === 'trending') loadTrendingContent();
+    });
+  });
+  
+  watchlistBtn.addEventListener('click', () => {
+    showContentSection('watchlist');
+    updateWatchlistDisplay();
+  });
+  
+  clearFilter.addEventListener('click', () => {
+    document.querySelectorAll('.genre-btn').forEach(btn => {
+      btn.classList.remove('active');
+    });
+    loadHomeContent();
+  });
+  
+  document.getElementById('clearSearch').addEventListener('click', () => {
+    loadHomeContent();
+  });
+  
+  document.getElementById('clearWatchlist').addEventListener('click', () => {
+    if (confirm('Clear all items from watchlist?')) {
+      watchlist = [];
+      localStorage.setItem('nikkflix_watchlist', JSON.stringify(watchlist));
+      updateWatchlistDisplay();
+      showNotice('Watchlist cleared', 'info');
+    }
+  });
 
-/* Initialize */
-(async function init() {
-  await loadTrending();
-  nameInput.focus();
-})();
-</script>
+  modalClose.addEventListener('click', () => {
+    playerFrame.src = 'about:blank';
+    playerFrame.classList.remove('loaded');
+    playerLoading.style.display = 'none';
+    modal.classList.remove('open');
+    seasonSelector.style.display = 'none';
+    seasonButtons.innerHTML = '';
+    episodeButtons.innerHTML = '';
+    currentItem = null;
+  });
 
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') modalClose.click();
+  });
+
+  /* View All Handlers */
+  document.querySelectorAll('.view-all').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const type = link.dataset.type;
+      
+      switch(type) {
+        case 'trending':
+          showContentSection('trending');
+          loadTrendingContent();
+          break;
+        case 'popular':
+        case 'allmovies':
+          showContentSection('movies');
+          loadMoviesContent();
+          break;
+        case 'toprated':
+        case 'nowplaying':
+        case 'weeklytrending':
+          // Just scroll to top for now
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          break;
+      }
+    });
+  });
+
+  /* Initialize */
+  async function init() {
+    // Load Font Awesome
+    if (!document.querySelector('#fa-icons')) {
+      const faLink = document.createElement('link');
+      faLink.id = 'fa-icons';
+      faLink.rel = 'stylesheet';
+      faLink.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';
+      document.head.appendChild(faLink);
+    }
+    
+    await loadHomeContent();
+    loadGenres();
+    updateWatchlistDisplay();
+    nameInput.focus();
+  }
+  
+  // Start initialization
+  setTimeout(() => init(), 100);
+  </script>
 </div>
 
 <script>
@@ -904,4 +1798,52 @@ setTimeout(()=>{
 
 </body>
 </html>
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title></title>
 
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+}
+</style>
+</head>
+
+<body>
+
+<!-- YOUR EXISTING CONTENT / PLAYER / IFRAME GOES HERE -->
+<!-- NOTHING NEEDS TO BE MODIFIED -->
+
+<script>
+/* Global fullscreen → landscape (YouTube-style) */
+
+function lockLandscape() {
+  if (screen.orientation && screen.orientation.lock) {
+    screen.orientation.lock('landscape').catch(() => {});
+  }
+}
+
+function unlockOrientation() {
+  if (screen.orientation && screen.orientation.unlock) {
+    screen.orientation.unlock();
+  }
+}
+
+document.addEventListener('fullscreenchange', () => {
+  if (document.fullscreenElement) {
+    lockLandscape();
+  } else {
+    unlockOrientation();
+  }
+});
+</script>
+
+</body>
+  </html>
