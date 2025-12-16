@@ -3,40 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search Results</title>
+    <title>Video Page</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
             margin: 0;
-            padding: 20px;
-            background-color: #f0f0f0;
+            background-color: #000;
         }
-        #search-container {
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        video {
+            max-width: 90%;
+            max-height: 90%;
+            border: 2px solid #fff;
+            border-radius: 10px;
         }
     </style>
 </head>
 <body>
-    <h1>Search Results</h1>
-    <div id="search-container">
-        <!-- Content from search.js will be displayed here -->
-    </div>
-
-    <script src="https://rinolski.neocities.org/JS/search.js"></script>
-    <script>
-        // Assuming search.js exposes a function or data
-        // If search.js sets a variable `searchContent`
-        if (typeof searchContent !== "undefined") {
-            document.getElementById("search-container").innerHTML = searchContent;
-        }
-
-        // Or if search.js exposes a function `getSearchResults()`
-        if (typeof getSearchResults === "function") {
-            document.getElementById("search-container").innerHTML = getSearchResults();
-        }
-    </script>
+    <video controls>
+        <source src="https://res.cloudinary.com/dhqn68dsi/video/upload/v1762640368/Tulsa.King.S03E01._NKIRI.COM_qs3uxt.mkv" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
 </body>
 </html>
