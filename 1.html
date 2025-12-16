@@ -1,38 +1,42 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Rinolski (PS3 Version)</title>
-  <style>
-    body {
-      background-color: #000;
-      color: #fff;
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 20px;
-    }
-    h1 {
-      color: #0f0;
-    }
-    a {
-      color: #0f0;
-      text-decoration: none;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
-    ul {
-      padding-left: 20px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        #search-container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+    </style>
 </head>
 <body>
-  <h1>Welcome to Rinolski</h1>
-  <p>This is the PS3-compatible version of the site. Click below to access the main content:</p>
-  <ul>
-    <li><a href="https://reily.ct.ws/rinolski.php""Enter Rinolski</a></li>
-  </ul>
+    <h1>Search Results</h1>
+    <div id="search-container">
+        <!-- Content from search.js will be displayed here -->
+    </div>
 
-  <p style="font-size:small;">Note: This version is simplified for older browsers like the PS3 browser.</p>
+    <script src="search.js"></script>
+    <script>
+        // Assuming search.js exposes a function or data
+        // If search.js sets a variable `searchContent`
+        if (typeof searchContent !== "undefined") {
+            document.getElementById("search-container").innerHTML = searchContent;
+        }
+
+        // Or if search.js exposes a function `getSearchResults()`
+        if (typeof getSearchResults === "function") {
+            document.getElementById("search-container").innerHTML = getSearchResults();
+        }
+    </script>
 </body>
 </html>
