@@ -43,7 +43,7 @@ body { font-family: Arial, Helvetica, sans-serif; background: #000; color: #fff;
 .modal-box input { width: 100%; padding: 12px; margin-bottom: 12px; background: #222; border: none; color: #fff; border-radius: 4px; }
 .modal-box button { width: 100%; padding: 12px; background: #e50914; border: none; color: #fff; font-weight: bold; cursor: pointer; border-radius: 4px; }
 .switch { margin-top: 12px; font-size: 14px; color: #aaa; cursor: pointer; text-align: center; }
-.error-msg { color: #ff4c4c; margin-bottom: 10px; font-size: 14px; text-align: center; }
+.error-msg { color: #ff4c4c; margin-bottom: 10px; font-size: 14px; text-align: center; min-height: 18px; }
 </style>
 </head>
 <body>
@@ -74,9 +74,9 @@ body { font-family: Arial, Helvetica, sans-serif; background: #000; color: #fff;
 </div>
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.26.0/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.26.0/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.26.0/firebase-firestore.js";
 
 // Firebase config
 const firebaseConfig = {
@@ -89,7 +89,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// DOM
+// DOM elements
 const authBtn = document.getElementById("authBtn");
 const getStartedBtn = document.querySelector(".get-started");
 const modal = document.getElementById("modal");
@@ -194,12 +194,12 @@ submitBtn.addEventListener('click', submitAuth);
 // Auto redirect if already signed in
 onAuthStateChanged(auth, user=>{
   if(user){
+    modal.style.display="none";
     if(window.location.pathname.endsWith("index.html") || window.location.pathname === "/" || window.location.pathname === "/index.html"){
       window.location.href = "https://rinolski.neocities.org/Home.html";
     }
   }
 });
 </script>
-
 </body>
 </html>
