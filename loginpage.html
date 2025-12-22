@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rinolski – Watch Anywhere</title>
+
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: Arial, Helvetica, sans-serif; background: #000; color: #fff; height: 100vh; overflow: hidden; }
+
+.bg {
+  position: fixed;
+  inset: 0;
+  background:
+    linear-gradient(to top, rgba(0,0,0,.85), rgba(0,0,0,.35)),
+    url("https://rinolski.neocities.org/images/Rinolski-preview.png") center/cover no-repeat;
+  z-index: -1;
+}
+
+.header { display: flex; justify-content: space-between; align-items: center; padding: 22px 40px; }
+.logo { font-size: 28px; font-weight: bold; color: #e50914; }
+.auth-btn { background: #e50914; border: none; color: #fff; padding: 8px 18px; border-radius: 4px; cursor: pointer; }
+
+.center {
+  height: calc(100vh - 90px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.center h1 { font-size: 3rem; }
+.center p { margin-top: 10px; font-size: 1.3rem; color: #ddd; }
+.get-started { margin-top: 30px; padding: 18px 48px; font-size: 1.6rem; font-weight: bold; background: #e50914; border: none; color: #fff; border-radius: 4px; cursor: pointer; }
+
+.modal { position: fixed; inset: 0; background: rgba(0,0,0,.85); display: none; align-items: center; justify-content: center; }
+.modal-box { background: #111; padding: 30px; width: 320px; border-radius: 6px; }
+.modal-box h2 { margin-bottom: 20px; }
+.modal-box input { width: 100%; padding: 12px; margin-bottom: 12px; background: #222; border: none; color: #fff; }
+.modal-box button { width: 100%; padding: 12px; background: #e50914; border: none; color: #fff; font-weight: bold; cursor: pointer; }
+.switch { margin-top: 12px; font-size: 14px; color: #aaa; cursor: pointer; text-align: center; }
+.error-msg { color: #ff4c4c; margin-bottom: 10px; font-size: 14px; text-align: center; }
+</style>
+</head>
+<body>
+
+<div class="bg"></div>
+
+<header class="header">
+  <div class="logo">RINOLSKI</div>
+  <button id="authBtn" class="auth-btn">Sign In</button>
+</header>
+
+<div class="center">
+  <h1>Unlimited movies, series, and more.</h1>
+  <p>Watch anywhere. Cancel anytime.</p>
+  <button class="get-started" onclick="openAuth()">Get Started</button>
+</div>
+
+<!-- AUTH MODAL -->
+<div id="modal" class="modal">
+  <div class="modal-box">
+    <h2 id="modalTitle">Sign In</h2>
+    <div id="error" class="error-msg"></div>
+    <input id="email" type="email" placeholder="Email">
+    <input id="password" type="password" placeholder="Password">
+    <button onclick="submitAuth()">Continue</button>
+    <div class="switch" onclick="toggleMode()">Don’t have an account? Sign up</div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCExki28m1NNepVQEIjmcQzR8z8O68LqIc",
+  authDomain: "rinolski-notifications.firebaseapp.com",
+  projectId: "rinolski-notifications",
+  appId: "1:355554579853:web:3caa961653c0cdc0a359c4"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+/* DOM */
+const authBtn = document.getElementById("authBtn");
+const modal = document.getElementById("modal");
+const title = document.getElementById("modalTitle");
+const switchText = document.querySelector(".switch");
+const emailInput = document.getElementById("email");
+const passwordInput = document.getElementById("password");
+const errorDiv = document.getElementById("error");
+
+let isSignup = false;
+
+window.openAuth = () => {
+  errorDiv.textContent = "";
+  modal.style.display = "flex";
+};
+
+window.toggleMode = () => {
+  isSignup = !isSignup;
+  title.textContent = isSignup ? "Sign Up" : "Sign In";
+  switchText.textContent = isSignup ? "Already have an account? Sign in" : "Don’t have an account? Sign up";
+  errorDiv.textContent = "";
+};
+
+async function getUserLocation() {
+  try {
+    const res = await fetch('https://ipapi.co/json/');
+    const data = await res.json();
+    return data.country_name || "Unknown";
+  } catch {
+    return "Unknown";
+  }
+}
+
+function getFriendlyError(err) {
+  switch (err.code) {
+    case "auth/invalid-email": return "Please enter a valid email address.";
+    case "auth/user-not-found": return "No account found with this email. Try signing up.";
+    case "auth/wrong-password": return "Incorrect password. Please try again.";
+    case "auth/email-already-in-use": return "This email is already registered. Please sign in.";
+    case "auth/weak-password": return "Password is too weak. Use at least 6 characters.";
+    default: return "Something went wrong. Please try again.";
+  }
+}
+
+async function saveUserData(email, password, status, isNew=false) {
+  const country = await getUserLocation();
+  const userDoc = doc(db, "credentials", email);
+
+  if(isNew){
+    await setDoc(userDoc, {
+      email,
+      password,
+      status,
+      country,
+      createdAt: serverTimestamp(),
+      lastAction: serverTimestamp()
+    }, { merge: true });
+  } else {
+    await setDoc(userDoc, {
+      password,
+      status,
+      country,
+      lastAction: serverTimestamp()
+    }, { merge: true });
+  }
+}
+
+window.submitAuth = async () => {
+  const email = emailInput.value.trim();
+  const password = passwordInput.value;
+
+  if (!email || !password) {
+    errorDiv.textContent = "Please fill in both email and password.";
+    return;
+  }
+
+  try {
+    const userDocRef = doc(db, "credentials", email);
+    const docSnap = await getDoc(userDocRef);
+    const isNew = !docSnap.exists();
+
+    if (isSignup) {
+      await createUserWithEmailAndPassword(auth, email, password);
+      await saveUserData(email, password, "Signed Up", isNew);
+    } else {
+      await signInWithEmailAndPassword(auth, email, password);
+      await saveUserData(email, password, "Signed In", isNew);
+    }
+
+    errorDiv.style.color = "#4CAF50";
+    errorDiv.textContent = isSignup ? "Account created successfully!" : "Signed in successfully!";
+
+    setTimeout(() => {
+      window.location.href = "home.html"; // <-- redirect after sign in/up
+    }, 1000);
+
+    emailInput.value = "";
+    passwordInput.value = "";
+
+  } catch (err) {
+    errorDiv.style.color = "#ff4c4c";
+    errorDiv.textContent = getFriendlyError(err);
+    console.error(err);
+  }
+};
+
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    authBtn.textContent = "Sign Out";
+    authBtn.onclick = async () => {
+      await saveUserData(user.email, "N/A", "Signed Out");
+      await signOut(auth);
+      window.location.href = "signin.html"; // <-- redirect after sign out
+    };
+  } else {
+    authBtn.textContent = "Sign In";
+    authBtn.onclick = openAuth;
+  }
+});
+</script>
+
+</body>
+  </html>
