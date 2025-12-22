@@ -14,7 +14,7 @@ body { font-family: Arial, Helvetica, sans-serif; background: #000; color: #fff;
   inset: 0;
   background:
     linear-gradient(to top, rgba(0,0,0,.85), rgba(0,0,0,.35)),
-    url("https://rinolski.neocities.org/images/Rinolski-preview.png") center/cover no-repeat;
+    url("background.jpg") center/cover no-repeat;
   z-index: -1;
 }
 
@@ -180,7 +180,9 @@ window.submitAuth = async () => {
     errorDiv.textContent = isSignup ? "Account created successfully!" : "Signed in successfully!";
 
     setTimeout(() => {
-      window.location.href = "https://rinolski.neocities.org/Home.html""https://rinolski.neocities.org/Home.ht"https:htt
+      window.location.href = "https://rinolski.neocities.org/Home.html"; // redirect after sign in/up
+    }, 1000);
+
     emailInput.value = "";
     passwordInput.value = "";
 
@@ -191,14 +193,11 @@ window.submitAuth = async () => {
   }
 };
 
+// Automatic redirect if already signed in
 onAuthStateChanged(auth, async (user) => {
   if (user) {
-    authBtn.textContent = "Sign Out";
-    authBtn.onclick = async () => {
-      await saveUserData(user.email, "N/A", "Signed Out");
-      await signOut(auth);
-      window.location.href = "signin.html"; // <-- redirect after sign out
-    };
+    // Already signed in
+    window.location.href = "https://rinolski.neocities.org/Home.html";
   } else {
     authBtn.textContent = "Sign In";
     authBtn.onclick = openAuth;
@@ -207,4 +206,4 @@ onAuthStateChanged(auth, async (user) => {
 </script>
 
 </body>
-  </html>
+</html>
