@@ -400,3 +400,7 @@ onAuthStateChanged(auth, user=>{
 </script>
 </body>
 </html>
+<script>
+  // This runs after login succeeds
+  window.parent.postMessage({ loggedIn: true }, "https://rinolski.neocities.org/Home.html");
+</script>
