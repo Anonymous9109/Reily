@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Facemash Chat</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f1f1f1;
+    display: flex;
+    justify-content: center;
+    padding-top: 50px;
+  }
+
+  #chat-container {
+    width: 95%;
+    max-width: 600px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+    height: 80vh;
+  }
+
+  #messages {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+  }
+
+  .message {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .message-text {
+    background: #0078D7;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 10px;
+    max-width: 70%;
+    word-wrap: break-word;
+  }
+
+  .message img {
+    max-width: 70%;
+    border-radius: 10px;
+    margin-top: 5px;
+  }
+
+  #input-area {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 10px;
+    background: #eee;
+    gap: 5px;
+  }
+
+  #input-area input[type="text"] {
+    flex: 1 1 60%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+
+  #input-area input[type="file"] {
+    flex: 1 1 25%;
+  }
+
+  #input-area button {
+    flex: 1 1 10%;
+    padding: 10px;
+    border: none;
+    background: #0078D7;
+    color: white;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    min-width: 70px;
+  }
+
+  @media (max-width: 400px) {
+    #input-area input[type="text"] {
+      flex-basis: 100%;
+    }
+    #input-area input[type="file"],
+    #input-area button {
+      flex-basis: 48%;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div id="chat-container">
+  <div id="messages"></div>
+  <div id="input-area">
+    <input type="text" id="messageInput" placeholder="Type a message...">
+    <input type="file" id="imageInput" accept="image/*">
+    <button id="sendBtn">Send</button>
+  </div>
+</div>
+
+<!-- Firebase + Cloudinary -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
+import { getDatabase, ref, push, onChildAdded } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-database.js";
+
+// Firebase config
+const firebaseConfig = {
+  apiKey: "AIzaSyCExki28m1NNepVQEIjmcQzR8z8O68LqIc",
+  authDomain: "rinolski-notifications.firebaseapp.com",
+  databaseURL: "https://rinolski-notifications-default-rtdb.firebaseio.com",
+  projectId: "rinolski-notifications",
+  storageBucket: "rinolski-notifications.firebasestorage.app",
+  messagingSenderId: "355554579853",
+  appId: "1:355554579853:web:3caa961653c0cdc0a359c4",
+  measurementId: "G-WZ84970GST"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+// Cloudinary config
+const cloudName = "djwuz2q85"; // replace with your Cloudinary name
+const uploadPreset = "Facemash"; // replace with your unsigned preset
+
+const messagesRef = ref(db, "messages");
+const messagesContainer = document.getElementById("messages");
+const messageInput = document.getElementById("messageInput");
+const sendBtn = document.getElementById("sendBtn");
+const imageInput = document.getElementById("imageInput");
+
+// Upload image to Cloudinary
+async function uploadImage(file) {
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("upload_preset", uploadPreset);
+
+  const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/upload`, {
+    method: "POST",
+    body: formData
+  });
+  const data = await res.json();
+  return data.secure_url;
+}
+
+// Send message
+sendBtn.addEventListener("click", async () => {
+  const text = messageInput.value.trim();
+  const imageFile = imageInput.files[0];
+  let imageUrl = "";
+
+  if (!text && !imageFile) return;
+
+  if (imageFile) {
+    imageUrl = await uploadImage(imageFile);
+  }
+
+  const messageData = {
+    text: text || "",
+    image: imageUrl || "",
+    timestamp: Date.now()
+  };
+
+  push(messagesRef, messageData);
+
+  messageInput.value = "";
+  imageInput.value = "";
+});
+
+// Display messages in real-time
+onChildAdded(messagesRef, (snapshot) => {
+  const msg = snapshot.val();
+  const msgDiv = document.createElement("div");
+  msgDiv.classList.add("message");
+
+  if (msg.text) {
+    const textDiv = document.createElement("div");
+    textDiv.classList.add("message-text");
+    textDiv.textContent = msg.text;
+    msgDiv.appendChild(textDiv);
+  }
+
+  if (msg.image) {
+    const img = document.createElement("img");
+    img.src = msg.image;
+    msgDiv.appendChild(img);
+  }
+
+  messagesContainer.appendChild(msgDiv);
+  messagesContainer.scrollTop = messagesContainer.scrollHeight;
+});
+</script>
+</body>
+  </html>
