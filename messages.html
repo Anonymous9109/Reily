@@ -3,198 +3,236 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Facemash Chat</title>
+<title>secret place</title>
+
 <style>
-  body {
-    font-family: Arial, sans-serif;
-    background: #f1f1f1;
-    display: flex;
-    justify-content: center;
-    padding-top: 50px;
-  }
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:#0f0f0f;
+  color:white;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+}
 
-  #chat-container {
-    width: 95%;
-    max-width: 600px;
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.2);
-    display: flex;
-    flex-direction: column;
-    height: 80vh;
-  }
+#login, #chat-container{
+  width:95%;
+  max-width:600px;
+  background:#1a1a1a;
+  border-radius:10px;
+  box-shadow:0 0 20px #000;
+  padding:15px;
+}
 
-  #messages {
-    flex: 1;
-    padding: 10px;
-    overflow-y: auto;
-  }
+input,button{
+  padding:10px;
+  margin:5px 0;
+  border:none;
+  border-radius:5px;
+}
 
-  .message {
-    margin-bottom: 15px;
-    display: flex;
-    flex-direction: column;
-  }
+button{
+  background:#0078D7;
+  color:white;
+  cursor:pointer;
+}
 
-  .message-text {
-    background: #0078D7;
-    color: white;
-    padding: 8px 12px;
-    border-radius: 10px;
-    max-width: 70%;
-    word-wrap: break-word;
-  }
+#messages{
+  height:60vh;
+  overflow-y:auto;
+  margin-bottom:10px;
+}
 
-  .message img {
-    max-width: 70%;
-    border-radius: 10px;
-    margin-top: 5px;
-  }
+.message{
+  margin-bottom:12px;
+}
 
-  #input-area {
-    display: flex;
-    flex-wrap: wrap;
-    padding: 10px;
-    background: #eee;
-    gap: 5px;
-  }
+.message-text{
+  background:#0078D7;
+  padding:8px 12px;
+  border-radius:10px;
+  max-width:70%;
+}
 
-  #input-area input[type="text"] {
-    flex: 1 1 60%;
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-  }
+.meta{
+  font-size:11px;
+  opacity:0.6;
+}
 
-  #input-area input[type="file"] {
-    flex: 1 1 25%;
-  }
-
-  #input-area button {
-    flex: 1 1 10%;
-    padding: 10px;
-    border: none;
-    background: #0078D7;
-    color: white;
-    font-weight: bold;
-    border-radius: 5px;
-    cursor: pointer;
-    min-width: 70px;
-  }
-
-  @media (max-width: 400px) {
-    #input-area input[type="text"] {
-      flex-basis: 100%;
-    }
-    #input-area input[type="file"],
-    #input-area button {
-      flex-basis: 48%;
-    }
-  }
+#typing{
+  font-size:12px;
+  opacity:0.6;
+  height:15px;
+}
 </style>
 </head>
 <body>
 
-<div id="chat-container">
-  <div id="messages"></div>
-  <div id="input-area">
-    <input type="text" id="messageInput" placeholder="Type a message...">
-    <input type="file" id="imageInput" accept="image/*">
-    <button id="sendBtn">Send</button>
-  </div>
+<div id="login">
+  <h3>Login</h3>
+  <input id="user" placeholder="Username">
+  <input id="pass" type="password" placeholder="Password">
+  <button id="loginBtn">Login</button>
 </div>
 
-<!-- Firebase + Cloudinary -->
+<div id="chat-container" style="display:none;">
+  <div id="active"></div>
+  <div id="messages"></div>
+  <div id="typing"></div>
+  <input type="text" id="messageInput" placeholder="Type...">
+  <input type="file" id="imageInput">
+  <button id="sendBtn">Send</button>
+</div>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
-import { getDatabase, ref, push, onChildAdded } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-database.js";
+import { getDatabase, ref, push, onChildAdded, update, set, onValue } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-database.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore.js";
 
-// Firebase config
 const firebaseConfig = {
-  apiKey: "AIzaSyCExki28m1NNepVQEIjmcQzR8z8O68LqIc",
+  apiKey: "AIzaSyCEx...",
   authDomain: "rinolski-notifications.firebaseapp.com",
   databaseURL: "https://rinolski-notifications-default-rtdb.firebaseio.com",
   projectId: "rinolski-notifications",
-  storageBucket: "rinolski-notifications.firebasestorage.app",
-  messagingSenderId: "355554579853",
-  appId: "1:355554579853:web:3caa961653c0cdc0a359c4",
-  measurementId: "G-WZ84970GST"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
+const fs = getFirestore(app);
 
-// Cloudinary config
-const cloudName = "djwuz2q85"; // replace with your Cloudinary name
-const uploadPreset = "Facemash"; // replace with your unsigned preset
-
+let currentUser = "";
 const messagesRef = ref(db, "messages");
-const messagesContainer = document.getElementById("messages");
-const messageInput = document.getElementById("messageInput");
-const sendBtn = document.getElementById("sendBtn");
-const imageInput = document.getElementById("imageInput");
+const presenceRef = ref(db, "presence");
+const typingRef = ref(db, "typing");
 
-// Upload image to Cloudinary
-async function uploadImage(file) {
-  const formData = new FormData();
-  formData.append("file", file);
-  formData.append("upload_preset", uploadPreset);
+const loginDiv = document.getElementById("login");
+const chatDiv = document.getElementById("chat-container");
+const messages = document.getElementById("messages");
+const typingDiv = document.getElementById("typing");
+const activeDiv = document.getElementById("active");
 
-  const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/upload`, {
-    method: "POST",
-    body: formData
+// LOGIN FROM FIRESTORE
+document.getElementById("loginBtn").onclick = async () => {
+  const u = user.value.trim();
+  const p = pass.value.trim();
+
+  const snap = await getDoc(doc(fs, "secret", u));
+  if(!snap.exists()) return alert("User not found");
+
+  if(snap.data().password !== p) return alert("Wrong password");
+
+  currentUser = u;
+
+  loginDiv.style.display="none";
+  chatDiv.style.display="block";
+
+  set(ref(db, "presence/"+u), {
+    online:true,
+    since:Date.now()
   });
-  const data = await res.json();
-  return data.secure_url;
+
+  loadMessages();
+};
+
+// CLOUDINARY
+async function uploadImage(file){
+  const fd = new FormData();
+  fd.append("file", file);
+  fd.append("upload_preset", "Facemash");
+
+  const r = await fetch("https://api.cloudinary.com/v1_1/djwuz2q85/upload", {
+    method:"POST", body:fd
+  });
+  const d = await r.json();
+  return d.secure_url;
 }
 
-// Send message
-sendBtn.addEventListener("click", async () => {
+// SEND MESSAGE
+sendBtn.onclick = async () => {
   const text = messageInput.value.trim();
-  const imageFile = imageInput.files[0];
-  let imageUrl = "";
+  const img = imageInput.files[0];
+  if(!text && !img) return;
 
-  if (!text && !imageFile) return;
+  let imageUrl="";
+  if(img) imageUrl = await uploadImage(img);
 
-  if (imageFile) {
-    imageUrl = await uploadImage(imageFile);
-  }
+  push(messagesRef,{
+    user:currentUser,
+    text,
+    image:imageUrl,
+    timestamp:Date.now(),
+    seen:false
+  });
 
-  const messageData = {
-    text: text || "",
-    image: imageUrl || "",
-    timestamp: Date.now()
-  };
+  messageInput.value="";
+  imageInput.value="";
+  set(ref(db,"typing/"+currentUser), false);
+};
 
-  push(messagesRef, messageData);
+// TYPING
+messageInput.oninput = ()=>{
+  set(ref(db,"typing/"+currentUser), true);
+  setTimeout(()=>set(ref(db,"typing/"+currentUser), false),1500);
+};
 
-  messageInput.value = "";
-  imageInput.value = "";
+onValue(typingRef, snap=>{
+  let t="";
+  snap.forEach(s=>{
+    if(s.key!==currentUser && s.val())
+      t = s.key+" is typing...";
+  });
+  typingDiv.textContent=t;
 });
 
-// Display messages in real-time
-onChildAdded(messagesRef, (snapshot) => {
-  const msg = snapshot.val();
-  const msgDiv = document.createElement("div");
-  msgDiv.classList.add("message");
+// LOAD MESSAGES
+function loadMessages(){
+  onChildAdded(messagesRef, snap=>{
+    const m = snap.val();
 
-  if (msg.text) {
-    const textDiv = document.createElement("div");
-    textDiv.classList.add("message-text");
-    textDiv.textContent = msg.text;
-    msgDiv.appendChild(textDiv);
-  }
+    const div = document.createElement("div");
+    div.className="message";
 
-  if (msg.image) {
-    const img = document.createElement("img");
-    img.src = msg.image;
-    msgDiv.appendChild(img);
-  }
+    const txt = document.createElement("div");
+    txt.className="message-text";
+    txt.innerHTML = `<b>${m.user}</b><br>${m.text || ""}`;
 
-  messagesContainer.appendChild(msgDiv);
-  messagesContainer.scrollTop = messagesContainer.scrollHeight;
-});
+    const meta = document.createElement("div");
+    meta.className="meta";
+    meta.textContent = m.user===currentUser
+      ? (m.seen ? "Seen" : "Sent")
+      : " ";
+
+    div.appendChild(txt);
+
+    if(m.image){
+      const im=document.createElement("img");
+      im.src=m.image;
+      im.style.maxWidth="70%";
+      im.style.borderRadius="10px";
+      div.appendChild(im);
+    }
+
+    div.appendChild(meta);
+    messages.appendChild(div);
+    messages.scrollTop = messages.scrollHeight;
+
+    if(m.user!==currentUser){
+      update(ref(db,"messages/"+snap.key),{seen:true});
+    }
+  });
+
+  // ACTIVE USERS
+  onValue(presenceRef, snap=>{
+    let a="Active: ";
+    snap.forEach(s=>{
+      if(s.val().online)
+        a+= s.key+" ";
+    });
+    activeDiv.textContent=a;
+  });
+}
 </script>
 </body>
-  </html>
+</html>
