@@ -3,36 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secret place</title>
+    <title>Secure Messenger Pro | Push Enabled</title>
     <style>
-
-        body { font-family: 'Inter', sans-serif; background: #0f172a; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; color: white; }
-        .view { display: none; width: 100%; max-width: 450px; }
+        :root { --primary: #6366f1; --bg: #0f172a; --glass: rgba(255, 255, 255, 0.05); }
+        body { 
+            font-family: 'Inter', sans-serif; background: #0f172a; 
+            background: radial-gradient(circle at top left, #1e293b, #0f172a);
+            display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; color: white;
+        }
+        .view { display: none; width: 100%; max-width: 450px; animation: fadeIn 0.3s ease; }
         .active { display: block; }
         .glass-card { background: var(--glass); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); overflow: hidden; }
 
-        /* Optimized Chat UI */
-        #messages { height: 480px; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 8px; contain: content; }
-        .msg { padding: 8px 14px; border-radius: 15px; max-width: 80%; line-height: 1.4; position: relative; }
-        .msg.mine { background: blue; align-self: flex-end; border-bottom-right-radius: 2px; }
-        .msg.other { background: #334155; align-self: flex-start; border-bottom-left-radius: 2px; }
+        /* Login */
+        .login-padding { padding: 40px; text-align: center; }
+        input { width: 100%; padding: 12px; background: rgba(0,0,0,0.3); border: 1px solid #334155; border-radius: 12px; color: white; margin-bottom: 15px; box-sizing: border-box; outline: none; transition: 0.2s; }
+        input:focus { border-color: var(--primary); background: rgba(0,0,0,0.4); }
+        button { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        button:hover { background: #4f46e5; transform: translateY(-1px); }
+
+        /* Chat UI */
+        #messages { height: 480px; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 10px; scroll-behavior: smooth; }
+        .msg { padding: 10px 14px; border-radius: 18px; max-width: 75%; position: relative; line-height: 1.4; animation: slideIn 0.2s ease; }
+        .msg.mine { background: var(--primary); align-self: flex-end; border-bottom-right-radius: 4px; }
+        .msg.other { background: #334155; align-self: flex-start; border-bottom-left-radius: 4px; }
         
-        .msg-meta { font-size: 0.6rem; opacity: 0.7; margin-top: 4px; text-align: right; }
-        .status-tick { margin-left: 4px; font-weight: bold; }
-        
-        #chat-input-area { display: flex; padding: 12px; gap: 8px; background: rgba(0,0,0,0.2); }
-        input { width: 100%; padding: 10px; background: rgba(0,0,0,0.3); border: 1px solid #334155; border-radius: 20px; color: white; outline: none; }
-        button { padding: 10px 20px; background: var(--primary); color: white; border: none; border-radius: 20px; font-weight: bold; cursor: pointer; }
+        .msg-meta { font-size: 0.6rem; opacity: 0.8; margin-top: 4px; display: flex; align-items: center; justify-content: flex-end; gap: 4px; }
+        .status-tick { font-weight: bold; font-size: 0.7rem; }
+        .username-tag { font-size: 0.7rem; font-weight: 800; color: #818cf8; margin-bottom: 2px; display: block; }
+
+        #chat-input-area { display: flex; padding: 15px; gap: 10px; background: rgba(0,0,0,0.2); border-top: 1px solid rgba(255,255,255,0.05); }
+        #messageInput { margin-bottom: 0; border-radius: 25px; padding-left: 20px; }
+        #sendBtn { width: 80px; border-radius: 25px; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideIn { from { opacity: 0; scale: 0.95; } to { opacity: 1; scale: 1; } }
     </style>
 </head>
 <body>
 
     <div id="login-view" class="view active">
-        <div class="glass-card" style="padding: 40px; text-align: center;">
-
-            <input type="text" id="username" placeholder="">
-            <input type="password" id="password" placeholder="" style="margin-top: 10px;">
-            <button id="loginBtn" style="width: 100%; margin-top: 20px;"></button>
+        <div class="glass-card login-padding">
+            <h2 style="margin-top:0">Vault Terminal</h2>
+            <input type="text" id="username" placeholder="Username">
+            <input type="password" id="password" placeholder="Secret Key">
+            <button id="loginBtn">Authenticate & Sync</button>
+            <p id="error-msg" style="color: #f87171; font-size: 0.8rem; margin-top: 15px;"></p>
         </div>
     </div>
 
@@ -40,7 +56,7 @@
         <div class="glass-card">
             <div id="messages"></div>
             <div id="chat-input-area">
-                <input type="text" id="messageInput" placeholder="Message...">
+                <input type="text" id="messageInput" placeholder="Secure message...">
                 <button id="sendBtn">Send</button>
             </div>
         </div>
@@ -48,8 +64,9 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-        import { getDatabase, ref, push, onChildAdded, onValue, set, limitToLast, query } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getDatabase, ref, push, onChildAdded, onValue, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCExki28m1NNepVQEIjmcQzR8z8O68LqIc",
@@ -64,87 +81,119 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const rtdb = getDatabase(app);
+        const messaging = getMessaging(app);
         
         let currentUser = "";
         let otherUserLastRead = 0;
+        let isFirstLoad = true;
 
+        // Register Service Worker for Background Support
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./firebase-messaging-sw.js');
+        }
+
+        // --- AUTH & TOKEN LOGIC ---
         document.getElementById('loginBtn').onclick = async () => {
             const u = document.getElementById('username').value.trim();
             const p = document.getElementById('password').value;
-            const userSnap = await getDoc(doc(db, "secret", u));
+            if(!u || !p) return;
 
-            if (userSnap.exists() && userSnap.data().password === p) {
+            const userRef = doc(db, "secret", u);
+            const snap = await getDoc(userRef);
+
+            if (snap.exists() && snap.data().password === p) {
                 currentUser = u;
+
+                // Sync Push Token using your VAPID Key
+                try {
+                    const token = await getToken(messaging, { 
+                        vapidKey: 'BAV-syyYVAm3WqCjnFuO0SbE34Z5Sw1m1iRMmnRMqIWGkX7AIRWZgSEkUIduuGrkj3UsoJouOSj41B97a_tCikc' 
+                    });
+                    if (token) await updateDoc(userRef, { fcmToken: token });
+                } catch (e) { console.warn("Push token blocked/failed:", e); }
+
                 document.getElementById('login-view').classList.remove('active');
                 document.getElementById('chat-view').classList.add('active');
                 initChat();
+            } else {
+                document.getElementById('error-msg').innerText = "Access Denied.";
             }
         };
 
+        // --- CHAT LOGIC ---
         function initChat() {
             const messagesDiv = document.getElementById("messages");
-            // Optimization: Only load the last 50 messages to speed up initial load
-            const msgQuery = query(ref(rtdb, "messages"), limitToLast(50));
+            const msgRef = ref(rtdb, "messages");
             const myPresenceRef = ref(rtdb, `presence/${currentUser}`);
 
+            // Presence Tracking (Updates 'Seen' status for others)
             const updatePresence = () => set(myPresenceRef, Date.now());
             updatePresence();
-            window.addEventListener('focus', updatePresence);
+            window.onfocus = updatePresence;
 
-            // Listen for presence changes and update existing checkmarks only
+            // Listen for other users' activity
             onValue(ref(rtdb, "presence"), (snap) => {
                 const data = snap.val() || {};
+                otherUserLastRead = 0;
                 for (let user in data) {
-                    if (user !== currentUser) otherUserLastRead = data[user];
+                    if (user !== currentUser) otherUserLastRead = Math.max(otherUserLastRead, data[user]);
                 }
-                updateCheckmarks();
+                updateSeenMarkers();
             });
 
-            // Incremental rendering: Add messages one by one as they arrive
-            onChildAdded(msgQuery, (snap) => {
+            // Handle New Messages
+            onChildAdded(msgRef, (snap) => {
                 const msg = snap.val();
-                appendMessage(msg);
-                updatePresence(); 
+                appendMsgUI(msg);
+
+                // Foreground Notification (if tab is hidden)
+                if (!isFirstLoad && msg.username !== currentUser && document.hidden) {
+                    new Notification(`Vault: ${msg.username}`, { body: msg.text });
+                }
+                updatePresence();
             });
 
-            function appendMessage(msg) {
+            // Prevent notification spam on history load
+            onValue(msgRef, () => isFirstLoad = false, { onlyOnce: true });
+
+            function appendMsgUI(msg) {
                 const isMine = msg.username === currentUser;
                 const time = new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                 
                 const div = document.createElement("div");
                 div.className = `msg ${isMine ? 'mine' : 'other'}`;
-                // We add a data-time attribute to find this message later for "Seen" updates
-                div.setAttribute('data-time', msg.timestamp);
+                div.setAttribute('data-ts', msg.timestamp);
                 div.innerHTML = `
+                    ${!isMine ? `<span class="username-tag">${msg.username}</span>` : ''}
                     <div>${msg.text}</div>
                     <div class="msg-meta">${time} <span class="status-tick"></span></div>
                 `;
                 messagesDiv.appendChild(div);
                 messagesDiv.scrollTop = messagesDiv.scrollHeight;
-                updateCheckmarks();
+                updateSeenMarkers();
             }
 
-            function updateCheckmarks() {
-                const ticks = document.querySelectorAll('.mine .status-tick');
-                ticks.forEach(tick => {
-                    const msgTime = tick.closest('.msg').getAttribute('data-time');
-                    tick.innerText = msgTime <= otherUserLastRead ? "seen" : "sent";
-                    tick.style.color = msgTime <= otherUserLastRead ? "#93c5fd" : "white";
+            function updateSeenMarkers() {
+                document.querySelectorAll('.mine .status-tick').forEach(tick => {
+                    const ts = tick.closest('.msg').getAttribute('data-ts');
+                    const isSeen = ts <= otherUserLastRead;
+                    tick.innerText = isSeen ? "Seen" : "Sent";
+                    tick.style.color = isSeen ? "#93c5fd" : "rgba(255,255,255,0.5)";
                 });
             }
 
-            document.getElementById("sendBtn").onclick = () => {
+            const send = () => {
                 const input = document.getElementById("messageInput");
                 if (input.value.trim()) {
-                    push(ref(rtdb, "messages"), {
-                        username: currentUser,
-                        text: input.value,
-                        timestamp: Date.now()
-                    });
+                    push(msgRef, { username: currentUser, text: input.value, timestamp: Date.now() });
                     input.value = "";
                 }
             };
+
+            document.getElementById("sendBtn").onclick = send;
+            document.getElementById("messageInput").onkeypress = (e) => { if(e.key === 'Enter') send(); };
         }
     </script>
 </body>
 </html>
+                
