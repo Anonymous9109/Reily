@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmileExe | Share the Joy</title>
+    <style>
+        :root { --smile-yellow: #ffcc00; --exe-blue: #0066ff; --gray-light: #f0f2f5; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+
+        /* Navigation */
+        .navbar {
+            display: flex; align-items: center; padding: 10px 25px; gap: 20px;
+            position: fixed; top: 0; width: 100%; background: white; z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .logo { font-size: 24px; font-weight: 900; color: var(--exe-blue); }
+        .logo span { color: var(--smile-yellow); text-shadow: 1px 1px 0 #000; }
+
+        .search-bar { flex-grow: 1; background: var(--gray-light); border-radius: 50px; padding: 8px 20px; }
+        .search-bar input { border: none; background: transparent; width: 100%; outline: none; }
+
+        /* Grid */
+        .container { margin-top: 80px; padding: 20px; }
+        .masonry-grid { column-count: 4; column-gap: 20px; }
+        @media (max-width: 1000px) { .masonry-grid { column-count: 2; } }
+
+        /* Pin */
+        .pin { display: inline-block; width: 100%; margin-bottom: 20px; border-radius: 20px; overflow: hidden; background: #ddd; position: relative; }
+        .pin img { width: 100%; display: block; min-height: 200px; background: #ccc; }
+        .pin-overlay {
+            position: absolute; bottom: 0; left: 0; right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            padding: 20px; color: white; opacity: 0; transition: 0.3s;
+        }
+        .pin:hover .pin-overlay { opacity: 1; }
+
+        /* Auth Modal */
+        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; align-items: center; justify-content: center; z-index: 2000; }
+        .modal-content { background: white; padding: 40px; border-radius: 25px; width: 350px; text-align: center; }
+        .modal-content input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 10px; border: 1px solid #ccc; }
+        
+        .btn { padding: 10px 20px; border-radius: 50px; border: none; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .btn-blue { background: var(--exe-blue); color: white; }
+        .like-btn { background: white; color: black; border: none; padding: 5px 12px; border-radius: 20px; cursor: pointer; }
+        .like-btn.active { background: var(--smile-yellow); }
+    </style>
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="logo">Smile<span>.Exe</span></div>
+        <div class="search-bar"><input type="text" id="searchInput" placeholder="Search smiles..."></div>
+        <div id="authZone">
+            <button class="btn btn-blue" onclick="openModal()">Sign In</button>
+        </div>
+        <div id="userZone" style="display:none; align-items: center; gap: 10px;">
+            <span id="displayUser" style="font-size: 12px; color: #666;"></span>
+            <button class="btn" onclick="handleLogout()">Log Out</button>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="masonry-grid" id="imageGrid"></div>
+    </main>
+
+    <div class="modal" id="authModal">
+        <div class="modal-content">
+            <h2 id="modalTitle">Welcome Back</h2>
+            <input type="email" id="email" placeholder="Email">
+            <input type="password" id="password" placeholder="Password">
+            <button class="btn btn-blue" id="submitAuth" style="width:100%; margin-top: 10px;">Login</button>
+            <p id="toggleAuth" style="margin-top:15px; cursor:pointer; font-size:13px; color: var(--exe-blue);">
+                New here? Create account
+            </p>
+            <p onclick="closeModal()" style="margin-top:10px; cursor:pointer; font-size:12px; color: #999;">Cancel</p>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getDatabase, ref, set, remove, onValue, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCExki28m1NNepVQEIjmcQzR8z8O68LqIc",
+            authDomain: "rinolski-notifications.firebaseapp.com",
+            databaseURL: "https://rinolski-notifications-default-rtdb.firebaseio.com",
+            projectId: "rinolski-notifications",
+            storageBucket: "rinolski-notifications.firebasestorage.app",
+            messagingSenderId: "355554579853",
+            appId: "1:355554579853:web:3caa961653c0cdc0a359c4"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getDatabase(app);
+
+        const rawImages = [
+            { id: "p1", title: "Morning Sun", url: "https://picsum.photos/400/500" },
+            { id: "p2", title: "Cyber Vibe", url: "https://picsum.photos/400/700" },
+            { id: "p3", title: "Joy Ride", url: "" },
+            { id: "p4", title: "Abstract Smile", url: "https://picsum.photos/400/400" },
+            { id: "p5", title: "Neon City", url: "https://picsum.photos/400/650" }
+        ];
+
+        let currentUser = null;
+        let isSignUpMode = false;
+
+        // AUTH UI TOGGLE
+        const toggleAuthBtn = document.getElementById('toggleAuth');
+        toggleAuthBtn.onclick = () => {
+            isSignUpMode = !isSignUpMode;
+            document.getElementById('modalTitle').innerText = isSignUpMode ? "Join SmileExe" : "Welcome Back";
+            document.getElementById('submitAuth').innerText = isSignUpMode ? "Create Account" : "Login";
+            toggleAuthBtn.innerText = isSignUpMode ? "Already have an account? Login" : "New here? Create account";
+        };
+
+        // RENDER GRID
+        function render(filter = "") {
+            const grid = document.getElementById('imageGrid');
+            grid.innerHTML = "";
+            const list = rawImages.filter(i => i.title.toLowerCase().includes(filter.toLowerCase())).sort(() => Math.random() - 0.5);
+
+            list.forEach(item => {
+                const pin = document.createElement('div');
+                pin.className = 'pin';
+                pin.innerHTML = `
+                    <img src="${item.url || 'err'}" onerror="this.src='https://via.placeholder.com/400x500/cccccc/ffffff?text=SmileExe'">
+                    <div class="pin-overlay">
+                        <button id="like-${item.id}" class="like-btn" onclick="toggleLike('${item.id}')">
+                            😊 <span id="count-${item.id}">0</span>
+                        </button>
+                        <p>${item.title}</p>
+                    </div>
+                `;
+                grid.appendChild(pin);
+
+                // Live Like Count
+                onValue(ref(db, `likes/${item.id}`), (snap) => {
+                    const likes = snap.val() || {};
+                    const count = Object.keys(likes).length;
+                    document.getElementById(`count-${item.id}`).innerText = count;
+                    
+                    const btn = document.getElementById(`like-${item.id}`);
+                    if (currentUser && likes[currentUser.uid]) btn.classList.add('active');
+                    else btn.classList.remove('active');
+                });
+            });
+        }
+
+        // LIKE TOGGLE
+        window.toggleLike = async (postId) => {
+            if (!currentUser) return openModal();
+            const likeRef = ref(db, `likes/${postId}/${currentUser.uid}`);
+            const snap = await get(likeRef);
+            if (snap.exists()) remove(likeRef);
+            else set(likeRef, true);
+        };
+
+        // AUTH ACTIONS
+        window.openModal = () => document.getElementById('authModal').style.display = 'flex';
+        window.closeModal = () => document.getElementById('authModal').style.display = 'none';
+
+        document.getElementById('submitAuth').onclick = async () => {
+            const email = document.getElementById('email').value;
+            const pass = document.getElementById('password').value;
+            try {
+                if (isSignUpMode) await createUserWithEmailAndPassword(auth, email, pass);
+                else await signInWithEmailAndPassword(auth, email, pass);
+                closeModal();
+            } catch (e) { alert(e.message); }
+        };
+
+        window.handleLogout = () => signOut(auth);
+
+        onAuthStateChanged(auth, (user) => {
+            currentUser = user;
+            document.getElementById('authZone').style.display = user ? 'none' : 'block';
+            document.getElementById('userZone').style.display = user ? 'flex' : 'none';
+            if(user) document.getElementById('displayUser').innerText = user.email;
+            render();
+        });
+
+        document.getElementById('searchInput').oninput = (e) => render(e.target.value);
+        render();
+    </script>
+</body>
+</html>
+
