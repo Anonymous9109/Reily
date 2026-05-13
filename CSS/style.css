@@ -1,0 +1,111 @@
+body {
+    margin: 0;
+    background: #141414;
+    color: #e5e5e5;
+    font-family: Helvetica, Arial, sans-serif;
+    /* Prevents the default mobile tap highlight */
+    -webkit-tap-highlight-color: transparent; 
+}
+
+/* =========================
+   SECTION SPACING (ROWS)
+========================= */
+.section {
+    margin: 32px 0; 
+}
+
+.section-title {
+    font-size: 26px;
+    font-weight: 700; 
+    letter-spacing: 0.3px;
+    padding-left: 14px;
+    margin-bottom: 18px;
+}
+
+/* =========================
+   HORIZONTAL MOVIE ROW
+========================= */
+.movies {
+  padding-top: 10px;
+    display: flex;
+    gap: 7px;
+    overflow-x: auto;
+    padding: 12px 14px;
+    scroll-behavior: smooth;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.movies::-webkit-scrollbar {
+    display: none;
+}
+
+/* =========================
+   MOVIE CARD (MOBILE SIZE)
+========================= */
+.movie {
+    flex: 0 0 auto;
+    width: 110px;
+    position: relative; /* Anchor for the circle */
+    cursor: pointer;
+    overflow: hidden; /* Clips the circle to the edges */
+    border-radius: 4px;
+}
+
+.movie img {
+    width: 100%; /* Changed from fixed 110px for flexibility */
+    height: 165px; 
+    object-fit: cover;
+    border-radius: 4px;
+    display: block;
+    transition: filter 0.2s ease;
+}
+
+/* =========================
+   NETFLIX RIPPLE EFFECT
+========================= */
+.movie::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 160%; /* Ensure it hits the top/bottom corners */
+    aspect-ratio: 1/1;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 2;
+    /* Reset: Smoothly fades out when you let go */
+    transition: transform 0.4s ease-out, opacity 0.3s ease;
+}
+
+.movie:active::after {
+    transform: translate(-50%, -50%) scale(1.4);
+    opacity: 1;
+    /* Expansion: Rapidly grows when you click */
+    transition: transform 0.12s ease-out;
+}
+
+/* Subtle darkening while hovering (Desktop only) */
+@media (hover: hover) {
+    .movie:hover img {
+        filter: brightness(0.85);
+    }
+}
+
+/* =========================
+   HIDE TITLES
+========================= */
+.title {
+    display: none;
+}
+
+
+
+
+
+
+
+

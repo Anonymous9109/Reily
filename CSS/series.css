@@ -1,0 +1,54 @@
+.series-header {
+  padding: 20px;
+  text-align: center;
+}
+
+.series-header h1 {
+  font-size: 2em;
+  margin-bottom: 10px;
+}
+
+.series-header p {
+  color: #ccc;
+}
+
+.episode-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 15px;
+  padding: 20px;
+}
+
+.episode-card {
+  background: #111;
+  border-radius: 8px;
+  overflow: hidden;
+  text-align: center;
+  transition: transform 0.2s;
+}
+
+.episode-card:hover {
+  transform: scale(1.05);
+}
+
+.episode-card img {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+}
+
+.episode-card .title {
+  padding: 8px;
+  font-size: 0.9em;
+  color: #fff;
+}
+
+.back-btn {
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  background: rgba(0,0,0,0.6);
+  padding: 6px 10px;
+  border-radius: 5px;
+  z-index: 1000;
+}

@@ -1,0 +1,167 @@
+body {
+  margin: 0;
+  background-color: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
+}
+
+#videoPlayer {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  overflow: hidden;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+video {
+  width: 100%;
+  height: 100%;
+}
+
+@media (orientation: portrait) {
+  #videoPlayer {
+    transform: rotate(90deg);
+    width: 100vh;
+    height: 100vw;
+  }
+
+  video {
+    transform: rotate(0deg);
+  }
+}
+
+.back-button,
+.controls-text {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.5);
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  color: white;
+  font-size: 16px;
+  font-family: Arial, sans-serif;
+  cursor: pointer;
+  z-index: 10;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s, visibility 0.5s;
+}
+
+.back-button {
+  top: -10px;
+  left: 0px;
+  font-size: 36px;
+  background: rgba(0, 0, 0, 0.0);
+}
+
+.controls-text {
+  top: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  background: none;
+  border: none;
+  cursor: default;
+}
+
+.controls {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s, visibility 0.5s;
+}
+
+.controls button {
+  background: rgba(0, 0, 0, 0.5);
+  border: none;
+  border-radius: 50%;
+  padding: 10px;
+  cursor: pointer;
+  margin: 0 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.controls svg {
+  width: 44px;
+  height: 44px;
+  fill: white;
+}
+
+.progress-container {
+  position: absolute;
+  bottom: 75px;
+  left: 30px;
+  right: 70px;
+  height: 5px;
+  background: #555;
+  cursor: pointer;
+  z-index: 10;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s, visibility 0.5s;
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0;
+  background: red;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.countdown-timer {
+  position: absolute;
+  bottom: 70px;
+  right: 20px;
+  color: white;
+  font-size: 18px;
+  z-index: 10;
+  transition: opacity 0.5s, visibility 0.5s;
+}
+
+#loadingRing {
+  display: none;
+  position: center;
+  width: 40px;
+  height: 40px;
+  border: 8px solid rgba(255, 0, 0, 0.3);
+  border-top: 8px solid red;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  z-index: 999;
+  transform: translate(-50%, -50%);
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 🔧 Added fix for black background and smooth fade-in */
+#videoElement {
+  background-color: black !important;
+  object-fit: contain;
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s, opacity 0.3s ease-in;
+}
