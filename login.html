@@ -1,321 +1,178 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
-
   <meta charset="UTF-8" />
-
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
-  <title>Log in or sign up to MyDrugs</title>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portal Login</title>
   <style>
-
-    * {
-
-      box-sizing: border-box;
-
-    }
-
+    /* ─── Modern Dark UI ─── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-
-      margin: 0;
-
-      font-family: Arial, sans-serif;
-
-      background-color: black;
-
-      color: white;
-
-      height: 100vh;
-
-      width: 100vw;
-
+      min-height: 100vh;
       display: flex;
-
+      align-items: center;
       justify-content: center;
-
-      align-items: center;
-
-      padding: 20px;
-
+      background: #0a0a0f;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #fff;
     }
-
-    .login-box {
-
-      background: rgba(0, 0, 0, 0.75);
-
+    .container {
+      background: #16161e;
+      border: 1px solid #2d2d3d;
+      border-radius: 12px;
       padding: 30px;
-
-      border-radius: 10px;
-
       width: 100%;
-
-      max-width: 400px;
-
-      box-sizing: border-box;
-
-      display: flex;
-
-      flex-direction: column;
-
-      align-items: center;
-
+      max-width: 360px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
-
-    .login-box h1 {
-
-      margin-bottom: 20px;
-
-      text-align: center;
-
-      color: white;
-
-    }
-
-    .login-box input {
-
+    h2 { margin-bottom: 20px; font-size: 20px; text-align: center; color: #a586ff; }
+    .tabs { display: flex; margin-bottom: 20px; border-bottom: 1px solid #2d2d3d; }
+    .tab { flex: 1; padding: 10px; text-align: center; cursor: pointer; color: #666; font-weight: 600; }
+    .tab.active { color: #fff; border-bottom: 2px solid #7c5cfc; }
+    .input-group { margin-bottom: 15px; }
+    label { display: block; font-size: 12px; color: #888; margin-bottom: 5px; }
+    input {
       width: 100%;
-
       padding: 12px;
-
-      margin-bottom: 12px;
-
-      border: none;
-
+      background: #1f1f2e;
+      border: 1px solid #2d2d3d;
       border-radius: 6px;
-
-      font-size: 16px;
-
+      color: #fff;
+      outline: none;
     }
-
-    .login-box button {
-
-      width: 48%;
-
-      padding: 10px;
-
-      background-color: #e50914;
-
-      border: none;
-
-      color: white;
-
-      font-size: 16px;
-
-      border-radius: 4px;
-
-      cursor: pointer;
-
-      margin-top: 10px;
-
-    }
-
-    .login-box button:hover {
-
-      background-color: #f40612;
-
-    }
-
-    .button-container {
-
-      display: flex;
-
-      justify-content: space-between;
-
-      gap: 4%;
-
+    input:focus { border-color: #7c5cfc; }
+    .btn {
       width: 100%;
-
-    }
-
-    #message {
-
-      color: #ff8080;
-
-      font-size: 14px;
-
+      padding: 12px;
+      background: #7c5cfc;
+      border: none;
+      border-radius: 6px;
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
       margin-top: 10px;
-
-      min-height: 18px;
-
-      text-align: center;
-
     }
-
-    .note {
-
-      color: red;
-
+    .btn:hover { background: #6b4de6; }
+    .status {
+      padding: 10px;
+      border-radius: 4px;
       font-size: 13px;
-
-      margin-top: 15px;
-
-      text-align: center;
-
+      margin-bottom: 15px;
+      display: none;
     }
-
+    .error { display: block; background: rgba(255, 50, 50, 0.1); color: #ff5f5f; border: 1px solid rgba(255, 50, 50, 0.2); }
+    .success { display: block; background: rgba(50, 255, 50, 0.1); color: #5fff5f; border: 1px solid rgba(50, 255, 50, 0.2); }
+    #reg-form { display: none; }
   </style>
-
 </head>
-
 <body>
 
-  <div class="login-box">
-
-    <h1>Welcome to MyDrugs</h1>
-
-    <input type="email" id="email" placeholder="Email" />
-
-    <input type="password" id="password" placeholder="Password (min 6 chars)" />
-
-    <div class="button-container">
-
-      <button onclick="signIn()">Log In</button>
-
-      <button onclick="signUp()">Sign Up</button>
-
+  <div class="container">
+    <h2 id="title">Project Rinolski</h2>
+    
+    <div class="tabs">
+      <div id="tab-l" class="tab active" onclick="toggleForm('login')">Login</div>
+      <div id="tab-r" class="tab" onclick="toggleForm('reg')">Register</div>
     </div>
 
-    <div id="message"></div>
+    <div id="status-box" class="status"></div>
 
-    <div class="note">
+    <!-- Login -->
+    <form id="login-form" onsubmit="handleAuth(event, 'login')">
+      <div class="input-group">
+        <label>Email</label>
+        <input type="email" id="l-email" required>
+      </div>
+      <div class="input-group">
+        <label>Password</label>
+        <input type="password" id="l-pass" required>
+      </div>
+      <button type="submit" class="btn">Sign In</button>
+    </form>
 
-      *Remember that you need to contact us to change your password — you certainly cannot change it on your own for security reasons.
-
-    </div>
-
+    <!-- Register -->
+    <form id="reg-form" onsubmit="handleAuth(event, 'reg')">
+      <div class="input-group">
+        <label>Email</label>
+        <input type="email" id="r-email" required>
+      </div>
+      <div class="input-group">
+        <label>Password</label>
+        <input type="password" id="r-pass" required minlength="6">
+      </div>
+      <button type="submit" class="btn">Create Account</button>
+    </form>
   </div>
 
-  <script type="module">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+  <script>
+    // --- Configuration ---
+    const S_URL = 'https://shalcskumchrkpknykyl.supabase.co';
+    const S_KEY = 'sb_publishable_5P4HH2iyz3ET1wtINF7vEg_kMr1QSbE';
+    const PROXY_KEY = 'cfx_1f297f7a8b66f68fd9c4dc96f5fb0d72';
 
-    import {
-
-      getAuth,
-
-      signInWithEmailAndPassword,
-
-      createUserWithEmailAndPassword
-
-    } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
-
-    const firebaseConfig = {
-
-      apiKey: "AIzaSyCExki28m1NNepVQEIjmcQzR8z8O68LqIc",
-
-      authDomain: "rinolski-notifications.firebaseapp.com",
-
-      databaseURL: "https://rinolski-notifications-default-rtdb.firebaseio.com",
-
-      projectId: "rinolski-notifications",
-
-      storageBucket: "rinolski-notifications.firebasestorage.app",
-
-      messagingSenderId: "355554579853",
-
-      appId: "1:355554579853:web:3caa961653c0cdc0a359c4",
-
-      measurementId: "G-WZ84970GST"
-
+    // --- The "Simple Request" Proxy Fetcher ---
+    // This moves the key into the URL to prevent the browser from 
+    // triggering a CORS pre-flight (OPTIONS) request.
+    const customFetch = (url, options = {}) => {
+      const proxiedUrl = `https://proxy.corsfix.com/?key=${PROXY_KEY}&url=${encodeURIComponent(url)}`;
+      return fetch(proxiedUrl, options);
     };
 
-    const app = initializeApp(firebaseConfig);
+    const sb = supabase.createClient(S_URL, S_KEY, {
+      global: { fetch: customFetch }
+    });
 
-    const auth = getAuth(app);
-
-    const messageBox = document.getElementById("message");
-
-    function clearMsg() {
-
-      messageBox.textContent = "";
-
+    // --- UI Logic ---
+    function toggleForm(mode) {
+      const isL = mode === 'login';
+      document.getElementById('login-form').style.display = isL ? 'block' : 'none';
+      document.getElementById('reg-form').style.display = isL ? 'none' : 'block';
+      document.getElementById('tab-l').classList.toggle('active', isL);
+      document.getElementById('tab-r').classList.toggle('active', !isL);
+      hideStatus();
     }
 
-    window.signIn = async function () {
+    function showStatus(msg, type) {
+      const box = document.getElementById('status-box');
+      box.textContent = msg;
+      box.className = 'status ' + type;
+    }
 
-      clearMsg();
+    function hideStatus() { document.getElementById('status-box').style.display = 'none'; }
 
-      const email = document.getElementById("email").value.trim();
-
-      const password = document.getElementById("password").value;
-
-      if (!email || password.length < 6) {
-
-        messageBox.textContent = "Enter a valid email and a password of at least 6 characters.";
-
-        return;
-
-      }
-
-      try {
-
-        await signInWithEmailAndPassword(auth, email, password);
-
-        window.location.href = "Home.html";
-
-      } catch (err) {
-
-        if (err.code === "auth/wrong-password") {
-
-          messageBox.textContent = "Incorrect password. Please try again.";
-
-        } else if (err.code === "auth/user-not-found") {
-
-          messageBox.textContent = "No account found with this email.";
-
-        } else {
-
-          messageBox.textContent = "Incorrect password or invalid login credentials.";
-
-        }
-
-      }
-
-    };
-
-    window.signUp = async function () {
-
-      clearMsg();
-
-      const email = document.getElementById("email").value.trim();
-
-      const password = document.getElementById("password").value;
-
-      if (!email || password.length < 6) {
-
-        messageBox.textContent = "Enter a valid email and a password of at least 6 characters.";
-
-        return;
-
-      }
+    // --- Auth Logic ---
+    async function handleAuth(e, type) {
+      e.preventDefault();
+      hideStatus();
+      
+      const email = document.getElementById(type === 'login' ? 'l-email' : 'r-email').value;
+      const password = document.getElementById(type === 'login' ? 'l-pass' : 'r-pass').value;
 
       try {
-
-        await createUserWithEmailAndPassword(auth, email, password);
-
-        window.location.href = "Home.html";
-
-      } catch (err) {
-
-        if (err.code === "auth/email-already-in-use") {
-
-          messageBox.textContent = "This email is already registered. Please log in.";
-
+        let response;
+        if (type === 'login') {
+          response = await sb.auth.signInWithPassword({ email, password });
         } else {
-
-          messageBox.textContent = "Signup error: " + err.message;
-
+          response = await sb.auth.signUp({ email, password });
         }
 
+        if (response.error) {
+          showStatus(response.error.message, 'error');
+        } else {
+          if (type === 'login') {
+            showStatus("Success! Entering...", "success");
+            setTimeout(() => window.location.href = 'dashboard.html', 1000);
+          } else {
+            showStatus("Account created! Verify your email.", "success");
+          }
+        }
+      } catch (err) {
+        showStatus("Connection blocked. Please disable Ad-Blockers.", "error");
+        console.error(err);
       }
-
-    };
-
+    }
   </script>
-
 </body>
-
 </html>
