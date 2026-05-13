@@ -5,7 +5,7 @@ const seriesData = {
     video: "https://res.cloudinary.com/dhbgx3ysr/video/upload/v1733589920/Beef_Netflix_Series_Episode_1_Ending_li6174.mp4",
     seasons: [
       { number: 1, prefix: "Beef-S1E", totalEpisodes: 8 },
-      { number: 2, prefix: "Beef-S2E", totalEpisodes: 8 }
+      { number: 0, prefix: "Beef-S2E", totalEpisodes: 8 }
 
     ]
   },
