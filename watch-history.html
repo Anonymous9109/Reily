@@ -3,73 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rinolski</title>
+    <title>Rinolski | Stream Your Way</title>
     <style>
         :root {
-            --primary-red: #d81f26;
-            --dark-bg: #000000;
-            --card-bg: rgba(0, 0, 0, 0.9);
-            --input-gray: #333333;
-            --error-orange: #e87c03;
-            --success-green: #2ecc71;
+            --brand-color: #d81f26; /* Premium Red */
+            --bg-dark: #000000;
+            --card-overlay: rgba(0, 0, 0, 0.85);
+            --input-fill: #333333;
+            --error-box: #e87c03;
+            --success-box: #2ecc71;
         }
 
         body, html {
             margin: 0; padding: 0;
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            background-color: var(--dark-bg);
-            color: #fff; height: 100%; overflow-x: hidden;
+            background-color: var(--bg-dark);
+            color: #fff; height: 100%; overflow: hidden;
         }
 
-        .hero-viewport {
-            background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.8) 100%), 
+        /* Cinematic Background */
+        .viewport {
+            background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.8) 100%), 
                         url('');
             background-size: cover; background-position: center;
             min-height: 100vh; display: flex; flex-direction: column;
         }
 
         nav { padding: 25px 50px; }
-        .brand { color: var(--primary-red); font-size: 2rem; font-weight: 900; letter-spacing: -1px; }
+        .logo { color: var(--brand-color); font-size: 2.2rem; font-weight: 900; letter-spacing: -2px; }
 
-        .container { flex-grow: 1; display: flex; justify-content: center; align-items: center; padding-bottom: 50px; }
+        .content-area { flex-grow: 1; display: flex; justify-content: center; align-items: center; padding: 20px; }
 
-        /* Notification Toast */
-        #toast {
-            position: fixed; top: 20px; right: 20px; padding: 15px 25px;
-            border-radius: 4px; font-weight: bold; transform: translateX(200%);
-            transition: transform 0.4s ease; z-index: 1000;
-        }
-        .toast-error { background: var(--error-orange); }
-        .toast-success { background: var(--success-green); }
-
+        /* The Main Card */
         .card {
-            background-color: var(--card-bg);
+            background-color: var(--card-overlay);
             padding: 60px; width: 100%; max-width: 450px;
-            border-radius: 8px; box-sizing: border-box; text-align: left;
+            border-radius: 4px; box-sizing: border-box;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
         }
 
-        h1 { margin: 0 0 25px; font-size: 2rem; }
+        h1 { margin: 0 0 28px; font-size: 2rem; font-weight: 700; }
+
+        /* In-page messages */
+        .msg {
+            padding: 12px 20px; border-radius: 4px; font-size: 0.9rem;
+            margin-bottom: 20px; display: none; color: #fff;
+        }
+        .msg.error { background: var(--error-box); }
+        .msg.success { background: var(--success-box); }
+
         input {
-            width: 100%; height: 50px; background: var(--input-gray);
+            width: 100%; height: 55px; background: var(--input-fill);
             border: none; border-radius: 4px; padding: 0 20px;
-            color: white; box-sizing: border-box; font-size: 1rem; margin-bottom: 15px;
+            color: white; box-sizing: border-box; font-size: 1rem; margin-bottom: 16px;
         }
 
-        .btn-red {
-            width: 100%; padding: 15px; background: var(--primary-red);
+        .btn-main {
+            width: 100%; padding: 16px; background: var(--brand-color);
             color: white; border: none; border-radius: 4px;
-            font-weight: bold; cursor: pointer; font-size: 1rem; margin-bottom: 10px;
+            font-weight: bold; cursor: pointer; font-size: 1.1rem;
+            transition: opacity 0.2s;
+        }
+        .btn-main:hover { opacity: 0.9; }
+
+        .helper-text { color: #737373; margin-top: 30px; font-size: 1rem; }
+        .link { color: #fff; cursor: pointer; text-decoration: none; font-weight: 500; }
+        .link:hover { text-decoration: underline; }
+
+        .forgot-link {
+            display: block; text-align: right; font-size: 0.85rem;
+            color: #b3b3b3; margin-top: -8px; margin-bottom: 20px;
         }
 
-        .secondary-text { color: #737373; margin-top: 20px; font-size: 0.9rem; }
-        .link { color: #fff; cursor: pointer; text-decoration: none; }
-
-        /* Dashboard & Settings */
-        #dashboard, #username-setup { display: none; }
-        .settings-group { margin-top: 20px; border-top: 1px solid #333; padding-top: 20px; }
-        .hidden-menu { display: none; margin-top: 15px; }
+        /* Account / Dashboard Sections */
+        #dashboard, #username-step { display: none; }
+        .settings-divider { margin-top: 30px; border-top: 1px solid #333; padding-top: 25px; }
+        .settings-content { display: none; margin-top: 15px; }
         
-        .btn-outline {
+        .btn-ghost {
             background: none; border: 1px solid #737373; color: #fff;
             padding: 12px; width: 100%; cursor: pointer; margin-top: 10px; border-radius: 4px;
         }
@@ -77,40 +88,177 @@
 </head>
 <body>
 
-<div id="toast"></div>
+<div class="viewport">
+    <nav><div class="logo">RINOLSKI</div></nav>
 
-<div class="hero-viewport">
-    <nav><div class="brand">Rinolski</div></nav>
-
-    <div class="container">
-        <!-- 1. AUTH SECTION -->
+    <div class="content-area">
+        <!-- 1. LOGIN / SIGNUP -->
         <div class="card" id="auth-section">
-            <h1 id="title">Sign In</h1>
+            <h1 id="form-title">Sign In</h1>
+            <div id="auth-msg" class="msg"></div>
+            
             <form id="authForm">
-                <input type="email" id="email" placeholder="Email" required>
+                <input type="email" id="email" placeholder="Email Address" required>
                 <input type="password" id="password" placeholder="Password" required>
-                <button type="submit" class="btn-red" id="mainBtn">Sign In</button>
+                <span class="link forgot-link" id="forgot-password">Forgot password?</span>
+                <button type="submit" class="btn-main" id="btn-text">Sign In</button>
             </form>
-            <div class="secondary-text">
-                <span id="footerText">New to Rinolski?</span> 
-                <span class="link" id="switchBtn">Sign up now.</span>
+
+            <div class="helper-text">
+                <span id="footer-prefix">New to Rinolski?</span> 
+                <span class="link" id="toggle-auth">Sign up now.</span>
             </div>
         </div>
 
-        <!-- 2. USERNAME INITIAL SETUP (Only shows once) -->
-        <div class="card" id="username-setup">
-            <h1>Welcome!</h1>
-            <p style="color:#b3b3b3">Choose a display name to get started.</p>
-            <input type="text" id="first-username" placeholder="Username">
-            <button class="btn-red" id="complete-setup">Finish Setup</button>
+        <!-- 2. ONE-TIME USERNAME SETUP -->
+        <div class="card" id="username-step">
+            <h1>Welcome to Rinolski</h1>
+            <div id="setup-msg" class="msg"></div>
+            <p style="color:#b3b3b3; margin-bottom: 20px;">Let's set up your display name.</p>
+            <input type="text" id="initial-username" placeholder="Choose Username">
+            <button class="btn-main" id="save-initial">Continue</button>
         </div>
 
-        <!-- 3. MAIN DASHBOARD -->
+        <!-- 3. ACCOUNT DASHBOARD -->
         <div class="card" id="dashboard">
-            <h1 style="font-size: 1.5rem;">Hello, <span id="user-display" style="color: var(--primary-red);"></span></h1>
-            
-            <div class="settings-group">
-                <button class="btn-outline" id="toggle-settings">Account Settings ▾</button>
+            <h1>Hello, <span id="display-name" style="color: var(--brand-color);"></span></h1>
+            <div id="dash-msg" class="msg"></div>
+
+            <div class="settings-divider">
+                <button class="btn-ghost" id="open-settings">Account Settings ▾</button>
+                
+                <div class="settings-content" id="settings-menu">
+                    <input type="text" id="new-name-input" placeholder="Update display name" style="height: 45px;">
+                    <button class="btn-main" id="update-profile" style="padding: 10px; font-size: 0.9rem; margin-bottom: 20px;">Update Profile</button>
+                    
+                    <button class="btn-ghost" id="logout-btn" style="color: var(--brand-color); border-color: var(--brand-color);">Sign Out of Rinolski</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile, sendPasswordResetEmail, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCExki28m1NNepVQEIjmcQzR8z8O68LqIc",
+        authDomain: "rinolski-notifications.firebaseapp.com",
+        projectId: "rinolski-notifications",
+        storageBucket: "rinolski-notifications.firebasestorage.app",
+        messagingSenderId: "355554579853",
+        appId: "1:355554579853:web:3caa961653c0cdc0a359c4"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // Helpers
+    const showMsg = (id, text, success = false) => {
+        const el = document.getElementById(id);
+        el.innerText = text;
+        el.style.display = 'block';
+        el.className = success ? 'msg success' : 'msg error';
+    };
+
+    let isLogin = true;
+
+    // Switch between Sign In and Sign Up
+    document.getElementById('toggle-auth').onclick = () => {
+        isLogin = !isLogin;
+        document.getElementById('auth-msg').style.display = 'none';
+        document.getElementById('form-title').innerText = isLogin ? "Sign In" : "Sign Up";
+        document.getElementById('btn-text').innerText = isLogin ? "Sign In" : "Sign Up";
+        document.getElementById('footer-prefix').innerText = isLogin ? "New to Rinolski?" : "Already have an account?";
+        document.getElementById('toggle-auth').innerText = isLogin ? "Sign up now." : "Sign in here.";
+        document.getElementById('forgot-password').style.display = isLogin ? 'block' : 'none';
+    };
+
+    // Forgot Password
+    document.getElementById('forgot-password').onclick = async () => {
+        const email = document.getElementById('email').value;
+        if (!email) return showMsg('auth-msg', "Please enter your email address first.");
+        try {
+            await sendPasswordResetEmail(auth, email);
+            showMsg('auth-msg', "Password reset link sent to your email.", true);
+        } catch (err) { showMsg('auth-msg', "Account not found or invalid email."); }
+    };
+
+    // Handle Form Submit
+    document.getElementById('authForm').onsubmit = async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        try {
+            if (isLogin) {
+                await signInWithEmailAndPassword(auth, email, password);
+            } else {
+                await createUserWithEmailAndPassword(auth, email, password);
+            }
+        } catch (err) {
+            let errorMsg = "Incorrect email or password.";
+            if (err.code === 'auth/weak-password') errorMsg = "Password must be at least 6 characters.";
+            if (err.code === 'auth/invalid-email') errorMsg = "Invalid email address.";
+            showMsg('auth-msg', errorMsg);
+        }
+    };
+
+    // Monitor Auth State
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            document.getElementById('auth-section').style.display = 'none';
+            if (!user.displayName) {
+                document.getElementById('username-step').style.display = 'block';
+                document.getElementById('dashboard').style.display = 'none';
+            } else {
+                document.getElementById('username-step').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+                document.getElementById('display-name').innerText = user.displayName;
+            }
+        } else {
+            document.getElementById('auth-section').style.display = 'block';
+            document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('username-step').style.display = 'none';
+        }
+    });
+
+    // Username Setup (Step 2)
+    document.getElementById('save-initial').onclick = async () => {
+        const name = document.getElementById('initial-username').value;
+        if (!name) return showMsg('setup-msg', "Please choose a username.");
+        try {
+            await updateProfile(auth.currentUser, { displayName: name });
+        } catch (err) { showMsg('setup-msg', err.message); }
+    };
+
+    // Settings Menu Toggle
+    document.getElementById('open-settings').onclick = () => {
+        const menu = document.getElementById('settings-menu');
+        const isHidden = menu.style.display === 'none' || menu.style.display === '';
+        menu.style.display = isHidden ? 'block' : 'none';
+        document.getElementById('open-settings').innerText = isHidden ? "Account Settings ▴" : "Account Settings ▾";
+    };
+
+    // Update Profile
+    document.getElementById('update-profile').onclick = async () => {
+        const newName = document.getElementById('new-name-input').value;
+        if (!newName) return showMsg('dash-msg', "Please enter a new name.");
+        try {
+            await updateProfile(auth.currentUser, { displayName: newName });
+            document.getElementById('display-name').innerText = newName;
+            showMsg('dash-msg', "Profile updated successfully!", true);
+            document.getElementById('new-name-input').value = "";
+        } catch (err) { showMsg('dash-msg', err.message); }
+    };
+
+    // Logout
+    document.getElementById('logout-btn').onclick = () => signOut(auth);
+
+</script>
+</body>
+</html>
                 
                 <div class="hidden-menu" id="settings-menu">
                     <label style="font-size: 0.8rem; color:#737373">Change Username</label>
