@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "title": "Breaking Bad",
+    "image": "https://via.placeholder.com/300x450",
+    "description": "A chemistry teacher turns into a drug kingpin.",
+    "genre": "Crime, Drama",
+    "video": "https://example.com/video1.mp4"
+  },
+  {
+    "id": 2,
+    "title": "Stranger Things",
+    "image": "https://via.placeholder.com/300x450",
+    "description": "Kids uncover supernatural mysteries.",
+    "genre": "Sci-Fi, Horror",
+    "video": "https://example.com/video2.mp4"
+  }
+]

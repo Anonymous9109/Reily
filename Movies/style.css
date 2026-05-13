@@ -1,0 +1,125 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: black;
+  color: white;
+}
+
+/* Background Video */
+.bg-video {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  filter: brightness(0.35);
+  z-index: -1;
+}
+
+/* Overlay */
+.overlay {
+  position: fixed;
+  width: 100%; height: 100%;
+  background: linear-gradient(to right, rgba(0,0,0,0.85) 30%, transparent 80%);
+  z-index: -1;
+}
+
+/* Back Button */
+.back-btn {
+  position: fixed;
+  top: 20px; left: 20px;
+  width: 45px; height: 45px;
+  background: rgba(0,0,0,0.6);
+  border: none;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+  transition: 0.3s;
+  z-index: 9999;
+}
+
+.back-btn:hover {
+  background: rgba(0,0,0,0.85);
+  transform: scale(1.1);
+  box-shadow: 0 0 20px rgba(0,0,0,0.7);
+}
+
+/* Content */
+.content {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  padding-left: 80px;
+}
+
+.text {
+  max-width: 500px;
+}
+
+h1 {
+  font-size: 56px;
+  margin-bottom: 15px;
+}
+
+p {
+  color: #ccc;
+  line-height: 1.6;
+  margin-bottom: 25px;
+}
+
+/* Play Button */
+.play-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 45px;
+  font-size: 18px;
+  
+  border-radius: 50px;
+  background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: #fff;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.play-btn:hover {
+  transform: scale(1.05);
+}
+
+/* Mobile & Tablet */
+@media (max-width: 900px) {
+  .overlay {
+    background: linear-gradient(to top, rgba(0,0,0,0.9) 40%, transparent 100%);
+  }
+
+  .content {
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+    height: 100vh;
+  }
+
+  .text {
+    max-width: 100%;
+  }
+
+  h1 {
+    font-size: 32px;
+  }
+
+  p {
+    font-size: 14px;
+  }
+
+  .play-btn {
+    width: 100%;
+    padding: 16px;
+    justify-content: center;
+  }
+
+  .bg-video {
+    height: 60%;
+  }
+}

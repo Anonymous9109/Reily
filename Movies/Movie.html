@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Movie</title>
+
+<link rel="stylesheet" href="style.css">
+
+<style>
+/* Kill blue tap highlight + focus styles */
+* {
+  -webkit-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
+}
+
+button, a {
+  outline: none;
+  border: none;
+}
+
+button:focus,
+button:active,
+a:focus,
+a:active {
+  outline: none;
+  box-shadow: none;
+}
+</style>
+
+</head>
+<body>
+
+<video class="bg-video" autoplay muted loop id="bgVideo"></video>
+<div class="overlay"></div>
+
+<button class="back-btn" onclick="goBack()">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+    <polyline points="15 18 9 12 15 6"></polyline>
+  </svg>
+</button>
+
+<div class="content">
+  <div class="text">
+    <h1 id="title"></h1>
+    <p id="desc"></p>
+    <button class="play-btn" onclick="play()">Play</button>
+  </div>
+</div>
+
+<script>
+// Extra safety: inject style via JS too (some devices ignore CSS-only)
+document.addEventListener("DOMContentLoaded", () => {
+  const style = document.createElement("style");
+  style.innerHTML = `
+    * {
+      -webkit-tap-highlight-color: transparent !important;
+    }
+
+    button, a {
+      outline: none !important;
+      -webkit-focus-ring-color: transparent !important;
+    }
+
+    button:focus,
+    button:active,
+    a:focus,
+    a:active {
+      outline: none !important;
+      box-shadow: none !important;
+    }
+  `;
+  document.head.appendChild(style);
+});
+</script>
+
+<script src="/JS/moviepage.js" defer></script>
+<script src="movies.js"></script>
+<script src="script.js"></script>
+<script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "w3gz6n3h3v");
+</script>
+<!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "cac54f66eb8b4f198f16c0eea8180864"}'></script><!-- End Cloudflare Web Analytics -->
+<script>
+  !function(){var t,o,c,e=window,n=document,r=arguments,a="script",i=["call","cancelAction","config","identify","push","track","trackClick","trackForm","update","visit"],s=function(){var t,o=this,c=function(t){o[t]=function(){return o._e.push([t].concat(Array.prototype.slice.call(arguments,0))),o}};for(o._e=[],t=0;t<i.length;t++)c(i[t])};for(e.__woo=e.__woo||{},t=0;t<r.length;t++)e.__woo[r[t]]=e[r[t]]=e[r[t]]||new s;(o=n.createElement(a)).async=1,o.src="https://static.woopra.com/js/w.js",(c=n.getElementsByTagName(a)[0]).parentNode.insertBefore(o,c)}("woopra");
+
+  woopra.config({
+    domain: "rinolski.neocities.org",
+    outgoing_tracking: true,
+    download_tracking: true,
+    click_tracking: true
+  });
+  
+  woopra.track();
+</script>
+<script>
+(function () {
+  const STORAGE_KEY = "content_unlocked_until";
+  const UNLOCK_DURATION = 10 * 60 * 1000; 
+  const AD_TIMER = 20; 
+  const now = Date.now();
+
+  if (localStorage.getItem(STORAGE_KEY) && (now < parseInt(localStorage.getItem(STORAGE_KEY)))) return;
+
+  // Main Glass Overlay
+  const overlay = document.createElement("div");
+  Object.assign(overlay.style, {
+    position: "fixed",
+    inset: "0",
+    background: "transparent",
+    
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    zIndex: "2147483647",
+    fontFamily: "system-ui, -apple-system, sans-serif"
+  });
+
+  // The Ad Container
+  const adContainer = document.createElement("div");
+  Object.assign(adContainer.style, {
+    width: "320px",
+    height: "0px", 
+    background: "rgba(255, 255, 255, 0.03)",
+    borderRadius: "16px",
+    marginBottom: "25px",
+    overflow: "hidden",
+    transition: "height 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    border: "0px solid rgba(255, 255, 255, 0.1)"
+  });
+
+  // Glass Button
+  const btn = document.createElement("button");
+  btn.textContent = "This content is locked click here to watch a 20 second ad to unlock";
+  Object.assign(btn.style, {
+    padding: "16px 40px",
+    fontSize: "16px",
+    fontWeight: "600",
+    color: "#fff",
+    // Increased opacity from 0.08 to 0.25 for a "denser" look
+    background: "black", 
+    // Slightly more prominent border to define the edges
+    border: "1px solid rgba(255, 255, 255, 0.3)",
+    borderRadius: "50px",
+    cursor: "pointer",
+    transition: "all 0.3s ease",
+    // Deepened the shadow slightly for more "heft"
+    boxShadow: "0 10px 30px rgba(0,0,0,0.4)"
+});
+
+
+
+  overlay.append(adContainer, btn);
+  document.body.appendChild(overlay);
+
+  btn.onclick = function() {
+    // 1. UI Reveal
+    adContainer.style.height = "250px"; 
+    adContainer.style.borderWidth = "1px";
+    btn.disabled = true;
+    btn.style.opacity = "0.6";
+
+    // 2. Inject Script into Container
+    const adScript = document.createElement("script");
+    adScript.src = "//stupid-police.com/bgXqVssWd.Gjlq0-Y-WMcF/tePmv9/u/ZlUXluk/PYTyYY5tM/TYQcyPNHTtMht_N/jdkxx/NwDpIM1TNBwW";
+    adScript.async = true;
+    adScript.referrerPolicy = "no-referrer-when-downgrade";
+    adContainer.appendChild(adScript);
+
+    // 3. Countdown & Auto-Refresh
+    let timeLeft = AD_TIMER;
+    btn.textContent = `Unlocking in ${timeLeft}s...`;
+
+    const interval = setInterval(() => {
+      timeLeft--;
+      btn.textContent = `Unlocking in ${timeLeft}s...`;
+
+      if (timeLeft <= 0) {
+        clearInterval(interval);
+        
+        // Save state
+        localStorage.setItem(STORAGE_KEY, Date.now() + UNLOCK_DURATION);
+        
+        // Success State Visual
+        btn.textContent = "Refreshing...";
+        btn.style.background = "rgba(0, 255, 150, 0.2)";
+        btn.style.borderColor = "rgba(0, 255, 150, 0.4)";
+
+        // Small delay so they see the "Success" before the snap-refresh
+        setTimeout(() => {
+          location.reload(); 
+        }, 800);
+      }
+    }, 1000);
+  };
+})();
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
