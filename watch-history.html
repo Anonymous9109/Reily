@@ -1,160 +1,255 @@
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta name='admaven-placement' content=Bqja5qjC4>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>profile</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      height: 300px; /* Added extra height for scrolling demonstration */
-      margin: 0;
-      padding: 0px;
-      background-color: black;
-    }
-    h1 {
-      color: white;
-    }
-  </style>
-</head>
-<body>
-
-
-  <script>
-    // Prevent pinch-to-zoom but allow scrolling
-    let lastTouchEnd = 0;
-
-    document.addEventListener('touchstart', function (event) {
-      if (event.touches.length > 1) {
-        event.preventDefault(); // Prevent multi-touch gestures like zoom
-      }
-    }, { passive: false });
-
-    document.addEventListener('touchend', function (event) {
-      const now = new Date().getTime();
-      if (now - lastTouchEnd <= 300) {
-        event.preventDefault(); // Prevent double-tap zoom
-      }
-      lastTouchEnd = now;
-    }, { passive: false });
-  </script>
-</body>
-</html>
-<a href="https://zyloxon.itch.io/rinolski/purchase" style="text-decoration: none;">
-  <button style="background-color: white; color: black; border: 1px solid #ccc; padding: 10px 20px; border-radius: 5px; cursor: pointer;">
-Download the app for better experience 
-  </button>
-</a>
-<h1></h1>
-
-<iframe src="https://anonymous9109.github.io/Reily/profile.html" width="100%" height="100%" style="border:none;"></iframe>
-<script>
-  window.addEventListener("message", function(event) {
-    if (event.origin !== "https://anonymous9109.github.io/Reily/") return;
-
-    if (event.data.type === "firebase-login") {
-      const token = event.data.token;
-      console.log("Firebase Token:", token);
-
-      // You can send this token to your backend for verification or store it temporarily
-    }
-  });
-</script>
-<style>
-  .element {
-    margin-bottom: 10px; /* Adds 10px gap below each element */
-  }
-  p { color: white;
-  }
-</style>
-<div class="element"></div>
-<div class="element"></div>
-<iframe src="https://anonymous9109.github.io/Reily/" width="100%" height="400vh" style="border:none;"></iframe>
-<script>
-  window.addEventListener("message", function(event) {
-    if (event.origin !== "https://anonymous9109.github.io/Reily/") return;
-
-    if (event.data.type === "firebase-login") {
-      const token = event.data.token;
-      console.log("Firebase Token:", token);
-
-      // You can send this token to your backend for verification or store it temporarily
-    }
-  });
-</script>
-<style>
-  .element {
-    margin-bottom: 10px; /* Adds 10px gap below each element */
-  }
-  p { color: white;
-  }
-</style>
-<div class="element"></div>
-<div class="element"></div>
-
-<!
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>
+    <title>Rinolski</title>
     <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
+        :root {
+            --primary-red: #d81f26;
+            --dark-bg: #000000;
+            --card-bg: rgba(0, 0, 0, 0.9);
+            --input-gray: #333333;
+            --error-orange: #e87c03;
+            --success-green: #2ecc71;
         }
-        .navbar {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            background-color: #141414;
-            padding: 8px;
-            position: fixed;
-            width: 100%;
-            bottom: 0;
-            z-index: 100;
-            right: -14px;
+
+        body, html {
+            margin: 0; padding: 0;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: var(--dark-bg);
+            color: #fff; height: 100%; overflow-x: hidden;
         }
-        .navbar a {
-            color: white;
-            text-decoration: none;
-            font-size: 10px;
-            text-align: center;
+
+        .hero-viewport {
+            background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.8) 100%), 
+                        url('');
+            background-size: cover; background-position: center;
+            min-height: 100vh; display: flex; flex-direction: column;
         }
-        .navbar a:hover {
-            color: black;
+
+        nav { padding: 25px 50px; }
+        .brand { color: var(--primary-red); font-size: 2rem; font-weight: 900; letter-spacing: -1px; }
+
+        .container { flex-grow: 1; display: flex; justify-content: center; align-items: center; padding-bottom: 50px; }
+
+        /* Notification Toast */
+        #toast {
+            position: fixed; top: 20px; right: 20px; padding: 15px 25px;
+            border-radius: 4px; font-weight: bold; transform: translateX(200%);
+            transition: transform 0.4s ease; z-index: 1000;
         }
-        .navbar svg {
-            display: block;
-            fill: white;
-            width: 30px;
-            height: 30px;
+        .toast-error { background: var(--error-orange); }
+        .toast-success { background: var(--success-green); }
+
+        .card {
+            background-color: var(--card-bg);
+            padding: 60px; width: 100%; max-width: 450px;
+            border-radius: 8px; box-sizing: border-box; text-align: left;
         }
-        .navbar span {
-            font-size: 10px;
-            display: block;
+
+        h1 { margin: 0 0 25px; font-size: 2rem; }
+        input {
+            width: 100%; height: 50px; background: var(--input-gray);
+            border: none; border-radius: 4px; padding: 0 20px;
+            color: white; box-sizing: border-box; font-size: 1rem; margin-bottom: 15px;
+        }
+
+        .btn-red {
+            width: 100%; padding: 15px; background: var(--primary-red);
+            color: white; border: none; border-radius: 4px;
+            font-weight: bold; cursor: pointer; font-size: 1rem; margin-bottom: 10px;
+        }
+
+        .secondary-text { color: #737373; margin-top: 20px; font-size: 0.9rem; }
+        .link { color: #fff; cursor: pointer; text-decoration: none; }
+
+        /* Dashboard & Settings */
+        #dashboard, #username-setup { display: none; }
+        .settings-group { margin-top: 20px; border-top: 1px solid #333; padding-top: 20px; }
+        .hidden-menu { display: none; margin-top: 15px; }
+        
+        .btn-outline {
+            background: none; border: 1px solid #737373; color: #fff;
+            padding: 12px; width: 100%; cursor: pointer; margin-top: 10px; border-radius: 4px;
         }
     </style>
 </head>
 <body>
 
-    <div class="navbar">
-        <!-- Home Icon as SVG -->
-        <a href="Home.html">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-            <span>Home</span>
-        </a>
-        <!-- Hot & New Icon as SVG -->
+<div id="toast"></div>
 
-        <!-- Profile Icon as SVG -->
-        <a href="watch-history.html">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4S14.21 4 12 4 8 5.79 8 8s1.79 4 4 4zM12 14c-3.31 0-6 2.69-6 6h12c0-3.31-2.69-6-6-6z"/></svg>
-            <span>Profile</span>
-        </a>
+<div class="hero-viewport">
+    <nav><div class="brand">Rinolski</div></nav>
+
+    <div class="container">
+        <!-- 1. AUTH SECTION -->
+        <div class="card" id="auth-section">
+            <h1 id="title">Sign In</h1>
+            <form id="authForm">
+                <input type="email" id="email" placeholder="Email" required>
+                <input type="password" id="password" placeholder="Password" required>
+                <button type="submit" class="btn-red" id="mainBtn">Sign In</button>
+            </form>
+            <div class="secondary-text">
+                <span id="footerText">New to Rinolski?</span> 
+                <span class="link" id="switchBtn">Sign up now.</span>
+            </div>
+        </div>
+
+        <!-- 2. USERNAME INITIAL SETUP (Only shows once) -->
+        <div class="card" id="username-setup">
+            <h1>Welcome!</h1>
+            <p style="color:#b3b3b3">Choose a display name to get started.</p>
+            <input type="text" id="first-username" placeholder="Username">
+            <button class="btn-red" id="complete-setup">Finish Setup</button>
+        </div>
+
+        <!-- 3. MAIN DASHBOARD -->
+        <div class="card" id="dashboard">
+            <h1 style="font-size: 1.5rem;">Hello, <span id="user-display" style="color: var(--primary-red);"></span></h1>
+            
+            <div class="settings-group">
+                <button class="btn-outline" id="toggle-settings">Account Settings ▾</button>
+                
+                <div class="hidden-menu" id="settings-menu">
+                    <label style="font-size: 0.8rem; color:#737373">Change Username</label>
+                    <input type="text" id="change-user-input" placeholder="New username" style="height: 40px; margin-top:5px;">
+                    <button class="btn-red" id="update-user-btn" style="padding: 10px;">Update</button>
+                    
+                    <button class="btn-outline" id="change-pass-btn">Reset Password via Email</button>
+                    <button class="btn-outline" id="logout-btn" style="border-color: var(--primary-red); color: var(--primary-red);">Sign Out</button>
+                </div>
+            </div>
+        </div>
     </div>
+</div>
 
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile, sendPasswordResetEmail, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCExki28m1NNepVQEIjmcQzR8z8O68LqIc",
+        authDomain: "rinolski-notifications.firebaseapp.com",
+        projectId: "rinolski-notifications",
+        storageBucket: "rinolski-notifications.firebasestorage.app",
+        messagingSenderId: "355554579853",
+        appId: "1:355554579853:web:3caa961653c0cdc0a359c4"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // DOM Elements
+    const toast = document.getElementById('toast');
+    const authSection = document.getElementById('auth-section');
+    const usernameSetup = document.getElementById('username-setup');
+    const dashboard = document.getElementById('dashboard');
+    const userDisplay = document.getElementById('user-display');
+    const settingsMenu = document.getElementById('settings-menu');
+
+    function showNotify(msg, type = 'error') {
+        toast.innerText = msg;
+        toast.className = type === 'error' ? 'toast-error' : 'toast-success';
+        toast.style.transform = 'translateX(0)';
+        setTimeout(() => { toast.style.transform = 'translateX(200%)'; }, 3500);
+    }
+
+    let isLogin = true;
+
+    // Toggle Sign In/Up
+    document.getElementById('switchBtn').onclick = () => {
+        isLogin = !isLogin;
+        document.getElementById('title').innerText = isLogin ? "Sign In" : "Sign Up";
+        document.getElementById('mainBtn').innerText = isLogin ? "Sign In" : "Sign Up";
+        document.getElementById('footerText').innerText = isLogin ? "New to StreamPulse?" : "Already a member?";
+        document.getElementById('switchBtn').innerText = isLogin ? "Sign up now." : "Sign in now.";
+    };
+
+    // Auth Form Logic
+    document.getElementById('authForm').onsubmit = async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        try {
+            if (isLogin) {
+                await signInWithEmailAndPassword(auth, email, password);
+                showNotify("Logged in successfully", "success");
+            } else {
+                await createUserWithEmailAndPassword(auth, email, password);
+                showNotify("Account created!", "success");
+            }
+        } catch (err) {
+            let msg = "An error occurred";
+            if (err.code === 'auth/invalid-credential') msg = "Invalid email or password.";
+            if (err.code === 'auth/weak-password') msg = "Password is too weak.";
+            showNotify(msg, "error");
+        }
+    };
+
+    // Global Auth Observer (Handles UI State)
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            authSection.style.display = 'none';
+            if (!user.displayName) {
+                usernameSetup.style.display = 'block';
+                dashboard.style.display = 'none';
+            } else {
+                usernameSetup.style.display = 'none';
+                dashboard.style.display = 'block';
+                userDisplay.innerText = user.displayName;
+            }
+        } else {
+            authSection.style.display = 'block';
+            dashboard.style.display = 'none';
+            usernameSetup.style.display = 'none';
+        }
+    });
+
+    // Initial Username Setup
+    document.getElementById('complete-setup').onclick = async () => {
+        const name = document.getElementById('first-username').value;
+        if (!name) return showNotify("Please enter a name");
+        try {
+            await updateProfile(auth.currentUser, { displayName: name });
+            showNotify("Profile Complete!", "success");
+            // The Auth Observer will automatically switch to dashboard
+        } catch (err) { showNotify(err.message); }
+    };
+
+    // Dashboard Settings Toggle
+    document.getElementById('toggle-settings').onclick = () => {
+        const isHidden = settingsMenu.style.display === 'none' || settingsMenu.style.display === '';
+        settingsMenu.style.display = isHidden ? 'block' : 'none';
+        document.getElementById('toggle-settings').innerText = isHidden ? "Account Settings ▴" : "Account Settings ▾";
+    };
+
+    // Update Username inside Settings
+    document.getElementById('update-user-btn').onclick = async () => {
+        const newName = document.getElementById('change-user-input').value;
+        if (!newName) return showNotify("Enter a new username");
+        try {
+            await updateProfile(auth.currentUser, { displayName: newName });
+            userDisplay.innerText = newName;
+            showNotify("Username updated", "success");
+            document.getElementById('change-user-input').value = "";
+        } catch (err) { showNotify(err.message); }
+    };
+
+    // Reset Password
+    document.getElementById('change-pass-btn').onclick = async () => {
+        try {
+            await sendPasswordResetEmail(auth, auth.currentUser.email);
+            showNotify("Reset email sent!", "success");
+        } catch (err) { showNotify(err.message); }
+    };
+
+    // Logout
+    document.getElementById('logout-btn').onclick = () => {
+        signOut(auth).then(() => showNotify("Signed out", "success"));
+    };
+</script>
 </body>
 </html>
