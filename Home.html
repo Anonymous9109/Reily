@@ -4,113 +4,205 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rinolski</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
     <style>
-        /* Disable text selection for the entire page */
+        /* Your Original Styles */
         body {
-            user-select: none; /* CSS property to prevent selection */
-            -webkit-user-select: none; /* For Safari */
-            -ms-user-select: none; /* For Internet Explorer/Edge */
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #141414;
+            color: white;
+            padding-bottom: 80px;
+            user-select: none;
+            -webkit-user-select: none;
         }
+
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 15px 20px;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.9) 0%, transparent 100%);
+            z-index: 1000;
+        }
+
+        .Rinolski-font {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 34px;
+            color: red;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            height: 65px;
+            background-color: #000;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-top: 1px solid #222;
+            z-index: 1001;
+        }
+
+        .nav-item {
+            text-decoration: none;
+            color: #b3b3b3;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 11px;
+        }
+
+        .nav-item svg { width: 24px; height: 24px; margin-bottom: 4px; fill: currentColor; }
+
+        #sliding-content {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            transition: right 0.3s ease-in-out;
+            z-index: 2000;
+            overflow-y: auto;
+        }
+
+        .search-header {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: #000;
+            position: sticky;
+            top: 0;
+        }
+
+        #searchInput {
+            flex: 1;
+            padding: 12px;
+            background: #333;
+            border: none;
+            color: white;
+            border-radius: 6px;
+            font-size: 16px;
+            margin-left: 10px;
+            outline: none;
+        }
+
+        /* Essential classes for search.js and homepage rows */
+        .section-title { font-size: 20px; margin: 20px 0 10px 20px; color: #e5e5e5; }
+        .movie-section { display: flex; overflow-x: auto; gap: 12px; padding: 0 20px 20px 20px; }
+        .movie-section::-webkit-scrollbar { display: none; }
+        .movie-item { flex: 0 0 auto; width: 110px; height: 160px; background-color: #333; border-radius: 4px; overflow: hidden; }
+        .movie-item img { width: 100%; height: 100%; object-fit: cover; }
     </style>
-    <script>
-        // Additional script to prevent selection in case CSS is bypassed
-        document.addEventListener("selectstart", (e) => {
-            e.preventDefault();
-        });
-
-        // Disable right-click as an extra measure
-        document.addEventListener("contextmenu", (e) => {
-            e.preventDefault();
-        });
-    </script>
 </head>
 <body>
 
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title></title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<header>
+    <h2 class="Rinolski-font">rinolski</h2>
+</header>
 
-  <style>
-    /* REMOVE MOBILE BLUE TAP HIGHLIGHT */
-    * {
-      -webkit-tap-highlight-color: transparent;
-      -webkit-touch-callout: none;
-    }
-
-    /* REMOVE FOCUS OUTLINES */
-    button, a {
-      outline: none;
-      border: none;
-      background: none;
-      cursor: pointer;
-      user-select: none;
-    }
-
-    /* REMOVE ACTIVE / CLICK FLASH */
-    button:active,
-    a:active {
-      background-color: transparent;
-    }
-
-    /* PREVENT BLUE BOX ON ANDROID */
-    button:focus,
-    button:focus-visible,
-    a:focus,
-    a:focus-visible {
-      outline: none;
-    }
-
-    /* DEMO STYLING */
+<!-- Main content area (This is what search.js hides/shows) -->
+<div id="initialSections">
+    <div style="height: 80px;"></div> <!-- Spacer for header -->
     
+    <div id="actionContainer"></div>
+    <div id="comedyContainer"></div>
+    <div id="dramaContainer"></div>
+    <div id="genreContainer"></div>
+</div>
 
+<footer>
+    <a href="Home.html" class="nav-item">
+        <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        <span>Home</span>
+    </a>
+    <button id="search-trigger" class="nav-item">
+        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+        <span>Search</span>
+    </button>
+    <a href="watch-history.html" class="nav-item">
+        <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+        <span>Profile</span>
+    </a>
+</footer>
 
-    .btn:hover {
-      background: #2a2a2a;
+<!-- Search Interface -->
+<div id="sliding-content">
+    <div class="search-header">
+        <button id="back-button" style="background:none; border:none;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        </button>
+        <input type="text" id="searchInput" placeholder="Search shows, movies..." onkeyup="searchMovies()">
+    </div>
+    <div id="searchResults" style="display: none;"></div>
+</div>
+
+<script src="https://rinolski.neocities.org/JS/search.js"></script>
+
+<script>
+    // --- 1. THE FIX: HOMEPAGE FETCHING LOGIC ---
+    window.addEventListener('load', () => {
+        if (typeof movies !== 'undefined') {
+            renderHomeRow("Action", "actionContainer");
+            renderHomeRow("Comedy", "comedyContainer");
+            renderHomeRow("Drama", "dramaContainer");
+        }
+    });
+
+    function renderHomeRow(genre, containerId) {
+        const container = document.getElementById(containerId);
+        const filtered = movies.filter(m => m.genres && m.genres.includes(genre));
+        
+        if (filtered.length > 0) {
+            let html = `<h2 class="section-title">${genre}</h2>`;
+            html += `<div class="movie-section">`;
+            html += filtered.map(m => `
+                <div class="movie-item">
+                    <a href="${m.link}"><img src="${m.image}" alt=""></a>
+                </div>
+            `).join('');
+            html += `</div>`;
+            container.innerHTML = html;
+        }
     }
-  </style>
-</head>
-<body>
 
+    // --- 2. ORIGINAL SEARCH PANEL CONTROLS ---
+    const slidingContent = document.getElementById('sliding-content');
+    const searchTrigger = document.getElementById('search-trigger');
+    const backButton = document.getElementById('back-button');
+    const searchInput = document.getElementById('searchInput');
+    const initialSections = document.getElementById('initialSections');
+    const searchResults = document.getElementById('searchResults');
 
+    searchTrigger.addEventListener('click', () => {
+        slidingContent.style.right = '0%';
+        searchInput.focus();
+    });
+
+    backButton.addEventListener('click', () => {
+        slidingContent.style.right = '-100%';
+        searchInput.value = '';
+        initialSections.style.display = "block";
+        searchResults.style.display = "none";
+        searchResults.innerHTML = "";
+    });
+
+    // Security
+    document.addEventListener("contextmenu", e => e.preventDefault());
+    document.addEventListener("selectstart", e => e.preventDefault());
+</script>
 
 </body>
 </html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title></title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      min-height: 180vh;
-      margin: 0;
-       padding: 20px;
-    }
-  </style>
-</head>
-<body>
-
-
-  <script>
-    // Prevent pinch-to-zoom but allow scrolling
-    let lastTouchEnd = 0;
-
-    document.addEventListener('touchstart', function (event) {
-      if (event.touches.length > 1) {
-        event.preventDefault(); // Prevent multi-touch gestures like zoom
-      }
-    }, { passive: false });
-
-    document.addEventListener('touchend', function (event) {
-      const now = new Date().getTime();
-      if (now - lastTouchEnd <= 300) {
         event.preventDefault(); // Prevent double-tap zoom
       }
       lastTouchEnd = now;
