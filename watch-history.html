@@ -401,6 +401,171 @@
 </script>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>rinolski</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #141414;
+            color: white;
+            padding-bottom: 80px; /* Space for the footer */
+        }
+
+        /* Top Logo Header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 15px 20px;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.9) 0%, transparent 100%);
+            z-index: 1000;
+        }
+
+        .Rinolski-font {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 34px;
+            color: red;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Bottom Footer Navigation */
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            height: 65px;
+            background-color: #000;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-top: 1px solid #222;
+            z-index: 1001;
+        }
+
+        .nav-item {
+            text-decoration: none;
+            color: #b3b3b3;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 11px;
+            transition: color 0.2s;
+        }
+
+        .nav-item svg {
+            width: 24px;
+            height: 24px;
+            margin-bottom: 4px;
+            fill: currentColor;
+        }
+
+        .nav-item:hover { color: white; }
+
+        /* Sliding Search Panel */
+        #sliding-content {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            transition: right 0.3s ease-in-out;
+            z-index: 2000;
+            overflow-y: auto;
+        }
+
+        .search-header {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: #000;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        #back-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+        }
+
+        #searchInput {
+            flex: 1;
+            padding: 12px;
+            background: #333;
+            border: none;
+            color: white;
+            border-radius: 6px;
+            font-size: 16px;
+            margin-left: 10px;
+            outline: none;
+        }
+
+        /* Styles required by your search.js logic */
+        .section-title {
+            font-size: 20px;
+            margin: 20px 0 10px 20px;
+            color: #e5e5e5;
+        }
+
+        .movie-section {
+            display: flex;
+            overflow-x: auto;
+            gap: 12px;
+            padding: 0 20px 20px 20px;
+            scroll-behavior: smooth;
+        }
+
+        .movie-section::-webkit-scrollbar { display: none; }
+
+        .movie-item {
+            flex: 0 0 auto;
+            width: 110px;
+            height: 160px;
+            background-color: #333;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .movie-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .no-image { display: none; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h2 class="Rinolski-font">rinolski</h2>
+</header>
+
+
+<!-- Main content area -->
+<div id="initialSections">
+    <!-- This is where your home page content usually lives -->
+    <div style="">
+  
+    </div>
+</div>
+
+
 <footer>
     <a href="Home.html" class="nav-item">
         <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
