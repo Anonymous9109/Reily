@@ -1,0 +1,95 @@
+/* 1. Layout & Core Styles */
+body { 
+  margin: 0; 
+  padding: 0;
+  background: #000; 
+  color: #fff; 
+  font-family: sans-serif; 
+  
+  /* These lines force content to the bottom */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end; 
+  overflow-x: hidden;
+}
+
+/* 2. Background Video - Fixed and Centered */
+.bg-video { 
+  position: fixed; 
+  top: 50%; 
+  left: 50%; 
+  min-width: 100vw; 
+  min-height: 100vh; 
+  width: auto; 
+  height: auto; 
+  object-fit: cover; 
+  transform: translate(-50%, -50%); 
+  z-index: -1; 
+  background-color: black;
+  opacity: 0; /* Handled by JS for fade-in usually */
+  transition: opacity 0.8s ease-in-out;
+}
+
+/* 3. The Bottom Shadow Gradient */
+.overlay { 
+  position: fixed; 
+  bottom: 0; 
+  left: 0;
+  width: 100%;  
+  height: 100%; 
+  background: linear-gradient(to top, black 10%, transparent 60%); 
+  z-index: 0; 
+  pointer-events: none; /* Allows clicking through the gradient */
+}
+
+/* 4. Content Area - Sticking to Bottom */
+.content { 
+  position: relative; 
+  z-index: 10; 
+  padding: 80px 20px 40px; /* Large top padding for smooth gradient fade */
+  
+  /* This gradient ensures text legibility over the video */
+  background: linear-gradient(to top, rgba(0,0,0,0.9) 20%, rgba(0,0,0,0.4) 70%, transparent 100%);
+}
+
+/* 5. Swiping Episodes Wrapper */
+.episodes-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  display: flex;
+  padding-bottom: 10px; /* Space for scroll physics */
+  -webkit-overflow-scrolling: touch; 
+}
+
+/* Hide scrollbar for Chrome/Safari/IE/Edge */
+.episodes-wrapper::-webkit-scrollbar { display: none; }
+.episodes-wrapper { -ms-overflow-style: none; scrollbar-width: none; }
+
+.episode-list { 
+  display: flex; 
+  gap: 15px; 
+}
+
+/* 6. Episode Buttons */
+.ep-btn {
+  flex: 0 0 auto;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  backdrop-filter: blur(12px);
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.ep-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-2px);
+}
+
+.ep-btn:active {
+  transform: scale(0.95);
+}

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>  
+  <meta charset="UTF-8">  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+  <title>S1:E5 "'03 Bonnie and Clyde"</title>  
+  <link rel="stylesheet" href="/CSS/Player.css">  
+  <meta name="force-landscape" content="yes">  
+</head>
+<body>  
+  <div id="videoPlayer">  
+    <button class="back-button" onclick="location.href='Euphoria.html'">←</button>  
+    <button class="next-episode-button" onclick="location.href='Euphoria-S1E6.html'">Next Ep.》</button>  
+    <div class="controls-text">S1:E5 "'03 Bonnie and Clyde"</div>  
+    
+    <video id="videoElement" preload="auto">  
+      <source src="https://archive.org/download/euphoria.-us.-s-01-e-02/Euphoria.US.S01E05.mp4" type="video/mp4">  
+      Your browser does not support the video tag.  
+    </video>  
+
+    <div class="controls">  
+      <button id="rewindButton">
+        <span class="icon" data-src="icons/rewind.svg"></span>
+      </button>
+      <button id="playPauseButton">
+        <span class="icon" data-src="icons/play.svg"></span>
+      </button>
+      <button id="skipButton">
+        <span class="icon" data-src="icons/skip.svg"></span>
+      </button>
+    </div>  
+
+    <div class="progress-container" id="progressContainer">  
+      <div class="progress-bar" id="progressBar"></div>  
+    </div>  
+
+    <div class="countdown-timer" id="countdownTimer">00:00</div>  
+  </div>  
+
+  <script>
+    window.backEpisodeLink = 'Euphoria.html';
+    window.nextEpisodeLink = 'Euphoria-S1E6.html';
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const icons = document.querySelectorAll('.icon[data-src]');
+      icons.forEach(icon => {
+        fetch(icon.dataset.src)
+          .then(res => res.text())
+          .then(svg => {
+            icon.innerHTML = svg;
+          })
+          .catch(err => console.error('SVG load error:', err));
+      });
+    });
+  </script>
+
+  <script src="/JS/Player.js" defer></script>
+</body>
+</html>
