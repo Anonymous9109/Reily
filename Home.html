@@ -17,6 +17,7 @@
       --header-h: 50px;
     }
 
+    /* PREVENT FLICKER: Body hidden until Firebase confirms auth status */
     body { 
       visibility: hidden; 
       background: var(--bg); 
@@ -29,6 +30,7 @@
 
     *, *::before, *::after { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
+    /* AUTH SCREEN */
     #auth-screen {
       position: fixed; inset: 0;
       background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://assets.nflxext.com/ffe/siteui/vlv3/f841d4c7-10e1-40af-bcae-07a3f8cf141a/web/TN-en-20220502-popsignuptwoweeks-perspective_alpha_website_large.jpg');
@@ -42,9 +44,10 @@
       padding: 24px; border-radius: 4px;
     }
 
-    .auth-input { background: #333; border: none; border-radius: 4px; padding: 12px; color: white; width: 100%; margin-bottom: 10px; outline: none; }
-    .auth-btn { background: var(--red); color: white; border: none; border-radius: 4px; padding: 12px; width: 100%; font-weight: 700; cursor: pointer; }
+    .auth-input { background: #333; border: none; border-radius: 4px; padding: 12px; color: white; width: 100%; margin-bottom: 10px; outline: none; font-size: 14px; }
+    .auth-btn { background: var(--red); color: white; border: none; border-radius: 4px; padding: 12px; width: 100%; font-weight: 700; cursor: pointer; font-size: 14px; }
 
+    /* APP LAYOUT */
     #app { display: none; height: 100vh; flex-direction: column; }
     #app.visible { display: flex; }
 
@@ -54,7 +57,7 @@
     }
     .header-logo { font-family: 'Bebas Neue', sans-serif; font-size: 26px; color: var(--red); letter-spacing: 1px; }
 
-    /* ANIMATION / SLIDING LOGIC */
+    /* SLIDING TRANSITIONS */
     .page-wrapper { flex: 1; position: relative; margin-top: var(--header-h); margin-bottom: var(--nav-h); overflow: hidden; }
     .page {
       position: absolute; inset: 0; width: 100%; height: 100%;
@@ -73,13 +76,14 @@
     body.active-account #search-page { transform: translateX(-20%); opacity: 0.4; }
     body.active-account #account-page { transform: translateX(0); opacity: 1; }
 
-    /* CONTENT STYLING */
+    /* COMPACT CONTENT */
     .section-title { font-size: 15px; font-weight: 700; margin: 15px 0 6px 12px; color: #fff; text-transform: capitalize; }
     .movie-row { display: flex; overflow-x: auto; gap: 8px; padding: 0 12px 12px; }
     .movie-row::-webkit-scrollbar { display: none; }
-    .movie-card { flex: 0 0 auto; width: 100px; height: 145px; border-radius: 3px; overflow: hidden; background: #111; }
+    .movie-card { flex: 0 0 auto; width: 100px; height: 145px; border-radius: 3px; overflow: hidden; background: #111; cursor: pointer; }
     .movie-card img { width: 100%; height: 100%; object-fit: cover; }
 
+    /* NAV */
     #bottom-nav {
       position: fixed; bottom: 0; left: 0; right: 0; height: var(--nav-h);
       background: #000; display: flex; border-top: 1px solid #1a1a1a; z-index: 1000;
@@ -88,15 +92,16 @@
     .nav-btn.active { color: white; }
     .nav-btn svg { width: 20px; height: 20px; fill: currentColor; }
 
+    /* SEARCH & HISTORY */
     #search-results { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; padding: 0 12px; }
-    .history-item { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-bottom: 1px solid #111; }
+    .history-item { display: flex; align-items: center; gap: 12px; padding: 10px 15px; border-bottom: 1px solid #111; cursor: pointer; }
   </style>
 </head>
 <body class="active-home">
 
 <div id="auth-screen">
   <div class="auth-card">
-    <div class="auth-title" id="auth-label" style="font-size: 22px; margin-bottom: 15px; font-weight: 700;">Sign In</div>
+    <div class="auth-title" id="auth-label">Sign In</div>
     <input class="auth-input" type="email" id="auth-email" placeholder="Email">
     <input class="auth-input" type="password" id="auth-password" placeholder="Password">
     <button class="auth-btn" id="auth-main-btn" onclick="handleAuthAction()">Sign In</button>
@@ -110,18 +115,20 @@
   <div id="app-header"><div class="header-logo">RINOLSKI</div></div>
   <div class="page-wrapper">
     <div id="home-page" class="page"><div id="home-content"></div></div>
+    
     <div id="search-page" class="page">
-      <div style="padding: 10px 12px;"><input type="text" id="search-input" placeholder="Search..." style="width:100%; padding:10px; background:#1a1a1a; border:none; border-radius:4px; color:white; outline:none;"></div>
+      <div style="padding: 10px 12px;"><input type="text" id="search-input" placeholder="Search movies, shows..." style="width:100%; padding:10px; background:#1a1a1a; border:none; border-radius:4px; color:white; outline:none;"></div>
       <div id="search-results"></div>
     </div>
+
     <div id="account-page" class="page">
       <div style="padding: 20px 15px; border-bottom: 1px solid #222;">
-        <div style="font-size:11px; color:#555;">ACCOUNT</div>
-        <div id="display-email" style="font-size:14px;"></div>
+        <div style="font-size:10px; color:#555; letter-spacing: 1px;">MEMBER EMAIL</div>
+        <div id="display-email" style="font-size:14px; margin-top: 2px;"></div>
       </div>
-      <div class="section-title">History</div>
+      <div class="section-title">Recently Watched</div>
       <div id="history-list"></div>
-      <button onclick="handleSignOut()" style="margin:20px 12px; width:calc(100% - 24px); padding:12px; background:#1a1a1a; color:#ff4444; border:1px solid #333; border-radius:4px;">Sign Out</button>
+      <button onclick="handleSignOut()" style="margin:20px 12px; width:calc(100% - 24px); padding:12px; background:#1a1a1a; color:#ff4444; border:1px solid #333; border-radius:4px; font-weight: 600; font-size: 13px;">Sign Out of Rinolski</button>
     </div>
   </div>
 
@@ -151,24 +158,30 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 let allMovies = [], userDoc = null, isLoginMode = true;
 
-async function loadData() {
+async function loadMovies() {
     const res = await fetch('https://rinolski.online/JS/search.js');
     const txt = await res.text();
     allMovies = new Function(txt + " return movies;")();
 }
 
-async function logAction(email, ev) {
-    await setDoc(doc(db, "logininformation", email), { email, ev, time: new Date().toISOString() }, { merge: true });
+async function logLoginInfo(email, type) {
+    await setDoc(doc(db, "logininformation", email), {
+        email: email,
+        type: type,
+        timestamp: new Date().toISOString()
+    }, { merge: true });
 }
 
 onAuthStateChanged(auth, async user => {
     if (user) {
-        await loadData();
+        await loadMovies();
         document.getElementById('display-email').textContent = user.email;
-        const ref = doc(db, 'users', user.email);
-        const snap = await getDoc(ref);
-        if (!snap.exists()) await setDoc(ref, { history: [] });
-        onSnapshot(ref, s => { userDoc = s.data(); renderHome(); renderHistory(); });
+        const userRef = doc(db, 'users', user.email);
+        const snap = await getDoc(userRef);
+        if (!snap.exists()) await setDoc(userRef, { history: [] });
+        
+        onSnapshot(userRef, s => { userDoc = s.data(); renderHome(); renderHistory(); });
+        
         document.getElementById('auth-screen').style.display = 'none';
         document.getElementById('app').classList.add('visible');
     } else {
@@ -180,11 +193,17 @@ onAuthStateChanged(auth, async user => {
 });
 
 window.handleAuthAction = async () => {
-    const e = document.getElementById('auth-email').value, p = document.getElementById('auth-password').value;
+    const e = document.getElementById('auth-email').value;
+    const p = document.getElementById('auth-password').value;
     if (!e || !p) return;
     try {
-        if (isLoginMode) { await signInWithEmailAndPassword(auth, e, p); await logAction(e, "Login"); }
-        else { await createUserWithEmailAndPassword(auth, e, p); await logAction(e, "Signup"); }
+        if (isLoginMode) {
+            await signInWithEmailAndPassword(auth, e, p);
+            await logLoginInfo(e, "Login");
+        } else {
+            await createUserWithEmailAndPassword(auth, e, p);
+            await logLoginInfo(e, "Signup");
+        }
     } catch (err) { alert(err.message); }
 };
 
@@ -228,7 +247,7 @@ function renderHome() {
 
 function renderSearchResults(list) {
     const grid = document.getElementById('search-results'); grid.innerHTML = '';
-    list.slice(0, 21).forEach(m => {
+    list.forEach(m => {
         const card = document.createElement('div');
         card.style.cssText = "width:100%; aspect-ratio:100/145; background:#111; border-radius:3px; overflow:hidden;";
         card.innerHTML = `<img src="https://rinolski.online/${m.image}" style="width:100%; height:100%; object-fit:cover;">`;
@@ -240,16 +259,23 @@ function renderSearchResults(list) {
 document.getElementById('search-input').addEventListener('input', (e) => {
     const v = e.target.value.toLowerCase();
     const filtered = allMovies.filter(m => m.title.toLowerCase().includes(v) || m.genres.some(g => g.toLowerCase().includes(v)));
-    renderSearchResults(v ? filtered : allMovies);
+    renderSearchResults(filtered);
 });
 
 function renderHistory() {
-    const list = document.getElementById('history-list'); list.innerHTML = '';
+    const list = document.getElementById('history-list'); 
+    list.innerHTML = '';
     (userDoc?.history || []).forEach(h => {
         const m = allMovies.find(x => x.title === h.title) || { image: '' };
-        const item = document.createElement('div'); item.className = 'history-item';
-        item.innerHTML = `<img src="https://rinolski.online/${m.image}" style="width:35px; height:50px; object-fit:cover; border-radius:2px;">
-                          <div style="font-size:13px;">${h.title}</div>`;
+        const d = new Date(h.at);
+        const item = document.createElement('div'); 
+        item.className = 'history-item';
+        item.innerHTML = `
+            <img src="https://rinolski.online/${m.image}" style="width:40px; height:58px; object-fit:cover; border-radius:2px;">
+            <div style="flex:1;">
+                <div style="font-size:13px; font-weight:500;">${h.title}</div>
+                <div style="font-size:10px; color:#555;">${d.toLocaleDateString()} at ${d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</div>
+            </div>`;
         item.onclick = () => recordAndGo(m);
         list.appendChild(item);
     });
@@ -257,4 +283,3 @@ function renderHistory() {
 </script>
 </body>
 </html>
-
