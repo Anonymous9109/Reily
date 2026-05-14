@@ -1,61 +1,28 @@
 /* -----------------------------
-   CSS INJECTION (Maximum Closeness)
+   FIREBASE & FIRESTORE SETUP
+------------------------------ */
+const db = firebase.firestore();
+const auth = firebase.auth();
+
+/* -----------------------------
+   CSS INJECTION
 ------------------------------ */
 const style = document.createElement('style');
 style.textContent = `
-    /* Remove all spacing between genre blocks */
-    .section {
-        margin: 0 !important;
-        padding: 0 !important;
-    }
-
-    /* Remove all spacing between Title and Row */
-    .section-title {
-        margin: 0 !important;
-        padding: 2px 5px !important; /* Minimal 20px gap just to keep text visible */
-        font-size: 1rem;
-        line-height: 1;
-    }
-
-    /* Remove vertical gap in the flex container */
-    .movies {
-        display: flex;
-        overflow-x: auto;
-        gap: 5px; /* Minimal horizontal gap between posters */
-        margin: 10px !important;
-        padding: 0 !important;
-        scrollbar-width: none;
-    }
-
-    .movies::-webkit-scrollbar {
-        display: none;
-    }
-
-    .movie {
-        flex: 0 0 auto;
-        margin: 0 !important;
-        padding: 0 !important;
-    }
-
-    .movie img {
-        display: block;
-        margin: 0;
-        width: 100%; /* Ensures no extra inline spacing */
-    }
-
-    .movie .title {
-        margin: 0 !important;
-        padding: 0px 0 50px 0 !important; /* Space below the text before next row starts */
-        font-size: 0.75rem;
-        line-height: 1.1;
-    }
+    .section { margin: 0 !important; padding: 0 !important; }
+    .section-title { margin: 0 !important; padding: 2px 5px !important; font-size: 1rem; line-height: 1; }
+    .movies { display: flex; overflow-x: auto; gap: 5px; margin: 10px !important; padding: 0 !important; scrollbar-width: none; }
+    .movies::-webkit-scrollbar { display: none; }
+    .movie { flex: 0 0 auto; margin: 0 !important; padding: 0 !important; }
+    .movie img { display: block; margin: 0; width: 100%; }
+    .movie .title { margin: 0 !important; padding: 0px 0 50px 0 !important; font-size: 0.75rem; line-height: 1.1; }
+    .auth-status-banner { text-align: center; padding: 10px; font-size: 0.8rem; color: #888; background: rgba(255,255,255,0.05); }
 `;
 document.head.appendChild(style);
 
 /* -----------------------------
-   INDEXEDDB (WebView-safe storage)
+   STORAGE & SYNC (IndexedDB + Firestore)
 ------------------------------ */
-
 const DB_NAME = "rinolskiDB";
 const STORE = "meta";
 
@@ -64,9 +31,7 @@ function openDB() {
         const request = indexedDB.open(DB_NAME, 1);
         request.onupgradeneeded = () => {
             const db = request.result;
-            if (!db.objectStoreNames.contains(STORE)) {
-                db.createObjectStore(STORE);
-            }
+            if (!db.objectStoreNames.contains(STORE)) db.createObjectStore(STORE);
         };
         request.onsuccess = () => resolve(request.result);
         request.onerror = () => reject(request.error);
@@ -78,9 +43,7 @@ async function setLastGenre(value) {
         const db = await openDB();
         const tx = db.transaction(STORE, "readwrite");
         tx.objectStore(STORE).put(value, "lastGenre");
-    } catch (e) {
-        console.log("IndexedDB set error:", e);
-    }
+    } catch (e) { console.log("IDB Error:", e); }
 }
 
 async function getLastGenre() {
@@ -92,15 +55,33 @@ async function getLastGenre() {
             req.onsuccess = () => resolve(req.result || null);
             req.onerror = () => resolve(null);
         });
-    } catch (e) {
-        return null;
+    } catch (e) { return null; }
+}
+
+async function syncGenreToCloud(genre) {
+    const user = auth.currentUser;
+    if (user && user.email) {
+        try {
+            await db.collection("users").doc(user.email).set({
+                lastGenre: genre,
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            }, { merge: true });
+        } catch (e) { console.error("Cloud Sync Error:", e); }
     }
 }
 
-/* -----------------------------
-   HELPERS
------------------------------- */
+async function getCloudGenre() {
+    const user = auth.currentUser;
+    if (user && user.email) {
+        const doc = await db.collection("users").doc(user.email).get();
+        return doc.exists ? doc.data().lastGenre : null;
+    }
+    return null;
+}
 
+/* -----------------------------
+   CORE LOGIC
+------------------------------ */
 function getGenres(genres) {
     if (Array.isArray(genres)) return genres.map(g => g.toLowerCase());
     if (typeof genres === "string") return genres.split(",").map(g => g.trim().toLowerCase());
@@ -110,12 +91,7 @@ function getGenres(genres) {
 function createMovieCard(m) {
     const div = document.createElement("div");
     div.className = "movie";
-    div.innerHTML = `
-        <a href="${m.link}">
-            <img src="${m.image}">
-        </a>
-        <p class="title">${m.title}</p>
-    `;
+    div.innerHTML = `<a href="${m.link}"><img src="${m.image}"></a><p class="title">${m.title}</p>`;
     return div;
 }
 
@@ -128,41 +104,43 @@ function shuffle(arr) {
     return a;
 }
 
-function saveLastWatchedGenre(movie) {
+async function saveLastWatchedGenre(movie) {
     const genres = getGenres(movie.genres);
-    if (genres.length) setLastGenre(genres[0]);
+    if (genres.length) {
+        const genre = genres[0];
+        await setLastGenre(genre);
+        await syncGenreToCloud(genre);
+    }
 }
 
 /* -----------------------------
-   RANDOM PICKS
+   RENDERING
 ------------------------------ */
-
 function buildRandom() {
     const container = document.getElementById("randomContainer");
     if (!container) return;
-    const random = shuffle(movies).slice(0, 20);
-    container.innerHTML = `
-        <div class="section">
-            <h2 class="section-title">Random Picks</h2>
-            <div class="movies"></div>
-        </div>
-    `;
+    container.innerHTML = `<div class="section"><h2 class="section-title">Random Picks</h2><div class="movies"></div></div>`;
     const row = container.querySelector(".movies");
-    random.forEach(m => {
+    shuffle(movies).slice(0, 20).forEach(m => {
         const card = createMovieCard(m);
         card.addEventListener("click", () => saveLastWatchedGenre(m));
         row.appendChild(card);
     });
 }
 
-/* -----------------------------
-   GENRE ROWS
------------------------------- */
-
 async function buildAllGenreRows() {
     const container = document.getElementById("genreContainer") || document.body;
-    const genreMap = {};
+    container.innerHTML = ""; // Clear for re-renders
 
+    const user = auth.currentUser;
+    if (!user) {
+        const banner = document.createElement("div");
+        banner.className = "auth-status-banner";
+        banner.innerText = "Not logged in: Personalized content isn't available.";
+        container.appendChild(banner);
+    }
+
+    const genreMap = {};
     movies.forEach(m => {
         getGenres(m.genres).forEach(g => {
             if (!genreMap[g]) genreMap[g] = [];
@@ -170,7 +148,10 @@ async function buildAllGenreRows() {
         });
     });
 
-    let lastGenre = await getLastGenre();
+    // Priority: Cloud Email Doc > Local IndexedDB
+    let lastGenre = user ? await getCloudGenre() : null;
+    if (!lastGenre) lastGenre = await getLastGenre();
+
     let genres = Object.keys(genreMap);
     if (lastGenre && genreMap[lastGenre]) {
         genres = [lastGenre, ...genres.filter(g => g !== lastGenre)];
@@ -179,6 +160,7 @@ async function buildAllGenreRows() {
     const finalOrder = [genres[0], ...shuffle(genres.slice(1))];
 
     finalOrder.forEach(genre => {
+        if (!genre) return;
         const section = document.createElement("div");
         section.className = "section";
         section.innerHTML = `
@@ -196,19 +178,14 @@ async function buildAllGenreRows() {
 }
 
 /* -----------------------------
-   INIT
+   INITIALIZATION
 ------------------------------ */
-
-window.addEventListener("load", () => {
+auth.onAuthStateChanged(() => {
     const interval = setInterval(() => {
         if (window.movies && Array.isArray(movies) && movies.length > 0) {
             clearInterval(interval);
-            try {
-                buildRandom();
-                buildAllGenreRows();
-            } catch (e) {
-                console.log("Render error:", e);
-            }
+            buildRandom();
+            buildAllGenreRows();
         }
     }, 50);
 });
