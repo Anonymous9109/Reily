@@ -1,761 +1,388 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rinolski</title>
-    <style>
-        /* Disable text selection for the entire page */
-        body {
-            user-select: none; /* CSS property to prevent selection */
-            -webkit-user-select: none; /* For Safari */
-            -ms-user-select: none; /* For Internet Explorer/Edge */
-        }
-    </style>
-    <script>
-        // Additional script to prevent selection in case CSS is bypassed
-        document.addEventListener("selectstart", (e) => {
-            e.preventDefault();
-        });
-
-        // Disable right-click as an extra measure
-        document.addEventListener("contextmenu", (e) => {
-            e.preventDefault();
-        });
-    </script>
-</head>
-<body>
-
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
   <meta charset="UTF-8">
-  <title></title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Rinolski</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 
   <style>
-    /* REMOVE MOBILE BLUE TAP HIGHLIGHT */
-    * {
+    *, *::before, *::after {
+      box-sizing: border-box;
       -webkit-tap-highlight-color: transparent;
-      -webkit-touch-callout: none;
-    }
-
-    /* REMOVE FOCUS OUTLINES */
-    button, a {
-      outline: none;
-      border: none;
-      background: none;
-      cursor: pointer;
       user-select: none;
     }
 
-    /* REMOVE ACTIVE / CLICK FLASH */
-    button:active,
-    a:active {
-      background-color: transparent;
+    :root {
+      --red: #e50914;
+      --bg: #050505; 
+      --surface2: #121212;
+      --border: #222;
+      --text: #ffffff;
+      --text-muted: #a3a3a3;
+      --nav-h: 72px;
+      --header-h: 60px;
     }
 
-    /* PREVENT BLUE BOX ON ANDROID */
-    button:focus,
-    button:focus-visible,
-    a:focus,
-    a:focus-visible {
-      outline: none;
+    html, body {
+      margin: 0; padding: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      height: 100vh;
+      overflow: hidden;
     }
 
-    /* DEMO STYLING */
-    
-
-
-    .btn:hover {
-      background: #2a2a2a;
+    /* =====================
+       AUTH SCREEN (Netflix-Style)
+    ===================== */
+    #auth-screen {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.75)), url('https://assets.nflxext.com/ffe/siteui/vlv3/f841d4c7-10e1-40af-bcae-07a3f8cf141a/web/TN-en-20220502-popsignuptwoweeks-perspective_alpha_website_large.jpg');
+      background-size: cover;
+      background-position: center;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
     }
+    #auth-screen.hidden { display: none; }
+
+    .auth-card {
+      width: 100%;
+      max-width: 400px;
+      background: rgba(0, 0, 0, 0.85);
+      padding: 40px 30px;
+      border-radius: 8px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    .auth-title { font-size: 32px; font-weight: 700; margin-bottom: 28px; }
+    .auth-form { display: flex; flex-direction: column; gap: 16px; }
+    .auth-input { 
+      background: #333; border: none; border-radius: 5px; 
+      padding: 16px; color: white; outline: none; font-size: 16px; 
+    }
+    .auth-btn { 
+      background: var(--red); color: white; border: none; 
+      border-radius: 5px; padding: 16px; font-weight: 700; 
+      margin-top: 10px; cursor: pointer; font-size: 16px;
+    }
+    .auth-toggle { 
+      margin-top: 30px; color: var(--text-muted); font-size: 15px; 
+    }
+    .auth-toggle span { color: white; cursor: pointer; font-weight: 500; text-decoration: underline; }
+
+    /* =====================
+       APP SHELL & SLIDES
+    ===================== */
+    #app { display: none; height: 100vh; flex-direction: column; }
+    #app.visible { display: flex; }
+
+    #app-header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--header-h);
+      background: linear-gradient(to bottom, #000 80%, transparent 100%);
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      z-index: 500;
+    }
+    .header-logo { font-family: 'Bebas Neue', sans-serif; font-size: 34px; color: var(--red); letter-spacing: 2px; }
+
+    .page-wrapper {
+      flex: 1;
+      position: relative;
+      margin-top: var(--header-h);
+      margin-bottom: var(--nav-h);
+      overflow: hidden;
+    }
+
+    .page {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--bg);
+      overflow-y: auto;
+      transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s;
+    }
+
+    body.active-home #home-page { transform: translateX(0); opacity: 1; }
+    body.active-home #search-page, body.active-home #account-page { transform: translateX(100%); }
+
+    body.active-search #home-page { transform: translateX(-20%); opacity: 0.4; }
+    body.active-search #search-page { transform: translateX(0); opacity: 1; }
+    body.active-search #account-page { transform: translateX(100%); }
+
+    body.active-account #home-page { transform: translateX(-40%); opacity: 0.2; }
+    body.active-account #search-page { transform: translateX(-20%); opacity: 0.4; }
+    body.active-account #account-page { transform: translateX(0); opacity: 1; }
+
+    .section-title { font-size: 19px; font-weight: 600; margin: 24px 0 12px 16px; color: #fff; }
+    .movie-row { display: flex; overflow-x: auto; gap: 12px; padding: 0 16px 20px; }
+    .movie-row::-webkit-scrollbar { display: none; }
+    .movie-card { flex: 0 0 auto; width: 125px; height: 180px; border-radius: 6px; overflow: hidden; background: #111; cursor: pointer; }
+    .movie-card img { width: 100%; height: 100%; object-fit: cover; }
+
+    .account-header { padding: 40px 16px; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
+    .email-label { color: var(--text-muted); font-size: 13px; text-transform: uppercase; letter-spacing: 1px; }
+    .user-email { font-size: 18px; font-weight: 500; margin-top: 4px; }
+    .logout-btn { 
+      margin: 30px 16px; padding: 16px; width: calc(100% - 32px); 
+      background: #1a1a1a; color: #ff4444; border: 1px solid #333; 
+      border-radius: 8px; font-weight: 600; font-size: 15px; cursor: pointer;
+    }
+
+    #search-wrap { padding: 15px 16px; position: sticky; top: 0; background: var(--bg); z-index: 10; }
+    #search-input { width: 100%; background: #1a1a1a; border: 1px solid #333; border-radius: 8px; padding: 15px; color: white; outline: none; font-size: 16px; }
+    #search-results { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 0 16px; }
+
+    #bottom-nav {
+      position: fixed; bottom: 0; left: 0; right: 0; height: var(--nav-h);
+      background: #000; display: flex; border-top: 1px solid #1a1a1a; z-index: 1000;
+    }
+    .nav-btn { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; background: none; border: none; color: #555; font-size: 11px; gap: 5px; }
+    .nav-btn.active { color: white; }
+    .nav-btn svg { width: 24px; height: 24px; fill: currentColor; }
   </style>
 </head>
-<body>
+<body class="active-home">
 
-
-
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title></title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      min-height: 180vh;
-      margin: 0;
-       padding: 20px;
-    }
-  </style>
-</head>
-<body>
-
-
-  <script>
-    // Prevent pinch-to-zoom but allow scrolling
-    let lastTouchEnd = 0;
-
-    document.addEventListener('touchstart', function (event) {
-      if (event.touches.length > 1) {
-        event.preventDefault(); // Prevent multi-touch gestures like zoom
-      }
-    }, { passive: false });
-
-    document.addEventListener('touchend', function (event) {
-      const now = new Date().getTime();
-      if (now - lastTouchEnd <= 300) {
-        event.preventDefault(); // Prevent double-tap zoom
-      }
-      lastTouchEnd = now;
-    }, { passive: false });
-  </script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>
-    <style>
-        body {
-            background-color: black !important;
-            color: white !important;
-            margin: 0; /* Removes default body margin */
-        }
-    </style>
-
-</head>
-<body>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>rinolski</title>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #141414;
-            color: white;
-            padding-bottom: 80px; /* Space for the footer */
-        }
-
-        /* Top Logo Header */
-        header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            padding: 15px 20px;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.9) 0%, transparent 100%);
-            z-index: 1000;
-        }
-
-        .Rinolski-font {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 34px;
-            color: red;
-            margin: 0;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        /* Bottom Footer Navigation */
-        footer {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            height: 65px;
-            background-color: #000;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            border-top: 1px solid #222;
-            z-index: 1001;
-        }
-
-        .nav-item {
-            text-decoration: none;
-            color: #b3b3b3;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            flex: 1;
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 11px;
-            transition: color 0.2s;
-        }
-
-        .nav-item svg {
-            width: 24px;
-            height: 24px;
-            margin-bottom: 4px;
-            fill: currentColor;
-        }
-
-        .nav-item:hover { color: white; }
-
-        /* Sliding Search Panel */
-        #sliding-content {
-            position: fixed;
-            top: 0;
-            right: -100%;
-            width: 100%;
-            height: 100%;
-            background: #000;
-            transition: right 0.3s ease-in-out;
-            z-index: 2000;
-            overflow-y: auto;
-        }
-
-        .search-header {
-            display: flex;
-            align-items: center;
-            padding: 15px;
-            background: #000;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
-
-        #back-button {
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 10px;
-        }
-
-        #searchInput {
-            flex: 1;
-            padding: 12px;
-            background: #333;
-            border: none;
-            color: white;
-            border-radius: 6px;
-            font-size: 16px;
-            margin-left: 10px;
-            outline: none;
-        }
-
-        /* Styles required by your search.js logic */
-        .section-title {
-            font-size: 20px;
-            margin: 20px 0 10px 20px;
-            color: #e5e5e5;
-        }
-
-        .movie-section {
-            display: flex;
-            overflow-x: auto;
-            gap: 12px;
-            padding: 0 20px 20px 20px;
-            scroll-behavior: smooth;
-        }
-
-        .movie-section::-webkit-scrollbar { display: none; }
-
-        .movie-item {
-            flex: 0 0 auto;
-            width: 110px;
-            height: 160px;
-            background-color: #333;
-            border-radius: 4px;
-            overflow: hidden;
-        }
-
-        .movie-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .no-image { display: none; }
-    </style>
-</head>
-<body>
-
-<header>
-    <h2 class="Rinolski-font">rinolski</h2>
-</header>
-
-
-<!-- Main content area -->
-<div id="initialSections">
-    <!-- This is where your home page content usually lives -->
-    <div style="">
-  
+<div id="auth-screen">
+  <div class="auth-card">
+    <div class="auth-title" id="auth-label">Sign In</div>
+    <div class="auth-form">
+      <input class="auth-input" type="email" id="auth-email" placeholder="Email">
+      <input class="auth-input" type="password" id="auth-password" placeholder="Password">
+      <button class="auth-btn" id="auth-main-btn" onclick="handleAuthAction()">Sign In</button>
     </div>
+    <div class="auth-toggle">
+      <span id="toggle-text">New to Rinolski?</span> <span onclick="toggleAuthMode()" id="toggle-link">Sign up now.</span>
+    </div>
+  </div>
 </div>
 
-
-<footer>
-    <a href="Home.html" class="nav-item">
-        <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-        <span>Home</span>
-    </a>
-
-    <button id="search-trigger" class="nav-item">
-        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-        <span>Search</span>
-    </button>
-
-    <a href="watch-history.html" class="nav-item">
-        <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-        <span>Profile</span>
-    </a>
-</footer>
-
-<!-- Search Interface -->
-<div id="sliding-content">
-    <div class="search-header">
-        <button id="back-button">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
-        </button>
-        <input type="text" id="searchInput" placeholder="Search shows, movies..." onkeyup="searchMovies()">
-    </div>
+<div id="app">
+  <div id="app-header"><div class="header-logo">RINOLSKI</div></div>
+  <div class="page-wrapper">
+    <div id="home-page" class="page"><div id="home-content"></div></div>
     
-    <!-- search.js will inject sections here -->
-    <div id="searchResults" style="display: none;"></div>
-</div>
+    <div id="search-page" class="page">
+      <div id="search-wrap">
+        <input type="text" id="search-input" placeholder="Search movies, shows, genres..." autocomplete="off">
+      </div>
+      <div id="search-results"></div>
+    </div>
 
-<!-- Load your search script here -->
-<script src="https://rinolski.neocities.org/JS/search.js"></script>
+    <div id="account-page" class="page">
+        <div class="account-header">
+            <div class="email-label">Member Email</div>
+            <div class="user-email" id="display-email">Not Signed In</div>
+        </div>
+        <div class="section-title">Recently Viewed</div>
+        <div id="history-list"></div>
+        <button class="logout-btn" onclick="handleSignOut()">Sign Out of Rinolski</button>
+    </div>
+  </div>
 
-<script>
-    const slidingContent = document.getElementById('sliding-content');
-    const searchTrigger = document.getElementById('search-trigger');
-    const backButton = document.getElementById('back-button');
-    const searchInput = document.getElementById('searchInput');
-    const initialSections = document.getElementById('initialSections');
-    const searchResults = document.getElementById('searchResults');
-
-    // Open Search Panel
-    searchTrigger.addEventListener('click', () => {
-        slidingContent.style.right = '0%';
-        searchInput.focus();
-    });
-
-    // Close Search Panel
-    backButton.addEventListener('click', () => {
-        slidingContent.style.right = '-100%';
-        // Reset view back to initial
-        searchInput.value = '';
-        initialSections.style.display = "block";
-        searchResults.style.display = "none";
-        searchResults.innerHTML = "";
-    });
-</script>
-
-</body>
-</html>
-
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home Page</title>
-    <style>
-        /* =========================
-   GLOBAL STYLES
-   ========================= */
-body {
-    background-color: black;
-    color: white;
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    /* Prevents the annoying blue tap highlight on mobile */
-    -webkit-tap-highlight-color: transparent;
-}
-
-.container {
-    padding: 4px;
-}
-
-.section {
-    margin-bottom: 20px;
-}
-
-.section-title {
-    margin: 20px 12px;
-    font-size: 1.2em;
-    font-weight: bold;
-}
-
-/* =========================
-   MOVIE ROW & CARDS
-   ========================= */
-.row {
-    display: flex;
-    overflow-x: auto;
-    padding-left: 10px;
-}
-
-.row::-webkit-scrollbar {
-    display: none;
-}
-
-.card {
-    position: relative;
-    margin-right: 10px;
-    width: 100px; /* Adjusted to look more like Netflix mobile */
-    height: 150px;
-    background-color: #222;
-    border-radius: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex: 0 0 auto;
-    text-decoration: none;
-    color: inherit;
-    overflow: hidden; /* CRITICAL: Clips the gray circle to the card */
-}
-
-.card img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 4px;
-    transition: filter 0.3s ease;
-}
-
-/* =========================
-   THE NETFLIX RIPPLE EFFECT
-   ========================= */
-.card::after {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    /* Start as a small circle in the middle */
-    width: 120%;
-    aspect-ratio: 1/1;
-    background: rgba(255, 255, 255, 0.2); /* The gray fill */
-    border-radius: 50%;
-    transform: translate(-50%, -50%) scale(0);
-    opacity: 0;
-    pointer-events: none;
-    z-index: 2;
-    /* Reset transition: makes the circle fade away smoothly when released */
-    transition: transform 0.4s ease-out, opacity 0.3s ease;
-}
-
-/* Triggers when the user is actually PRESSING the card */
-.card:active::after {
-    transform: translate(-50%, -50%) scale(1.5);
-    opacity: 1;
-    /* Fast expansion on the initial click */
-    transition: transform 0.1s ease-out;
-}
-
-/* Optional: Slight dimming on hover to show focus */
-.card:hover img {
-    filter: brightness(0.8);
-}
-
-/* =========================
-   BOTTOM NAVIGATION
-   ========================= */
-.bottom-nav {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    background-color: #1a1a1a;
-    padding: 10px 0;
-    display: flex;
-    justify-content: space-around;
-    border-top: 1px solid #333;
-    z-index: 10;
-}
-
-.bottom-nav div {
-    text-align: center;
-    color: gray;
-    font-size: 10px; /* Small label text */
-}
-
-.bottom-nav div img {
-    width: 24px;
-    height: 24px;
-    display: block;
-    margin: 0 auto 4px;
-    filter: grayscale(1); /* Keeps icons muted like Netflix */
-}
-
-    </style>
-
-<div style="width: 0px; height: 70px;"></div>
-
-
-
-
-
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Surprise Me</title>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/CSS/buttons.css">
-</head>
-<body>
-
-<div class="random-container">
-    <button class="random-btn" onclick="goRandom()">Can't decide what to watch?</button>
-
-
-</div>
-
-
-
-
-
-
-<script src="/JS/search.js"></script>
-
-<script>
-function goRandom() {
-    if (!movies || movies.length === 0) return;
-
-    const randomIndex = Math.floor(Math.random() * movies.length);
-    const randomMovie = movies[randomIndex];
-
-    window.location.href = randomMovie.link;
-}
-</script>
-
-</body>
-</html>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title></title>
- <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
-</head>
-<body>
-
-<h1></h1>
-    <button class="random-btn" onclick="window.location.href='subtitles/settings.html';">
-      Subtitles Settings
+  <nav id="bottom-nav">
+    <button class="nav-btn active" id="btn-home" onclick="switchPage('home')">
+      <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>Home
     </button>
-<div id="genresSlider"></div>
-<div id="homeFeed"></div>
+    <button class="nav-btn" id="btn-search" onclick="switchPage('search')">
+      <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>Search
+    </button>
+    <button class="nav-btn" id="btn-account" onclick="switchPage('account')">
+      <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>Account
+    </button>
+  </nav>
+</div>
 
+<script src="../JS/search.js"></script>
 
-<script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc, updateDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+const firebaseConfig = {
+  apiKey: "AIzaSyCExki28m1NNepVQEIjmcQzR8z8O68LqIc",
+  authDomain: "rinolski-notifications.firebaseapp.com",
+  projectId: "rinolski-notifications",
+  storageBucket: "rinolski-notifications.firebasestorage.app",
+  messagingSenderId: "355554579853",
+  appId: "1:355554579853:web:3caa961653c0cdc0a359c4"
+};
 
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+let userDoc = null;
+let isLoginMode = true;
 
-// Load search.js dynamically
-const script = document.createElement("script");
-script.src = "https://rinolski.neocities.org/JS/search.js";
-script.onload = () => initGenresPage();
-document.body.appendChild(script);
+// Wait for movie data to load from search.js
+// Assumes search.js defines a global variable named 'movies'
+const getMovies = () => window.movies || [];
 
-// ------------------------------
-// Fisher–Yates Shuffle (Randomizer)
-// ------------------------------
-function shuffleArray(array) {
-for (let i = array.length - 1; i > 0; i--) {
-const j = Math.floor(Math.random() * (i + 1));
-[array[i], array[j]] = [array[j], array[i]];
-}
-return array;
-}
-
-// ------------------------------
-// Main Genres Page Builder
-// ------------------------------
-function initGenresPage() {
-if (!window.movies && typeof movies !== "undefined") window.movies = movies;
-if (!window.movies) {
-console.error("movies not found");
-return;
-}
-
-const genresSet = new Set();
-window.movies.forEach(m => m.genres?.forEach(g => genresSet.add(g.trim())));
-const genres = Array.from(genresSet).sort();
-
-const slider = document.getElementById("genresSlider");
-const feed = document.getElementById("homeFeed");
-
-// ------------------------------
-// Show Movies of a Selected Genre
-// (Randomized)
-// ------------------------------
-function showGenre(genre) {
-feed.innerHTML = "";
-
-let filteredMovies = window.movies.filter(m => m.genres.includes(genre));    
-
-// RANDOMIZE EVERY TIME    
-filteredMovies = shuffleArray(filteredMovies);    
-
-if (filteredMovies.length) {    
-    const row = document.createElement("div");    
-    row.classList.add("row");    
-
-    row.innerHTML = filteredMovies.map(m => `    
-        <div class="movie-card">    
-            <a href="${m.link}">    
-                <img src="${m.image}" alt="">    
-            </a>    
-            <p>${m.title}</p>    
-        </div>    
-    `).join('');    
-
-    feed.appendChild(row);    
-} else {    
-    feed.innerHTML = "<p>No movies found for this genre.</p>";    
-}
-
-}
-
-// ------------------------------
-// Create Buttons for Each Genre
-// ------------------------------
-genres.forEach(genre => {
-const btn = document.createElement("button");
-btn.textContent = genre;
-btn.onclick = () => showGenre(genre);
-slider.appendChild(btn);
+onAuthStateChanged(auth, async user => {
+  if (user) {
+    document.getElementById('display-email').textContent = user.email;
+    const ref = doc(db, 'users', user.uid);
+    const snap = await getDoc(ref);
+    if (!snap.exists()) await setDoc(ref, { history: [] });
+    
+    onSnapshot(ref, s => { 
+      userDoc = s.data(); 
+      renderHome(); 
+      renderHistory(); 
+    });
+    
+    document.getElementById('auth-screen').classList.add('hidden');
+    document.getElementById('app').classList.add('visible');
+    renderSearchResults(getMovies());
+  } else {
+    document.getElementById('auth-screen').classList.remove('hidden');
+    document.getElementById('app').classList.remove('visible');
+  }
 });
 
-// ------------------------------
-// If URL contains ?genre=...
-// ------------------------------
-const urlParams = new URLSearchParams(window.location.search);
-const selectedGenre = urlParams.get("genre");
+window.toggleAuthMode = () => {
+  isLoginMode = !isLoginMode;
+  document.getElementById('auth-label').innerText = isLoginMode ? "Sign In" : "Sign Up";
+  document.getElementById('auth-main-btn').innerText = isLoginMode ? "Sign In" : "Sign Up";
+  document.getElementById('toggle-text').innerText = isLoginMode ? "New to Rinolski?" : "Already have an account?";
+  document.getElementById('toggle-link').innerText = isLoginMode ? "Sign up now." : "Sign in now.";
+};
 
-if (selectedGenre && genres.includes(selectedGenre)) {
-showGenre(selectedGenre);
-} else {
-feed.innerHTML = ""; // nothing shown if nothing selected
+window.handleAuthAction = () => {
+  const email = document.getElementById('auth-email').value;
+  const pass = document.getElementById('auth-password').value;
+  if (!email || !pass) return alert("Please fill in all fields.");
+  
+  if (isLoginMode) {
+    signInWithEmailAndPassword(auth, email, pass).catch(e => alert(e.message));
+  } else {
+    createUserWithEmailAndPassword(auth, email, pass).catch(e => alert(e.message));
+  }
+};
+
+window.handleSignOut = () => signOut(auth);
+
+window.switchPage = (p) => {
+  document.body.className = `active-${p}`;
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.toggle('active', b.id === `btn-${p}`));
+};
+
+async function recordAndGo(m) {
+  if (auth.currentUser) {
+    const ref = doc(db, 'users', auth.currentUser.uid);
+    const history = userDoc?.history || [];
+    const clean = history.filter(h => h.title !== m.title);
+    await updateDoc(ref, { 
+      history: [{title: m.title, watchedAt: new Date().toISOString()}, ...clean].slice(0, 20) 
+    });
+  }
+  window.location.href = m.link;
 }
 
+function renderHome() {
+  const cont = document.getElementById('home-content');
+  const movieList = getMovies();
+  cont.innerHTML = '';
+
+  if (userDoc?.history?.length > 0) {
+    const watchedG = [...new Set(userDoc.history.flatMap(h => movieList.find(m => m.title === h.title)?.genres || []))];
+    const recs = movieList.filter(m => m.genres.some(g => watchedG.includes(g)) && !userDoc.history.some(h => h.title === m.title));
+    
+    if (recs.length > 0) {
+      appendRow(cont, "For You", recs.sort(() => 0.5 - Math.random()).slice(0, 12));
+    }
+  }
+
+  const allGenres = [...new Set(movieList.flatMap(m => m.genres))];
+  const shuffledGenres = allGenres.sort(() => 0.5 - Math.random());
+
+  shuffledGenres.forEach(g => {
+    const genreMovies = movieList.filter(m => m.genres.includes(g)).sort(() => 0.5 - Math.random());
+    appendRow(cont, g, genreMovies);
+  });
 }
-</script>
 
-</body>
-</html>
-<script>
-  !function(){var t,o,c,e=window,n=document,r=arguments,a="script",i=["call","cancelAction","config","identify","push","track","trackClick","trackForm","update","visit"],s=function(){var t,o=this,c=function(t){o[t]=function(){return o._e.push([t].concat(Array.prototype.slice.call(arguments,0))),o}};for(o._e=[],t=0;t<i.length;t++)c(i[t])};for(e.__woo=e.__woo||{},t=0;t<r.length;t++)e.__woo[r[t]]=e[r[t]]=e[r[t]]||new s;(o=n.createElement(a)).async=1,o.src="https://static.woopra.com/js/w.js",(c=n.getElementsByTagName(a)[0]).parentNode.insertBefore(o,c)}("woopra");
-
-  woopra.config({
-    domain: "rinolski.neocities.org",
-    outgoing_tracking: true,
-    download_tracking: true,
-    click_tracking: true
+function appendRow(parent, title, list) {
+  const div = document.createElement('div');
+  div.innerHTML = `<div class="section-title">${title}</div>`;
+  const row = document.createElement('div');
+  row.className = 'movie-row';
+  
+  list.forEach(m => {
+    const card = document.createElement('div');
+    card.className = 'movie-card';
+    card.innerHTML = `<img src="${m.image}" loading="lazy">`;
+    card.onclick = () => recordAndGo(m);
+    row.appendChild(card);
   });
   
-  woopra.track();
+  div.appendChild(row);
+  parent.appendChild(div);
+}
+
+function renderSearchResults(list) {
+  const grid = document.getElementById('search-results');
+  grid.innerHTML = '';
+  list.forEach(m => {
+    const card = document.createElement('div');
+    card.style.cssText = 'width:100%; aspect-ratio:2/3; border-radius:6px; overflow:hidden; background:#111; cursor:pointer;';
+    card.innerHTML = `<img src="${m.image}" style="width:100%; height:100%; object-fit:cover;">`;
+    card.onclick = () => recordAndGo(m);
+    grid.appendChild(card);
+  });
+}
+
+document.getElementById('search-input').addEventListener('input', (e) => {
+  const val = e.target.value.toLowerCase();
+  const movieList = getMovies();
+  if (!val) {
+    renderSearchResults(movieList.sort(() => 0.5 - Math.random()).slice(0, 12));
+    return;
+  }
+  const filtered = movieList.filter(m => 
+    m.title.toLowerCase().includes(val) || 
+    m.genres.some(g => g.toLowerCase().includes(val))
+  );
+  renderSearchResults(filtered);
+});
+
+function renderHistory() {
+    const list = document.getElementById('history-list');
+    const movieList = getMovies();
+    list.innerHTML = '';
+    const historyData = userDoc?.history || [];
+    
+    if (historyData.length === 0) {
+        list.innerHTML = '<div style="padding:20px; color:#555; text-align:center;">No history yet.</div>';
+        return;
+    }
+
+    historyData.forEach(h => {
+        const m = movieList.find(x => x.title === h.title) || { image: 'images/placeholder.jpg', link: '#' };
+        const item = document.createElement('div');
+        item.style.cssText = 'display:flex; align-items:center; gap:15px; padding:12px 16px; border-bottom:1px solid #1a1a1a; cursor:pointer;';
+        item.innerHTML = `
+            <img src="${m.image}" style="width:50px; height:75px; border-radius:4px; object-fit:cover;">
+            <div>
+                <div style="font-size:15px; font-weight:500;">${h.title}</div>
+                <div style="font-size:12px; color:var(--text-muted); margin-top:3px;">Watched on ${new Date(h.watchedAt).toLocaleDateString()}</div>
+            </div>`;
+        item.onclick = () => recordAndGo(m);
+        list.appendChild(item);
+    });
+}
 </script>
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Rinolski</title>
-    <link rel="stylesheet" href="/CSS/style.css">
-</head>
-<body>
-
-    <div id="continueContainer"></div>
-<div id="forYouContainer"></div>
-<div id="randomContainer"></div>
-
-<div id="actionContainer"></div>
-<div id="comedyContainer"></div>
-<div id="dramaContainer"></div>
-<div id="randomContainer"></div>
-<div id="genreContainer"></div>
-    <script src="https://rinolski.neocities.org/JS/search.js"></script> <!-- contains movies[] -->
-    <script src="https://rinolski.neocities.org/JS/foryou.js"></script>
-
 </body>
 </html>
-<script charset="UTF-8" src="//web.webpushs.com/js/push/c8f6a6f4d311b896b4009f91380e3752_1.js" async></script>
-<!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "cac54f66eb8b4f198f16c0eea8180864"}'></script><!-- End Cloudflare Web Analytics -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-        }
-        .navbar {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            background-color: #141414;
-            padding: 8px;
-            position: fixed;
-            width: 100%;
-            bottom: 0;
-            z-index: 100;
-            right: -14px;
-        }
-        .navbar a {
-            color: white;
-            text-decoration: none;
-            font-size: 10px;
-            text-align: center;
-        }
-        .navbar a:hover {
-            color: black;
-        }
-        .navbar svg {
-            display: block;
-            fill: white;
-            width: 30px;
-            height: 30px;
-        }
-        .navbar span {
-            font-size: 10px;
-            display: block;
-        }
-    </style>
-</head>
-<body>
 
-    <div class="navbar">
-        <!-- Home Icon as SVG -->
-        <a href="Home.html">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-            <span>Home</span>
-        </a>
-        <!-- Hot & New Icon as SVG -->
-
-        <!-- Profile Icon as SVG -->
-        <a href="watch-history.html">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4S14.21 4 12 4 8 5.79 8 8s1.79 4 4 4zM12 14c-3.31 0-6 2.69-6 6h12c0-3.31-2.69-6-6-6z"/></svg>
-            <span>Profile</span>
-        </a>
-    </div>
-
-    </body>
