@@ -78,15 +78,20 @@ window.videoData = {
   // From - Season 4
   "From-S4E1": "https://dl.dropboxusercontent.com/scl/fi/nrtuaypboyct9kk4tmwqr/FROM-_-S4E1-2022.mp4?rlkey=hgbl1egxf2b32tqcbyc1ifruy&st=wlacmbej&dl=1",
   "From-S4E1-subs": [
-    { label: "Arabic", lang: "en", src: "https://rinolski.neocities.org/subtitles/From-S4E-Arabic.txt" }
+    { label: "Arabic", lang: "ar", src: "../subtitles/From-S4E1-Arabic.txt" }
   ],
   "From-S4E2": "https://dl.dropboxusercontent.com/scl/fi/sn9n2abnmqqatznccttpm/FROM-_-S4E2-2022.mp4?rlkey=25etli8sqgwbguiyphbz7yksm&st=3p4h7akg&dl=1",
   "From-S4E2-subs": [
-    { label: "Arabic", lang: "en", src: "https://rinolski.neocities.org/subtitles/From-S4E2-Arabic.txt" }
+    { label: "Arabic", lang: "ar", src: "../subtitles/From-S4E2-Arabic.txt" }
   ],
     "From-S4E3": "https://dl.dropboxusercontent.com/scl/fi/6fa0o9fm6foq55akihdhd/FROM.S04E03.mkv?rlkey=0z2fd3zythe5accplc9bchzmr&st=xun3mmtx&dl=1",
+    "From-S4E3-subs": [
+    { label: "Arabic", lang: "ar", src: "../subtitles/From-S4E3-Arabic.txt" }
+  ],
 "From-S4E4":"https://dl.dropboxusercontent.com/scl/fi/j9sevhgzgg3a24d1xxgbf/From.S04E04.mp4?rlkey=en0ev0amzaxq4xz6zf9hzacpw&st=vyjztg1z&dl=1",
-
+  "From-S4E4-subs": [
+    { label: "Arabic", lang: "ar", src: "../subtitles/From-S4E2-Arabic.txt" }
+  ],
 
   "WidowsBay-S1E1": "https://dl.dropboxusercontent.com/scl/fi/rczh6tfszhc8pcdeytc1z/Widow-s-Bay-_-S1E1-2026.mp4?rlkey=fbzcga70849wvszjzchcl6vlj&st=0lmup05y&dl=1",
   "WidowsBay-S1E1-subs": [
