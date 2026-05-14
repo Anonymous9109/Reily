@@ -1,8 +1,8 @@
 /* Cyrene Player (smart source detection + back button + portrait support + subtitles + Timer + Netflix Shadow) */
 document.addEventListener("DOMContentLoaded", async () => {
 
-  /********** 1) Firestore Integration Logic (Using Email) **********/
-  // Grabbing the email from your Firebase instance
+  /********** NEW: Firestore Email Logic **********/
+  // Using email as the primary key as requested
   const userEmail = window.firebaseUser?.email || (typeof auth !== 'undefined' ? auth.currentUser?.email : null);
   const params = new URLSearchParams(window.location.search);
   const contentId = params.get("id") || window.location.pathname; 
@@ -10,7 +10,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   async function loadProgress() {
     if (!userEmail) return; 
     try {
-      // Path: users -> [email] -> watching -> [contentId]
       const docRef = doc(db, "users", userEmail, "watching", contentId);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
@@ -24,9 +23,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   async function saveProgress() {
     if (!userEmail || !video.duration) return;
-    
     const timeLeft = video.duration - video.currentTime;
-    const isWatched = timeLeft < 300; // 5 minutes left marks as watched
+    const isWatched = timeLeft < 300; 
 
     try {
       await setDoc(doc(db, "users", userEmail, "watching", contentId), {
@@ -38,7 +36,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     } catch (e) { console.error("Error saving progress:", e); }
   }
 
-  /********** 2) Inject CSS **********/
+  /********** ORIGINAL: Inject CSS **********/
   const css = `
     @font-face {
       font-family: 'CyreneCustom';
@@ -46,14 +44,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       font-weight: normal;
       font-style: normal;
     }
-
     :root { -webkit-tap-highlight-color: transparent; }
     body { margin:0; background:#000; height:100vh; overflow:hidden; display:flex; align-items:center; justify-content:center; }
     #videoPlayer{ position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:#000; }
     video{ width:100%; height:100%; object-fit:contain; background:#000; opacity:0; transition:opacity .28s ease; }
-
     video::cue { visibility: hidden !important; opacity: 0 !important; background: transparent !important; }
-
     #videoPlayer::after {
       content: "";
       position: absolute;
@@ -66,45 +61,32 @@ document.addEventListener("DOMContentLoaded", async () => {
       transition: opacity .4s ease;
     }
     #videoPlayer.show-ui::after { opacity: 1; }
-
     #subDisplay {
       position: absolute;
-      bottom: 8%; 
-      left: 10%;
-      right: 10%;
-      text-align: center;
-      z-index: 25;
-      pointer-events: none;
+      bottom: 8%; left: 10%; right: 10%;
+      text-align: center; z-index: 25; pointer-events: none;
       font-family: 'CyreneCustom', sans-serif;
       transition: bottom 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      display: flex;
-      justify-content: center;
+      display: flex; justify-content: center;
     }
     #subDisplay span {
-        padding: 0.2em 0.5em;
-        border-radius: 0.2em;
-        line-height: 1.2;
-        color: #ffffff; 
-        font-size: 4.5vmin;
+        padding: 0.2em 0.5em; border-radius: 0.2em;
+        line-height: 1.2; color: #ffffff; font-size: 4.5vmin;
         text-shadow: 0px 0px 4px rgba(0,0,0,0.9);
-        text-align: center;
-        transition: all 0.2s ease;
+        text-align: center; transition: all 0.2s ease;
     }
     #videoPlayer.show-ui #subDisplay { bottom: 20%; }
-
     .controls {  
       position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); 
       display:flex; gap:90px; align-items:center; z-index:30;  
       opacity:0; visibility:hidden; transition:opacity .2s, visibility .2s;  
     }  
-
     .controls button {  
       width:100px; height:100px; border-radius:50%; border:none;  
       background:transparent; display:flex; align-items:center; justify-content:center;  
       cursor:pointer; transition:background .25s;
     }
     .controls svg { height:54px; width:54px; fill:#fff; pointer-events:none; }  
-
     #ccBtn {
       position: absolute; bottom: 25px; left: 5%; 
       background: none; border: none; cursor: pointer; 
@@ -113,7 +95,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
     #ccBtn svg { width:32px; height:32px; fill:#fff; }
     #ccBtn.active svg { fill: red; }
-
     #sub-menu {
       position: absolute; bottom: 65px; left: 5%; 
       background: rgba(15, 15, 15, 0.95); border: 1px solid #444; 
@@ -127,7 +108,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
     .sub-option:hover { background: rgba(255, 255, 255, 0.1); }
     .sub-option.active { color: red; font-weight: bold; }
-
     #backToPrev {  
       position:absolute; top:14px; left:14px; width:46px; height:46px;  
       border:none; border-radius:50%; background:rgba(0,0,0,.55);  
@@ -137,7 +117,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }  
     #backToPrev:hover { background:rgba(255,0,0,0.65); }  
     #backToPrev svg { width:28px; height:28px; fill:#fff; }  
-
     .progress-container {  
       position:absolute; bottom:60px; left:5%; right:5%;  
       height:20px; display:flex; align-items:center; cursor:pointer; 
@@ -145,7 +124,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }  
     .progress-bg { width:100%; height:7px; background:rgba(255,255,255,0.2); border-radius:4px; position:relative; }
     .progress-bar { width:0%; height:100%; background:red; border-radius:4px; position:relative; pointer-events:none; } 
-    
     .progress-bar::after {
       content: ""; position: absolute; right: -8px; top: 50%;
       transform: translateY(-50%) scale(0);
@@ -153,22 +131,12 @@ document.addEventListener("DOMContentLoaded", async () => {
       transition: transform 0.1s ease;
     }
     .progress-container.dragging .progress-bar::after { transform: translateY(-50%) scale(1); }
-
     .video-timer {
       position: absolute; bottom: 85px; left: 5%;
       color: #fff; font-family: sans-serif; font-size: 14px; font-weight: 600;
       z-index: 25; opacity: 0; visibility: hidden;
       transition: opacity .2s, visibility .2s; text-shadow: 0 0 4px rgba(0,0,0,0.7);
     }
-
-    .nav-btn {  
-      position:absolute; top:16px; background:transparent; color:#fff;  
-      border:none; font-size:22px; padding:8px 12px; cursor:pointer; z-index:30;  
-      opacity:0; visibility:hidden; transition:opacity .2s, visibility .2s;  
-    }  
-    .back-btn { left:12px; }  
-    .next-btn { right:12px; }  
-
     #loadingRing{  
       position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);  
       width:52px; height:52px; border-radius:50%;  
@@ -184,16 +152,13 @@ document.addEventListener("DOMContentLoaded", async () => {
   styleTag.textContent = css;
   document.head.appendChild(styleTag);
 
-  /********** 3) Build DOM **********/
+  /********** ORIGINAL: Build DOM **********/
   const root = document.createElement("div");
   root.id = "videoPlayer";
-
   const video = document.createElement("video");
   video.id = "videoElement";
-  video.playsInline = true;
-  video.preload = "auto";
-  video.setAttribute("webkit-playsinline", "");
-  video.crossOrigin = "anonymous"; 
+  video.playsInline = true; video.preload = "auto";
+  video.setAttribute("webkit-playsinline", ""); video.crossOrigin = "anonymous"; 
 
   const subDisplay = document.createElement("div");
   subDisplay.id = "subDisplay";
@@ -212,102 +177,71 @@ document.addEventListener("DOMContentLoaded", async () => {
   const ccBtn = document.createElement("button");
   ccBtn.id = "ccBtn";
   ccBtn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M19 4H5c-1.11 0-2 .9-2 2v12c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 7H9.5v-.5h-2v3h2V13H11v1c0 .55-.45 1-1 1H7c-.55 0-1-.45-1-1v-4c0-.55.45-1 1-1h3c.55 0 1 .45 1 1v1zm7 0h-1.5v-.5h-2v3h2V13H18v1c0 .55-.45 1-1 1h-3c-.55 0-1-.45-1-1v-4c0-.55.45-1 1-1h3c.55 0 1 .45 1 1v1z" fill="white"/></svg>`;
-
-  const subMenu = document.createElement("div");
-  subMenu.id = "sub-menu";
-
-  const backToPrev = document.createElement("button");
-  backToPrev.id = "backToPrev";
+  const subMenu = document.createElement("div"); subMenu.id = "sub-menu";
+  const backToPrev = document.createElement("button"); backToPrev.id = "backToPrev";
   backToPrev.innerHTML = `<svg viewBox="0 0 24 24"><path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z" fill="white"/></svg>`;
   backToPrev.onclick = () => history.back();
 
-  const progressContainer = document.createElement("div");
-  progressContainer.className = "progress-container";
-  const progressBg = document.createElement("div");
-  progressBg.className = "progress-bg";
-  const progressBar = document.createElement("div");
-  progressBar.id = "pBar";
-  progressBar.className = "progress-bar";
-  progressBg.appendChild(progressBar);
-  progressContainer.appendChild(progressBg);
+  const progressContainer = document.createElement("div"); progressContainer.className = "progress-container";
+  const progressBg = document.createElement("div"); progressBg.className = "progress-bg";
+  const progressBar = document.createElement("div"); progressBar.id = "pBar"; progressBar.className = "progress-bar";
+  progressBg.appendChild(progressBar); progressContainer.appendChild(progressBg);
 
-  const timerDisplay = document.createElement("div");
-  timerDisplay.className = "video-timer";
-  timerDisplay.textContent = "0:00 / 0:00";
-
-  const loadingRing = document.createElement("div");
-  loadingRing.id = "loadingRing";
+  const timerDisplay = document.createElement("div"); timerDisplay.className = "video-timer";
+  const loadingRing = document.createElement("div"); loadingRing.id = "loadingRing";
 
   root.append(video, subDisplay, controls, progressContainer, timerDisplay, ccBtn, subMenu, loadingRing, backToPrev);
   document.body.appendChild(root);
 
-  /********** 4) Core Interaction Logic **********/
+  /********** ORIGINAL: Core Interaction Logic **********/
   let controlsVisible = false, hideTimeout, isDragging = false;
-
   const showControls = () => {
-    controlsVisible = true;
-    root.classList.add("show-ui");
+    controlsVisible = true; root.classList.add("show-ui");
     [controls, progressContainer, timerDisplay, ccBtn, backToPrev].forEach(el => { el.style.opacity = "1"; el.style.visibility = "visible"; });
     clearTimeout(hideTimeout);
     if (!video.paused) hideTimeout = setTimeout(hideControls, 3000);
   };
-
   const hideControls = () => {
     if (isDragging) return;
-    controlsVisible = false;
-    root.classList.remove("show-ui");
+    controlsVisible = false; root.classList.remove("show-ui");
     [controls, progressContainer, timerDisplay, ccBtn, subMenu, backToPrev].forEach(el => { el.style.opacity = "0"; el.style.visibility = "hidden"; });
     subMenu.style.display = "none";
   };
-
   const formatTime = (s) => {
-    const h = Math.floor(s / 3600);
-    const m = Math.floor((s % 3600) / 60);
-    const sec = Math.floor(s % 60);
+    const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), sec = Math.floor(s % 60);
     return h > 0 ? `${h}:${m.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}` : `${m}:${sec.toString().padStart(2, '0')}`;
   };
-
   const playPause = () => {
     if (video.paused) { video.play(); playIcon.style.display="none"; pauseIcon.style.display="block"; }
     else { video.pause(); playIcon.style.display="block"; pauseIcon.style.display="none"; }
     showControls();
-    saveProgress();
+    saveProgress(); // NEW
   };
-
   playPauseBtn.onclick = (e) => { e.stopPropagation(); playPause(); };
   rewindBtn.onclick = (e) => { e.stopPropagation(); video.currentTime -= 10; showControls(); };
   skipBtn.onclick = (e) => { e.stopPropagation(); video.currentTime += 10; showControls(); };
-
   video.addEventListener("waiting", () => loadingRing.style.display = "block");
   video.addEventListener("playing", () => { loadingRing.style.display = "none"; video.style.opacity = "1"; });
 
-  // Auto-save progress every 10 seconds while playing
+  // NEW: Save triggers
   setInterval(() => { if(!video.paused) saveProgress(); }, 10000);
   video.addEventListener("pause", saveProgress);
   window.addEventListener("beforeunload", saveProgress);
 
-  /********** 5) Source & Rotation Logic **********/
+  /********** ORIGINAL: Source & Rotation Logic **********/
   const ep = params.get("ep") || "1";
   let src = (window.videoData && window.videoData[ep]) ? window.videoData[ep] : decodeURIComponent(params.get("src") || "");
-
-  if (!src) {
-    document.body.innerHTML = `<p style="color:white;text-align:center;margin-top:20vh;">No video found.</p>`;
-    return;
-  }
+  if (!src) { document.body.innerHTML = `<p style="color:white;text-align:center;margin-top:20vh;">No video found.</p>`; return; }
 
   async function loadVideo(url) {
     const isM3u8 = /\.m3u8($|\?)/i.test(url);
     if (isM3u8) {
       if (!window.Hls) {
-        await new Promise(res => {
-          const s = document.createElement("script");
-          s.src = "https://cdn.jsdelivr.net/npm/hls.js@1.4.0/dist/hls.min.js";
-          s.onload = res; document.head.appendChild(s);
-        });
+        await new Promise(res => { const s = document.createElement("script"); s.src = "https://cdn.jsdelivr.net/npm/hls.js@1.4.0/dist/hls.min.js"; s.onload = res; document.head.appendChild(s); });
       }
       if (Hls.isSupported()) {
         const h = new Hls(); h.loadSource(url); h.attachMedia(video);
-        h.on(Hls.Events.MANIFEST_PARSED, loadProgress);
+        h.on(Hls.Events.MANIFEST_PARSED, loadProgress); // NEW: Load on start
       } else { video.src = url; video.onloadedmetadata = loadProgress; }
     } else { video.src = url; video.onloadedmetadata = loadProgress; }
   }
@@ -316,27 +250,23 @@ document.addEventListener("DOMContentLoaded", async () => {
     const isPortrait = window.innerHeight > window.innerWidth;
     const vw = window.innerWidth, vh = window.innerHeight;
     if (isPortrait) {
-      root.style.transform = `translate(-50%, -50%) rotate(90deg)`;
-      root.style.width = `${vh}px`; root.style.height = `${vw}px`;
+      root.style.transform = `translate(-50%, -50%) rotate(90deg)`; root.style.width = `${vh}px`; root.style.height = `${vw}px`;
       root.style.left = "50%"; root.style.top = "50%";
     } else {
       root.style.transform = "none"; root.style.width = "100%"; root.style.height = "100%";
       root.style.left = "0"; root.style.top = "0";
     }
   }
-
   window.addEventListener("resize", rotateIfPortrait);
-  rotateIfPortrait();
-  loadVideo(src);
+  rotateIfPortrait(); loadVideo(src);
 
-  /********** 6) Progress & Seek Logic **********/
+  /********** ORIGINAL: Progress & Seek Logic **********/
   video.addEventListener("timeupdate", () => {
     if (isFinite(video.duration) && !isDragging) {
       progressBar.style.width = (video.currentTime / video.duration) * 100 + "%";
       timerDisplay.textContent = `${formatTime(video.currentTime)} / ${formatTime(video.duration)}`;
     }
   });
-
   const scrub = (e) => {
     const rect = progressBg.getBoundingClientRect();
     const isPortrait = window.innerHeight > window.innerWidth;
@@ -347,10 +277,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     progressBar.style.width = pct * 100 + "%";
     video.currentTime = pct * video.duration;
   };
-
   progressContainer.onmousedown = (e) => { isDragging = true; scrub(e); };
   window.onmousemove = (e) => { if (isDragging) scrub(e); };
   window.onmouseup = () => { if (isDragging) { isDragging = false; saveProgress(); } };
-
   root.addEventListener("click", () => { if(!isDragging) controlsVisible ? hideControls() : showControls(); });
 });
