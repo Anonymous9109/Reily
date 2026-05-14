@@ -1,8 +1,26 @@
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getFirestore, doc, setDoc, getDoc, serverTimestamp } from "firebase/firestore";
+
 /* -----------------------------
-   FIREBASE & FIRESTORE SETUP
+   FIREBASE INITIALIZATION
 ------------------------------ */
-const db = firebase.firestore();
-const auth = firebase.auth();
+const firebaseConfig = {
+  apiKey: "AIzaSyCExki28m1NNepVQEIjmcQzR8z8O68LqIc",
+  authDomain: "rinolski-notifications.firebaseapp.com",
+  databaseURL: "https://rinolski-notifications-default-rtdb.firebaseio.com",
+  projectId: "rinolski-notifications",
+  storageBucket: "rinolski-notifications.firebasestorage.app",
+  messagingSenderId: "355554579853",
+  appId: "1:355554579853:web:3caa961653c0cdc0a359c4",
+  measurementId: "G-WZ84970GST"
+};
+
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
 /* -----------------------------
    CSS INJECTION
@@ -10,18 +28,18 @@ const auth = firebase.auth();
 const style = document.createElement('style');
 style.textContent = `
     .section { margin: 0 !important; padding: 0 !important; }
-    .section-title { margin: 0 !important; padding: 2px 5px !important; font-size: 1rem; line-height: 1; }
+    .section-title { margin: 0 !important; padding: 2px 5px !important; font-size: 1rem; line-height: 1; color: #fff; }
     .movies { display: flex; overflow-x: auto; gap: 5px; margin: 10px !important; padding: 0 !important; scrollbar-width: none; }
     .movies::-webkit-scrollbar { display: none; }
     .movie { flex: 0 0 auto; margin: 0 !important; padding: 0 !important; }
-    .movie img { display: block; margin: 0; width: 100%; }
-    .movie .title { margin: 0 !important; padding: 0px 0 50px 0 !important; font-size: 0.75rem; line-height: 1.1; }
-    .auth-status-banner { text-align: center; padding: 10px; font-size: 0.8rem; color: #888; background: rgba(255,255,255,0.05); }
+    .movie img { display: block; margin: 0; width: 100%; border-radius: 4px; }
+    .movie .title { margin: 0 !important; padding: 5px 0 40px 0 !important; font-size: 0.75rem; line-height: 1.1; color: #ccc; }
+    .auth-banner { text-align: center; padding: 10px; font-size: 0.8rem; color: #ffab00; background: rgba(255,171,0,0.1); margin-bottom: 10px; }
 `;
 document.head.appendChild(style);
 
 /* -----------------------------
-   STORAGE & SYNC (IndexedDB + Firestore)
+   LOCAL STORAGE (IndexedDB)
 ------------------------------ */
 const DB_NAME = "rinolskiDB";
 const STORE = "meta";
@@ -40,17 +58,17 @@ function openDB() {
 
 async function setLastGenre(value) {
     try {
-        const db = await openDB();
-        const tx = db.transaction(STORE, "readwrite");
+        const dbInstance = await openDB();
+        const tx = dbInstance.transaction(STORE, "readwrite");
         tx.objectStore(STORE).put(value, "lastGenre");
-    } catch (e) { console.log("IDB Error:", e); }
+    } catch (e) { console.error("IDB Error:", e); }
 }
 
 async function getLastGenre() {
     try {
-        const db = await openDB();
+        const dbInstance = await openDB();
         return new Promise((resolve) => {
-            const tx = db.transaction(STORE, "readonly");
+            const tx = dbInstance.transaction(STORE, "readonly");
             const req = tx.objectStore(STORE).get("lastGenre");
             req.onsuccess = () => resolve(req.result || null);
             req.onerror = () => resolve(null);
@@ -58,13 +76,17 @@ async function getLastGenre() {
     } catch (e) { return null; }
 }
 
+/* -----------------------------
+   CLOUD SYNC (Firestore Email-based)
+------------------------------ */
 async function syncGenreToCloud(genre) {
     const user = auth.currentUser;
     if (user && user.email) {
         try {
-            await db.collection("users").doc(user.email).set({
+            const userRef = doc(db, "users", user.email);
+            await setDoc(userRef, {
                 lastGenre: genre,
-                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                updatedAt: serverTimestamp()
             }, { merge: true });
         } catch (e) { console.error("Cloud Sync Error:", e); }
     }
@@ -73,14 +95,17 @@ async function syncGenreToCloud(genre) {
 async function getCloudGenre() {
     const user = auth.currentUser;
     if (user && user.email) {
-        const doc = await db.collection("users").doc(user.email).get();
-        return doc.exists ? doc.data().lastGenre : null;
+        try {
+            const userRef = doc(db, "users", user.email);
+            const docSnap = await getDoc(userRef);
+            return docSnap.exists() ? docSnap.data().lastGenre : null;
+        } catch (e) { return null; }
     }
     return null;
 }
 
 /* -----------------------------
-   CORE LOGIC
+   CORE UI LOGIC
 ------------------------------ */
 function getGenres(genres) {
     if (Array.isArray(genres)) return genres.map(g => g.toLowerCase());
@@ -114,14 +139,14 @@ async function saveLastWatchedGenre(movie) {
 }
 
 /* -----------------------------
-   RENDERING
+   RENDERING FUNCTIONS
 ------------------------------ */
 function buildRandom() {
     const container = document.getElementById("randomContainer");
     if (!container) return;
     container.innerHTML = `<div class="section"><h2 class="section-title">Random Picks</h2><div class="movies"></div></div>`;
     const row = container.querySelector(".movies");
-    shuffle(movies).slice(0, 20).forEach(m => {
+    shuffle(window.movies).slice(0, 20).forEach(m => {
         const card = createMovieCard(m);
         card.addEventListener("click", () => saveLastWatchedGenre(m));
         row.appendChild(card);
@@ -130,25 +155,25 @@ function buildRandom() {
 
 async function buildAllGenreRows() {
     const container = document.getElementById("genreContainer") || document.body;
-    container.innerHTML = ""; // Clear for re-renders
+    container.innerHTML = "";
 
     const user = auth.currentUser;
     if (!user) {
         const banner = document.createElement("div");
-        banner.className = "auth-status-banner";
+        banner.className = "auth-banner";
         banner.innerText = "Not logged in: Personalized content isn't available.";
-        container.appendChild(banner);
+        container.prepend(banner);
     }
 
     const genreMap = {};
-    movies.forEach(m => {
+    window.movies.forEach(m => {
         getGenres(m.genres).forEach(g => {
             if (!genreMap[g]) genreMap[g] = [];
             genreMap[g].push(m);
         });
     });
 
-    // Priority: Cloud Email Doc > Local IndexedDB
+    // Strategy: Try Cloud (by Email), fallback to Local, fallback to random
     let lastGenre = user ? await getCloudGenre() : null;
     if (!lastGenre) lastGenre = await getLastGenre();
 
@@ -180,12 +205,13 @@ async function buildAllGenreRows() {
 /* -----------------------------
    INITIALIZATION
 ------------------------------ */
-auth.onAuthStateChanged(() => {
+onAuthStateChanged(auth, (user) => {
     const interval = setInterval(() => {
-        if (window.movies && Array.isArray(movies) && movies.length > 0) {
+        if (window.movies && Array.isArray(window.movies) && window.movies.length > 0) {
             clearInterval(interval);
             buildRandom();
             buildAllGenreRows();
         }
     }, 50);
 });
+
