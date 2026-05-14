@@ -14,10 +14,10 @@
       --text: #ffffff;
       --text-muted: #a3a3a3;
       --nav-h: 60px;
-      --header-h: 50px;
+      --header-h: 60px;
+      --max-width: 1200px;
     }
 
-    /* PREVENT FLICKER: Body hidden until Firebase confirms auth status */
     body { 
       visibility: hidden; 
       background: var(--bg); 
@@ -39,13 +39,13 @@
     }
 
     .auth-card {
-      width: 100%; max-width: 320px;
+      width: 100%; max-width: 380px;
       background: rgba(0, 0, 0, 0.9);
-      padding: 24px; border-radius: 4px;
+      padding: 40px; border-radius: 8px;
     }
 
-    .auth-input { background: #333; border: none; border-radius: 4px; padding: 12px; color: white; width: 100%; margin-bottom: 10px; outline: none; font-size: 14px; }
-    .auth-btn { background: var(--red); color: white; border: none; border-radius: 4px; padding: 12px; width: 100%; font-weight: 700; cursor: pointer; font-size: 14px; }
+    .auth-input { background: #333; border: none; border-radius: 4px; padding: 14px; color: white; width: 100%; margin-bottom: 15px; outline: none; font-size: 16px; }
+    .auth-btn { background: var(--red); color: white; border: none; border-radius: 4px; padding: 14px; width: 100%; font-weight: 700; cursor: pointer; font-size: 16px; }
 
     /* APP LAYOUT */
     #app { display: none; height: 100vh; flex-direction: column; }
@@ -53,9 +53,10 @@
 
     #app-header {
       position: fixed; top: 0; left: 0; right: 0; height: var(--header-h);
-      background: #000; display: flex; align-items: center; padding: 0 15px; z-index: 500;
+      background: rgba(0,0,0,0.95); display: flex; align-items: center; justify-content: center; padding: 0 20px; z-index: 500;
     }
-    .header-logo { font-family: 'Bebas Neue', sans-serif; font-size: 26px; color: var(--red); letter-spacing: 1px; }
+    .header-content { width: 100%; max-width: var(--max-width); display: flex; align-items: center; }
+    .header-logo { font-family: 'Bebas Neue', sans-serif; font-size: 32px; color: var(--red); letter-spacing: 2px; }
 
     /* SLIDING TRANSITIONS */
     .page-wrapper { flex: 1; position: relative; margin-top: var(--header-h); margin-bottom: var(--nav-h); overflow: hidden; }
@@ -64,78 +65,106 @@
       background: var(--bg); overflow-y: auto;
       transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s;
     }
+    
+    /* Center content on desktop */
+    .content-container { width: 100%; max-width: var(--max-width); margin: 0 auto; padding-bottom: 40px; }
 
     body.active-home #home-page { transform: translateX(0); opacity: 1; }
     body.active-home #search-page, body.active-home #account-page { transform: translateX(100%); }
-
     body.active-search #home-page { transform: translateX(-20%); opacity: 0.4; }
     body.active-search #search-page { transform: translateX(0); opacity: 1; }
     body.active-search #account-page { transform: translateX(100%); }
-
     body.active-account #home-page { transform: translateX(-40%); opacity: 0.2; }
     body.active-account #search-page { transform: translateX(-20%); opacity: 0.4; }
     body.active-account #account-page { transform: translateX(0); opacity: 1; }
 
     /* COMPACT CONTENT */
-    .section-title { font-size: 15px; font-weight: 700; margin: 15px 0 6px 12px; color: #fff; text-transform: capitalize; }
-    .movie-row { display: flex; overflow-x: auto; gap: 8px; padding: 0 12px 12px; }
+    .section-title { font-size: 18px; font-weight: 700; margin: 25px 0 10px 15px; color: #fff; text-transform: capitalize; }
+    .movie-row { display: flex; overflow-x: auto; gap: 10px; padding: 0 15px 15px; scroll-behavior: smooth; }
     .movie-row::-webkit-scrollbar { display: none; }
-    .movie-card { flex: 0 0 auto; width: 100px; height: 145px; border-radius: 3px; overflow: hidden; background: #111; cursor: pointer; }
+    
+    /* Responsive Movie Cards */
+    .movie-card { flex: 0 0 auto; width: 110px; height: 160px; border-radius: 4px; overflow: hidden; background: #111; cursor: pointer; transition: transform 0.2s; }
+    .movie-card:hover { transform: scale(1.05); }
     .movie-card img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* DESKTOP SPECIFIC OVERRIDES */
+    @media (min-width: 768px) {
+      .movie-card { width: 160px; height: 230px; }
+      .section-title { font-size: 22px; margin-left: 0; }
+      .movie-row { gap: 15px; padding: 0 0 20px 0; }
+      #search-results { grid-template-columns: repeat(5, 1fr) !important; gap: 15px !important; }
+      .auth-card { max-width: 450px; }
+    }
 
     /* NAV */
     #bottom-nav {
       position: fixed; bottom: 0; left: 0; right: 0; height: var(--nav-h);
-      background: #000; display: flex; border-top: 1px solid #1a1a1a; z-index: 1000;
+      background: #000; display: flex; justify-content: center; border-top: 1px solid #1a1a1a; z-index: 1000;
     }
-    .nav-btn { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; background: none; border: none; color: #555; font-size: 10px; gap: 2px; }
+    .nav-content { width: 100%; max-width: 600px; display: flex; height: 100%; }
+    .nav-btn { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; background: none; border: none; color: #555; font-size: 11px; gap: 4px; cursor: pointer; transition: color 0.2s; }
     .nav-btn.active { color: white; }
-    .nav-btn svg { width: 20px; height: 20px; fill: currentColor; }
+    .nav-btn svg { width: 22px; height: 22px; fill: currentColor; }
 
     /* SEARCH & HISTORY */
-    #search-results { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; padding: 0 12px; }
-    .history-item { display: flex; align-items: center; gap: 12px; padding: 10px 15px; border-bottom: 1px solid #111; cursor: pointer; }
+    #search-results { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 0 15px; }
+    .history-item { display: flex; align-items: center; gap: 15px; padding: 12px 15px; border-bottom: 1px solid #111; cursor: pointer; }
+    .history-item:hover { background: #0f0f0f; }
   </style>
 </head>
 <body class="active-home">
 
 <div id="auth-screen">
   <div class="auth-card">
-    <div class="auth-title" id="auth-label">Sign In</div>
+    <div class="auth-title" id="auth-label" style="font-size: 28px; font-weight: 700; margin-bottom: 25px;">Sign In</div>
     <input class="auth-input" type="email" id="auth-email" placeholder="Email">
     <input class="auth-input" type="password" id="auth-password" placeholder="Password">
     <button class="auth-btn" id="auth-main-btn" onclick="handleAuthAction()">Sign In</button>
-    <div style="margin-top: 12px; font-size: 12px; color: #aaa; text-align: center;">
-      <span onclick="toggleAuthMode()" id="toggle-link" style="color:white; text-decoration:underline; cursor:pointer;">Switch to Sign Up</span>
+    <div style="margin-top: 20px; font-size: 14px; color: #aaa; text-align: center;">
+      <span id="toggle-text">New to Rinolski?</span> <span onclick="toggleAuthMode()" id="toggle-link" style="color:white; text-decoration:underline; cursor:pointer;">Sign up now.</span>
     </div>
   </div>
 </div>
 
 <div id="app">
-  <div id="app-header"><div class="header-logo">RINOLSKI</div></div>
+  <div id="app-header">
+    <div class="header-content">
+      <div class="header-logo">RINOLSKI</div>
+    </div>
+  </div>
+  
   <div class="page-wrapper">
-    <div id="home-page" class="page"><div id="home-content"></div></div>
+    <div id="home-page" class="page">
+      <div class="content-container" id="home-content"></div>
+    </div>
     
     <div id="search-page" class="page">
-      <div style="padding: 10px 12px;"><input type="text" id="search-input" placeholder="Search movies, shows..." style="width:100%; padding:10px; background:#1a1a1a; border:none; border-radius:4px; color:white; outline:none;"></div>
-      <div id="search-results"></div>
+      <div class="content-container">
+        <div style="padding: 20px 15px;"><input type="text" id="search-input" placeholder="Search titles, genres..." style="width:100%; padding:15px; background:#1a1a1a; border:none; border-radius:4px; color:white; outline:none; font-size: 16px;"></div>
+        <div id="search-results"></div>
+      </div>
     </div>
 
     <div id="account-page" class="page">
-      <div style="padding: 20px 15px; border-bottom: 1px solid #222;">
-        <div style="font-size:10px; color:#555; letter-spacing: 1px;">MEMBER EMAIL</div>
-        <div id="display-email" style="font-size:14px; margin-top: 2px;"></div>
+      <div class="content-container">
+        <div style="padding: 30px 15px; border-bottom: 1px solid #222;">
+          <div style="font-size:12px; color:#555; letter-spacing: 1px; font-weight: 700;">MEMBER EMAIL</div>
+          <div id="display-email" style="font-size:18px; margin-top: 5px;"></div>
+        </div>
+        <div class="section-title">Recently Watched</div>
+        <div id="history-list"></div>
+        <button onclick="handleSignOut()" style="margin:30px 15px; width:calc(100% - 30px); padding:15px; background:#1a1a1a; color:#ff4444; border:1px solid #333; border-radius:4px; font-weight: 600; font-size: 14px; cursor: pointer;">Sign Out of Rinolski</button>
       </div>
-      <div class="section-title">Recently Watched</div>
-      <div id="history-list"></div>
-      <button onclick="handleSignOut()" style="margin:20px 12px; width:calc(100% - 24px); padding:12px; background:#1a1a1a; color:#ff4444; border:1px solid #333; border-radius:4px; font-weight: 600; font-size: 13px;">Sign Out of Rinolski</button>
     </div>
   </div>
 
   <nav id="bottom-nav">
-    <button class="nav-btn active" id="btn-home" onclick="switchPage('home')"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>Home</button>
-    <button class="nav-btn" id="btn-search" onclick="switchPage('search')"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>Search</button>
-    <button class="nav-btn" id="btn-account" onclick="switchPage('account')"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>Account</button>
+    <div class="nav-content">
+      <button class="nav-btn active" id="btn-home" onclick="switchPage('home')"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>Home</button>
+      <button class="nav-btn" id="btn-search" onclick="switchPage('search')"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>Search</button>
+      <button class="nav-btn" id="btn-account" onclick="switchPage('account')"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>Account</button>
+    </div>
   </nav>
 </div>
 
@@ -165,11 +194,7 @@ async function loadMovies() {
 }
 
 async function logLoginInfo(email, type) {
-    await setDoc(doc(db, "logininformation", email), {
-        email: email,
-        type: type,
-        timestamp: new Date().toISOString()
-    }, { merge: true });
+    await setDoc(doc(db, "logininformation", email), { email, type, timestamp: new Date().toISOString() }, { merge: true });
 }
 
 onAuthStateChanged(auth, async user => {
@@ -179,9 +204,7 @@ onAuthStateChanged(auth, async user => {
         const userRef = doc(db, 'users', user.email);
         const snap = await getDoc(userRef);
         if (!snap.exists()) await setDoc(userRef, { history: [] });
-        
         onSnapshot(userRef, s => { userDoc = s.data(); renderHome(); renderHistory(); });
-        
         document.getElementById('auth-screen').style.display = 'none';
         document.getElementById('app').classList.add('visible');
     } else {
@@ -193,24 +216,19 @@ onAuthStateChanged(auth, async user => {
 });
 
 window.handleAuthAction = async () => {
-    const e = document.getElementById('auth-email').value;
-    const p = document.getElementById('auth-password').value;
+    const e = document.getElementById('auth-email').value, p = document.getElementById('auth-password').value;
     if (!e || !p) return;
     try {
-        if (isLoginMode) {
-            await signInWithEmailAndPassword(auth, e, p);
-            await logLoginInfo(e, "Login");
-        } else {
-            await createUserWithEmailAndPassword(auth, e, p);
-            await logLoginInfo(e, "Signup");
-        }
+        if (isLoginMode) { await signInWithEmailAndPassword(auth, e, p); await logLoginInfo(e, "Login"); }
+        else { await createUserWithEmailAndPassword(auth, e, p); await logLoginInfo(e, "Signup"); }
     } catch (err) { alert(err.message); }
 };
 
 window.toggleAuthMode = () => {
     isLoginMode = !isLoginMode;
     document.getElementById('auth-label').innerText = isLoginMode ? "Sign In" : "Sign Up";
-    document.getElementById('toggle-link').innerText = isLoginMode ? "Switch to Sign Up" : "Switch to Sign In";
+    document.getElementById('toggle-text').innerText = isLoginMode ? "New to Rinolski?" : "Already a member?";
+    document.getElementById('toggle-link').innerText = isLoginMode ? "Sign up now." : "Sign in now.";
 };
 
 window.handleSignOut = () => signOut(auth);
@@ -249,7 +267,7 @@ function renderSearchResults(list) {
     const grid = document.getElementById('search-results'); grid.innerHTML = '';
     list.forEach(m => {
         const card = document.createElement('div');
-        card.style.cssText = "width:100%; aspect-ratio:100/145; background:#111; border-radius:3px; overflow:hidden;";
+        card.style.cssText = "width:100%; aspect-ratio:100/145; background:#111; border-radius:3px; overflow:hidden; cursor:pointer;";
         card.innerHTML = `<img src="https://rinolski.online/${m.image}" style="width:100%; height:100%; object-fit:cover;">`;
         card.onclick = () => recordAndGo(m);
         grid.appendChild(card);
@@ -263,18 +281,16 @@ document.getElementById('search-input').addEventListener('input', (e) => {
 });
 
 function renderHistory() {
-    const list = document.getElementById('history-list'); 
-    list.innerHTML = '';
+    const list = document.getElementById('history-list'); list.innerHTML = '';
     (userDoc?.history || []).forEach(h => {
         const m = allMovies.find(x => x.title === h.title) || { image: '' };
         const d = new Date(h.at);
-        const item = document.createElement('div'); 
-        item.className = 'history-item';
+        const item = document.createElement('div'); item.className = 'history-item';
         item.innerHTML = `
-            <img src="https://rinolski.online/${m.image}" style="width:40px; height:58px; object-fit:cover; border-radius:2px;">
+            <img src="https://rinolski.online/${m.image}" style="width:45px; height:65px; object-fit:cover; border-radius:3px;">
             <div style="flex:1;">
-                <div style="font-size:13px; font-weight:500;">${h.title}</div>
-                <div style="font-size:10px; color:#555;">${d.toLocaleDateString()} at ${d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</div>
+                <div style="font-size:14px; font-weight:500;">${h.title}</div>
+                <div style="font-size:11px; color:#555;">${d.toLocaleDateString()} at ${d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</div>
             </div>`;
         item.onclick = () => recordAndGo(m);
         list.appendChild(item);
