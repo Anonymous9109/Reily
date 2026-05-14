@@ -1,117 +1,237 @@
-/* Cyrene Player (smart source detection + back button + portrait support + subtitles + Timer + Netflix Shadow) */
+/* 
+  Cyrene Player + Firebase Sync 
+  Features: Smart source detection, auto-resume, auto-save, custom subs, and rotation support.
+*/
+
+import { initializeApp } from "firebase/app";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
+
+// 1. Firebase Configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyCExki28m1NNepVQEIjmcQzR8z8O68LqIc",
+  authDomain: "rinolski-notifications.firebaseapp.com",
+  databaseURL: "https://rinolski-notifications-default-rtdb.firebaseio.com",
+  projectId: "rinolski-notifications",
+  storageBucket: "rinolski-notifications.firebasestorage.app",
+  messagingSenderId: "355554579853",
+  appId: "1:355554579853:web:3caa961653c0cdc0a359c4"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
 document.addEventListener("DOMContentLoaded", async () => {
 
   /********** 1) Inject CSS **********/
   const css = `
-    @font-face {
-      font-family: 'CyreneCustom';
-      src: url('/fonts/your-font.woff2') format('woff2');
-      font-weight: normal;
-      font-style: normal;
-    }
-
+    @font-face { font-family: 'CyreneCustom'; src: url('/fonts/your-font.woff2') format('woff2'); }
     :root { -webkit-tap-highlight-color: transparent; }
     body { margin:0; background:#000; height:100vh; overflow:hidden; display:flex; align-items:center; justify-content:center; }
     #videoPlayer{ position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:#000; }
     video{ width:100%; height:100%; object-fit:contain; background:#000; opacity:1; transition:opacity .28s ease; }
-
-    video::cue { visibility: hidden !important; opacity: 0 !important; background: transparent !important; }
-
-    #videoPlayer::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 20%, transparent 50%),
-                  linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, transparent 30%);
-      z-index: 20;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity .4s ease;
-    }
+    video::cue { visibility: hidden !important; }
+    #videoPlayer::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 50%); z-index: 20; pointer-events: none; opacity: 0; transition: opacity .4s ease; }
     #videoPlayer.show-ui::after { opacity: 1; }
-
-    #subDisplay {
-      position: absolute;
-      bottom: 8%; 
-      left: 10%;
-      right: 10%;
-      text-align: center;
-      z-index: 25;
-      pointer-events: none;
-      font-family: 'CyreneCustom', sans-serif;
-      transition: bottom 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      display: flex;
-      justify-content: center;
-    }
-    #subDisplay span {
-        padding: 0.2em 0.5em;
-        border-radius: 0.2em;
-        line-height: 1.2;
-        color: #ffffff; 
-        font-size: 4.5vmin;
-        text-align: center;
-        transition: all 0.2s ease;
-    }
-    #videoPlayer.show-ui #subDisplay { bottom: 20%; }
-
-    .controls {  
-      position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); 
-      display:flex; gap:90px; align-items:center; z-index:30;  
-      opacity:0; visibility:hidden; transition:opacity .2s, visibility .2s;  
-    }  
-
-    .controls button {  
-      width:100px; height:100px; border-radius:50%; border:none;  
-      background:transparent; display:flex; align-items:center; justify-content:center;  
-      cursor:pointer; transition:background .25s;
-    }
-    .controls button:hover { background: }  
-    .controls svg { height:54px; width:54px; fill:#fff; pointer-events:none; }  
-
-    #ccBtn {
-      position: absolute; bottom: 25px; left: 5%; 
-      background: none; border: none; cursor: pointer; 
-      z-index: 35; opacity: 0; visibility: hidden; 
-      transition: opacity .2s, visibility .2s; display: none; align-items: center;
-    }
+    #subDisplay { position: absolute; bottom: 8%; left: 10%; right: 10%; text-align: center; z-index: 25; pointer-events: none; font-family: 'CyreneCustom', sans-serif; display: flex; justify-content: center; }
+    #subDisplay span { padding: 0.2em 0.5em; color: #fff; font-size: 4.5vmin; text-shadow: 0 0 4px #000; }
+    .controls { position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); display:flex; gap:90px; align-items:center; z-index:30; opacity:0; visibility:hidden; transition:opacity .2s; }
+    .controls button { width:100px; height:100px; background:transparent; border:none; cursor:pointer; }
+    .controls svg { height:54px; width:54px; fill:#fff; }
+    .progress-container { position:absolute; bottom:60px; left:5%; right:5%; height:20px; display:flex; align-items:center; cursor:pointer; z-index:25; opacity:0; visibility:hidden; }
+    .progress-bg { width:100%; height:7px; background:rgba(255,255,255,0.2); border-radius:4px; }
+    .progress-bar { width:0%; height:100%; background:red; border-radius:4px; }
+    .video-timer { position: absolute; bottom: 85px; left: 5%; color: #fff; font-family: sans-serif; font-size: 14px; opacity: 0; visibility: hidden; }
+    #loadingRing{ position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:52px; height:52px; border-radius:50%; border:6px solid rgba(255,0,0,0.25); border-top:6px solid red; animation:spin 1s linear infinite; display:none; z-index:60; }
+    @keyframes spin { from{transform:translate(-50%,-50%) rotate(0deg);} to{transform:translate(-50%,-50%) rotate(360deg);} }
+    #backToPrev { position:absolute; top:14px; left:14px; width:46px; height:46px; border:none; border-radius:50%; background:rgba(0,0,0,.55); display:flex; align-items:center; justify-content:center; z-index:40; opacity:0; visibility:hidden; }
+    #ccBtn { position: absolute; bottom: 25px; left: 5%; background: none; border: none; z-index: 35; display: none; opacity:0; }
     #ccBtn svg { width:32px; height:32px; fill:#fff; }
-    #ccBtn.active svg { fill: red; }
+    #sub-menu { position: absolute; bottom: 65px; left: 5%; background: rgba(15, 15, 15, 0.95); border: 1px solid #444; border-radius: 4px; display: none; flex-direction: column; z-index: 50; }
+  `;
+  const styleTag = document.createElement("style");
+  styleTag.textContent = css;
+  document.head.appendChild(styleTag);
 
-    #sub-menu {
-      position: absolute; bottom: 65px; left: 5%; 
-      background: rgba(15, 15, 15, 0.95); border: 1px solid #444; 
-      border-radius: 4px; padding: 5px 0; display: none; 
-      flex-direction: column; z-index: 50; min-width: 120px;
+  /********** 2) Build DOM **********/
+  const root = document.createElement("div");
+  root.id = "videoPlayer";
+  const video = document.createElement("video");
+  video.id = "videoElement";
+  video.playsInline = true;
+  video.crossOrigin = "anonymous"; 
+
+  const subDisplay = document.createElement("div");
+  subDisplay.id = "subDisplay";
+
+  const controls = document.createElement("div");
+  controls.className = "controls";
+  controls.innerHTML = `
+    <button id="rewindBtn"><svg viewBox="0 0 24 24"><path d="M12.5 8c-2.65 0-5.05 1.08-6.71 2.82L4 9v6h6l-2.35-2.35c1.27-1.27 3.03-2.15 4.85-2.15 3.87 0 7 3.13 7 7h2c0-4.97-4.03-9-9-9z" fill="white"/></svg></button>
+    <button id="playPauseBtn"><svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="white"/></svg><svg id="pauseIcon" viewBox="0 0 24 24" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" fill="white"/></svg></button>
+    <button id="skipBtn"><svg viewBox="0 0 24 24"><path d="M11.5 9c4.97 0 9 4.03 9 9h-2c0-3.87-3.13-7-7-7-1.82 0-3.58.88-4.85 2.15L9 15H3V9l1.79 1.82C6.45 9.08 8.85 8 11.5 8z" fill="white"/></svg></button>
+  `;
+
+  const progressContainer = document.createElement("div");
+  progressContainer.className = "progress-container";
+  progressContainer.innerHTML = `<div class="progress-bg"><div id="pBar" class="progress-bar"></div></div>`;
+  const progressBar = progressContainer.querySelector("#pBar");
+  const progressBg = progressContainer.querySelector(".progress-bg");
+
+  const timerDisplay = document.createElement("div");
+  timerDisplay.className = "video-timer";
+  timerDisplay.textContent = "0:00 / 0:00";
+
+  const loadingRing = document.createElement("div");
+  loadingRing.id = "loadingRing";
+
+  const ccBtn = document.createElement("button");
+  ccBtn.id = "ccBtn";
+  ccBtn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M19 4H5c-1.11 0-2 .9-2 2v12c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 7H9.5v-.5h-2v3h2V13H11v1c0 .55-.45 1-1 1H7c-.55 0-1-.45-1-1v-4c0-.55.45-1 1-1h3c.55 0 1 .45 1 1v1zm7 0h-1.5v-.5h-2v3h2V13H18v1c0 .55-.45 1-1 1h-3c-.55 0-1-.45-1-1v-4c0-.55.45-1 1-1h3c.55 0 1 .45 1 1v1z"/></svg>`;
+
+  const subMenu = document.createElement("div");
+  subMenu.id = "sub-menu";
+
+  const backToPrev = document.createElement("button");
+  backToPrev.id = "backToPrev";
+  backToPrev.innerHTML = `<svg viewBox="0 0 24 24"><path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>`;
+  backToPrev.onclick = () => history.back();
+
+  root.append(video, subDisplay, controls, progressContainer, timerDisplay, ccBtn, subMenu, loadingRing, backToPrev);
+  document.body.appendChild(root);
+
+  /********** 3) Source Detection & Firebase Video ID **********/
+  const params = new URLSearchParams(window.location.search);
+  const ep = params.get("ep") || "1";
+  let src = null;
+
+  if (window.videoData && ep && window.videoData[ep]) src = window.videoData[ep];
+  if (!src && params.get("src")) src = decodeURIComponent(params.get("src"));
+
+  if (!src) {
+    document.body.innerHTML = `<p style="color:white;text-align:center;">No video found.</p>`;
+    return;
+  }
+
+  // Create a unique ID for this video (Episode number or hash of URL)
+  const videoId = ep ? `ep-${ep}` : btoa(src).substring(0, 12);
+
+  /********** 4) Firebase Logic **********/
+  let lastSavedTime = 0;
+
+  async function saveProgress(user, force = false) {
+    const currentTime = Math.floor(video.currentTime);
+    if (currentTime <= 0 || video.duration - currentTime < 10) return; // Don't save if at the very start or end
+
+    if (force || Math.abs(currentTime - lastSavedTime) >= 5) {
+      lastSavedTime = currentTime;
+      try {
+        const docRef = doc(db, "users", user.uid, "videoProgress", videoId);
+        await setDoc(docRef, { seconds: currentTime, lastUpdated: serverTimestamp() }, { merge: true });
+      } catch (e) { console.error("Save Error", e); }
     }
-    .sub-option {
-      color: white; background: none; border: none; 
-      text-align: left; padding: 8px 15px; cursor: pointer; 
-      font-family: sans-serif; font-size: 13px;
+  }
+
+  async function resumeProgress(user) {
+    const docRef = doc(db, "users", user.uid, "videoProgress", videoId);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      const savedTime = docSnap.data().seconds;
+      video.addEventListener('loadedmetadata', () => { video.currentTime = savedTime; }, { once: true });
+      if (video.readyState >= 1) video.currentTime = savedTime;
     }
-    .sub-option:hover { background: rgba(255, 255, 255, 0.1); }
-    .sub-option.active { color: red; font-weight: bold; }
+  }
 
-    #backToPrev {  
-      position:absolute; top:14px; left:14px; width:46px; height:46px;  
-      border:none; border-radius:50%; background:rgba(0,0,0,.55);  
-      display:flex; align-items:center; justify-content:center;  
-      cursor:pointer; transition:background .25s, opacity .2s, visibility .2s;  
-      z-index:40; opacity:0; visibility:hidden;  
-    }  
-    #backToPrev:hover { background:rgba(255,0,0,0.65); }  
-    #backToPrev svg { width:28px; height:28px; fill:#fff; }  
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      resumeProgress(user);
+      video.addEventListener("timeupdate", () => saveProgress(user));
+      video.addEventListener("pause", () => saveProgress(user, true));
+      window.addEventListener("beforeunload", () => saveProgress(user, true));
+    }
+  });
 
-    .progress-container {  
-      position:absolute; bottom:60px; left:5%; right:5%;  
-      height:20px; display:flex; align-items:center; cursor:pointer; 
-      z-index:25; opacity:0; visibility:hidden; transition:opacity .2s, visibility .2s;  
-    }  
-    .progress-bg { width:100%; height:7px; background:rgba(255,255,255,0.2); border-radius:4px; position:relative; }
-    .progress-bar { width:0%; height:100%; background:red; border-radius:4px; position:relative; pointer-events:none; } 
-    
-    .progress-bar::after {
-      content: ""; position: absolute; right: -8px; top: 50%;
-      transform: translateY(-50%) scale(0);
+  /********** 5) Player Logic & Controls **********/
+  async function attachSource(url) {
+    const isM3u8 = /\.m3u8/i.test(url);
+    if (isM3u8 && window.Hls && Hls.isSupported()) {
+      const hls = new Hls(); hls.loadSource(url); hls.attachMedia(video);
+    } else { video.src = url; }
+  }
+  await attachSource(src);
+
+  // Play/Pause
+  const playPauseBtn = document.getElementById("playPauseBtn");
+  const playIcon = document.getElementById("playIcon");
+  const pauseIcon = document.getElementById("pauseIcon");
+
+  playPauseBtn.onclick = (e) => {
+    e.stopPropagation();
+    if (video.paused) video.play(); else video.pause();
+  };
+
+  video.onplaying = () => { playIcon.style.display="none"; pauseIcon.style.display="block"; };
+  video.onpause = () => { playIcon.style.display="block"; pauseIcon.style.display="none"; };
+
+  // Timer & Progress
+  const formatTime = (s) => {
+    const m = Math.floor(s / 60); const sec = Math.floor(s % 60);
+    return `${m}:${sec.toString().padStart(2, '0')}`;
+  };
+
+  video.ontimeupdate = () => {
+    if (!isDragging) {
+      const pct = (video.currentTime / video.duration) * 100;
+      progressBar.style.width = pct + "%";
+      timerDisplay.textContent = `${formatTime(video.currentTime)} / ${formatTime(video.duration)}`;
+    }
+  };
+
+  // UI Visibility
+  let hideTimer;
+  const showUI = () => {
+    root.classList.add("show-ui");
+    [controls, progressContainer, timerDisplay, backToPrev, ccBtn].forEach(el => { el.style.opacity = "1"; el.style.visibility = "visible"; });
+    clearTimeout(hideTimer);
+    hideTimer = setTimeout(hideUI, 3000);
+  };
+  const hideUI = () => {
+    root.classList.remove("show-ui");
+    [controls, progressContainer, timerDisplay, backToPrev, ccBtn].forEach(el => { el.style.opacity = "0"; el.style.visibility = "hidden"; });
+  };
+  root.onclick = showUI;
+
+  // Scrubbing
+  let isDragging = false;
+  progressContainer.onmousedown = () => isDragging = true;
+  window.onmouseup = () => isDragging = false;
+  window.onmousemove = (e) => {
+    if (isDragging) {
+      const rect = progressBg.getBoundingClientRect();
+      const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+      video.currentTime = pct * video.duration;
+    }
+  };
+
+  // Rotation Handle
+  const rotate = () => {
+    const isPortrait = window.innerHeight > window.innerWidth;
+    if (isPortrait) {
+      root.style.transform = "rotate(90deg)";
+      root.style.width = window.innerHeight + "px";
+      root.style.height = window.innerWidth + "px";
+    } else {
+      root.style.transform = "none";
+      root.style.width = "100%";
+      root.style.height = "100%";
+    }
+  };
+  window.onresize = rotate;
+  rotate();
+
+});
       width: 16px; height: 16px; background: red; border-radius: 50%;
       transition: transform 0.1s ease;
     }
