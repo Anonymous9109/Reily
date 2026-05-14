@@ -78,7 +78,7 @@ window.videoData = {
   // From - Season 4
   "From-S4E1": "https://dl.dropboxusercontent.com/scl/fi/nrtuaypboyct9kk4tmwqr/FROM-_-S4E1-2022.mp4?rlkey=hgbl1egxf2b32tqcbyc1ifruy&st=wlacmbej&dl=1",
   "From-S4E1-subs": [
-    { label: "Arabic", lang: "ar", src: "../subtitles/From-S4E1-Arabic.txt" }
+    { label: "Arabic", lang: "ar", src: "https://rinolski.online/subtitles/From/From-S4E1-Arabic.txt" }
   ],
   "From-S4E2": "https://dl.dropboxusercontent.com/scl/fi/sn9n2abnmqqatznccttpm/FROM-_-S4E2-2022.mp4?rlkey=25etli8sqgwbguiyphbz7yksm&st=3p4h7akg&dl=1",
   "From-S4E2-subs": [
