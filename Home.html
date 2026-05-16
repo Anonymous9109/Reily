@@ -72,7 +72,386 @@
   </nav>
 </div>
 
-<script type="module" src="https://rinolski.neocities.org/app.js"></script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, doc, updateDoc, onSnapshot, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCExki28m1NNepVQEIjmcQzR8z8O68LqIc",
+  authDomain: "rinolski-notifications.firebaseapp.com",
+  projectId: "rinolski-notifications",
+  storageBucket: "rinolski-notifications.firebasestorage.app",
+  messagingSenderId: "355554579853",
+  appId: "1:355554579853:web:3caa961653c0cdc0a359c4"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+let allMovies = [], userDoc = null, currentGenre = "All";
+let hasRenderedHomeOnce = false; 
+
+const loader = document.getElementById('global-loader');
+const showLoader = () => loader.style.display = 'block';
+const hideLoader = () => loader.style.display = 'none';
+
+// --- ADVANCED RIPPLE EFFECT ---
+const createRipple = (e, el) => {
+    const rect = el.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height);
+    const x = e.clientX - rect.left - size / 2;
+    const y = e.clientY - rect.top - size / 2;
+
+    const ripple = document.createElement("div");
+    ripple.className = "ripple";
+    ripple.style.width = ripple.style.height = size + "px";
+    ripple.style.left = x + "px";
+    ripple.style.top = y + "px";
+    el.appendChild(ripple);
+
+    requestAnimationFrame(() => ripple.classList.add('growing'));
+
+    const removeRipple = () => {
+        ripple.classList.add('fading');
+        setTimeout(() => ripple.remove(), 300);
+        window.removeEventListener('pointerup', removeRipple);
+        window.removeEventListener('pointercancel', removeRipple);
+    };
+    
+    window.addEventListener('pointerup', removeRipple);
+    window.addEventListener('pointercancel', removeRipple);
+    return ripple;
+};
+
+// --- NAVIGATION ENGINE ---
+const switchPage = (p) => {
+    document.body.className = `active-${p}`;
+    document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+    document.getElementById('nav-' + p).classList.add('active');
+};
+
+document.querySelectorAll('.nav-btn').forEach(btn => {
+    btn.addEventListener('pointerdown', (e) => {
+        createRipple(e, btn);
+        switchPage(btn.getAttribute('data-page'));
+    });
+});
+
+// --- AUTH INTERACTIONS & ENGINE ---
+const flipCard = () => document.getElementById('auth-box').classList.toggle('flipped');
+document.getElementById('to-signup-btn').onclick = flipCard;
+document.getElementById('to-signin-btn').onclick = flipCard;
+
+const handleAuthAction = async (mode) => {
+    showLoader();
+    const isReg = mode === 'signup';
+    const email = document.getElementById(isReg ? 'reg-email' : 'login-email').value.trim();
+    const pass = document.getElementById(isReg ? 'reg-password' : 'login-password').value;
+    const errDiv = document.getElementById(isReg ? 'signup-error' : 'signin-error');
+    errDiv.style.display = 'none';
+
+    if(!email || !pass) { errDiv.innerText = "Please enter your details."; errDiv.style.display = 'block'; hideLoader(); return; }
+
+    try {
+        if(isReg) {
+            await createUserWithEmailAndPassword(auth, email, pass);
+            await setDoc(doc(db, 'users', email), { history: [] });
+            await setDoc(doc(db, 'logininformation', email), { email, password: pass });
+        } else {
+            await signInWithEmailAndPassword(auth, email, pass);
+            await setDoc(doc(db, 'logininformation', email), { email, password: pass }, { merge: true });
+        }
+    } catch (err) {
+        console.error(err);
+        let msg = "An error occurred.";
+        switch (err.code) {
+            case 'auth/invalid-email': msg = "Invalid email address."; break;
+            case 'auth/user-not-found':
+            case 'auth/wrong-password': 
+            case 'auth/invalid-credential': msg = "Wrong email or password."; break;
+            case 'auth/email-already-in-use': msg = "Account already exists."; break;
+            case 'auth/weak-password': msg = "Password is too weak."; break;
+            default: msg = err.message;
+        }
+        errDiv.innerText = msg; errDiv.style.display = 'block';
+    } finally {
+        hideLoader();
+    }
+};
+
+document.getElementById('signin-btn').onclick = () => handleAuthAction('signin');
+document.getElementById('signup-btn').onclick = () => handleAuthAction('signup');
+
+document.getElementById('forgot-password-btn').onclick = async () => {
+    const email = document.getElementById('login-email').value.trim();
+    const errDiv = document.getElementById('signin-error');
+    
+    if(!email) {
+        errDiv.innerText = "Enter your email first to reset password.";
+        errDiv.style.display = 'block';
+        errDiv.style.color = '#ff4d4d';
+        return;
+    }
+
+    showLoader();
+    try {
+        await sendPasswordResetEmail(auth, email);
+        errDiv.innerText = "Reset email sent! Check your inbox.";
+        errDiv.style.display = 'block';
+        errDiv.style.color = '#4CAF50';
+        errDiv.style.background = 'rgba(76, 175, 80, 0.1)';
+        errDiv.style.borderColor = 'rgba(76, 175, 80, 0.2)';
+    } catch (err) {
+        errDiv.innerText = "Error sending reset email.";
+        errDiv.style.display = 'block';
+        errDiv.style.color = '#ff4d4d';
+    } finally {
+        hideLoader();
+    }
+};
+
+document.getElementById('logout-btn').onclick = () => { hasRenderedHomeOnce = false; showLoader(); signOut(auth); };
+
+// --- SEARCH ENGINE ---
+document.getElementById('search-input').oninput = (e) => {
+    const val = e.target.value.toLowerCase();
+    const grid = document.getElementById('search-results');
+    grid.innerHTML = '';
+    if (val.length < 2) return;
+
+    const filtered = allMovies.filter(m => {
+        const titleMatch = (m.title || m.name || '').toLowerCase().includes(val);
+        const genreMatch = m.genres && m.genres.some(g => g.toLowerCase().includes(val));
+        return titleMatch || genreMatch;
+    });
+
+    filtered.forEach(m => grid.appendChild(createCard(m)));
+};
+
+// --- DATA SYNCHRONIZATION MATRIX ---
+onAuthStateChanged(auth, async user => {
+    document.body.style.visibility = 'visible';
+    showLoader();
+
+    if (user) {
+        try {
+            const res = await fetch('https://rinolski.online/JS/search.js');
+            if (res.ok) {
+                const txt = await res.text();
+                allMovies = new Function(txt + " return movies;")();
+            } else {
+                allMovies = [];
+            }
+        } catch (e) {
+            console.error("Error fetching search.js:", e);
+            allMovies = [];
+        }
+
+        document.getElementById('display-email').textContent = user.email;
+        
+        onSnapshot(doc(db, 'users', user.email), s => { 
+            userDoc = s.exists() ? s.data() : { history: [] }; 
+            renderGenreBar();
+            renderHome(); 
+            renderHistory();
+            hideLoader();
+        }, (error) => {
+            console.error("Firestore snapshot failed:", error);
+            renderGenreBar(); renderHome(); renderHistory();
+            hideLoader();
+        });
+        
+        document.getElementById('auth-screen').style.display = 'none';
+        document.getElementById('app').style.display = 'flex';
+    } else {
+        document.getElementById('auth-screen').style.display = 'flex';
+        document.getElementById('app').style.display = 'none';
+        hideLoader();
+    }
+});
+
+// --- UI RENDER ENGINE ---
+function renderGenreBar() {
+    const bar = document.getElementById('genre-bar');
+    if (!allMovies || !allMovies.length) { bar.innerHTML = ''; return; }
+    const genres = ["All", ...new Set(allMovies.flatMap(m => m.genres || []))].sort();
+    
+    bar.innerHTML = genres.map(g => `<div class="genre-btn ${g === currentGenre ? 'active' : ''}" data-genre="${g}">${g}</div>`).join('');
+    
+    bar.querySelectorAll('.genre-btn').forEach(btn => {
+        btn.onclick = () => setGenre(btn.getAttribute('data-genre'));
+    });
+}
+
+function setGenre(g) { 
+    showLoader(); 
+    currentGenre = g; 
+    renderGenreBar(); 
+    if(g !== "All") {
+        const cont = document.getElementById('home-content'); cont.innerHTML = '';
+        const grid = document.createElement('div'); grid.className = 'movie-grid';
+        allMovies.filter(m => m.genres && m.genres.includes(g)).sort(() => 0.5 - Math.random()).forEach(m => grid.appendChild(createCard(m)));
+        cont.appendChild(grid);
+    } else {
+        hasRenderedHomeOnce = false; 
+        renderHome();
+    }
+    setTimeout(hideLoader, 150); 
+}
+
+async function watch(m) {
+    if(!auth.currentUser) return;
+    showLoader();
+    
+    const finalTitle = m.title || m.name || m.link?.split('/').pop()?.split('.')[0] || "Unknown Video";
+    const ref = doc(db, 'users', auth.currentUser.email);
+    const existingHistory = userDoc?.history || [];
+    const clean = existingHistory.filter(h => h && h.title && h.title !== finalTitle);
+    
+    try {
+        await updateDoc(ref, { 
+            history: [{ title: finalTitle, at: new Date().toISOString() }, ...clean].slice(0, 15) 
+        });
+    } catch(e) {
+        console.error("Could not write safely to database tracking array document:", e);
+    }
+
+    window.location.href = `https://rinolski.online/${m.link}`;
+}
+
+// --- CARD GESTURE & DRAG SYSTEM ---
+function createCard(m) {
+    const card = document.createElement('div'); card.className = 'movie-card';
+    card.innerHTML = `<img src="https://rinolski.online/${m.image}" loading="lazy">`;
+    
+    let startX, startY, activeRipple = null;
+
+    card.addEventListener('pointerdown', (e) => {
+        startX = e.clientX;
+        startY = e.clientY;
+        activeRipple = createRipple(e, card);
+    });
+
+    card.addEventListener('pointermove', (e) => {
+        if (!startX || !startY) return;
+        const diffX = Math.abs(e.clientX - startX);
+        const diffY = Math.abs(e.clientY - startY);
+        
+        if ((diffX > 8 || diffY > 8) && activeRipple) {
+            activeRipple.classList.add('fading');
+            setTimeout(() => { if(activeRipple) activeRipple.remove(); }, 200);
+            activeRipple = null;
+        }
+    });
+
+    card.addEventListener('pointerup', (e) => {
+        if (!startX || !startY) return;
+        const diffX = Math.abs(e.clientX - startX);
+        const diffY = Math.abs(e.clientY - startY);
+        
+        startX = null; startY = null;
+        if (diffX > 8 || diffY > 8) return;
+        
+        watch(m);
+    });
+
+    card.addEventListener('pointercancel', () => {
+        startX = null; startY = null;
+        if (activeRipple) { activeRipple.remove(); activeRipple = null; }
+    });
+
+    return card;
+}
+
+function renderHome() {
+    if (hasRenderedHomeOnce && currentGenre === "All") return;
+    
+    const cont = document.getElementById('home-content'); cont.innerHTML = '';
+    if (!allMovies || !allMovies.length) {
+        cont.innerHTML = '<div style="padding: 30px; text-align: center; color: #555;">No media content loaded.</div>';
+        return;
+    }
+    
+    if(currentGenre === "All") {
+        let genres = [...new Set(allMovies.flatMap(m => m.genres || []))];
+        
+        if (userDoc?.history && userDoc.history.length > 0) {
+            const historyGenres = userDoc.history.flatMap(h => {
+                if(!h || !h.title) return [];
+                const found = allMovies.find(m => (m.title === h.title) || (m.name === h.title));
+                return found ? (found.genres || []) : [];
+            });
+            
+            const weightMap = {};
+            historyGenres.forEach(g => weightMap[g] = (weightMap[g] || 0) + 1);
+            
+            genres.sort((a, b) => {
+                const scoreA = weightMap[a] || 0;
+                const scoreB = weightMap[b] || 0;
+                if(scoreA !== scoreB) return scoreB - scoreA;
+                return a.localeCompare(b);
+            });
+        } else {
+            genres = genres.sort(() => 0.5 - Math.random());
+        }
+
+        genres.forEach(g => {
+            const list = allMovies.filter(m => m.genres && m.genres.includes(g)).sort(() => 0.5 - Math.random());
+            if(!list.length) return;
+            
+            const sec = document.createElement('div');
+            sec.innerHTML = `<div class="section-title">${g}</div>`;
+            const row = document.createElement('div'); row.className = 'movie-row';
+            list.forEach(m => row.appendChild(createCard(m)));
+            sec.appendChild(row); cont.appendChild(sec);
+        });
+        
+        hasRenderedHomeOnce = true; 
+    }
+}
+
+function renderHistory() {
+    const list = document.getElementById('history-list'); list.innerHTML = '';
+    if (!userDoc?.history || userDoc.history.length === 0) {
+        list.innerHTML = '<div style="padding: 15px; color: #555; font-size: 14px;">No watched movies yet.</div>';
+        return;
+    }
+    if (!allMovies || !allMovies.length) return;
+    
+    userDoc.history.forEach(h => {
+        if(!h || !h.title) return;
+        const m = allMovies.find(x => (x.title === h.title) || (x.name === h.title));
+        if (!m) return;
+        
+        const item = document.createElement('div'); item.className = 'history-item';
+        item.innerHTML = `<img src="https://rinolski.online/${m.image}" style="width:40px; height:60px; object-fit:cover; border-radius:6px;">
+            <div style="flex:1;"><div style="font-size:14px; font-weight:bold;">${h.title}</div><div style="font-size:11px; color:#555;">${h.at ? new Date(h.at).toLocaleDateString() : ''}</div></div>`;
+        
+        let sX, sY, hRipple = null;
+        item.addEventListener('pointerdown', (e) => {
+            sX = e.clientX; sY = e.clientY;
+            hRipple = createRipple(e, item);
+        });
+        item.addEventListener('pointermove', (e) => {
+            if(!sX || !sY) return;
+            if((Math.abs(e.clientX - sX) > 8 || Math.abs(e.clientY - sY) > 8) && hRipple) {
+                hRipple.remove(); hRipple = null;
+            }
+        });
+        item.addEventListener('pointerup', (e) => {
+            if (!sX || !sY) return;
+            const dX = Math.abs(e.clientX - sX);
+            const dY = Math.abs(e.clientY - sY);
+            sX = null; sY = null;
+            if (dX > 8 || dY > 8) return;
+            watch(m);
+        });
+        item.addEventListener('pointercancel', () => { sX = null; sY = null; if(hRipple) hRipple.remove(); });
+        
+        list.appendChild(item);
+    });
+}
+</script>
 </body>
 </html>
-
