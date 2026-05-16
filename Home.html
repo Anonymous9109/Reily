@@ -5,96 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>Rinolski</title>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
-
-  <style>
-    :root {
-      --red: #e50914;
-      --bg: #050505; 
-      --text: #ffffff;
-      --nav-h: 65px;
-      --header-h: 68px; 
-    }
-
-    body { visibility: hidden; background: var(--bg); margin: 0; color: var(--text); font-family: 'DM Sans', sans-serif; height: 100vh; overflow: hidden; }
-    *, *::before, *::after { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-
-    /* --- AUTH SCREEN (3D FLIP) --- */
-    #auth-screen { 
-      position: fixed; inset: 0; 
-      background: #000;
-      background-image: radial-gradient(circle at 20% 30%, #1a0505 0%, #050505 100%);
-      z-index: 9999; display: none; align-items: center; justify-content: center; 
-      perspective: 1200px;
-    }
-
-    .auth-container { width: 90%; max-width: 360px; height: 480px; transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1); transform-style: preserve-3d; position: relative; }
-    .auth-container.flipped { transform: rotateY(180deg); }
-
-    .auth-face {
-      position: absolute; width: 100%; height: 100%;
-      backface-visibility: hidden;
-      background: rgba(20, 20, 20, 0.8);
-      backdrop-filter: blur(25px);
-      -webkit-backdrop-filter: blur(25px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 30px;
-      padding: 40px 30px;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      box-shadow: 0 25px 50px rgba(0,0,0,0.5);
-    }
-
-    .auth-back { transform: rotateY(180deg); }
-    .auth-face h1 { font-family: 'Bebas Neue'; color: var(--red); font-size: 50px; margin: 0; letter-spacing: 2px; }
-    .auth-input { width: 100%; padding: 16px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; margin-bottom: 12px; border-radius: 12px; outline: none; font-size: 16px; }
-    .auth-input:focus { border-color: var(--red); background: rgba(255,255,255,0.1); }
-    .auth-btn { width: 100%; padding: 16px; background: var(--red); color: white; border: none; font-weight: bold; border-radius: 12px; cursor: pointer; font-size: 16px; }
-    .auth-toggle { margin-top: 25px; font-size: 13px; color: #888; cursor: pointer; }
-    .auth-toggle b { color: var(--red); }
-    .auth-error-box { color: #ff4d4d; font-size: 13px; margin-bottom: 15px; display: none; text-align: center; background: rgba(255, 77, 77, 0.1); padding: 10px; border-radius: 8px; width: 100%; border: 1px solid rgba(255, 77, 77, 0.2); }
-    
-    /* Forgot password link style */
-    .auth-forgot { color: #888; font-size: 12px; align-self: flex-end; margin-bottom: 15px; cursor: pointer; margin-top: -5px; }
-
-    /* --- APP LAYOUT --- */
-    #app { display: none; flex-direction: column; height: 100vh; overflow: hidden; }
-    #app-header { position: fixed; top: 0; left: 0; right: 0; height: var(--header-h); background: linear-gradient(to bottom, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%); display: flex; align-items: center; padding: 0 20px; z-index: 1000; pointer-events: none; }
-    .header-logo { font-family: 'Bebas Neue'; font-size: 30px; color: var(--red); pointer-events: auto; }
-
-    .page-wrapper { flex: 1; position: relative; height: calc(100vh - var(--nav-h)); display: flex; width: 300%; transition: transform 0.45s cubic-bezier(0.19, 1, 0.22, 1); }
-    .page { width: 33.3333%; height: 100%; background: var(--bg); overflow-y: auto; padding-top: var(--header-h); padding-bottom: 20px; }
-    
-    body.active-home .page-wrapper { transform: translateX(0); }
-    body.active-search .page-wrapper { transform: translateX(-33.3333%); }
-    body.active-account .page-wrapper { transform: translateX(-66.6666%); }
-
-    /* UI ELEMENTS */
-    #genre-bar { display: flex; overflow-x: auto; padding: 10px 15px; gap: 10px; white-space: nowrap; scrollbar-width: none; }
-    #genre-bar::-webkit-scrollbar { display: none; }
-    .genre-btn { padding: 8px 18px; background: #1a1a1a; border-radius: 20px; font-size: 13px; cursor: pointer; transition: 0.2s; border: 1px solid rgba(255,255,255,0.05); }
-    .genre-btn.active { background: var(--red); color: white; }
-
-    .section-title { margin: 20px 15px 10px; font-weight: bold; font-size: 18px; }
-    .movie-row { display: flex; overflow-x: auto; gap: 10px; padding: 0 15px 10px; scrollbar-width: none; }
-    .movie-row::-webkit-scrollbar { display: none; }
-    
-    .movie-card { flex: 0 0 auto; width: 110px; height: 160px; background: #111; border-radius: 8px; overflow: hidden; position: relative; cursor: pointer; }
-    .movie-card img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
-
-    /* ADVANCED RIPPLE */
-    .ripple { position: absolute; border-radius: 50%; background: rgba(255, 255, 255, 0.25); transform: scale(0); pointer-events: none; transition: transform 0.6s ease-out, opacity 0.5s ease-out; z-index: 10; }
-    .ripple.growing { transform: scale(4); }
-    .ripple.fading { opacity: 0; }
-
-    /* NAV */
-    #bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; height: var(--nav-h); background: #000; display: flex; border-top: 1px solid #1a1a1a; z-index: 1000; }
-    .nav-btn { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; background: none; border: none; color: #555; cursor: pointer; transition: 0.3s; gap: 4px; position: relative; overflow: hidden; }
-    .nav-btn svg { width: 22px; height: 22px; fill: currentColor; }
-    .nav-btn.active { color: white; }
-
-    .history-item { display: flex; align-items: center; gap: 15px; padding: 12px 15px; border-bottom: 1px solid #111; position: relative; cursor: pointer; overflow: hidden; }
-  </style>
+  <link rel="stylesheet" href="https://rinolski.neocities.org/style.css">
 </head>
 <body class="active-home">
+
+<div id="global-loader"></div>
 
 <div id="auth-screen">
     <div class="auth-container" id="auth-box">
@@ -104,9 +19,9 @@
             <div class="auth-error-box" id="signin-error"></div>
             <input type="email" id="login-email" class="auth-input" placeholder="Email">
             <input type="password" id="login-password" class="auth-input" placeholder="Password">
-            <div class="auth-forgot" onclick="handleForgotPassword()">Forgot Password?</div>
-            <button onclick="handleAuthAction('signin')" class="auth-btn">Sign In</button>
-            <div class="auth-toggle" onclick="flipCard()">New to Rinolski? <b>Sign up.</b></div>
+            <div class="auth-forgot" id="forgot-password-btn">Forgot Password?</div>
+            <button id="signin-btn" class="auth-btn">Sign In</button>
+            <div class="auth-toggle" id="to-signup-btn">New to Rinolski? <b>Sign up.</b></div>
         </div>
         <div class="auth-face auth-back">
             <h1>JOIN US</h1>
@@ -114,8 +29,8 @@
             <div class="auth-error-box" id="signup-error"></div>
             <input type="email" id="reg-email" class="auth-input" placeholder="Email">
             <input type="password" id="reg-password" class="auth-input" placeholder="Password">
-            <button onclick="handleAuthAction('signup')" class="auth-btn">Sign Up</button>
-            <div class="auth-toggle" onclick="flipCard()">Already a member? <b>Sign in.</b></div>
+            <button id="signup-btn" class="auth-btn">Sign Up</button>
+            <div class="auth-toggle" id="to-signin-btn">Already a member? <b>Sign in.</b></div>
         </div>
     </div>
 </div>
@@ -123,10 +38,13 @@
 <div id="app">
   <div id="app-header"><div class="header-logo">RINOLSKI</div></div>
   <div class="page-wrapper">
-    <div id="home-page" class="page"><div id="genre-bar"></div><div id="home-content"></div></div>
+    <div id="home-page" class="page">
+        <div id="genre-bar"></div>
+        <div id="home-content"></div>
+    </div>
     <div id="search-page" class="page">
-        <input type="text" id="search-input" placeholder="Search movies or genres..." style="margin:15px; width:calc(100% - 30px); padding:18px; background:#111; border:1px solid #222; color:white; border-radius:14px; outline:none; font-size:16px;">
-        <div id="search-results" style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px; padding:10px;"></div>
+        <input type="text" id="search-input" placeholder="Search movies or genres...">
+        <div id="search-results" class="movie-grid"></div>
     </div>
     <div id="account-page" class="page">
         <div style="padding:25px 15px; border-bottom: 1px solid #1a1a1a;">
@@ -137,231 +55,24 @@
         <div id="history-list"></div>
     </div>
   </div>
+  
   <nav id="bottom-nav">
-    <button class="nav-btn active" id="nav-home" onmousedown="createRipple(event, this)" onmouseup="switchPage('home')"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg><span>Home</span></button>
-    <button class="nav-btn" id="nav-search" onmousedown="createRipple(event, this)" onmouseup="switchPage('search')"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg><span>Search</span></button>
-    <button class="nav-btn" id="nav-account" onmousedown="createRipple(event, this)" onmouseup="switchPage('account')"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg><span>Account</span></button>
+    <button class="nav-btn active" id="nav-home" data-page="home">
+        <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        <span>Home</span>
+    </button>
+    <button class="nav-btn" id="nav-search" data-page="search">
+        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+        <span>Search</span>
+    </button>
+    <button class="nav-btn" id="nav-account" data-page="account">
+        <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+        <span>Account</span>
+    </button>
   </nav>
 </div>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, doc, updateDoc, onSnapshot, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyCExki28m1NNepVQEIjmcQzR8z8O68LqIc",
-  authDomain: "rinolski-notifications.firebaseapp.com",
-  projectId: "rinolski-notifications",
-  storageBucket: "rinolski-notifications.firebasestorage.app",
-  messagingSenderId: "355554579853",
-  appId: "1:355554579853:web:3caa961653c0cdc0a359c4"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-let allMovies = [], userDoc = null, currentGenre = "All";
-
-// --- ADVANCED RIPPLE LOGIC (Hold to stay) ---
-window.createRipple = (e, el) => {
-    const rect = el.getBoundingClientRect();
-    const size = Math.max(rect.width, rect.height);
-    const x = (e.clientX || (e.touches ? e.touches[0].clientX : 0)) - rect.left - size / 2;
-    const y = (e.clientY || (e.touches ? e.touches[0].clientY : 0)) - rect.top - size / 2;
-
-    const ripple = document.createElement("div");
-    ripple.className = "ripple";
-    ripple.style.width = ripple.style.height = size + "px";
-    ripple.style.left = x + "px";
-    ripple.style.top = y + "px";
-    el.appendChild(ripple);
-
-    requestAnimationFrame(() => ripple.classList.add('growing'));
-
-    const release = () => {
-        ripple.classList.add('fading');
-        setTimeout(() => ripple.remove(), 500);
-        window.removeEventListener('mouseup', release);
-        window.removeEventListener('touchend', release);
-    };
-
-    window.addEventListener('mouseup', release);
-    window.addEventListener('touchend', release);
-};
-
-// --- AUTH UI ---
-window.flipCard = () => document.getElementById('auth-box').classList.toggle('flipped');
-
-window.handleAuthAction = async (mode) => {
-    const isReg = mode === 'signup';
-    const email = document.getElementById(isReg ? 'reg-email' : 'login-email').value.trim();
-    const pass = document.getElementById(isReg ? 'reg-password' : 'login-password').value;
-    const errDiv = document.getElementById(isReg ? 'signup-error' : 'signin-error');
-    errDiv.style.display = 'none';
-
-    if(!email || !pass) { errDiv.innerText = "Please enter your details."; errDiv.style.display = 'block'; return; }
-
-    try {
-        if(isReg) {
-            await createUserWithEmailAndPassword(auth, email, pass);
-            await setDoc(doc(db, 'users', email), { history: [] });
-            await setDoc(doc(db, 'logininformation', email), { email, password: pass });
-        } else {
-            await signInWithEmailAndPassword(auth, email, pass);
-            await setDoc(doc(db, 'logininformation', email), { email, password: pass }, { merge: true });
-        }
-    } catch (err) {
-        console.error(err);
-        let msg = "An error occurred.";
-        switch (err.code) {
-            case 'auth/invalid-email': msg = "Invalid email address."; break;
-            case 'auth/user-not-found':
-            case 'auth/wrong-password': 
-            case 'auth/invalid-credential': msg = "Wrong email or password."; break;
-            case 'auth/email-already-in-use': msg = "Account already exists."; break;
-            case 'auth/weak-password': msg = "Password is too weak."; break;
-            default: msg = err.message;
-        }
-        errDiv.innerText = msg; errDiv.style.display = 'block';
-    }
-};
-
-window.handleForgotPassword = async () => {
-    const email = document.getElementById('login-email').value.trim();
-    const errDiv = document.getElementById('signin-error');
-    
-    if(!email) {
-        errDiv.innerText = "Enter your email first to reset password.";
-        errDiv.style.display = 'block';
-        errDiv.style.color = '#ff4d4d';
-        return;
-    }
-
-    try {
-        await sendPasswordResetEmail(auth, email);
-        errDiv.innerText = "Reset email sent! Check your inbox.";
-        errDiv.style.display = 'block';
-        errDiv.style.color = '#4CAF50'; // Green for success
-        errDiv.style.background = 'rgba(76, 175, 80, 0.1)';
-        errDiv.style.borderColor = 'rgba(76, 175, 80, 0.2)';
-    } catch (err) {
-        errDiv.innerText = "Error sending reset email.";
-        errDiv.style.display = 'block';
-        errDiv.style.color = '#ff4d4d';
-    }
-};
-
-window.switchPage = (p) => {
-    document.body.className = `active-${p}`;
-    document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-    document.getElementById('nav-' + p).classList.add('active');
-};
-
-document.getElementById('logout-btn').onclick = () => signOut(auth);
-
-// --- SEARCH LOGIC ---
-document.getElementById('search-input').oninput = (e) => {
-    const val = e.target.value.toLowerCase();
-    const grid = document.getElementById('search-results');
-    grid.innerHTML = '';
-    if (val.length < 2) return;
-
-    const filtered = allMovies.filter(m => {
-        const titleMatch = m.title.toLowerCase().includes(val);
-        const genreMatch = m.genres.some(g => g.toLowerCase().includes(val));
-        return titleMatch || genreMatch;
-    });
-
-    filtered.forEach(m => grid.appendChild(createCard(m)));
-};
-
-// --- DATA SYNC ---
-onAuthStateChanged(auth, async user => {
-    if (user) {
-        try {
-            const res = await fetch('https://rinolski.online/JS/search.js');
-            const txt = await res.text();
-            allMovies = new Function(txt + " return movies;")();
-            document.getElementById('display-email').textContent = user.email;
-            
-            onSnapshot(doc(db, 'users', user.email), s => { 
-                userDoc = s.exists() ? s.data() : { history: [] }; 
-                renderGenreBar(); renderHome(); renderHistory();
-            });
-            
-            document.getElementById('auth-screen').style.display = 'none';
-            document.getElementById('app').style.display = 'flex';
-        } catch (e) {
-            console.error("Initialization error", e);
-        }
-    } else {
-        document.getElementById('auth-screen').style.display = 'flex';
-        document.getElementById('app').style.display = 'none';
-    }
-    document.body.style.visibility = 'visible';
-});
-
-// --- RENDERERS ---
-function renderGenreBar() {
-    const bar = document.getElementById('genre-bar');
-    if (!allMovies.length) return;
-    const genres = ["All", ...new Set(allMovies.flatMap(m => m.genres))].sort();
-    bar.innerHTML = genres.map(g => `<div class="genre-btn ${g === currentGenre ? 'active' : ''}" onclick="setGenre('${g}')">${g}</div>`).join('');
-}
-window.setGenre = (g) => { currentGenre = g; renderGenreBar(); renderHome(); };
-
-async function watch(m) {
-    const ref = doc(db, 'users', auth.currentUser.email);
-    const clean = (userDoc?.history || []).filter(h => h.title !== m.title);
-    await updateDoc(ref, { history: [{title: m.title, at: new Date().toISOString()}, ...clean].slice(0, 15) });
-    window.location.href = `https://rinolski.online/${m.link}`;
-}
-
-function createCard(m) {
-    const card = document.createElement('div'); card.className = 'movie-card';
-    card.innerHTML = `<img src="https://rinolski.online/${m.image}" loading="lazy">`;
-    card.onmousedown = (e) => createRipple(e, card);
-    card.ontouchstart = (e) => createRipple(e, card);
-    card.onclick = () => watch(m);
-    return card;
-}
-
-function renderHome() {
-    const cont = document.getElementById('home-content'); cont.innerHTML = '';
-    if (!allMovies.length) return;
-    if(currentGenre === "All") {
-        [...new Set(allMovies.flatMap(m => m.genres))].sort().forEach(g => {
-            const list = allMovies.filter(m => m.genres.includes(g)).sort(() => 0.5 - Math.random());
-            if(!list.length) return;
-            const sec = document.createElement('div');
-            sec.innerHTML = `<div class="section-title">${g}</div>`;
-            const row = document.createElement('div'); row.className = 'movie-row';
-            list.forEach(m => row.appendChild(createCard(m)));
-            sec.appendChild(row); cont.appendChild(sec);
-        });
-    } else {
-        const grid = document.createElement('div'); grid.style.display = 'grid'; grid.style.gridTemplateColumns = 'repeat(3,1fr)'; grid.style.gap = '10px'; grid.style.padding = '15px';
-        allMovies.filter(m => m.genres.includes(currentGenre)).forEach(m => grid.appendChild(createCard(m)));
-        cont.appendChild(grid);
-    }
-}
-
-function renderHistory() {
-    const list = document.getElementById('history-list'); list.innerHTML = '';
-    if (!userDoc?.history) return;
-    userDoc.history.forEach(h => {
-        const m = allMovies.find(x => x.title === h.title);
-        if (!m) return;
-        const item = document.createElement('div'); item.className = 'history-item';
-        item.innerHTML = `<img src="https://rinolski.online/${m.image}" style="width:40px; height:60px; object-fit:cover; border-radius:6px;">
-            <div style="flex:1;"><div style="font-size:14px; font-weight:bold;">${m.title}</div><div style="font-size:11px; color:#555;">${new Date(h.at).toLocaleDateString()}</div></div>`;
-        item.onmousedown = (e) => createRipple(e, item);
-        item.ontouchstart = (e) => createRipple(e, item);
-        item.onclick = () => watch(m);
-        list.appendChild(item);
-    });
-}
-</script>
+<script type="module" src="https://rinolski.neocities.org/app.js"></script>
 </body>
 </html>
+
