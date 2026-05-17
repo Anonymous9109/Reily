@@ -118,7 +118,7 @@ const seriesData = {
       { number: 1, prefix: "From-S1E", totalEpisodes: 10 },
       { number: 2, prefix: "From-S2E", totalEpisodes: 10 },
       { number: 3, prefix: "From-S3E", totalEpisodes: 10 },
-      { number: 4, prefix: "From-S4E", totalEpisodes: 4 }
+      { number: 4, prefix: "From-S4E", totalEpisodes: 5 }
     ]
   },
 
