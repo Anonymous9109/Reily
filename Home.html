@@ -690,8 +690,6 @@
 
 <!-- Unified Email-Mapped Firestore Listeners -->
 <script>
-    // CLEANED UP: The logic inside logWatchAction is now safely integrated into navigateToMovie() 
-    // to prevent WebView frame termination during link navigation.
     function listenToWatchHistory() {
         const historyContainer = document.getElementById('history-container');
         const user = auth.currentUser;
@@ -727,7 +725,6 @@
                     const cardLink = document.createElement('div');
                     cardLink.className = 'history-card-link';
                     
-                    // Match single quote escaping conventions for safety
                     const sanitizedTitle = item.title.replace(/'/g, "\\'");
                     const sanitizedLink = runtimeLink.replace(/'/g, "\\'");
                     
@@ -820,7 +817,6 @@
         homeTrigger.classList.add('active');
     });
 
-    // FIX: Routed random selections into the secure navigateToMovie controller setup
     function goRandom() {
         if (typeof movies === 'undefined' || !movies.length) return;
         const randomItem = movies[Math.floor(Math.random() * movies.length)];
@@ -862,8 +858,6 @@
         return [];
     }
 
-    // FIX: Replaced standard anchor links with an onclick handler that pauses 
-    // page redirection until Firestore confirms the user transaction save.
     function createMovieCard(m) {
         const div = document.createElement("div");
         div.className = "movie";
@@ -879,7 +873,7 @@
         return div;
     }
 
-    // FIX: New unified navigation system protecting your WebView lifecycle execution loop
+    // FIX: Replaced .add() with .doc(docId).set() to update the timestamp instead of duplicating items.
     function navigateToMovie(movieTitle, destinationUrl) {
         const user = auth.currentUser;
         
@@ -888,18 +882,21 @@
             return;
         }
 
-        // 1. Submit asynchronous update transaction
-        db.collection('users').doc(user.email).collection('history').add({
+        // Generate a clean, lowercase document ID unique to this title (e.g. "avatar-2" or "the-batman")
+        const docId = movieTitle.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+
+        // Save history entry securely using a fixed document path
+        db.collection('users').doc(user.email).collection('history').doc(docId).set({
             title: movieTitle,
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
         })
         .then(() => {
-            // 2. Database save confirmed by Firestore engine. Now safe to redirect views.
+            // Once updated or created, seamlessly shift the application context to target frame url
             window.location.href = destinationUrl;
         })
         .catch(err => {
             console.error("History tracking failed: ", err);
-            // Fallback: Continue redirection if a unexpected network failure drops the database pipeline
+            // Fallback: Don't block navigation if the write execution encounters an exception
             window.location.href = destinationUrl;
         });
     }
