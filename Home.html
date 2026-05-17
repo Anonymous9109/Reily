@@ -348,7 +348,7 @@
         .auth-container {
             max-width: 400px;
             width: 100%;
-            margin: 0 opacity;
+            margin: 0 auto;
         }
         .auth-input {
             width: 100%;
@@ -690,16 +690,8 @@
 
 <!-- Unified Email-Mapped Firestore Listeners -->
 <script>
-    function logWatchAction(movieTitle) {
-        const user = auth.currentUser;
-        if (!user) return;
-
-        db.collection('users').doc(user.email).collection('history').add({
-            title: movieTitle,
-            timestamp: firebase.firestore.FieldValue.serverTimestamp()
-        }).catch(err => console.error("Firestore history tracking failed: ", err));
-    }
-
+    // CLEANED UP: The logic inside logWatchAction is now safely integrated into navigateToMovie() 
+    // to prevent WebView frame termination during link navigation.
     function listenToWatchHistory() {
         const historyContainer = document.getElementById('history-container');
         const user = auth.currentUser;
@@ -732,9 +724,15 @@
 
                     const date = new Date(timestampMillis).toLocaleDateString(undefined, {month: 'short', day: 'numeric', hour: '2-digit', minute:'2-digit'});
                     
-                    const cardLink = document.createElement('a');
-                    cardLink.href = runtimeLink;
+                    const cardLink = document.createElement('div');
                     cardLink.className = 'history-card-link';
+                    
+                    // Match single quote escaping conventions for safety
+                    const sanitizedTitle = item.title.replace(/'/g, "\\'");
+                    const sanitizedLink = runtimeLink.replace(/'/g, "\\'");
+                    
+                    cardLink.setAttribute('onclick', `navigateToMovie('${sanitizedTitle}', '${sanitizedLink}')`);
+                    cardLink.style.cursor = 'pointer';
                     
                     cardLink.innerHTML = `
                         <div class="history-item">
@@ -822,11 +820,11 @@
         homeTrigger.classList.add('active');
     });
 
+    // FIX: Routed random selections into the secure navigateToMovie controller setup
     function goRandom() {
         if (typeof movies === 'undefined' || !movies.length) return;
         const randomItem = movies[Math.floor(Math.random() * movies.length)];
-        logWatchAction(randomItem.title);
-        setTimeout(() => { window.location.href = randomItem.link; }, 150);
+        navigateToMovie(randomItem.title, randomItem.link);
     }
 
     function searchMovies() {
@@ -864,15 +862,46 @@
         return [];
     }
 
+    // FIX: Replaced standard anchor links with an onclick handler that pauses 
+    // page redirection until Firestore confirms the user transaction save.
     function createMovieCard(m) {
         const div = document.createElement("div");
         div.className = "movie";
+        
+        const sanitizedTitle = m.title.replace(/'/g, "\\'");
+        const sanitizedLink = m.link.replace(/'/g, "\\'");
+        
         div.innerHTML = `
-            <a href="${m.link}" onclick="logWatchAction('${m.title.replace(/'/g, "\\'")}')">
+            <div style="cursor: pointer; width: 100%; height: 100%;" onclick="navigateToMovie('${sanitizedTitle}', '${sanitizedLink}')">
                 <img src="${m.image}" onerror="this.insertAdjacentHTML('afterend', '<p class=\\'fallback-label\\'>${m.title}</p>'); this.style.opacity='0.25';">
-            </a>
+            </div>
         `;
         return div;
+    }
+
+    // FIX: New unified navigation system protecting your WebView lifecycle execution loop
+    function navigateToMovie(movieTitle, destinationUrl) {
+        const user = auth.currentUser;
+        
+        if (!user) {
+            window.location.href = destinationUrl;
+            return;
+        }
+
+        // 1. Submit asynchronous update transaction
+        db.collection('users').doc(user.email).collection('history').add({
+            title: movieTitle,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        })
+        .then(() => {
+            // 2. Database save confirmed by Firestore engine. Now safe to redirect views.
+            window.location.href = destinationUrl;
+        })
+        .catch(err => {
+            console.error("History tracking failed: ", err);
+            // Fallback: Continue redirection if a unexpected network failure drops the database pipeline
+            window.location.href = destinationUrl;
+        });
     }
 
     function shuffleArray(arr) {
