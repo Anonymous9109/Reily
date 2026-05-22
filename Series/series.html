@@ -8,10 +8,7 @@
     <style>
         * { -webkit-tap-highlight-color: transparent; tap-highlight-color: transparent; }
         button, a { outline: none; border: none; }
-        .season-btn { padding: 10px 15px; background: rgba(255,255,255,0.1); color: white; border-radius: 5px; cursor: pointer;
-     margin-bottom: 20px;  
-        }
-
+        .season-btn { padding: 10px 15px; background: rgba(255,255,255,0.1); color: white; border-radius: 5px; cursor: pointer; margin-bottom: 20px; }
         .season-btn.active { background: red; font-weight: bold; }
         .back-btn {
             position: fixed; top: 20px; left: 20px; width: 45px; height: 45px;
@@ -19,11 +16,11 @@
             align-items: center; justify-content: center; cursor: pointer; z-index: 10;
         }
         
-        /* Hides the body content until Firebase confirms the user is logged in */
+        /* Keep page hidden until we are 100% sure of the login status */
         body { display: none; background-color: #000000; color: white; }
     </style>
 
-    <!-- Firebase SDK CDNs (v10 Compat) matching your index.html -->
+    <!-- Firebase SDK CDNs (v10 Compat) -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 </head>
@@ -63,16 +60,27 @@
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
 
-        // AUTHENTICATION GATEWAY
+        // Track if Firebase has finished checking the initial auth state
+        let isInitialAuthChecked = false;
+
         auth.onAuthStateChanged(user => {
+            isInitialAuthChecked = true; // Firebase completed its check
+
             if (user) {
-                // User is authenticated! Show the layout content
+                // Confirmed logged in! Reveal the page.
                 document.body.style.display = 'block';
             } else {
-                // Not logged in? Boot them out immediately to index.html
-                window.location.href = '../index';
+                // Confirmed NOT logged in. Redirect to index.
+                window.location.href = 'index.html';
             }
         });
+
+        // Safety fallback: If Firebase doesn't respond at all within 2 seconds, redirect to index
+        setTimeout(() => {
+            if (!isInitialAuthChecked) {
+                window.location.href = 'index.html';
+            }
+        }, 2000);
     </script>
 
     <!-- External Series Logic Scripts -->
@@ -82,12 +90,10 @@
     <!-- NAVIGATION LOGIC -->
     <script>
         document.getElementById('back-btn').onclick = () => {
-            // Check if there is internal history linking from within your own site domain
             if (document.referrer && document.referrer.includes(window.location.hostname)) {
                 window.history.back();
             } else {
-                // No history, or arrived directly via copy-pasting/new tab? Force back to index.html
-                window.location.href = '../index'; 
+                window.location.href = 'index.html'; 
             }
         };
     </script>
