@@ -166,7 +166,7 @@ title: "Margo's Got Money Troubles",
 desc: "The daughter of a former Hooter's waitress and an ex-pro wrestler, Margo is a recent college dropout and aspiring writer. Faced with a new baby, mounting pile of bills, and dwindling",
     video: "https://dl.dropboxusercontent.com/scl/fi/91d7vhdo8h7eymnisymor/Margo-s-Got-Money-Troubles-_-S1E1-2026.mp4?rlkey=iki1lez5edvnmj0ui876npj38&st=b6yg8z7y&dl=1",
     seasons: [
-      { number: 1, prefix: "MargosGotMoneyTroubles-S1E", totalEpisodes: 6 }
+      { number: 1, prefix: "MargosGotMoneyTroubles-S1E", totalEpisodes: 8 }
     ]
   }
 };
