@@ -1,6 +1,3 @@
-
-
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,7 +12,6 @@
      margin-bottom: 20px;  
         }
 
-
         .season-btn.active { background: red; font-weight: bold; }
         .back-btn {
             position: fixed; top: 20px; left: 20px; width: 45px; height: 45px;
@@ -25,6 +21,13 @@
     </style>
 </head>
 <body>
+    <!-- 1. AUTH CHECK: Redirects immediately if the user isn't logged in -->
+    <script>
+        if (!localStorage.getItem('isLoggedIn') || localStorage.getItem('isLoggedIn') !== 'true') {
+            window.location.href = '../index.html'; 
+        }
+    </script>
+
     <video class="bg-video" autoplay muted loop id="bgVideo"></video>
     <div class="overlay"></div>
 
@@ -45,33 +48,19 @@
         </div>
     </div>
 
+    <!-- External Logic Scripts -->
     <script src="https://rinolski.neocities.org/Series/series.js"></script>
     <script src="https://rinolski.neocities.org/Series/script.js"></script>
 
+    <!-- 2. NAVIGATION LOGIC: Back button falls back to index.html if no history exists -->
     <script>
         document.getElementById('back-btn').onclick = () => {
-            window.history.length > 1 ? window.history.back() : window.location.href = '../Home.html';
+            if (document.referrer && document.referrer !== "") {
+                window.history.back();
+            } else {
+                window.location.href = '../index.html'; 
+            }
         };
     </script>
-        
-    
-    
-    
 </body>
 </html>
-
-
-
-
-
-
-        
-
-
-
-
-
-
-
-    
-    
