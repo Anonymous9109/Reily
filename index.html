@@ -1,21 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Favicon (Small Icon for Browser Tab) -->
-    <link rel="icon" href="/favicon.ico" type="image/x-icon">
-    
-    <!-- Open Graph Meta Tags (For Google & Social Media) -->
-    <meta property="og:image" content="https://rinolski.neocities.org/20250201_160149.jpg">
-    <meta property="og:title" content="Rinolski - Watch Movies And TV Shows Online">
-    <meta property="og:description" content="Watch movies and series Online For Free On Rinolski.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://rinolski.neocities.org">
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!DOCTYPE html>
-<html lang="en">
-<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Rinolski</title>
@@ -57,6 +42,44 @@
             user-select: none;
             color: inherit;
             text-decoration: none;
+        }
+
+        /* ====================================
+           LOCALIZED SPINNING RING UTILITY
+           ==================================== */
+        .loading-ring {
+            width: 32px;
+            height: 32px;
+            border: 3px solid rgba(229, 9, 20, 0.15);
+            border-top: 3px solid #e50914;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 20px auto;
+        }
+
+        /* Spinner state injection inside a movie card */
+        .movie-loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 5;
+        }
+        .movie-loading-overlay .loading-ring {
+            width: 24px;
+            height: 24px;
+            border-width: 2.5px;
+            margin: 0;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         /* Top Logo Header */
@@ -470,11 +493,81 @@
         .nav-item:hover, .nav-item.active { 
             color: white; 
         }
+
+        /* ====================================
+           LONG PRESS ACTIONS SHEET DIALOG
+           ==================================== */
+        #action-sheet-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 7000;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        #action-sheet {
+            position: fixed;
+            bottom: -100%;
+            left: 0;
+            width: 100%;
+            background: #141414;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+            padding: 20px 16px 40px 16px;
+            z-index: 7010;
+            transition: bottom 0.3s cubic-bezier(0.1, 0.8, 0.3, 1);
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.8);
+        }
+        .action-sheet-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #808080;
+            margin-bottom: 15px;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .action-sheet-btn {
+            width: 100%;
+            background: #262626;
+            color: #ff3b30;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .action-sheet-btn.cancel {
+            background: #1f1f1f;
+            color: #ffffff;
+            margin-bottom: 0;
+        }
     </style>
 </head>
 <body>
 
 <div id="toast-container"></div>
+
+<!-- Long Press Bottom Action Sheet Window -->
+<div id="action-sheet-backdrop" onclick="closeActionSheet()"></div>
+<div id="action-sheet">
+    <div class="action-sheet-title" id="action-sheet-target-title">Movie Title</div>
+    <button class="action-sheet-btn" onclick="confirmHideMovie()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+        Not Interested / Hide This
+    </button>
+    <button class="action-sheet-btn cancel" onclick="closeActionSheet()">Cancel</button>
+</div>
 
 <!-- Authentication Form Layer -->
 <div id="auth-gate">
@@ -552,7 +645,7 @@
 
         <div class="profile-section-heading">Watch History</div>
         <div id="history-container" class="history-list">
-            <p style="color: gray; font-size: 14px;">No movies watched yet.</p>
+            <div class="loading-ring"></div>
         </div>
         
         <button class="auth-btn" style="background:#222; margin-top:40px;" onclick="logOut()">Sign Out</button>
@@ -576,10 +669,12 @@
     const db = firebase.firestore();
 
     let userWatchHistoryCache = [];
+    let userUnwantedCache = []; 
     let historyListenerUnsubscribe = null;
+    let unwantedListenerUnsubscribe = null;
 </script>
 
-<!-- Global Movies Data Catalog Hosted Externally -->
+<!-- Global Movies Data Catalog Hosted Extracted -->
 <script src="https://rinolski.online/JS/search.js"></script>
 
 <!-- Security Gate, Logs, & User Sessions -->
@@ -679,10 +774,11 @@
     }
 
     function logOut() {
-        if(historyListenerUnsubscribe) {
-            historyListenerUnsubscribe();
-            historyListenerUnsubscribe = null;
-        }
+        if(historyListenerUnsubscribe) historyListenerUnsubscribe();
+        if(unwantedListenerUnsubscribe) unwantedListenerUnsubscribe();
+        historyListenerUnsubscribe = null;
+        unwantedListenerUnsubscribe = null;
+        
         auth.signOut().then(() => {
             document.getElementById('auth-gate').style.display = 'flex';
             showToast("Signed out cleanly.");
@@ -695,8 +791,7 @@
             gate.style.display = 'none';
             document.getElementById('profile-email').innerText = user.email;
             document.getElementById('profile-initial').innerText = user.email.charAt(0).toUpperCase();
-            listenToWatchHistory();
-            buildHomeFeed();
+            listenToUnwantedMovies(); 
         } else {
             gate.style.display = 'flex';
         }
@@ -705,10 +800,36 @@
 
 <!-- Unified Email-Mapped Firestore Listeners -->
 <script>
+    function listenToUnwantedMovies() {
+        const user = auth.currentUser;
+        if (!user) return;
+
+        unwantedListenerUnsubscribe = db.collection('unwanted')
+            .where('email', '==', user.email)
+            .onSnapshot(snapshot => {
+                userUnwantedCache = [];
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    if(data.title) userUnwantedCache.push(data.title.toLowerCase());
+                });
+                
+                if(!historyListenerUnsubscribe) {
+                    listenToWatchHistory();
+                } else {
+                    buildHomeFeed();
+                }
+            }, error => {
+                console.error("Firestore unwanted listeners broke layout context stream: ", error);
+                listenToWatchHistory();
+            });
+    }
+
     function listenToWatchHistory() {
         const historyContainer = document.getElementById('history-container');
         const user = auth.currentUser;
         if (!user) return;
+        
+        historyContainer.innerHTML = '<div class="loading-ring"></div>';
         
         historyListenerUnsubscribe = db.collection('users').doc(user.email).collection('history')
             .orderBy('timestamp', 'desc')
@@ -735,7 +856,13 @@
                     const runtimeLink = referenceMovie ? referenceMovie.link : "#";
                     const runtimeImage = referenceMovie ? referenceMovie.image : "";
 
-                    const date = new Date(timestampMillis).toLocaleDateString(undefined, {month: 'short', day: 'numeric', hour: '2-digit', minute:'2-digit'});
+                    const date = new Date(timestampMillis).toLocaleDateString(undefined, {
+                        year: 'numeric',
+                        month: 'short', 
+                        day: 'numeric', 
+                        hour: '2-digit', 
+                        minute: '2-digit'
+                    });
                     
                     const cardLink = document.createElement('div');
                     cardLink.className = 'history-card-link';
@@ -743,7 +870,7 @@
                     const sanitizedTitle = item.title.replace(/'/g, "\\'");
                     const sanitizedLink = runtimeLink.replace(/'/g, "\\'");
                     
-                    cardLink.setAttribute('onclick', `navigateToMovie('${sanitizedTitle}', '${sanitizedLink}')`);
+                    cardLink.setAttribute('onclick', `navigateToMovie('${sanitizedTitle}', '${sanitizedLink}', this)`);
                     cardLink.style.cursor = 'pointer';
                     
                     cardLink.innerHTML = `
@@ -763,6 +890,7 @@
                 buildHomeFeed();
             }, error => {
                 console.error("Firestore snapshot pipeline disrupted: ", error);
+                historyContainer.innerHTML = `<p style="color: red; font-size: 14px;">Error sync data history.</p>`;
             });
     }
 </script>
@@ -834,7 +962,12 @@
 
     function goRandom() {
         if (typeof movies === 'undefined' || !movies.length) return;
-        const randomItem = movies[Math.floor(Math.random() * movies.length)];
+        const availableOptions = movies.filter(m => !userUnwantedCache.includes(m.title.toLowerCase()));
+        if(!availableOptions.length) {
+            showToast("No movies available matching filter conditions.");
+            return;
+        }
+        const randomItem = availableOptions[Math.floor(Math.random() * availableOptions.length)];
         navigateToMovie(randomItem.title, randomItem.link);
     }
 
@@ -846,8 +979,8 @@
         if (query === "") return;
 
         const matches = movies.filter(m => 
-            m.title.toLowerCase().includes(query) || 
-            m.genres.some(g => g.toLowerCase().includes(query))
+            !userUnwantedCache.includes(m.title.toLowerCase()) && 
+            (m.title.toLowerCase().includes(query) || m.genres.some(g => g.toLowerCase().includes(query)))
         );
 
         if (matches.length > 0) {
@@ -866,6 +999,115 @@
     }
 </script>
 
+<!-- Mobile Gestures & Custom Long Press Systems Manager Engine -->
+<script>
+    let activeLongPressTimer = null;
+    let longPressTriggeredFlag = false;
+    let selectedSheetMovieTitle = "";
+    
+    // Variables to precisely track touch coordinates
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let isScrollingMove = false;
+
+    function setupLongPressGesture(cardElement, movieTitle, movieLink) {
+        cardElement.addEventListener('contextmenu', e => e.preventDefault());
+
+        cardElement.addEventListener('touchstart', (e) => {
+            longPressTriggeredFlag = false;
+            isScrollingMove = false;
+            selectedSheetMovieTitle = movieTitle;
+            
+            // Capture initial touch coordinates
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+            
+            activeLongPressTimer = setTimeout(() => {
+                longPressTriggeredFlag = true;
+                openActionSheet(movieTitle);
+            }, 700); 
+        }, { passive: true });
+
+        cardElement.addEventListener('touchmove', (e) => {
+            const currentX = e.touches[0].clientX;
+            const currentY = e.touches[0].clientY;
+            
+            // Calculate absolute dragging distances
+            const moveDeltaX = Math.abs(currentX - touchStartX);
+            const moveDeltaY = Math.abs(currentY - touchStartY);
+
+            // If drag exceeds 10px in any direction, label as scrolling and kill timer
+            if (moveDeltaX > 10 || moveDeltaY > 10) {
+                isScrollingMove = true;
+                if (activeLongPressTimer) clearTimeout(activeLongPressTimer);
+            }
+        }, { passive: true });
+
+        cardElement.addEventListener('touchend', (e) => {
+            if (activeLongPressTimer) clearTimeout(activeLongPressTimer);
+            
+            // Block navigation if a long press fired OR if the user was just scrolling the track row
+            if (longPressTriggeredFlag || isScrollingMove) {
+                e.preventDefault(); 
+            } else {
+                const sanitizedTitle = movieTitle.replace(/'/g, "\\'");
+                const sanitizedLink = movieLink.replace(/'/g, "\\'");
+                navigateToMovie(sanitizedTitle, sanitizedLink, cardElement.firstElementChild);
+            }
+        });
+    }
+
+    function openActionSheet(title) {
+        document.getElementById('action-sheet-target-title').innerText = title;
+        const backdrop = document.getElementById('action-sheet-backdrop');
+        const sheet = document.getElementById('action-sheet');
+        
+        backdrop.style.display = 'block';
+        setTimeout(() => {
+            backdrop.style.opacity = '1';
+            sheet.style.bottom = '0px';
+        }, 10);
+    }
+
+    function closeActionSheet() {
+        const backdrop = document.getElementById('action-sheet-backdrop');
+        const sheet = document.getElementById('action-sheet');
+        
+        sheet.style.bottom = '-100%';
+        backdrop.style.opacity = '0';
+        setTimeout(() => {
+            backdrop.style.display = 'none';
+        }, 300);
+    }
+
+    function confirmHideMovie() {
+        const user = auth.currentUser;
+        if (!user) {
+            showToast("Please authenticate first.");
+            closeActionSheet();
+            return;
+        }
+
+        if (!selectedSheetMovieTitle) return;
+
+        closeActionSheet();
+        showToast(`Hiding "${selectedSheetMovieTitle}"...`);
+
+        db.collection('unwanted').add({
+            email: user.email,
+            title: selectedSheetMovieTitle,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        })
+        .then(() => {
+            showToast("Recommendations list updated.");
+        })
+        .catch(err => {
+            console.error("Firestore drop block exception: ", err);
+            showToast("Failed to save exclusion filter.");
+        });
+    }
+</script>
+
 <!-- Recommendation Algorithm Matrix -->
 <script>
     function parseGenres(genres) {
@@ -877,41 +1119,42 @@
         const div = document.createElement("div");
         div.className = "movie";
         
-        const sanitizedTitle = m.title.replace(/'/g, "\\'");
-        const sanitizedLink = m.link.replace(/'/g, "\\'");
-        
         div.innerHTML = `
-            <div style="cursor: pointer; width: 100%; height: 100%;" onclick="navigateToMovie('${sanitizedTitle}', '${sanitizedLink}')">
+            <div style="cursor: pointer; width: 100%; height: 100%; position: relative;">
                 <img src="${m.image}" onerror="this.insertAdjacentHTML('afterend', '<p class=\\'fallback-label\\'>${m.title}</p>'); this.style.opacity='0.25';">
             </div>
         `;
+        
+        setupLongPressGesture(div, m.title, m.link);
         return div;
     }
 
-    // FIX: Replaced .add() with .doc(docId).set() to update the timestamp instead of duplicating items.
-    function navigateToMovie(movieTitle, destinationUrl) {
+    function navigateToMovie(movieTitle, destinationUrl, elementClicked) {
         const user = auth.currentUser;
         
+        if (elementClicked) {
+            if (elementClicked.querySelector('.movie-loading-overlay')) return;
+
+            const localizedSpinner = document.createElement('div');
+            localizedSpinner.className = 'movie-loading-overlay';
+            localizedSpinner.innerHTML = '<div class="loading-ring"></div>';
+            elementClicked.appendChild(localizedSpinner);
+        }
+
         if (!user) {
             window.location.href = destinationUrl;
             return;
         }
 
-        // Generate a clean, lowercase document ID unique to this title (e.g. "avatar-2" or "the-batman")
-        const docId = movieTitle.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
-
-        // Save history entry securely using a fixed document path
-        db.collection('users').doc(user.email).collection('history').doc(docId).set({
+        db.collection('users').doc(user.email).collection('history').add({
             title: movieTitle,
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
         })
         .then(() => {
-            // Once updated or created, seamlessly shift the application context to target frame url
             window.location.href = destinationUrl;
         })
         .catch(err => {
             console.error("History tracking failed: ", err);
-            // Fallback: Don't block navigation if the write execution encounters an exception
             window.location.href = destinationUrl;
         });
     }
@@ -934,32 +1177,39 @@
         
         if(!randomContainer || !genreContainer || !watchAgainContainer) return;
 
-        // 1. Compile Unique "Watch Again" Row
+        // FILTER STEP: Filter out any title explicitly listed inside userUnwantedCache
+        const filteredGlobalCatalog = movies.filter(m => !userUnwantedCache.includes(m.title.toLowerCase()));
+
+        // Build Watch Again Track Row
         if (userWatchHistoryCache.length > 0) {
             const uniqueTitles = [];
             const watchAgainMovies = [];
             
             userWatchHistoryCache.forEach(item => {
-                if (!uniqueTitles.includes(item.title.toLowerCase())) {
+                if (!uniqueTitles.includes(item.title.toLowerCase()) && !userUnwantedCache.includes(item.title.toLowerCase())) {
                     uniqueTitles.push(item.title.toLowerCase());
-                    const matchedMovie = movies.find(m => m.title.toLowerCase() === item.title.toLowerCase());
+                    const matchedMovie = filteredGlobalCatalog.find(m => m.title.toLowerCase() === item.title.toLowerCase());
                     if (matchedMovie) watchAgainMovies.push(matchedMovie);
                 }
             });
 
-            watchAgainContainer.innerHTML = `
-                <div class="section">
-                    <h2 class="section-title">Watch Again</h2>
-                    <div class="movies"></div>
-                </div>
-            `;
-            const watchAgainRow = watchAgainContainer.querySelector(".movies");
-            watchAgainMovies.forEach(m => watchAgainRow.appendChild(createMovieCard(m)));
+            if(watchAgainMovies.length > 0) {
+                watchAgainContainer.innerHTML = `
+                    <div class="section">
+                        <h2 class="section-title">Watch Again</h2>
+                        <div class="movies"></div>
+                    </div>
+                `;
+                const watchAgainRow = watchAgainContainer.querySelector(".movies");
+                watchAgainMovies.forEach(m => watchAgainRow.appendChild(createMovieCard(m)));
+            } else {
+                watchAgainContainer.innerHTML = "";
+            }
         } else {
             watchAgainContainer.innerHTML = "";
         }
 
-        // 2. Mix Random Picks
+        // Build Random Picks Track Row
         randomContainer.innerHTML = `
             <div class="section">
                 <h2 class="section-title">Random Picks</h2>
@@ -967,11 +1217,11 @@
             </div>
         `;
         const randomRow = randomContainer.querySelector(".movies");
-        shuffleArray(movies).forEach(m => randomRow.appendChild(createMovieCard(m)));
+        shuffleArray(filteredGlobalCatalog).forEach(m => randomRow.appendChild(createMovieCard(m)));
 
-        // 3. Map Categories dynamically to Specific Buckets based on genres
+        // Build Categorized Genre Map Rows
         const genreMap = {};
-        movies.forEach(m => {
+        filteredGlobalCatalog.forEach(m => {
             parseGenres(m.genres).forEach(g => {
                 const formattedGenre = g.charAt(0).toUpperCase() + g.slice(1).toLowerCase();
                 if (!genreMap[formattedGenre]) genreMap[formattedGenre] = [];
@@ -979,7 +1229,6 @@
             });
         });
 
-        // 4. Render Structured Interface Rows Separated by Genre
         genreContainer.innerHTML = "";
         Object.keys(genreMap).sort().forEach(genre => {
             const section = document.createElement("div");
@@ -997,4 +1246,3 @@
 
 </body>
 </html>
-
