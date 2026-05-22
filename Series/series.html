@@ -18,16 +18,16 @@
             background: rgba(0,0,0,0.6); border-radius: 50%; display: flex; 
             align-items: center; justify-content: center; cursor: pointer; z-index: 10;
         }
+        
+        /* Hides the body content until Firebase confirms the user is logged in */
+        body { display: none; background-color: #000000; color: white; }
     </style>
+
+    <!-- Firebase SDK CDNs (v10 Compat) matching your index.html -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 </head>
 <body>
-    <!-- 1. AUTH CHECK: Redirects immediately if the user isn't logged in -->
-    <script>
-        if (!localStorage.getItem('isLoggedIn') || localStorage.getItem('isLoggedIn') !== 'true') {
-            window.location.href = '../index.html'; 
-        }
-    </script>
-
     <video class="bg-video" autoplay muted loop id="bgVideo"></video>
     <div class="overlay"></div>
 
@@ -48,17 +48,46 @@
         </div>
     </div>
 
-    <!-- External Logic Scripts -->
+    <!-- Firebase Setup Initialization -->
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyCExki28m1NNepVQEIjmcQzR8z8O68LqIc",
+            authDomain: "rinolski-notifications.firebaseapp.com",
+            projectId: "rinolski-notifications",
+            storageBucket: "rinolski-notifications.firebasestorage.app",
+            messagingSenderId: "355554579853",
+            appId: "1:355554579853:web:3caa961653c0cdc0a359c4",
+            measurementId: "G-WZ84970GST"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+
+        // AUTHENTICATION GATEWAY
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                // User is authenticated! Show the layout content
+                document.body.style.display = 'block';
+            } else {
+                // Not logged in? Boot them out immediately to index.html
+                window.location.href = '../index';
+            }
+        });
+    </script>
+
+    <!-- External Series Logic Scripts -->
     <script src="https://rinolski.neocities.org/Series/series.js"></script>
     <script src="https://rinolski.neocities.org/Series/script.js"></script>
 
-    <!-- 2. NAVIGATION LOGIC: Back button falls back to index.html if no history exists -->
+    <!-- NAVIGATION LOGIC -->
     <script>
         document.getElementById('back-btn').onclick = () => {
-            if (document.referrer && document.referrer !== "") {
+            // Check if there is internal history linking from within your own site domain
+            if (document.referrer && document.referrer.includes(window.location.hostname)) {
                 window.history.back();
             } else {
-                window.location.href = '../index.html'; 
+                // No history, or arrived directly via copy-pasting/new tab? Force back to index.html
+                window.location.href = '../index'; 
             }
         };
     </script>
