@@ -427,7 +427,8 @@ window.videoData = {
   "MargosGotMoneyTroubles-S1E4": "https://dl.dropboxusercontent.com/scl/fi/esmvnqdttdi6o251ssgbi/Margos.Got.Money.Troubles.S01E04.mkv?rlkey=y9dx9o8qgeq9hsxkbu4i122vt&st=gdr30at3&dl=1",
   "MargosGotMoneyTroubles-S1E5": "https://dl.dropboxusercontent.com/scl/fi/lhxrdkd1rnkocrtirkdx9/Margos.Got.Money.Troubles.S01E05.mkv?rlkey=7d5o74s21pz6uh3kfdbsiwm1f&st=uqalrvy4&dl=1",
   "MargosGotMoneyTroubles-S1E6": "https://dl.dropboxusercontent.com/scl/fi/pa31hjqomlyz1voe06fn9/Margos.Got.Money.Troubles.S01E06.mkv?rlkey=k3th6r6c9b0hg6xuow1e0xi6d&st=br7iqbqm&dl=1",
-
+  "MargosGotMoneyTroubles-S1E7": "https://dl.dropboxusercontent.com/scl/fi/woi5hl33w56ghrr0iam0s/Margos.Got.Money.Troubles.S01E07.mkv?rlkey=zg0lbkg3ygmdg3vr37d9yk3n2&st=7flm7w8d&dl=1",
+  "MargosGotMoneyTroubles-S1E8": "https://dl.dropboxusercontent.com/scl/fi/1lbnc6ua0ewx482ds0xnn/Margos.Got.Money.Troubles.S01E08.mkv?rlkey=tull7l1sa4e2fkqu1xhe157f5&st=0cplh8q8&dl=1",
   // Beef
   "Beef-S1E1": "https://dl.dropboxusercontent.com/scl/fi/v5xuzr54pcnzivkc3ebmt/BEEF.S01E01_t1slsq.mkv?rlkey=vei5nx2j7r6pr5ka9guzkdzh4&st=70wn5uvk&dl=1",
   "Beef-S1E2": "https://dl.dropboxusercontent.com/scl/fi/vn6r95h4aaixde3althjo/BEEF.S01E02_aab1wx.mkv?rlkey=mzqjqvsil0d68vsc7gosltjvi&st=fne648pf&dl=1",
