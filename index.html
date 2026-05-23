@@ -6,7 +6,7 @@
     <title>Rinolski</title>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
     
-    <!-- Firebase SDK CDNs (v10 Compat) -->
+    <!-- Firebase SDK CDNs (v10 Compat Layer) -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
@@ -690,22 +690,34 @@
         setTimeout(() => toast.remove(), 3500);
     }
 
+    // FIXED: Maps code strings directly into clean, consumer-ready language
     function handleAuthError(error) {
+        console.error("Firebase auth issue triggered:", error);
+        
         switch (error.code) {
             case "auth/invalid-email":
-                showToast("Invalid email");
+                showToast("That email address doesn't look quite right.");
                 break;
             case "auth/user-not-found":
-                showToast("Email not found. Try signing up instead.");
+                showToast("We couldn't find an account matching that email address.");
                 break;
             case "auth/wrong-password":
-                showToast("Incorrect password");
+                showToast("The password you entered is incorrect.");
                 break;
             case "auth/email-already-in-use":
-                showToast("Email already registered. Try signing in.");
+                showToast("This email address is already connected to another account.");
+                break;
+            case "auth/weak-password":
+                showToast("Your password needs to be at least 6 characters long.");
+                break;
+            case "auth/network-request-failed":
+                showToast("Connection issue. Check your internet settings and try again.");
+                break;
+            case "auth/too-many-requests":
+                showToast("Too many failed attempts. This account has been temporarily locked out.");
                 break;
             default:
-                showToast(error.message);
+                showToast("Something went wrong. Please check your entries and try again.");
                 break;
         }
     }
@@ -738,7 +750,7 @@
         const password = document.getElementById('auth-password').value;
 
         if(!email || !password) {
-            showToast("Please complete all inputs.");
+            showToast("Please enter both your email and password.");
             return;
         }
 
@@ -804,8 +816,7 @@
         const user = auth.currentUser;
         if (!user) return;
 
-        unwantedListenerUnsubscribe = db.collection('unwanted')
-            .where('email', '==', user.email)
+        unwantedListenerUnsubscribe = db.collection('unwanted').doc(user.email).collection('items')
             .onSnapshot(snapshot => {
                 userUnwantedCache = [];
                 snapshot.forEach(doc => {
@@ -890,7 +901,7 @@
                 buildHomeFeed();
             }, error => {
                 console.error("Firestore snapshot pipeline disrupted: ", error);
-                historyContainer.innerHTML = `<p style="color: red; font-size: 14px;">Error sync data history.</p>`;
+                historyContainer.innerHTML = `<p style="color: red; font-size: 14px;">Failed to load watch history.</p>`;
             });
     }
 </script>
@@ -964,7 +975,7 @@
         if (typeof movies === 'undefined' || !movies.length) return;
         const availableOptions = movies.filter(m => !userUnwantedCache.includes(m.title.toLowerCase()));
         if(!availableOptions.length) {
-            showToast("No movies available matching filter conditions.");
+            showToast("No movies matching filter conditions.");
             return;
         }
         const randomItem = availableOptions[Math.floor(Math.random() * availableOptions.length)];
@@ -1005,7 +1016,6 @@
     let longPressTriggeredFlag = false;
     let selectedSheetMovieTitle = "";
     
-    // Variables to precisely track touch coordinates
     let touchStartX = 0;
     let touchStartY = 0;
     let isScrollingMove = false;
@@ -1018,7 +1028,6 @@
             isScrollingMove = false;
             selectedSheetMovieTitle = movieTitle;
             
-            // Capture initial touch coordinates
             touchStartX = e.touches[0].clientX;
             touchStartY = e.touches[0].clientY;
             
@@ -1032,11 +1041,9 @@
             const currentX = e.touches[0].clientX;
             const currentY = e.touches[0].clientY;
             
-            // Calculate absolute dragging distances
             const moveDeltaX = Math.abs(currentX - touchStartX);
             const moveDeltaY = Math.abs(currentY - touchStartY);
 
-            // If drag exceeds 10px in any direction, label as scrolling and kill timer
             if (moveDeltaX > 10 || moveDeltaY > 10) {
                 isScrollingMove = true;
                 if (activeLongPressTimer) clearTimeout(activeLongPressTimer);
@@ -1046,7 +1053,6 @@
         cardElement.addEventListener('touchend', (e) => {
             if (activeLongPressTimer) clearTimeout(activeLongPressTimer);
             
-            // Block navigation if a long press fired OR if the user was just scrolling the track row
             if (longPressTriggeredFlag || isScrollingMove) {
                 e.preventDefault(); 
             } else {
@@ -1077,25 +1083,30 @@
         backdrop.style.opacity = '0';
         setTimeout(() => {
             backdrop.style.display = 'none';
+            selectedSheetMovieTitle = ""; 
         }, 300);
     }
 
     function confirmHideMovie() {
         const user = auth.currentUser;
         if (!user) {
-            showToast("Please authenticate first.");
+            showToast("Please sign in first.");
             closeActionSheet();
             return;
         }
 
-        if (!selectedSheetMovieTitle) return;
+        if (!selectedSheetMovieTitle) {
+            showToast("Error: No movie targeted.");
+            closeActionSheet();
+            return;
+        }
 
+        const movieToHide = selectedSheetMovieTitle; 
         closeActionSheet();
-        showToast(`Hiding "${selectedSheetMovieTitle}"...`);
+        showToast(`Hiding "${movieToHide}"...`);
 
-        db.collection('unwanted').add({
-            email: user.email,
-            title: selectedSheetMovieTitle,
+        db.collection('unwanted').doc(user.email).collection('items').doc(movieToHide).set({
+            title: movieToHide,
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
         })
         .then(() => {
@@ -1103,7 +1114,7 @@
         })
         .catch(err => {
             console.error("Firestore drop block exception: ", err);
-            showToast("Failed to save exclusion filter.");
+            showToast("Failed to hide selection.");
         });
     }
 </script>
@@ -1146,7 +1157,7 @@
             return;
         }
 
-        db.collection('users').doc(user.email).collection('history').add({
+        db.collection('users').doc(user.email).collection('history').doc(movieTitle).set({
             title: movieTitle,
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
         })
@@ -1177,7 +1188,6 @@
         
         if(!randomContainer || !genreContainer || !watchAgainContainer) return;
 
-        // FILTER STEP: Filter out any title explicitly listed inside userUnwantedCache
         const filteredGlobalCatalog = movies.filter(m => !userUnwantedCache.includes(m.title.toLowerCase()));
 
         // Build Watch Again Track Row
@@ -1246,3 +1256,4 @@
 
 </body>
 </html>
+
