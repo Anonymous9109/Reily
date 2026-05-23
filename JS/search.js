@@ -17,7 +17,12 @@ genres: ["Action", "Crime"],
 image: "images/FastFurious2009.jpg",
 link: "Movies/Movie?movie=fast-and-furious-2009"
 },
-
+{
+title: "Diary of a Wimpy Kid: Rodrick Rules",
+genres: ["Comedy", "Family"],
+image: "images/DiaryofAWimpyKidRodrickRules.jpg",
+link: "Movies/Movie?movie=DiaryofAWimpyKidRodrickRules"
+},
 {
 title: "Good fortune",
 genres: ["Action","Comedy"],
