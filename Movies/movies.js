@@ -12,6 +12,12 @@ const movies = {
     video: "https://res.cloudinary.com/dn8w9kttq/video/upload/v1773969958/ipjwhxgb8tljfxtnwu6m.mp4",
     play: "ThePursuitofHappyness"
   },
+  "DiaryofAWimpyKidRodrickRules": {
+    title: "Diary of a Wimpy Kid: Rodrick Rules",
+    desc: "Back in middle school after summer vacation, Greg Heffley and his older brother Rodrick must deal with their parents' misguided attempts to have them bond.",
+    video: "",
+    play: "DiaryofAWimpyKidRodrickRules"
+  },
 
   "the-social-network": {
     title: "The Social Network",
