@@ -29,7 +29,7 @@ genres: ["Comedy", "Family"],
 image: "images/DiaryOfAWimpyKidTheLongHaul.jpg",
 link: "Movies/Movie?movie=DiaryOfAWimpyKidTheLongHaul"
 },
-    {
+    
 {
 title: "Good fortune",
 genres: ["Action","Comedy"],
