@@ -18,7 +18,12 @@ const movies = {
     video: "",
     play: "DiaryofAWimpyKidRodrickRules"
   },
-
+  "DiaryOfAWimpyKidTheLongHaul": {
+    title: "Diary of a Wimpy Kid: The Long Haul",
+    desc: "Greg Heffley's mother proposes a road trip during the summer vacation, ruining his plans. He comes up with an idea to attend a YouTube gaming convention.",
+    video: "",
+    play: "DiaryOfAWimpyKidTheLongHaul"
+  },
   "the-social-network": {
     title: "The Social Network",
     desc: "The story of the founding of Facebook and the lawsuits that followed, revealing the personal and legal conflicts behind the rise of Mark Zuckerberg.",
