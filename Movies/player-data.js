@@ -34,6 +34,7 @@ window.videoData = {
       src: "../subtitles/500DaysOfSummer/500DaysOfSummer-Arabic.txt" // Changed .txt to .vtt
     }
   ], 
+  "DiaryOfAWimpyKidTheLongHaul": "https://dl.dropboxusercontent.com/scl/fi/j9ywhxgafntjykozbxcef/Diary.Of.A.Wimpy.Kid.The.Long.Haul.mp4?rlkey=71wl80qtj1wdu9nuu0nx0jj2h&st=ze81sht8&dl=1",
   "DiaryofAWimpyKidRodrickRules": "https://dl.dropboxusercontent.com/scl/fi/f7jqvfjxl3gskuay80erq/Diary.Of.A.Wimpy.Kid.Rodrick.Rules.2011.mp4?rlkey=xr67pjfqqf365rgjtknoa9hwi&st=eshk5m7v&dl=1",
 "TheIdeaOfYou": "https://dl.dropboxusercontent.com/scl/fi/99l7zqpxf552015ilesgz/The.Idea.of.You.mkv?rlkey=iz8nme1b3i1ndxqalwzpgelds&st=c4lyyb9t&dl=1",
 "TheMazeRunner": "https://dl.dropboxusercontent.com/scl/fi/zitz54jyti9imtn5bnwaj/TheMazeRunner.mp4?rlkey=d5pijxulpmp3ndk2cbjgb02ay&st=qait2ips&dl=1",
