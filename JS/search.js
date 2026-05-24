@@ -23,13 +23,12 @@ genres: ["Comedy", "Family"],
 image: "images/DiaryofAWimpyKidRodrickRules.jpg",
 link: "Movies/Movie?movie=DiaryofAWimpyKidRodrickRules"
 },
-    {
+{
 title: "Diary of a Wimpy Kid: The Long Haul",
 genres: ["Comedy", "Family"],
 image: "images/DiaryOfAWimpyKidTheLongHaul.jpg",
 link: "Movies/Movie?movie=DiaryOfAWimpyKidTheLongHaul"
 },
-    
 {
 title: "Good fortune",
 genres: ["Action","Comedy"],
