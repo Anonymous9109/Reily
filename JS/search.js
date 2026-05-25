@@ -1,5 +1,4 @@
-const movies = [
-  { title: "The Hangover", genres: ["Action", "Comedy"], image: "images/TheHangover.jpg", link: "Movies/Movie?movie=the-hangover" },  
+  
 const movies = [
 
 { title: "The Hangover", genres: ["Action", "Comedy"], image: "images/TheHangover.jpg", link: "Movies/Movie?movie=the-hangover" },  
