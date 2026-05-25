@@ -327,7 +327,7 @@ link: "Series/series?series=MOBPSYCHO100"
   genres: ["Thriller", "Action"],
   image: "images/EscapefromAlcatraz.jpg",
   link: "Movies/Movie?movie=EscapefromAlcatraz"
-}
+},
   { title: "Diary of a Wimpy Kid: Rodrick Rules", genres: ["Comedy", "Family"], image: "images/DiaryofAWimpyKidRodrickRules.jpg", link: "Movies/Movie?movie=DiaryofAWimpyKidRodrickRules" },
   { title: "Diary of a Wimpy Kid: The Long Haul", genres: ["Comedy", "Family"], image: "images/DiaryOfAWimpyKidTheLongHaul.jpg", link: "Movies/Movie?movie=DiaryOfAWimpyKidTheLongHaul" }
 
