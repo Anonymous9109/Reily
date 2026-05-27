@@ -12,6 +12,12 @@ const movies = {
     video: "https://res.cloudinary.com/dn8w9kttq/video/upload/v1773969958/ipjwhxgb8tljfxtnwu6m.mp4",
     play: "ThePursuitofHappyness"
   },
+    "DiaryOfAWimpyKid": {
+    title: "Diary of a Wimpy Kid",
+    desc: "Greg Heffley, an 11-year-old, is about to begin middle school and wishes to become popular among the students. However, his attempts to gain fame land him in hilariously sticky situations.",
+    video: "",
+    play: "DiaryOfAWimpyKid"
+  },
   "DiaryofAWimpyKidRodrickRules": {
     title: "Diary of a Wimpy Kid: Rodrick Rules",
     desc: "Back in middle school after summer vacation, Greg Heffley and his older brother Rodrick must deal with their parents' misguided attempts to have them bond.",
