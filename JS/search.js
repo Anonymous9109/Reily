@@ -324,7 +324,8 @@ const movies = [
     link: "Movies/Movie?movie=EscapefromAlcatraz"
   },
   { title: "Diary of a Wimpy Kid: Rodrick Rules", genres: ["Comedy", "Family"], image: "images/DiaryofAWimpyKidRodrickRules.jpg", link: "Movies/Movie?movie=DiaryofAWimpyKidRodrickRules" },
-  { title: "Diary of a Wimpy Kid: The Long Haul", genres: ["Comedy", "Family"], image: "images/DiaryOfAWimpyKidTheLongHaul.jpg", link: "Movies/Movie?movie=DiaryOfAWimpyKidTheLongHaul" }
+  { title: "Diary of a Wimpy Kid: The Long Haul", genres: ["Comedy", "Family"], image: "images/DiaryOfAWimpyKidTheLongHaul.jpg", link: "Movies/Movie?movie=DiaryOfAWimpyKidTheLongHaul" },
+  { title: "Diary of a Wimpy Kid", genres: ["Comedy", "Family"], image: "images/DiaryOfAWimpyKid.jpg", link: "Movies/Movie?movie=DiaryOfAWimpyKid" },
 ];
 
 // Convert Arabic characters to English-sound equivalents
