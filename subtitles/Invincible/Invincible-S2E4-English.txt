@@ -1,0 +1,2533 @@
+﻿WEBVTT
+
+00:00:07.133 --> 00:00:09.385
+Time to push my baby bird
+out of the nest.
+
+00:00:09.468 --> 00:00:11.637
+<i>[Séance Dog] Mark Grayson,
+I need your help.</i>
+
+00:00:11.721 --> 00:00:14.682
+<i>My name is Nuolzot.
+I am from the planet Thraxa.</i>
+
+00:00:14.765 --> 00:00:17.309
+I have to go away
+for a few weeks, to space again.
+
+00:00:17.393 --> 00:00:19.603
+- [phone beeps]
+- <i>Amber, I, um, I love you.</i>
+
+00:00:19.687 --> 00:00:21.439
+<i>[Carol] We're not that different
+from other support groups.</i>
+
+00:00:21.522 --> 00:00:23.607
+<i>[Louise] It's about time
+someone cut through</i>
+
+00:00:23.691 --> 00:00:25.234
+<i>all the red tape
+and did something.</i>
+
+00:00:25.317 --> 00:00:27.653
+<i>[Eve's dad] Your powers don't
+make you a hero.</i>
+
+00:00:27.737 --> 00:00:29.363
+They make you dangerous.
+
+00:00:29.447 --> 00:00:32.199
+- Donald?
+- Wonder what that was about.
+
+00:00:32.283 --> 00:00:35.327
+- Just had half my body melted
+helping you mutilate yourself.
+- [grunting]
+
+00:00:35.411 --> 00:00:36.912
+<i>[Allen] Thaedus thinks
+there's a mole.</i>
+
+00:00:36.996 --> 00:00:38.706
+[Thaedus] Forgive me, Allen.
+
+00:00:38.789 --> 00:00:41.167
+<i>[Debbie] I can't heal
+'cause he murdered Alana</i>
+
+00:00:41.250 --> 00:00:44.086
+<i>and the other Guardians
+and almost killed my son.</i>
+
+00:00:44.170 --> 00:00:45.212
+<i>I didn't know who he was.</i>
+
+00:00:45.296 --> 00:00:46.672
+You should have.
+
+00:00:46.756 --> 00:00:48.424
+[Nolan] Hello, son.
+
+00:00:48.507 --> 00:00:50.301
+It's been a while.
+
+00:00:52.553 --> 00:00:54.555
+[Mark groaning]
+
+00:01:01.228 --> 00:01:03.189
+- Dad?
+- [gasps]
+
+00:01:04.940 --> 00:01:07.651
+[groaning]
+
+00:01:10.029 --> 00:01:11.614
+[grunts]
+
+00:01:12.323 --> 00:01:15.201
+[breathing heavily]
+
+00:01:21.415 --> 00:01:24.710
+[♪ Nick Cave: "Avalanche"]
+
+00:01:27.755 --> 00:01:32.218
+♪ <i>I stepped into an avalanche</i> ♪
+
+00:01:33.677 --> 00:01:37.181
+♪ <i>It covered up my soul</i> ♪
+
+00:01:39.558 --> 00:01:45.147
+♪ <i>When I am not
+this hunchback that you see</i> ♪
+
+00:01:45.231 --> 00:01:49.777
+♪ <i>I sleep beneath
+the golden hill</i> ♪
+
+00:01:51.946 --> 00:01:55.783
+♪ <i>You who wish to conquer pain</i> ♪
+
+00:01:55.866 --> 00:01:57.910
+♪ <i>You must learn</i> ♪
+
+00:01:57.993 --> 00:02:02.748
+♪ <i>Learn to serve me well</i> ♪
+
+00:02:12.883 --> 00:02:17.680
+♪ <i>You strike my side
+by accident</i> ♪
+
+00:02:17.763 --> 00:02:21.892
+♪ <i>As you go down for your goal</i> ♪
+
+00:02:23.644 --> 00:02:28.023
+♪ <i>The cripple here
+that you clothe and feed</i> ♪
+
+00:02:28.107 --> 00:02:34.154
+♪ <i>Is neither starved or cold</i> ♪
+
+00:02:35.698 --> 00:02:39.243
+♪ <i>He does not ask
+for your company</i> ♪
+
+00:02:39.326 --> 00:02:41.453
+♪ <i>Not at the center</i> ♪
+
+00:02:41.537 --> 00:02:43.163
+{\an8}♪ <i>The center of</i> ♪
+
+00:02:43.247 --> 00:02:47.209
+♪ <i>The world</i> ♪
+
+00:02:56.176 --> 00:02:59.805
+♪ <i>When I am on a pedestal</i> ♪
+
+00:03:01.140 --> 00:03:05.269
+♪ <i>You did not raise me there</i> ♪
+
+00:03:06.604 --> 00:03:10.733
+♪ <i>Your laws do not compel me
+now</i> ♪
+
+00:03:12.276 --> 00:03:16.906
+♪ <i>To kneel grotesque and bare</i> ♪
+
+00:03:18.991 --> 00:03:23.162
+♪ <i>I, myself, am the pedestal</i> ♪
+
+00:03:23.245 --> 00:03:30.127
+♪ <i>For this ugly hump
+at which you stare</i> ♪
+
+00:03:39.553 --> 00:03:43.223
+♪ <i>You who wish to conquer pain</i> ♪
+
+00:03:44.725 --> 00:03:49.146
+♪ <i>You must learn
+what makes me kind</i> ♪
+
+00:03:49.229 --> 00:03:54.652
+♪ <i>The crumbs of love
+that you offer me</i> ♪
+
+00:03:54.735 --> 00:03:59.907
+♪ <i>They're the crumbs
+I've left behind</i> ♪♪
+
+00:04:04.870 --> 00:04:06.372
+[Thraxan captain] Wait!
+
+00:04:07.831 --> 00:04:11.961
+I don't know who you are,
+but we owe you our lives.
+
+00:04:12.044 --> 00:04:13.212
+Won't you stay?
+
+00:04:13.295 --> 00:04:15.089
+Tell us your name.
+
+00:04:15.172 --> 00:04:17.257
+Uh, where you come from.
+
+00:04:20.928 --> 00:04:22.930
+[wind whistling]
+
+00:04:30.771 --> 00:04:32.314
+[Nolan] Hello, son.
+
+00:04:32.398 --> 00:04:33.482
+[gasps]
+
+00:04:33.565 --> 00:04:34.984
+It's been a while.
+
+00:04:37.611 --> 00:04:39.738
+Dad?
+
+00:04:44.702 --> 00:04:46.745
+[breathes shakily]
+
+00:04:49.289 --> 00:04:51.166
+[grunts softly]
+
+00:04:56.088 --> 00:04:58.007
+[groans]
+
+00:05:08.684 --> 00:05:10.269
+[grunts]
+
+00:05:17.151 --> 00:05:18.569
+[sighs softly]
+
+00:05:20.988 --> 00:05:23.073
+I...
+
+00:05:23.157 --> 00:05:24.491
+I missed you.
+
+00:05:26.702 --> 00:05:28.620
+This was all you?
+
+00:05:28.704 --> 00:05:29.872
+Bringing me here?
+
+00:05:29.955 --> 00:05:31.749
+Yes.
+
+00:05:31.832 --> 00:05:34.043
+The Thraxans told me
+that they needed my help.
+
+00:05:34.126 --> 00:05:36.170
+They do need your help.
+
+00:05:36.253 --> 00:05:37.755
+Why?
+
+00:05:37.838 --> 00:05:40.090
+It's complicated.
+Come with me and...
+
+00:05:40.174 --> 00:05:42.676
+No, why would you
+lie to me again?
+
+00:05:45.304 --> 00:05:47.389
+You killed thousands of people.
+
+00:05:47.473 --> 00:05:48.807
+Yes.
+
+00:05:50.684 --> 00:05:53.562
+Why would you think
+I'd ever want to see you again?
+
+00:05:54.605 --> 00:05:56.648
+You called Mom a pet.
+
+00:05:56.732 --> 00:05:58.650
+- [sighs]
+- Mark, I need your help.
+
+00:05:58.734 --> 00:06:00.319
+I can't believe
+you put them up to this.
+
+00:06:00.402 --> 00:06:02.362
+- Made them lie to me, too.
+- Just listen.
+
+00:06:02.446 --> 00:06:04.531
+I don't have to listen
+to anything you say.
+
+00:06:04.615 --> 00:06:07.826
+Mark. Look...
+I made a mistake.
+
+00:06:07.910 --> 00:06:11.163
+And I've thought about you
+every day since...
+
+00:06:11.246 --> 00:06:13.832
+- A mistake?!
+- Son...
+
+00:06:13.916 --> 00:06:15.542
+No, you don't get
+to call me that anymore!
+
+00:06:15.626 --> 00:06:17.628
+What do you want me to say,
+Mark?
+
+00:06:17.711 --> 00:06:19.838
+You could have started
+with "I'm sorry."
+
+00:06:23.634 --> 00:06:25.511
+You know what?
+Don't bother, all right?
+
+00:06:25.594 --> 00:06:27.554
+It wouldn't mean anything
+anyway.
+
+00:06:27.638 --> 00:06:29.890
+I hope you like it here
+with your new friends.
+
+00:06:31.391 --> 00:06:33.685
+I guess they don't know you
+the way that I do.
+
+00:06:35.854 --> 00:06:37.606
+Fuck you.
+
+00:06:42.444 --> 00:06:44.113
+You'll never make it home
+on your own.
+
+00:06:44.196 --> 00:06:46.281
+- Watch me.
+- Mark, it's millions of miles,
+
+00:06:46.365 --> 00:06:47.866
+and you don't know the way.
+
+00:06:47.950 --> 00:06:50.452
+Navigation was never
+your strong suit.
+
+00:06:50.536 --> 00:06:53.872
+Come back and we'll talk.
+Please?
+
+00:06:53.956 --> 00:06:55.290
+And what are you gonna do
+if I don't?
+
+00:06:55.374 --> 00:06:57.209
+Knock all my teeth out again?
+
+00:06:59.920 --> 00:07:01.421
+I'll get you a ship home,
+
+00:07:01.505 --> 00:07:02.965
+but there's something
+you need to see first.
+
+00:07:03.048 --> 00:07:03.966
+No.
+
+00:07:04.049 --> 00:07:06.009
+Nuolzot wasn't lying to you.
+
+00:07:06.093 --> 00:07:08.846
+His people do need your help.
+Let me tell you why.
+
+00:07:08.929 --> 00:07:10.430
+I don't care.
+
+00:07:11.473 --> 00:07:12.933
+I know that's not true.
+
+00:07:20.941 --> 00:07:24.820
+Five minutes.
+For them, not you.
+
+00:07:26.697 --> 00:07:28.365
+[sighs]
+
+00:07:29.950 --> 00:07:30.868
+[indistinct chatter nearby]
+
+00:07:30.951 --> 00:07:33.662
+[Mark] So, you conquered this
+place instead of Earth. Great.
+
+00:07:33.745 --> 00:07:36.748
+I didn't conquer the Thraxans.
+
+00:07:36.832 --> 00:07:39.168
+They asked me to be
+their emperor.
+
+00:07:39.251 --> 00:07:41.587
+Emperor, conqueror,
+what's the difference?
+
+00:07:49.178 --> 00:07:50.596
+Mmm.
+
+00:07:54.099 --> 00:07:57.394
+Mark, welcome to our home.
+
+00:07:57.477 --> 00:07:59.354
+My husband's told me
+so much about you.
+
+00:07:59.438 --> 00:08:00.439
+Andressa...
+
+00:08:00.522 --> 00:08:02.858
+What the fuck is going on?
+
+00:08:03.901 --> 00:08:05.444
+Did I misspeak?
+
+00:08:07.321 --> 00:08:09.281
+I know this comes as a surprise.
+
+00:08:09.364 --> 00:08:11.909
+No shit I'm surprised.
+You're married to Mom.
+
+00:08:11.992 --> 00:08:14.953
+I can't go back to Earth, Mark.
+
+00:08:15.037 --> 00:08:16.788
+Not ever.
+
+00:08:16.872 --> 00:08:19.541
+- The life I had there is over.
+- [groans softly]
+
+00:08:21.668 --> 00:08:23.962
+[sighs] Oh, okay.
+
+00:08:24.046 --> 00:08:25.297
+All right,
+you're all done with Mom
+
+00:08:25.380 --> 00:08:26.965
+and all done with Earth.
+Good to know.
+
+00:08:27.049 --> 00:08:28.425
+Super glad you got to show me
+
+00:08:28.508 --> 00:08:30.886
+how great your life is
+without us.
+
+00:08:30.969 --> 00:08:32.971
+That's not
+what I wanted to show you.
+
+00:08:34.890 --> 00:08:36.850
+[inhales sharply] What
+else could you possibly...
+
+00:08:36.934 --> 00:08:38.477
+[gasps]
+
+00:08:38.560 --> 00:08:40.729
+- Mark...
+- [cooing]
+
+00:08:41.813 --> 00:08:43.690
+Who is that?
+
+00:08:43.774 --> 00:08:46.777
+This is your little brother.
+
+00:08:46.860 --> 00:08:48.612
+[sighs]
+
+00:08:48.695 --> 00:08:50.072
+Uh, you got to be...
+
+00:08:50.155 --> 00:08:52.157
+{\an8}♪ ♪
+
+00:08:56.411 --> 00:08:58.705
+...fucking kidding me!
+
+00:08:58.789 --> 00:09:00.791
+[♪ Blondshell: "Olympus"]
+
+00:09:12.886 --> 00:09:15.097
+♪ <i>I'd still kill for you</i> ♪
+
+00:09:15.180 --> 00:09:19.685
+♪ <i>I'd die to spend the night
+at your belonging</i> ♪
+
+00:09:19.768 --> 00:09:24.273
+♪ <i>All my friends think
+that I've lost it</i> ♪
+
+00:09:26.650 --> 00:09:30.195
+♪ <i>Up at Olympus,
+miss your house still</i> ♪
+
+00:09:30.279 --> 00:09:34.324
+{\an8}♪ <i>Sounds like birds
+and smells like vodka</i> ♪
+
+00:09:34.408 --> 00:09:37.869
+{\an8}♪ <i>You're always
+off your rocker</i> ♪
+
+00:09:40.205 --> 00:09:42.666
+{\an8}♪ <i>I want to save myself</i> ♪
+
+00:09:42.749 --> 00:09:45.961
+{\an8}♪ <i>You're part of my addiction</i> ♪
+
+00:09:46.044 --> 00:09:48.922
+{\an8}♪ <i>I just keep you
+in the kitchen</i> ♪
+
+00:09:49.006 --> 00:09:50.507
+{\an8}♪ <i>While I burn</i> ♪
+
+00:09:54.970 --> 00:09:59.224
+♪ <i>Burn, burn</i> ♪
+
+00:10:02.102 --> 00:10:06.398
+♪ <i>Burn, burn</i> ♪♪
+
+00:10:09.985 --> 00:10:11.820
+Why me?
+
+00:10:13.238 --> 00:10:15.490
+You could have taken Earth
+whenever you wanted.
+
+00:10:15.574 --> 00:10:17.326
+Why did you marry me?
+
+00:10:18.744 --> 00:10:22.831
+Was it just to be cruel?
+Just to hurt someone?
+
+00:10:25.000 --> 00:10:26.835
+[sighs]
+
+00:10:26.918 --> 00:10:30.881
+Everything we built, 20 years,
+
+00:10:30.964 --> 00:10:33.258
+and none of it was real.
+
+00:10:33.342 --> 00:10:35.469
+None of it.
+
+00:10:35.552 --> 00:10:37.971
+You weren't real.
+
+00:10:38.055 --> 00:10:39.890
+Only Mark.
+
+00:10:41.350 --> 00:10:43.602
+And you almost took him, too.
+
+00:10:46.104 --> 00:10:49.983
+{\an8}I never knew you at all, did I?
+
+00:10:50.067 --> 00:10:53.987
+I never even fucking knew you.
+
+00:10:57.032 --> 00:10:58.867
+Why me?
+
+00:10:58.950 --> 00:11:00.952
+[crying]
+
+00:11:03.080 --> 00:11:05.082
+<i>[Maulers grunting]</i>
+
+00:11:10.087 --> 00:11:12.089
+[whirring]
+
+00:11:19.388 --> 00:11:22.766
+Welcome to the world
+of the living, clone.
+
+00:11:22.849 --> 00:11:24.976
+Not this time.
+
+00:11:25.060 --> 00:11:26.770
+No, no, no. I was there.
+
+00:11:26.853 --> 00:11:29.981
+I remember the machine,
+Angstrom, the explosion.
+
+00:11:30.065 --> 00:11:31.775
+Of course you do.
+
+00:11:31.858 --> 00:11:35.570
+You have all of my memories,
+my experiences
+
+00:11:35.654 --> 00:11:38.073
+because...
+
+00:11:38.156 --> 00:11:39.950
+I'm the clone.
+
+00:11:40.033 --> 00:11:41.701
+For the first time,
+
+00:11:41.785 --> 00:11:44.037
+we know exactly
+who's the original
+
+00:11:44.121 --> 00:11:46.665
+- and who's the inferior.
+- [groans]
+
+00:11:46.748 --> 00:11:50.377
+This is going to be
+so much better.
+
+00:11:53.672 --> 00:11:55.882
+[dog barking in distance]
+
+00:11:55.966 --> 00:11:57.384
+[doorbell rings]
+
+00:11:57.467 --> 00:12:00.303
+Debbie, it's-it's Donald.
+
+00:12:06.351 --> 00:12:08.937
+[sighs heavily] Hmm.
+
+00:12:21.700 --> 00:12:23.243
+Hmm.
+
+00:12:46.683 --> 00:12:48.018
+[grunts softly]
+
+00:12:52.772 --> 00:12:54.441
+{\an8}[William laughs]
+
+00:12:54.524 --> 00:12:56.026
+{\an8}And the craziest thing is,
+
+00:12:56.109 --> 00:12:57.903
+{\an8}the prof doesn't even
+take attendance.
+
+00:12:57.986 --> 00:13:00.155
+You can show up, not show up,
+sleep in.
+
+00:13:00.238 --> 00:13:03.116
+- It's like they're...
+- Treating us like adults?
+
+00:13:03.200 --> 00:13:06.077
+You know you're paying
+to be here, right?
+
+00:13:06.161 --> 00:13:08.121
+You sure know how to take
+the fun out of skipping classes.
+
+00:13:08.205 --> 00:13:09.456
+[Eve] Amber!
+
+00:13:09.539 --> 00:13:11.500
+Hey, William!
+
+00:13:11.583 --> 00:13:13.168
+Oh, my gosh, Eve.
+
+00:13:13.251 --> 00:13:16.463
+- [Amber chuckles]
+- Hey, it's my favorite
+non-superhero superhero.
+
+00:13:18.298 --> 00:13:19.841
+Everything okay?
+
+00:13:19.925 --> 00:13:22.260
+Yeah, it's...
+
+00:13:22.344 --> 00:13:23.678
+okay.
+
+00:13:23.762 --> 00:13:25.722
+Hey, I-I tried texting Mark,
+
+00:13:25.805 --> 00:13:27.599
+but they're not going through.
+
+00:13:27.682 --> 00:13:29.226
+Do you guys know where he is?
+
+00:13:29.309 --> 00:13:30.644
+Ooh...
+
+00:13:30.727 --> 00:13:33.855
+About that.
+Remember Séance Dog?
+
+00:13:33.939 --> 00:13:35.106
+Yeah.
+
+00:13:35.190 --> 00:13:38.818
+Turns out, he's a talking
+alien bug from another planet.
+
+00:13:38.902 --> 00:13:41.196
+Who knew? Not this guy.
+
+00:13:41.279 --> 00:13:44.366
+Mark's away on a mission
+or something in space.
+
+00:13:44.449 --> 00:13:48.161
+He was in a hurry, so I didn't
+get much of an explanation.
+
+00:13:48.245 --> 00:13:50.247
+That was a week ago.
+
+00:13:51.581 --> 00:13:54.251
+Perils of dating a superhero,
+right? [chuckles]
+
+00:13:54.334 --> 00:13:55.835
+He's lucky he's cute.
+
+00:13:55.919 --> 00:13:58.255
+You sure you're okay?
+
+00:13:58.338 --> 00:13:59.798
+It's... [sighs]
+
+00:13:59.881 --> 00:14:01.883
+It's been a long week.
+
+00:14:01.967 --> 00:14:04.719
+Come on. Let's go grab
+a coffee and catch up.
+
+00:14:04.803 --> 00:14:06.763
+Hey, don't you guys have class?
+
+00:14:06.846 --> 00:14:09.099
+William was just telling me
+that the best part of college
+
+00:14:09.182 --> 00:14:11.810
+- is skipping it.
+- It totally is.
+
+00:14:11.893 --> 00:14:14.813
+It's super freeing, like
+wearing pants with no underwear.
+
+00:14:14.896 --> 00:14:18.483
+Amber, William, you guys coming?
+
+00:14:19.609 --> 00:14:21.611
+No, I'm fine.
+You guys should go.
+
+00:14:21.695 --> 00:14:25.699
+Tomorrow morning, brunch. Okay?
+Do not tell us no.
+
+00:14:25.782 --> 00:14:28.326
+Meet us at the dorms,
+like 9:00?
+
+00:14:28.410 --> 00:14:29.703
+Sure. I'd like that.
+
+00:14:29.786 --> 00:14:32.247
+Your tree house is,
+like, miles away.
+
+00:14:32.330 --> 00:14:33.832
+Do you need somewhere to crash?
+
+00:14:33.915 --> 00:14:36.001
+No, I keep a place in the city.
+
+00:14:45.010 --> 00:14:46.803
+[cooing]
+
+00:14:46.886 --> 00:14:49.598
+I-I don't...
+I don't even know what to say.
+
+00:14:49.681 --> 00:14:51.766
+A new wife, a kid.
+
+00:14:51.850 --> 00:14:55.270
+You just replaced us,
+except, you know, bugs.
+
+00:14:55.353 --> 00:14:56.479
+That's not true.
+
+00:14:56.563 --> 00:14:58.148
+Mom's going through hell
+back on Earth,
+
+00:14:58.231 --> 00:14:59.733
+and you were getting it on
+with a grasshopper
+
+00:14:59.816 --> 00:15:02.444
+- two seconds after you left.
+- It wasn't like that.
+
+00:15:02.527 --> 00:15:04.904
+He's way older than six months,
+which means you were...
+
+00:15:04.988 --> 00:15:07.407
+Thraxan biology is
+different than ours.
+
+00:15:09.034 --> 00:15:12.579
+I didn't replace you, Mark,
+or your mother.
+
+00:15:12.662 --> 00:15:14.164
+[sighs]
+
+00:15:14.247 --> 00:15:17.167
+I was lost when I left Earth.
+
+00:15:17.250 --> 00:15:19.836
+I found these people.
+
+00:15:19.919 --> 00:15:21.296
+I saved lives.
+
+00:15:21.379 --> 00:15:24.341
+It was like I had a purpose
+again.
+
+00:15:24.424 --> 00:15:26.676
+It felt right to stay
+and help them.
+
+00:15:26.760 --> 00:15:29.095
+Oh, so now you're a good guy,
+right?
+
+00:15:29.179 --> 00:15:31.056
+Here, not on Earth.
+
+00:15:31.139 --> 00:15:33.224
+- You don't have to forgive me.
+- Good.
+
+00:15:33.308 --> 00:15:37.354
+- But he is innocent
+in all this.
+- [cooing]
+
+00:15:37.437 --> 00:15:39.898
+- Innocent in what?
+- The Viltrumite rules
+
+00:15:39.981 --> 00:15:41.775
+of interbreeding are
+not complicated.
+
+00:15:41.858 --> 00:15:44.152
+Rules of... Oh, Jesus.
+
+00:15:44.235 --> 00:15:45.904
+We're only allowed to procreate
+
+00:15:45.987 --> 00:15:48.073
+with genetically
+similar species.
+
+00:15:48.156 --> 00:15:49.699
+Humans, for example.
+
+00:15:49.783 --> 00:15:51.159
+Look at you.
+
+00:15:51.242 --> 00:15:53.870
+You are a Viltrumite
+in almost every way.
+
+00:15:53.953 --> 00:15:55.914
+Except I'm not a monster.
+
+00:15:58.625 --> 00:16:01.336
+By now, Viltrum knows
+I've left my post.
+
+00:16:01.419 --> 00:16:04.506
+They'll track me,
+and they'll find this planet.
+
+00:16:04.589 --> 00:16:06.174
+And when they do,
+
+00:16:06.257 --> 00:16:10.011
+they'll see your brother
+as inferior and kill him.
+
+00:16:10.095 --> 00:16:11.638
+[gasps]
+
+00:16:13.098 --> 00:16:15.225
+And I can't stop them alone.
+
+00:16:15.308 --> 00:16:19.396
+But we can stop them together.
+
+00:16:19.479 --> 00:16:22.941
+You almost killed me,
+then lied to me to get me here.
+
+00:16:23.024 --> 00:16:25.360
+And now you want me to
+risk my life to save some kid
+
+00:16:25.443 --> 00:16:28.238
+you had with another woman
+while still married to Mom?
+
+00:16:28.321 --> 00:16:29.864
+He's your brother, Mark.
+
+00:16:29.948 --> 00:16:32.951
+You don't get to put that on me,
+not after everything you did.
+
+00:16:33.034 --> 00:16:37.080
+What I did on Earth was...
+
+00:16:37.163 --> 00:16:39.082
+unforgivable.
+
+00:16:40.583 --> 00:16:43.378
+But your brother
+and all these people
+
+00:16:43.461 --> 00:16:45.380
+will die without our help.
+
+00:16:45.463 --> 00:16:47.298
+This is bullshit!
+
+00:16:47.382 --> 00:16:48.842
+You're the reason
+they're in danger.
+
+00:16:48.925 --> 00:16:50.719
+You signed their death warrant,
+not me.
+
+00:16:50.802 --> 00:16:54.139
+And now I'm asking you
+to help me save them.
+
+00:16:55.223 --> 00:16:57.267
+[sighs]
+
+00:16:57.350 --> 00:16:59.269
+Fuck you.
+
+00:16:59.352 --> 00:17:02.981
+I mean... just fuck you.
+
+00:17:03.064 --> 00:17:04.315
+They're good people.
+
+00:17:04.399 --> 00:17:06.276
+How...
+
+00:17:06.359 --> 00:17:08.153
+[sighs] How can I help?
+
+00:17:08.236 --> 00:17:09.738
+I couldn't even beat you.
+
+00:17:09.821 --> 00:17:11.781
+We can start training
+right away.
+
+00:17:11.865 --> 00:17:13.825
+Get you ready for what's coming.
+
+00:17:15.076 --> 00:17:16.369
+Mark?
+
+00:17:16.453 --> 00:17:18.329
+I'm thinking.
+
+00:17:18.413 --> 00:17:19.539
+[loud bang]
+
+00:17:19.622 --> 00:17:20.540
+- [gasps]
+- [panicked chatter]
+
+00:17:20.623 --> 00:17:23.001
+What-what was that?
+
+00:17:27.088 --> 00:17:28.673
+[panicked chatter,
+screaming]
+
+00:17:28.757 --> 00:17:32.093
+No, it's too soon.
+We need more time.
+
+00:17:32.177 --> 00:17:34.095
+Nolan? [mutters]
+
+00:17:34.179 --> 00:17:36.139
+Oh, shit. Are those...?
+
+00:17:36.222 --> 00:17:37.515
+[Nolan] Viltrumite soldiers.
+
+00:17:37.599 --> 00:17:39.100
+Mark, get Andressa
+and your brother to safety.
+
+00:17:39.184 --> 00:17:40.560
+Where?
+
+00:17:40.643 --> 00:17:42.729
+Andressa will show you.
+Go. There's no time.
+
+00:17:42.812 --> 00:17:44.397
+Okay.
+
+00:17:44.481 --> 00:17:46.399
+Um, sorry. Dad?
+
+00:17:46.483 --> 00:17:48.443
+Go!
+
+00:17:48.526 --> 00:17:51.571
+[explosions]
+
+00:17:54.657 --> 00:17:57.619
+[shower running]
+
+00:17:58.995 --> 00:18:00.622
+[water shuts off]
+
+00:18:12.801 --> 00:18:15.220
+[loud clattering nearby]
+
+00:18:18.431 --> 00:18:21.559
+All right, man. Come on.
+
+00:18:21.643 --> 00:18:23.520
+Come on.
+
+00:18:24.729 --> 00:18:26.731
+[grunts]
+
+00:18:29.442 --> 00:18:32.695
+Should've packed your bags
+better, Robot.
+
+00:18:32.779 --> 00:18:34.781
+[power shutting off]
+
+00:18:37.283 --> 00:18:39.494
+- [Eve] Killcannon.
+- Hmm? [gasps]
+
+00:18:39.577 --> 00:18:42.539
+Did you ever pick the wrong
+night to rob this place.
+
+00:18:42.622 --> 00:18:44.123
+Atom Eve.
+
+00:18:44.207 --> 00:18:45.959
+Thought you ditched this dump.
+
+00:18:46.042 --> 00:18:48.002
+Guess they left you behind, too.
+
+00:18:48.086 --> 00:18:51.339
+Ha. It's been a long week,
+
+00:18:51.422 --> 00:18:53.049
+so put Robot's thing back
+
+00:18:53.132 --> 00:18:55.510
+and I won't beat the living shit
+out of you.
+
+00:18:55.593 --> 00:18:58.471
+- How's that for a deal?
+- You want this back?
+
+00:18:59.973 --> 00:19:01.641
+Come and get it.
+
+00:19:02.725 --> 00:19:05.436
+Wrong choice, asshole.
+
+00:19:07.272 --> 00:19:08.314
+[Mark] I don't see anything.
+
+00:19:08.398 --> 00:19:09.315
+[Andressa] Keep going.
+
+00:19:09.399 --> 00:19:10.775
+Lower.
+
+00:19:12.610 --> 00:19:14.070
+There.
+
+00:19:22.328 --> 00:19:24.289
+[cooing]
+
+00:19:25.331 --> 00:19:26.583
+What is this place?
+
+00:19:26.666 --> 00:19:28.668
+The Caves of Roclaine.
+
+00:19:28.751 --> 00:19:31.129
+Who's that?
+Some kind of explorer?
+
+00:19:31.212 --> 00:19:32.380
+I'm not sure.
+
+00:19:32.463 --> 00:19:34.382
+Uh, my people have used
+these caverns as a refuge
+
+00:19:34.465 --> 00:19:36.259
+in times of trouble
+and violence.
+
+00:19:36.342 --> 00:19:38.720
+- We'll be safe here.
+- [cooing]
+
+00:19:38.803 --> 00:19:41.639
+I, uh...
+
+00:19:41.723 --> 00:19:43.683
+You never told me
+what his name is.
+
+00:19:43.766 --> 00:19:45.643
+We allow children
+to choose their own name
+
+00:19:45.727 --> 00:19:47.353
+once they come of age.
+
+00:19:47.437 --> 00:19:49.981
+Thraxan lifespans aren't
+like humans.
+
+00:19:50.064 --> 00:19:51.816
+Only one of your years.
+
+00:19:51.900 --> 00:19:55.069
+One year? Seriously?
+
+00:19:55.153 --> 00:19:57.238
+It's never seemed short to me.
+
+00:19:57.322 --> 00:19:58.531
+From what Nolan says,
+
+00:19:58.615 --> 00:20:01.117
+we do certain things
+quicker than your kind.
+
+00:20:01.200 --> 00:20:05.955
+Growing, learning, loving.
+
+00:20:06.039 --> 00:20:09.709
+It seems your father's genes
+have slowed our son's aging.
+
+00:20:09.792 --> 00:20:13.046
+Still, we expect his first words
+any day now.
+
+00:20:13.129 --> 00:20:15.381
+[cooing]
+
+00:20:16.507 --> 00:20:18.718
+Nolan and I...
+
+00:20:18.801 --> 00:20:21.054
+I want you to know
+it's not how you think.
+
+00:20:21.137 --> 00:20:22.680
+What do you mean?
+
+00:20:22.764 --> 00:20:26.059
+I didn't knowingly try
+to replace your mother.
+
+00:20:26.142 --> 00:20:28.478
+Yeah, I-I did...
+I didn't mean that.
+
+00:20:28.561 --> 00:20:33.024
+Your father saved my life
+and the lives of many others.
+
+00:20:34.484 --> 00:20:36.444
+At first,
+it was hard to know him.
+
+00:20:36.527 --> 00:20:37.987
+He was so...
+
+00:20:38.071 --> 00:20:42.158
+hurt, so closed off,
+after what happened on Earth.
+
+00:20:42.241 --> 00:20:45.703
+I fell in love with him
+before I knew his story.
+
+00:20:45.787 --> 00:20:47.789
+By the time I found out
+about you and your mother,
+
+00:20:47.872 --> 00:20:49.916
+I was, I was already...
+
+00:20:51.209 --> 00:20:54.128
+What's the human phrase?
+
+00:20:54.212 --> 00:20:55.546
+Head over feet?
+
+00:20:55.630 --> 00:20:57.465
+Heels.
+
+00:20:57.548 --> 00:20:59.884
+Head over heels.
+
+00:20:59.968 --> 00:21:01.970
+I know none of this
+is your fault.
+
+00:21:03.513 --> 00:21:05.723
+But it still hurts.
+
+00:21:06.975 --> 00:21:09.185
+Nolan loves and misses you.
+
+00:21:09.268 --> 00:21:11.729
+Even if he can't say it to you.
+
+00:21:11.813 --> 00:21:12.855
+He said it to me...
+
+00:21:12.939 --> 00:21:15.316
+- [rumbling]
+- Huh?
+
+00:21:18.569 --> 00:21:21.489
+So it's true.
+
+00:21:21.572 --> 00:21:25.284
+The great Nolan fathered a child
+with an Earth woman.
+
+00:21:25.368 --> 00:21:26.577
+What do you want?
+
+00:21:26.661 --> 00:21:28.121
+[Lucan] You.
+
+00:21:28.204 --> 00:21:29.789
+If you fight well,
+
+00:21:29.872 --> 00:21:33.001
+we may allow you
+to join the empire.
+
+00:21:33.084 --> 00:21:35.420
+If not, you'll die.
+
+00:21:35.503 --> 00:21:37.839
+Stay back. I'm warning you.
+
+00:21:37.922 --> 00:21:40.133
+[baby fussing]
+
+00:21:40.216 --> 00:21:41.592
+- Maybe I wasn't cl...
+- [grunts]
+
+00:21:42.885 --> 00:21:46.139
+- [pants]
+- [Lucan] Nolan made
+another child?
+
+00:21:46.222 --> 00:21:48.099
+[fussing]
+
+00:21:48.182 --> 00:21:51.477
+With these disgusting creatures?
+
+00:21:51.561 --> 00:21:53.855
+[grunting]
+
+00:21:53.938 --> 00:21:55.356
+[Lucan scoffs]
+
+00:21:55.440 --> 00:21:56.941
+[grunts]
+
+00:21:57.984 --> 00:21:59.944
+Run. Run!
+
+00:22:00.028 --> 00:22:02.196
+[both grunting]
+
+00:22:04.198 --> 00:22:07.076
+[Lucan] Are you sure
+you're Nolan's son?
+
+00:22:07.160 --> 00:22:08.911
+[Mark panting]
+
+00:22:08.995 --> 00:22:11.622
+And not an insect
+like these creatures?
+
+00:22:11.706 --> 00:22:14.083
+- [groaning]
+- [rumbling]
+
+00:22:18.671 --> 00:22:21.049
+[grunts]
+
+00:22:21.132 --> 00:22:23.176
+Stay away from my children,
+Lucan.
+
+00:22:23.259 --> 00:22:26.179
+You knew the consequences
+when you had them.
+
+00:22:26.262 --> 00:22:29.390
+[both grunting]
+
+00:22:30.475 --> 00:22:31.726
+[groans]
+
+00:22:31.809 --> 00:22:34.020
+- [baby crying]
+- [Andressa gasps]
+
+00:22:35.480 --> 00:22:37.982
+- [Mark straining]
+- [gasps]
+
+00:22:41.360 --> 00:22:43.905
+You've dishonored your people.
+
+00:22:43.988 --> 00:22:46.324
+[both grunting]
+
+00:22:50.078 --> 00:22:52.288
+You deserve death.
+
+00:22:53.331 --> 00:22:55.541
+[groans]
+
+00:22:57.627 --> 00:22:59.629
+[groaning]
+
+00:23:00.671 --> 00:23:01.631
+I know.
+
+00:23:01.714 --> 00:23:04.008
+[labored breathing]
+
+00:23:04.092 --> 00:23:05.593
+[sighs]
+
+00:23:05.676 --> 00:23:06.844
+Mark?
+
+00:23:06.928 --> 00:23:09.222
+- Andressa?
+- [rumbling]
+
+00:23:09.305 --> 00:23:11.682
+[coughs] Dad!
+
+00:23:11.766 --> 00:23:12.725
+[baby cooing]
+
+00:23:12.809 --> 00:23:13.726
+Are you okay?
+
+00:23:13.810 --> 00:23:15.353
+[pants] We're fine.
+
+00:23:15.436 --> 00:23:16.729
+Mark sheltered us.
+
+00:23:16.813 --> 00:23:20.358
+Good. Good.
+
+00:23:20.441 --> 00:23:24.112
+Andressa,
+go deeper into the caves.
+
+00:23:24.195 --> 00:23:26.114
+Mark, come with me.
+
+00:23:26.197 --> 00:23:28.366
+- [groaning]
+- There's two more.
+
+00:23:33.412 --> 00:23:35.998
+[groaning]
+
+00:23:37.834 --> 00:23:39.502
+Shooting, shooting, shooting.
+
+00:23:39.585 --> 00:23:43.923
+I guess when your arm's a gun,
+you really only have one trick.
+
+00:23:44.006 --> 00:23:45.591
+It's a good trick.
+
+00:23:45.675 --> 00:23:47.844
+Not tonight, it isn't.
+
+00:23:47.927 --> 00:23:49.345
+[panicked chatter, gasping]
+
+00:23:49.428 --> 00:23:50.680
+[grunts]
+
+00:23:54.475 --> 00:23:56.310
+- [grunts]
+- [groaning]
+
+00:24:01.607 --> 00:24:03.776
+Oh, what's the matter?
+You done already?
+
+00:24:03.860 --> 00:24:04.986
+[panting]
+
+00:24:05.069 --> 00:24:06.487
+Get up.
+
+00:24:06.571 --> 00:24:08.406
+That's right. Come on.
+
+00:24:08.489 --> 00:24:10.950
+- We're not done yet.
+- [whirring]
+
+00:24:11.033 --> 00:24:12.702
+Not by a long shot.
+
+00:24:15.705 --> 00:24:17.498
+- [tires squealing]
+- [gasps]
+
+00:24:17.582 --> 00:24:19.917
+Oh, no! Oh, no! Oh...
+
+00:24:20.001 --> 00:24:21.294
+Shit.
+
+00:24:23.129 --> 00:24:24.672
+[groans]
+
+00:24:24.755 --> 00:24:27.967
+[whimpering, screaming]
+
+00:24:28.050 --> 00:24:29.427
+No!
+
+00:24:29.510 --> 00:24:31.262
+[groaning, gasping]
+
+00:24:31.345 --> 00:24:33.222
+[grunts]
+
+00:24:33.306 --> 00:24:35.183
+- [screaming]
+- [Eve] No!
+
+00:24:35.266 --> 00:24:36.475
+[Killcannon laughs] Yes.
+
+00:24:36.559 --> 00:24:39.228
+[both grunting]
+
+00:24:39.312 --> 00:24:41.189
+Now who's done?
+
+00:24:41.939 --> 00:24:44.901
+[both grunting]
+
+00:24:45.902 --> 00:24:47.028
+Shit.
+
+00:24:47.111 --> 00:24:50.072
+[yells, groans]
+
+00:24:54.702 --> 00:24:56.704
+[breathing heavily]
+
+00:25:03.252 --> 00:25:05.254
+[sirens wailing in distance]
+
+00:25:10.092 --> 00:25:12.094
+- [gasps]
+- [sirens wailing]
+
+00:25:13.346 --> 00:25:15.389
+[tires squealing]
+
+00:25:15.473 --> 00:25:17.433
+- Help!
+- [gasps]
+
+00:25:17.516 --> 00:25:18.684
+I need help here!
+
+00:25:18.768 --> 00:25:20.728
+Check for breathing and pulse.
+
+00:25:22.063 --> 00:25:23.731
+[Eve] Are they okay?
+
+00:25:23.814 --> 00:25:25.066
+Please...
+
+00:25:25.149 --> 00:25:27.526
+Please just help them.
+
+00:25:27.610 --> 00:25:29.612
+[insects chirping]
+
+00:25:52.510 --> 00:25:54.136
+[knocking]
+
+00:25:55.346 --> 00:25:57.014
+[Art] Debbie?
+
+00:25:57.098 --> 00:25:58.516
+- Are you home?
+- [door opens]
+
+00:25:58.599 --> 00:25:59.934
+Can I come in?
+
+00:26:00.017 --> 00:26:02.311
+- Art.
+- [door closes]
+
+00:26:02.395 --> 00:26:04.814
+I called,
+but you didn't pick up,
+
+00:26:04.897 --> 00:26:08.567
+and I, uh, just wanted
+to see how you're doing.
+
+00:26:11.237 --> 00:26:13.281
+You okay?
+
+00:26:13.364 --> 00:26:15.074
+I'm fine. I just...
+
+00:26:17.702 --> 00:26:19.829
+[sighs]
+
+00:26:19.912 --> 00:26:21.664
+I'm not fine.
+
+00:26:23.457 --> 00:26:25.209
+Me neither.
+
+00:26:25.293 --> 00:26:26.794
+After all these months,
+
+00:26:26.877 --> 00:26:29.130
+I still can't
+wrap my head around it.
+
+00:26:29.213 --> 00:26:32.049
+Was all of it a lie?
+All of it?
+
+00:26:32.133 --> 00:26:33.759
+[groans]
+
+00:26:33.843 --> 00:26:35.636
+I don't know.
+
+00:26:37.096 --> 00:26:38.222
+[sighs]
+
+00:26:38.306 --> 00:26:40.850
+[Debbie] Right after
+I took this,
+
+00:26:40.933 --> 00:26:43.394
+Nolan had to fly off
+to fight some monster
+
+00:26:43.477 --> 00:26:45.438
+or alien or God-knows-what.
+
+00:26:45.521 --> 00:26:48.190
+I ended up teaching Mark to ride
+by myself.
+
+00:26:48.274 --> 00:26:49.900
+[chuckles]
+
+00:26:51.152 --> 00:26:53.946
+I don't even know
+why I miss Nolan so much.
+
+00:26:54.947 --> 00:26:56.866
+He was barely around.
+
+00:26:58.409 --> 00:27:01.078
+I always thought
+you were the strong one,
+
+00:27:01.162 --> 00:27:03.456
+to handle your life
+the way you did.
+
+00:27:03.539 --> 00:27:05.082
+[scoffs]
+
+00:27:05.166 --> 00:27:06.751
+You thought I was strong?
+
+00:27:06.834 --> 00:27:10.129
+Nolan has superpowers.
+He's indestructible.
+
+00:27:10.212 --> 00:27:13.758
+That's not strength.
+That's having it easy.
+
+00:27:13.841 --> 00:27:17.219
+You, you've got strength.
+
+00:27:17.303 --> 00:27:20.014
+Living with Nolan,
+standing up to him,
+
+00:27:20.097 --> 00:27:22.350
+raising Mark the way you did.
+
+00:27:22.433 --> 00:27:24.977
+Hell, you're the real reason
+we're all still alive
+
+00:27:25.061 --> 00:27:28.439
+and not slaves, or worse.
+
+00:27:32.068 --> 00:27:34.195
+You said it yourself,
+
+00:27:34.278 --> 00:27:36.489
+Nolan was always off
+fighting something,
+
+00:27:36.572 --> 00:27:39.033
+and you made things work
+without him.
+
+00:27:39.116 --> 00:27:41.243
+Now it's just official.
+
+00:27:41.327 --> 00:27:42.870
+You don't need the bum.
+
+00:27:42.953 --> 00:27:45.790
+[scoffs] You never did.
+
+00:27:48.667 --> 00:27:51.545
+- [quiet chatter]
+- [typing]
+
+00:28:00.805 --> 00:28:02.223
+[elevator bell dings]
+
+00:28:05.059 --> 00:28:06.936
+[light buzzing]
+
+00:28:24.578 --> 00:28:25.996
+Huh.
+
+00:28:27.164 --> 00:28:29.041
+[sighs]
+
+00:28:33.087 --> 00:28:34.338
+[sighs]
+
+00:28:42.888 --> 00:28:44.932
+{\an8}[screaming]
+
+00:28:54.900 --> 00:28:56.652
+Run now!
+
+00:28:56.735 --> 00:28:58.863
+<i>[employees panting, whimpering]</i>
+
+00:28:58.946 --> 00:29:02.032
+<i>[Donald grunting]</i>
+
+00:29:04.618 --> 00:29:08.497
+[gasps] It's been an honor, sir.
+
+00:29:08.581 --> 00:29:10.332
+[Nolan scoffs] Who are you
+talking to?
+
+00:29:11.417 --> 00:29:12.626
+[gasps]
+
+00:29:12.710 --> 00:29:15.171
+[breathing shakily]
+
+00:29:31.812 --> 00:29:33.105
+[grunts]
+
+00:29:35.941 --> 00:29:37.067
+[sighs]
+
+00:29:38.110 --> 00:29:39.278
+[Mark sighs, gasps]
+
+00:29:40.279 --> 00:29:41.614
+Oh, no.
+
+00:29:49.705 --> 00:29:51.290
+Dad?
+
+00:29:51.373 --> 00:29:53.417
+- [growling softly]
+- Dad?
+
+00:29:53.501 --> 00:29:55.503
+[growling]
+
+00:29:57.213 --> 00:29:59.423
+- Why?
+- [groans]
+
+00:29:59.507 --> 00:30:02.676
+Why do I care about them?
+
+00:30:02.760 --> 00:30:06.805
+They were weak, short-lived,
+
+00:30:06.889 --> 00:30:08.474
+barely a species.
+
+00:30:08.557 --> 00:30:09.934
+[sighs]
+
+00:30:10.017 --> 00:30:12.019
+They shouldn't matter to me.
+
+00:30:12.102 --> 00:30:13.812
+That doesn't mean
+they should die.
+
+00:30:13.896 --> 00:30:15.606
+You don't understand!
+
+00:30:15.689 --> 00:30:18.275
+I'm not supposed
+to feel this way!
+
+00:30:18.359 --> 00:30:21.070
+How is this better?!
+
+00:30:21.153 --> 00:30:24.740
+This is how
+you should have felt on Earth.
+
+00:30:26.408 --> 00:30:28.410
+[Mark groaning]
+
+00:30:29.995 --> 00:30:32.748
+[Vidor] There's the great Nolan.
+
+00:30:32.831 --> 00:30:34.250
+[growls]
+
+00:30:34.333 --> 00:30:35.376
+[groans]
+
+00:30:35.459 --> 00:30:37.628
+Lucan found you first, I see.
+
+00:30:38.671 --> 00:30:41.882
+Glad you haven't gone too soft.
+
+00:30:41.966 --> 00:30:44.051
+Lucan was weak.
+
+00:30:44.134 --> 00:30:45.803
+Now he's dead.
+
+00:30:45.886 --> 00:30:48.222
+Then he deserved his fate.
+
+00:30:48.305 --> 00:30:51.267
+Like these insects.
+
+00:30:51.350 --> 00:30:55.271
+You barely touch them
+and they die.
+
+00:30:56.564 --> 00:31:00.150
+I'll kill you for what you did
+to these people.
+
+00:31:00.234 --> 00:31:02.403
+Then do it.
+
+00:31:02.486 --> 00:31:04.321
+[grunts]
+
+00:31:08.033 --> 00:31:09.702
+Wait. We don't have to...
+
+00:31:09.785 --> 00:31:13.080
+Because you're Nolan's son,
+I'll make this quick.
+
+00:31:16.917 --> 00:31:19.295
+[both grunting]
+
+00:31:25.509 --> 00:31:28.262
+You should worry about yourself,
+Nolan.
+
+00:31:29.305 --> 00:31:31.765
+[grunting]
+
+00:31:35.269 --> 00:31:36.395
+[Mark groans]
+
+00:31:38.272 --> 00:31:39.940
+- There.
+- [straining]
+
+00:31:40.024 --> 00:31:42.318
+I promised I'd make it quick.
+
+00:31:42.401 --> 00:31:44.153
+[both groaning]
+
+00:31:45.696 --> 00:31:47.615
+- [groans]
+- [grunting]
+
+00:31:47.698 --> 00:31:50.909
+I never break my promises.
+
+00:31:51.910 --> 00:31:54.413
+Why so worried, Nolan?
+
+00:31:54.496 --> 00:31:58.792
+If your son dies,
+he never deserved to live.
+
+00:31:58.876 --> 00:32:01.378
+Talking won't keep you alive,
+Vidor.
+
+00:32:05.382 --> 00:32:07.134
+[groaning]
+
+00:32:07.217 --> 00:32:10.095
+Mark, what are you doing?
+She's tearing you apart.
+
+00:32:10.179 --> 00:32:12.056
+[groaning softly]
+
+00:32:13.474 --> 00:32:15.351
+Yeah, I noticed.
+
+00:32:15.434 --> 00:32:17.227
+You're fighting
+like you're on Earth.
+
+00:32:17.311 --> 00:32:18.562
+This is different.
+
+00:32:18.646 --> 00:32:21.357
+Stop holding back, or
+you're gonna get us both killed.
+
+00:32:21.440 --> 00:32:22.691
+I'm not holding back.
+
+00:32:22.775 --> 00:32:25.277
+Yes, you are.
+She's trying to kill you, Mark.
+
+00:32:25.361 --> 00:32:28.822
+If you're not trying to
+kill her, you're going to die.
+
+00:32:28.906 --> 00:32:30.616
+Don't think. Act.
+
+00:32:30.699 --> 00:32:32.785
+You need to fight
+like a Viltrumite.
+
+00:32:32.868 --> 00:32:35.162
+No. I don't kill people.
+
+00:32:35.245 --> 00:32:38.415
+If you don't do this,
+we're all dead.
+
+00:32:38.499 --> 00:32:40.834
+You, me, your brother,
+
+00:32:40.918 --> 00:32:43.295
+and every single Thraxan
+on this planet.
+
+00:32:43.379 --> 00:32:45.756
+[loud rumbling]
+
+00:32:47.841 --> 00:32:49.885
+Remember what I told you.
+
+00:32:52.721 --> 00:32:54.640
+[grunting]
+
+00:33:02.147 --> 00:33:03.774
+[Mark groans]
+
+00:33:08.237 --> 00:33:10.239
+[grunting, groaning]
+
+00:33:25.587 --> 00:33:27.381
+[Thula yells]
+
+00:33:27.464 --> 00:33:29.800
+- [grunts]
+- [screams]
+
+00:33:33.303 --> 00:33:35.889
+[panting]
+
+00:33:37.474 --> 00:33:39.017
+[chuckles]
+
+00:33:39.101 --> 00:33:41.019
+Finally. [grunts]
+
+00:33:41.103 --> 00:33:43.689
+[all grunting, groaning]
+
+00:34:06.920 --> 00:34:08.255
+[groaning]
+
+00:34:11.216 --> 00:34:14.386
+I'd say you fought well,
+but, uh...
+
+00:34:15.387 --> 00:34:17.389
+[groaning]
+
+00:34:21.226 --> 00:34:26.607
+Do you regret attacking
+my family now? Do you?
+
+00:34:26.690 --> 00:34:28.233
+[Mark] Dad!
+
+00:34:28.317 --> 00:34:31.195
+- [groans]
+- [Thula grunts]
+
+00:34:34.156 --> 00:34:36.909
+[both grunting]
+
+00:34:38.577 --> 00:34:40.579
+[groaning, choking]
+
+00:34:47.711 --> 00:34:49.129
+Mark.
+
+00:34:49.213 --> 00:34:52.132
+[panting] Are you okay?
+
+00:34:52.216 --> 00:34:54.384
+No.
+
+00:34:54.468 --> 00:34:56.970
+[chuckles] Don't worry.
+
+00:34:57.054 --> 00:34:59.848
+It's over. Let me have a look.
+
+00:34:59.932 --> 00:35:03.101
+- [Lucan grunting]
+- [groans]
+
+00:35:08.690 --> 00:35:10.275
+Dad! [groans]
+
+00:35:10.359 --> 00:35:12.528
+[breathing heavily]
+
+00:35:12.611 --> 00:35:16.615
+Next time you kill somebody...
+[spits]
+
+00:35:16.698 --> 00:35:20.702
+make sure they're dead.
+
+00:35:21.829 --> 00:35:24.581
+- [device beeps]
+- It's done. [groans]
+
+00:35:33.173 --> 00:35:34.424
+[birds chirping]
+
+00:35:34.508 --> 00:35:36.093
+<i>[Cecil] Debbie, think this over.</i>
+
+00:35:36.176 --> 00:35:38.011
+[Debbie] I have thought it over.
+
+00:35:38.095 --> 00:35:40.055
+I've been thinking about it
+all night.
+
+00:35:41.139 --> 00:35:43.642
+I don't want
+Nolan's book money...
+
+00:35:43.725 --> 00:35:46.019
+your money... any longer.
+
+00:35:46.103 --> 00:35:49.064
+The survivors in Chicago need it
+more than I do.
+
+00:35:49.147 --> 00:35:51.859
+And if you can't find a way
+to get it to them, I will.
+
+00:35:51.942 --> 00:35:54.611
+of course I can find a way
+to get it to 'em.
+
+00:35:54.695 --> 00:35:58.156
+I just think that
+you're making a mistake.
+
+00:35:58.240 --> 00:36:01.410
+I'm thankful for what you did
+for Mark and me.
+
+00:36:01.493 --> 00:36:03.662
+We were struggling,
+and you helped.
+
+00:36:03.745 --> 00:36:06.081
+But you don't get something
+for nothing in this world.
+
+00:36:06.164 --> 00:36:09.835
+And you especially don't get
+something for nothing from you.
+
+00:36:09.918 --> 00:36:11.044
+Debbie...
+
+00:36:11.128 --> 00:36:13.130
+You wouldn't be protesting
+half as much
+
+00:36:13.213 --> 00:36:17.175
+if the money wasn't a way to
+keep a hold on Mark and on me.
+
+00:36:17.259 --> 00:36:20.387
+We take it, we feel we owe you,
+
+00:36:20.470 --> 00:36:22.764
+and I'm done feeling that way.
+
+00:36:25.100 --> 00:36:26.810
+If you change your mind...
+
+00:36:26.894 --> 00:36:28.770
+I won't.
+
+00:36:32.190 --> 00:36:34.192
+[sighs]
+
+00:36:58.175 --> 00:37:00.385
+[groaning]
+
+00:37:00.469 --> 00:37:02.304
+[straining]
+
+00:37:05.933 --> 00:37:08.852
+Dad. Dad.
+
+00:37:08.936 --> 00:37:10.687
+Mark. [groans]
+
+00:37:10.771 --> 00:37:12.773
+Don't forget the good I did,
+
+00:37:12.856 --> 00:37:15.150
+- my work...
+- [groans]
+
+00:37:15.233 --> 00:37:18.737
+...my deeds, my books.
+
+00:37:18.820 --> 00:37:22.032
+[groans] Read my books, Mark.
+
+00:37:23.659 --> 00:37:25.077
+[breathes heavily]
+
+00:37:26.578 --> 00:37:28.580
+[♪ Zoe Boekbinder:
+"I Am Yesterday"]
+
+00:37:30.332 --> 00:37:32.376
+[door opens, closes]
+
+00:37:32.459 --> 00:37:34.461
+<i>[singer vocalizing]</i>
+
+00:37:37.422 --> 00:37:39.883
+- [car door opens, closes]
+- [engine starts]
+
+00:37:48.433 --> 00:37:53.188
+♪ <i>Why are you always
+on my mind?</i> ♪
+
+00:37:53.271 --> 00:37:55.273
+[phone buzzes]
+
+00:37:56.483 --> 00:38:02.781
+♪ <i>Spend all day and night
+like you're doing time</i> ♪
+
+00:38:03.991 --> 00:38:07.911
+♪ <i>You're saying
+I'm the one doing crime</i> ♪
+
+00:38:10.664 --> 00:38:12.040
+[sighs]
+
+00:38:12.124 --> 00:38:18.422
+♪ <i>Writing the worst thing
+I ever said in neon lights</i> ♪
+
+00:38:19.589 --> 00:38:24.469
+♪ <i>Dragging my name
+through the mud</i> ♪
+
+00:38:27.305 --> 00:38:30.392
+♪ <i>If I did something to offend</i> ♪
+
+00:38:30.475 --> 00:38:34.062
+♪ <i>Tell me what it was</i> ♪
+
+00:38:34.146 --> 00:38:38.483
+♪ <i>Saw you walking tonight</i> ♪
+
+00:38:38.567 --> 00:38:42.112
+♪ <i>Streetlight on your face</i> ♪
+
+00:38:42.195 --> 00:38:45.240
+♪ <i>Saw you walking
+with your head high</i> ♪
+
+00:38:45.323 --> 00:38:49.119
+♪ <i>I could not look away</i> ♪
+
+00:38:50.287 --> 00:38:53.749
+♪ <i>Saw you out
+with your new guy</i> ♪
+
+00:38:53.832 --> 00:38:56.501
+♪ <i>I am yesterday</i> ♪
+
+00:38:56.585 --> 00:38:59.713
+♪ <i>You didn't even say goodbye</i> ♪
+
+00:38:59.796 --> 00:39:01.673
+♪ <i>I am yesterday</i> ♪
+
+00:39:01.757 --> 00:39:03.842
+[grunts, groans]
+
+00:39:03.925 --> 00:39:06.636
+♪ <i>I am yesterday</i> ♪
+
+00:39:06.720 --> 00:39:08.430
+[knife clatters]
+
+00:39:08.513 --> 00:39:10.223
+<i>[singer vocalizing]</i>
+
+00:39:11.933 --> 00:39:13.810
+Thank God.
+
+00:39:13.894 --> 00:39:17.814
+♪ <i>Whatever you say is
+what they see</i> ♪
+
+00:39:21.818 --> 00:39:24.529
+- ♪ <i>Whoever you say I am</i> ♪
+- [gasps]
+
+00:39:24.613 --> 00:39:28.283
+♪ <i>They will believe</i> ♪
+
+00:39:29.618 --> 00:39:33.580
+♪ <i>I know
+you know that's not me</i> ♪♪
+
+00:39:33.663 --> 00:39:34.915
+<i>[Cecil] Donald,
+where the hell are you?</i>
+
+00:39:34.998 --> 00:39:36.500
+<i>We've got a situation.</i>
+
+00:39:43.757 --> 00:39:45.509
+<i>[Mark groans]</i>
+
+00:39:45.592 --> 00:39:48.553
+[Kregg] Good, you're alive.
+
+00:39:48.637 --> 00:39:52.307
+[sighs] My dad,
+what are you doing...?
+
+00:39:52.390 --> 00:39:55.310
+Don't speak. Listen.
+
+00:39:55.393 --> 00:39:58.063
+My name is General Kregg.
+
+00:39:58.146 --> 00:39:59.981
+You've survived
+your first true battle
+
+00:40:00.065 --> 00:40:03.318
+in proving yourself worthy
+of your Viltrumite heritage.
+
+00:40:04.361 --> 00:40:05.946
+Go fuck yours...
+
+00:40:08.490 --> 00:40:13.286
+Your father will be executed,
+and you will return to Earth.
+
+00:40:13.370 --> 00:40:14.913
+You will assume his mission
+
+00:40:14.996 --> 00:40:17.040
+and prepare the planet
+for our rule.
+
+00:40:18.458 --> 00:40:23.713
+I know this may not appeal
+to you, given your sympathies,
+
+00:40:23.797 --> 00:40:26.675
+so I'll put it like this.
+
+00:40:26.758 --> 00:40:31.012
+You can kill a few humans
+to convince them to capitulate,
+
+00:40:31.096 --> 00:40:35.392
+or we will kill millions
+if we arrive to find you
+
+00:40:35.475 --> 00:40:38.812
+or your planet
+still defiant against us.
+
+00:40:40.689 --> 00:40:43.233
+We will check
+on your progress soon.
+
+00:40:43.316 --> 00:40:45.819
+And unlike your father,
+
+00:40:45.902 --> 00:40:49.489
+we do not change our minds.
+
+00:40:49.573 --> 00:40:51.491
+Good luck on your mission.
+
+00:40:55.412 --> 00:40:58.248
+- [groans]
+- [ship whirring]
+
+00:41:12.304 --> 00:41:14.306
+[♪ Run the Jewels:
+"The Ground Below"]
+
+00:41:20.020 --> 00:41:22.063
+[grunts]
+
+00:41:22.147 --> 00:41:23.899
+[sighs] It's about time.
+
+00:41:23.982 --> 00:41:27.360
+Messy wiring.
+
+00:41:27.444 --> 00:41:28.945
+Sloppy welding.
+
+00:41:29.029 --> 00:41:31.823
+Obviously the work of a clone.
+
+00:41:35.452 --> 00:41:37.954
+But it'll do.
+
+00:41:38.038 --> 00:41:40.665
+Yes, King Mauler.
+
+00:41:43.585 --> 00:41:45.670
+I don't know why
+I didn't think of this sooner.
+
+00:41:45.754 --> 00:41:50.425
+Why stop at one idiot clone
+when I can have so many more?
+
+00:41:54.804 --> 00:41:58.266
+Oof. I hope one of you is
+better in the kitchen.
+
+00:41:58.350 --> 00:42:01.603
+No wonder
+your bourguignon is terrible.
+
+00:42:01.686 --> 00:42:04.231
+You can't even make
+decent lemonade.
+
+00:42:04.314 --> 00:42:06.524
+[groaning]
+
+00:42:08.568 --> 00:42:11.988
+My bourguignon is exquisite,
+you jackass.
+
+00:42:12.072 --> 00:42:15.200
+And so is my lemonade.
+
+00:42:15.283 --> 00:42:19.037
+When it's not laced with
+a modified mycotoxin, that is.
+
+00:42:19.120 --> 00:42:20.538
+[groaning]
+
+00:42:24.167 --> 00:42:27.087
+[choking]
+
+00:42:32.425 --> 00:42:34.761
+And sometimes things are
+the way they are
+
+00:42:34.844 --> 00:42:37.180
+for a good fucking reason.
+
+00:42:39.307 --> 00:42:40.433
+{\an8}♪ <i>Born from the ether</i> ♪
+
+00:42:40.517 --> 00:42:41.893
+{\an8}♪ <i>I just appeared
+out a cloud of reefer</i> ♪
+
+00:42:41.977 --> 00:42:43.311
+{\an8}♪ <i>Screaming "Fuck the world"</i> ♪
+
+00:42:43.395 --> 00:42:44.562
+{\an8}♪ <i>It can drink what's
+coming out my urethra</i> ♪
+
+00:42:44.646 --> 00:42:45.730
+{\an8}♪ <i>I'll slap a dying child</i> ♪
+
+00:42:45.814 --> 00:42:47.148
+{\an8}♪ <i>He don't pronounce my name
+correct</i> ♪
+
+00:42:47.232 --> 00:42:48.525
+{\an8}♪ <i>Rules have gotta be rules,
+any exceptions</i> ♪
+
+00:42:48.608 --> 00:42:50.110
+{\an8}♪ <i>And I'm not a leader</i> ♪
+
+00:42:50.193 --> 00:42:51.236
+{\an8}♪ <i>Think in the box,
+I'm not gettin' my fix</i> ♪
+
+00:42:51.319 --> 00:42:52.487
+{\an8}♪ <i>Then shit is iffy</i> ♪
+
+00:42:52.570 --> 00:42:53.655
+{\an8}♪ <i>Fellate a doughnut hole</i> ♪
+
+00:42:53.738 --> 00:42:55.365
+{\an8}♪ <i>Wife don't get to the crib
+and quickly</i> ♪
+
+00:42:55.448 --> 00:42:56.616
+{\an8}♪ <i>I'll watch my mouth
+when I'm finished</i> ♪
+
+00:42:56.700 --> 00:42:57.867
+{\an8}♪ <i>Watchin' y'all suck clout</i> ♪
+
+00:42:57.951 --> 00:42:59.536
+{\an8}♪ <i>Don't doubt you put an ounce
+of that evil on me</i> ♪
+
+00:42:59.619 --> 00:43:02.080
+{\an8}♪ <i>I'm flippin', Ricky,
+I give an inch to you simps</i> ♪
+
+00:43:02.163 --> 00:43:04.541
+{\an8}♪ <i>I'll never forgive me,
+not sayin' it's a conspiracy</i> ♪
+
+00:43:04.624 --> 00:43:06.251
+{\an8}♪ <i>But you're all against me</i> ♪
+
+00:43:06.334 --> 00:43:08.169
+{\an8}♪ <i>You see a future where
+Run the Jewels ain't the shit</i> ♪
+
+00:43:08.253 --> 00:43:09.379
+{\an8}♪ <i>Cancel
+my Hitler-killin' trip</i> ♪
+
+00:43:09.462 --> 00:43:10.755
+{\an8}♪ <i>Turn the time machine
+back around a century</i> ♪
+
+00:43:10.839 --> 00:43:14.092
+{\an8}♪ <i>You say that
+you don't love me, hey</i> ♪
+
+00:43:14.175 --> 00:43:16.344
+{\an8}♪ <i>I'm guessin' I'm-a be okay</i> ♪
+
+00:43:16.428 --> 00:43:18.847
+{\an8}♪ <i>You say that
+you don't feel me now</i> ♪
+
+00:43:18.930 --> 00:43:22.267
+{\an8}♪ <i>I feel like
+I'm-a live somehow</i> ♪
+
+00:43:22.350 --> 00:43:23.935
+{\an8}♪ <i>Your love never
+meant much to me</i> ♪
+
+00:43:24.019 --> 00:43:27.230
+{\an8}♪ <i>Love never meant much to me</i> ♪
+
+00:43:27.314 --> 00:43:30.483
+{\an8}♪ <i>Love never meant much to me,
+uh-uh</i> ♪
+
+00:43:30.567 --> 00:43:32.152
+{\an8}♪ <i>Love never meant much</i> ♪♪
