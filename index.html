@@ -840,10 +840,10 @@
 
     // 4 Customizable Avatar Matrix Catalog
     const profileAvatarsCatalog = {
-        1: "images/1.jpg", // Add your avatar image URL here
-        2: "images/2.jpg", // Add your avatar image URL here
-        3: "images/3.jpg", // Add your avatar image URL here
-        4: "images/4.jpg",  // Add your avatar image URL here
+        1: "images/1.jpg", 
+        2: "images/2.jpg", 
+        3: "images/3.jpg", 
+        4: "images/4.jpg",  
         5: "images/5.jpg",
         6: "images/6.jpg"
     };
@@ -971,7 +971,6 @@
         loginInfoListenerUnsubscribe = null;
         
         auth.signOut().then(() => {
-            // Reset sliding panels hidden on logout
             document.getElementById('sliding-profile').style.right = '-100%';
             document.getElementById('sliding-search').style.right = '-100%';
             resetActiveNavbar();
@@ -1188,7 +1187,8 @@
                     const sanitizedTitle = item.title.replace(/'/g, "\\'");
                     const sanitizedLink = runtimeLink.replace(/'/g, "\\'");
                     
-                    cardLink.setAttribute('onclick', `MapsToMovie('${sanitizedTitle}', '${sanitizedLink}', this)`);
+                    // FIXED: Replaced non-existent MapsToMovie call with your functional navigateToMovie target launcher
+                    cardLink.setAttribute('onclick', `navigateToMovie('${sanitizedTitle}', '${sanitizedLink}', this.querySelector('.history-poster-frame'))`);
                     cardLink.style.cursor = 'pointer';
                     
                     cardLink.innerHTML = `
@@ -1214,7 +1214,6 @@
 </script>
 
 <script>
-    // WebView Fix: Removed root passive document interceptors which deadlock dynamic DOM rendering engine pipelines
     const searchPanel = document.getElementById('sliding-search');
     const profilePanel = document.getElementById('sliding-profile');
     const searchTrigger = document.getElementById('search-trigger');
@@ -1316,14 +1315,12 @@
     let isScrollingMove = false;
 
     function setupLongPressGesture(cardElement, movieTitle, movieLink) {
-        // WebView Fix: Deeply suppress context menu calls using immediate stops to override system shares
         cardElement.addEventListener('contextmenu', (e) => {
             e.preventDefault();
             e.stopPropagation();
             return false;
         });
 
-        // WebView Fix: Removed passive declaration hooks so runtime commands can control events without execution exceptions
         cardElement.addEventListener('touchstart', (e) => {
             longPressTriggeredFlag = false;
             isScrollingMove = false;
@@ -1355,7 +1352,6 @@
             if (activeLongPressTimer) clearTimeout(activeLongPressTimer);
             
             if (longPressTriggeredFlag) {
-                // WebView Fix: Exclusively swallow gesture only if long-press menu opens
                 e.preventDefault(); 
                 e.stopPropagation();
             } else if (!isScrollingMove) {
@@ -1492,7 +1488,6 @@
 
         const filteredGlobalCatalog = movies.filter(m => !userUnwantedCache.includes(m.title.toLowerCase()));
 
-        // Build Watch Again Track Row
         if (userWatchHistoryCache.length > 0) {
             const uniqueTitles = [];
             const watchAgainMovies = [];
@@ -1521,7 +1516,6 @@
             watchAgainContainer.innerHTML = "";
         }
 
-        // Build Random Picks Track Row
         randomContainer.innerHTML = `
             <div class="section">
                 <h2 class="section-title">Random Picks</h2>
@@ -1531,7 +1525,6 @@
         const randomRow = randomContainer.querySelector(".movies");
         shuffleArray(filteredGlobalCatalog).forEach(m => randomRow.appendChild(createMovieCard(m)));
 
-        // Build Categorized Genre Map Rows
         const genreMap = {};
         filteredGlobalCatalog.forEach(m => {
             parseGenres(m.genres).forEach(g => {
