@@ -185,6 +185,24 @@
             -webkit-user-drag: none;
         }
 
+        /* Top Corner Trend Overlay Badge */
+        .trending-badge {
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            background: rgba(229, 9, 20, 0.95);
+            color: #ffffff;
+            font-size: 9px;
+            font-weight: 900;
+            padding: 2px 6px;
+            border-radius: 2px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            z-index: 3;
+            font-family: Helvetica, Arial, sans-serif;
+        }
+
         /* Ripple Animation on Select */
         .movie::after {
             content: "";
@@ -647,13 +665,13 @@
             top: 0;
             left: 0;
             width: 100vw;
-            height: 100dvh; /* WebView Fix: dvh recalculates correctly inside in-app wrapper browser heights */
+            height: 100dvh; 
             background: rgba(0, 0, 0, 0.6);
             z-index: 7000;
             display: none;
             opacity: 0;
             transition: opacity 0.3s ease;
-            pointer-events: auto; /* WebView Fix: Ensures backdrop remains interceptive to click cleanups */
+            pointer-events: auto; 
         }
         #action-sheet {
             position: fixed;
@@ -757,6 +775,7 @@
     </div>
     
     <div id="watchAgainContainer"></div>
+    <div id="trendingContainer"></div>
     <div id="randomContainer"></div>
     <div id="genreContainer"></div>
 </div>
@@ -837,6 +856,7 @@
     let historyListenerUnsubscribe = null;
     let unwantedListenerUnsubscribe = null;
     let loginInfoListenerUnsubscribe = null;
+    let trendingListenerUnsubscribe = null;
 
     // 4 Customizable Avatar Matrix Catalog
     const profileAvatarsCatalog = {
@@ -966,9 +986,11 @@
         if(historyListenerUnsubscribe) historyListenerUnsubscribe();
         if(unwantedListenerUnsubscribe) unwantedListenerUnsubscribe();
         if(loginInfoListenerUnsubscribe) loginInfoListenerUnsubscribe();
+        if(trendingListenerUnsubscribe) trendingListenerUnsubscribe();
         historyListenerUnsubscribe = null;
         unwantedListenerUnsubscribe = null;
         loginInfoListenerUnsubscribe = null;
+        trendingListenerUnsubscribe = null;
         
         auth.signOut().then(() => {
             document.getElementById('sliding-profile').style.right = '-100%';
@@ -990,6 +1012,7 @@
             
             listenToLoginInformation();
             listenToUnwantedMovies(); 
+            listenToTrendingTitles();
         } else {
             gate.style.display = 'flex';
         }
@@ -1162,6 +1185,19 @@
 
                 snapshot.forEach(doc => {
                     const item = doc.data();
+                    const docId = doc.id;
+                    
+                    // --- REQ 1: Check if content actually exists in the local data module ---
+                    const referenceMovie = typeof movies !== 'undefined' ? movies.find(m => m.title.toLowerCase() === item.title.toLowerCase()) : null;
+                    
+                    if (!referenceMovie) {
+                        // Title doesn't exist anymore! Disappear it from user UI, clean document from Firestore
+                        db.collection('users').doc(user.email).collection('history').doc(docId).delete()
+                            .then(() => console.log(`Cleaned missing title out of history: ${item.title}`))
+                            .catch(err => console.error("Error pruning orphan history element:", err));
+                        return; // Skip rendering this item completely
+                    }
+
                     const timestampMillis = item.timestamp ? item.timestamp.toMillis() : Date.now();
                     
                     userWatchHistoryCache.push({
@@ -1169,9 +1205,8 @@
                         timestamp: timestampMillis
                     });
 
-                    const referenceMovie = typeof movies !== 'undefined' ? movies.find(m => m.title.toLowerCase() === item.title.toLowerCase()) : null;
-                    const runtimeLink = referenceMovie ? referenceMovie.link : "#";
-                    const runtimeImage = referenceMovie ? referenceMovie.image : "";
+                    const runtimeLink = referenceMovie.link;
+                    const runtimeImage = referenceMovie.image;
 
                     const date = new Date(timestampMillis).toLocaleDateString(undefined, {
                         year: 'numeric',
@@ -1187,8 +1222,7 @@
                     const sanitizedTitle = item.title.replace(/'/g, "\\'");
                     const sanitizedLink = runtimeLink.replace(/'/g, "\\'");
                     
-                    // FIXED: Replaced non-existent MapsToMovie call with your functional navigateToMovie target launcher
-                    cardLink.setAttribute('onclick', `navigateToMovie('${sanitizedTitle}', '${sanitizedLink}', this.querySelector('.history-poster-frame'))`);
+                    cardLink.setAttribute('onclick', `MapsToMovie('${sanitizedTitle}', '${sanitizedLink}', this.querySelector('.history-poster-frame'))`);
                     cardLink.style.cursor = 'pointer';
                     
                     cardLink.innerHTML = `
@@ -1209,6 +1243,26 @@
             }, error => {
                 console.error("Firestore snapshot pipeline disrupted: ", error);
                 historyContainer.innerHTML = `<p style="color: red; font-size: 14px;">Failed to load watch history.</p>`;
+            });
+    }
+
+    // --- REQ 2: Listen globally to which assets are added to histories by users ---
+    let globalTrendingData = [];
+    function listenToTrendingTitles() {
+        trendingListenerUnsubscribe = db.collection('public_analytics').doc('trending_counters').collection('titles')
+            .orderBy('hitCount', 'desc')
+            .limit(15) 
+            .onSnapshot(snapshot => {
+                globalTrendingData = [];
+                snapshot.forEach(doc => {
+                    globalTrendingData.push({
+                        title: doc.id,
+                        hitCount: doc.data().hitCount || 0
+                    });
+                });
+                buildHomeFeed(); 
+            }, err => {
+                console.error("Trending aggregation feed pipeline down: ", err);
             });
     }
 </script>
@@ -1424,12 +1478,14 @@
         return [];
     }
 
-    function createMovieCard(m) {
+    // Modified to accept an optional trend text parameter
+    function createMovieCard(m, topTrendRank = null) {
         const div = document.createElement("div");
         div.className = "movie";
         
         div.innerHTML = `
             <div style="cursor: pointer; width: 100%; height: 100%; position: relative;">
+                ${topTrendRank ? `<div class="trending-badge">Top ${topTrendRank}</div>` : ''}
                 <img src="${m.image}" draggable="false" onerror="this.insertAdjacentHTML('afterend', '<p class=\\'fallback-label\\'>${m.title}</p>'); this.style.opacity='0.25';">
             </div>
         `;
@@ -1449,6 +1505,12 @@
             localizedSpinner.innerHTML = '<div class="loading-ring"></div>';
             elementClicked.appendChild(localizedSpinner);
         }
+
+        // Increment the global count asynchronously for trending calculations
+        const globalTrendRef = db.collection('public_analytics').doc('trending_counters').collection('titles').doc(movieTitle.toLowerCase());
+        globalTrendRef.set({
+            hitCount: firebase.firestore.FieldValue.increment(1)
+        }, { merge: true }).catch(e => console.error("Trending sync skipped:", e));
 
         if (!user) {
             window.location.href = destinationUrl;
@@ -1481,10 +1543,11 @@
         if (typeof movies === 'undefined') return;
         
         const watchAgainContainer = document.getElementById("watchAgainContainer");
+        const trendingContainer = document.getElementById("trendingContainer");
         const randomContainer = document.getElementById("randomContainer");
         const genreContainer = document.getElementById("genreContainer");
         
-        if(!randomContainer || !genreContainer || !watchAgainContainer) return;
+        if(!randomContainer || !genreContainer || !watchAgainContainer || !trendingContainer) return;
 
         const filteredGlobalCatalog = movies.filter(m => !userUnwantedCache.includes(m.title.toLowerCase()));
 
@@ -1514,6 +1577,39 @@
             }
         } else {
             watchAgainContainer.innerHTML = "";
+        }
+
+        // --- RENDER REQ 2: Top 1-10 Trending Section ---
+        if (globalTrendingData.length > 0) {
+            let trendingCount = 0;
+            const trendingCardsFragment = document.createDocumentFragment();
+
+            for (let i = 0; i < globalTrendingData.length; i++) {
+                if (trendingCount >= 10) break; // Limit strictly to Top 10 items
+                
+                const dataItem = globalTrendingData[i];
+                const matchedMovie = filteredGlobalCatalog.find(m => m.title.toLowerCase() === dataItem.title);
+                
+                if (matchedMovie) {
+                    trendingCount++;
+                    const card = createMovieCard(matchedMovie, trendingCount);
+                    trendingCardsFragment.appendChild(card);
+                }
+            }
+
+            if (trendingCount > 0) {
+                trendingContainer.innerHTML = `
+                    <div class="section">
+                        <h2 class="section-title">Trending Top 10</h2>
+                        <div class="movies"></div>
+                    </div>
+                `;
+                trendingContainer.querySelector(".movies").appendChild(trendingCardsFragment);
+            } else {
+                trendingContainer.innerHTML = "";
+            }
+        } else {
+            trendingContainer.innerHTML = "";
         }
 
         randomContainer.innerHTML = `
@@ -1551,4 +1647,3 @@
 
 </body>
 </html>
-
