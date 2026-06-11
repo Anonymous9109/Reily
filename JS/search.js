@@ -40,6 +40,12 @@ const movies = [
     image: "images/JohnWick.jpg",
     link: "Movies/Movie?movie=john-wick-1"
   },
+    {
+    title: "2 Broke Girls",
+    genres: ["Sitcom", "Comedy"],
+    image: "images/2BrokeGirls.jpg",
+    link: "Series/series?series=2BrokeGirls"
+  },
   {
     title: "John Wick 2 ",
     genres: ["Action", "Thriller"],
