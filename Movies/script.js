@@ -1,25 +1,53 @@
-const params = new URLSearchParams(window.location.search);
-const id = params.get("movie");
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.x.x/firebase-auth.js"; // Adjust version/path if needed
 
-const movie = movies[id];
+const auth = getAuth();
 
-if (!movie) {
-  document.body.innerHTML = "Movie not found";
+// 1. Check if user is logged in
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    // User is signed in, safe to show content and load movie data
+    document.body.style.display = "block"; 
+    initializeMoviePage();
+  } else {
+    // User is not signed in, redirect to index
+    window.location.href = "index.html"; // Adjust if your file is named differently (e.g., "/")
+  }
+});
+
+// 2. Put your original page logic inside a function
+function initializeMoviePage() {
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get("movie");
+
+  const movie = movies[id];
+
+  if (!movie) {
+    document.body.innerHTML = "Movie not found";
+    return; // Stop execution if no movie exists
+  }
+
+  document.getElementById("title").textContent = movie.title;
+  document.getElementById("desc").textContent = movie.desc;
+
+  const video = document.getElementById("bgVideo");
+  video.innerHTML = `<source src="${movie.video}" type="video/mp4">`;
 }
 
-document.getElementById("title").textContent = movie.title;
-document.getElementById("desc").textContent = movie.desc;
-
-const video = document.getElementById("bgVideo");
-video.innerHTML = `<source src="${movie.video}" type="video/mp4">`;
-
+// 3. Keep your navigation functions global so HTML buttons can click them
 function play() {
-  window.location.href = `videoplayer?ep=${movie.play}`;
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get("movie");
+  const movie = movies[id];
+  if (movie) {
+    window.location.href = `videoplayer?ep=${movie.play}`;
+  }
 }
 
 function goBack() {
   window.history.back();
 }
+
+// Your style block remains untouched
 (function () {
   const style = document.createElement('style');
   style.innerHTML = `
@@ -47,4 +75,3 @@ function goBack() {
   `;
   document.head.appendChild(style);
 })();
-//
