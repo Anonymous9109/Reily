@@ -8,6 +8,11 @@
 <link rel="stylesheet" href="style.css">
 
 <style>
+/* 1. HIDE EVERYTHING BY DEFAULT UNTIL FIREBASE SAYS IT'S OK */
+body {
+  display: none;
+}
+
 /* Kill blue tap highlight + focus styles */
 * {
   -webkit-tap-highlight-color: transparent;
@@ -86,6 +91,23 @@ document.addEventListener("DOMContentLoaded", () => {
   `;
   document.head.appendChild(style);
 });
+</script>
+
+<script type="module">
+  // NOTE: If you already initialize firebase in another file (like moviepage.js), 
+  // make sure getAuth() works here, or update the import version to match your project.
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  
+  const auth = getAuth();
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      // User logged in! Reveal the page so your original scripts work perfectly.
+      document.body.style.display = "block";
+    } else {
+      // Not logged in! Kick them to the index page immediately.
+      window.location.href = "index.html";
+    }
+  });
 </script>
 
 <script src="/JS/moviepage.js" defer></script>
