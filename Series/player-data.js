@@ -105,7 +105,29 @@ window.videoData = {
   ],
 
 
-
+ "2BrokeGirls-S1E1": "https://dl.dropboxusercontent.com/scl/fi/gxryes0bba60c6v7w7ayj/2.Broke.Girls.S01E01.mkv?rlkey=3vzhsai5cfhgsfzut8jjwctgz&st=d3lruing&dl=1",
+  "2BrokeGirls-S1E2": "https://dl.dropboxusercontent.com/scl/fi/tewqyl7c2f2kr0vbed74a/2.Broke.Girls.S01E02.mkv?rlkey=9j1q9soazk1zrznwut8c0m9xu&st=gy4guua5&dl=1",
+  "2BrokeGirls-S1E3": "https://dl.dropboxusercontent.com/scl/fi/ltpbzhh92jef2mxkibuy2/2.Broke.Girls.S01E03.mkv?rlkey=k7mv6oqbrhs5btvyoyrtiiag7&st=903a9r1d&dl=1",
+  "2BrokeGirls-S1E4": "https://dl.dropboxusercontent.com/scl/fi/93baane1otixva4s53074/2.Broke.Girls.S01E04.mkv?rlkey=00e3b20ru5r8kezi8jta7egr1&st=tavsnsoo&dl=1",
+  "2BrokeGirls-S1E5": "https://dl.dropboxusercontent.com/scl/fi/6dp7ewy3hufwioehjjs1n/2.Broke.Girls.S01E05.mkv?rlkey=5anpxlsiwgiueg1q3zbgfijr4&st=c0kil3uz&dl=1",
+  "2BrokeGirls-S1E6": "https://dl.dropboxusercontent.com/scl/fi/r5vjoqgpy6qmkvcsehc8v/2.Broke.Girls.S01E06.mkv?rlkey=itoykirwv6d3geo5y5lf8vf7g&st=qjgzk9x2&dl=1",
+  "2BrokeGirls-S1E7": "https://dl.dropboxusercontent.com/scl/fi/jehm5jdaltgz0kw8p3p2g/2.Broke.Girls.S01E07.mkv?rlkey=fk91389psqsbeshfnb97qpnhc&st=j3k6pu1j&dl=1",
+  "2BrokeGirls-S1E8": "https://dl.dropboxusercontent.com/scl/fi/hzsrkh7953hu27ziufjym/2.Broke.Girls.S01E08.mkv?rlkey=z3zchp8llcnfor2o9fjgtdb0y&st=skf77h6w&dl=1",
+  "2BrokeGirls-S1E9": "https://dl.dropboxusercontent.com/scl/fi/imhp332a5rif9frkg7m15/2.Broke.Girls.S01E09.mkv?rlkey=rlt9x199yxsdd9vz7h0sxy8wb&st=wbcqno45&dl=1",
+  "2BrokeGirls-S1E10": "https://dl.dropboxusercontent.com/scl/fi/rgjm7rmuua02udnhr9uw6/2.Broke.Girls.S01E10.mkv?rlkey=dsksqw4k8dgmc92ofra3iq7bp&st=jtanwm4e&dl=1",
+  "2BrokeGirls-S1E11": "https://dl.dropboxusercontent.com/scl/fi/5sp1h8qbfe758eegwsvtp/2.Broke.Girls.S01E11.mkv?rlkey=5nbhxf0hcj5sh7x89br6hvspc&st=ula1ab10&dl=1",
+  "2BrokeGirls-S1E12": "https://dl.dropboxusercontent.com/scl/fi/orxf4lewqcmfkla4pde18/2.Broke.Girls.S01E12.mkv?rlkey=2xeor65q675nuiqse2xzzf5zh&st=f10t49rs&dl=1",
+  "2BrokeGirls-S1E13": "https://dl.dropboxusercontent.com/scl/fi/lfjfg58trozzo7m4nlqqv/2.Broke.Girls.S01E13.mkv?rlkey=7ylul4wsjom518dyqqeg6einr&st=egg8lquo&dl=1",
+  "2BrokeGirls-S1E14": "https://dl.dropboxusercontent.com/scl/fi/53zdoyu79u1nr9f1xe9du/2.Broke.Girls.S01E14.mkv?rlkey=qf31ljunolt7rjsd1tvl8dpq8&st=uwi094ar&dl=1",
+  "2BrokeGirls-S1E15": "https://dl.dropboxusercontent.com/scl/fi/suuf7rr04gm1j59hf06l6/2.Broke.Girls.S01E15.mkv?rlkey=o0vngozqwdvlnolu3gt2myfzf&st=evsijhgd&dl=1",
+  "2BrokeGirls-S1E16": "https://dl.dropboxusercontent.com/scl/fi/kjofp8c1l5o1h9nk2cc6n/2.Broke.Girls.S01E16.mkv?rlkey=f8ismgl6on5uwyc11w4u8gvyd&st=c83dbizy&dl=1",
+  "2BrokeGirls-S1E17": "https://dl.dropboxusercontent.com/scl/fi/3e51of9m0kp57w3ymfxqi/2.Broke.Girls.S01E17.mkv?rlkey=nsmyejledsvforr6l9ugcxvuk&st=z0h56861&dl=1",
+  "2BrokeGirls-S1E18": "https://dl.dropboxusercontent.com/scl/fi/udsqa6kivasnvgzr7mrsq/2.Broke.Girls.S01E18.mkv?rlkey=r9me5cro83bjqxqviprabptnj&st=j75qo7a2&dl=1",
+  "2BrokeGirls-S1E19": "https://dl.dropboxusercontent.com/scl/fi/v8i7bfbsbljbtrehwaysh/2.Broke.Girls.S01E19.mkv?rlkey=kj3lmli3f8xrnyq96d35jb3ao&st=70tulw81&dl=1",
+  "2BrokeGirls-S1E20": "https://dl.dropboxusercontent.com/scl/fi/hwa7rewbxxfarnogbn8sk/2.Broke.Girls.S01E20.mkv?rlkey=5uogrn0v9bga3ekuxldgq5mlt&st=5214xw22&dl=1",
+  "2BrokeGirls-S1E21": "https://dl.dropboxusercontent.com/scl/fi/tbucd36hffko8zt4ja03d/2.Broke.Girls.S01E21.mkv?rlkey=h4qw51m5tnp4mr3iv6a9cffih&st=vccve4su&dl=1",
+  "2BrokeGirls-S1E22": "https://dl.dropboxusercontent.com/scl/fi/35yqhhhvatsx2rthade06/2.Broke.Girls.S01E22.mkv?rlkey=d5w2om3z2g5hozkgs4jnlxvx6&st=nhanq4i5&dl=1",
+  "2BrokeGirls-S1E23": "https://dl.dropboxusercontent.com/scl/fi/286jg9lwryw7mcpvtdqzv/2.Broke.Girls.S01E23.mkv?rlkey=sp98buq9xz4k04rarch8areof&st=v2scqrs6&dl=1",
 
   // The Boys
   "TheBoys-S1E1": "https://dl.dropboxusercontent.com/scl/fi/20hdizsqpv5anaook5orr/The-Boys-_-S1E1-2019.mp4?rlkey=xzhasqzdf23lzel5vc7zkysjz&st=6snnjkk5&dl=1",
