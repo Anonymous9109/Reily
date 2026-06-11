@@ -84,13 +84,13 @@ p {
 }
 
 .play-btn:hover {
-  transform: scale(1.05);
+  
 }
 
 /* Mobile & Tablet */
 @media (max-width: 900px) {
   .overlay {
-    background: linear-gradient(to top, rgba(0,0,0,0.9) 40%, transparent 100%);
+    background: linear-gradient(to top, rgba(0,0,0,0.9) 100%, transparent 100%);
   }
 
   .content {
