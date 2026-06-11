@@ -15,14 +15,6 @@ body {
   z-index: -1;
 }
 
-/* Overlay */
-.overlay {
-  position: fixed;
-  width: 100%; height: 100%;
-  
-  z-index: -1;
-}
-
 /* Back Button */
 .back-btn {
   position: fixed;
@@ -74,25 +66,20 @@ p {
   gap: 10px;
   padding: 14px 25px;
   font-size: 18px;
-  
   border-radius: 5px;
   background: white;
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    color: black;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: black;
   cursor: pointer;
   transition: 0.25s;
 }
 
 .play-btn:hover {
-  
+  /* Add hover styles here if needed */
 }
 
 /* Mobile & Tablet */
 @media (max-width: 900px) {
-  .overlay {
-    
-  }
-
   .content {
     flex-direction: column;
     justify-content: center;
