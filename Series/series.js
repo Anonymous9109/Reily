@@ -25,6 +25,14 @@ const seriesData = {
       { number: 1, prefix: "RegularShowLostTapes-S1E", totalEpisodes: 5 }
     ]
   },
+  "2BrokeGirls": {
+    title: "2 Broke Girls",
+    desc: "Max and Caroline, two girls in their mid-twenties, work at a Brooklyn restaurant as waitresses. Together, they dream of starting up their cupcake business, but always find themselves without money.",
+    video: "https://dl.dropboxusercontent.com/scl/fi/gxryes0bba60c6v7w7ayj/2.Broke.Girls.S01E01.mkv?rlkey=3vzhsai5cfhgsfzut8jjwctgz&st=d3lruing&dl=1",
+    seasons: [
+      { number: 1, prefix: "2BrokeGirls-S1E", totalEpisodes: 23 }
+    ]
+  },
     "WidowsBay": {
     title: "Widow's Bay",
     desc: "A New England mayor trying to boost tourism on his island must navigate strange events suggesting it might be cursed.",
