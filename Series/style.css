@@ -74,9 +74,9 @@ body {
 /* 6. Episode Buttons */
 .ep-btn {
   flex: 0 0 auto;
-  background: rgba(255, 255, 255, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: #fff;
+  background: white;
+  border: 5px ;
+  color: black;
   padding: 12px 24px;
   border-radius: 8px;
   font-weight: bold;
@@ -91,5 +91,5 @@ body {
 }
 
 .ep-btn:active {
-  transform: scale(0.95);
+  
 }
