@@ -26,6 +26,15 @@ a:active {
   outline: none;
   box-shadow: none;
 }
+
+/* Flex layout to keep the SVG icon and text aligned nicely */
+.play-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px; /* Adds space between the icon and the text */
+  cursor: pointer;
+}
 </style>
 
 </head>
@@ -44,7 +53,12 @@ a:active {
   <div class="text">
     <h1 id="title"></h1>
     <p id="desc"></p>
-    <button class="play-btn" onclick="play()">Play</button>
+    <button class="play-btn" onclick="play()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+        <polygon points="5 3 19 12 5 21 5 3"></polygon>
+      </svg>
+      Play
+    </button>
   </div>
 </div>
 
@@ -77,13 +91,5 @@ document.addEventListener("DOMContentLoaded", () => {
 <script src="/JS/moviepage.js" defer></script>
 <script src="movies.js"></script>
 <script src="script.js"></script>
-<script type="text/javascript">
-    
-
-
-
-
-
-
-
-
+</body>
+</html>
