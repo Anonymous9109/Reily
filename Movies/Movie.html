@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="style.css">
 
 <style>
-/* 1. HIDE EVERYTHING BY DEFAULT UNTIL FIREBASE CONFIRMS LOGGED IN STATUS */
+/* 1. HIDE EVERYTHING BY DEFAULT UNTIL AUTHENTICATED */
 body {
   display: none;
 }
@@ -67,6 +67,37 @@ a:active {
   </div>
 </div>
 
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCExki28m1NNepVQEIjmcQzR8z8O68LqIc",
+    authDomain: "rinolski-notifications.firebaseapp.com",
+    databaseURL: "https://rinolski-notifications-default-rtdb.firebaseio.com",
+    projectId: "rinolski-notifications",
+    storageBucket: "rinolski-notifications.firebasestorage.app",
+    messagingSenderId: "355554579853",
+    appId: "1:355554579853:web:3caa961653c0cdc0a359c4",
+    measurementId: "G-WZ84970GST"
+  };
+
+  // Initialize localized instance
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  // Monitor user authorization
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      // Authenticated successfully! Reveal page
+      document.body.style.display = "block";
+    } else {
+      // Unauthenticated! Redirect to index
+      window.location.href = "index.html";
+    }
+  });
+</script>
+
 <script>
 // Extra safety: inject style via JS too (some devices ignore CSS-only)
 document.addEventListener("DOMContentLoaded", () => {
@@ -93,10 +124,8 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
-<!-- 2. YOUR ORIGINAL SCRIPTS (Completely untouched layout) -->
 <script src="/JS/moviepage.js" defer></script>
 <script src="movies.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
-
