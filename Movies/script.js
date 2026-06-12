@@ -1,4 +1,4 @@
-const params = new URLSearchParams(window.location.search);
+ const params = new URLSearchParams(window.location.search);
 const id = params.get("movie");
 
 // We expose the global movies reference so player.js can pull dynamic titles
@@ -18,19 +18,6 @@ if (!movie) {
   checkContinueWatchingStatus();
 }
 
-/**
- * Formats raw minutes remaining into a clean text string.
- * Converts values >= 60 minutes into hours and minutes (e.g., 96m -> 1h 36m).
- */
-function formatMinutesDisplay(totalMinutes) {
-  if (totalMinutes >= 60) {
-    const hours = Math.floor(totalMinutes / 60);
-    const mins = Math.round(totalMinutes % 60);
-    return mins > 0 ? `${hours}h ${mins}m` : `${hours}h`;
-  }
-  return `${Math.round(totalMinutes)}m`;
-}
-
 async function checkContinueWatchingStatus() {
   try {
     // Import Firestore and Auth modules dynamically
@@ -40,21 +27,10 @@ async function checkContinueWatchingStatus() {
     const auth = getAuth();
     const db = getFirestore();
 
-    // Safely figure out the movie title even if data layer loads out of order
-    const activeMovieTitle = movie ? movie.title : document.getElementById("title").textContent;
-
-    if (!activeMovieTitle || activeMovieTitle === "Movie not found") {
-      return; // Can't fetch history without a valid title identifier
-    }
-
     // Wait until Firebase determines if a user is logged in
     auth.onAuthStateChanged(async (user) => {
-      if (user && user.email) {
-        // Escape dots out of email string for safe document path layout
-        const cleanEmail = user.email.replace(/\./g, '_');
-        
-        // Document name matching player.js: emailString_movieTitleString
-        const docRef = doc(db, "watchHistory", `${cleanEmail}_${activeMovieTitle}`);
+      if (user) {
+        const docRef = doc(db, "watchHistory", `${user.uid}_${id}`);
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
@@ -65,21 +41,16 @@ async function checkContinueWatchingStatus() {
           // If they have watched a piece but haven't completely finished it (15 seconds left buffer)
           if (currentTime > 5 && currentTime < (duration - 15)) {
             const timeLeftSeconds = duration - currentTime;
-            const timeLeftMinutes = timeLeftSeconds / 60;
+            const timeLeftMinutes = Math.ceil(timeLeftSeconds / 60);
 
-            // Turn raw minutes into clean format ("1h 36m" instead of "96m")
-            const formattedTimeLeft = formatMinutesDisplay(timeLeftMinutes);
-
-            // Select via class first, fall back to searching for any button containing "play" in context
-            let playBtn = document.querySelector(".play-btn") || document.querySelector("button[onclick^='play']");
-            
+            const playBtn = document.querySelector(".play-btn");
             if (playBtn) {
               // Retain your neat inline SVG graphic layout and just update text contents
               playBtn.innerHTML = `
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                   <polygon points="5 3 19 12 5 21 5 3"></polygon>
                 </svg>
-                Continue • ${formattedTimeLeft} left
+                Continue • ${timeLeftMinutes}m left
               `;
             }
           }
