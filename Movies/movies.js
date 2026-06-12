@@ -18,6 +18,11 @@ const movies = {
     video: "",
     play: "DiaryOfAWimpyKid"
   },
+  "RideAlong": {
+    title: "Ride Along",
+    desc: "Ben, a security guard, is in love with police officer James Payton's sister. In order to win his future brother-in-law's heart, Ben rides along with him on a 24-hour patrol trip to Atlanta.",
+    play: "RideAlong"
+  },
   "DiaryofAWimpyKidRodrickRules": {
     title: "Diary of a Wimpy Kid: Rodrick Rules",
     desc: "Back in middle school after summer vacation, Greg Heffley and his older brother Rodrick must deal with their parents' misguided attempts to have them bond.",
