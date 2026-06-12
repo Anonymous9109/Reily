@@ -1,4 +1,4 @@
-/* Cyrene Player (smart source detection + back button + portrait support + subtitles + Timer + Netflix Shadow + Firestore Resume) */
+/* Cyrene Player (smart source detection + back button + portrait support + subtitles + Timer + Netflix Shadow + Firestore Resume Fixed) */
 document.addEventListener("DOMContentLoaded", async () => {
 
   /********** 1) Inject CSS **********/
@@ -183,7 +183,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const ccBtn = document.createElement("button");
   ccBtn.id = "ccBtn";
-  ccBtn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M19 4H5c-1.11 0-2 .9-2 2v12c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 7H9.5v-.5h-2v3h2V13H11v1c0 .55-.45 1-1 1H7c-.55 0-1-.45-1-1v-4c0-.55.45-1 1-1h3c.55 0 1 .45 1 1v1zm7 0h-1.5v-.5h-2v3h2V13H18v1c0 .55-.45 1-1 1h-3c-.55 0-1-.45-1-1v-4c0-.55.45-1 1-1h3c.55 0 1 .45 1 1v1z"/></svg>`;
+  ccBtn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M19 4H5c-1.11 0-2 .9-2 2v12c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 7H9.5v-.5h-2v3h2V13H11v1c0 .55-.45 1-1 1H7c-.55 0-1-.45-1-1v-4c0-.55.45-1 1-1h3c.55 0 1 .45 1 1v1zm7 0h-1.5v-.5h-2v3h2V13H18v1c0 .55-.45 1-1 1h-3c-.55 0-1-.45-1-1v-4c0-.55 0-.45 1-1h3c.55 0 1 .45 1 1v1z"/></svg>`;
 
   const subMenu = document.createElement("div");
   subMenu.id = "sub-menu";
@@ -256,7 +256,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   await attachSourceToVideo(src);
 
-  /********** NEW: FIRESTORE INITIALIZATION & VARIABLES **********/
+  /********** NEW: FIRESTORE CONFIG & ASYNC VARIABLES **********/
   const { getFirestore, doc, setDoc } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
   const { getAuth } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js");
   
@@ -272,14 +272,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     activeMovieTitle = document.title;
   }
 
-  let isResuming = true; // Guard variable to stop timeupdate overwrites during load
+  let isResuming = true; // Block tracking until resume is finished
   let lastSavedTime = 0;
+  let firebaseTimestamp = null; // Stash timestamp globally until metadata loads
 
   async function saveWatchProgress() {
     const user = auth.currentUser;
     if (!user || !video.duration || isResuming) return;
 
-    // Reject saving if the video hasn't really started, or if it's basically finished
     if (video.currentTime < 5 || video.currentTime > video.duration - 10) return;
 
     try {
@@ -299,7 +299,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
-  // Save triggers when switching apps, leaving tab, or hitting back
   window.addEventListener("beforeunload", saveWatchProgress);
   document.addEventListener("visibilitychange", () => {
     if (document.visibilityState === "hidden") saveWatchProgress();
@@ -472,13 +471,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   rewindBtn.onclick = (e) => { e.stopPropagation(); video.currentTime = Math.max(0, video.currentTime - 10); };
   skipBtn.onclick = (e) => { e.stopPropagation(); video.currentTime = Math.min(video.duration, video.currentTime + 10); };
 
-  // Sync video slider progress + write adjustments periodically to Firestore
   video.addEventListener("timeupdate", () => {
     if (isFinite(video.duration) && !isDragging && !isResuming) {
       progressBar.style.width = (video.currentTime / video.duration) * 100 + "%";
       timerDisplay.textContent = `${formatTime(video.currentTime)} / ${formatTime(video.duration)}`;
       
-      // Throttle: upload current position to Firestore every 5 seconds
       if (Math.abs(video.currentTime - lastSavedTime) >= 5) {
         saveWatchProgress();
       }
@@ -512,7 +509,26 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   root.addEventListener("click", () => { if(!isDragging) controlsVisible ? hideControls() : showControls(); });
 
-  /********** AUTO-RESUME TIMESTAMPS ASYNCHRONOUSLY **********/
+  /********** THE JUMP FIX: TRACK LOADEDMETADATA **********/
+  video.addEventListener("loadedmetadata", async () => {
+    // When the browser knows video dimensions and track lengths, apply the stashed time
+    if (firebaseTimestamp && firebaseTimestamp < video.duration - 15) {
+      video.currentTime = firebaseTimestamp;
+      lastSavedTime = firebaseTimestamp;
+    }
+    
+    // Now release the guard so timeupdates can track normally
+    isResuming = false;
+    
+    try { 
+      await video.play(); 
+    } catch { 
+      video.pause(); 
+      showControls(5000); 
+    }
+  });
+
+  // Pull down data early from network, store it in variable until metadata loads
   auth.onAuthStateChanged(async (user) => {
     if (user) {
       try {
@@ -521,24 +537,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         const docSnap = await getDoc(docRef);
         
         if (docSnap.exists()) {
-          const savedTime = docSnap.data().currentTime;
-          // Jump video ahead to timestamp if they haven't finished it completely
-          if (savedTime && savedTime < video.duration - 15) {
-            video.currentTime = savedTime;
-          }
+          firebaseTimestamp = docSnap.data().currentTime;
         }
       } catch (err) { 
-        console.error("Error loading watch position: ", err); 
+        console.error("Error pulling history collection: ", err); 
       }
-    }
-    
-    // Unlock and trigger the video player safely now that positions align
-    isResuming = false;
-    try { 
-      await video.play(); 
-    } catch { 
-      video.pause(); 
-      showControls(5000); 
     }
   });
 
