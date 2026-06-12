@@ -263,14 +263,17 @@ document.addEventListener("DOMContentLoaded", async () => {
   const db = getFirestore();
   const auth = getAuth();
   
-  // Set the Movie ID explicitly to its text title string
+  // Extract parameters out of the current URL context
+  const movieParamId = params.get("movie"); 
   let activeMovieTitle = "Unknown Media";
-  if (document.title && document.title !== "Player") {
-    activeMovieTitle = document.title;
-  } else if (params.get("title")) {
+  
+  // Match look-up path sequencing exactly with script.js parameters
+  if (params.get("title")) {
     activeMovieTitle = decodeURIComponent(params.get("title"));
-  } else if (window.movies && window.movies[ep]) {
-    activeMovieTitle = window.movies[ep].title;
+  } else if (window.movies && movieParamId && window.movies[movieParamId]) {
+    activeMovieTitle = window.movies[movieParamId].title;
+  } else if (document.title && !["Player", "Document", ""].includes(document.title)) {
+    activeMovieTitle = document.title;
   }
 
   let isResuming = true; 
@@ -279,24 +282,25 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   async function saveWatchProgress() {
     const user = auth.currentUser;
-    // Break out if conditions aren't active or authenticated correctly
     if (!user || !user.email || !video.duration || isResuming) return;
 
+    // Do not save context if user is inside intro or past trailing credits buffer
     if (video.currentTime < 5 || video.currentTime > video.duration - 10) return;
 
     try {
-      // Escape dots out of email string for standard firestore layout compliance
+      // Escape dots out of email string for standard Firestore path compatibility
       const cleanEmail = user.email.replace(/\./g, '_');
       const docId = `${cleanEmail}_${activeMovieTitle}`;
       
       await setDoc(doc(db, "watchHistory", docId), {
         userEmail: user.email,
-        movieId: activeMovieTitle, // Set directly to Title string
+        movieId: activeMovieTitle, // Explicitly match text titles instead of generic numeric IDs
         movieTitle: activeMovieTitle,
         currentTime: video.currentTime,
         duration: video.duration,
         lastUpdated: new Date()
       }, { merge: true });
+      
       lastSavedTime = video.currentTime;
     } catch (error) {
       console.error("Failed to sync progress track data:", error);
@@ -346,7 +350,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if(edge === 'dropShadow') {
         el.style.textShadow = `${shadowAmt}em ${shadowAmt}em 0.15em rgba(0,0,0,0.9)`;
     } else if(edge === 'outline') {
-        el.style.textShadow = `-${shadowAmt/2}em -${shadowAmt/2}em 0 #000, ${shadowAmt/2}em -${shadowAmt/2}em 0 #000, -${shadowAmt/2}em ${shadowAmt/2}em 0 #000, ${shadowAmt/2}em ${shadowAmt/2}em 0 #000`;
+        el.style.textShadow = `-\${shadowAmt/2}em -\${shadowAmt/2}em 0 #000, \${shadowAmt/2}em -\${shadowAmt/2}em 0 #000, -\${shadowAmt/2}em \${shadowAmt/2}em 0 #000, \${shadowAmt/2}em \${shadowAmt/2}em 0 #000`;
     } else if(edge === 'raised') {
         el.style.textShadow = `0 -0.03em 0 #000, 0 0.03em 0 #fff`;
     } else {
@@ -365,7 +369,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (this.mode === 'hidden') {
           const cue = this.activeCues[0];
           if (cue) {
-            subDisplay.innerHTML = `<span>${cue.text}</span>`;
+            subDisplay.innerHTML = `<span>\${cue.text}</span>`;
             const span = subDisplay.querySelector('span');
             if(span) await applySubAppearance(span);
           } else {
@@ -429,7 +433,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const h = Math.floor(seconds / 3600);
     const m = Math.floor((seconds % 3600) / 60);
     const s = Math.floor(seconds % 60);
-    return h > 0 ? `${h}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}` : `${m}:${s.toString().padStart(2,'0')}`;
+    return h > 0 ? `\${h}:\${m.toString().padStart(2,'0')}:\${s.toString().padStart(2,'0')}` : `\${m}:\${s.toString().padStart(2,'0')}`;
   };
 
   const showControls = (timeout = 3000) => {
@@ -478,7 +482,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   video.addEventListener("timeupdate", () => {
     if (isFinite(video.duration) && !isDragging && !isResuming) {
       progressBar.style.width = (video.currentTime / video.duration) * 100 + "%";
-      timerDisplay.textContent = `${formatTime(video.currentTime)} / ${formatTime(video.duration)}`;
+      timerDisplay.textContent = `\${formatTime(video.currentTime)} / \${formatTime(video.duration)}`;
       
       if (Math.abs(video.currentTime - lastSavedTime) >= 5) {
         saveWatchProgress();
@@ -496,7 +500,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     pct = Math.max(0, Math.min(1, pct));
     progressBar.style.width = pct * 100 + "%";
     const targetTime = pct * video.duration;
-    timerDisplay.textContent = `${formatTime(targetTime)} / ${formatTime(video.duration)}`;
+    timerDisplay.textContent = `\${formatTime(targetTime)} / \${formatTime(video.duration)}`;
     video.currentTime = targetTime;
   };
 
@@ -514,7 +518,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   root.addEventListener("click", () => { if(!isDragging) controlsVisible ? hideControls() : showControls(); });
 
   /********** RE-APPLY STASHED PROGRESS VIA EMAIL UNIQUE ID **********/
-  video.addEventListener("loadedmetadata", async () => {
+  video.addEventListener("loadedmetadata", () => {
     if (firebaseTimestamp && firebaseTimestamp < video.duration - 15) {
       video.currentTime = firebaseTimestamp;
       lastSavedTime = firebaseTimestamp;
@@ -522,7 +526,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     
     isResuming = false;
     try { 
-      await video.play(); 
+      video.play().catch(() => { showControls(5000); }); 
     } catch { 
       video.pause(); 
       showControls(5000); 
@@ -534,11 +538,16 @@ document.addEventListener("DOMContentLoaded", async () => {
       try {
         const { getDoc } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
         const cleanEmail = user.email.replace(/\./g, '_');
-        const docRef = doc(db, "watchHistory", `${cleanEmail}_${activeMovieTitle}`);
+        const docRef = doc(db, "watchHistory", `\${cleanEmail}_\${activeMovieTitle}`);
         const docSnap = await getDoc(docRef);
         
         if (docSnap.exists()) {
           firebaseTimestamp = docSnap.data().currentTime;
+          // Trigger a clip hop instantly if metadata was cached early
+          if (video.readyState >= 1 && firebaseTimestamp < video.duration - 15) {
+            video.currentTime = firebaseTimestamp;
+            lastSavedTime = firebaseTimestamp;
+          }
         }
       } catch (err) { 
         console.error("Error pulling database tracking history: ", err); 
@@ -556,8 +565,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       root.style.left = "50%";
       root.style.transform = `translate(-50%, -50%) rotate(90deg)`;
       root.style.transformOrigin = "center center";
-      root.style.width = `${vh}px`;
-      root.style.height = `${vw}px`;
+      root.style.width = `\${vh}px`;
+      root.style.height = `\${vw}px`;
     } else {
       root.style.position = "fixed";
       root.style.top = "0";
