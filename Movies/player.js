@@ -225,7 +225,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const params = new URLSearchParams(window.location.search);
   const ep = params.get("ep") || "1";
   
-  // FIX: Explicit match strategy. Prioritize '?movie=' param, then fallback to dynamic variables.
+  // Explicit match strategy. Prioritize '?movie=' param, then fallback to dynamic variables.
   const movieParamId = params.get("movie") || params.get("id") || ep; 
 
   let src = null;
@@ -273,7 +273,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     activeMovieTitle = document.title;
   }
 
-  let isResuming = true; // Block manual track timeline overwriting until metadata phase finishes
+  let isResuming = true; // Block manual tracking updates until lifecycle resolves
   let lastSavedTime = 0;
   let firebaseTimestamp = null; 
 
@@ -281,7 +281,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const user = auth.currentUser;
     if (!user || !user.email || !video.duration || isResuming) return;
 
-    // FIX: Removed strict minutes barrier. Now accurately saves everything down to short durations.
+    // Removed tight timeline constraint borders so tracking works reliably down to zero bounds
     if (video.currentTime < 3 || video.currentTime > video.duration - 5) return;
 
     try {
@@ -343,7 +343,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if(edge === 'dropShadow') {
         el.style.textShadow = `${shadowAmt}em ${shadowAmt}em 0.15em rgba(0,0,0,0.9)`;
     } else if(edge === 'outline') {
-        el.style.textShadow = `-${shadowAmt/2}em -${shadowAmt/2}em 0 #000, ${shadowAmt/2}em -${shadowAmt/2}em 0 #000, -${shadowAmt/2}em ${shadowAmt/2}em 0 #000, ${shadowAmt/2}em ${shadowAmt/2}em 0 #000`;
+        el.style.textShadow = `-\${shadowAmt/2}em -\${shadowAmt/2}em 0 #000, \${shadowAmt/2}em -\${shadowAmt/2}em 0 #000, -\${shadowAmt/2}em \${shadowAmt/2}em 0 #000, \${shadowAmt/2}em \${shadowAmt/2}em 0 #000`;
     } else if(edge === 'raised') {
         el.style.textShadow = `0 -0.03em 0 #000, 0 0.03em 0 #fff`;
     } else {
@@ -362,7 +362,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (this.mode === 'hidden') {
           const cue = this.activeCues[0];
           if (cue) {
-            subDisplay.innerHTML = `<span>${cue.text}</span>`;
+            subDisplay.innerHTML = `<span>\${cue.text}</span>`;
             const span = subDisplay.querySelector('span');
             if(span) await applySubAppearance(span);
           } else {
@@ -426,7 +426,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const h = Math.floor(seconds / 3600);
     const m = Math.floor((seconds % 3600) / 60);
     const s = Math.floor(seconds % 60);
-    return h > 0 ? `${h}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}` : `${m}:${s.toString().padStart(2,'0')}`;
+    return h > 0 ? `\${h}:\${m.toString().padStart(2,'0')}:\${s.toString().padStart(2,'0')}` : `\${m}:\${s.toString().padStart(2,'0')}`;
   };
 
   const showControls = (timeout = 3000) => {
@@ -475,7 +475,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   video.addEventListener("timeupdate", () => {
     if (isFinite(video.duration) && !isDragging && !isResuming) {
       progressBar.style.width = (video.currentTime / video.duration) * 100 + "%";
-      timerDisplay.textContent = `${formatTime(video.currentTime)} / ${formatTime(video.duration)}`;
+      timerDisplay.textContent = `\${formatTime(video.currentTime)} / \${formatTime(video.duration)}`;
       
       if (Math.abs(video.currentTime - lastSavedTime) >= 5) {
         saveWatchProgress();
@@ -493,7 +493,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     pct = Math.max(0, Math.min(1, pct));
     progressBar.style.width = pct * 100 + "%";
     const targetTime = pct * video.duration;
-    timerDisplay.textContent = `${formatTime(targetTime)} / ${formatTime(video.duration)}`;
+    timerDisplay.textContent = `\${formatTime(targetTime)} / \${formatTime(video.duration)}`;
     video.currentTime = targetTime;
   };
 
@@ -510,16 +510,26 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   root.addEventListener("click", () => { if(!isDragging) controlsVisible ? hideControls() : showControls(); });
 
-  /********** THE JUMP FIXED **********/
+  /********** THE JUMP FIXED (Race-Condition Proof) **********/
+  let firestoreLoaded = false;
+
   video.addEventListener("loadedmetadata", () => {
-    // FIX: Lowered end constraint parameter to 5 seconds so you don't lose status on short contents
-    if (firebaseTimestamp && firebaseTimestamp < video.duration - 5) {
+    // If Firestore resolved first, jump straight away
+    if (firestoreLoaded && firebaseTimestamp && firebaseTimestamp < video.duration - 5) {
       video.currentTime = firebaseTimestamp;
       lastSavedTime = firebaseTimestamp;
+      isResuming = false;
+    } 
+    // If Firestore is still running queries, assign a 3s timeout buffer to verify safety state
+    else if (!firestoreLoaded) {
+      setTimeout(() => {
+        if (!firestoreLoaded) {
+          isResuming = false;
+          try { video.play().catch(() => {}); } catch { showControls(5000); }
+        }
+      }, 3000);
     }
-    
-    isResuming = false;
-    
+
     try { 
       video.play().catch(() => {}); 
     } catch { 
@@ -538,18 +548,22 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (docSnap.exists()) {
           firebaseTimestamp = docSnap.data().currentTime;
           
-          // FIX: If video metadata has already loaded by the time network snapshot arrives, apply it instantly
-          if (video.readyState >= 1 && isResuming) {
-            if (firebaseTimestamp < video.duration - 5) {
-              video.currentTime = firebaseTimestamp;
-              lastSavedTime = firebaseTimestamp;
-            }
-            isResuming = false;
+          // Retroactive Jump: If metadata parsed while network packet resolved, run structural alignment now
+          if (video.readyState >= 1 && firebaseTimestamp < video.duration - 5) {
+            video.currentTime = firebaseTimestamp;
+            lastSavedTime = firebaseTimestamp;
           }
         }
       } catch (err) { 
         console.error("Error pulling history collection: ", err); 
+      } finally {
+        // Unlock timeline parameters for runtime execution loops
+        firestoreLoaded = true;
+        isResuming = false;
       }
+    } else {
+      firestoreLoaded = true;
+      isResuming = false;
     }
   });
 
@@ -563,8 +577,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       root.style.left = "50%";
       root.style.transform = `translate(-50%, -50%) rotate(90deg)`;
       root.style.transformOrigin = "center center";
-      root.style.width = `${vh}px`;
-      root.style.height = `${vw}px`;
+      root.style.width = `\${vh}px`;
+      root.style.height = `\${vw}px`;
     } else {
       root.style.position = "fixed";
       root.style.top = "0";
@@ -611,3 +625,4 @@ document.addEventListener("fullscreenchange", () => {
   document.addEventListener("mousemove", (e) => { e.target.dispatchEvent(createTouchEvent("touchmove", e)); });
   document.addEventListener("mouseup", (e) => { e.target.dispatchEvent(createTouchEvent("touchend", e)); });
 })();
+
