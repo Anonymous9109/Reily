@@ -283,8 +283,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (video.currentTime < 5 || video.currentTime > video.duration - 10) return;
 
     try {
-      const docId = `${user.uid}_${movieParamId}`;
-      await setDoc(doc(db, "watchHistory", docId), {
+      await setDoc(doc(db, "watchHistory", user.email, "movies", movieParamId), {
         userId: user.uid,
         userEmail: user.email,
         movieId: movieParamId,
@@ -342,7 +341,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if(edge === 'dropShadow') {
         el.style.textShadow = `${shadowAmt}em ${shadowAmt}em 0.15em rgba(0,0,0,0.9)`;
     } else if(edge === 'outline') {
-        el.style.textShadow = `-${shadowAmt/2}em -${shadowAmt/2}em 0 #000, ${shadowAmt/2}em -${shadowAmt/2}em 0 #000, -${shadowAmt/2}em ${shadowAmt/2}em 0 #000, ${shadowAmt/2}em ${shadowAmt/2}em 0 #000`;
+        el.style.textShadow = `-\${shadowAmt/2}em -\${shadowAmt/2}em 0 #000, \${shadowAmt/2}em -\${shadowAmt/2}em 0 #000, -\${shadowAmt/2}em \${shadowAmt/2}em 0 #000, \${shadowAmt/2}em \${shadowAmt/2}em 0 #000`;
     } else if(edge === 'raised') {
         el.style.textShadow = `0 -0.03em 0 #000, 0 0.03em 0 #fff`;
     } else {
@@ -361,7 +360,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (this.mode === 'hidden') {
           const cue = this.activeCues[0];
           if (cue) {
-            subDisplay.innerHTML = `<span>${cue.text}</span>`;
+            subDisplay.innerHTML = `<span>\${cue.text}</span>`;
             const span = subDisplay.querySelector('span');
             if(span) await applySubAppearance(span);
           } else {
@@ -425,7 +424,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const h = Math.floor(seconds / 3600);
     const m = Math.floor((seconds % 3600) / 60);
     const s = Math.floor(seconds % 60);
-    return h > 0 ? `${h}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}` : `${m}:${s.toString().padStart(2,'0')}`;
+    return h > 0 ? `\${h}:\${m.toString().padStart(2,'0')}:\${s.toString().padStart(2,'0')}` : `\${m}:\${s.toString().padStart(2,'0')}`;
   };
 
   const showControls = (timeout = 3000) => {
@@ -474,7 +473,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   video.addEventListener("timeupdate", () => {
     if (isFinite(video.duration) && !isDragging && !isResuming) {
       progressBar.style.width = (video.currentTime / video.duration) * 100 + "%";
-      timerDisplay.textContent = `${formatTime(video.currentTime)} / ${formatTime(video.duration)}`;
+      timerDisplay.textContent = `\${formatTime(video.currentTime)} / \${formatTime(video.duration)}`;
       
       if (Math.abs(video.currentTime - lastSavedTime) >= 5) {
         saveWatchProgress();
@@ -492,7 +491,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     pct = Math.max(0, Math.min(1, pct));
     progressBar.style.width = pct * 100 + "%";
     const targetTime = pct * video.duration;
-    timerDisplay.textContent = `${formatTime(targetTime)} / ${formatTime(video.duration)}`;
+    timerDisplay.textContent = `\${formatTime(targetTime)} / \${formatTime(video.duration)}`;
     video.currentTime = targetTime;
   };
 
@@ -533,7 +532,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (user) {
       try {
         const { getDoc } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
-        const docRef = doc(db, "watchHistory", `${user.uid}_${movieParamId}`);
+        const docRef = doc(db, "watchHistory", user.email, "movies", movieParamId);
         const docSnap = await getDoc(docRef);
         
         if (docSnap.exists()) {
@@ -555,8 +554,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       root.style.left = "50%";
       root.style.transform = `translate(-50%, -50%) rotate(90deg)`;
       root.style.transformOrigin = "center center";
-      root.style.width = `${vh}px`;
-      root.style.height = `${vw}px`;
+      root.style.width = `\${vh}px`;
+      root.style.height = `\${vw}px`;
     } else {
       root.style.position = "fixed";
       root.style.top = "0";
