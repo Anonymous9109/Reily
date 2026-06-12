@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="style.css">
 
 <style>
-/* 1. HIDE EVERYTHING BY DEFAULT UNTIL FIREBASE SAYS IT'S OK */
+/* 1. HIDE EVERYTHING BY DEFAULT UNTIL FIREBASE CONFIRMS LOGGED IN STATUS */
 body {
   display: none;
 }
@@ -93,25 +93,10 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
-<script type="module">
-  // NOTE: If you already initialize firebase in another file (like moviepage.js), 
-  // make sure getAuth() works here, or update the import version to match your project.
-  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-  
-  const auth = getAuth();
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      // User logged in! Reveal the page so your original scripts work perfectly.
-      document.body.style.display = "block";
-    } else {
-      // Not logged in! Kick them to the index page immediately.
-      window.location.href = "index.html";
-    }
-  });
-</script>
-
+<!-- 2. YOUR ORIGINAL SCRIPTS (Completely untouched layout) -->
 <script src="/JS/moviepage.js" defer></script>
 <script src="movies.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
+
