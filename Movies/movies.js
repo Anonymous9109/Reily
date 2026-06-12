@@ -21,6 +21,7 @@ const movies = {
   "RideAlong": {
     title: "Ride Along",
     desc: "Ben, a security guard, is in love with police officer James Payton's sister. In order to win his future brother-in-law's heart, Ben rides along with him on a 24-hour patrol trip to Atlanta.",
+    video: "https://dl.dropboxusercontent.com/scl/fi/trmlgfjfhhxyl1zqj4u7t/Kevin-Hart-Funny-Scene-From-Ride-Along.mp4?rlkey=6eksrz1rydnax15fxtqsntx9q&st=hcq9i7p2&dl=1",
     play: "RideAlong"
   },
   "DiaryofAWimpyKidRodrickRules": {
