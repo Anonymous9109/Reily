@@ -40,12 +40,16 @@ async function checkContinueWatchingStatus() {
     const auth = getAuth();
     const db = getFirestore();
 
+    // Safely figure out the movie title even if data layer loads out of order
+    const activeMovieTitle = movie ? movie.title : document.getElementById("title").textContent;
+
+    if (!activeMovieTitle || activeMovieTitle === "Movie not found") {
+      return; // Can't fetch history without a valid title identifier
+    }
+
     // Wait until Firebase determines if a user is logged in
     auth.onAuthStateChanged(async (user) => {
-      if (user && user.email && movie) {
-        // Use movie.title directly for the query matches instead of ID numbers
-        const activeMovieTitle = movie.title;
-        
+      if (user && user.email) {
         // Escape dots out of email string for safe document path layout
         const cleanEmail = user.email.replace(/\./g, '_');
         
@@ -66,7 +70,9 @@ async function checkContinueWatchingStatus() {
             // Turn raw minutes into clean format ("1h 36m" instead of "96m")
             const formattedTimeLeft = formatMinutesDisplay(timeLeftMinutes);
 
-            const playBtn = document.querySelector(".play-btn");
+            // Select via class first, fall back to searching for any button containing "play" in context
+            let playBtn = document.querySelector(".play-btn") || document.querySelector("button[onclick^='play']");
+            
             if (playBtn) {
               // Retain your neat inline SVG graphic layout and just update text contents
               playBtn.innerHTML = `
