@@ -1,4 +1,4 @@
-/* Cyrene Player (smart source detection + back button + portrait support + subtitles + Timer + Netflix Shadow + Firestore Sync) */
+/* Cyrene Player (smart source detection + back button + portrait support + subtitles + Timer + Netflix Shadow) */
 document.addEventListener("DOMContentLoaded", async () => {
 
   /********** 1) Inject CSS **********/
@@ -374,13 +374,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   const playIcon = document.getElementById("playIcon");
   const pauseIcon = document.getElementById("pauseIcon");
   let controlsVisible = false, hideTimer, isDragging = false;
-  let lastSavedTime = 0; // Firestore throttle tracking
+  let lastSavedTime = 0;
 
-  // Core Firestore DB Save Logic Pack
   async function saveProgressToFirestore() {
     if (!window.db || !isFinite(video.duration)) return;
 
-    // Pulls direct values dynamically assigned during your session
     const userEmail = window.currentUserEmail || "user@gmail.com"; 
     const activeMovieTitle = window.currentVideoTitle || "Unknown Show"; 
 
@@ -446,7 +444,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   video.addEventListener("playing", () => { hideLoading(); setPlayingUI(true); });
   video.addEventListener("pause", () => {
     setPlayingUI(false);
-    saveProgressToFirestore(); // Instantly write position to database on pause events
+    saveProgressToFirestore();
   });
   video.addEventListener("waiting", showLoading);
   video.addEventListener("ended", hideLoading);
@@ -464,7 +462,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       progressBar.style.width = (video.currentTime / video.duration) * 100 + "%";
       timerDisplay.textContent = `\${formatTime(video.currentTime)} / \${formatTime(video.duration)}`;
       
-      // Auto-throttled save to Firestore every 5 running seconds
       if (Math.abs(video.currentTime - lastSavedTime) >= 5) {
         lastSavedTime = video.currentTime;
         saveProgressToFirestore();
@@ -472,7 +469,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 
-  // Capture position immediately if user exits or destroys the active tab structure
   window.addEventListener("beforeunload", saveProgressToFirestore);
 
   const scrub = (e) => {
@@ -562,4 +558,3 @@ document.addEventListener("fullscreenchange", () => {
   document.addEventListener("mousemove", (e) => { e.target.dispatchEvent(createTouchEvent("touchmove", e)); });
   document.addEventListener("mouseup", (e) => { e.target.dispatchEvent(createTouchEvent("touchend", e)); });
 })();
-
