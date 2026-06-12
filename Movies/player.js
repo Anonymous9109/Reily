@@ -224,8 +224,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   /********** 3) Smart Source Detection **********/
   const params = new URLSearchParams(window.location.search);
   const ep = params.get("ep") || "1";
-  let src = null;
+  
+  // FIX: Explicit match strategy. Prioritize '?movie=' param, then fallback to dynamic variables.
+  const movieParamId = params.get("movie") || params.get("id") || ep; 
 
+  let src = null;
   if (window.videoData && ep && window.videoData[ep]) src = window.videoData[ep];
   if (!src && params.get("src")) src = decodeURIComponent(params.get("src"));
 
@@ -256,34 +259,32 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   await attachSourceToVideo(src);
 
-  /********** NEW: FIRESTORE CONFIG & ASYNC VARIABLES **********/
+  /********** FIRESTORE INITIALIZATION **********/
   const { getFirestore, doc, setDoc } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
   const { getAuth } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js");
   
   const db = getFirestore();
   const auth = getAuth();
   
-  const movieParamId = params.get("id") || params.get("movie") || ep; 
   let activeMovieTitle = "Unknown Media";
-  
   if (window.movies && window.movies[movieParamId]) {
     activeMovieTitle = window.movies[movieParamId].title;
   } else if (document.title && document.title !== "Player") {
     activeMovieTitle = document.title;
   }
 
-  let isResuming = true; // Block tracking until resume is finished
+  let isResuming = true; // Block manual track timeline overwriting until metadata phase finishes
   let lastSavedTime = 0;
-  let firebaseTimestamp = null; // Stash timestamp globally until metadata loads
+  let firebaseTimestamp = null; 
 
   async function saveWatchProgress() {
     const user = auth.currentUser;
     if (!user || !user.email || !video.duration || isResuming) return;
 
-    if (video.currentTime < 5 || video.currentTime > video.duration - 10) return;
+    // FIX: Removed strict minutes barrier. Now accurately saves everything down to short durations.
+    if (video.currentTime < 3 || video.currentTime > video.duration - 5) return;
 
     try {
-      // CHANGED: Saving to subcollection path -> watchHistory/userEmail/movies/movieId
       await setDoc(doc(db, "watchHistory", user.email, "movies", movieParamId), {
         userId: user.uid,
         userEmail: user.email,
@@ -304,7 +305,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (document.visibilityState === "hidden") saveWatchProgress();
   });
 
-  /********** 5) IndexedDB Subtitles & Appearance Logic **********/
+  /********** 5) Subtitles & Appearance Logic **********/
   async function getSubSettings() {
     return new Promise((resolve) => {
       const request = indexedDB.open('SubtitleDB', 1);
@@ -509,9 +510,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   root.addEventListener("click", () => { if(!isDragging) controlsVisible ? hideControls() : showControls(); });
 
-  /********** THE JUMP FIX: TRACK LOADEDMETADATA **********/
-  video.addEventListener("loadedmetadata", async () => {
-    if (firebaseTimestamp && firebaseTimestamp < video.duration - 15) {
+  /********** THE JUMP FIXED **********/
+  video.addEventListener("loadedmetadata", () => {
+    // FIX: Lowered end constraint parameter to 5 seconds so you don't lose status on short contents
+    if (firebaseTimestamp && firebaseTimestamp < video.duration - 5) {
       video.currentTime = firebaseTimestamp;
       lastSavedTime = firebaseTimestamp;
     }
@@ -519,24 +521,31 @@ document.addEventListener("DOMContentLoaded", async () => {
     isResuming = false;
     
     try { 
-      await video.play(); 
+      video.play().catch(() => {}); 
     } catch { 
       video.pause(); 
       showControls(5000); 
     }
   });
 
-  // Pull down data early from network, store it in variable until metadata loads
   auth.onAuthStateChanged(async (user) => {
     if (user && user.email) {
       try {
         const { getDoc } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
-        // CHANGED: Pulling document reference from nested setup path -> watchHistory/userEmail/movies/movieId
         const docRef = doc(db, "watchHistory", user.email, "movies", movieParamId);
         const docSnap = await getDoc(docRef);
         
         if (docSnap.exists()) {
           firebaseTimestamp = docSnap.data().currentTime;
+          
+          // FIX: If video metadata has already loaded by the time network snapshot arrives, apply it instantly
+          if (video.readyState >= 1 && isResuming) {
+            if (firebaseTimestamp < video.duration - 5) {
+              video.currentTime = firebaseTimestamp;
+              lastSavedTime = firebaseTimestamp;
+            }
+            isResuming = false;
+          }
         }
       } catch (err) { 
         console.error("Error pulling history collection: ", err); 
@@ -602,4 +611,3 @@ document.addEventListener("fullscreenchange", () => {
   document.addEventListener("mousemove", (e) => { e.target.dispatchEvent(createTouchEvent("touchmove", e)); });
   document.addEventListener("mouseup", (e) => { e.target.dispatchEvent(createTouchEvent("touchend", e)); });
 })();
-
