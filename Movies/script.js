@@ -1,4 +1,4 @@
- const params = new URLSearchParams(window.location.search);
+const params = new URLSearchParams(window.location.search);
 const id = params.get("movie");
 
 // We expose the global movies reference so player.js can pull dynamic titles
@@ -29,8 +29,11 @@ async function checkContinueWatchingStatus() {
 
     // Wait until Firebase determines if a user is logged in
     auth.onAuthStateChanged(async (user) => {
-      if (user) {
-        const docRef = doc(db, "watchHistory", `${user.uid}_${id}`);
+      // CHANGED: Added user.email check since the subcollection uses the email address as the folder document name
+      if (user && user.email) {
+        
+        // CHANGED: Matches player setup path -> watchHistory/userEmail/movies/movieId
+        const docRef = doc(db, "watchHistory", user.email, "movies", id);
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
