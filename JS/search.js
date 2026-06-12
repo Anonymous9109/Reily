@@ -34,6 +34,12 @@ const movies = [
     image: "images/TheFastAndTheFurious.jpg",
     link: "Movies/Movie?movie=the-fast-and-the-furious"
   },
+    {
+    title: "Ride Along",
+    genres: ["Action", "Comedy"],
+    image: "images/RideAlong.jpg",
+    link: "Movies/Movie?movie=RideAlong"
+  },
   {
     title: "John Wick",
     genres: ["Action", "Thriller"],
