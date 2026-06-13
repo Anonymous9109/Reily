@@ -337,31 +337,9 @@ const movies = [
   },
   { title: "Diary of a Wimpy Kid: Rodrick Rules", genres: ["Comedy", "Family"], image: "images/DiaryofAWimpyKidRodrickRules.jpg", link: "Movies/Movie?movie=DiaryofAWimpyKidRodrickRules" },
   { title: "Diary of a Wimpy Kid: The Long Haul", genres: ["Comedy", "Family"], image: "images/DiaryOfAWimpyKidTheLongHaul.jpg", link: "Movies/Movie?movie=DiaryOfAWimpyKidTheLongHaul" },
-  { title: "Diary of a Wimpy Kid", genres: ["Comedy", "Family"], image: "images/DiaryOfAWimpyKid.jpg", link: "Movies/Movie?movie=DiaryOfAWimpyKid" },
-  {
-    title: "yeah here again",
-    genres: ["yup"],
-    image: "images/PIC1.PNG",
-    link: "Movies/Movie?movie=yeah-here-again"
-  },
-  {
-    title: "1",
-    genres: ["1"],
-    image: "images/1691037963202.jpg",
-    link: "Movies/Movie?movie=1"
-  },
-  {
-    title: "obsession",
-    genres: ["horror"],
-    image: "images/Obsession.jpg",
-    link: "Movies/Movie?movie=obsession"
-  },
-  {
-    title: "Finally",
-    genres: ["Horror"],
-    image: "images/billie-eilish-happier-than-ever.jpg",
-    link: "Movies/Movie?movie=finally"
-  }
+  { title: "Diary of a Wimpy Kid", genres: ["Comedy", "Family"], image: "images/DiaryOfAWimpyKid.jpg", link: "Movies/Movie?movie=DiaryOfAWimpyKid" }
+  
+
 ];
 
 // Convert Arabic characters to English-sound equivalents
