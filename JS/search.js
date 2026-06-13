@@ -343,13 +343,13 @@ const movies = [
 // Convert Arabic characters to English-sound equivalents
 function arabicToEnglish(str) {
   const map = {
-    "Ø§":"a","Ø£":"a","Ø¥":"e","Ø¢":"aa",
-    "Ø¨":"b","Øª":"t","Ø«":"th","Ø¬":"j","Ø­":"h","Ø®":"kh",
-    "Ø¯":"d","Ø°":"th","Ø±":"r","Ø²":"z","Ø³":"s","Ø´":"sh",
-    "Øµ":"s","Ø¶":"d","Ø·":"t","Ø¸":"th","Ø¹":"a","Øº":"gh",
-    "Ù":"f","Ù":"q","Ù":"k","Ù":"l","Ù":"m","Ù":"n",
-    "Ù":"h","Ù":"w","Ù":"y",
-    "Ø©":"h","Ù":"a"
+    "ÃÂ§":"a","ÃÂ£":"a","ÃÂ¥":"e","ÃÂ¢":"aa",
+    "ÃÂ¨":"b","ÃÂª":"t","ÃÂ«":"th","ÃÂ¬":"j","ÃÂ­":"h","ÃÂ®":"kh",
+    "ÃÂ¯":"d","ÃÂ°":"th","ÃÂ±":"r","ÃÂ²":"z","ÃÂ³":"s","ÃÂ´":"sh",
+    "ÃÂµ":"s","ÃÂ¶":"d","ÃÂ·":"t","ÃÂ¸":"th","ÃÂ¹":"a","ÃÂº":"gh",
+    "ÃÂ":"f","ÃÂ":"q","ÃÂ":"k","ÃÂ":"l","ÃÂ":"m","ÃÂ":"n",
+    "ÃÂ":"h","ÃÂ":"w","ÃÂ":"y",
+    "ÃÂ©":"h","ÃÂ":"a"
   };
   return str.split("").map(ch => map[ch] || ch).join("");
 }
@@ -368,7 +368,7 @@ function searchMovies() {
   if (!searchInputEl) return;
 
   const rawInput = searchInputEl.value.toLowerCase();
-  const searchTerm = arabicToEnglish(rawInput); // Arabic â English matching
+  const searchTerm = arabicToEnglish(rawInput); // Arabic Ã¢ÂÂ English matching
 
   const filteredMovies = movies.filter(movie =>  
     movie.title.toLowerCase().includes(searchTerm) ||  
@@ -422,5 +422,11 @@ function searchMovies() {
     genres: ["Horror"],
     image: "images/TheNun.jpg",
     link: "Movies/Movie?movie=thenun"
+  },
+  {
+    title: "The Nun 2",
+    genres: ["Horror"],
+    image: "images/TheNun2.jpg",
+    link: "Movies/Movie?movie=the-nun-2"
   }
 }
