@@ -267,19 +267,7 @@ const movies = {
     play: "TheNun"
   },
   
-  "testingagain": {
-    title: "yeah here again",
-    desc: "just trying to make something work here",
-    video: "",
-    play: "testingagain",
-  "1": {
-    title: "1",
-    desc: "1",
-    video: "",
-    play: "1"
-  }
-  }
-  }
+
 };
 
 
