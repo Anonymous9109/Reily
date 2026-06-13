@@ -343,13 +343,13 @@ const movies = [
 // Convert Arabic characters to English-sound equivalents
 function arabicToEnglish(str) {
   const map = {
-    "ا":"a","أ":"a","إ":"e","آ":"aa",
-    "ب":"b","ت":"t","ث":"th","ج":"j","ح":"h","خ":"kh",
-    "د":"d","ذ":"th","ر":"r","ز":"z","س":"s","ش":"sh",
-    "ص":"s","ض":"d","ط":"t","ظ":"th","ع":"a","غ":"gh",
-    "ف":"f","ق":"q","ك":"k","ل":"l","م":"m","ن":"n",
-    "ه":"h","و":"w","ي":"y",
-    "ة":"h","ى":"a"
+    "Ø§":"a","Ø£":"a","Ø¥":"e","Ø¢":"aa",
+    "Ø¨":"b","Øª":"t","Ø«":"th","Ø¬":"j","Ø­":"h","Ø®":"kh",
+    "Ø¯":"d","Ø°":"th","Ø±":"r","Ø²":"z","Ø³":"s","Ø´":"sh",
+    "Øµ":"s","Ø¶":"d","Ø·":"t","Ø¸":"th","Ø¹":"a","Øº":"gh",
+    "Ù":"f","Ù":"q","Ù":"k","Ù":"l","Ù":"m","Ù":"n",
+    "Ù":"h","Ù":"w","Ù":"y",
+    "Ø©":"h","Ù":"a"
   };
   return str.split("").map(ch => map[ch] || ch).join("");
 }
@@ -368,7 +368,7 @@ function searchMovies() {
   if (!searchInputEl) return;
 
   const rawInput = searchInputEl.value.toLowerCase();
-  const searchTerm = arabicToEnglish(rawInput); // Arabic → English matching
+  const searchTerm = arabicToEnglish(rawInput); // Arabic â English matching
 
   const filteredMovies = movies.filter(movie =>  
     movie.title.toLowerCase().includes(searchTerm) ||  
@@ -416,5 +416,11 @@ function searchMovies() {
       </div>  
     `;  
     searchResults.appendChild(genreSection);  
+  },
+  {
+    title: "TheNun",
+    genres: ["Horror"],
+    image: "images/TheNun.jpg",
+    link: "Movies/Movie?movie=thenun"
   }
 }
