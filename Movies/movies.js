@@ -63,7 +63,7 @@ const movies = {
   },
 
   "john-wick-3": {
-    title: "John Wick: Chapter 3 – Parabellum",
+    title: "John Wick: Chapter 3 â Parabellum",
     desc: "John Wick is on the run after killing a member of the international assassins' guild, with a massive bounty on his head.",
     video: "https://res.cloudinary.com/dn8w9kttq/video/upload/v1774285358/eldyxqgzu5guahdwtxiu.mp4",
     play: "JohnWick3"
@@ -259,7 +259,13 @@ const movies = {
     desc: "The early life of the famous musician Michael Jackson, known as the King of Pop.",
     video: "https://dl.dropboxusercontent.com/scl/fi/junogv422vrxsqynpmgmc/Michael-2026.mkv?rlkey=9a9817eapqgta8lhuyq0f6chx&st=tuvxhv6a&dl=1",
     play: "Michael"
-}
+},
+  "TheNun": {
+    title: "TheNun",
+    desc: "Horror movie I'm testing with it hopefully it works",
+    video: "",
+    play: "TheNun"
+  }
 };
 
 
