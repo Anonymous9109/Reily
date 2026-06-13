@@ -32,7 +32,8 @@ window.videoData = {
       label: "Arabic", 
       lang: "ar", 
       src: "../subtitles/500DaysOfSummer/500DaysOfSummer-Arabic.txt" // Changed .txt to .vtt,
-  "testingagain": "https://dl.dropboxusercontent.com/scl/fi/trmlgfjfhhxyl1zqj4u7t/Kevin-Hart-Funny-Scene-From-Ride-Along.mp4?rlkey=6eksrz1rydnax15fxtqsntx9q&st=hcq9i7p2&dl=1"
+  "testingagain": "https://dl.dropboxusercontent.com/scl/fi/trmlgfjfhhxyl1zqj4u7t/Kevin-Hart-Funny-Scene-From-Ride-Along.mp4?rlkey=6eksrz1rydnax15fxtqsntx9q&st=hcq9i7p2&dl=1",
+  "1": "https://dl.dropboxusercontent.com/scl/fi/d93kmm5d8mp0d6pj5pym1/RideAlong.mp4?rlkey=m9jrg8inl12bczgle6if9tg75&st=nr31t404&dl=1"
     }
   ], 
   "RideAlong": "https://dl.dropboxusercontent.com/scl/fi/d93kmm5d8mp0d6pj5pym1/RideAlong.mp4?rlkey=m9jrg8inl12bczgle6if9tg75&st=9vaa4oxl&dl=1",
@@ -91,8 +92,8 @@ window.videoData = {
 
 
 
-"Michael": "https://dl.dropboxusercontent.com/scl/fi/junogv422vrxsqynpmgmc/Michael-2026.mkv?rlkey=9a9817eapqgta8lhuyq0f6chx&st=tuvxhv6a&dl=1",// i love you srraÃÂ°ÃÂÃÂÃÂ
-"Apex": "https://dl.dropboxusercontent.com/scl/fi/jkvv6gqccokcxg2yze779/Apex-2026.mkv?rlkey=tu4yk1phlellyc8co5kbdrn5v&st=n8axl8bn&dl=1",// i'm not just trying to get you back on meÃÂ°ÃÂÃÂÃÂ,
+"Michael": "https://dl.dropboxusercontent.com/scl/fi/junogv422vrxsqynpmgmc/Michael-2026.mkv?rlkey=9a9817eapqgta8lhuyq0f6chx&st=tuvxhv6a&dl=1",// i love you srraÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ
+"Apex": "https://dl.dropboxusercontent.com/scl/fi/jkvv6gqccokcxg2yze779/Apex-2026.mkv?rlkey=tu4yk1phlellyc8co5kbdrn5v&st=n8axl8bn&dl=1",// i'm not just trying to get you back on meÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ,
 
 
 
