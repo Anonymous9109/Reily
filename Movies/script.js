@@ -1,22 +1,70 @@
 const params = new URLSearchParams(window.location.search);
-const id = params.get("movie");
+const id = params.get("movie") || params.get("series"); // ADDED: Support both movie and series parameters
 
 // We expose the global movies reference so player.js can pull dynamic titles
 window.movies = typeof movies !== "undefined" ? movies : {};
+
+// --- ADDED: Fallback Logic to populate window.movies[id] from search.js array if it's missing ---
+if (!window.movies[id] && typeof movies !== "undefined" && Array.isArray(movies) && id) {
+  const matchedMovie = movies.find(m => {
+    const movieUrlParams = new URLSearchParams(m.link.split('?')[1]);
+    const movieId = movieUrlParams.get('movie') || movieUrlParams.get('series');
+    return movieId && movieId.toLowerCase() === id.toLowerCase();
+  });
+  if (matchedMovie) {
+    window.movies[id] = matchedMovie;
+  }
+}
+// ---------------------------------------------------------------------------------------------
+
 const movie = window.movies[id];
 
 if (!movie) {
   document.body.innerHTML = "Movie not found";
 } else {
   document.getElementById("title").textContent = movie.title;
-  document.getElementById("desc").textContent = movie.desc;
+  document.getElementById("desc").textContent = movie.desc || ""; // Safe fallback if desc doesn't exist
 
   const video = document.getElementById("bgVideo");
-  video.innerHTML = `<source src="${movie.video}" type="video/mp4">`;
+  
+  // --- CHANGED/ADDED: Wrap video source assignment with fallback handling ---
+  if (movie.video && video) {
+    video.innerHTML = `<source src="${movie.video}" type="video/mp4">`;
+    video.load();
+
+    // Trigger fallback if the video file fails to load or error occurs
+    video.addEventListener('error', function() {
+      applyFallbackBackground();
+    }, true);
+  } else {
+    // Trigger fallback immediately if no bg video property is available
+    applyFallbackBackground();
+  }
+  // --------------------------------------------------------------------------
 
   // Check for saved progress in Firestore to modify the Play Button
   checkContinueWatchingStatus();
 }
+
+// --- ADDED: Fallback function to handle image extraction or black background ---
+function applyFallbackBackground() {
+  const video = document.getElementById("bgVideo");
+  if (video) {
+    video.style.display = "none"; // Hide video container
+  }
+
+  const bgContainer = document.body; // Target background container
+  if (movie && movie.image) {
+    bgContainer.style.backgroundImage = `url('${movie.image}')`;
+    bgContainer.style.backgroundSize = "cover";
+    bgContainer.style.backgroundPosition = "center";
+    bgContainer.style.backgroundRepeat = "no-repeat";
+  } else {
+    bgContainer.style.backgroundColor = "#000000";
+    bgContainer.style.backgroundImage = "none";
+  }
+}
+// -------------------------------------------------------------------------------
 
 async function checkContinueWatchingStatus() {
   try {
