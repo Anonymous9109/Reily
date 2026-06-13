@@ -63,7 +63,7 @@ const movies = {
   },
 
   "john-wick-3": {
-    title: "John Wick: Chapter 3 ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ Parabellum",
+    title: "John Wick: Chapter 3 ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ Parabellum",
     desc: "John Wick is on the run after killing a member of the international assassins' guild, with a massive bounty on his head.",
     video: "https://res.cloudinary.com/dn8w9kttq/video/upload/v1774285358/eldyxqgzu5guahdwtxiu.mp4",
     play: "JohnWick3"
@@ -285,6 +285,12 @@ const movies = {
     desc: "Thirteen-year-old Riley tackles high school with her personified emotions guiding her decisions. Soon her newfound feelings cause turmoil and force her to redefine her sense of self.",
     video: "",
     play: "InsideOut2"
+  },
+  "underwater": {
+    title: "Underwater",
+    desc: "Norah and her team find themselves in a dangerous situation as they work at the bottom of the Mariana Trench and clash against an unidentified species.",
+    video: "",
+    play: "Underwater"
   }
 };
 
