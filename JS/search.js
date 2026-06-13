@@ -343,13 +343,13 @@ const movies = [
 // Convert Arabic characters to English-sound equivalents
 function arabicToEnglish(str) {
   const map = {
-    "ÃÂ§":"a","ÃÂ£":"a","ÃÂ¥":"e","ÃÂ¢":"aa",
-    "ÃÂ¨":"b","ÃÂª":"t","ÃÂ«":"th","ÃÂ¬":"j","ÃÂ­":"h","ÃÂ®":"kh",
-    "ÃÂ¯":"d","ÃÂ°":"th","ÃÂ±":"r","ÃÂ²":"z","ÃÂ³":"s","ÃÂ´":"sh",
-    "ÃÂµ":"s","ÃÂ¶":"d","ÃÂ·":"t","ÃÂ¸":"th","ÃÂ¹":"a","ÃÂº":"gh",
-    "ÃÂ":"f","ÃÂ":"q","ÃÂ":"k","ÃÂ":"l","ÃÂ":"m","ÃÂ":"n",
-    "ÃÂ":"h","ÃÂ":"w","ÃÂ":"y",
-    "ÃÂ©":"h","ÃÂ":"a"
+    "ÃÂÃÂ§":"a","ÃÂÃÂ£":"a","ÃÂÃÂ¥":"e","ÃÂÃÂ¢":"aa",
+    "ÃÂÃÂ¨":"b","ÃÂÃÂª":"t","ÃÂÃÂ«":"th","ÃÂÃÂ¬":"j","ÃÂÃÂ­":"h","ÃÂÃÂ®":"kh",
+    "ÃÂÃÂ¯":"d","ÃÂÃÂ°":"th","ÃÂÃÂ±":"r","ÃÂÃÂ²":"z","ÃÂÃÂ³":"s","ÃÂÃÂ´":"sh",
+    "ÃÂÃÂµ":"s","ÃÂÃÂ¶":"d","ÃÂÃÂ·":"t","ÃÂÃÂ¸":"th","ÃÂÃÂ¹":"a","ÃÂÃÂº":"gh",
+    "ÃÂÃÂ":"f","ÃÂÃÂ":"q","ÃÂÃÂ":"k","ÃÂÃÂ":"l","ÃÂÃÂ":"m","ÃÂÃÂ":"n",
+    "ÃÂÃÂ":"h","ÃÂÃÂ":"w","ÃÂÃÂ":"y",
+    "ÃÂÃÂ©":"h","ÃÂÃÂ":"a"
   };
   return str.split("").map(ch => map[ch] || ch).join("");
 }
@@ -368,7 +368,7 @@ function searchMovies() {
   if (!searchInputEl) return;
 
   const rawInput = searchInputEl.value.toLowerCase();
-  const searchTerm = arabicToEnglish(rawInput); // Arabic Ã¢ÂÂ English matching
+  const searchTerm = arabicToEnglish(rawInput); // Arabic ÃÂ¢ÃÂÃÂ English matching
 
   const filteredMovies = movies.filter(movie =>  
     movie.title.toLowerCase().includes(searchTerm) ||  
@@ -428,5 +428,11 @@ function searchMovies() {
     genres: ["Horror"],
     image: "images/TheNun2.jpg",
     link: "Movies/Movie?movie=the-nun-2"
+  },
+  {
+    title: "hi",
+    genres: ["ho"],
+    image: "images/hi.jpg",
+    link: "Movies/Movie?movie=hi"
   }
 }
