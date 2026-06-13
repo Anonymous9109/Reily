@@ -416,6 +416,6 @@ function searchMovies() {
       </div>  
     `;  
     searchResults.appendChild(genreSection);  
-  },
+}
 
 }
