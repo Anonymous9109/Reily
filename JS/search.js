@@ -417,22 +417,5 @@ function searchMovies() {
     `;  
     searchResults.appendChild(genreSection);  
   },
-  {
-    title: "TheNun",
-    genres: ["Horror"],
-    image: "images/TheNun.jpg",
-    link: "Movies/Movie?movie=thenun"
-  },
-  {
-    title: "The Nun 2",
-    genres: ["Horror"],
-    image: "images/TheNun2.jpg",
-    link: "Movies/Movie?movie=the-nun-2"
-  },
-  {
-    title: "hi",
-    genres: ["ho"],
-    image: "images/hi.jpg",
-    link: "Movies/Movie?movie=hi"
-  }
+
 }
