@@ -63,7 +63,7 @@ const movies = {
   },
 
   "john-wick-3": {
-    title: "John Wick: Chapter 3 â Parabellum",
+    title: "John Wick: Chapter 3 Ã¢ÂÂ Parabellum",
     desc: "John Wick is on the run after killing a member of the international assassins' guild, with a massive bounty on his head.",
     video: "https://res.cloudinary.com/dn8w9kttq/video/upload/v1774285358/eldyxqgzu5guahdwtxiu.mp4",
     play: "JohnWick3"
@@ -265,6 +265,12 @@ const movies = {
     desc: "Horror movie I'm testing with it hopefully it works",
     video: "",
     play: "TheNun"
+  },
+  "hi": {
+    title: "hi",
+    desc: "eguejeshsiskejeg",
+    video: "",
+    play: "hi"
   }
 };
 
