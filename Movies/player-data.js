@@ -23,96 +23,67 @@ window.videoData = {
   "ThePursuitofHappyness": "https://dl.dropboxusercontent.com/scl/fi/i1tk0jpe457rrib801q4e/The.Pursuit.Of.Happyness.2006.mkv?rlkey=3pmq0v6555n459rnbuluhvmma&st=ttymx4qy&dl=1",
   "500DaysOfSummer": "https://dl.dropboxusercontent.com/scl/fi/ci4ar9g9ooct0ncwdabn2/500.Days.Of.Summer.mp4?rlkey=4529ifwnatbmqcyei6oq8uca0&st=xcaxzfqo&dl=1",
   "500DaysOfSummer-subs": [
-{ 
+    { 
       label: "English", 
       lang: "en", 
-      src: "../subtitles/500DaysOfSummer/500DaysOfSummer-English.txt" // Changed .txt to .vtt
+      src: "../subtitles/500DaysOfSummer/500DaysOfSummer-English.txt"
     },
     { 
       label: "Arabic", 
       lang: "ar", 
-      src: "../subtitles/500DaysOfSummer/500DaysOfSummer-Arabic.txt" // Changed .txt to .vtt,
-  "testingagain": "https://dl.dropboxusercontent.com/scl/fi/trmlgfjfhhxyl1zqj4u7t/Kevin-Hart-Funny-Scene-From-Ride-Along.mp4?rlkey=6eksrz1rydnax15fxtqsntx9q&st=hcq9i7p2&dl=1",
-  "1": "https://dl.dropboxusercontent.com/scl/fi/d93kmm5d8mp0d6pj5pym1/RideAlong.mp4?rlkey=m9jrg8inl12bczgle6if9tg75&st=nr31t404&dl=1"
+      src: "../subtitles/500DaysOfSummer/500DaysOfSummer-Arabic.txt"
     }
   ], 
+  "testingagain": "https://dl.dropboxusercontent.com/scl/fi/trmlgfjfhhxyl1zqj4u7t/Kevin-Hart-Funny-Scene-From-Ride-Along.mp4?rlkey=6eksrz1rydnax15fxtqsntx9q&st=hcq9i7p2&dl=1",
+  "1": "https://dl.dropboxusercontent.com/scl/fi/d93kmm5d8mp0d6pj5pym1/RideAlong.mp4?rlkey=m9jrg8inl12bczgle6if9tg75&st=nr31t404&dl=1",
   "RideAlong": "https://dl.dropboxusercontent.com/scl/fi/d93kmm5d8mp0d6pj5pym1/RideAlong.mp4?rlkey=m9jrg8inl12bczgle6if9tg75&st=9vaa4oxl&dl=1",
   "DiaryOfAWimpyKid": "https://dl.dropboxusercontent.com/scl/fi/763idgnq6tfj53gzm2ev9/Diary.Of.A.Wimpy.Kid.2010.720p.x264.mkv?rlkey=zxyozuir567oqrzgd7rnomowj&st=9zunu9om&dl=1",
   "DiaryOfAWimpyKidTheLongHaul": "https://dl.dropboxusercontent.com/scl/fi/j9ywhxgafntjykozbxcef/Diary.Of.A.Wimpy.Kid.The.Long.Haul.mp4?rlkey=71wl80qtj1wdu9nuu0nx0jj2h&st=ze81sht8&dl=1",
   "DiaryofAWimpyKidRodrickRules": "https://dl.dropboxusercontent.com/scl/fi/f7jqvfjxl3gskuay80erq/Diary.Of.A.Wimpy.Kid.Rodrick.Rules.2011.mp4?rlkey=xr67pjfqqf365rgjtknoa9hwi&st=eshk5m7v&dl=1",
-"TheIdeaOfYou": "https://dl.dropboxusercontent.com/scl/fi/99l7zqpxf552015ilesgz/The.Idea.of.You.mkv?rlkey=iz8nme1b3i1ndxqalwzpgelds&st=c4lyyb9t&dl=1",
-"TheMazeRunner": "https://dl.dropboxusercontent.com/scl/fi/zitz54jyti9imtn5bnwaj/TheMazeRunner.mp4?rlkey=d5pijxulpmp3ndk2cbjgb02ay&st=qait2ips&dl=1",
-"TheRebound": "https://dl.dropboxusercontent.com/scl/fi/4cs3fomz7sy6w47tktwgb/The.Rebound.2009.720p.BrRip.x264.YIFY.mp4?rlkey=5d73d8ikcgwq4n9cd3ue6ezl2&st=vdo15w12&dl=1",
-"ThePerfectFind": " https://dl.dropboxusercontent.com/scl/fi/qcmwy75w6xykmnqhrpnez/The.Perfect.Find.mp4?rlkey=2npqdsj43ayhbeqwjsun9ogay&st=wjlt9j2n&dl=1",
-"BridgetoTerabithia": "https://dl.dropboxusercontent.com/scl/fi/9nrijroax491mw1gs8kid/BridgetoTerabithia.mp4?rlkey=z0xmq9htzb51h28k9ee6g8jpw&st=jg6ur1z1&dl=1",
-"AnyonebutYou": "https://dl.dropboxusercontent.com/scl/fi/e4p5dvqlrazmco96rs4ck/Anyone.But.You.mkv?rlkey=zjzapxqx0rzmcoq77r7loyv74&st=4shvtfve&dl=1",
-"FiveFeetApart": "https://dl.dropboxusercontent.com/scl/fi/2eb6sz1mk43gndyfe0pnb/Five.Feet.Apart.mp4?rlkey=lp036jyrm31st7tndql56line&st=p3tg6lu2&dl=1",
-"JeepersCreepers": "https://dl.dropboxusercontent.com/scl/fi/rts7r5p6ydi7ylw62pq5v/Jeepers.Creepers.mp4?rlkey=qlp5e7mln3i5kpzq192t78emz&st=tqp6z6ao&dl=1",
-"LongShot": "https://dl.dropboxusercontent.com/scl/fi/uslvwsn018skkk32o90sy/Long.Shot.2019.mp4?rlkey=9csdjqxftwsiqeeuqe7aogkbu&st=xk2ge1zn&dl=1",
-"EverythingEverything": "https://dl.dropboxusercontent.com/scl/fi/3hdzk9pli2j3cgs2b4p1q/Everything-.Everything.mp4?rlkey=d0m720mjamxy18b76x31zw5d6&st=ga2w2ca3&dl=1",
-"TheBookofEli": "https://dl.dropboxusercontent.com/scl/fi/j1n33evabkiid3q3mycj6/ThBookElii.2010.mkv?rlkey=p9wxfze2zteplujdcf4drgozm&st=tfmwlprn&dl=1",
-"Eli": "https://dl.dropboxusercontent.com/scl/fi/ouutpwfoslxulxnxf1d2t/Eli.2019.mp4?rlkey=gh8s91axxj3y5rxfgfcyjwc12&st=fynbyizd&dl=1",
-"InsideOut":"https://dl.dropboxusercontent.com/scl/fi/wxa9by1y94g289mtrar6t/Inside.Out.mkv?rlkey=vzghm36wkt1zr6x1qs3left0q&st=p45kwe0x&dl=1",
+  "TheIdeaOfYou": "https://dl.dropboxusercontent.com/scl/fi/99l7zqpxf552015ilesgz/The.Idea.of.You.mkv?rlkey=iz8nme1b3i1ndxqalwzpgelds&st=c4lyyb9t&dl=1",
+  "TheMazeRunner": "https://dl.dropboxusercontent.com/scl/fi/zitz54jyti9imtn5bnwaj/TheMazeRunner.mp4?rlkey=d5pijxulpmp3ndk2cbjgb02ay&st=qait2ips&dl=1",
+  "TheRebound": "https://dl.dropboxusercontent.com/scl/fi/4cs3fomz7sy6w47tktwgb/The.Rebound.2009.720p.BrRip.x264.YIFY.mp4?rlkey=5d73d8ikcgwq4n9cd3ue6ezl2&st=vdo15w12&dl=1",
+  "ThePerfectFind": "https://dl.dropboxusercontent.com/scl/fi/qcmwy75w6xykmnqhrpnez/The.Perfect.Find.mp4?rlkey=2npqdsj43ayhbeqwjsun9ogay&st=wjlt9j2n&dl=1",
+  "BridgetoTerabithia": "https://dl.dropboxusercontent.com/scl/fi/9nrijroax491mw1gs8kid/BridgetoTerabithia.mp4?rlkey=z0xmq9htzb51h28k9ee6g8jpw&st=jg6ur1z1&dl=1",
+  "AnyonebutYou": "https://dl.dropboxusercontent.com/scl/fi/e4p5dvqlrazmco96rs4ck/Anyone.But.You.mkv?rlkey=zjzapxqx0rzmcoq77r7loyv74&st=4shvtfve&dl=1",
+  "FiveFeetApart": "https://dl.dropboxusercontent.com/scl/fi/2eb6sz1mk43gndyfe0pnb/Five.Feet.Apart.mp4?rlkey=lp036jyrm31st7tndql56line&st=p3tg6lu2&dl=1",
+  "JeepersCreepers": "https://dl.dropboxusercontent.com/scl/fi/rts7r5p6ydi7ylw62pq5v/Jeepers.Creepers.mp4?rlkey=qlp5e7mln3i5kpzq192t78emz&st=tqp6z6ao&dl=1",
+  "LongShot": "https://dl.dropboxusercontent.com/scl/fi/uslvwsn018skkk32o90sy/Long.Shot.2019.mp4?rlkey=9csdjqxftwsiqeeuqe7aogkbu&st=xk2ge1zn&dl=1",
+  "EverythingEverything": "https://dl.dropboxusercontent.com/scl/fi/3hdzk9pli2j3cgs2b4p1q/Everything-.Everything.mp4?rlkey=d0m720mjamxy18b76x31zw5d6&st=ga2w2ca3&dl=1",
+  "TheBookofEli": "https://dl.dropboxusercontent.com/scl/fi/j1n33evabkiid3q3mycj6/ThBookElii.2010.mkv?rlkey=p9wxfze2zteplujdcf4drgozm&st=tfmwlprn&dl=1",
+  "Eli": "https://dl.dropboxusercontent.com/scl/fi/ouutpwfoslxulxnxf1d2t/Eli.2019.mp4?rlkey=gh8s91axxj3y5rxfgfcyjwc12&st=fynbyizd&dl=1",
+  "InsideOut": "https://dl.dropboxusercontent.com/scl/fi/wxa9by1y94g289mtrar6t/Inside.Out.mkv?rlkey=vzghm36wkt1zr6x1qs3left0q&st=p45kwe0x&dl=1",
   "InsideOut-subs": [
-        { 
+    { 
       label: "English", 
       lang: "en", 
-      src: "../subtitles/InsideOut/InsideOut-English.txt" // Changed .txt to .vtt
+      src: "../subtitles/InsideOut/InsideOut-English.txt"
     },
     { 
       label: "Arabic", 
       lang: "ar", 
-      src: "../subtitles/InsideOut/InsideOut-Arabic.txt" // Changed .txt to .vtt
+      src: "../subtitles/InsideOut/InsideOut-Arabic.txt"
     }
   ], 
-"VirginTerritory":"https://dl.dropboxusercontent.com/scl/fi/srh3nltnidet9gcq8krtp/Virgin.Territory.mp4?rlkey=pprefehb49w6trxm0x785xxpk&st=eo9lah29&dl=1",
-"EscapefromAlcatraz":"https://dl.dropboxusercontent.com/scl/fi/r79e0f20d6h3ztg9fmryy/Escape-from-Alcatraz-1979.mp4?rlkey=n9t7495bxxzxo0ss6eejth7pr&st=7lis5wgc&dl=1",
-       "EscapefromAlcatraz-subs": [
-{ 
+  "VirginTerritory": "https://dl.dropboxusercontent.com/scl/fi/srh3nltnidet9gcq8krtp/Virgin.Territory.mp4?rlkey=pprefehb49w6trxm0x785xxpk&st=eo9lah29&dl=1",
+  "EscapefromAlcatraz": "https://dl.dropboxusercontent.com/scl/fi/r79e0f20d6h3ztg9fmryy/Escape-from-Alcatraz-1979.mp4?rlkey=n9t7495bxxzxo0ss6eejth7pr&st=7lis5wgc&dl=1",
+  "EscapefromAlcatraz-subs": [
+    { 
       label: "English", 
       lang: "en", 
-      src: "../subtitles/EscapefromAlcatraz/EscapefromAlcatraz-English.txt" // Changed .txt to .vtt
+      src: "../subtitles/EscapefromAlcatraz/EscapefromAlcatraz-English.txt"
     },
     { 
       label: "Arabic", 
       lang: "ar", 
-      src: "../subtitles/EscapefromAlcatraz/EscapefromAlcatraz-Arabic.txt" // Changed .txt to .vtt
+      src: "../subtitles/EscapefromAlcatraz/EscapefromAlcatraz-Arabic.txt"
     }
   ], 
-
-"SAW":"https://dl.dropboxusercontent.com/scl/fi/zgiaj7moe0ldnmn3y8wew/Saw-2004.mp4?rlkey=aistl9nkfm6knvisvym3t7mom&st=bz0yz62t&dl=1",
-
-
-
-
-
-
-
-
-
-
-
-"Michael": "https://dl.dropboxusercontent.com/scl/fi/junogv422vrxsqynpmgmc/Michael-2026.mkv?rlkey=9a9817eapqgta8lhuyq0f6chx&st=tuvxhv6a&dl=1",// i love you srraÃÂÃÂÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ
-"Apex": "https://dl.dropboxusercontent.com/scl/fi/jkvv6gqccokcxg2yze779/Apex-2026.mkv?rlkey=tu4yk1phlellyc8co5kbdrn5v&st=n8axl8bn&dl=1",// i'm not just trying to get you back on meÃÂÃÂÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ,
-
-
-
-
-
-
-
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+  "SAW": "https://dl.dropboxusercontent.com/scl/fi/zgiaj7moe0ldnmn3y8wew/Saw-2004.mp4?rlkey=aistl9nkfm6knvisvym3t7mom&st=bz0yz62t&dl=1",
+  "Michael": "https://dl.dropboxusercontent.com/scl/fi/junogv422vrxsqynpmgmc/Michael-2026.mkv?rlkey=9a9817eapqgta8lhuyq0f6chx&st=tuvxhv6a&dl=1", // i love you srra💕
+  "Apex": "https://dl.dropboxusercontent.com/scl/fi/jkvv6gqccokcxg2yze779/Apex-2026.mkv?rlkey=tu4yk1phlellyc8co5kbdrn5v&st=n8axl8bn&dl=1", // i'm not just trying to get you back on me😔
   "TheNun": "https://dl.dropboxusercontent.com/scl/fi/d93kmm5d8mp0d6pj5pym1/RideAlong.mp4?rlkey=m9jrg8inl12bczgle6if9tg75&st=9vaa4oxl&dl=1",
   "hi": "https://dl.dropboxusercontent.com/scl/fi/d93kmm5d8mp0d6pj5pym1/RideAlong.mp4?rlkey=m9jrg8inl12bczgle6if9tg75&st=9vaa4oxl&dl=1",
   "obsession": "https://dl.dropboxusercontent.com/scl/fi/d93kmm5d8mp0d6pj5pym1/RideAlong.mp4?rlkey=m9jrg8inl12bczgle6if9tg75&st=9vaa4oxl&dl=1"
 };
+
