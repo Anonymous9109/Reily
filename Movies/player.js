@@ -1,4 +1,4 @@
-/* Cyrene Player (smart source detection + back button + portrait support + subtitles + Timer + Netflix Shadow + Firestore Resume Fixed) */
+/* Cyrene Player (smart source detection + back button + portrait support + subtitles + Timer + Netflix Shadow + Firestore Resume Fixed + Google IMA VAST Integration) */
 document.addEventListener("DOMContentLoaded", async () => {
 
   /********** 1) Inject CSS **********/
@@ -141,6 +141,14 @@ document.addEventListener("DOMContentLoaded", async () => {
       from{transform:translate(-50%,-50%) rotate(0deg);}  
       to{transform:translate(-50%,-50%) rotate(360deg);}  
     }
+
+    /* IMA Ad overlay layer styles */
+    #imaAdContainer {
+      position: absolute;
+      inset: 0;
+      z-index: 55;
+      pointer-events: auto;
+    }
   `;
   const styleTag = document.createElement("style");
   styleTag.textContent = css;
@@ -248,13 +256,75 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
       if (window.Hls && window.Hls.isSupported()) {
         const h = new Hls();
-        h.loadSource("https://crookedagreement.com/dgmuF.zWdEGiNtvQZ/GkUv/oerme9fuIZ_UClEkuPdTjcvxsM/z/g/xZMujpUOtwNdz/EDznOLDZE/y/O_QU");
+        h.loadSource(url);
         h.attachMedia(video);
-      } else video.src = "https://crookedagreement.com/dgmuF.zWdEGiNtvQZ/GkUv/oerme9fuIZ_UClEkuPdTjcvxsM/z/g/xZMujpUOtwNdz/EDznOLDZE/y/O_QU";
-    } else video.src = "https://crookedagreement.com/dgmuF.zWdEGiNtvQZ/GkUv/oerme9fuIZ_UClEkuPdTjcvxsM/z/g/xZMujpUOtwNdz/EDznOLDZE/y/O_QU";
+      } else video.src = url;
+    } else video.src = url;
   }
 
-  await attachSourceToVideo(src);
+  /********** GOOGLE IMA VAST IMPLEMENTATION **********/
+  function initIMAAdWorkflow(movieUrl) {
+    // 1. Ensure IMA script is in head element
+    if (!window.google || !window.google.ima) {
+      const imaScript = document.createElement("script");
+      imaScript.src = "https://imasdk.googleapis.com/js/sdkloader/ima3.js";
+      imaScript.onload = () => setupIMAManager(movieUrl);
+      imaScript.onerror = () => fallbackDirectToMovie(movieUrl);
+      document.head.appendChild(imaScript);
+    } else {
+      setupIMAManager(movieUrl);
+    }
+  }
+
+  function setupIMAManager(movieUrl) {
+    const adContainer = document.createElement("div");
+    adContainer.id = "imaAdContainer";
+    root.appendChild(adContainer);
+
+    const adDisplayContainer = new google.ima.AdDisplayContainer(adContainer, video);
+    const adsLoader = new google.ima.AdsLoader(adDisplayContainer);
+
+    let adsManager = null;
+
+    adsLoader.addEventListener(google.ima.AdsManagerLoadedEvent.Type.ADS_MANAGER_LOADED, (e) => {
+      adsManager = e.getAdsManager(video);
+      
+      adsManager.addEventListener(google.ima.AdErrorEvent.Type.AD_ERROR, () => cleanAdAndStartMovie(adContainer, movieUrl));
+      adsManager.addEventListener(google.ima.AdEvent.Type.ALL_ADS_COMPLETED, () => cleanAdAndStartMovie(adContainer, movieUrl));
+      adsManager.addEventListener(google.ima.AdEvent.Type.CONTENT_RESUME_REQUESTED, () => cleanAdAndStartMovie(adContainer, movieUrl));
+
+      try {
+        adDisplayContainer.initialize();
+        adsManager.init(root.clientWidth, root.clientHeight, google.ima.ViewMode.NORMAL);
+        adsManager.start();
+      } catch (err) {
+        cleanAdAndStartMovie(adContainer, movieUrl);
+      }
+    }, false);
+
+    adsLoader.addEventListener(google.ima.AdErrorEvent.Type.AD_ERROR, () => cleanAdAndStartMovie(adContainer, movieUrl), false);
+
+    const adsRequest = new google.ima.AdsRequest();
+    adsRequest.adTagUrl = "https://crookedagreement.com/dHm.FVzMdxGPN/vtZ_GgUZ/Hecmg9xuBZdUOlgkKPATdcexXMCzJkh2/NTDbkItLNbzzEPzbOeTvYP1/MJyRZKsfaaWI1KpaddDP0rxW";
+    adsRequest.linearAdSlotWidth = root.clientWidth;
+    adsRequest.linearAdSlotHeight = root.clientHeight;
+    adsLoader.requestAds(adsRequest);
+  }
+
+  function cleanAdAndStartMovie(containerDom, movieUrl) {
+    if (containerDom && containerDom.parentNode) {
+      containerDom.remove();
+    }
+    fallbackDirectToMovie(movieUrl);
+  }
+
+  async function fallbackDirectToMovie(movieUrl) {
+    await attachSourceToVideo(movieUrl);
+  }
+
+  // Fire up the ad wrapper sequence immediately on startup
+  initIMAAdWorkflow(src);
+
 
   /********** NEW: FIRESTORE CONFIG & ASYNC VARIABLES **********/
   const { getFirestore, doc, setDoc } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
