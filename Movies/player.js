@@ -1,4 +1,4 @@
-/* Cyrene Player (smart source detection + back button + portrait support + subtitles + Timer + Netflix Shadow + Firestore Resume Fixed) */
+/* Cyrene Player (smart source detection + back button + portrait support + subtitles + Timer + Netflix Shadow + Firestore Resume Fixed + VAST Ads) */
 document.addEventListener("DOMContentLoaded", async () => {
 
   /********** 1) Inject CSS **********/
@@ -141,6 +141,20 @@ document.addEventListener("DOMContentLoaded", async () => {
       from{transform:translate(-50%,-50%) rotate(0deg);}  
       to{transform:translate(-50%,-50%) rotate(360deg);}  
     }
+
+    /* VAST Ad Container styling */
+    #adContainer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 38; /* Sits right underneath your core click handler and layout buttons */
+      display: none;
+    }
+    #videoPlayer.ad-playing #adContainer {
+      display: block;
+    }
   `;
   const styleTag = document.createElement("style");
   styleTag.textContent = css;
@@ -156,6 +170,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   video.preload = "auto";
   video.setAttribute("webkit-playsinline", "");
   video.crossOrigin = "anonymous"; 
+
+  // Ad Container Element
+  const adContainer = document.createElement("div");
+  adContainer.id = "adContainer";
 
   const subDisplay = document.createElement("div");
   subDisplay.id = "subDisplay";
@@ -218,7 +236,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   const loadingRing = document.createElement("div");
   loadingRing.id = "loadingRing";
 
-  root.append(video, subDisplay, controls, progressContainer, timerDisplay, ccBtn, subMenu, backBtn, nextBtn, loadingRing, backToPrev);
+  // Appended adContainer into the root stack
+  root.append(video, adContainer, subDisplay, controls, progressContainer, timerDisplay, ccBtn, subMenu, backBtn, nextBtn, loadingRing, backToPrev);
   document.body.appendChild(root);
 
   /********** 3) Smart Source Detection **********/
@@ -418,6 +437,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const playIcon = document.getElementById("playIcon");
   const pauseIcon = document.getElementById("pauseIcon");
   let controlsVisible = false, hideTimer, isDragging = false;
+  let isAdPlaying = false; // Guard variable to disable interaction during an active ad
 
   const formatTime = (seconds) => {
     if (!isFinite(seconds) || isNaN(seconds)) return "0:00";
@@ -428,6 +448,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   };
 
   const showControls = (timeout = 3000) => {
+    if (isAdPlaying) return; // Completely hide standard controls if an ad is currently playing
     root.classList.add("show-ui");
     for (const el of [controls, progressContainer, backToPrev, timerDisplay, ccBtn]) {
       el.style.opacity = "1"; el.style.visibility = "visible";
@@ -442,7 +463,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   };
 
   const hideControls = () => {
-    if (isDragging) return;
     root.classList.remove("show-ui");
     for (const el of [controls, progressContainer, backToPrev, backBtn, nextBtn, timerDisplay, ccBtn]) {
       el.style.opacity = "0"; el.style.visibility = "hidden";
@@ -464,14 +484,15 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   playPauseBtn.onclick = (e) => {
     e.stopPropagation();
+    if (isAdPlaying) return;
     if (video.paused) video.play().catch(() => { video.muted = true; video.play(); });
     else video.pause();
   };
-  rewindBtn.onclick = (e) => { e.stopPropagation(); video.currentTime = Math.max(0, video.currentTime - 10); };
-  skipBtn.onclick = (e) => { e.stopPropagation(); video.currentTime = Math.min(video.duration, video.currentTime + 10); };
+  rewindBtn.onclick = (e) => { e.stopPropagation(); if (!isAdPlaying) video.currentTime = Math.max(0, video.currentTime - 10); };
+  skipBtn.onclick = (e) => { e.stopPropagation(); if (!isAdPlaying) video.currentTime = Math.min(video.duration, video.currentTime + 10); };
 
   video.addEventListener("timeupdate", () => {
-    if (isFinite(video.duration) && !isDragging && !isResuming) {
+    if (isFinite(video.duration) && !isDragging && !isResuming && !isAdPlaying) {
       progressBar.style.width = (video.currentTime / video.duration) * 100 + "%";
       timerDisplay.textContent = `${formatTime(video.currentTime)} / ${formatTime(video.duration)}`;
       
@@ -482,6 +503,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   const scrub = (e) => {
+    if (isAdPlaying) return;
     const rect = progressBg.getBoundingClientRect();
     const isPortrait = window.innerHeight > window.innerWidth;
     const clientX = e.touches ? e.touches[0].clientX : e.clientX;
@@ -495,36 +517,30 @@ document.addEventListener("DOMContentLoaded", async () => {
     video.currentTime = targetTime;
   };
 
-  progressContainer.onmousedown = (e) => { isDragging = true; progressContainer.classList.add("dragging"); scrub(e); };
+  progressContainer.onmousedown = (e) => { if(!isAdPlaying){ isDragging = true; progressContainer.classList.add("dragging"); scrub(e); } };
   window.onmousemove = (e) => { if (isDragging) scrub(e); };
   window.onmouseup = () => { if (isDragging) { isDragging = false; progressContainer.classList.remove("dragging"); showControls(); } };
 
-  progressContainer.ontouchstart = (e) => { isDragging = true; progressContainer.classList.add("dragging"); scrub(e); };
+  progressContainer.ontouchstart = (e) => { if(!isAdPlaying){ isDragging = true; progressContainer.classList.add("dragging"); scrub(e); } };
   window.ontouchmove = (e) => { if (isDragging) scrub(e); };
   window.ontouchend = () => { if (isDragging) { isDragging = false; progressContainer.classList.remove("dragging"); showControls(); } };
 
-  backBtn.onclick = () => { if (window.backEpisodeLink) location.href = window.backEpisodeLink; };
-  nextBtn.onclick = () => { if (window.nextEpisodeLink) location.href = window.nextEpisodeLink; };
+  backBtn.onclick = () => { if (window.backEpisodeLink && !isAdPlaying) location.href = window.backEpisodeLink; };
+  nextBtn.onclick = () => { if (window.nextEpisodeLink && !isAdPlaying) location.href = window.nextEpisodeLink; };
 
-  root.addEventListener("click", () => { if(!isDragging) controlsVisible ? hideControls() : showControls(); });
+  root.addEventListener("click", () => { if(!isDragging && !isAdPlaying) controlsVisible ? hideControls() : showControls(); });
 
   /********** THE JUMP FIX: TRACK LOADEDMETADATA **********/
   video.addEventListener("loadedmetadata", async () => {
-    // When the browser knows video dimensions and track lengths, apply the stashed time
     if (firebaseTimestamp && firebaseTimestamp < video.duration - 15) {
       video.currentTime = firebaseTimestamp;
       lastSavedTime = firebaseTimestamp;
     }
     
-    // Now release the guard so timeupdates can track normally
     isResuming = false;
     
-    try { 
-      await video.play(); 
-    } catch { 
-      video.pause(); 
-      showControls(5000); 
-    }
+    // Fire up IMA VAST Ads setup once metadata is loaded
+    initIMA();
   });
 
   // Pull down data early from network, store it in variable until metadata loads
@@ -545,6 +561,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   /********** 7) Portrait rotation **********/
+  let adsManager = null; // Global reference to handle responsive resizing on orientation switch
+  
   function rotateIfPortrait() {
     const isPortrait = window.innerHeight > window.innerWidth;
     const vw = window.innerWidth, vh = window.innerHeight;
@@ -556,6 +574,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       root.style.transformOrigin = "center center";
       root.style.width = `${vh}px`;
       root.style.height = `${vw}px`;
+      if (adsManager) adsManager.resize(vh, vw, google.ima.ViewMode.NORMAL);
     } else {
       root.style.position = "fixed";
       root.style.top = "0";
@@ -563,10 +582,99 @@ document.addEventListener("DOMContentLoaded", async () => {
       root.style.transform = "none";
       root.style.width = "100%";
       root.style.height = "100%";
+      if (adsManager) adsManager.resize(vw, vh, google.ima.ViewMode.NORMAL);
     }
   }
   rotateIfPortrait();
   window.addEventListener("resize", rotateIfPortrait);
+
+  /********** 8) Google IMA VAST Implementation **********/
+  function initIMA() {
+    if (window.google && window.google.ima) {
+      setupAdDisplayContainer();
+      return;
+    }
+    const script = document.createElement("script");
+    script.src = "https://imasdk.googleapis.com/js/sdkloader/ima3.js";
+    script.onload = setupAdDisplayContainer;
+    document.head.appendChild(script);
+  }
+
+  let adsDisplayContainer, adsLoader;
+
+  function setupAdDisplayContainer() {
+    adsDisplayContainer = new google.ima.AdDisplayContainer(adContainer, video);
+    adsLoader = new google.ima.AdsLoader(adsDisplayContainer);
+
+    adsLoader.addEventListener(google.ima.AdsManagerLoadedEvent.Type.ADS_MANAGER_LOADED, onAdsManagerLoaded, false);
+    adsLoader.addEventListener(google.ima.AdErrorEvent.Type.AD_ERROR, onAdError, false);
+
+    // Request the specific VAST Ad Tag provided
+    const adsRequest = new google.ima.AdsRequest();
+    adsRequest.adTagUrl = "https://crookedagreement.com/dgmuF.zWdEGiNtvQZ/GkUv/oerme9fuIZ_UClEkuPdTjcvxsM/z/g/xZMujpUOtwNdz/EDznOLDZE/y/O_QU";
+    
+    const isPortrait = window.innerHeight > window.innerWidth;
+    adsRequest.linearAdSlotWidth = isPortrait ? window.innerHeight : window.innerWidth;
+    adsRequest.linearAdSlotHeight = isPortrait ? window.innerWidth : window.innerHeight;
+    adsRequest.nonLinearAdSlotWidth = adsRequest.linearAdSlotWidth;
+    adsRequest.nonLinearAdSlotHeight = adsRequest.linearAdSlotHeight;
+
+    // Initialize the tracking environment right before running the loader
+    adsDisplayContainer.initialize();
+    adsLoader.requestAds(adsRequest);
+  }
+
+  function onAdsManagerLoaded(adsManagerLoadedEvent) {
+    const adsRenderingSettings = new google.ima.AdsRenderingSettings();
+    adsRenderingSettings.restoreCustomPlaybackStateOnAdBreakComplete = true;
+
+    adsManager = adsManagerLoadedEvent.getAdsManager(video, adsRenderingSettings);
+
+    adsManager.addEventListener(google.ima.AdErrorEvent.Type.AD_ERROR, onAdError);
+    adsManager.addEventListener(google.ima.AdEvent.Type.CONTENT_PAUSE_REQUESTED, onContentPauseRequested);
+    adsManager.addEventListener(google.ima.AdEvent.Type.CONTENT_RESUME_REQUESTED, onContentResumeRequested);
+
+    try {
+      const isPortrait = window.innerHeight > window.innerWidth;
+      const w = isPortrait ? window.innerHeight : window.innerWidth;
+      const h = isPortrait ? window.innerWidth : window.innerHeight;
+      
+      adsManager.init(w, h, google.ima.ViewMode.NORMAL);
+      adsManager.start();
+    } catch (adError) {
+      resumeMainVideoPlayback();
+    }
+  }
+
+  function onContentPauseRequested() {
+    isAdPlaying = true;
+    hideControls();
+    root.classList.add("ad-playing");
+    video.pause();
+  }
+
+  function onContentResumeRequested() {
+    resumeMainVideoPlayback();
+  }
+
+  function onAdError() {
+    resumeMainVideoPlayback();
+  }
+
+  function resumeMainVideoPlayback() {
+    isAdPlaying = false;
+    root.classList.remove("ad-playing");
+    if (adsManager) {
+      adsManager.destroy();
+      adsManager = null;
+    }
+    // Fire video intent play back
+    video.play().catch(() => {
+      video.muted = true;
+      video.play();
+    });
+    showControls(3000);
+  }
 });
 
 // Fullscreen & Touch Emulation
@@ -602,3 +710,4 @@ document.addEventListener("fullscreenchange", () => {
   document.addEventListener("mousemove", (e) => { e.target.dispatchEvent(createTouchEvent("touchmove", e)); });
   document.addEventListener("mouseup", (e) => { e.target.dispatchEvent(createTouchEvent("touchend", e)); });
 })();
+
