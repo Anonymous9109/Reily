@@ -363,13 +363,8 @@ const movies = [
     genres: ["Animation","Action"],
     image: "images/StevenUniverseTheMovie.jpg",
     link: "Movies/Movie?movie=steven-universe-the-movie"
-  },
-  {
-    title: "1",
-    genres: ["Action"],
-    image: "images/WeretheMillers.jpg",
-    link: "Movies/Movie?movie=1"
   }
+  
 ];
 
 // Convert Arabic characters to English-sound equivalents
