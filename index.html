@@ -55,6 +55,26 @@
             100% { transform: rotate(360deg); }
         }
 
+        .movie-loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 5;
+            border-radius: 4px;
+            animation: fadeIn 0.2s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
         header {
             position: fixed;
             top: 0;
@@ -172,21 +192,21 @@
             position: absolute;
             top: 50%;
             left: 50%;
-            width: 180%; 
+            width: 200%; 
             aspect-ratio: 1/1;
-            background-color: rgba(255, 255, 255, 0.15);
+            background-color: rgba(255, 255, 255, 0.25);
             border-radius: 50%;
             transform: translate(-50%, -50%) scale(0);
             opacity: 0;
             pointer-events: none;
-            z-index: 2;
-            transition: transform 0.4s cubic-bezier(0.1, 0.8, 0.3, 1), opacity 0.3s ease;
+            z-index: 4;
+            transition: transform 0.35s cubic-bezier(0.1, 0.8, 0.3, 1), opacity 0.2s ease;
         }
 
         .movie:active::after {
             transform: translate(-50%, -50%) scale(1);
             opacity: 1;
-            transition: transform 0.08s ease-out;
+            transition: transform 0s;
         }
 
         .movie .fallback-label {
@@ -257,7 +277,6 @@
             outline: none;
         }
 
-        /* Container for Ad placeholder under search input */
         .search-ad-wrapper {
             padding: 10px 15px;
             text-align: center;
@@ -459,6 +478,8 @@
             display: flex;
             align-items: center;
             gap: 15px;
+            position: relative;
+            overflow: hidden;
             transition: background 0.2s;
         }
         
@@ -783,7 +804,6 @@
     </button>
 </footer>
 
-<!-- SLIDING SEARCH PANEL -->
 <div id="sliding-search" class="sliding-panel">
     <div class="panel-header">
         <button class="back-button" id="search-back-button">
@@ -792,7 +812,6 @@
         <input type="text" id="searchInput" placeholder="Search shows, movies..." onkeyup="searchMovies()">
     </div>
     
-    <!-- YOUR EXACT AD INJECTION BLOCK -->
     <div class="search-ad-wrapper">
         <script>
         (function(cztzc){
@@ -1176,7 +1195,8 @@
                     const sanitizedTitle = item.title.replace(/'/g, "\\'");
                     const sanitizedLink = runtimeLink.replace(/'/g, "\\'");
                     
-                    cardLink.setAttribute('onclick', `navigateToMovie('${sanitizedTitle}', '${sanitizedLink}', this.querySelector('.history-poster-frame'))`);
+                    // FIXED: Click behavior attached safely to the layout row structure
+                    cardLink.setAttribute('onclick', `navigateToMovie('${sanitizedTitle}', '${sanitizedLink}', this.querySelector('.history-item'))`);
                     cardLink.style.cursor = 'pointer';
                     
                     cardLink.innerHTML = `
@@ -1364,7 +1384,7 @@
             } else if (!isScrollingMove) {
                 const sanitizedTitle = movieTitle.replace(/'/g, "\\'");
                 const sanitizedLink = movieLink.replace(/'/g, "\\'");
-                navigateToMovie(sanitizedTitle, sanitizedLink, cardElement.firstElementChild);
+                navigateToMovie(sanitizedTitle, sanitizedLink, cardElement);
             }
         });
     }
@@ -1434,7 +1454,7 @@
         div.className = "movie";
         
         div.innerHTML = `
-            <div style="cursor: pointer; width: 100%; height: 100%; position: relative;">
+            <div style="width: 100%; height: 100%; position: relative; pointer-events: none;">
                 ${topTrendRank ? `<div class="trending-badge">${topTrendRank}</div>` : ''}
                 <img src="${m.image}" draggable="false" onerror="this.insertAdjacentHTML('afterend', '<p class=\\'fallback-label\\'>${m.title}</p>'); this.style.opacity='0.25';">
             </div>
@@ -1452,7 +1472,7 @@
 
             const localizedSpinner = document.createElement('div');
             localizedSpinner.className = 'movie-loading-overlay';
-            localizedSpinner.innerHTML = '<div class="loading-ring"></div>';
+            localizedSpinner.innerHTML = '<div class="loading-ring" style="margin:0;"></div>';
             elementClicked.appendChild(localizedSpinner);
         }
 
@@ -1579,7 +1599,10 @@
         });
 
         genreContainer.innerHTML = "";
-        Object.keys(genreMap).sort().forEach(genre => {
+        
+        // FIXED: Rows and movies are randomized dynamically inside the keys mapping loop structure
+        const randomizedGenreNames = shuffleArray(Object.keys(genreMap));
+        randomizedGenreNames.forEach(genre => {
             const section = document.createElement("div");
             section.className = "section";
             section.innerHTML = `
@@ -1587,7 +1610,11 @@
                 <div class="movies"></div>
             `;
             const row = section.querySelector(".movies");
-            genreMap[genre].forEach(m => row.appendChild(createMovieCard(m)));
+            
+            // Randomizes individual movies inside each row context
+            const randomizedMoviesInGenre = shuffleArray(genreMap[genre]);
+            randomizedMoviesInGenre.forEach(m => row.appendChild(createMovieCard(m)));
+            
             genreContainer.appendChild(section);
         });
     }
@@ -1595,3 +1622,4 @@
 
 </body>
 </html>
+
