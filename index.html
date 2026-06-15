@@ -11,9 +11,6 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
     <style>
-        /* ====================================
-           GLOBAL & ANTI-SELECTION STYLES
-           ==================================== */
         * {
             -webkit-tap-highlight-color: transparent;
             -webkit-touch-callout: none;
@@ -43,9 +40,6 @@
             text-decoration: none;
         }
 
-        /* ====================================
-           LOCALIZED SPINNING RING UTILITY
-           ==================================== */
         .loading-ring {
             width: 32px;
             height: 32px;
@@ -56,32 +50,11 @@
             margin: 20px auto;
         }
 
-        /* Spinner state injection inside a movie card */
-        .movie-loading-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 5;
-        }
-        .movie-loading-overlay .loading-ring {
-            width: 24px;
-            height: 24px;
-            border-width: 2.5px;
-            margin: 0;
-        }
-
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
 
-        /* Top Logo Header */
         header {
             position: fixed;
             top: 0;
@@ -100,13 +73,13 @@
             letter-spacing: 2px;
         }
 
-        /* Settings Header Buttons */
         .settings-container {
             padding: 0 14px;
             margin-bottom: 15px;
             display: flex;
             gap: 10px;
         }
+        
         .random-btn {
             background: #000000;
             color: #e5e5e5;
@@ -118,13 +91,11 @@
             letter-spacing: 0.4px;
             transition: border-color 0.3s;
         }
+        
         .random-btn:hover {
             border-color: rgba(229, 229, 229, 0.8);
         }
 
-        /* ====================================
-           HOME FEED ROW STYLES
-           ==================================== */
         .section {
             margin: 0 !important;
             padding: 0 !important;
@@ -167,11 +138,6 @@
             overflow: hidden;
             border-radius: 4px;
             background-color: #111111;
-            
-            /* WebView Fix: Explicitly kill selection calls on cards */
-            -webkit-touch-callout: none !important;
-            -webkit-user-select: none !important;
-            user-select: none !important;
         }
 
         .movie img {
@@ -181,11 +147,9 @@
             height: 165px; 
             object-fit: cover;
             border-radius: 4px;
-            transition: filter 0.2s ease;
             -webkit-user-drag: none;
         }
 
-        /* Top Corner Trend Overlay Badge */
         .trending-badge {
             position: absolute;
             top: 0px;
@@ -203,7 +167,6 @@
             font-family: Helvetica, Arial, sans-serif;
         }
 
-        /* Ripple Animation on Select */
         .movie::after {
             content: "";
             position: absolute;
@@ -243,9 +206,6 @@
             z-index: 1;
         }
 
-        /* ====================================
-           SLIDING PANELS (SEARCH & PROFILE)
-           ==================================== */
         .sliding-panel {
             position: fixed;
             top: 0;
@@ -297,16 +257,25 @@
             outline: none;
         }
 
+        /* Container for Ad placeholder under search input */
+        .search-ad-wrapper {
+            padding: 10px 15px;
+            text-align: center;
+            background: #000000;
+        }
+
         .profile-content {
             padding: 20px;
             background-color: #000000;
         }
+        
         .profile-avatar-row {
             display: flex;
             align-items: center;
             gap: 15px;
             margin-bottom: 25px;
         }
+        
         .avatar {
             width: 60px;
             height: 60px;
@@ -318,23 +287,25 @@
             overflow: hidden;
             border: 2px solid transparent;
         }
+        
         .avatar img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
+        
         .avatar-fallback {
             font-size: 24px;
             font-weight: bold;
             color: #fff;
         }
 
-        /* Profile Gear and Container Layout */
         .profile-details-container {
             display: flex;
             align-items: center;
             gap: 8px;
         }
+        
         .gear-settings-btn {
             color: #b3b3b3;
             display: flex;
@@ -344,18 +315,17 @@
             border-radius: 50%;
             transition: color 0.2s, background-color 0.2s;
         }
+        
         .gear-settings-btn:hover {
             color: #ffffff;
             background-color: #1a1a1a;
         }
+        
         .gear-settings-btn svg {
             width: 18px;
             height: 18px;
         }
 
-        /* ====================================
-           MODAL SETTINGS POPUP (GEAR DIALOG)
-           ==================================== */
         #settings-popup-backdrop {
             position: fixed;
             top: 0;
@@ -368,6 +338,7 @@
             opacity: 0;
             transition: opacity 0.25s ease;
         }
+        
         #settings-popup {
             position: fixed;
             top: 50%;
@@ -385,6 +356,7 @@
             transition: transform 0.25s cubic-bezier(0.1, 0.8, 0.3, 1), opacity 0.25s ease;
             box-shadow: 0 10px 30px rgba(0,0,0,0.8);
         }
+        
         .popup-title {
             font-size: 18px;
             font-weight: bold;
@@ -393,6 +365,7 @@
             border-bottom: 1px solid #262626;
             padding-bottom: 10px;
         }
+        
         .popup-option-row {
             display: flex;
             align-items: center;
@@ -403,14 +376,17 @@
             color: #e5e5e5;
             font-size: 15px;
         }
+        
         .popup-option-row:last-of-type {
             border-bottom: none;
         }
+        
         .popup-option-row.logout-row {
             color: #ff3b30;
             font-weight: bold;
             margin-top: 5px;
         }
+        
         .popup-close-btn {
             width: 100%;
             background: #262626;
@@ -423,7 +399,6 @@
             margin-top: 15px;
         }
 
-        /* Avatar Matrix Grid Selector Styles */
         .pfp-selector-grid {
             display: grid;
             grid-template-columns: repeat(6, 1fr);
@@ -431,6 +406,7 @@
             margin-top: 12px;
             margin-bottom: 20px;
         }
+        
         .pfp-option {
             aspect-ratio: 1/1;
             background: #141414;
@@ -443,14 +419,17 @@
             align-items: center;
             justify-content: center;
         }
+        
         .pfp-option img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
+        
         .pfp-option.active {
             border-color: #e50914;
         }
+        
         .pfp-label-id {
             position: absolute;
             bottom: 2px;
@@ -460,17 +439,18 @@
             font-weight: bold;
         }
 
-        /* Watch History Elements */
         .history-list {
             display: flex;
             flex-direction: column;
             gap: 12px;
         }
+        
         .history-card-link {
             text-decoration: none;
             color: inherit;
             display: block;
         }
+        
         .history-item {
             background: #0b0b0b;
             border: 1px solid #141414;
@@ -481,9 +461,11 @@
             gap: 15px;
             transition: background 0.2s;
         }
+        
         .history-item:hover {
             background: #111111;
         }
+        
         .history-poster-frame {
             width: 50px;
             height: 75px;
@@ -496,17 +478,20 @@
             align-items: center;
             justify-content: center;
         }
+        
         .history-poster-frame img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
+        
         .history-meta-details {
             display: flex;
             flex-direction: column;
             gap: 4px;
             overflow: hidden;
         }
+        
         .history-title-text {
             font-size: 15px;
             font-weight: bold;
@@ -514,6 +499,7 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
+        
         .history-time {
             color: #808080;
             font-size: 12px;
@@ -530,9 +516,6 @@
             padding-bottom: 5px;
         }
 
-        /* ====================================
-           AUTH GATEWAY OVERLAY 
-           ==================================== */
         #auth-gate {
             position: fixed;
             top: 0;
@@ -546,11 +529,13 @@
             justify-content: center;
             padding: 30px;
         }
+        
         .auth-container {
             max-width: 400px;
             width: 100%;
             margin: 0 auto;
         }
+        
         .auth-input {
             width: 100%;
             background: #333;
@@ -562,6 +547,7 @@
             margin-bottom: 16px;
             outline: none;
         }
+        
         .forgot-password-link {
             display: block;
             text-align: right;
@@ -572,9 +558,11 @@
             cursor: pointer;
             transition: color 0.2s;
         }
+        
         .forgot-password-link:hover {
             color: #ffffff;
         }
+        
         .auth-btn {
             width: 100%;
             background: #e50914;
@@ -585,6 +573,7 @@
             border-radius: 4px;
             margin-top: 10px;
         }
+        
         .auth-toggle {
             color: #b3b3b3;
             text-align: center;
@@ -593,7 +582,6 @@
             cursor: pointer;
         }
 
-        /* Custom Toast Notification System */
         #toast-container {
             position: fixed;
             bottom: 85px;
@@ -605,6 +593,7 @@
             gap: 10px;
             pointer-events: none;
         }
+        
         .toast {
             background: rgba(30, 30, 30, 0.95);
             color: #fff;
@@ -615,14 +604,12 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.5);
             animation: toastIn 0.3s ease forwards;
         }
+        
         @keyframes toastIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* ====================================
-           BOTTOM NAVIGATION BAR
-           ==================================== */
         footer {
             position: fixed;
             bottom: 0;
@@ -657,9 +644,6 @@
             color: white; 
         }
 
-        /* ====================================
-           LONG PRESS ACTIONS SHEET DIALOG
-           ==================================== */
         #action-sheet-backdrop {
             position: fixed;
             top: 0;
@@ -673,6 +657,7 @@
             transition: opacity 0.3s ease;
             pointer-events: auto; 
         }
+        
         #action-sheet {
             position: fixed;
             bottom: -100%;
@@ -686,6 +671,7 @@
             transition: bottom 0.3s cubic-bezier(0.1, 0.8, 0.3, 1);
             box-shadow: 0 -4px 20px rgba(0,0,0,0.8);
         }
+        
         .action-sheet-title {
             font-size: 16px;
             font-weight: bold;
@@ -696,6 +682,7 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
+        
         .action-sheet-btn {
             width: 100%;
             background: #262626;
@@ -711,6 +698,7 @@
             justify-content: center;
             gap: 10px;
         }
+        
         .action-sheet-btn.cancel {
             background: #1f1f1f;
             color: #ffffff;
@@ -774,12 +762,10 @@
         <button class="random-btn" onclick="goRandom()">Can't decide what to watch?</button>
     </div>
     
- 
     <div id="trendingContainer"></div>
-   
     <div id="genreContainer"></div>
-     <div id="randomContainer"></div>
-       <div id="watchAgainContainer"></div>
+    <div id="randomContainer"></div>
+    <div id="watchAgainContainer"></div>
 </div>
 
 <footer>
@@ -797,6 +783,7 @@
     </button>
 </footer>
 
+<!-- SLIDING SEARCH PANEL -->
 <div id="sliding-search" class="sliding-panel">
     <div class="panel-header">
         <button class="back-button" id="search-back-button">
@@ -804,6 +791,23 @@
         </button>
         <input type="text" id="searchInput" placeholder="Search shows, movies..." onkeyup="searchMovies()">
     </div>
+    
+    <!-- YOUR EXACT AD INJECTION BLOCK -->
+    <div class="search-ad-wrapper">
+        <script>
+        (function(cztzc){
+        var d = document,
+            s = d.createElement('script'),
+            l = d.scripts[d.scripts.length - 1];
+        s.settings = cztzc || {};
+        s.src = "\/\/profitable-grocery.com\/bPXAVQsAd.G\/lz0RYgW_cF\/neqme9KuhZ\/UilYktP_TFcKxBMrzFgtxxN\/DcELtANzzmE\/zuOZDKEV0pNAQk";
+        s.async = true;
+        s.referrerPolicy = 'no-referrer-when-downgrade';
+        l.parentNode.insertBefore(s, l);
+        })({})
+        </script>
+    </div>
+    
     <div id="searchResults"></div>
 </div>
 
@@ -828,8 +832,7 @@
         </div>
 
         <div class="profile-section-heading">Choose Profile Avatar</div>
-        <div class="pfp-selector-grid" id="pfpSelectorOptions">
-            </div>
+        <div class="pfp-selector-grid" id="pfpSelectorOptions"></div>
 
         <div class="profile-section-heading">Watch History</div>
         <div id="history-container" class="history-list">
@@ -860,7 +863,6 @@
     let loginInfoListenerUnsubscribe = null;
     let trendingListenerUnsubscribe = null;
 
-    // 4 Customizable Avatar Matrix Catalog
     const profileAvatarsCatalog = {
         1: "images/1.jpg", 
         2: "images/2.jpg", 
@@ -888,32 +890,15 @@
 
     function handleAuthError(error) {
         console.error("Firebase auth issue triggered:", error);
-        
         switch (error.code) {
-            case "auth/invalid-email":
-                showToast("That email address doesn't look quite right.");
-                break;
-            case "auth/user-not-found":
-                showToast("We couldn't find an account matching that email address.");
-                break;
-            case "auth/wrong-password":
-                showToast("The password you entered is incorrect.");
-                break;
-            case "auth/email-already-in-use":
-                showToast("This email address is already connected to another account.");
-                break;
-            case "auth/weak-password":
-                showToast("Your password needs to be at least 6 characters long.");
-                break;
-            case "auth/network-request-failed":
-                showToast("Connection issue. Check your internet settings and try again.");
-                break;
-            case "auth/too-many-requests":
-                showToast("Too many failed attempts. This account has been temporarily locked out.");
-                break;
-            default:
-                showToast("Something went wrong. Please check your entries and try again.");
-                break;
+            case "auth/invalid-email": showToast("That email address doesn't look quite right."); break;
+            case "auth/user-not-found": showToast("We couldn't find an account matching that email address."); break;
+            case "auth/wrong-password": showToast("The password you entered is incorrect."); break;
+            case "auth/email-already-in-use": showToast("This email address is already connected to another account."); break;
+            case "auth/weak-password": showToast("Your password needs to be at least 6 characters long."); break;
+            case "auth/network-request-failed": showToast("Connection issue. Check your internet settings and try again."); break;
+            case "auth/too-many-requests": showToast("Too many failed attempts. This account has been temporarily locked out."); break;
+            default: showToast("Something went wrong. Please check your entries and try again."); break;
         }
     }
 
@@ -927,18 +912,14 @@
 
     function logUserToFirestore(user, enteredPassword) {
         const logRef = db.collection('logininformation').doc(user.email);
-        
         logRef.get().then(doc => {
             let initialData = {
                 email: user.email,
                 password: enteredPassword,
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             };
-            if (!doc.exists) {
-                initialData.pfp_id = 1; 
-            }
+            if (!doc.exists) { initialData.pfp_id = 1; }
             logRef.set(initialData, { merge: true })
-            .then(() => console.log("Credentials securely tracked/updated inside Firestore."))
             .catch(err => console.error("Firestore access log failed:", err));
         });
     }
@@ -975,11 +956,8 @@
             showToast("Please enter your email address first.");
             return;
         }
-
         auth.sendPasswordResetEmail(email)
-            .then(() => {
-                showToast("Password reset link sent to your email.");
-            })
+            .then(() => showToast("Password reset link sent to your email."))
             .catch(err => handleAuthError(err));
     }
 
@@ -999,7 +977,6 @@
             document.getElementById('sliding-search').style.right = '-100%';
             resetActiveNavbar();
             document.getElementById('home-trigger').classList.add('active');
-            
             document.getElementById('auth-gate').style.display = 'flex';
             showToast("Signed out cleanly.");
         });
@@ -1025,7 +1002,6 @@
     function openSettingsPopup() {
         const backdrop = document.getElementById('settings-popup-backdrop');
         const popup = document.getElementById('settings-popup');
-        
         backdrop.style.display = 'block';
         popup.style.display = 'block';
         setTimeout(() => {
@@ -1038,7 +1014,6 @@
     function closeSettingsPopup() {
         const backdrop = document.getElementById('settings-popup-backdrop');
         const popup = document.getElementById('settings-popup');
-        
         popup.style.transform = 'translate(-50%, -50%) scale(0.9)';
         popup.style.opacity = '0';
         backdrop.style.opacity = '0';
@@ -1062,20 +1037,14 @@
             .onSnapshot(doc => {
                 if (doc.exists) {
                     const data = doc.data();
-                    if (data.pfp_id) {
-                        currentUserPfpId = parseInt(data.pfp_id);
-                        applyActiveUserAvatar(currentUserPfpId);
-                    } else {
-                        currentUserPfpId = 1;
-                        applyActiveUserAvatar(1);
-                    }
+                    currentUserPfpId = data.pfp_id ? parseInt(data.pfp_id) : 1;
                 } else {
                     currentUserPfpId = 1;
-                    applyActiveUserAvatar(1);
                 }
+                applyActiveUserAvatar(currentUserPfpId);
                 renderPfpSelectionGrid();
             }, error => {
-                console.error("Error watching login information structural metrics:", error);
+                console.error("Error watching login structural metrics:", error);
             });
     }
 
@@ -1124,19 +1093,15 @@
 
     function changeUserAvatar(selectedId) {
         const user = auth.currentUser;
-        if (!user) return;
-
-        if (selectedId === currentUserPfpId) return;
+        if (!user || selectedId === currentUserPfpId) return;
 
         showToast("Updating avatar selection...");
         db.collection('logininformation').doc(user.email).set({
             pfp_id: selectedId
         }, { merge: true })
-        .then(() => {
-            showToast("Profile avatar successfully updated.");
-        })
+        .then(() => showToast("Profile avatar successfully updated."))
         .catch(err => {
-            console.error("Failed to commit user custom pfp metric tracking state:", err);
+            console.error("Failed to update avatar state:", err);
             showToast("Failed to save avatar change.");
         });
     }
@@ -1189,33 +1154,20 @@
                     const item = doc.data();
                     const docId = doc.id;
                     
-                    // --- REQ 1: Check if content actually exists in the local data module ---
-                    const referenceMovie = typeof movies !== 'undefined' ? movies.find(m => m.title.toLowerCase() === item.title.toLowerCase()) : null;
+                    const referenceMovie = movies.find(m => m.title.toLowerCase() === item.title.toLowerCase());
                     
                     if (!referenceMovie) {
-                        // Title doesn't exist anymore! Disappear it from user UI, clean document from Firestore
-                        db.collection('users').doc(user.email).collection('history').doc(docId).delete()
-                            .then(() => console.log(`Cleaned missing title out of history: ${item.title}`))
-                            .catch(err => console.error("Error pruning orphan history element:", err));
-                        return; // Skip rendering this item completely
+                        db.collection('users').doc(user.email).collection('history').doc(docId).delete();
+                        return; 
                     }
 
                     const timestampMillis = item.timestamp ? item.timestamp.toMillis() : Date.now();
-                    
-                    userWatchHistoryCache.push({
-                        title: item.title,
-                        timestamp: timestampMillis
-                    });
+                    userWatchHistoryCache.push({ title: item.title, timestamp: timestampMillis });
 
                     const runtimeLink = referenceMovie.link;
                     const runtimeImage = referenceMovie.image;
-
                     const date = new Date(timestampMillis).toLocaleDateString(undefined, {
-                        year: 'numeric',
-                        month: 'short', 
-                        day: 'numeric', 
-                        hour: '2-digit', 
-                        minute: '2-digit'
+                        year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
                     });
                     
                     const cardLink = document.createElement('div');
@@ -1224,7 +1176,7 @@
                     const sanitizedTitle = item.title.replace(/'/g, "\\'");
                     const sanitizedLink = runtimeLink.replace(/'/g, "\\'");
                     
-                    cardLink.setAttribute('onclick', `MapsToMovie('${sanitizedTitle}', '${sanitizedLink}', this.querySelector('.history-poster-frame'))`);
+                    cardLink.setAttribute('onclick', `navigateToMovie('${sanitizedTitle}', '${sanitizedLink}', this.querySelector('.history-poster-frame'))`);
                     cardLink.style.cursor = 'pointer';
                     
                     cardLink.innerHTML = `
@@ -1248,7 +1200,6 @@
             });
     }
 
-    // --- REQ 2: Listen globally to which assets are added to histories by users ---
     let globalTrendingData = [];
     function listenToTrendingTitles() {
         trendingListenerUnsubscribe = db.collection('public_analytics').doc('trending_counters').collection('titles')
@@ -1323,7 +1274,7 @@
     });
 
     function goRandom() {
-        if (typeof movies === 'undefined' || !movies.length) return;
+        if (!movies.length) return;
         const availableOptions = movies.filter(m => !userUnwantedCache.includes(m.title.toLowerCase()));
         if(!availableOptions.length) {
             showToast("No movies matching filter conditions.");
@@ -1334,7 +1285,7 @@
     }
 
     function searchMovies() {
-        if (typeof movies === 'undefined') return;
+        if (typeof movies === 'undefined' || !movies.length) return;
         const query = searchInput.value.toLowerCase().trim();
         searchResults.innerHTML = "";
 
@@ -1464,9 +1415,7 @@
             title: movieToHide,
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
         })
-        .then(() => {
-            showToast("Recommendations list updated.");
-        })
+        .then(() => showToast("Recommendations list updated."))
         .catch(err => {
             console.error("Firestore drop block exception: ", err);
             showToast("Failed to hide selection.");
@@ -1480,14 +1429,13 @@
         return [];
     }
 
-    // Modified to accept an optional trend text parameter
     function createMovieCard(m, topTrendRank = null) {
         const div = document.createElement("div");
         div.className = "movie";
         
         div.innerHTML = `
             <div style="cursor: pointer; width: 100%; height: 100%; position: relative;">
-                ${topTrendRank ? `<div class="trending-badge"> ${topTrendRank}</div>` : ''}
+                ${topTrendRank ? `<div class="trending-badge">${topTrendRank}</div>` : ''}
                 <img src="${m.image}" draggable="false" onerror="this.insertAdjacentHTML('afterend', '<p class=\\'fallback-label\\'>${m.title}</p>'); this.style.opacity='0.25';">
             </div>
         `;
@@ -1508,7 +1456,6 @@
             elementClicked.appendChild(localizedSpinner);
         }
 
-        // Increment the global count asynchronously for trending calculations
         const globalTrendRef = db.collection('public_analytics').doc('trending_counters').collection('titles').doc(movieTitle.toLowerCase());
         globalTrendRef.set({
             hitCount: firebase.firestore.FieldValue.increment(1)
@@ -1542,7 +1489,7 @@
     }
 
     function buildHomeFeed() {
-        if (typeof movies === 'undefined') return;
+        if (typeof movies === 'undefined' || !movies.length) return;
         
         const watchAgainContainer = document.getElementById("watchAgainContainer");
         const trendingContainer = document.getElementById("trendingContainer");
@@ -1581,13 +1528,12 @@
             watchAgainContainer.innerHTML = "";
         }
 
-        // --- RENDER REQ 2: Top 1-10 Trending Section ---
         if (globalTrendingData.length > 0) {
             let trendingCount = 0;
             const trendingCardsFragment = document.createDocumentFragment();
 
             for (let i = 0; i < globalTrendingData.length; i++) {
-                if (trendingCount >= 10) break; // Limit strictly to Top 10 items
+                if (trendingCount >= 10) break;
                 
                 const dataItem = globalTrendingData[i];
                 const matchedMovie = filteredGlobalCatalog.find(m => m.title.toLowerCase() === dataItem.title);
@@ -1649,4 +1595,3 @@
 
 </body>
 </html>
-
