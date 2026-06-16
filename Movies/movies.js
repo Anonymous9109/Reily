@@ -317,7 +317,7 @@ const movies = {
     play: "TheWatch"
   },
   "are-you-there-god-its-me-margaret": {
-    title: "Are You There God? It's Me, Margaret",
+    title: "Are You There God Its Me Margaret",
     desc: "Eleven-year-old Margaret moves to a new town and starts to contemplate everything about life, friendship and adolescence. She relies on her mother, Barbara, who offers loving support, and her grandmother, Sylvia, who's coming to terms with finding happiness in the next phase of her life. Questions of identity, one's place in the world, and what brings meaning to life soon brings them closer together than ever before",
     video: "",
     play: "AreYouThereGodItsMeMargaret"
