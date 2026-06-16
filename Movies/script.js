@@ -1,5 +1,5 @@
 // ==========================================================================
-// 1. DYNAMIC DATA ARCHITECTURE & DEPENDENCY LOADING
+// 1. DYNAMIC DATA ARCHITECTURE & DEPENDENCY LOADING (SANDBOXED)
 // ==========================================================================
 
 /**
@@ -85,7 +85,7 @@ function renderPage(id) {
 loadDataFiles();
 
 // ==========================================================================
-// 2. BACKGROUND FALLBACK (IMAGE PARSER)
+// 2. BACKGROUND FALLBACK (DYNAMIC EXTENSION EXTRACTION VIA MATCHED ID)
 // ==========================================================================
 
 function applyFallbackBackground(id) {
@@ -173,7 +173,7 @@ async function checkContinueWatchingStatus() {
 }
 
 // ==========================================================================
-// 4. NAVIGATION CONTROLS
+// 4. USER INTERACTIVE NAVIGATION CONTROLS
 // ==========================================================================
 
 function play() {
@@ -191,10 +191,29 @@ function goBack() {
 }
 
 // ==========================================================================
-// 5. GLOBAL STYLE DECORATORS (UI/UX)
+// 5. GLOBAL STYLE DECORATORS & FADING OVERLAYS (UI/UX)
 // ==========================================================================
 
 (function () {
+  // 1. Create and inject the subtle fading background overlay
+  const overlay = document.createElement('div');
+  overlay.id = "bottomFadeOverlay";
+  
+  // Set up layout and the light linear-gradient
+  Object.assign(overlay.style, {
+    position: "fixed",
+    bottom: "0",
+    left: "0",
+    width: "100%",
+    height: "55vh", // Controls how high up the viewport the gradient climbs
+    background: "linear-gradient(to top, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0) 100%)",
+    pointerEvents: "none", // Allows clicks to pass through completely
+    zIndex: "1" // Places it over backgrounds, but behind UI typography elements
+  });
+  
+  document.body.appendChild(overlay);
+
+  // 2. Clear mobile tap delays, outline styling, and stack text layers explicitly
   const style = document.createElement('style');
   style.innerHTML = `
     * {
@@ -210,6 +229,11 @@ function goBack() {
     }
     button:active, a:active {
       background-color: transparent !important;
+    }
+    /* Forces elements out of the stacking index loop to sit cleanly over the fade overlay */
+    #title, #desc, .play-btn, .back-btn, .text-container-wrapper, .info-container {
+      position: relative;
+      z-index: 2;
     }
   `;
   document.head.appendChild(style);
