@@ -372,7 +372,7 @@ const movies = [
     link: "Movies/Movie?movie=the-watch"
   },
   {
-    title: "Are You There God Its Me, Margaret",
+    title: "Are You There God Its Me Margaret",
     genres: ["Comedy","Drama"],
     image: "images/AreYouThereGodItsMeMargaret.jpg",
     link: "Movies/Movie?movie=are-you-there-god-its-me-margaret"
