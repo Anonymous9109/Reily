@@ -1,115 +1,125 @@
 // ==========================================================================
-// 1. DYNAMIC SCRIPT LOADING & DATA ARCHITECTURE
+// 1. DYNAMIC DATA ARCHITECTURE & DEPENDENCY LOADING
 // ==========================================================================
 
-function loadSearchScript() {
-  return new Promise((resolve) => {
-    if (typeof window.movies !== "undefined" || typeof movies !== "undefined") {
-      resolve();
-      return;
-    }
-    
-    const script = document.createElement("script");
-    script.src = "https://rinolski.online/JS/search.js"; // Absolute root path to search script
-    script.onload = () => resolve();
-    script.onerror = () => {
-      console.error("Failed to load search.js");
-      resolve(); 
-    };
-    document.head.appendChild(script);
-  });
-}
-
-async function initializePage() {
-  await loadSearchScript();
-
+/**
+ * Loads text files instead of script tags to bypass global variable conflicts.
+ */
+async function loadDataFiles() {
   const params = new URLSearchParams(window.location.search);
   const id = params.get("movie") || params.get("series");
 
-  const sourceMovies = typeof window.movies !== "undefined" ? window.movies : (typeof movies !== "undefined" ? movies : null);
-  window.movies = {};
-
-  // Find the exact movie record in search.js matching our URL ID
-  if (sourceMovies && Array.isArray(sourceMovies) && id) {
-    const matchedMovie = sourceMovies.find(m => {
-      if (!m.link) return false;
-      const urlPart = m.link.includes('?') ? m.link.split('?')[1] : m.link;
-      const movieUrlParams = new URLSearchParams(urlPart);
-      const movieId = movieUrlParams.get('movie') || movieUrlParams.get('series');
-      
-      return movieId && movieId.toLowerCase() === id.toLowerCase();
-    });
-    
-    if (matchedMovie) {
-      window.movies[id] = matchedMovie;
-    }
-  } else if (sourceMovies && typeof sourceMovies === "object") {
-    window.movies = sourceMovies;
-  }
-
-  const movie = window.movies[id];
-
-  if (!movie) {
-    document.body.innerHTML = "<div style='color:white; text-align:center; margin-top:20%; font-family:sans-serif;'>Movie not found</div>";
+  if (!id) {
+    document.body.innerHTML = "<div style='color:white; text-align:center; margin-top:20%; font-family:sans-serif;'>No video ID provided.</div>";
     return;
   }
 
-  document.getElementById("title").textContent = movie.title;
+  try {
+    // 1. Fetch and parse search.js safely
+    const searchResponse = await fetch("/JS/search.js");
+    const searchText = await searchResponse.text();
+    // Convert the 'const movies =' declaration to a safe localized object evaluation
+    const cleanSearchText = searchText.replace(/const\s+movies\s*=/, "return ");
+    const parseSearch = new Function(cleanSearchText);
+    window.searchArray = parseSearch();
+
+    // 2. Fetch and parse movies.js safely
+    const moviesResponse = await fetch("/Movies/movies.js");
+    const moviesText = await moviesResponse.text();
+    // Convert the 'const movies =' declaration to a safe localized object evaluation
+    const cleanMoviesText = moviesText.replace(/const\s+movies\s*=/, "return ");
+    const parseMovies = new Function(cleanMoviesText);
+    window.movieDetailsDict = parseMovies();
+
+    // 3. Kickoff layout initialization
+    renderPage(id);
+
+  } catch (error) {
+    console.error("Critical error while reading data engines safely:", error);
+    document.body.innerHTML = "<div style='color:white; text-align:center; margin-top:20%; font-family:sans-serif;'>Failed to load background systems.</div>";
+  }
+}
+
+/**
+ * Handles building the UI and background assets now that data maps are secure.
+ */
+function renderPage(id) {
+  // Case-insensitive lookup protects against "SAW" vs "saw" mismatching
+  const exactKey = Object.keys(window.movieDetailsDict).find(key => key.toLowerCase() === id.toLowerCase());
+  const movieData = exactKey ? window.movieDetailsDict[exactKey] : null;
+
+  if (!movieData) {
+    document.body.innerHTML = "<div style='color:white; text-align:center; margin-top:20%; font-family:sans-serif;'>Movie data not found.</div>";
+    return;
+  }
+
+  // Bind to global window scope so play() and fallback handlers can access it cleanly
+  window.currentMovie = movieData;
+
+  // Populate UI
+  document.getElementById("title").textContent = movieData.title;
   
   const descEl = document.getElementById("desc");
   if (descEl) {
-    descEl.textContent = movie.desc || "";
+    descEl.textContent = movieData.desc || "";
   }
 
+  // Handle Video / Background Stream initialization
   const video = document.getElementById("bgVideo");
   
-  if (movie.video && video) {
-    video.innerHTML = `<source src="${movie.video}" type="video/mp4">`;
+  if (movieData.video && video) {
+    video.innerHTML = `<source src="${movieData.video}" type="video/mp4">`;
     video.load();
 
     video.addEventListener('error', function() {
-      applyFallbackBackground();
+      applyFallbackBackground(id);
     }, true);
   } else {
-    applyFallbackBackground();
+    applyFallbackBackground(id);
   }
 
   checkContinueWatchingStatus();
 }
 
-// Run the application initialization sequence
-initializePage();
+// Kickoff the sandboxed loading process immediately
+loadDataFiles();
 
 // ==========================================================================
-// 2. BACKGROUND FALLBACK (DYNAMIC EXTENSION extraction VIA MATCHED ID)
+// 2. BACKGROUND FALLBACK (IMAGE PARSER)
 // ==========================================================================
 
-function applyFallbackBackground() {
+function applyFallbackBackground(id) {
   const video = document.getElementById("bgVideo");
   if (video) {
     video.style.display = "none";
   }
 
   const bgContainer = document.body;
-  const id = new URLSearchParams(window.location.search).get("movie") || new URLSearchParams(window.location.search).get("series");
-  const movie = window.movies ? window.movies[id] : null;
+  const targetId = id || new URLSearchParams(window.location.search).get("movie") || new URLSearchParams(window.location.search).get("series");
 
-  // If the ID successfully paired with a record inside search.js, extract the exact file string
-  if (movie && movie.image) {
-    // Splits "images/ThePursuitofHappyness.webp" and isolated "ThePursuitofHappyness.webp"
-    const filename = movie.image.split('/').pop(); 
+  // Find the item in your search array matching this exact ID string from the URL
+  const matchedSearchItem = window.searchArray ? window.searchArray.find(m => {
+    if (!m.link) return false;
+    const urlPart = m.link.includes('?') ? m.link.split('?')[1] : m.link;
+    const movieUrlParams = new URLSearchParams(urlPart);
+    const movieId = movieUrlParams.get('movie') || movieUrlParams.get('series');
+    return movieId && movieId.toLowerCase() === targetId.toLowerCase();
+  }) : null;
+
+  if (matchedSearchItem && matchedSearchItem.image) {
+    // Isolates the clean filename (e.g., "ThePursuitofHappyness.webp") safely regardless of extension
+    const filename = matchedSearchItem.image.split('/').pop();
+    const absoluteImagePath = `/images/${filename}`;
     
-    // Stitch it into your standard root images directory absolute path
-    const derivedImagePath = `/images/${filename}`;
-    console.log(`Successfully mapped ID "${id}" to absolute filename:`, derivedImagePath);
+    console.log(`Setting background image from ID link match:`, absoluteImagePath);
     
-    bgContainer.style.backgroundImage = `url('${derivedImagePath}')`;
+    bgContainer.style.backgroundImage = `url('${absoluteImagePath}')`;
     bgContainer.style.backgroundSize = "cover";
     bgContainer.style.backgroundPosition = "center";
     bgContainer.style.backgroundRepeat = "no-repeat";
     bgContainer.style.backgroundAttachment = "fixed";
   } else {
-    console.warn(`Could not extract a valid search.js database image filename for ID: "${id}".`);
+    console.warn(`No attached image property found in search array for ID: "${targetId}". Using black background.`);
     bgContainer.style.backgroundColor = "#000000";
     bgContainer.style.backgroundImage = "none";
   }
@@ -163,13 +173,14 @@ async function checkContinueWatchingStatus() {
 }
 
 // ==========================================================================
-// 4. USER INTERACTIVE NAVIGATION CONTROLS
+// 4. NAVIGATION CONTROLS
 // ==========================================================================
 
 function play() {
   const params = new URLSearchParams(window.location.search);
   const id = params.get("movie") || params.get("series");
-  const movie = window.movies[id];
+  const movie = window.currentMovie; 
+  
   if (movie && id) {
     window.location.href = `videoplayer?ep=${movie.play || ''}&movie=${id}`;
   }
@@ -203,4 +214,3 @@ function goBack() {
   `;
   document.head.appendChild(style);
 })();
-
