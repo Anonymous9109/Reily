@@ -394,6 +394,12 @@ const movies = [
     genres: ["Action"],
     image: "images/CreedIII.jpg",
     link: "Movies/Movie?movie=creed-iii"
+  },
+  {
+    title: "Swapped",
+    genres: ["Adventure","Comedy","Animation"],
+    image: "images/Swapped.jpg",
+    link: "Movies/Movie?movie=swapped"
   }
 ];
 
