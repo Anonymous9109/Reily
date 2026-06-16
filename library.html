@@ -3,19 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Discover Rinolski library</title>
-    <meta name="description" content="Browse the complete, up-to-date Rinolski movie library. Instantly search and discover streaming availability for hundreds of titles.">
+    <title>Discover Rinolski Library</title>
+    <meta name="description" content="Browse the complete, open Rinolski movie library. Instantly search and discover streaming availability for hundreds of titles.">
     
+    <!-- AI & Search Engine Crawling Permissions -->
     <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
     
     <style>
         :root {
             --bg-color: #0c0c0c;
             --text-color: #ffffff;
-            --accent-color: #e50914;
-            --card-bg: #1a1a1a;
+            --accent-color: #e50914; /* Cinematic Streaming Red */
+            --card-bg: #141414;
             --muted-text: #999999;
             --border-color: #2a2a2a;
+            --card-radius: 10px;
         }
 
         body {
@@ -76,43 +78,77 @@
             border-radius: 30px;
             box-sizing: border-box;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s ease;
         }
 
         .search-box input:focus {
             outline: none;
-            border-color: var(--border-color);
+            border-color: var(--accent-color);
             background-color: #1e1e1e;
+            box-shadow: 0 4px 25px rgba(229, 9, 20, 0.2);
         }
 
-        .movie-section {
+        /* PREMIUM CINEMATIC GRID */
+        #searchResults {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
             gap: 24px;
+            padding: 20px 0;
         }
 
+        @media (max-width: 480px) {
+            #searchResults {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+                gap: 16px;
+            }
+        }
+
+        /* BRAND NEW COMPACT CINEMATIC MOVIE CARD LAYER */
         .movie-item {
             position: relative;
-            border-radius: 12px;
+            background: var(--card-bg);
+            border-radius: var(--card-radius);
             overflow: hidden;
-            background-color: var(--card-bg);
-            aspect-ratio: 16 / 10; 
-            border: 1px solid var(--border-color);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            width: 100%;
+            aspect-ratio: 2 / 3; /* Exact premium poster format */
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            transform: translateZ(0);
+            transition: transform 0.35s cubic-bezier(0.25, 0.8, 0.25, 1), 
+                        box-shadow 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
+        /* Clean Layout Hover Rules for Computers */
+        @media (hover: hover) {
+            .movie-item:hover {
+                transform: scale(1.04);
+                box-shadow: 0 12px 24px rgba(0, 0, 0, 0.6), 0 0 0 2px var(--accent-color);
+            }
+        }
+
+        /* CSS Aggressive Filtering fallback guard rails */
         .movie-item:has(a[href*="series"]),
         .movie-item:has(a[href*="Series"]),
         .movie-item:not(:has(a[href*="movies"])):not(:has(a[href*="Movies"])) {
             display: none !important;
         }
 
+        /* Movie Item Image Management Layer */
         .movie-item img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             display: block;
+            transition: transform 0.5s ease;
         }
 
+        @media (hover: hover) {
+            .movie-item:hover img {
+                transform: scale(1.03);
+            }
+        }
+
+        /* Image Failure Fallback UI */
         .movie-item img:before {
             content: "";
             display: block;
@@ -125,31 +161,97 @@
             z-index: 2;
         }
 
+        /* Integrated Custom Movie Badges */
+        .movie-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            color: var(--text-color);
+            padding: 3px 6px;
+            font-size: 11px;
+            font-weight: 700;
+            border-radius: 4px;
+            border-left: 3px solid var(--accent-color);
+            letter-spacing: 0.5px;
+            z-index: 3;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        /* Elegant Movie Meta Info Text Wrapper Block */
+        .movie-meta-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 40px 12px 12px 12px;
+            box-sizing: border-box;
+            background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.6) 60%, rgba(0,0,0,0) 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            z-index: 2;
+            pointer-events: none; /* Let clicks pass directly into underlying elements */
+        }
+
+        .movie-card-title {
+            color: var(--text-color);
+            font-size: 14px;
+            font-weight: 600;
+            margin: 0 0 4px 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .movie-card-subtext {
+            font-size: 12px;
+            color: #aaaaaa;
+            margin: 0;
+        }
+
+        /* Custom Floating Play Action Wrapper */
         .play-link-wrapper {
             position: absolute;
-            bottom: 12px;
-            right: 12px;
-            z-index: 5;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 4;
             text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .play-btn-overlay {
-            width: 40px;
-            height: 40px;
-            background-color: #2a2a2a;
+            width: 45px;
+            height: 45px;
+            background-color: rgba(229, 9, 24, 0.9);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
             cursor: pointer;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
         .play-btn-overlay svg {
-            width: 18px;
-            height: 18px;
+            width: 20px;
+            height: 20px;
             fill: #ffffff;
             margin-left: 2px;
+        }
+
+        /* Reveal the Play Icon Smoothly on Desktop Hover */
+        @media (hover: hover) {
+            .movie-item:hover .play-btn-overlay {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
         #initialSections {
@@ -161,11 +263,12 @@
         }
 
         .fallback-container {
+            grid-column: 1 / -1; /* Stretch across all grid spaces gracefully */
             text-align: center;
             padding: 60px 30px;
             background: linear-gradient(135deg, #161616 0%, #0d0d0d 100%);
             border-radius: 16px;
-            margin-top: 30px;
+            margin-top: 10px;
             border: 1px solid var(--border-color);
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
@@ -196,6 +299,11 @@
             cursor: pointer;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            transition: background 0.2s ease;
+        }
+
+        .fallback-container button:hover {
+            background-color: #e2e2e2;
         }
 
         .fallback-container button:disabled {
@@ -222,11 +330,14 @@
         <p style="margin: 0; color: var(--muted-text); font-size: 14px;">Start typing above to search titles in real-time.</p>
     </div>
 
+    <!-- MAIN TARGET CONTAINER FOR WEB SCRAPERS AND AI BOT CONTENT ANALYSIS -->
     <main id="searchResults" style="display: none;"></main>
 </div>
 
+<!-- Hook to external database file -->
 <script src="https://rinolski.online/JS/search.js"></script>
 
+<!-- Injection Script to Map Schema Markup directly into JavaScript Objects for LLM Context Parsing -->
 <script id="ai-movie-ld-json" type="application/ld+json">{}</script>
 
 <script type="module">
@@ -294,7 +405,7 @@
         }
     }
 
-    // Call schema compilation instantly when script maps in data arrays
+    // Compile dynamic structured schemas instantly as script loads
     setTimeout(generateStructuredDataSchema, 500);
 
     async function submitRequest(requestedTitle, buttonElement) {
@@ -352,20 +463,44 @@
                     targetUrl = oldLink.getAttribute("href");
                 }
 
+                // Complete Node Removal for Series Objects
                 if (targetUrl.toLowerCase().includes("series/") || !targetUrl.toLowerCase().includes("movies/")) {
                     card.remove();
                     return; 
                 }
 
-                if (oldLink) {
-                    oldLink.removeAttribute("href");
-                    oldLink.style.cursor = "default";
+                // Extract Clean Info before changing layout nodes
+                let movieName = card.innerText ? card.innerText.trim() : "";
+                // Strip out trailing text if it merged with internal template spans
+                movieName = movieName.split('\n')[0];
+
+                // RE-ASSEMBLE CARD DOM TO PREMIUM INTERACTIVE LOOK
+                card.innerHTML = ""; // Clear out raw template layouts cleanly
+
+                // 1. Quality Badge Layer
+                const qualityBadge = document.createElement("span");
+                qualityBadge.className = "";
+                qualityBadge.innerText = "";
+                card.appendChild(qualityBadge);
+
+                // 2. Poster Node
+                if (cardImg) {
+                    card.appendChild(cardImg);
                 }
 
+                // 3. Movie Metadata Typography Overlays
+                const metaOverlay = document.createElement("div");
+                metaOverlay.className = "movie-meta-overlay";
+                metaOverlay.innerHTML = `
+                    <h3 class="movie-card-title">${movieName}</h3>
+                    <p class="movie-card-subtext"></p>
+                `;
+                card.appendChild(metaOverlay);
+
+                // 4. Hitbox Anchor with Floating Play Overlay Circle
                 const playLinkWrapper = document.createElement("a");
                 playLinkWrapper.className = "play-link-wrapper";
                 playLinkWrapper.setAttribute("href", targetUrl);
-                
                 playLinkWrapper.innerHTML = `
                     <div class="play-btn-overlay">
                         <svg viewBox="0 0 24 24">
@@ -381,7 +516,7 @@
         
         if (searchTerm && visibleItems.length === 0) {
             initialSections.style.display = "none";  
-            searchResults.style.display = "block";  
+            searchResults.style.display = "grid";  
             searchResults.innerHTML = `
                 <div class="fallback-container">
                     <h3>We couldn't find "${rawValue}"</h3>
@@ -394,6 +529,12 @@
             reqBtn.onclick = function() {
                 submitRequest(rawValue, reqBtn);
             };
+        } else if (searchTerm) {
+            initialSections.style.display = "none";  
+            searchResults.style.display = "grid";  
+        } else {
+            initialSections.style.display = "block";  
+            searchResults.style.display = "none";  
         }
     }
 </script>
