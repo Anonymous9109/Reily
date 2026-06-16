@@ -339,7 +339,7 @@ const movies = {
     title: "Jerry & Marge Go Large",
     desc: "Jerry Selbee, a retiree, who discovers a loophole in the Massachusetts lottery, goes on a winning spree with his wife, Marge, and they use the money to restore their hometown.",
     video: "",
-    play: "Jerry&MargeGoLarge"
+    play: "JerryMargeGoLarge"
   }
 };
 
