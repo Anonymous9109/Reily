@@ -2,54 +2,41 @@
 // 1. DYNAMIC SCRIPT LOADING & DATA ARCHITECTURE
 // ==========================================================================
 
-/**
- * Dynamically injects search.js if the 'movies' data isn't already available.
- */
 function loadSearchScript() {
   return new Promise((resolve) => {
-    // If window.movies or a local global 'movies' array is already here, skip loading
     if (typeof window.movies !== "undefined" || typeof movies !== "undefined") {
       resolve();
       return;
     }
     
     const script = document.createElement("script");
-    script.src = "../JS/search.js"; // Adjust path dynamically if needed ('../' or '/')
+    script.src = "/JS/search.js"; // Absolute root path to search script
     script.onload = () => resolve();
     script.onerror = () => {
       console.error("Failed to load search.js");
-      resolve(); // Resolve anyway so initialization doesn't permanently freeze
+      resolve(); 
     };
     document.head.appendChild(script);
   });
 }
 
-/**
- * Main Orchestrator: Runs on page load to configure data structures,
- * set up media elements, and trigger database hooks.
- */
 async function initializePage() {
   await loadSearchScript();
 
   const params = new URLSearchParams(window.location.search);
   const id = params.get("movie") || params.get("series");
 
-  // Capture the raw object/array exported from search.js safely
   const sourceMovies = typeof window.movies !== "undefined" ? window.movies : (typeof movies !== "undefined" ? movies : null);
-
-  // Re-initialize window.movies as a dictionary mapping for explicit id lookups
   window.movies = {};
 
-  // Parse out the matched ID element from your search.js database array
+  // Find the exact movie record in search.js matching our URL ID
   if (sourceMovies && Array.isArray(sourceMovies) && id) {
     const matchedMovie = sourceMovies.find(m => {
       if (!m.link) return false;
-      // Extract the query parameters directly from the link string inside search.js
       const urlPart = m.link.includes('?') ? m.link.split('?')[1] : m.link;
       const movieUrlParams = new URLSearchParams(urlPart);
       const movieId = movieUrlParams.get('movie') || movieUrlParams.get('series');
       
-      // Case-insensitive comparison handles "SAW" vs "saw" perfectly
       return movieId && movieId.toLowerCase() === id.toLowerCase();
     });
     
@@ -57,7 +44,6 @@ async function initializePage() {
       window.movies[id] = matchedMovie;
     }
   } else if (sourceMovies && typeof sourceMovies === "object") {
-    // If it was already formatted as a key-value dictionary, preserve it directly
     window.movies = sourceMovies;
   }
 
@@ -68,7 +54,6 @@ async function initializePage() {
     return;
   }
 
-  // Populate UI basic metadata strings
   document.getElementById("title").textContent = movie.title;
   
   const descEl = document.getElementById("desc");
@@ -82,7 +67,6 @@ async function initializePage() {
     video.innerHTML = `<source src="${movie.video}" type="video/mp4">`;
     video.load();
 
-    // Fall back to image background if video stream faults mid-transfer or fails to parse
     video.addEventListener('error', function() {
       applyFallbackBackground();
     }, true);
@@ -90,17 +74,16 @@ async function initializePage() {
     applyFallbackBackground();
   }
 
-  // Query Firestore to evaluate continue watching status adjustments
   checkContinueWatchingStatus();
 }
 
+// Run the application initialization sequence
+initializePage();
+
 // ==========================================================================
-// 2. BACKGROUND FALLBACK & MEDIA RENDERERS
+// 2. BACKGROUND FALLBACK (DYNAMIC EXTENSION extraction VIA MATCHED ID)
 // ==========================================================================
 
-/**
- * Hides video player interface and sets up the static CSS background cover image.
- */
 function applyFallbackBackground() {
   const video = document.getElementById("bgVideo");
   if (video) {
@@ -111,20 +94,22 @@ function applyFallbackBackground() {
   const id = new URLSearchParams(window.location.search).get("movie") || new URLSearchParams(window.location.search).get("series");
   const movie = window.movies ? window.movies[id] : null;
 
+  // If the ID successfully paired with a record inside search.js, extract the exact file string
   if (movie && movie.image) {
-    // Your paths inside search.js are written like "images/TheHangover.jpg".
-    // If your main player pages are in subfolders (like "Movies/Movie"), 
-    // we step up one level to find the root images folder correctly.
-    const relativeImagePath = `../${movie.image}`;
-    console.log("Applying background image asset path:", relativeImagePath);
+    // Splits "images/ThePursuitofHappyness.webp" and isolated "ThePursuitofHappyness.webp"
+    const filename = movie.image.split('/').pop(); 
     
-    bgContainer.style.backgroundImage = `url('${relativeImagePath}')`;
+    // Stitch it into your standard root images directory absolute path
+    const derivedImagePath = `/images/${filename}`;
+    console.log(`Successfully mapped ID "${id}" to absolute filename:`, derivedImagePath);
+    
+    bgContainer.style.backgroundImage = `url('${derivedImagePath}')`;
     bgContainer.style.backgroundSize = "cover";
     bgContainer.style.backgroundPosition = "center";
     bgContainer.style.backgroundRepeat = "no-repeat";
     bgContainer.style.backgroundAttachment = "fixed";
   } else {
-    console.warn("No fallback image property found for ID:", id, "- Defaulting to black canvas.");
+    console.warn(`Could not extract a valid search.js database image filename for ID: "${id}".`);
     bgContainer.style.backgroundColor = "#000000";
     bgContainer.style.backgroundImage = "none";
   }
@@ -134,9 +119,6 @@ function applyFallbackBackground() {
 // 3. FIRESTORE INTEGRATION & USER PROGRESS
 // ==========================================================================
 
-/**
- * Asynchronously imports Firebase modules and checks user progress history records.
- */
 async function checkContinueWatchingStatus() {
   const params = new URLSearchParams(window.location.search);
   const id = params.get("movie") || params.get("series");
@@ -158,7 +140,6 @@ async function checkContinueWatchingStatus() {
           const currentTime = data.currentTime || 0;
           const duration = data.duration || 0;
 
-          // Alter button UI text if user is active past intro and has more than 15s remaining
           if (currentTime > 5 && currentTime < (duration - 15)) {
             const timeLeftSeconds = duration - currentTime;
             const timeLeftMinutes = Math.ceil(timeLeftSeconds / 60);
@@ -185,9 +166,6 @@ async function checkContinueWatchingStatus() {
 // 4. USER INTERACTIVE NAVIGATION CONTROLS
 // ==========================================================================
 
-/**
- * Triggers video player redirection route passing specific episode target parameters.
- */
 function play() {
   const params = new URLSearchParams(window.location.search);
   const id = params.get("movie") || params.get("series");
@@ -197,9 +175,6 @@ function play() {
   }
 }
 
-/**
- * Simple window history wrapper to handle navigating backwards.
- */
 function goBack() {
   window.history.back();
 }
@@ -208,9 +183,6 @@ function goBack() {
 // 5. GLOBAL STYLE DECORATORS (UI/UX)
 // ==========================================================================
 
-/**
- * Immediately-Invoked Function Expression to clear mobile tap delays and focus styles
- */
 (function () {
   const style = document.createElement('style');
   style.innerHTML = `
@@ -231,7 +203,4 @@ function goBack() {
   `;
   document.head.appendChild(style);
 })();
-
-// Execute initial execution pipeline
-initializePage();
 
