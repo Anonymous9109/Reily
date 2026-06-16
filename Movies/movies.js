@@ -358,6 +358,12 @@ const movies = {
     desc: "A male chauvinist is transported to a matriarchal society, facing challenges from a formidable female version of himself.",
     video: "",
     play: "LadiesFirst"
+  },
+  "outcome": {
+    title: "Outcome",
+    desc: "Beloved Hollywood star Reef Hawk becomes the target of an extortion plot when he receives a mysterious video that's sure to shatter his image and end his career. Hoping to identify the blackmailer, he soon embarks on a soul-searching journey to make amends with anyone he could have possibly wronged.",
+    video: "",
+    play: "Outcome"
   }
 };
 
