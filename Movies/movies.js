@@ -340,6 +340,12 @@ const movies = {
     desc: "Jerry Selbee, a retiree, who discovers a loophole in the Massachusetts lottery, goes on a winning spree with his wife, Marge, and they use the money to restore their hometown.",
     video: "",
     play: "JerryMargeGoLarge"
+  },
+  "creed-iii": {
+    title: "Creed III",
+    desc: "Still dominating the boxing world, Adonis Creed is thriving in his career and family life. When Damian, a childhood friend and former boxing prodigy resurfaces after serving time in prison, he's eager to prove that he deserves his shot in the ring. The face-off between former friends is more than just a fight. To settle the score, Adonis must put his future on the line to battle Damian -- a fighter who has nothing to lose.",
+    video: "",
+    play: "CreedIII"
   }
 };
 
