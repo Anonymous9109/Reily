@@ -328,6 +328,12 @@ const movies = {
     desc: "4",
     video: "",
     play: "3"
+  },
+  "manchester-by-the-sea": {
+    title: "Manchester by the Sea",
+    desc: "After his brother's death, Lee Chandler is named guardian to his 16-year-old nephew, Patrick. This forces him to return to his hometown and confront his past.",
+    video: "",
+    play: "ManchesterbytheSea"
   }
 };
 
