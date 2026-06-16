@@ -382,6 +382,12 @@ const movies = [
     genres: ["Drama"],
     image: "images/ManchesterbytheSea.jpg",
     link: "Movies/Movie?movie=manchester-by-the-sea"
+  },
+  {
+    title: "Jerry & Marge Go Large",
+    genres: ["Comedy","Drama"],
+    image: "images/Jerry&MargeGoLarge.jpg",
+    link: "Movies/Movie?movie=jerry-marge-go-large"
   }
 ];
 
