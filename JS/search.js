@@ -406,6 +406,12 @@ const movies = [
     genres: ["Comedy"],
     image: "images/LadiesFirst.jpg",
     link: "Movies/Movie?movie=ladies-first"
+  },
+  {
+    title: "Outcome",
+    genres: ["Comedy","Crime"],
+    image: "images/Outcome.jpg",
+    link: "Movies/Movie?movie=outcome"
   }
 ];
 
