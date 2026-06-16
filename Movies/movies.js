@@ -352,6 +352,12 @@ const movies = {
     desc: "A small woodland creature and a majestic bird, two natural sworn enemies of the Valley, magically trade places and set off on an adventure of a lifetime.",
     video: "",
     play: "Swapped"
+  },
+  "ladies-first": {
+    title: "Ladies First",
+    desc: "A male chauvinist is transported to a matriarchal society, facing challenges from a formidable female version of himself.",
+    video: "",
+    play: "LadiesFirst"
   }
 };
 
