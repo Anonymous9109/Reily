@@ -40,12 +40,16 @@ async function initializePage() {
   // Re-initialize window.movies as a dictionary mapping for explicit id lookups
   window.movies = {};
 
-  // If search.js provides an array structure, filter and parse out the matched ID element
+  // Parse out the matched ID element from your search.js database array
   if (sourceMovies && Array.isArray(sourceMovies) && id) {
     const matchedMovie = sourceMovies.find(m => {
       if (!m.link) return false;
-      const movieUrlParams = new URLSearchParams(m.link.split('?')[1]);
+      // Extract the query parameters directly from the link string inside search.js
+      const urlPart = m.link.includes('?') ? m.link.split('?')[1] : m.link;
+      const movieUrlParams = new URLSearchParams(urlPart);
       const movieId = movieUrlParams.get('movie') || movieUrlParams.get('series');
+      
+      // Case-insensitive comparison handles "SAW" vs "saw" perfectly
       return movieId && movieId.toLowerCase() === id.toLowerCase();
     });
     
@@ -66,7 +70,11 @@ async function initializePage() {
 
   // Populate UI basic metadata strings
   document.getElementById("title").textContent = movie.title;
-  document.getElementById("desc").textContent = movie.desc || "";
+  
+  const descEl = document.getElementById("desc");
+  if (descEl) {
+    descEl.textContent = movie.desc || "";
+  }
 
   const video = document.getElementById("bgVideo");
   
@@ -104,11 +112,17 @@ function applyFallbackBackground() {
   const movie = window.movies ? window.movies[id] : null;
 
   if (movie && movie.image) {
-    console.log("Applying background image asset path:", movie.image);
-    bgContainer.style.backgroundImage = `url('${movie.image}')`;
+    // Your paths inside search.js are written like "images/TheHangover.jpg".
+    // If your main player pages are in subfolders (like "Movies/Movie"), 
+    // we step up one level to find the root images folder correctly.
+    const relativeImagePath = `../${movie.image}`;
+    console.log("Applying background image asset path:", relativeImagePath);
+    
+    bgContainer.style.backgroundImage = `url('${relativeImagePath}')`;
     bgContainer.style.backgroundSize = "cover";
     bgContainer.style.backgroundPosition = "center";
     bgContainer.style.backgroundRepeat = "no-repeat";
+    bgContainer.style.backgroundAttachment = "fixed";
   } else {
     console.warn("No fallback image property found for ID:", id, "- Defaulting to black canvas.");
     bgContainer.style.backgroundColor = "#000000";
@@ -179,7 +193,7 @@ function play() {
   const id = params.get("movie") || params.get("series");
   const movie = window.movies[id];
   if (movie && id) {
-    window.location.href = `videoplayer?ep=${movie.play}&movie=${id}`;
+    window.location.href = `videoplayer?ep=${movie.play || ''}&movie=${id}`;
   }
 }
 
@@ -220,3 +234,4 @@ function goBack() {
 
 // Execute initial execution pipeline
 initializePage();
+
