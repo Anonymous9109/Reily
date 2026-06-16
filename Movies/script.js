@@ -10,7 +10,7 @@ function loadSearchScript() {
     }
     
     const script = document.createElement("script");
-    script.src = "/JS/search.js"; // Absolute root path to search script
+    script.src = "../JS/search.js"; // Absolute root path to search script
     script.onload = () => resolve();
     script.onerror = () => {
       console.error("Failed to load search.js");
