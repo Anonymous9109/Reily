@@ -346,6 +346,12 @@ const movies = {
     desc: "Still dominating the boxing world, Adonis Creed is thriving in his career and family life. When Damian, a childhood friend and former boxing prodigy resurfaces after serving time in prison, he's eager to prove that he deserves his shot in the ring. The face-off between former friends is more than just a fight. To settle the score, Adonis must put his future on the line to battle Damian -- a fighter who has nothing to lose.",
     video: "",
     play: "CreedIII"
+  },
+  "swapped": {
+    title: "Swapped",
+    desc: "A small woodland creature and a majestic bird, two natural sworn enemies of the Valley, magically trade places and set off on an adventure of a lifetime.",
+    video: "",
+    play: "Swapped"
   }
 };
 
