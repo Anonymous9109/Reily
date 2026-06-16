@@ -428,12 +428,7 @@ function searchMovies() {
   const moviesByGenre = {};  
   filteredMovies.forEach(movie => {  
     movie.genres.forEach(genre => {  
-  {
-    title: "3",
-    genres: ["3"],
-    image: "images/PIC10.PNG",
-    link: "Movies/Movie?movie=3"
-  }
+  
       if (!moviesByGenre[genre]) moviesByGenre[genre] = [];  
       moviesByGenre[genre].push(movie);  
     });  
