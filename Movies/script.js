@@ -119,7 +119,7 @@ function setupLandscapeDOMArchitecture(imagePath) {
     ambientBg.style.backgroundImage = `url('${imagePath}')`;
   }
 
-  // 2. Assemble Dynamic Flex Layout Columns
+  // 2. Assemble Dynamic Layout Columns
   if (!mainWrapper) {
     mainWrapper = document.createElement("div");
     mainWrapper.id = "movieContentWrapper";
@@ -260,10 +260,10 @@ function goBack() {
     bottom: "0",
     left: "0",
     width: "100%",
-    height: "55vh", // Controls how high up the viewport the gradient climbs
+    height: "55vh", 
     background: "linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.2) 60%, rgba(0, 0, 0, 0) 100%)",
-    pointerEvents: "none", // Allows clicks to pass through completely
-    zIndex: "2" // Places it over backgrounds, but behind UI typography elements
+    pointerEvents: "none", 
+    zIndex: "2" 
   });
   
   document.body.appendChild(overlay);
@@ -278,15 +278,11 @@ function goBack() {
     }
     body {
       margin: 0;
-      padding: 24px;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background-color: #000;
-      min-height: 100vh;
     }
     button, a {
       outline: none !important;
       border: none;
-      cursor: pointer;
     }
     button:focus, button:focus-visible, a:focus, a:focus-visible {
       outline: none !important;
@@ -304,58 +300,52 @@ function goBack() {
       z-index: 1;
     }
 
-    /* Ambient Canvas Engine Styling */
-    #ambientBg {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      filter: blur(50px) brightness(0.45) saturate(1.4);
-      transform: scale(1.15); /* Eliminates dynamic blur borders screen leak */
-      z-index: 0;
-      pointer-events: none;
-    }
-
-    /* Core Content Block Structure Base */
-    #movieContentWrapper {
-      position: relative;
-      z-index: 3;
-      display: flex;
-      flex-direction: column;
-    }
-
     /* ==========================================
      * LANDSCAPE ORIENTATION DESIGN IMPLEMENTATION
      * ========================================== */
     @media (orientation: landscape) {
       body {
-        padding: 40px;
-        display: flex;
-        align-items: flex-start;
-        justify-content: flex-start;
+        overflow-y: auto !important; /* Forces normal document scrolling availability */
+        min-height: 100vh;
       }
 
-      #movieContentWrapper {
+      /* Ambient Canvas Engine Styling */
+      #ambientBg {
+        display: block !important;
         position: fixed;
-        top: 40px;
-        left: 40px;
-        width: 400px;
-        max-width: 35vw;
-        gap: 20px;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        filter: blur(65px) brightness(0.4) saturate(1.4);
+        transform: scale(1.2); /* Eliminates dynamic blur borders screen leak */
+        z-index: 0;
+        pointer-events: none;
       }
 
-      /* 1. Image Layer on Top Left */
+      /* Core Layout Wrapper positioned top-left but allows scrolling */
+      #movieContentWrapper {
+        display: flex;
+        flex-direction: column;
+        width: 320px; /* Structured fixed portrait-ratio content width column */
+        max-width: 30vw;
+        gap: 20px;
+        margin: 40px 0 60px 40px; /* Left-anchored margin flow instead of hard position fixing */
+        position: relative;
+        z-index: 3;
+      }
+
+      /* 1. Image Layer on Top Left styled as a vertical Movie Poster */
       #moviePosterContainer {
         position: relative;
         width: 100%;
-        aspect-ratio: 16 / 10;
-        border-radius: 14px;
+        aspect-ratio: 2 / 3; /* Exact true standard movie poster dimensions ratio */
+        border-radius: 12px;
         overflow: hidden;
-        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.75);
+        box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6);
       }
 
       #moviePosterImg {
@@ -365,20 +355,20 @@ function goBack() {
         display: block;
       }
 
-      /* 2. Title Layered Safely In Front of Image */
+      /* 2. Title Layered Safely In Front of Image Poster Box */
       #title {
         position: absolute;
         bottom: 0;
         left: 0;
         width: 100%;
         margin: 0 !important;
-        padding: 32px 20px 16px 20px;
-        background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.4) 65%, transparent 100%);
+        padding: 48px 16px 16px 16px;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.5) 60%, transparent 100%);
         color: #ffffff;
-        font-size: 2rem;
+        font-size: 1.8rem;
         font-weight: 800;
         letter-spacing: -0.5px;
-        text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+        text-shadow: 0 2px 8px rgba(0,0,0,0.5);
         z-index: 4;
       }
 
@@ -386,17 +376,13 @@ function goBack() {
       #desc {
         margin: 0;
         color: rgba(255, 255, 255, 0.85);
-        font-size: 1.05rem;
-        line-height: 1.6;
-        max-height: 180px;
-        overflow-y: auto;
-        padding-right: 8px;
+        font-size: 1rem;
+        line-height: 1.5;
       }
 
       /* 4. Play Action Controller Box Under Description Layer */
       .play-btn {
         align-self: flex-start;
-        margin-top: 4px;
       }
       
       .back-btn {
@@ -407,26 +393,26 @@ function goBack() {
       }
     }
 
-    /* Elegant fallback structures layout for vertical devices */
+    /* ==========================================
+     * PORTRAIT MODE STABILIZER (ZERO ALTERATIONS)
+     * ========================================== */
     @media (orientation: portrait) {
-      #moviePosterContainer {
-        display: none; /* Degrades gracefully to background layout standard spacing */
-      }
+      /* display: contents neutralizes layout changes so your original styles rule */
       #movieContentWrapper {
-        margin-top: 55vh;
-        gap: 16px;
+        display: contents !important;
       }
-      #title {
-        color: #fff;
-        font-size: 2.2rem;
-        font-weight: 800;
-        margin: 0;
+      #moviePosterContainer {
+        display: contents !important;
       }
-      #desc {
-        color: rgba(255, 255, 255, 0.7);
-        font-size: 1rem;
-        line-height: 1.5;
-        margin: 0;
+      #moviePosterImg {
+        display: none !important; /* Hide image asset to keep portrait exactly matching original */
+      }
+      #ambientBg {
+        display: none !important; /* Fall back safely to standard page background settings */
+      }
+      #title, #desc, .play-btn, .back-btn {
+        position: relative;
+        z-index: 2;
       }
     }
   `;
