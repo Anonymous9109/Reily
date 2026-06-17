@@ -176,7 +176,7 @@ function applyFallbackBackground(id) {
   }) : null;
 
   if (matchedSearchItem && matchedSearchItem.image) {
-    // Isolates the clean filename (e.g., "ThePursuitofHappyness.webp") safely regardless of extension
+    // Isolates the clean filename safely regardless of extension
     const filename = matchedSearchItem.image.split('/').pop();
     const absoluteImagePath = `/images/${filename}`;
     
@@ -334,7 +334,7 @@ function goBack() {
         gap: 24px;
         width: 800px;
         max-width: 75vw;
-        margin: 60px 0 80px 60px;
+        margin: 20px 0 80px 60px; /* Reduced top margin from 60px to 20px to raise the poster image */
         position: relative;
         z-index: 3;
       }
@@ -405,10 +405,20 @@ function goBack() {
     }
 
     /* ==========================================
-     * PORTRAIT ORIENTATION STABILIZER (UNTOUCHED)
+     * PORTRAIT ORIENTATION STABILIZER (CENTERED)
      * ========================================== */
     @media (orientation: portrait) {
-      /* display: contents neutralizes structural wrapping nodes entirely */
+      body {
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        align-items: center !important;
+        text-align: center !important;
+        min-height: 100vh !important;
+        padding: 24px !important;
+      }
+
+      /* display: contents neutralizes structural wrapping nodes entirely to preserve native styles */
       #movieContentWrapper, 
       #moviePosterContainer {
         display: contents !important;
@@ -420,8 +430,24 @@ function goBack() {
       
       /* Forces elements out of the stacking index loop to sit cleanly over the fade overlay */
       #title, #desc, .play-btn, .back-btn, .text-container-wrapper, .info-container {
-        position: center;
+        position: relative;
         z-index: 2;
+      }
+
+      /* Enforces precise text centering configuration rules */
+      #title, #desc {
+        text-align: center !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        width: 100%;
+        max-width: 90vw;
+      }
+
+      .play-btn {
+        margin: 0 auto !important;
+        display: inline-flex !important;
+        justify-content: center !important;
+        align-items: center !important;
       }
     }
   `;
