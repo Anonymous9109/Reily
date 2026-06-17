@@ -101,7 +101,7 @@ function renderPage(id) {
 }
 
 /**
- * Programmatically structures elements into a component pipeline matching design constraints
+ * Programmatically structures elements into a flat component pipeline for advanced grid layouts
  */
 function setupLandscapeDOMArchitecture(imagePath) {
   let mainWrapper = document.getElementById("movieContentWrapper");
@@ -119,7 +119,7 @@ function setupLandscapeDOMArchitecture(imagePath) {
     ambientBg.style.backgroundImage = `url('${imagePath}')`;
   }
 
-  // 2. Assemble Dynamic Layout Columns
+  // 2. Assemble Dynamic Layout Grid Pipeline
   if (!mainWrapper) {
     mainWrapper = document.createElement("div");
     mainWrapper.id = "movieContentWrapper";
@@ -133,14 +133,14 @@ function setupLandscapeDOMArchitecture(imagePath) {
     posterContainer.appendChild(posterImg);
     mainWrapper.appendChild(posterContainer);
     
-    // Select and safely migrate loose standalone template components into layout flow hierarchy
+    // Maintain a flat child structure under the wrapper to enable clean CSS Grid tracks
     const titleEl = document.getElementById("title");
     const descEl = document.getElementById("desc");
     const playBtn = document.querySelector(".play-btn");
     
-    if (titleEl) posterContainer.appendChild(titleEl); // Title in front of image
-    if (descEl) mainWrapper.appendChild(descEl);       // Description under image
-    if (playBtn) mainWrapper.appendChild(playBtn);     // Button under description
+    if (titleEl) mainWrapper.appendChild(titleEl); 
+    if (descEl) mainWrapper.appendChild(descEl);   
+    if (playBtn) mainWrapper.appendChild(playBtn); 
     
     document.body.appendChild(mainWrapper);
   }
@@ -167,7 +167,6 @@ function applyFallbackBackground(imagePath, targetId) {
 
   if (imagePath) {
     console.log(`Setting landscape dynamic ambient background asset matching:`, imagePath);
-    // Keep baseline full page scaling alive for portrait safety fallbacks
     bgContainer.style.backgroundImage = `url('${imagePath}')`;
     bgContainer.style.backgroundSize = "cover";
     bgContainer.style.backgroundPosition = "center";
@@ -268,7 +267,7 @@ function goBack() {
   
   document.body.appendChild(overlay);
 
-  // 2. Responsive UI Presentation Layer Styles Rules
+  // 2. Responsive Layout Presentation Layer Styles Rules
   const style = document.createElement('style');
   style.innerHTML = `
     * {
@@ -279,7 +278,6 @@ function goBack() {
     body {
       margin: 0;
       background-color: #000;
-      min-height: 100vh;
     }
     button, a {
       outline: none !important;
@@ -306,7 +304,8 @@ function goBack() {
      * ========================================== */
     @media (orientation: landscape) {
       body {
-        overflow-y: auto !important; /* Enables scrolling for overflowing content */
+        overflow-y: auto !important; /* Enables smooth scrolling configuration */
+        min-height: 100vh;
       }
 
       /* Ambient Canvas Engine Styling */
@@ -326,24 +325,25 @@ function goBack() {
         pointer-events: none;
       }
 
-      /* Core Content Structural Column */
+      /* Grid pipeline positioning elements with structural scannability layout */
       #movieContentWrapper {
-        display: flex;
-        flex-direction: column;
-        width: 320px; 
-        max-width: 30vw;
-        gap: 20px;
-        margin: 40px 0 60px 40px; /* Standard margins instead of hard fixed layout positions */
+        display: grid;
+        grid-template-columns: 240px 1fr; /* Left column: Poster size, Right column: Title room */
+        gap: 24px;
+        width: 700px;
+        max-width: 65vw;
+        margin: 40px 0 60px 40px;
         position: relative;
         z-index: 3;
       }
 
-      /* 1. Image Layer on Top Left configured as a vertical Movie Poster */
+      /* 1. Image Layer on Top Left styled as a vertical Movie Poster */
       #moviePosterContainer {
-        position: relative;
+        grid-column: 1;
+        grid-row: 1;
         display: block !important;
         width: 100%;
-        aspect-ratio: 2 / 3; /* Perfect standard movie poster aspect dimensional scale */
+        aspect-ratio: 2 / 3; /* Exact true movie poster scale proportion */
         border-radius: 12px;
         overflow: hidden;
         box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6);
@@ -356,35 +356,34 @@ function goBack() {
         object-fit: cover;
       }
 
-      /* 2. Title Layered Safely In Front of Image Poster Box */
+      /* 2. Title positioned on the Right Side of the Movie Poster Box */
       #title {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        margin: 0 !important;
-        padding: 48px 16px 16px 16px;
-        background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.5) 60%, transparent 100%);
+        grid-column: 2;
+        grid-row: 1;
+        align-self: center; /* Vertically balances title alongside vertical center lines of poster */
         color: #ffffff;
-        font-size: 1.8rem;
+        font-size: 2.4rem;
         font-weight: 800;
-        text-align: left !important;
-        letter-spacing: -0.5px;
-        text-shadow: 0 2px 8px rgba(0,0,0,0.5);
-        z-index: 4;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: none !important;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
       }
 
-      /* 3. Description Rendered Directly Under Image Box */
+      /* 3. Description Rendered Directly Under the Poster Column space */
       #desc {
+        grid-column: 1 / span 2;
+        grid-row: 2;
         margin: 0;
         color: rgba(255, 255, 255, 0.85);
-        font-size: 1rem;
-        line-height: 1.5;
-        text-align: left !important;
+        font-size: 1.05rem;
+        line-height: 1.6;
       }
 
       /* 4. Play Action Controller Box Under Description Layer */
       .play-btn {
+        grid-column: 1 / span 2;
+        grid-row: 3;
         align-self: flex-start !important;
       }
       
@@ -397,72 +396,26 @@ function goBack() {
     }
 
     /* ==========================================
-     * PORTRAIT ORIENTATION DESIGN IMPLEMENTATION
+     * PORTRAIT MODE STABILIZER (RESTORED TO ORIGINAL)
      * ========================================== */
     @media (orientation: portrait) {
-      body {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        padding: 24px;
-      }
-
-      #ambientBg {
-        display: none !important; /* Disable ambient element background engines */
-      }
-
-      /* Main container centering architecture blocks */
-      #movieContentWrapper {
-        display: flex !important;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-        width: 100%;
-        max-width: 500px;
-        gap: 24px;
-        position: relative;
-        z-index: 3;
-        margin-top: auto; /* Balances layout down to screen focal center paths */
-        margin-bottom: 5vh;
-      }
-
+      /* display: contents strips the custom layout shells entirely to keep native structures */
+      #movieContentWrapper, 
       #moviePosterContainer {
-        display: none !important; /* Hide landscape structural container properties completely */
+        display: contents !important;
       }
-
-      /* Title centered styling */
-      #title {
+      #moviePosterImg, 
+      #ambientBg {
+        display: none !important; /* Mutes elements missing from original script configuration */
+      }
+      
+      /* Exact stylistic layer definitions restored from original file code structure */
+      #title, #desc, .play-btn, .back-btn, .text-container-wrapper, .info-container {
         position: relative;
-        color: #ffffff;
-        font-size: 2.2rem;
-        font-weight: 800;
-        margin: 0;
-        padding: 0;
-        background: none;
-      }
-
-      /* Description centered styling */
-      #desc {
-        color: rgba(255, 255, 255, 0.75);
-        font-size: 1.05rem;
-        line-height: 1.6;
-        margin: 0;
-        padding: 0;
-      }
-
-      /* Play Button centered engine rules */
-      .play-btn {
-        align-self: center !important;
-      }
-
-      .back-btn {
-        position: absolute;
-        top: 24px;
-        left: 24px;
-        z-index: 5;
+        z-index: 2;
       }
     }
   `;
   document.head.appendChild(style);
 })();
+
