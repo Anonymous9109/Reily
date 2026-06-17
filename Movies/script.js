@@ -420,7 +420,7 @@ function goBack() {
       
       /* Forces elements out of the stacking index loop to sit cleanly over the fade overlay */
       #title, #desc, .play-btn, .back-btn, .text-container-wrapper, .info-container {
-        position: relative;
+        position: center;
         z-index: 2;
       }
     }
