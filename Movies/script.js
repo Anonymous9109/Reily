@@ -315,7 +315,7 @@ function goBack() {
       body {
         display: block !important;
         overflow-y: auto !important; /* Enables smooth document scrolling */
-        min-height: 100vh;
+        min-height: 10vh;
         margin: 0 !important;
         padding: 0 !important;
       }
