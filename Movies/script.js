@@ -142,7 +142,8 @@ function setupLandscapeDOMArchitecture(imagePath) {
     if (descEl) mainWrapper.appendChild(descEl);   
     if (playBtn) mainWrapper.appendChild(playBtn); 
     
-    document.body.appendChild(mainWrapper);
+    // INJECTION FIX: Insert at the absolute top of the body to block ghost HTML elements from creating top whitespace
+    document.body.insertBefore(mainWrapper, document.body.firstChild);
   }
 
   if (imagePath && posterImg) {
@@ -312,8 +313,16 @@ function goBack() {
      * ========================================== */
     @media (orientation: landscape) {
       body {
+        display: block !important;
         overflow-y: auto !important; /* Enables smooth document scrolling */
         min-height: 100vh;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+
+      /* Disables potential leftover structural container blocks from pushing down layout flow */
+      .text-container-wrapper, .info-container {
+        display: none !important;
       }
 
       /* Ambient Blurred Canvas Element Styling */
@@ -340,7 +349,8 @@ function goBack() {
         gap: 24px;
         width: 800px;
         max-width: 75vw;
-        margin: 10px; /* Reduced top space from 60px/20px to 10px to tightly fit the top */
+        margin: 0px 0 80px 60px !important; /* Zeroed out top margin completely */
+        padding-top: 10px !important;       /* Clean minimal padding spacing right from screen edge boundary */
         position: relative;
         z-index: 3;
       }
@@ -461,7 +471,7 @@ function goBack() {
         align-items: center !important;
       }
       
-      /* Note: .back-btn is left completely unreferenced here, keeping its native template placement intact */
+      /* Note: .back-btn is left completely untouched here, keeping its native template placement intact */
     }
   `;
   document.head.appendChild(style);
