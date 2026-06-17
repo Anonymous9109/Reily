@@ -432,7 +432,7 @@ function goBack() {
         align-items: center !important;
         text-align: center !important;
         position: absolute !important;
-        top: 50% !important;
+        top: 70% !important;
         left: 50% !important;
         transform: translate(-50%, -50%) !important;
         width: 100% !important;
