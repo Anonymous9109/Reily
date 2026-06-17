@@ -44,7 +44,7 @@ async function loadDataFiles() {
  * Handles building the UI and background assets now that data maps are secure.
  */
 function renderPage(id) {
-  // Case-insensitive lookup protects against "SAW" vs "saw" mismatching
+  // Case-insensitive lookup protects against case mismatching
   const exactKey = Object.keys(window.movieDetailsDict).find(key => key.toLowerCase() === id.toLowerCase());
   const movieData = exactKey ? window.movieDetailsDict[exactKey] : null;
 
@@ -418,4 +418,3 @@ function goBack() {
   `;
   document.head.appendChild(style);
 })();
-
