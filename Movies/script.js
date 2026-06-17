@@ -301,6 +301,12 @@ function goBack() {
       background-color: transparent !important;
     }
     
+    /* Forces elements out of the stacking index loop to sit cleanly over the fade overlay */
+    #title, #desc, .play-btn, .back-btn, .text-container-wrapper, .info-container {
+      position: relative;
+      z-index: 2;
+    }
+
     /* ==========================================
      * LANDSCAPE ORIENTATION DESIGN MODIFICATIONS
      * ========================================== */
@@ -334,7 +340,7 @@ function goBack() {
         gap: 24px;
         width: 800px;
         max-width: 75vw;
-        margin: 20px 0 80px 60px; /* Reduced top margin from 60px to 20px to raise the poster image */
+        margin: 10px 0 80px 60px; /* Reduced top space from 60px/20px to 10px to tightly fit the top */
         position: relative;
         z-index: 3;
       }
@@ -405,42 +411,47 @@ function goBack() {
     }
 
     /* ==========================================
-     * PORTRAIT ORIENTATION STABILIZER (CENTERED)
+     * PORTRAIT ORIENTATION STABILIZER (CENTERED IN THE MIDDLE)
      * ========================================== */
     @media (orientation: portrait) {
-      body {
+      /* Targets the text wrapper container and centers it directly in the dead center of the screen */
+      #movieContentWrapper {
         display: flex !important;
         flex-direction: column !important;
         justify-content: center !important;
         align-items: center !important;
         text-align: center !important;
-        min-height: 100vh !important;
-        padding: 24px !important;
+        position: absolute !important;
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+        width: 100% !important;
+        max-width: 88vw !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        z-index: 3 !important;
       }
 
-      /* display: contents neutralizes structural wrapping nodes entirely to preserve native styles */
-      #movieContentWrapper, 
-      #moviePosterContainer {
-        display: contents !important;
-      }
+      #moviePosterContainer, 
       #moviePosterImg, 
       #ambientBg {
-        display: none !important; /* Hides elements missing from your original setup */
-      }
-      
-      /* Forces elements out of the stacking index loop to sit cleanly over the fade overlay */
-      #title, #desc, .play-btn, .back-btn, .text-container-wrapper, .info-container {
-        position: relative;
-        z-index: 2;
+        display: none !important; /* Disables landscape dynamic nodes to retain layout rules */
       }
 
-      /* Enforces precise text centering configuration rules */
+      /* Enforces complete horizontal copy text alignment */
       #title, #desc {
         text-align: center !important;
         margin-left: auto !important;
         margin-right: auto !important;
         width: 100%;
-        max-width: 90vw;
+      }
+
+      #title {
+        margin: 0 0 16px 0 !important;
+      }
+
+      #desc {
+        margin: 0 0 24px 0 !important;
       }
 
       .play-btn {
@@ -449,6 +460,8 @@ function goBack() {
         justify-content: center !important;
         align-items: center !important;
       }
+      
+      /* Note: .back-btn is left completely unreferenced here, keeping its native template placement intact */
     }
   `;
   document.head.appendChild(style);
