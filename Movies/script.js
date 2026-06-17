@@ -56,7 +56,26 @@ function renderPage(id) {
   // Bind to global window scope so play() and fallback handlers can access it cleanly
   window.currentMovie = movieData;
 
-  // Populate UI
+  // Locate image asset string path early to use across layout engines
+  const targetId = id || new URLSearchParams(window.location.search).get("movie") || new URLSearchParams(window.location.search).get("series");
+  const matchedSearchItem = window.searchArray ? window.searchArray.find(m => {
+    if (!m.link) return false;
+    const urlPart = m.link.includes('?') ? m.link.split('?')[1] : m.link;
+    const movieUrlParams = new URLSearchParams(urlPart);
+    const movieId = movieUrlParams.get('movie') || movieUrlParams.get('series');
+    return movieId && movieId.toLowerCase() === targetId.toLowerCase();
+  }) : null;
+
+  let imagePath = "";
+  if (matchedSearchItem && matchedSearchItem.image) {
+    const filename = matchedSearchItem.image.split('/').pop();
+    imagePath = `/images/${filename}`;
+  }
+
+  // Build out dynamic orientation DOM nodes structural wrappers safely
+  setupLandscapeDOMArchitecture(imagePath);
+
+  // Populate UI Typography
   document.getElementById("title").textContent = movieData.title;
   
   const descEl = document.getElementById("desc");
@@ -72,13 +91,63 @@ function renderPage(id) {
     video.load();
 
     video.addEventListener('error', function() {
-      applyFallbackBackground(id);
+      applyFallbackBackground(imagePath, targetId);
     }, true);
   } else {
-    applyFallbackBackground(id);
+    applyFallbackBackground(imagePath, targetId);
   }
 
   checkContinueWatchingStatus();
+}
+
+/**
+ * Programmatically structures elements into a component pipeline matching design constraints
+ */
+function setupLandscapeDOMArchitecture(imagePath) {
+  let mainWrapper = document.getElementById("movieContentWrapper");
+  let posterContainer = document.getElementById("moviePosterContainer");
+  let posterImg = document.getElementById("moviePosterImg");
+  let ambientBg = document.getElementById("ambientBg");
+
+  // 1. Create Ambient Backdrop Engine Layer
+  if (!ambientBg) {
+    ambientBg = document.createElement("div");
+    ambientBg.id = "ambientBg";
+    document.body.insertBefore(ambientBg, document.body.firstChild);
+  }
+  if (imagePath) {
+    ambientBg.style.backgroundImage = `url('${imagePath}')`;
+  }
+
+  // 2. Assemble Dynamic Flex Layout Columns
+  if (!mainWrapper) {
+    mainWrapper = document.createElement("div");
+    mainWrapper.id = "movieContentWrapper";
+    
+    posterContainer = document.createElement("div");
+    posterContainer.id = "moviePosterContainer";
+    
+    posterImg = document.createElement("img");
+    posterImg.id = "moviePosterImg";
+    
+    posterContainer.appendChild(posterImg);
+    mainWrapper.appendChild(posterContainer);
+    
+    // Select and safely migrate loose standalone template components into layout flow hierarchy
+    const titleEl = document.getElementById("title");
+    const descEl = document.getElementById("desc");
+    const playBtn = document.querySelector(".play-btn");
+    
+    if (titleEl) posterContainer.appendChild(titleEl); // Title in front of image
+    if (descEl) mainWrapper.appendChild(descEl);       // Description under image
+    if (playBtn) mainWrapper.appendChild(playBtn);     // Button under description
+    
+    document.body.appendChild(mainWrapper);
+  }
+
+  if (imagePath && posterImg) {
+    posterImg.src = imagePath;
+  }
 }
 
 // Kickoff the sandboxed loading process immediately
@@ -88,32 +157,18 @@ loadDataFiles();
 // 2. BACKGROUND FALLBACK (DYNAMIC EXTENSION EXTRACTION VIA MATCHED ID)
 // ==========================================================================
 
-function applyFallbackBackground(id) {
+function applyFallbackBackground(imagePath, targetId) {
   const video = document.getElementById("bgVideo");
   if (video) {
     video.style.display = "none";
   }
 
   const bgContainer = document.body;
-  const targetId = id || new URLSearchParams(window.location.search).get("movie") || new URLSearchParams(window.location.search).get("series");
 
-  // Find the item in your search array matching this exact ID string from the URL
-  const matchedSearchItem = window.searchArray ? window.searchArray.find(m => {
-    if (!m.link) return false;
-    const urlPart = m.link.includes('?') ? m.link.split('?')[1] : m.link;
-    const movieUrlParams = new URLSearchParams(urlPart);
-    const movieId = movieUrlParams.get('movie') || movieUrlParams.get('series');
-    return movieId && movieId.toLowerCase() === targetId.toLowerCase();
-  }) : null;
-
-  if (matchedSearchItem && matchedSearchItem.image) {
-    // Isolates the clean filename (e.g., "ThePursuitofHappyness.webp") safely regardless of extension
-    const filename = matchedSearchItem.image.split('/').pop();
-    const absoluteImagePath = `/images/${filename}`;
-    
-    console.log(`Setting background image from ID link match:`, absoluteImagePath);
-    
-    bgContainer.style.backgroundImage = `url('${absoluteImagePath}')`;
+  if (imagePath) {
+    console.log(`Setting landscape dynamic ambient background asset matching:`, imagePath);
+    // Keep baseline full page scaling alive for portrait safety fallbacks
+    bgContainer.style.backgroundImage = `url('${imagePath}')`;
     bgContainer.style.backgroundSize = "cover";
     bgContainer.style.backgroundPosition = "center";
     bgContainer.style.backgroundRepeat = "no-repeat";
@@ -206,23 +261,32 @@ function goBack() {
     left: "0",
     width: "100%",
     height: "55vh", // Controls how high up the viewport the gradient climbs
-    background: "linear-gradient(to top, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0) 100%)",
+    background: "linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.2) 60%, rgba(0, 0, 0, 0) 100%)",
     pointerEvents: "none", // Allows clicks to pass through completely
-    zIndex: "1" // Places it over backgrounds, but behind UI typography elements
+    zIndex: "2" // Places it over backgrounds, but behind UI typography elements
   });
   
   document.body.appendChild(overlay);
 
-  // 2. Clear mobile tap delays, outline styling, and stack text layers explicitly
+  // 2. Responsive UI Presentation Layer Styles Rules
   const style = document.createElement('style');
   style.innerHTML = `
     * {
       -webkit-tap-highlight-color: transparent !important;
       -webkit-touch-callout: none !important;
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      padding: 24px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #000;
+      min-height: 100vh;
     }
     button, a {
       outline: none !important;
       border: none;
+      cursor: pointer;
     }
     button:focus, button:focus-visible, a:focus, a:focus-visible {
       outline: none !important;
@@ -230,10 +294,140 @@ function goBack() {
     button:active, a:active {
       background-color: transparent !important;
     }
-    /* Forces elements out of the stacking index loop to sit cleanly over the fade overlay */
-    #title, #desc, .play-btn, .back-btn, .text-container-wrapper, .info-container {
+    #bgVideo {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      z-index: 1;
+    }
+
+    /* Ambient Canvas Engine Styling */
+    #ambientBg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      filter: blur(50px) brightness(0.45) saturate(1.4);
+      transform: scale(1.15); /* Eliminates dynamic blur borders screen leak */
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* Core Content Block Structure Base */
+    #movieContentWrapper {
       position: relative;
-      z-index: 2;
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ==========================================
+     * LANDSCAPE ORIENTATION DESIGN IMPLEMENTATION
+     * ========================================== */
+    @media (orientation: landscape) {
+      body {
+        padding: 40px;
+        display: flex;
+        align-items: flex-start;
+        justify-content: flex-start;
+      }
+
+      #movieContentWrapper {
+        position: fixed;
+        top: 40px;
+        left: 40px;
+        width: 400px;
+        max-width: 35vw;
+        gap: 20px;
+      }
+
+      /* 1. Image Layer on Top Left */
+      #moviePosterContainer {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 16 / 10;
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.75);
+      }
+
+      #moviePosterImg {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      /* 2. Title Layered Safely In Front of Image */
+      #title {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        margin: 0 !important;
+        padding: 32px 20px 16px 20px;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.4) 65%, transparent 100%);
+        color: #ffffff;
+        font-size: 2rem;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+        text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+        z-index: 4;
+      }
+
+      /* 3. Description Rendered Directly Under Image Box */
+      #desc {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.85);
+        font-size: 1.05rem;
+        line-height: 1.6;
+        max-height: 180px;
+        overflow-y: auto;
+        padding-right: 8px;
+      }
+
+      /* 4. Play Action Controller Box Under Description Layer */
+      .play-btn {
+        align-self: flex-start;
+        margin-top: 4px;
+      }
+      
+      .back-btn {
+        position: fixed;
+        top: 40px;
+        right: 40px;
+        z-index: 5;
+      }
+    }
+
+    /* Elegant fallback structures layout for vertical devices */
+    @media (orientation: portrait) {
+      #moviePosterContainer {
+        display: none; /* Degrades gracefully to background layout standard spacing */
+      }
+      #movieContentWrapper {
+        margin-top: 55vh;
+        gap: 16px;
+      }
+      #title {
+        color: #fff;
+        font-size: 2.2rem;
+        font-weight: 800;
+        margin: 0;
+      }
+      #desc {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 1rem;
+        line-height: 1.5;
+        margin: 0;
+      }
     }
   `;
   document.head.appendChild(style);
