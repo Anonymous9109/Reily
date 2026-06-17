@@ -279,6 +279,7 @@ function goBack() {
     body {
       margin: 0;
       background-color: #000;
+      min-height: 100vh;
     }
     button, a {
       outline: none !important;
@@ -305,8 +306,7 @@ function goBack() {
      * ========================================== */
     @media (orientation: landscape) {
       body {
-        overflow-y: auto !important; /* Forces normal document scrolling availability */
-        min-height: 100vh;
+        overflow-y: auto !important; /* Enables scrolling for overflowing content */
       }
 
       /* Ambient Canvas Engine Styling */
@@ -321,38 +321,39 @@ function goBack() {
         background-position: center;
         background-repeat: no-repeat;
         filter: blur(65px) brightness(0.4) saturate(1.4);
-        transform: scale(1.2); /* Eliminates dynamic blur borders screen leak */
+        transform: scale(1.2); 
         z-index: 0;
         pointer-events: none;
       }
 
-      /* Core Layout Wrapper positioned top-left but allows scrolling */
+      /* Core Content Structural Column */
       #movieContentWrapper {
         display: flex;
         flex-direction: column;
-        width: 320px; /* Structured fixed portrait-ratio content width column */
+        width: 320px; 
         max-width: 30vw;
         gap: 20px;
-        margin: 40px 0 60px 40px; /* Left-anchored margin flow instead of hard position fixing */
+        margin: 40px 0 60px 40px; /* Standard margins instead of hard fixed layout positions */
         position: relative;
         z-index: 3;
       }
 
-      /* 1. Image Layer on Top Left styled as a vertical Movie Poster */
+      /* 1. Image Layer on Top Left configured as a vertical Movie Poster */
       #moviePosterContainer {
         position: relative;
+        display: block !important;
         width: 100%;
-        aspect-ratio: 2 / 3; /* Exact true standard movie poster dimensions ratio */
+        aspect-ratio: 2 / 3; /* Perfect standard movie poster aspect dimensional scale */
         border-radius: 12px;
         overflow: hidden;
         box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6);
       }
 
       #moviePosterImg {
+        display: block !important;
         width: 100%;
         height: 100%;
         object-fit: cover;
-        display: block;
       }
 
       /* 2. Title Layered Safely In Front of Image Poster Box */
@@ -367,6 +368,7 @@ function goBack() {
         color: #ffffff;
         font-size: 1.8rem;
         font-weight: 800;
+        text-align: left !important;
         letter-spacing: -0.5px;
         text-shadow: 0 2px 8px rgba(0,0,0,0.5);
         z-index: 4;
@@ -378,11 +380,12 @@ function goBack() {
         color: rgba(255, 255, 255, 0.85);
         font-size: 1rem;
         line-height: 1.5;
+        text-align: left !important;
       }
 
       /* 4. Play Action Controller Box Under Description Layer */
       .play-btn {
-        align-self: flex-start;
+        align-self: flex-start !important;
       }
       
       .back-btn {
@@ -394,25 +397,70 @@ function goBack() {
     }
 
     /* ==========================================
-     * PORTRAIT MODE STABILIZER (ZERO ALTERATIONS)
+     * PORTRAIT ORIENTATION DESIGN IMPLEMENTATION
      * ========================================== */
     @media (orientation: portrait) {
-      /* display: contents neutralizes layout changes so your original styles rule */
-      #movieContentWrapper {
-        display: contents !important;
+      body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 24px;
       }
-      #moviePosterContainer {
-        display: contents !important;
-      }
-      #moviePosterImg {
-        display: none !important; /* Hide image asset to keep portrait exactly matching original */
-      }
+
       #ambientBg {
-        display: none !important; /* Fall back safely to standard page background settings */
+        display: none !important; /* Disable ambient element background engines */
       }
-      #title, #desc, .play-btn, .back-btn {
+
+      /* Main container centering architecture blocks */
+      #movieContentWrapper {
+        display: flex !important;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        width: 100%;
+        max-width: 500px;
+        gap: 24px;
         position: relative;
-        z-index: 2;
+        z-index: 3;
+        margin-top: auto; /* Balances layout down to screen focal center paths */
+        margin-bottom: 5vh;
+      }
+
+      #moviePosterContainer {
+        display: none !important; /* Hide landscape structural container properties completely */
+      }
+
+      /* Title centered styling */
+      #title {
+        position: relative;
+        color: #ffffff;
+        font-size: 2.2rem;
+        font-weight: 800;
+        margin: 0;
+        padding: 0;
+        background: none;
+      }
+
+      /* Description centered styling */
+      #desc {
+        color: rgba(255, 255, 255, 0.75);
+        font-size: 1.05rem;
+        line-height: 1.6;
+        margin: 0;
+        padding: 0;
+      }
+
+      /* Play Button centered engine rules */
+      .play-btn {
+        align-self: center !important;
+      }
+
+      .back-btn {
+        position: absolute;
+        top: 24px;
+        left: 24px;
+        z-index: 5;
       }
     }
   `;
