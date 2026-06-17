@@ -340,7 +340,7 @@ function goBack() {
         gap: 24px;
         width: 800px;
         max-width: 75vw;
-        margin: 10px 0 80px 60px; /* Reduced top space from 60px/20px to 10px to tightly fit the top */
+        margin: 10px; /* Reduced top space from 60px/20px to 10px to tightly fit the top */
         position: relative;
         z-index: 3;
       }
