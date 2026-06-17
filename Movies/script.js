@@ -44,7 +44,7 @@ async function loadDataFiles() {
  * Handles building the UI and background assets now that data maps are secure.
  */
 function renderPage(id) {
-  // Case-insensitive lookup protects against case mismatching
+  // Case-insensitive lookup protects against "SAW" vs "saw" mismatching
   const exactKey = Object.keys(window.movieDetailsDict).find(key => key.toLowerCase() === id.toLowerCase());
   const movieData = exactKey ? window.movieDetailsDict[exactKey] : null;
 
@@ -56,7 +56,7 @@ function renderPage(id) {
   // Bind to global window scope so play() and fallback handlers can access it cleanly
   window.currentMovie = movieData;
 
-  // Locate image asset string path early to use across layout engines
+  // Pre-locate structural poster layout images from search array
   const targetId = id || new URLSearchParams(window.location.search).get("movie") || new URLSearchParams(window.location.search).get("series");
   const matchedSearchItem = window.searchArray ? window.searchArray.find(m => {
     if (!m.link) return false;
@@ -72,10 +72,10 @@ function renderPage(id) {
     imagePath = `/images/${filename}`;
   }
 
-  // Build out dynamic orientation DOM nodes structural wrappers safely
+  // Safely prepare layout containers for landscape layout requirements
   setupLandscapeDOMArchitecture(imagePath);
 
-  // Populate UI Typography
+  // Populate UI
   document.getElementById("title").textContent = movieData.title;
   
   const descEl = document.getElementById("desc");
@@ -91,17 +91,17 @@ function renderPage(id) {
     video.load();
 
     video.addEventListener('error', function() {
-      applyFallbackBackground(imagePath, targetId);
+      applyFallbackBackground(id);
     }, true);
   } else {
-    applyFallbackBackground(imagePath, targetId);
+    applyFallbackBackground(id);
   }
 
   checkContinueWatchingStatus();
 }
 
 /**
- * Programmatically structures elements into a flat component pipeline for advanced grid layouts
+ * Builds non-intrusive container wrappers needed for the landscape layout modifications
  */
 function setupLandscapeDOMArchitecture(imagePath) {
   let mainWrapper = document.getElementById("movieContentWrapper");
@@ -109,7 +109,7 @@ function setupLandscapeDOMArchitecture(imagePath) {
   let posterImg = document.getElementById("moviePosterImg");
   let ambientBg = document.getElementById("ambientBg");
 
-  // 1. Create Ambient Backdrop Engine Layer
+  // Create an ambient blur backdrop background element
   if (!ambientBg) {
     ambientBg = document.createElement("div");
     ambientBg.id = "ambientBg";
@@ -119,7 +119,7 @@ function setupLandscapeDOMArchitecture(imagePath) {
     ambientBg.style.backgroundImage = `url('${imagePath}')`;
   }
 
-  // 2. Assemble Dynamic Layout Grid Pipeline
+  // Group text elements into a clean grid tracking network for landscape requirements
   if (!mainWrapper) {
     mainWrapper = document.createElement("div");
     mainWrapper.id = "movieContentWrapper";
@@ -133,7 +133,7 @@ function setupLandscapeDOMArchitecture(imagePath) {
     posterContainer.appendChild(posterImg);
     mainWrapper.appendChild(posterContainer);
     
-    // Maintain a flat child structure under the wrapper to enable clean CSS Grid tracks
+    // Select your loose document items and append them to the responsive wrapper pipeline
     const titleEl = document.getElementById("title");
     const descEl = document.getElementById("desc");
     const playBtn = document.querySelector(".play-btn");
@@ -157,17 +157,32 @@ loadDataFiles();
 // 2. BACKGROUND FALLBACK (DYNAMIC EXTENSION EXTRACTION VIA MATCHED ID)
 // ==========================================================================
 
-function applyFallbackBackground(imagePath, targetId) {
+function applyFallbackBackground(id) {
   const video = document.getElementById("bgVideo");
   if (video) {
     video.style.display = "none";
   }
 
   const bgContainer = document.body;
+  const targetId = id || new URLSearchParams(window.location.search).get("movie") || new URLSearchParams(window.location.search).get("series");
 
-  if (imagePath) {
-    console.log(`Setting landscape dynamic ambient background asset matching:`, imagePath);
-    bgContainer.style.backgroundImage = `url('${imagePath}')`;
+  // Find the item in your search array matching this exact ID string from the URL
+  const matchedSearchItem = window.searchArray ? window.searchArray.find(m => {
+    if (!m.link) return false;
+    const urlPart = m.link.includes('?') ? m.link.split('?')[1] : m.link;
+    const movieUrlParams = new URLSearchParams(urlPart);
+    const movieId = movieUrlParams.get('movie') || movieUrlParams.get('series');
+    return movieId && movieId.toLowerCase() === targetId.toLowerCase();
+  }) : null;
+
+  if (matchedSearchItem && matchedSearchItem.image) {
+    // Isolates the clean filename (e.g., "ThePursuitofHappyness.webp") safely regardless of extension
+    const filename = matchedSearchItem.image.split('/').pop();
+    const absoluteImagePath = `/images/${filename}`;
+    
+    console.log(`Setting background image from ID link match:`, absoluteImagePath);
+    
+    bgContainer.style.backgroundImage = `url('${absoluteImagePath}')`;
     bgContainer.style.backgroundSize = "cover";
     bgContainer.style.backgroundPosition = "center";
     bgContainer.style.backgroundRepeat = "no-repeat";
@@ -259,25 +274,21 @@ function goBack() {
     bottom: "0",
     left: "0",
     width: "100%",
-    height: "55vh", 
-    background: "linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.2) 60%, rgba(0, 0, 0, 0) 100%)",
-    pointerEvents: "none", 
-    zIndex: "2" 
+    height: "55vh", // Controls how high up the viewport the gradient climbs
+    background: "linear-gradient(to top, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0) 100%)",
+    pointerEvents: "none", // Allows clicks to pass through completely
+    zIndex: "1" // Places it over backgrounds, but behind UI typography elements
   });
   
   document.body.appendChild(overlay);
 
-  // 2. Responsive Layout Presentation Layer Styles Rules
+  // 2. Clear mobile tap delays, outline styling, and stack text layers explicitly
   const style = document.createElement('style');
   style.innerHTML = `
     * {
       -webkit-tap-highlight-color: transparent !important;
       -webkit-touch-callout: none !important;
       box-sizing: border-box;
-    }
-    body {
-      margin: 0;
-      background-color: #000;
     }
     button, a {
       outline: none !important;
@@ -289,26 +300,17 @@ function goBack() {
     button:active, a:active {
       background-color: transparent !important;
     }
-    #bgVideo {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      object-fit: cover;
-      z-index: 1;
-    }
-
+    
     /* ==========================================
-     * LANDSCAPE ORIENTATION DESIGN IMPLEMENTATION
+     * LANDSCAPE ORIENTATION DESIGN MODIFICATIONS
      * ========================================== */
     @media (orientation: landscape) {
       body {
-        overflow-y: auto !important; /* Enables smooth scrolling configuration */
+        overflow-y: auto !important; /* Enables smooth document scrolling */
         min-height: 100vh;
       }
 
-      /* Ambient Canvas Engine Styling */
+      /* Ambient Blurred Canvas Element Styling */
       #ambientBg {
         display: block !important;
         position: fixed;
@@ -319,34 +321,34 @@ function goBack() {
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
-        filter: blur(65px) brightness(0.4) saturate(1.4);
+        filter: blur(65px) brightness(0.35) saturate(1.4);
         transform: scale(1.2); 
         z-index: 0;
         pointer-events: none;
       }
 
-      /* Grid pipeline positioning elements with structural scannability layout */
+      /* Grid structure setup to coordinate elements */
       #movieContentWrapper {
         display: grid;
-        grid-template-columns: 240px 1fr; /* Left column: Poster size, Right column: Title room */
+        grid-template-columns: 240px 1fr; /* Left: Poster width constraint, Right: Flexible space */
         gap: 24px;
-        width: 700px;
-        max-width: 65vw;
-        margin: 40px 0 60px 40px;
+        width: 800px;
+        max-width: 75vw;
+        margin: 60px 0 80px 60px;
         position: relative;
         z-index: 3;
       }
 
-      /* 1. Image Layer on Top Left styled as a vertical Movie Poster */
+      /* 1. Image element rendered styled as a vertical Movie Poster */
       #moviePosterContainer {
         grid-column: 1;
         grid-row: 1;
         display: block !important;
         width: 100%;
-        aspect-ratio: 2 / 3; /* Exact true movie poster scale proportion */
+        aspect-ratio: 2 / 3; /* Standard professional movie poster aspect dimensional scale */
         border-radius: 12px;
         overflow: hidden;
-        box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6);
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
       }
 
       #moviePosterImg {
@@ -356,35 +358,42 @@ function goBack() {
         object-fit: cover;
       }
 
-      /* 2. Title positioned on the Right Side of the Movie Poster Box */
+      /* 2. Title cleanly positioned onto the Right Side of the Movie Poster Box */
       #title {
         grid-column: 2;
         grid-row: 1;
-        align-self: center; /* Vertically balances title alongside vertical center lines of poster */
+        align-self: center; /* Vertically centers the title inline with the poster's height */
         color: #ffffff;
-        font-size: 2.4rem;
+        font-size: 2.8rem;
         font-weight: 800;
         margin: 0 !important;
         padding: 0 !important;
         background: none !important;
-        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+        text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7);
+        position: relative;
+        z-index: 4;
       }
 
-      /* 3. Description Rendered Directly Under the Poster Column space */
+      /* 3. Description positioned underneath the top item structure rows */
       #desc {
         grid-column: 1 / span 2;
         grid-row: 2;
-        margin: 0;
+        margin: 10px 0 0 0 !important;
         color: rgba(255, 255, 255, 0.85);
         font-size: 1.05rem;
         line-height: 1.6;
+        position: relative;
+        z-index: 4;
       }
 
-      /* 4. Play Action Controller Box Under Description Layer */
+      /* 4. Action Play Controller Box positions underneath the description track layout */
       .play-btn {
         grid-column: 1 / span 2;
         grid-row: 3;
         align-self: flex-start !important;
+        justify-self: start !important;
+        position: relative;
+        z-index: 4;
       }
       
       .back-btn {
@@ -396,20 +405,20 @@ function goBack() {
     }
 
     /* ==========================================
-     * PORTRAIT MODE STABILIZER (RESTORED TO ORIGINAL)
+     * PORTRAIT ORIENTATION STABILIZER (UNTOUCHED)
      * ========================================== */
     @media (orientation: portrait) {
-      /* display: contents strips the custom layout shells entirely to keep native structures */
+      /* display: contents neutralizes structural wrapping nodes entirely */
       #movieContentWrapper, 
       #moviePosterContainer {
         display: contents !important;
       }
       #moviePosterImg, 
       #ambientBg {
-        display: none !important; /* Mutes elements missing from original script configuration */
+        display: none !important; /* Hides elements missing from your original setup */
       }
       
-      /* Exact stylistic layer definitions restored from original file code structure */
+      /* Forces elements out of the stacking index loop to sit cleanly over the fade overlay */
       #title, #desc, .play-btn, .back-btn, .text-container-wrapper, .info-container {
         position: relative;
         z-index: 2;
@@ -418,3 +427,4 @@ function goBack() {
   `;
   document.head.appendChild(style);
 })();
+
