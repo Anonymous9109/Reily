@@ -364,6 +364,12 @@ const movies = {
     desc: "Beloved Hollywood star Reef Hawk becomes the target of an extortion plot when he receives a mysterious video that's sure to shatter his image and end his career. Hoping to identify the blackmailer, he soon embarks on a soul-searching journey to make amends with anyone he could have possibly wronged.",
     video: "",
     play: "Outcome"
+  },
+  "what-you-wish-for": {
+    title: "What You Wish For",
+    desc: "A down-on-his-luck chef assumes the identity of an old culinary friend who's a private chef for the wealthy. As the motives of his mysterious clients become clear, he desperately tries to find a way out.",
+    video: "",
+    play: "WhatYouWishFor"
   }
 };
 
