@@ -430,6 +430,12 @@ const movies = [
     genres: ["Adventure","Action"],
     image: "images/TheHungerGames.jpg",
     link: "Movies/Movie?movie=the-hunger-games"
+  },
+  {
+    title: "Maternal Instinct",
+    genres: ["Documentary"],
+    image: "images/Maternalinstinct.jpg",
+    link: "Movies/Movie?movie=maternal-instinct"
   }
 ];
 
