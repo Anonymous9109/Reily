@@ -412,6 +412,12 @@ const movies = [
     genres: ["Comedy","Crime"],
     image: "images/Outcome.jpg",
     link: "Movies/Movie?movie=outcome"
+  },
+  {
+    title: "What You Wish For",
+    genres: ["Thriller"],
+    image: "images/WhatYouWishFor.jpg",
+    link: "Movies/Movie?movie=what-you-wish-for"
   }
 ];
 
