@@ -418,6 +418,12 @@ const movies = [
     genres: ["Thriller"],
     image: "images/WhatYouWishFor.jpg",
     link: "Movies/Movie?movie=what-you-wish-for"
+  },
+  {
+    title: "Pirates of the Caribbean The Curse of the Black Pearl",
+    genres: ["Adventure","Action"],
+    image: "images/TheCurseoftheBlackPearl.jpg",
+    link: "Movies/Movie?movie=pirates-of-the-caribbean-the-curse-of-the-black-pearl"
   }
 ];
 
