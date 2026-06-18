@@ -424,6 +424,12 @@ const movies = [
     genres: ["Adventure","Action"],
     image: "images/TheCurseoftheBlackPearl.jpg",
     link: "Movies/Movie?movie=pirates-of-the-caribbean-the-curse-of-the-black-pearl"
+  },
+  {
+    title: "The Hunger Games",
+    genres: ["Adventure","Action"],
+    image: "images/TheHungerGames.jpg",
+    link: "Movies/Movie?movie=the-hunger-games"
   }
 ];
 
