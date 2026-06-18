@@ -370,6 +370,12 @@ const movies = {
     desc: "A down-on-his-luck chef assumes the identity of an old culinary friend who's a private chef for the wealthy. As the motives of his mysterious clients become clear, he desperately tries to find a way out.",
     video: "",
     play: "WhatYouWishFor"
+  },
+  "pirates-of-the-caribbean-the-curse-of-the-black-pearl": {
+    title: "Pirates of the Caribbean The Curse of the Black Pearl",
+    desc: "Will, a blacksmith, joins forces with Captain Jack Sparrow, a pirate, to rescue the love of his life from Jack's associates, who have kidnapped her suspecting she has his medallion.",
+    video: "",
+    play: "PiratesoftheCaribbeanTheCurseoftheBlackPearl"
   }
 };
 
