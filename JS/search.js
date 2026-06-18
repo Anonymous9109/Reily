@@ -436,6 +436,12 @@ const movies = [
     genres: ["Documentary"],
     image: "images/Maternalinstinct.jpg",
     link: "Movies/Movie?movie=maternal-instinct"
+  },
+  {
+    title: "Pirates of the Caribbean Dead Mans Chest",
+    genres: ["Adventure","Action"],
+    image: "images/PiratesoftheCaribbeanDeadMansChest.jpg",
+    link: "Movies/Movie?movie=pirates-of-the-caribbean-dead-mans-chest"
   }
 ];
 
