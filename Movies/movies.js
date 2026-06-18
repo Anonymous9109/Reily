@@ -376,6 +376,12 @@ const movies = {
     desc: "Will, a blacksmith, joins forces with Captain Jack Sparrow, a pirate, to rescue the love of his life from Jack's associates, who have kidnapped her suspecting she has his medallion.",
     video: "",
     play: "PiratesoftheCaribbeanTheCurseoftheBlackPearl"
+  },
+  "the-hunger-games": {
+    title: "The Hunger Games",
+    desc: "Katniss decides to take her sister's place in the Hunger Games, a televised reality competition, where young contestants must fight each other to death and the only survivor is crowned as the winner.",
+    video: "",
+    play: "TheHungerGames"
   }
 };
 
