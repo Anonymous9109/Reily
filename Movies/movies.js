@@ -388,6 +388,12 @@ const movies = {
     desc: "Police pull over a woman who claims she just gave birth But the baby and the blood aren't hers. Twisted lies unravel in this true-crime documentary",
     video: "",
     play: "Maternalinstinct"
+  },
+  "pirates-of-the-caribbean-dead-mans-chest": {
+    title: "Pirates of the Caribbean Dead Mans Chest",
+    desc: "Captain Jack Sparrow seeks the heart of Davy Jones, a mythical pirate, in order to avoid being enslaved to him. However, others, including his friends Will and Elizabeth, want it for their own gain.",
+    video: "",
+    play: "PiratesoftheCaribbeanDeadMansChest"
   }
 };
 
