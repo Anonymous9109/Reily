@@ -444,7 +444,7 @@ const movies = [
     link: "Movies/Movie?movie=pirates-of-the-caribbean-dead-mans-chest"
   },
   {
-    title: "Pirates of the Caribbean: At World's End",
+    title: "Pirates of the Caribbean: At Worlds End",
     genres: ["Adventure","Action"],
     image: "images/PiratesoftheCaribbeanAtWorldsEnd.jpg",
     link: "Movies/Movie?movie=pirates-of-the-caribbean-at-worlds-end"
