@@ -394,6 +394,12 @@ const movies = {
     desc: "Captain Jack Sparrow seeks the heart of Davy Jones, a mythical pirate, in order to avoid being enslaved to him. However, others, including his friends Will and Elizabeth, want it for their own gain.",
     video: "",
     play: "PiratesoftheCaribbeanDeadMansChest"
+  },
+  "pirates-of-the-caribbean-at-worlds-end": {
+    title: "Pirates of the Caribbean: At World's End",
+    desc: "Will Turner and Elizabeth Swann team up with Barbossa to rescue Jack Sparrow from the clutches of Davy Jones. The Flying Dutchman's ghost ship is all set to create trouble on the Seven Seas.",
+    video: "",
+    play: "PiratesoftheCaribbeanAtWorldsEnd"
   }
 };
 
