@@ -442,6 +442,12 @@ const movies = [
     genres: ["Adventure","Action"],
     image: "images/PiratesoftheCaribbeanDeadMansChest.jpg",
     link: "Movies/Movie?movie=pirates-of-the-caribbean-dead-mans-chest"
+  },
+  {
+    title: "Pirates of the Caribbean: At World's End",
+    genres: ["Adventure","Action"],
+    image: "images/PiratesoftheCaribbeanAtWorldsEnd.jpg",
+    link: "Movies/Movie?movie=pirates-of-the-caribbean-at-worlds-end"
   }
 ];
 
