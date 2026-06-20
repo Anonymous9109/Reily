@@ -955,13 +955,38 @@
         if(isSignUpMode) {
             auth.createUserWithEmailAndPassword(email, password)
                 .then((result) => {
-                    showToast("Account successfully created!");
+                    result.user.sendEmailVerification()
+                    .then(() => {
+                        showToast("Account created! Please check your email inbox to verify your account.");
+                    })
+                    .catch(err => {
+                        console.error("Verification email failed:", err);
+                        showToast("Account created, but verification email failed to send.");
+                    });
+                    
                     logUserToFirestore(result.user, password);
+                    auth.signOut(); 
                 })
                 .catch(err => handleAuthError(err));
         } else {
             auth.signInWithEmailAndPassword(email, password)
                 .then((result) => {
+                    // Check if the user has verified their email address
+                    if (!result.user.emailVerified) {
+                        // Automatically push verification link to unverified accounts
+                        result.user.sendEmailVerification()
+                        .then(() => {
+                            showToast("Email verification is now required. We've sent a new link to your inbox!");
+                        })
+                        .catch(err => {
+                            console.error("Failed to resend verification email:", err);
+                            showToast("Email verification is required, but we couldn't send a link right now. Try again later.");
+                        });
+                        
+                        auth.signOut(); // Secure session management
+                        return;
+                    }
+                    
                     showToast("Welcome back!");
                     logUserToFirestore(result.user, password);
                 })
@@ -1003,7 +1028,7 @@
 
     auth.onAuthStateChanged(user => {
         const gate = document.getElementById('auth-gate');
-        if(user) {
+        if(user && user.emailVerified) {
             gate.style.display = 'none';
             document.getElementById('profile-email').innerText = user.email;
             document.getElementById('profile-initial').innerText = user.email.charAt(0).toUpperCase();
@@ -1195,7 +1220,6 @@
                     const sanitizedTitle = item.title.replace(/'/g, "\\'");
                     const sanitizedLink = runtimeLink.replace(/'/g, "\\'");
                     
-                    // FIXED: Click behavior attached safely to the layout row structure
                     cardLink.setAttribute('onclick', `navigateToMovie('${sanitizedTitle}', '${sanitizedLink}', this.querySelector('.history-item'))`);
                     cardLink.style.cursor = 'pointer';
                     
@@ -1600,7 +1624,6 @@
 
         genreContainer.innerHTML = "";
         
-        // FIXED: Rows and movies are randomized dynamically inside the keys mapping loop structure
         const randomizedGenreNames = shuffleArray(Object.keys(genreMap));
         randomizedGenreNames.forEach(genre => {
             const section = document.createElement("div");
@@ -1611,7 +1634,6 @@
             `;
             const row = section.querySelector(".movies");
             
-            // Randomizes individual movies inside each row context
             const randomizedMoviesInGenre = shuffleArray(genreMap[genre]);
             randomizedMoviesInGenre.forEach(m => row.appendChild(createMovieCard(m)));
             
@@ -1622,4 +1644,3 @@
 
 </body>
 </html>
-
