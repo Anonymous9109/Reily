@@ -400,6 +400,12 @@ const movies = {
     desc: "Will Turner and Elizabeth Swann team up with Barbossa to rescue Jack Sparrow from the clutches of Davy Jones. The Flying Dutchman's ghost ship is all set to create trouble on the Seven Seas.",
     video: "",
     play: "PiratesoftheCaribbeanAtWorldsEnd"
+  },
+  "citizen-vigilante": {
+    title: "Citizen Vigilante",
+    desc: "Living in Croatia, a wealthy American businessman transforms into a feared vigilante who targets violent criminals, rapists and corrupt judges. As his brutal campaign gains traction online and across the media, he soon becomes a wanted criminal and an unlikely public hero.",
+    video: "",
+    play: "CitizenVigilante"
   }
 };
 
