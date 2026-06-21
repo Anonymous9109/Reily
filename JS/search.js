@@ -454,8 +454,14 @@ const movies = [
     genres: ["Thriller","Action"],
     image: "images/CitizenVigilante.jpg",
     link: "Movies/Movie?movie=citizen-vigilante"
-    }
+    },
 
+  {
+    title: "The Godfather",
+    genres: ["Crime"],
+    image: "images/TheGodfather.jpg",
+    link: "Movies/Movie?movie=the-godfather"
+  }
 ];
 
 // Shuffle function (Fisher-Yates) - returns a shuffled copy or shuffles in place safely
