@@ -418,6 +418,12 @@ const movies = {
     desc: "yes",
     video: "",
     play: "1"
+  },
+  "the-godfather": {
+    title: "The Godfather",
+    desc: "Don Vito Corleone, head of a mafia family, decides to hand over his empire to his youngest son, Michael. However, his decision unintentionally puts the lives of his loved ones in grave danger.",
+    video: "",
+    play: "TheGodfather"
   }
 };
 
