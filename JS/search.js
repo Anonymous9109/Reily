@@ -454,13 +454,8 @@ const movies = [
     genres: ["Thriller","Action"],
     image: "images/CitizenVigilante.jpg",
     link: "Movies/Movie?movie=citizen-vigilante"
-    },
-  {
-    title: "1",
-    genres: ["Action"],
-    image: "images/aMt9tWMgtsRBfCh0b46MzbRn3ya.jpg",
-    link: "Movies/Movie?movie=1"
-  }
+    }
+
 ];
 
 // Shuffle function (Fisher-Yates) - returns a shuffled copy or shuffles in place safely
@@ -502,12 +497,6 @@ function searchMovies() {
   filteredMovies.forEach(movie => {  
     movie.genres.forEach(genre => {  
 
-  {
-    title: "Citizen Vigilante",
-    genres: ["Thriller","Action"],
-    image: "images/CitizenVigilante.jpg",
-    link: "Movies/Movie?movie=citizen-vigilante"
-  }
       if (!moviesByGenre[genre]) moviesByGenre[genre] = [];  
       moviesByGenre[genre].push(movie);  
     });  
