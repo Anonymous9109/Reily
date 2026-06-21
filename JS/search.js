@@ -489,6 +489,12 @@ function searchMovies() {
   const moviesByGenre = {};  
   filteredMovies.forEach(movie => {  
     movie.genres.forEach(genre => {  
+  {
+    title: "Citizen Vigilante",
+    genres: ["Thriller","Action"],
+    image: "images/CitizenVigilante.jpg",
+    link: "Movies/Movie?movie=citizen-vigilante"
+  }
       if (!moviesByGenre[genre]) moviesByGenre[genre] = [];  
       moviesByGenre[genre].push(movie);  
     });  
