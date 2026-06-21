@@ -448,7 +448,13 @@ const movies = [
     genres: ["Adventure","Action"],
     image: "images/PiratesoftheCaribbeanAtWorldsEnd.jpg",
     link: "Movies/Movie?movie=pirates-of-the-caribbean-at-worlds-end"
-  }
+  },
+    {
+    title: "Citizen Vigilante",
+    genres: ["Thriller","Action"],
+    image: "images/CitizenVigilante.jpg",
+    link: "Movies/Movie?movie=citizen-vigilante"
+    }
 ];
 
 // Shuffle function (Fisher-Yates) - returns a shuffled copy or shuffles in place safely
@@ -489,12 +495,7 @@ function searchMovies() {
   const moviesByGenre = {};  
   filteredMovies.forEach(movie => {  
     movie.genres.forEach(genre => {  
-  {
-    title: "Citizen Vigilante",
-    genres: ["Thriller","Action"],
-    image: "images/CitizenVigilante.jpg",
-    link: "Movies/Movie?movie=citizen-vigilante"
-  }
+
       if (!moviesByGenre[genre]) moviesByGenre[genre] = [];  
       moviesByGenre[genre].push(movie);  
     });  
