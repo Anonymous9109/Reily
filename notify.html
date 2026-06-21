@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rinolski Notifications Test</title>
+    <style>
+        body { font-family: system-ui, sans-serif; background: #121212; color: #fff; max-width: 450px; margin: 50px auto; padding: 20px; text-align: center; }
+        h1 { color: #ffca28; }
+        button { background: #ffca28; color: #000; border: none; padding: 15px 30px; font-size: 16px; font-weight: bold; border-radius: 8px; cursor: pointer; width: 100%; margin-top: 20px; transition: 0.2s; }
+        button:active { transform: scale(0.98); }
+        #status { margin-top: 15px; color: #aaa; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+    <h1>Rinolski Push Test</h1>
+    <p>Open this page on your target testing device (like your phone) and hit the button below.</p>
+    
+    <button id="reg-btn">Link This Device</button>
+    <p id="status">Waiting for activation...</p>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging.js";
+
+        // Your exact project configuration
+        const firebaseConfig = {
+          apiKey: "AIzaSyCExki28m1NNepVQEIjmcQzR8z8O68LqIc",
+          authDomain: "rinolski-notifications.firebaseapp.com",
+          databaseURL: "https://rinolski-notifications-default-rtdb.firebaseio.com",
+          projectId: "rinolski-notifications",
+          storageBucket: "rinolski-notifications.firebasestorage.app",
+          messagingSenderId: "355554579853",
+          appId: "1:355554579853:web:3caa961653c0cdc0a359c4",
+          measurementId: "G-WZ84970GST"
+        };
+
+        // Initialize Services
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const messaging = getMessaging(app);
+
+        const regBtn = document.getElementById('reg-btn');
+        const statusText = document.getElementById('status');
+
+        // Paste your exact Web Push Key Pair certificate here
+        const VAPID_KEY = "BAV-syyYVAm3WqCjnFuO0SbE34Z5Sw1m1iRMmnRMqIWGkX7AIRWZgSEkUIduuGrkj3UsoJouOSj41B97a_tCikc";
+
+        regBtn.addEventListener('click', async () => {
+            statusText.innerText = "Requesting browser permission...";
+            try {
+                const permission = await Notification.requestPermission();
+                if (permission === 'granted') {
+                    statusText.innerText = "Generating secure device routing token...";
+                    
+                    // Fetch device registration token from Google infrastructure
+                    const currentToken = await getToken(messaging, { vapidKey: VAPID_KEY });
+                    
+                    if (currentToken) {
+                        statusText.innerText = "Saving token registry to Firestore database...";
+                        
+                        // Saves token to a document named "my-personal-phone" in a collection called "devices"
+                        await setDoc(doc(db, "devices", "my-personal-phone"), {
+                            token: currentToken,
+                            lastUpdated: new Date()
+                        });
+                        
+                        statusText.innerText = "Device linked successfully inside your database! ✓";
+                        regBtn.style.background = "#4caf50";
+                        regBtn.innerText = "Linked ✓";
+                    } else {
+                        statusText.innerText = "Failed to generate a token string.";
+                    }
+                } else {
+                    statusText.innerText = "Permission denied. Reset browser site permissions to retry.";
+                }
+            } catch (err) {
+                console.error(err);
+                statusText.innerText = "Error encountered: " + err.message;
+            }
+        });
+    </script>
+</body>
+</html>
