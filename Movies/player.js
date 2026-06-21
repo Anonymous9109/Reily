@@ -305,7 +305,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     adsLoader.addEventListener(google.ima.AdErrorEvent.Type.AD_ERROR, () => cleanAdAndStartMovie(adContainer, movieUrl), false);
 
     const adsRequest = new google.ima.AdsRequest();
-    adsRequest.adTagUrl = "";
+    adsRequest.adTagUrl = "https://crookedagreement.com/dHm.FVzMdxGPN/vtZ_GgUZ/Hecmg9xuBZdUOlgkKPATdcexXMCzJkh2/NTDbkItLNbzzEPzbOeTvYP1/MJyRZKsfaaWI1KpaddDP0rxW";
     adsRequest.linearAdSlotWidth = root.clientWidth;
     adsRequest.linearAdSlotHeight = root.clientHeight;
     adsLoader.requestAds(adsRequest);
