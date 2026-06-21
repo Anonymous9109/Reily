@@ -53,10 +53,18 @@
             try {
                 const permission = await Notification.requestPermission();
                 if (permission === 'granted') {
+                    statusText.innerText = "Registering background Service Worker...";
+                    
+                    // Explicitly register the service worker since this file is named notify.html
+                    const serviceWorkerRegistration = await navigator.serviceWorker.register('./firebase-messaging-sw.js');
+                    
                     statusText.innerText = "Generating secure device routing token...";
                     
-                    // Fetch device registration token from Google infrastructure
-                    const currentToken = await getToken(messaging, { vapidKey: VAPID_KEY });
+                    // Fetch device registration token using the custom service worker path
+                    const currentToken = await getToken(messaging, { 
+                        vapidKey: VAPID_KEY,
+                        serviceWorkerRegistration: serviceWorkerRegistration
+                    });
                     
                     if (currentToken) {
                         statusText.innerText = "Saving token registry to Firestore database...";
