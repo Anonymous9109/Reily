@@ -106,6 +106,7 @@ window.videoData = {
   "CitizenVigilante": "https://dl.dropboxusercontent.com/scl/fi/he201qnqez4cchu0jldnn/Citizen.Vigilante.mkv?rlkey=73fjzlnsrcs0k9zlzh0mf5r0b&st=2enn2gkf&dl=1",
   
   "1": "1?dl=1",
-  "TheGodfather": "https://dl.dropboxusercontent.com/scl/fi/pdisww9fzc6hethsxr8fs/The.Godfather.mp4?rlkey=ecgq3pg5pnwjito8p4057o8yq&st=0lfxb1rs&dl=1"
+  "TheGodfather": "https://dl.dropboxusercontent.com/scl/fi/pdisww9fzc6hethsxr8fs/The.Godfather.mp4?rlkey=ecgq3pg5pnwjito8p4057o8yq&st=0lfxb1rs&dl=1",
+  "NowYouSeeMe": "https://dl.dropboxusercontent.com/scl/fi/ty7e2e3aihcl4s95iuvjl/Now.You.See.Me.mkv?rlkey=2lw1y17guzzaj4pysiw66mxmz&st=c09t0k9w&dl=1"
 };
 
