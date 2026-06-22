@@ -424,6 +424,12 @@ const movies = {
     desc: "Don Vito Corleone, head of a mafia family, decides to hand over his empire to his youngest son, Michael. However, his decision unintentionally puts the lives of his loved ones in grave danger.",
     video: "",
     play: "TheGodfather"
+  },
+  "now-you-see-me": {
+    title: "Now You See Me",
+    desc: "The Horsemen, a group of four street magicians, are chased by FBI agent Dylan Rhodes and Interpol agent Alma Dray after they rob a huge sum of money that belongs to insurance magnate Arthur Tressler.",
+    video: "",
+    play: "NowYouSeeMe"
   }
 };
 
