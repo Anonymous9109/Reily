@@ -467,6 +467,12 @@ const movies = [
     genres: ["Thriller","Crime"],
     image: "images/NowYouSeeMe.jpg",
     link: "Movies/Movie?movie=now-you-see-me"
+  },
+  {
+    title: "Joe Dirt",
+    genres: ["Comedy","Adventure"],
+    image: "images/JoeDirt.jpg",
+    link: "Movies/Movie?movie=joe-dirt"
   }
 ];
 
