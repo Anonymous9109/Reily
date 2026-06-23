@@ -473,6 +473,12 @@ const movies = [
     genres: ["Comedy","Adventure"],
     image: "images/JoeDirt.jpg",
     link: "Movies/Movie?movie=joe-dirt"
+  },
+  {
+    title: "The Godfather Part II",
+    genres: ["Crime","Drama"],
+    image: "images/TheGodfatherPart2.jpg",
+    link: "Movies/Movie?movie=the-godfather-part-ii"
   }
 ];
 
