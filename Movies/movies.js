@@ -430,6 +430,12 @@ const movies = {
     desc: "The Horsemen, a group of four street magicians, are chased by FBI agent Dylan Rhodes and Interpol agent Alma Dray after they rob a huge sum of money that belongs to insurance magnate Arthur Tressler.",
     video: "",
     play: "NowYouSeeMe"
+  },
+  "joe-dirt": {
+    title: "Joe Dirt",
+    desc: "A man goes in search of his lost parents at the Grand Canyon. He meets a talk show host who wants to insult him on his radio show, but in a turn of events he becomes a public celebrity.",
+    video: "",
+    play: "JoeDirt"
   }
 };
 
