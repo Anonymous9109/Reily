@@ -170,22 +170,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   const controls = document.createElement("div");
   controls.className = "controls";
   controls.innerHTML = `
-    <button id="rewindBtn"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M2.99805 3.5C2.99805 3.22386 3.2219 3 3.49805 3C3.77419 3 3.99805 3.22386 3.99805 3.5V5.70632C4.91067 4.67184 6.08199 3.88382 7.40447 3.43107C9.2407 2.80243 11.2429 2.86309 13.0377 3.60171C14.8325 4.34033 16.2974 5.7065 17.1593 7.44549C17.2819 7.69291 17.1808 7.9929 16.9333 8.11552C16.6859 8.23815 16.3859 8.13698 16.2633 7.88956C15.5092 6.36804 14.2275 5.17272 12.6571 4.52646C11.0868 3.88021 9.33496 3.82714 7.72837 4.37716C6.31508 4.861 5.09908 5.78248 4.25184 7H7.49805C7.77419 7 7.99805 7.22386 7.99805 7.5C7.99805 7.77614 7.77419 8 7.49805 8H3.49805C3.2219 8 2.99805 7.77614 2.99805 7.5V3.5ZM8.00005 10.5C8.00005 10.3156 7.89856 10.1462 7.73598 10.0592C7.5734 9.97215 7.37613 9.98169 7.2227 10.084L5.7227 11.084C5.49294 11.2372 5.43085 11.5476 5.58403 11.7774C5.7372 12.0071 6.04764 12.0692 6.2774 11.916L7.00005 11.4343V16.5C7.00005 16.7761 7.22391 17 7.50005 17C7.7762 17 8.00005 16.7761 8.00005 16.5V10.5ZM12.5029 10C11.568 10 10.9058 10.4367 10.5071 11.1292C10.1306 11.7833 10.0029 12.6366 10.0029 13.5C10.0029 14.3634 10.1306 15.2167 10.5071 15.8708C10.9058 16.5633 11.568 17 12.5029 17C13.4379 17 14.1001 16.5633 14.4988 15.8708C14.8753 11.7833 15.0029 12.6366 15.0029 13.5C15.0029 12.6366 14.8753 11.7833 14.4988 11.1292C14.1001 10.4367 13.4379 10 12.5029 10ZM11.0029 13.5C11.0029 12.7065 11.1253 12.0598 11.3738 11.6281C11.6001 11.2349 11.9379 11 12.5029 11C13.068 11 13.4058 11.2349 13.6321 11.6281C13.8806 12.0598 14.0029 12.7065 14.0029 13.5C14.0029 14.2935 13.8806 14.9402 13.6321 15.3719C13.4058 15.7651 13.068 16 12.5029 16C11.9379 16 11.6001 15.7651 11.3738 15.3719C11.1253 14.9402 11.0029 14.2935 11.0029 13.5Z" fill="white"/>
-</svg>
-</button>
-<button id="playPauseBtn" style="background: none; border: none; cursor: pointer; color: white;">
-  <svg id="playIcon" viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
-    <path d="M6 4.359c0-.938 1.013-1.523 1.825-1.054l13.088 7.556a1.218 1.218 0 0 1 0 2.108l-13.088 7.556c-.812.469-1.825-.116-1.825-1.054V4.359Z" />
-  </svg>
-  <svg id="pauseIcon" viewBox="0 0 24 24" width="32" height="32" fill="currentColor" style="display:none">
-    <path d="M5.25 4.5A1.25 1.25 0 0 0 4 5.75v12.5c0 .69.56 1.25 1.25 1.25h3.5c.69 0 1.25-.56 1.25-1.25V5.75c0-.69-.56-1.25-1.25-1.25h-3.5ZM14.25 4.5a1.25 1.25 0 0 0-1.25 1.25v12.5c0 .69.56 1.25 1.25 1.25h3.5c.69 0 1.25-.56 1.25-1.25V5.75c0-.69-.56-1.25-1.25-1.25h-3.5Z" />
-  </svg>
-</button>
-<button id="skipBtn"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M17 3.5C17 3.22386 16.7761 3 16.5 3C16.2239 3 16 3.22386 16 3.5V5.70245C15.0879 4.66988 13.9178 3.88325 12.597 3.43107C10.7608 2.80243 8.75857 2.86309 6.96376 3.60171C5.16895 4.34033 3.70403 5.7065 2.84215 7.44549C2.71953 7.69291 2.82069 7.9929 3.06812 8.11552C3.31554 8.23815 3.61552 8.13698 3.73815 7.88956C4.49224 6.36804 5.77396 5.17272 7.34432 4.52646C8.91469 3.88021 10.6665 3.82714 12.2731 4.37716C13.6864 4.861 14.9024 5.78248 15.7496 7H12.5C12.2239 7 12 7.22386 12 7.5C12 7.77614 12.2239 8 12.5 8H16.5C16.7761 8 17 7.77614 17 7.5V3.5ZM10.5071 11.1292C10.9058 10.4367 11.568 10 12.5029 10C13.4379 10 14.1001 10.4367 14.4988 11.1292C14.8753 11.7833 15.0029 12.6366 15.0029 13.5C15.0029 14.3634 14.8753 15.2167 14.4988 15.8708C14.1001 16.5633 13.4379 17 12.5029 17C11.568 17 10.9058 16.5633 10.5071 15.8708C10.1306 15.2167 10.0029 14.3634 10.0029 13.5C10.0029 12.6366 10.1306 11.7833 10.5071 11.1292ZM11.3738 11.6281C11.1253 12.0598 11.0029 12.7065 11.0029 13.5C11.0029 14.2935 11.1253 14.9402 11.3738 15.3719C11.6001 15.7651 11.9379 16 12.5029 16C13.068 16 13.4058 15.7651 13.6321 15.3719C13.8806 14.9402 14.0029 14.2935 14.0029 13.5C14.0029 12.7065 13.8806 12.0598 13.6321 11.6281C13.4058 11.2349 13.068 11 12.5029 11C11.9379 11 11.6001 11.2349 11.3738 11.6281ZM8.00005 10.5C8.00005 10.3156 7.89856 10.1462 7.73598 10.0592C7.5734 9.97215 7.37613 9.98169 7.2227 10.084L5.7227 11.084C5.49294 11.2372 5.43085 11.5476 5.58403 11.7774C5.7372 12.0071 6.04764 12.0692 6.2774 11.916L7.00005 11.4343V16.5C7.00005 16.7761 7.22391 17 7.50005 17C7.7762 17 8.00005 16.7761 8.00005 16.5V10.5Z" fill="white"/>
-</svg>
-</button>
+    <button id="rewindBtn"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.99805 3.5C2.99805 3.22386 3.2219 3 3.49805 3C3.77419 3 3.99805 3.22386 3.99805 3.5V5.70632C4.91067 4.67184 6.08199 3.88382 7.40447 3.43107C9.2407 2.80243 11.2429 2.86309 13.0377 3.60171C14.8325 4.34033 16.2974 5.7065 17.1593 7.44549C17.2819 7.69291 17.1808 7.9929 16.9333 8.11552C16.6859 8.23815 16.3859 8.13698 16.2633 7.88956C15.5092 6.36804 14.2275 5.17272 12.6571 4.52646C11.0868 3.88021 9.33496 3.82714 7.72837 4.37716C6.31508 4.861 5.09908 5.78248 4.25184 7H7.49805C7.77419 7 7.99805 7.22386 7.99805 7.5C7.99805 7.77614 7.77419 8 7.49805 8H3.49805C3.2219 8 2.99805 7.77614 2.99805 7.5V3.5ZM8.00005 10.5C8.00005 10.3156 7.89856 10.1462 7.73598 10.0592C7.5734 9.97215 7.37613 9.98169 7.2227 10.084L5.7227 11.084C5.49294 11.2372 5.43085 11.5476 5.58403 11.7774C5.7372 12.0071 6.04764 12.0692 6.2774 11.916L7.00005 11.4343V16.5C7.00005 16.7761 7.22391 17 7.50005 17C7.7762 17 8.00005 16.7761 8.00005 16.5V10.5ZM12.5029 10C11.568 10 10.9058 10.4367 10.5071 11.1292C10.1306 11.7833 10.0029 12.6366 10.0029 13.5C10.0029 14.3634 10.1306 15.2167 10.5071 15.8708C10.9058 16.5633 11.568 17 12.5029 17C13.4379 17 14.1001 16.5633 14.4988 15.8708C14.8753 15.2167 15.0029 14.3634 15.0029 13.5C15.0029 12.6366 14.8753 11.7833 14.4988 11.1292C14.1001 10.4367 13.4379 10 12.5029 10ZM11.0029 13.5C11.0029 12.7065 11.1253 12.0598 11.3738 11.6281C11.6001 11.2349 11.9379 11 12.5029 11C13.068 11 13.4058 11.2349 13.6321 11.6281C13.8806 12.0598 14.0029 12.7065 14.0029 13.5C14.0029 14.2935 13.8806 14.9402 13.6321 15.3719C13.4058 15.7651 13.068 16 12.5029 16C11.9379 16 11.6001 15.7651 11.3738 15.3719C11.1253 14.9402 11.0029 14.2935 11.0029 13.5Z" fill="white"/></svg></button>
+    <button id="playPauseBtn" style="background: none; border: none; cursor: pointer; color: white;">
+      <svg id="playIcon" viewBox="0 0 24 24" width="32" height="32" fill="currentColor"><path d="M6 4.359c0-.938 1.013-1.523 1.825-1.054l13.088 7.556a1.218 1.218 0 0 1 0 2.108l-13.088 7.556c-.812.469-1.825-.116-1.825-1.054V4.359Z" /></svg>
+      <svg id="pauseIcon" viewBox="0 0 24 24" width="32" height="32" fill="currentColor" style="display:none"><path d="M5.25 4.5A1.25 1.25 0 0 0 4 5.75v12.5c0 .69.56 1.25 1.25 1.25h3.5c.69 0 1.25-.56 1.25-1.25V5.75c0-.69-.56-1.25-1.25-1.25h-3.5ZM14.25 4.5a1.25 1.25 0 0 0-1.25 1.25v12.5c0 .69.56 1.25 1.25 1.25h3.5c.69 0 1.25-.56 1.25-1.25V5.75c0-.69-.56-1.25-1.25-1.25h-3.5Z" /></svg>
+    </button>
+    <button id="skipBtn"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17 3.5C17 3.22386 16.7761 3 16.5 3C16.2239 3 16 3.22386 16 3.5V5.70245C15.0879 4.66988 13.9178 3.88325 12.597 3.43107C10.7608 2.80243 8.75857 2.86309 6.96376 3.60171C5.16895 4.34033 3.70403 5.7065 2.84215 7.44549C2.71953 7.69291 2.82069 7.9929 3.06812 8.11552C3.31554 8.23815 3.61552 8.13698 3.73815 7.88956C4.49224 6.36804 5.77396 5.17272 7.34432 4.52646C8.91469 3.88021 10.6665 3.82714 12.2731 4.37716C13.6864 4.861 14.9024 5.78248 15.7496 7H12.5C12.2239 7 12 7.22386 12 7.5C12 7.77614 12.2239 8 12.5 8H16.5C16.7761 8 17 7.77614 17 7.5V3.5ZM10.5071 11.1292C10.9058 10.4367 11.568 10 12.5029 10C13.4379 10 14.1001 10.4367 14.4988 11.1292C14.8753 11.7833 15.0029 12.6366 15.0029 13.5C15.0029 14.3634 14.8753 15.2167 14.4988 15.8708C14.1001 16.5633 13.4379 17 12.5029 17C11.568 17 10.9058 16.5633 10.5071 15.8708C10.1306 15.2167 10.0029 14.3634 10.0029 13.5C10.0029 12.6366 10.1306 11.7833 10.5071 11.1292ZM11.3738 11.6281C11.1253 12.0598 11.0029 12.7065 11.0029 13.5C11.0029 14.2935 11.1253 14.9402 11.3738 15.3719C11.6001 15.7651 11.9379 16 12.5029 16C13.068 16 13.4058 15.7651 13.6321 15.3719C13.8806 14.9402 14.0029 14.2935 14.0029 13.5C14.0029 12.7065 13.8806 12.0598 13.6321 11.6281C13.4058 11.2349 13.068 11 12.5029 11C11.9379 11 11.6001 11.2349 11.3738 11.6281ZM8.00005 10.5C8.00005 10.3156 7.89856 10.1462 7.73598 10.0592C7.5734 9.97215 7.37613 9.98169 7.2227 10.084L5.7227 11.084C5.49294 11.2372 5.43085 11.5476 5.58403 11.7774C5.7372 12.0071 6.04764 12.0692 6.2774 11.916L7.00005 11.4343V16.5C7.00005 16.7761 7.22391 17 7.50005 17C7.7762 17 8.00005 16.7761 8.00005 16.5V10.5Z" fill="white"/></svg></button>
   `;
 
   const ccBtn = document.createElement("button");
@@ -228,29 +218,38 @@ document.addEventListener("DOMContentLoaded", async () => {
   root.append(video, subDisplay, controls, progressContainer, timerDisplay, ccBtn, subMenu, backBtn, nextBtn, loadingRing, backToPrev);
   document.body.appendChild(root);
 
-  /********** 3) Smart Source Detection **********/
+  /********** 3) Connected Source & Prefix Parameter Parsing **********/
   const params = new URLSearchParams(window.location.search);
-  const ep = params.get("ep") || "1";
-  const movieParamId = params.get("id") || params.get("movie") || ep; 
+  
+  // Ep tracking sequence parameter string assigned from script.js target loop click
+  const epParam = params.get("ep");                         // e.g. "AdventureTime-S1E1"
+  const seriesId = params.get("movie") || params.get("id"); // e.g. "AdventureTime"
+
   let src = null;
 
   if (window.videoData) {
-    if (window.videoData[ep]) {
-      src = window.videoData[ep];
-    } else if (window.videoData[movieParamId] && typeof window.videoData[movieParamId] === 'object') {
-      src = window.videoData[movieParamId][ep];
-    } else if (window.videoData[movieParamId] && typeof window.videoData[movieParamId] === 'string') {
-      src = window.videoData[movieParamId];
+    // 1. Direct key reference string lookup confirmation
+    if (epParam && window.videoData[epParam]) {
+      src = window.videoData[epParam];
+    } 
+    // 2. Nested dataset check fallback protection
+    else if (seriesId && epParam && window.videoData[seriesId] && typeof window.videoData[seriesId] === 'object') {
+      src = window.videoData[seriesId][epParam];
+    } 
+    // 3. Flat movie record database entry fallback string logic check
+    else if (seriesId && window.videoData[seriesId] && typeof window.videoData[seriesId] === 'string') {
+      src = window.videoData[seriesId];
     }
   }
+
   if (!src && params.get("src")) src = decodeURIComponent(params.get("src"));
 
   if (!src) {
-    document.body.innerHTML = `<p style="color:white;text-align:center;font-family:sans-serif;margin-top:20vh;">No video found.</p>`;
+    document.body.innerHTML = `<p style="color:white;text-align:center;font-family:sans-serif;margin-top:20vh;">No video source mapped for reference identifier parameter.</p>`;
     return;
   }
 
-  /********** 4) Load Source **********/
+  /********** 4) Media Player Attachment **********/
   async function attachSourceToVideo(url) {
     const isM3u8 = /\.m3u8($|\?)/i.test(url);
     if (isM3u8) {
@@ -270,7 +269,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     } else video.src = url;
   }
 
-  /********** GOOGLE IMA VAST IMPLEMENTATION **********/
+  /********** GOOGLE IMA VAST AD WORKFLOW **********/
   function initIMAAdWorkflow(movieUrl) {
     if (!window.google || !window.google.ima) {
       const imaScript = document.createElement("script");
@@ -331,19 +330,20 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   initIMAAdWorkflow(src);
 
-  /********** FIRESTORE CONFIG & ASYNC VARIABLES **********/
+  /********** FIRESTORE RECOVERY & EVENT STORAGE SYNCHRONIZATION **********/
   const { getFirestore, doc, setDoc } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
   const { getAuth } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js");
   
   const db = getFirestore();
   const auth = getAuth();
   
+  const storageIdKey = seriesId || epParam; 
   let activeMovieTitle = "Unknown Media";
   
-  if (window.movies && window.movies[movieParamId]) {
-    activeMovieTitle = window.movies[movieParamId].title;
-  } else if (window.seriesData && window.seriesData[movieParamId]) {
-    activeMovieTitle = window.seriesData[movieParamId].title;
+  if (window.movies && window.movies[storageIdKey]) {
+    activeMovieTitle = window.movies[storageIdKey].title;
+  } else if (window.seriesData && window.seriesData[storageIdKey]) {
+    activeMovieTitle = window.seriesData[storageIdKey].title;
   } else if (document.title && document.title !== "Player") {
     activeMovieTitle = document.title;
   }
@@ -358,10 +358,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (video.currentTime < 5 || video.currentTime > video.duration - 10) return;
 
     try {
-      await setDoc(doc(db, "watchHistory", user.email, "movies", movieParamId), {
+      await setDoc(doc(db, "watchHistory", user.email, "movies", storageIdKey), {
         userId: user.uid,
         userEmail: user.email,
-        movieId: ep || movieParamId,
+        movieId: epParam || storageIdKey, // Maintains structural identifier tracking link reference
         movieTitle: activeMovieTitle,
         currentTime: video.currentTime,
         duration: video.duration,
@@ -369,7 +369,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       }, { merge: true });
       lastSavedTime = video.currentTime;
     } catch (error) {
-      console.error("Failed to save progress to Firestore:", error);
+      console.error("Failed to sync progress to Firebase collection path:", error);
     }
   }
 
@@ -378,7 +378,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (document.visibilityState === "hidden") saveWatchProgress();
   });
 
-  /********** 5) IndexedDB Subtitles & Appearance Logic **********/
+  /********** 5) IndexedDB Subtitles Appearance Sync **********/
   async function getSubSettings() {
     return new Promise((resolve) => {
       const request = indexedDB.open('SubtitleDB', 1);
@@ -416,7 +416,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if(edge === 'dropShadow') {
         el.style.textShadow = `${shadowAmt}em ${shadowAmt}em 0.15em rgba(0,0,0,0.9)`;
     } else if(edge === 'outline') {
-        el.style.textShadow = `-\${shadowAmt/2}em -\${shadowAmt/2}em 0 #000, \${shadowAmt/2}em -\${shadowAmt/2}em 0 #000, -\${shadowAmt/2}em \${shadowAmt/2}em 0 #000, \${shadowAmt/2}em \${shadowAmt/2}em 0 #000`;
+        el.style.textShadow = `-${shadowAmt/2}em -${shadowAmt/2}em 0 #000, ${shadowAmt/2}em -${shadowAmt/2}em 0 #000, -${shadowAmt/2}em ${shadowAmt/2}em 0 #000, ${shadowAmt/2}em ${shadowAmt/2}em 0 #000`;
     } else if(edge === 'raised') {
         el.style.textShadow = `0 -0.03em 0 #000, 0 0.03em 0 #fff`;
     } else {
@@ -435,7 +435,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (this.mode === 'hidden') {
           const cue = this.activeCues[0];
           if (cue) {
-            subDisplay.innerHTML = `<span>\${cue.text}</span>`;
+            subDisplay.innerHTML = `<span>${cue.text}</span>`;
             const span = subDisplay.querySelector('span');
             if(span) await applySubAppearance(span);
           } else {
@@ -458,7 +458,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     subMenu.style.display = "none";
   }
 
-  const subtitleKey = ep + "-subs";
+  // Dynamic lookup string generator logic matching player-data.js definition keys
+  const subtitleKey = (epParam || "1") + "-subs";
   const subData = window.videoData ? window.videoData[subtitleKey] : null;
 
   if (subData && Array.isArray(subData)) {
@@ -486,7 +487,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     subMenu.style.display = subMenu.style.display === "flex" ? "none" : "flex";
   };
 
-  /********** 6) Events & Controls **********/
+  /********** 6) Native Events & Player Controls **********/
   const rewindBtn = document.getElementById("rewindBtn");
   const playPauseBtn = document.getElementById("playPauseBtn");
   const skipBtn = document.getElementById("skipBtn");
@@ -499,7 +500,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const h = Math.floor(seconds / 3600);
     const m = Math.floor((seconds % 3600) / 60);
     const s = Math.floor(seconds % 60);
-    return h > 0 ? `\${h}:\${m.toString().padStart(2,'0')}:\${s.toString().padStart(2,'0')}` : `\${m}:\${s.toString().padStart(2,'0')}`;
+    return h > 0 ? `${h}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}` : `${m}:${s.toString().padStart(2,'0')}`;
   };
 
   const showControls = (timeout = 3000) => {
@@ -548,7 +549,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   video.addEventListener("timeupdate", () => {
     if (isFinite(video.duration) && !isDragging && !isResuming) {
       progressBar.style.width = (video.currentTime / video.duration) * 100 + "%";
-      timerDisplay.textContent = `\${formatTime(video.currentTime)} / \${formatTime(video.duration)}`;
+      timerDisplay.textContent = `${formatTime(video.currentTime)} / ${formatTime(video.duration)}`;
       
       if (Math.abs(video.currentTime - lastSavedTime) >= 5) {
         saveWatchProgress();
@@ -566,7 +567,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     pct = Math.max(0, Math.min(1, pct));
     progressBar.style.width = pct * 100 + "%";
     const targetTime = pct * video.duration;
-    timerDisplay.textContent = `\${formatTime(targetTime)} / \${formatTime(video.duration)}`;
+    timerDisplay.textContent = `${formatTime(targetTime)} / ${formatTime(video.duration)}`;
     video.currentTime = targetTime;
   };
 
@@ -583,7 +584,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   root.addEventListener("click", () => { if(!isDragging) controlsVisible ? hideControls() : showControls(); });
 
-  /********** THE JUMP FIX: TRACK LOADEDMETADATA **********/
+  /********** THE TIMESTAMP JUMP OVERRIDE FIX **********/
   video.addEventListener("loadedmetadata", async () => {
     if (firebaseTimestamp && firebaseTimestamp < video.duration - 15) {
       video.currentTime = firebaseTimestamp;
@@ -604,19 +605,19 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (user && user.email) {
       try {
         const { getDoc } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
-        const docRef = doc(db, "watchHistory", user.email, "movies", movieParamId);
+        const docRef = doc(db, "watchHistory", user.email, "movies", storageIdKey);
         const docSnap = await getDoc(docRef);
         
         if (docSnap.exists()) {
           firebaseTimestamp = docSnap.data().currentTime;
         }
       } catch (err) { 
-        console.error("Error pulling history collection: ", err); 
+        console.error("Error pulling profile data records: ", err); 
       }
     }
   });
 
-  /********** 7) Portrait rotation **********/
+  /********** 7) Portrait Layout Rotation Engine **********/
   function rotateIfPortrait() {
     const isPortrait = window.innerHeight > window.innerWidth;
     const vw = window.innerWidth, vh = window.innerHeight;
@@ -626,8 +627,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       root.style.left = "50%";
       root.style.transform = `translate(-50%, -50%) rotate(90deg)`;
       root.style.transformOrigin = "center center";
-      root.style.width = `\${vh}px`;
-      root.style.height = `\${vw}px`;
+      root.style.width = `${vh}px`;
+      root.style.height = `${vw}px`;
     } else {
       root.style.position = "fixed";
       root.style.top = "0";
@@ -641,7 +642,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   window.addEventListener("resize", rotateIfPortrait);
 });
 
-// Fullscreen & Touch Emulation
+// Fullscreen Emulation Logic
 let lastTap = 0;
 function goFullscreenLandscape() {
   const elem = document.documentElement;
@@ -674,4 +675,3 @@ document.addEventListener("fullscreenchange", () => {
   document.addEventListener("mousemove", (e) => { e.target.dispatchEvent(createTouchEvent("touchmove", e)); });
   document.addEventListener("mouseup", (e) => { e.target.dispatchEvent(createTouchEvent("touchend", e)); });
 })();
-
