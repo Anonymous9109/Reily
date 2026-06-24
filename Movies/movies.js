@@ -442,6 +442,12 @@ const movies = {
     desc: "Vito's popularity in the underworld is on the rise, while his son, Michael's career is swinging downwards. In order to redeem himself, Michael must fight his enemies, including his own brother.",
     video: "",
     play: "TheGodfatherPart2"
+  },
+  "now-you-see-me-2": {
+    title: "Now You See Me 2",
+    desc: "The Four Horsemen, a group of illusionists, find themselves in Macau, China, planning to pull off a robbery on the orders of a devious technology genius.",
+    video: "",
+    play: "NowYouSeeMe2"
   }
 };
 
