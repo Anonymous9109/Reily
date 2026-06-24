@@ -479,6 +479,12 @@ const movies = [
     genres: ["Crime","Drama"],
     image: "images/TheGodfatherPart2.jpg",
     link: "Movies/Movie?movie=the-godfather-part-ii"
+  },
+  {
+    title: "Now You See Me 2",
+    genres: ["Thriller","Comedy"],
+    image: "images/NowYouSeeMe2.jpg",
+    link: "Movies/Movie?movie=now-you-see-me-2"
   }
 ];
 
