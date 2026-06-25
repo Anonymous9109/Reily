@@ -448,6 +448,12 @@ const movies = {
     desc: "The Four Horsemen, a group of illusionists, find themselves in Macau, China, planning to pull off a robbery on the orders of a devious technology genius.",
     video: "",
     play: "NowYouSeeMe2"
+  },
+  "the-man-from-toronto": {
+    title: "The Man from Toronto",
+    desc: "A struggling entrepreneur plans a surprise for his wife's birthday, but due to a twist of fate, he gets caught in the middle of an operation to apprehend an assassin.",
+    video: "",
+    play: "TheManfromToronto"
   }
 };
 
