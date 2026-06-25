@@ -460,6 +460,12 @@ const movies = {
     desc: "After serving her prison sentence, Debbie Ocean, the younger sister of Danny Ocean, assembles a team of seven skilled women in an attempt to steal a diamond necklace worth USD 150 million.",
     video: "",
     play: "OceansEight"
+  },
+  "the-wolf-of-wall-street": {
+    title: "The Wolf of Wall Street",
+    desc: "Introduced to life in the fast lane through stockbroking, Jordan Belfort takes a hit after a Wall Street crash. He teams up with Donnie Azoff, cheating his way to the top as his relationships slide.",
+    video: "",
+    play: "TheWolfofWallStreet"
   }
 };
 
