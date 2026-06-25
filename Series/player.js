@@ -165,16 +165,44 @@ document.addEventListener("DOMContentLoaded", async () => {
   controls.className = "controls";
   controls.innerHTML = `
     <button id="rewindBtn"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M2.99805 3.5C2.99805 3.22386 3.2219 3 3.49805 3C3.77419 3 3.99805 3.22386 3.99805 3.5V5.70632C4.91067 4.67184 6.08199 3.88382 7.40447 3.43107C9.2407 2.80243 11.2429 2.86309 13.0377 3.60171C14.8325 4.34033 16.2974 5.7065 17.1593 7.44549C17.2819 7.69291 17.1808 7.9929 16.9333 8.11552C16.6859 8.23815 16.3859 8.13698 16.2633 7.88956C15.5092 6.36804 14.2275 5.17272 12.6571 4.52646C11.0868 3.88021 9.33496 3.82714 7.72837 4.37716C6.31508 4.861 5.09908 5.78248 4.25184 7H7.49805C7.77419 7 7.99805 7.22386 7.99805 7.5C7.99805 7.77614 7.77419 8 7.49805 8H3.49805C3.2219 8 2.99805 7.77614 2.99805 7.5V3.5ZM8.00005 10.5C8.00005 10.3156 7.89856 10.1462 7.73598 10.0592C7.5734 9.97215 7.37613 9.98169 7.2227 10.084L5.7227 11.084C5.49294 11.2372 5.43085 11.5476 5.58403 11.7774C5.7372 12.0071 6.04764 12.0692 6.2774 11.916L7.00005 11.4343V16.5C7.00005 16.7761 7.22391 17 7.50005 17C7.7762 17 8.00005 16.7761 8.00005 16.5V10.5ZM12.5029 10C11.568 10 10.9058 10.4367 10.5071 11.1292C10.1306 11.7833 10.0029 12.6366 10.0029 13.5C10.0029 14.3634 10.1306 15.2167 10.5071 15.8708C10.9058 16.5633 11.568 17 12.5029 17C13.4379 17 14.1001 16.5633 14.4988 15.8708C14.8753 15.2167 15.0029 14.3634 15.0029 13.5C15.0029 12.6366 14.8753 11.7833 14.4988 11.1292C14.1001 10.4367 13.4379 10 12.5029 10ZM11.0029 13.5C11.0029 12.7065 11.1253 12.0598 11.3738 11.6281C11.6001 11.2349 11.9379 11 12.5029 11C13.068 11 13.4058 11.2349 13.6321 11.6281C13.8806 12.0598 14.0029 12.7065 14.0029 13.5C14.0029 14.2935 13.8806 14.9402 13.6321 15.3719C13.4058 15.7651 13.068 16 12.5029 16C11.9379 16 11.6001 15.7651 11.3738 15.3719C11.1253 14.9402 11.0029 14.2935 11.0029 13.5Z" fill="white"/>
+<path d="M2.99805 3.5C2.99805 3.22386 3.2219 3 3.49805 3C3.77419 3 3.99805 3.22386 3.99805 3.5V5.70632C4.91067 4.67184 6.08199 3.88382 7.40447 3.43107C9.2407 2.80243 11.2429 2.86309 13.0377 3.60171C14.8325 4.34033 16.2974 5.7065 17.1593 7.44549C17.2819 7.69291 17.1808 7.9929 16.9333 8.11552C16.6859 8.23815 16.3859 8.13698 16.2633 7.88956C15.5092 6.36804 14.2275 5.17272 12.6571 4.52646C11.0868 3.88021 9.33496 3.82714 7.72837 4.37716C6.31508 4.861 5.09908 5.78248 4.25184 7H7.49805C7.77419 7 7.99805 7.22386 7.99805 7.5C7.99805 7.77614 7.77419 8 7.49805 8H3.49805C3.2219 8 2.99805 7.77614 2.99805 7.5V3.5ZM8.00005 10.5C8.00005 10.3156 7.89856 10.1462 7.73598 10.0592C7.5734 9.97215 7.37613 9.98169 7.2227 10.084L5.7227 11.084C5.49294 11.2372 5.43085 11.5476 5.58403 11.7774C5.7372 12.0071 6.04764 12.0692 6.2774 11.916L7.00005 11.4343V16.5C7.00005 16.7761 7.22391 17 7.50005 17C7.7762 17 8.00005 16.7761 8.00005 16.5V10.5ZM12.5029 10C11.568 10 10.9058 10.4367 10.5071 11.1292C10.1306 11.7833 10.0029 12.6366 10.0029 13.5C10.0029 14.3634 10.1306 15.2167 10.5071 15.8708C10.9058 16.5633 11.568 17 12.5029 17C13.4379 17 14.1001 16.5633 14.4988 15.8708C14.8753 15.2167 15.0029 14.3634 15.0029 13.5C15.0029 12.6366 14.8753 11.7833 14.4988 11.1292 window.fbAuth.onAuthStateChanged((user) => {
+    if (user) {
+      window.fbDb.collection("users").doc(user.uid).collection("watchHistory").doc(currentSeriesId).get()
+        .then((docSnap) => {
+          if (docSnap.exists && docSnap.data().lastWatchedEpisode === currentEpKey) {
+            const savedTime = docSnap.data().timestamp;
+            if (savedTime && (video.duration - savedTime > 10)) {
+              video.currentTime = savedTime;
+            }
+          }
+        }).catch(err => console.error("Error pulling history:", err));
+
+      video.addEventListener("timeupdate", () => {
+        const currentTime = video.currentTime;
+        const duration = video.duration;
+
+        if (Math.abs(currentTime - lastSavedTime) > 5 || currentTime === duration) {
+          lastSavedTime = currentTime;
+          const progressPercent = duration > 0 ? (currentTime / duration) * 100 : 0;
+
+          window.fbDb.collection("users").doc(user.uid).collection("watchHistory").doc(currentSeriesId).set({
+            lastWatchedEpisode: currentEpKey,
+            timestamp: currentTime,
+            percentComplete: progressPercent,
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+          }, { merge: true }).catch(err => console.error("Error saving progress:", err));
+        }
+      });
+    }
+  });
+}C14.1001 10.4367 13.4379 10 12.5029 10ZM11.0029 13.5C11.0029 12.7065 11.1253 12.0598 11.3738 11.6281C11.6001 11.2349 11.9379 11 12.5029 11C13.068 11 13.4058 11.2349 13.6321 11.6281C13.8806 12.0598 14.0029 12.7065 14.0029 13.5C14.0029 14.2935 13.8806 14.9402 13.6321 15.3719C13.4058 15.7651 13.068 16 12.5029 16C11.9379 16 11.6001 15.7651 11.3738 15.3719C11.1253 14.9402 11.0029 14.2935 11.0029 13.5Z" fill="white"/>
 </svg>
 </button>
 <button id="playPauseBtn" style="background: none; border: none; cursor: pointer; color: white;">
-  <!-- Netflix Style Thick Play -->
   <svg id="playIcon" viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
     <path d="M6 4.359c0-.938 1.013-1.523 1.825-1.054l13.088 7.556a1.218 1.218 0 0 1 0 2.108l-13.088 7.556c-.812.469-1.825-.116-1.825-1.054V4.359Z" />
   </svg>
   
-  <!-- Netflix Style Thick Pause -->
   <svg id="pauseIcon" viewBox="0 0 24 24" width="32" height="32" fill="currentColor" style="display:none">
     <path d="M5.25 4.5A1.25 1.25 0 0 0 4 5.75v12.5c0 .69.56 1.25 1.25 1.25h3.5c.69 0 1.25-.56 1.25-1.25V5.75c0-.69-.56-1.25-1.25-1.25h-3.5ZM14.25 4.5a1.25 1.25 0 0 0-1.25 1.25v12.5c0 .69.56 1.25 1.25 1.25h3.5c.69 0 1.25-.56 1.25-1.25V5.75c0-.69-.56-1.25-1.25-1.25h-3.5Z" />
   </svg>
@@ -261,6 +289,44 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   await attachSourceToVideo(src);
 
+  /********** 4.5) Firestore Sync Configuration **********/
+  const currentSeriesId = params.get("series");
+  const currentEpKey = ep;
+  let lastSavedTime = 0;
+
+  if (window.fbAuth && window.fbDb && currentSeriesId) {
+    window.fbAuth.onAuthStateChanged((user) => {
+      if (user) {
+        window.fbDb.collection("users").doc(user.uid).collection("watchHistory").doc(currentSeriesId).get()
+          .then((docSnap) => {
+            if (docSnap.exists && docSnap.data().lastWatchedEpisode === currentEpKey) {
+              const savedTime = docSnap.data().timestamp;
+              if (savedTime && (video.duration - savedTime > 10)) {
+                video.currentTime = savedTime;
+              }
+            }
+          }).catch(err => console.error("Error pulling history:", err));
+
+        video.addEventListener("timeupdate", () => {
+          const currentTime = video.currentTime;
+          const duration = video.duration;
+
+          if (Math.abs(currentTime - lastSavedTime) > 5 || currentTime === duration) {
+            lastSavedTime = currentTime;
+            const progressPercent = duration > 0 ? (currentTime / duration) * 100 : 0;
+
+            window.fbDb.collection("users").doc(user.uid).collection("watchHistory").doc(currentSeriesId).set({
+              lastWatchedEpisode: currentEpKey,
+              timestamp: currentTime,
+              percentComplete: progressPercent,
+              updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            }, { merge: true }).catch(err => console.error("Error saving progress:", err));
+          }
+        });
+      }
+    });
+  }
+
   /********** 5) IndexedDB Subtitles & Appearance Logic **********/
   async function getSubSettings() {
     return new Promise((resolve) => {
@@ -299,7 +365,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if(edge === 'dropShadow') {
         el.style.textShadow = `${shadowAmt}em ${shadowAmt}em 0.15em rgba(0,0,0,0.9)`;
     } else if(edge === 'outline') {
-        el.style.textShadow = `-${shadowAmt/2}em -${shadowAmt/2}em 0 #000, ${shadowAmt/2}em -${shadowAmt/2}em 0 #000, -${shadowAmt/2}em ${shadowAmt/2}em 0 #000, ${shadowAmt/2}em ${shadowAmt/2}em 0 #000`;
+        el.style.textShadow = `-\${shadowAmt/2}em -\${shadowAmt/2}em 0 #000, \${shadowAmt/2}em -\${shadowAmt/2}em 0 #000, -\text{\${shadowAmt/2}}em \${shadowAmt/2}em 0 #000, \${shadowAmt/2}em \${shadowAmt/2}em 0 #000`;
     } else if(edge === 'raised') {
         el.style.textShadow = `0 -0.03em 0 #000, 0 0.03em 0 #fff`;
     } else {
@@ -318,7 +384,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (this.mode === 'hidden') {
           const cue = this.activeCues[0];
           if (cue) {
-            subDisplay.innerHTML = `<span>${cue.text}</span>`;
+            subDisplay.innerHTML = `<span>\${cue.text}</span>`;
             const span = subDisplay.querySelector('span');
             if(span) await applySubAppearance(span);
           } else {
@@ -382,7 +448,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const h = Math.floor(seconds / 3600);
     const m = Math.floor((seconds % 3600) / 60);
     const s = Math.floor(seconds % 60);
-    return h > 0 ? `${h}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}` : `${m}:${s.toString().padStart(2,'0')}`;
+    return h > 0 ? `\${h}:\${m.toString().padStart(2,'0')}:\${s.toString().padStart(2,'0')}` : `\${m}:\${s.toString().padStart(2,'0')}`;
   };
 
   const showControls = (timeout = 3000) => {
@@ -431,7 +497,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   video.addEventListener("timeupdate", () => {
     if (isFinite(video.duration) && !isDragging) {
       progressBar.style.width = (video.currentTime / video.duration) * 100 + "%";
-      timerDisplay.textContent = `${formatTime(video.currentTime)} / ${formatTime(video.duration)}`;
+      timerDisplay.textContent = `\${formatTime(video.currentTime)} / \text{\${formatTime(video.duration)}}`;
     }
   });
 
@@ -445,7 +511,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     pct = Math.max(0, Math.min(1, pct));
     progressBar.style.width = pct * 100 + "%";
     const targetTime = pct * video.duration;
-    timerDisplay.textContent = `${formatTime(targetTime)} / ${formatTime(video.duration)}`;
+    timerDisplay.textContent = `\${formatTime(targetTime)} / \text{\${formatTime(video.duration)}}`;
     video.currentTime = targetTime;
   };
 
@@ -474,8 +540,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       root.style.left = "50%";
       root.style.transform = `translate(-50%, -50%) rotate(90deg)`;
       root.style.transformOrigin = "center center";
-      root.style.width = `${vh}px`;
-      root.style.height = `${vw}px`;
+      root.style.width = `\${vh}px`;
+      root.style.height = `\${vw}px`;
     } else {
       root.style.position = "fixed";
       root.style.top = "0";
