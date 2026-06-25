@@ -2,39 +2,6 @@ const params = new URLSearchParams(window.location.search);
 const id = params.get("series");
 const series = seriesData[id];
 
-// --- IndexedDB Helper Logic ---
-const dbName = "StreamingDB";
-const storeName = "progress";
-
-const openDB = () => {
-    return new Promise((resolve, reject) => {
-        const request = indexedDB.open(dbName, 1);
-        request.onupgradeneeded = (e) => {
-            e.target.result.createObjectStore(storeName);
-        };
-        request.onsuccess = () => resolve(request.result);
-        request.onerror = () => reject(request.error);
-    });
-};
-
-const getProgress = async (key) => {
-    const db = await openDB();
-    return new Promise((resolve) => {
-        const transaction = db.transaction(storeName, "readonly");
-        const store = transaction.objectStore(storeName);
-        const request = store.get(key);
-        request.onsuccess = () => resolve(request.result);
-    });
-};
-
-const saveProgress = async (key, value) => {
-    const db = await openDB();
-    const transaction = db.transaction(storeName, "readwrite");
-    const store = transaction.objectStore(storeName);
-    store.put(value, key);
-};
-// --- End Helper Logic ---
-
 async function init() {
     if (!series) return;
 
@@ -70,41 +37,37 @@ async function init() {
     // Create and insert the Continue Watching button container right before seasonNav
     const continueContainer = document.createElement("div");
     continueContainer.id = "continueWatchingContainer";
-    continueContainer.style.marginBottom = "15px"; // Simple separation layout spacing
+    continueContainer.style.marginBottom = "15px";
     seasonNav.parentNode.insertBefore(continueContainer, seasonNav);
 
     if (series.seasons && series.seasons.length > 0) {
-        const storageKey = `lastSeason_${id}`;
-        const localLastSeasonNum = await getProgress(storageKey);
 
-        const renderUI = (lastWatchedEpisode = null) => {
+        const renderUI = (lastWatchedEpisode = null, lastSavedSeasonNum = null) => {
             seasonNav.innerHTML = "";
             episodeContainer.innerHTML = "";
-            continueContainer.innerHTML = ""; // Clear old button frames
+            continueContainer.innerHTML = ""; 
 
-            // Find matching season configuration details 
             let displayOrder = [...series.seasons];
             let activeSeason = displayOrder[0];
             let matchedSeason = null;
 
+            // 1. Determine which season to focus on based on cloud progress sync
             if (lastWatchedEpisode) {
                 matchedSeason = displayOrder.find(s => lastWatchedEpisode.startsWith(s.prefix));
                 if (matchedSeason) activeSeason = matchedSeason;
-            } else if (localLastSeasonNum) {
-                const localMatched = displayOrder.find(s => s.number == localLastSeasonNum);
-                if (localMatched) activeSeason = localMatched;
+            } else if (lastSavedSeasonNum) {
+                const seasonMatch = displayOrder.find(s => s.number == lastSavedSeasonNum);
+                if (seasonMatch) activeSeason = seasonMatch;
             }
 
-            // --- Build "Continue Watching" Button if progress exists ---
+            // 2. Build the "Continue Watching" button if progress is found
             if (lastWatchedEpisode && matchedSeason) {
-                // Parse episode number out of prefix token matching strings
                 const epNumber = lastWatchedEpisode.replace(matchedSeason.prefix, "");
                 
                 const continueBtn = document.createElement("button");
                 continueBtn.className = "continue-btn";
                 continueBtn.textContent = `▶ Continue Watching: Season ${matchedSeason.number} - Episode ${epNumber}`;
                 
-                // Add simple design style properties (or control via global platform CSS configurations)
                 continueBtn.style.padding = "12px 24px";
                 continueBtn.style.background = "red";
                 continueBtn.style.color = "white";
@@ -120,6 +83,7 @@ async function init() {
                 continueContainer.appendChild(continueBtn);
             }
 
+            // 3. Render Episode Grid list layout
             const showEpisodes = (season) => {
                 episodeContainer.innerHTML = "";
                 for (let i = 1; i <= season.totalEpisodes; i++) {
@@ -138,6 +102,7 @@ async function init() {
                 }
             };
 
+            // 4. Render Season Selection Navigation Tab items
             displayOrder.forEach((season) => {
                 const seasonBtn = document.createElement("button");
                 seasonBtn.className = "season-btn";
@@ -148,36 +113,51 @@ async function init() {
                     showEpisodes(season);
                 }
 
-                seasonBtn.onclick = async () => {
+                seasonBtn.onclick = () => {
                     document.querySelectorAll(".season-btn").forEach(b => b.classList.remove("active"));
                     seasonBtn.classList.add("active");
-                    await saveProgress(storageKey, season.number);
                     showEpisodes(season);
+
+                    // Push user's manual season selection toggle into the core document profile record
+                    if (window.fbAuth && window.fbDb && window.fbAuth.currentUser) {
+                        const uid = window.fbAuth.currentUser.uid;
+                        window.fbDb.collection("users").doc(uid).collection("watchHistory").doc(id).set({
+                            lastViewedSeason: season.number,
+                            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                        }, { merge: true }).catch(err => console.error("Error updating season selection context:", err));
+                    }
                 };
 
                 seasonNav.appendChild(seasonBtn);
             });
         };
 
-        // Pull active server profiles context mapping
+        // --- Core Entry: Fetch everything live from Firestore ---
         if (window.fbAuth && window.fbDb) {
             window.fbAuth.onAuthStateChanged((user) => {
                 if (user) {
                     window.fbDb.collection("users").doc(user.uid).collection("watchHistory").doc(id).get()
                         .then((docSnap) => {
-                            const lastEp = docSnap.exists ? docSnap.data().lastWatchedEpisode : null;
-                            renderUI(lastEp);
+                            if (docSnap.exists) {
+                                const data = docSnap.data();
+                                renderUI(data.lastWatchedEpisode, data.lastViewedSeason);
+                            } else {
+                                renderUI(null, null);
+                            }
                         })
-                        .catch(() => renderUI(null));
+                        .catch((err) => {
+                            console.error("Firestore loading error:", err);
+                            renderUI(null, null);
+                        });
                 } else {
-                    renderUI(null);
+                    renderUI(null, null);
                 }
             });
         } else {
-            renderUI(null);
+            renderUI(null, null);
         }
     }
 }
 
-// Run the async function
 init();
+
