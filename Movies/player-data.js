@@ -110,6 +110,7 @@ window.videoData = {
   "NowYouSeeMe": "https://dl.dropboxusercontent.com/scl/fi/ty7e2e3aihcl4s95iuvjl/Now.You.See.Me.mkv?rlkey=2lw1y17guzzaj4pysiw66mxmz&st=c09t0k9w&dl=1",
   "JoeDirt": "https://dl.dropboxusercontent.com/scl/fi/1tjpv51amhayg0wzfop1p/JoeDirt.mp4?rlkey=b6plyori3gdujyr80hnev0tga&st=pvgy17ow&dl=1",
   "TheGodfatherPart2": "https://dl.dropboxusercontent.com/scl/fi/h4j407mbxl2790cclph39/The.Godfather.Part.2.mp4?rlkey=txixumki7efonkkus5r93c007&st=l8s0mopa&dl=1",
-  "NowYouSeeMe2": "https://dl.dropboxusercontent.com/scl/fi/91abkiozqk6gvbprjakll/Now.You.See.Me.2.mkv?rlkey=yi8rmdthq8amk416yi9i7xaqn&st=pa2vsc62&dl=1"
+  "NowYouSeeMe2": "https://dl.dropboxusercontent.com/scl/fi/91abkiozqk6gvbprjakll/Now.You.See.Me.2.mkv?rlkey=yi8rmdthq8amk416yi9i7xaqn&st=pa2vsc62&dl=1",
+  "TheManfromToronto": "https://dl.dropboxusercontent.com/scl/fi/i0v2jbjwnc6cpax65ijnw/The.Man.from.Toronto.mkv?rlkey=mavntcgs6qf6hhq2tga0ub29p&st=fj0gz1z0&dl=1"
 };
 
