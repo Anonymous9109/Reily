@@ -491,6 +491,12 @@ const movies = [
     genres: ["Action","Comedy"],
     image: "images/TheManfromToronto.jpg",
     link: "Movies/Movie?movie=the-man-from-toronto"
+  },
+  {
+    title: "Oceans Eight",
+    genres: ["Comedy","Crime"],
+    image: "images/OceansEight.jpg",
+    link: "Movies/Movie?movie=oceans-eight"
   }
 ];
 
