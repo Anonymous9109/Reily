@@ -454,6 +454,12 @@ const movies = {
     desc: "A struggling entrepreneur plans a surprise for his wife's birthday, but due to a twist of fate, he gets caught in the middle of an operation to apprehend an assassin.",
     video: "",
     play: "TheManfromToronto"
+  },
+  "oceans-eight": {
+    title: "Oceans Eight",
+    desc: "After serving her prison sentence, Debbie Ocean, the younger sister of Danny Ocean, assembles a team of seven skilled women in an attempt to steal a diamond necklace worth USD 150 million.",
+    video: "",
+    play: "OceansEight"
   }
 };
 
