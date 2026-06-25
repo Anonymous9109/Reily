@@ -45,27 +45,19 @@ async function init() {
     const video = document.getElementById("bgVideo");
 
     if (series.video) {
-        // Clear any old sources and inject the new one
         video.innerHTML = `<source src="${series.video}" type="video/mp4">`;
         video.load();
 
-        /** * FIX: REVEAL LOGIC
-         * We keep the video at opacity 0 (defined in your CSS) 
-         * and only switch to 1 once the data is actually playing.
-         */
         const revealVideo = () => {
             video.style.opacity = "1";
         };
 
-        // If the video is already buffered/playing
         if (video.readyState >= 3) {
             revealVideo();
         } else {
-            // Listen for the first frame being drawn
             video.addEventListener('loadeddata', revealVideo);
         }
 
-        // Catch errors to ensure it stays black if link is broken
         video.addEventListener('error', () => {
             video.style.opacity = "0";
             console.log("Video source not found - keeping background black.");
@@ -75,49 +67,115 @@ async function init() {
     const seasonNav = document.getElementById("seasonNav");
     const episodeContainer = document.getElementById("episodeList");
 
+    // Create and insert the Continue Watching button container right before seasonNav
+    const continueContainer = document.createElement("div");
+    continueContainer.id = "continueWatchingContainer";
+    continueContainer.style.marginBottom = "15px"; // Simple separation layout spacing
+    seasonNav.parentNode.insertBefore(continueContainer, seasonNav);
+
     if (series.seasons && series.seasons.length > 0) {
         const storageKey = `lastSeason_${id}`;
-        
-        // 1. Fetch last watched season from IndexedDB
-        const lastSeasonNum = await getProgress(storageKey);
+        const localLastSeasonNum = await getProgress(storageKey);
 
-        // 2. Sort: Last watched season comes first
-        let displayOrder = [...series.seasons];
-        if (lastSeasonNum) {
-            displayOrder.sort((a, b) => (a.number == lastSeasonNum ? -1 : 1));
-        }
-
-        const showEpisodes = (season) => {
+        const renderUI = (lastWatchedEpisode = null) => {
+            seasonNav.innerHTML = "";
             episodeContainer.innerHTML = "";
-            for (let i = 1; i <= season.totalEpisodes; i++) {
-                const btn = document.createElement("button");
-                btn.className = "ep-btn";
-                btn.textContent = `Episode ${i}`;
-                const episodeKey = `${season.prefix}${i}`;
-                btn.onclick = () => window.location.href = `videoplayer.html?ep=${episodeKey}`;
-                episodeContainer.appendChild(btn);
-            }
-        };
+            continueContainer.innerHTML = ""; // Clear old button frames
 
-        // 3. Build Season Buttons
-        displayOrder.forEach((season, index) => {
-            const seasonBtn = document.createElement("button");
-            seasonBtn.className = "season-btn";
-            seasonBtn.textContent = `Season ${season.number}`;
+            // Find matching season configuration details 
+            let displayOrder = [...series.seasons];
+            let activeSeason = displayOrder[0];
+            let matchedSeason = null;
 
-            if (index === 0) {
-                seasonBtn.classList.add("active");
-                showEpisodes(season);
+            if (lastWatchedEpisode) {
+                matchedSeason = displayOrder.find(s => lastWatchedEpisode.startsWith(s.prefix));
+                if (matchedSeason) activeSeason = matchedSeason;
+            } else if (localLastSeasonNum) {
+                const localMatched = displayOrder.find(s => s.number == localLastSeasonNum);
+                if (localMatched) activeSeason = localMatched;
             }
 
-            seasonBtn.onclick = async () => {
-                // Save to IndexedDB and reload
-                await saveProgress(storageKey, season.number);
-                location.reload();
+            // --- Build "Continue Watching" Button if progress exists ---
+            if (lastWatchedEpisode && matchedSeason) {
+                // Parse episode number out of prefix token matching strings
+                const epNumber = lastWatchedEpisode.replace(matchedSeason.prefix, "");
+                
+                const continueBtn = document.createElement("button");
+                continueBtn.className = "continue-btn";
+                continueBtn.textContent = `▶ Continue Watching: Season ${matchedSeason.number} - Episode ${epNumber}`;
+                
+                // Add simple design style properties (or control via global platform CSS configurations)
+                continueBtn.style.padding = "12px 24px";
+                continueBtn.style.background = "red";
+                continueBtn.style.color = "white";
+                continueBtn.style.border = "none";
+                continueBtn.style.borderRadius = "4px";
+                continueBtn.style.fontWeight = "bold";
+                continueBtn.style.cursor = "pointer";
+                continueBtn.style.display = "block";
+                
+                continueBtn.onclick = () => {
+                    window.location.href = `videoplayer.html?series=${id}&ep=${lastWatchedEpisode}`;
+                };
+                continueContainer.appendChild(continueBtn);
+            }
+
+            const showEpisodes = (season) => {
+                episodeContainer.innerHTML = "";
+                for (let i = 1; i <= season.totalEpisodes; i++) {
+                    const btn = document.createElement("button");
+                    btn.className = "ep-btn";
+                    btn.textContent = `Episode ${i}`;
+                    const episodeKey = `${season.prefix}${i}`;
+                    
+                    if (lastWatchedEpisode === episodeKey) {
+                        btn.classList.add("watching");
+                        btn.style.borderBottom = "3px solid red";
+                    }
+
+                    btn.onclick = () => window.location.href = `videoplayer.html?series=${id}&ep=${episodeKey}`;
+                    episodeContainer.appendChild(btn);
+                }
             };
 
-            seasonNav.appendChild(seasonBtn);
-        });
+            displayOrder.forEach((season) => {
+                const seasonBtn = document.createElement("button");
+                seasonBtn.className = "season-btn";
+                seasonBtn.textContent = `Season ${season.number}`;
+
+                if (season.number === activeSeason.number) {
+                    seasonBtn.classList.add("active");
+                    showEpisodes(season);
+                }
+
+                seasonBtn.onclick = async () => {
+                    document.querySelectorAll(".season-btn").forEach(b => b.classList.remove("active"));
+                    seasonBtn.classList.add("active");
+                    await saveProgress(storageKey, season.number);
+                    showEpisodes(season);
+                };
+
+                seasonNav.appendChild(seasonBtn);
+            });
+        };
+
+        // Pull active server profiles context mapping
+        if (window.fbAuth && window.fbDb) {
+            window.fbAuth.onAuthStateChanged((user) => {
+                if (user) {
+                    window.fbDb.collection("users").doc(user.uid).collection("watchHistory").doc(id).get()
+                        .then((docSnap) => {
+                            const lastEp = docSnap.exists ? docSnap.data().lastWatchedEpisode : null;
+                            renderUI(lastEp);
+                        })
+                        .catch(() => renderUI(null));
+                } else {
+                    renderUI(null);
+                }
+            });
+        } else {
+            renderUI(null);
+        }
     }
 }
 
