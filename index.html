@@ -1139,11 +1139,11 @@
         const user = auth.currentUser;
         if (!user || selectedId === currentUserPfpId) return;
 
-        showToast("Updating avatar selection...");
+        
         db.collection('logininformation').doc(user.email).set({
             pfp_id: selectedId
         }, { merge: true })
-        .then(() => showToast("Profile avatar successfully updated."))
+        
         .catch(err => {
             console.error("Failed to update avatar state:", err);
             showToast("Failed to save avatar change.");
@@ -1536,7 +1536,7 @@
         if (typeof movies === 'undefined' || !movies.length) return;
         
         const watchAgainContainer = document.getElementById("watchAgainContainer");
-        const trendingContainer = document.getElementById("trendingContainer");
+
         const randomContainer = document.getElementById("randomContainer");
         const genreContainer = document.getElementById("genreContainer");
         
