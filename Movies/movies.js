@@ -484,6 +484,12 @@ const movies = {
     desc: "Travis, an ex-marine and Vietnam veteran, works as a taxi driver in New York City. One day, he decides to save an underage prostitute from her pimp in an effort to clean the city of its corruption.",
     video: "",
     play: "TaxiDriver"
+  },
+  "tuner": {
+    title: "Tuner",
+    desc: "A talented piano tuner's meticulous skills for tuning pianos lead him to discover an unexpected aptitude for cracking safes, turning his life upside down.",
+    video: "",
+    play: "Tuner"
   }
 };
 
