@@ -478,6 +478,12 @@ const movies = {
     desc: "Alex, a young man, is in love with Corinne, a student. When Alex meets Corinne's mother, memories come rushing to him about his past life as a young lawyer who happens to be Corinne's father.",
     video: "",
     play: "ChancesAre"
+  },
+  "taxi-driver": {
+    title: "Taxi Driver",
+    desc: "Travis, an ex-marine and Vietnam veteran, works as a taxi driver in New York City. One day, he decides to save an underage prostitute from her pimp in an effort to clean the city of its corruption.",
+    video: "",
+    play: "TaxiDriver"
   }
 };
 
