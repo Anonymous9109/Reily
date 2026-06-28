@@ -503,6 +503,12 @@ const movies = [
     genres: ["Comedy","Thriller"],
     image: "images/TheWolfofWallStreet.jpg",
     link: "Movies/Movie?movie=the-wolf-of-wall-street"
+  },
+  {
+    title: "The 40 Year Old Virgin",
+    genres: ["Comedy","Romance","Action"],
+    image: "images/The40YearOldVirgin.jpg",
+    link: "Movies/Movie?movie=the-40-year-old-virgin"
   }
 ];
 
