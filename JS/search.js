@@ -521,6 +521,12 @@ const movies = [
     genres: ["Action","Crime","Drama"],
     image: "images/TaxiDriver.jpg",
     link: "Movies/Movie?movie=taxi-driver"
+  },
+  {
+    title: "Tuner",
+    genres: ["Crime","Thriller"],
+    image: "images/Tuner.jpg",
+    link: "Movies/Movie?movie=tuner"
   }
 ];
 
