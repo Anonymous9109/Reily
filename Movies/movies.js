@@ -472,6 +472,12 @@ const movies = {
     desc: "40-year-old Andy Stitzer, who works at a big-box store, is a virgin and deals with female customers awkwardly. Things become interesting when a romance develops between him and Trish, an entrepreneur.",
     video: "",
     play: "The40YearOldVirgin"
+  },
+  "chances-are": {
+    title: "Chances Are",
+    desc: "Alex, a young man, is in love with Corinne, a student. When Alex meets Corinne's mother, memories come rushing to him about his past life as a young lawyer who happens to be Corinne's father.",
+    video: "",
+    play: "ChancesAre"
   }
 };
 
