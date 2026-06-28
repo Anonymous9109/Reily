@@ -509,6 +509,12 @@ const movies = [
     genres: ["Comedy","Romance","Action"],
     image: "images/The40YearOldVirgin.jpg",
     link: "Movies/Movie?movie=the-40-year-old-virgin"
+  },
+  {
+    title: "Chances Are",
+    genres: ["Comedy","Romance"],
+    image: "images/ChancesAre.jpg",
+    link: "Movies/Movie?movie=chances-are"
   }
 ];
 
