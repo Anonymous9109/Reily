@@ -533,6 +533,12 @@ const movies = [
     genres: ["Action","Crime"],
     image: "images/StreetKings.jpg",
     link: "Movies/Movie?movie=street-kings"
+  },
+  {
+    title: "Dream Scenario",
+    genres: ["Horror","Comedy"],
+    image: "images/DreamScenario.jpg",
+    link: "Movies/Movie?movie=dream-scenario"
   }
 ];
 
