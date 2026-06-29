@@ -496,6 +496,12 @@ const movies = {
     desc: "Tom Ludlow, a cop, is disillusioned after the death of his wife. Later, a cop gets killed and all evidence points towards him, forcing him to go up against his own people and question their loyalties.",
     video: "",
     play: "StreetKings"
+  },
+  "dream-scenario": {
+    title: "Dream Scenario",
+    desc: "A family man finds his life turned upside down when millions of strangers suddenly start seeing him in their dreams. However, when his nighttime appearances take a nightmarish turn, he's forced to navigate the consequences of his newfound stardom.",
+    video: "",
+    play: "DreamScenario"
   }
 };
 
