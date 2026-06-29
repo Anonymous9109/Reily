@@ -490,6 +490,12 @@ const movies = {
     desc: "A talented piano tuner's meticulous skills for tuning pianos lead him to discover an unexpected aptitude for cracking safes, turning his life upside down.",
     video: "",
     play: "Tuner"
+  },
+  "street-kings": {
+    title: "Street Kings",
+    desc: "Tom Ludlow, a cop, is disillusioned after the death of his wife. Later, a cop gets killed and all evidence points towards him, forcing him to go up against his own people and question their loyalties.",
+    video: "",
+    play: "StreetKings"
   }
 };
 
