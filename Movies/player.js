@@ -1,4 +1,5 @@
-/* Cyrene Player (smart source detection + back button + portrait support + subtitles + Timer + Netflix Shadow + Firestore Resume Fixed + Google IMA VAST Integration + 4s Pause Info Overlay) */
+
+/* Cyrene Player (smart source detection + back button + portrait support + subtitles + Timer + Netflix Shadow + Firestore Resume Fixed + Google IMA VAST Integration) */
 document.addEventListener("DOMContentLoaded", async () => {
 
   /********** 1) Inject CSS **********/
@@ -53,48 +54,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         transition: all 0.2s ease;
     }
     #videoPlayer.show-ui #subDisplay { bottom: 20%; }
-
-    /* Movie Title & Description Info Overlay */
-    #infoOverlay {
-      position: absolute;
-      bottom: 120px;
-      left: 5%;
-      max-width: 40%;
-      z-index: 99; /* Higher layer priority to sit above video containers */
-      font-family: sans-serif;
-      color: #ffffff;
-      opacity: 0;
-      visibility: hidden;
-      display: block !important;
-      transition: opacity 0.4s ease, visibility 0.4s ease;
-      pointer-events: none;
-    }
-    #infoOverlay.show-info {
-      opacity: 1 !important;
-      visibility: visible !important;
-    }
-    #infoOverlay h2 {
-      margin: 0 0 6px 0;
-      font-size: 26px;
-      font-weight: 700;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.9);
-    }
-    #infoOverlay p {
-      margin: 0;
-      font-size: 14px;
-      line-height: 1.4;
-      color: #cccccc;
-      text-shadow: 0 1px 3px rgba(0,0,0,0.9);
-    }
-    #videoPlayer.show-ui #infoOverlay {
-      bottom: 150px;
-    }
-
-    @media (max-width: 768px) {
-      #infoOverlay { max-width: 75%; bottom: 105px; }
-      #infoOverlay h2 { font-size: 18px; }
-      #infoOverlay p { font-size: 12px; }
-    }
 
     .controls {  
       position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); 
@@ -268,11 +227,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const loadingRing = document.createElement("div");
   loadingRing.id = "loadingRing";
 
-  const infoOverlay = document.createElement("div");
-  infoOverlay.id = "infoOverlay";
-  infoOverlay.innerHTML = `<h2></h2><p></p>`;
-
-  root.append(video, subDisplay, controls, progressContainer, timerDisplay, ccBtn, subMenu, backBtn, nextBtn, loadingRing, backToPrev, infoOverlay);
+  root.append(video, subDisplay, controls, progressContainer, timerDisplay, ccBtn, subMenu, backBtn, nextBtn, loadingRing, backToPrev);
   document.body.appendChild(root);
 
   /********** 3) Smart Source Detection **********/
@@ -310,6 +265,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   /********** GOOGLE IMA VAST IMPLEMENTATION **********/
   function initIMAAdWorkflow(movieUrl) {
+    // 1. Ensure IMA script is in head element
     if (!window.google || !window.google.ima) {
       const imaScript = document.createElement("script");
       imaScript.src = "https://imasdk.googleapis.com/js/sdkloader/ima3.js";
@@ -367,10 +323,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     await attachSourceToVideo(movieUrl);
   }
 
+  // Fire up the ad wrapper sequence immediately on startup
   initIMAAdWorkflow(src);
 
 
-  /********** FIRESTORE CONFIG & ASYNC VARIABLES **********/
+  /********** NEW: FIRESTORE CONFIG & ASYNC VARIABLES **********/
   const { getFirestore, doc, setDoc } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
   const { getAuth } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js");
   
@@ -379,40 +336,16 @@ document.addEventListener("DOMContentLoaded", async () => {
   
   const movieParamId = params.get("id") || params.get("movie") || ep; 
   let activeMovieTitle = "Unknown Media";
-  let activeMovieDesc = "";
   
-  function resolveMovieMetadata() {
-    const movieDataTarget = (typeof movies !== 'undefined' ? movies : window.movies);
-    if (!movieDataTarget) return false;
-
-    let match = movieDataTarget[movieParamId];
-    
-    if (!match) {
-      const cleanKey = movieParamId.toString().toLowerCase().trim();
-      const foundKey = Object.keys(movieDataTarget).find(k => k.toLowerCase().trim() === cleanKey);
-      if (foundKey) match = movieDataTarget[foundKey];
-    }
-
-    if (match) {
-      activeMovieTitle = match.title || "Unknown Media";
-      activeMovieDesc = match.desc || "";
-      infoOverlay.querySelector("h2").textContent = activeMovieTitle;
-      infoOverlay.querySelector("p").textContent = activeMovieDesc;
-      return true;
-    }
-    return false;
+  if (window.movies && window.movies[movieParamId]) {
+    activeMovieTitle = window.movies[movieParamId].title;
+  } else if (document.title && document.title !== "Player") {
+    activeMovieTitle = document.title;
   }
 
-  if (!resolveMovieMetadata()) {
-    if (document.title && document.title !== "Player") {
-      activeMovieTitle = document.title;
-      infoOverlay.querySelector("h2").textContent = activeMovieTitle;
-    }
-  }
-
-  let isResuming = true; 
+  let isResuming = true; // Block tracking until resume is finished
   let lastSavedTime = 0;
-  let firebaseTimestamp = null; 
+  let firebaseTimestamp = null; // Stash timestamp globally until metadata loads
 
   async function saveWatchProgress() {
     const user = auth.currentUser;
@@ -476,14 +409,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const shadowAmt = 0.06 * multiplier;
     
-    // Fixed string syntax parsing crash bugs here
     if(edge === 'dropShadow') {
-        el.style.textShadow = shadowAmt + "em " + shadowAmt + "em 0.15em rgba(0,0,0,0.9)";
+        el.style.textShadow = `${shadowAmt}em ${shadowAmt}em 0.15em rgba(0,0,0,0.9)`;
     } else if(edge === 'outline') {
-        const hAmt = shadowAmt / 2;
-        el.style.textShadow = "-" + hAmt + "em -" + hAmt + "em 0 #000, " + hAmt + "em -" + hAmt + "em 0 #000, -" + hAmt + "em " + hAmt + "em 0 #000, " + hAmt + "em " + hAmt + "em 0 #000";
+        el.style.textShadow = `-${shadowAmt/2}em -${shadowAmt/2}em 0 #000, ${shadowAmt/2}em -${shadowAmt/2}em 0 #000, -${shadowAmt/2}em ${shadowAmt/2}em 0 #000, ${shadowAmt/2}em ${shadowAmt/2}em 0 #000`;
     } else if(edge === 'raised') {
-        el.style.textShadow = "0 -0.03em 0 #000, 0 0.03em 0 #fff";
+        el.style.textShadow = `0 -0.03em 0 #000, 0 0.03em 0 #fff`;
     } else {
         el.style.textShadow = "none";
     }
@@ -500,7 +431,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (this.mode === 'hidden') {
           const cue = this.activeCues[0];
           if (cue) {
-            subDisplay.innerHTML = "<span>" + cue.text + "</span>";
+            subDisplay.innerHTML = `<span>${cue.text}</span>`;
             const span = subDisplay.querySelector('span');
             if(span) await applySubAppearance(span);
           } else {
@@ -558,7 +489,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   const playIcon = document.getElementById("playIcon");
   const pauseIcon = document.getElementById("pauseIcon");
   let controlsVisible = false, hideTimer, isDragging = false;
-  let pauseTimer;
 
   const formatTime = (seconds) => {
     if (!isFinite(seconds) || isNaN(seconds)) return "0:00";
@@ -593,40 +523,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     clearTimeout(hideTimer);
   };
 
-  const startPauseTimer = () => {
-    clearPauseTimer();
-    if (video.paused && !isDragging) {
-      pauseTimer = setTimeout(() => {
-        infoOverlay.classList.add("show-info");
-      }, 4000);
-    }
-  };
-
-  const clearPauseTimer = () => {
-    clearTimeout(pauseTimer);
-    infoOverlay.classList.remove("show-info");
-  };
-
   const showLoading = () => loadingRing.style.display = "block";
   const hideLoading = () => loadingRing.style.display = "none";
   const setPlayingUI = (p) => { playIcon.style.display = p ? "none" : "block"; pauseIcon.style.display = p ? "block" : "none"; };
 
   video.addEventListener("canplay", () => { hideLoading(); video.style.opacity = "1"; });
-  video.addEventListener("playing", () => { 
-    hideLoading(); 
-    setPlayingUI(true); 
-    clearPauseTimer();
-  });
-  video.addEventListener("pause", () => { 
-    setPlayingUI(false); 
-    startPauseTimer();
-  });
+  video.addEventListener("playing", () => { hideLoading(); setPlayingUI(true); });
+  video.addEventListener("pause", () => setPlayingUI(false));
   video.addEventListener("waiting", showLoading);
   video.addEventListener("ended", hideLoading);
-  video.addEventListener("seeking", clearPauseTimer);
-  video.addEventListener("seeked", () => {
-    if (video.paused) startPauseTimer();
-  });
 
   playPauseBtn.onclick = (e) => {
     e.stopPropagation();
@@ -661,27 +566,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     video.currentTime = targetTime;
   };
 
-  progressContainer.onmousedown = (e) => { isDragging = true; progressContainer.classList.add("dragging"); clearPauseTimer(); scrub(e); };
+  progressContainer.onmousedown = (e) => { isDragging = true; progressContainer.classList.add("dragging"); scrub(e); };
   window.onmousemove = (e) => { if (isDragging) scrub(e); };
-  window.onmouseup = () => { 
-    if (isDragging) { 
-      isDragging = false; 
-      progressContainer.classList.remove("dragging"); 
-      showControls(); 
-      if (video.paused) startPauseTimer();
-    } 
-  };
+  window.onmouseup = () => { if (isDragging) { isDragging = false; progressContainer.classList.remove("dragging"); showControls(); } };
 
-  progressContainer.ontouchstart = (e) => { isDragging = true; progressContainer.classList.add("dragging"); clearPauseTimer(); scrub(e); };
+  progressContainer.ontouchstart = (e) => { isDragging = true; progressContainer.classList.add("dragging"); scrub(e); };
   window.ontouchmove = (e) => { if (isDragging) scrub(e); };
-  window.ontouchend = () => { 
-    if (isDragging) { 
-      isDragging = false; 
-      progressContainer.classList.remove("dragging"); 
-      showControls(); 
-      if (video.paused) startPauseTimer();
-    } 
-  };
+  window.ontouchend = () => { if (isDragging) { isDragging = false; progressContainer.classList.remove("dragging"); showControls(); } };
 
   backBtn.onclick = () => { if (window.backEpisodeLink) location.href = window.backEpisodeLink; };
   nextBtn.onclick = () => { if (window.nextEpisodeLink) location.href = window.nextEpisodeLink; };
@@ -690,13 +581,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   /********** THE JUMP FIX: TRACK LOADEDMETADATA **********/
   video.addEventListener("loadedmetadata", async () => {
-    resolveMovieMetadata();
-
+    // When the browser knows video dimensions and track lengths, apply the stashed time
     if (firebaseTimestamp && firebaseTimestamp < video.duration - 15) {
       video.currentTime = firebaseTimestamp;
       lastSavedTime = firebaseTimestamp;
     }
     
+    // Now release the guard so timeupdates can track normally
     isResuming = false;
     
     try { 
@@ -707,10 +598,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 
+  // Pull down data early from network, store it in variable until metadata loads
   auth.onAuthStateChanged(async (user) => {
     if (user && user.email) {
       try {
-        const { getDoc } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js");
+        const { getDoc } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
         const docRef = doc(db, "watchHistory", user.email, "movies", movieParamId);
         const docSnap = await getDoc(docRef);
         
@@ -781,4 +673,3 @@ document.addEventListener("fullscreenchange", () => {
   document.addEventListener("mousemove", (e) => { e.target.dispatchEvent(createTouchEvent("touchmove", e)); });
   document.addEventListener("mouseup", (e) => { e.target.dispatchEvent(createTouchEvent("touchend", e)); });
 })();
-
