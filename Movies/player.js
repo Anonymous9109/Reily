@@ -60,17 +60,18 @@ document.addEventListener("DOMContentLoaded", async () => {
       bottom: 120px;
       left: 5%;
       max-width: 40%;
-      z-index: 28;
+      z-index: 99; /* Higher layer priority to sit above video containers */
       font-family: sans-serif;
       color: #ffffff;
       opacity: 0;
       visibility: hidden;
+      display: block !important;
       transition: opacity 0.4s ease, visibility 0.4s ease;
       pointer-events: none;
     }
     #infoOverlay.show-info {
-      opacity: 1;
-      visibility: visible;
+      opacity: 1 !important;
+      visibility: visible !important;
     }
     #infoOverlay h2 {
       margin: 0 0 6px 0;
@@ -380,14 +381,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   let activeMovieTitle = "Unknown Media";
   let activeMovieDesc = "";
   
-  // DYNAMIC LOOKUP FUNCTION (Checks both string and explicit matching keys)
   function resolveMovieMetadata() {
     const movieDataTarget = (typeof movies !== 'undefined' ? movies : window.movies);
     if (!movieDataTarget) return false;
 
     let match = movieDataTarget[movieParamId];
     
-    // Fallback: If no direct match, look up by parsing clean keys case-insensitively
     if (!match) {
       const cleanKey = movieParamId.toString().toLowerCase().trim();
       const foundKey = Object.keys(movieDataTarget).find(k => k.toLowerCase().trim() === cleanKey);
@@ -404,7 +403,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     return false;
   }
 
-  // Initial Attempt
   if (!resolveMovieMetadata()) {
     if (document.title && document.title !== "Player") {
       activeMovieTitle = document.title;
@@ -478,12 +476,14 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const shadowAmt = 0.06 * multiplier;
     
+    // Fixed string syntax parsing crash bugs here
     if(edge === 'dropShadow') {
-        el.style.textShadow = `${shadowAmt}em ${shadowAmt}em 0.15em rgba(0,0,0,0.9)`;
+        el.style.textShadow = shadowAmt + "em " + shadowAmt + "em 0.15em rgba(0,0,0,0.9)";
     } else if(edge === 'outline') {
-        el.style.textShadow = `-\${shadowAmt/2}em -\${shadowAmt/2}em 0 #000, \${shadowAmt/2}em -\${shadowAmt/2}em 0 #000, -\text{\${shadowAmt/2}}em \${shadowAmt/2}em 0 #000, \${shadowAmt/2}em \${shadowAmt/2}em 0 #000`;
+        const hAmt = shadowAmt / 2;
+        el.style.textShadow = "-" + hAmt + "em -" + hAmt + "em 0 #000, " + hAmt + "em -" + hAmt + "em 0 #000, -" + hAmt + "em " + hAmt + "em 0 #000, " + hAmt + "em " + hAmt + "em 0 #000";
     } else if(edge === 'raised') {
-        el.style.textShadow = `0 -0.03em 0 #000, 0 0.03em 0 #fff`;
+        el.style.textShadow = "0 -0.03em 0 #000, 0 0.03em 0 #fff";
     } else {
         el.style.textShadow = "none";
     }
@@ -500,7 +500,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (this.mode === 'hidden') {
           const cue = this.activeCues[0];
           if (cue) {
-            subDisplay.innerHTML = `<span>\${cue.text}</span>`;
+            subDisplay.innerHTML = "<span>" + cue.text + "</span>";
             const span = subDisplay.querySelector('span');
             if(span) await applySubAppearance(span);
           } else {
@@ -690,7 +690,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   /********** THE JUMP FIX: TRACK LOADEDMETADATA **********/
   video.addEventListener("loadedmetadata", async () => {
-    // Retry looking up data as a safeguard once video context is fully alive
     resolveMovieMetadata();
 
     if (firebaseTimestamp && firebaseTimestamp < video.duration - 15) {
