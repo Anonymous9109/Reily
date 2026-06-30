@@ -539,6 +539,12 @@ const movies = [
     genres: ["Horror","Comedy"],
     image: "images/DreamScenario.jpg",
     link: "Movies/Movie?movie=dream-scenario"
+  },
+  {
+    title: "Do You Know Me",
+    genres: ["Thriller","Mystery"],
+    image: "images/DoYouKnowMe.jpg",
+    link: "Movies/Movie?movie=do-you-know-me"
   }
 ];
 
