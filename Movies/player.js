@@ -369,7 +369,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   initIMAAdWorkflow(src);
 
 
-  /********** NEW: FIRESTORE CONFIG & ASYNC VARIABLES **********/
+  /********** FIRESTORE CONFIG & ASYNC VARIABLES **********/
   const { getFirestore, doc, setDoc } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
   const { getAuth } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js");
   
@@ -380,9 +380,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   let activeMovieTitle = "Unknown Media";
   let activeMovieDesc = "";
   
-  if (typeof movies !== 'undefined' && movies[movieParamId]) {
-    activeMovieTitle = movies[movieParamId].title || "Unknown Media";
-    activeMovieDesc = movies[movieParamId].desc || "";
+  // Robust global scope check to catch 'const movies' from separate script execution
+  const movieDataTarget = (typeof movies !== 'undefined' ? movies : window.movies);
+
+  if (movieDataTarget && movieDataTarget[movieParamId]) {
+    activeMovieTitle = movieDataTarget[movieParamId].title || "Unknown Media";
+    activeMovieDesc = movieDataTarget[movieParamId].desc || "";
   } else if (document.title && document.title !== "Player") {
     activeMovieTitle = document.title;
   }
