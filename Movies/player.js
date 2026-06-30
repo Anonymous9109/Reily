@@ -380,18 +380,37 @@ document.addEventListener("DOMContentLoaded", async () => {
   let activeMovieTitle = "Unknown Media";
   let activeMovieDesc = "";
   
-  // Robust global scope check to catch 'const movies' from separate script execution
-  const movieDataTarget = (typeof movies !== 'undefined' ? movies : window.movies);
+  // DYNAMIC LOOKUP FUNCTION (Checks both string and explicit matching keys)
+  function resolveMovieMetadata() {
+    const movieDataTarget = (typeof movies !== 'undefined' ? movies : window.movies);
+    if (!movieDataTarget) return false;
 
-  if (movieDataTarget && movieDataTarget[movieParamId]) {
-    activeMovieTitle = movieDataTarget[movieParamId].title || "Unknown Media";
-    activeMovieDesc = movieDataTarget[movieParamId].desc || "";
-  } else if (document.title && document.title !== "Player") {
-    activeMovieTitle = document.title;
+    let match = movieDataTarget[movieParamId];
+    
+    // Fallback: If no direct match, look up by parsing clean keys case-insensitively
+    if (!match) {
+      const cleanKey = movieParamId.toString().toLowerCase().trim();
+      const foundKey = Object.keys(movieDataTarget).find(k => k.toLowerCase().trim() === cleanKey);
+      if (foundKey) match = movieDataTarget[foundKey];
+    }
+
+    if (match) {
+      activeMovieTitle = match.title || "Unknown Media";
+      activeMovieDesc = match.desc || "";
+      infoOverlay.querySelector("h2").textContent = activeMovieTitle;
+      infoOverlay.querySelector("p").textContent = activeMovieDesc;
+      return true;
+    }
+    return false;
   }
 
-  infoOverlay.querySelector("h2").textContent = activeMovieTitle;
-  infoOverlay.querySelector("p").textContent = activeMovieDesc;
+  // Initial Attempt
+  if (!resolveMovieMetadata()) {
+    if (document.title && document.title !== "Player") {
+      activeMovieTitle = document.title;
+      infoOverlay.querySelector("h2").textContent = activeMovieTitle;
+    }
+  }
 
   let isResuming = true; 
   let lastSavedTime = 0;
@@ -671,6 +690,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   /********** THE JUMP FIX: TRACK LOADEDMETADATA **********/
   video.addEventListener("loadedmetadata", async () => {
+    // Retry looking up data as a safeguard once video context is fully alive
+    resolveMovieMetadata();
+
     if (firebaseTimestamp && firebaseTimestamp < video.duration - 15) {
       video.currentTime = firebaseTimestamp;
       lastSavedTime = firebaseTimestamp;
