@@ -557,6 +557,12 @@ const movies = [
     genres: ["Sci-fi","Adventure"],
     image: "images/GoodLuckHaveFunDontDie.jpg",
     link: "Movies/Movie?movie=good-luck-have-fun-dont-die"
+  },
+  {
+    title: "The Dictator",
+    genres: ["Comedy","Drama"],
+    image: "images/TheDictator.jpg",
+    link: "Movies/Movie?movie=the-dictator"
   }
 ];
 
