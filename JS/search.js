@@ -545,6 +545,12 @@ const movies = [
     genres: ["Thriller","Mystery"],
     image: "images/DoYouKnowMe.jpg",
     link: "Movies/Movie?movie=do-you-know-me"
+  },
+  {
+    title: "Sweet Home Alabama",
+    genres: ["Comedy","Romance"],
+    image: "images/SweetHomeAlabama.jpg",
+    link: "Movies/Movie?movie=sweet-home-alabama"
   }
 ];
 
