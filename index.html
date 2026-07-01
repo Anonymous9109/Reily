@@ -763,6 +763,8 @@
         <h1 class="Rinolski-font" style="font-size: 48px; text-align: center; margin-bottom: 30px;">rinolski</h1>
         <h2 id="auth-title" style="margin-bottom: 20px; font-size: 24px;">Sign In</h2>
         
+        <div id="auth-inline-alert" style="display: none; padding: 12px; border-radius: 4px; font-size: 14px; margin-bottom: 16px; line-height: 1.4; text-align: center;"></div>
+
         <input type="email" id="auth-email" class="auth-input" placeholder="Email Address">
         <input type="password" id="auth-password" class="auth-input" placeholder="Password">
         
@@ -897,6 +899,8 @@
 
 <script>
     let isSignUpMode = false;
+    let authCooldownTimer = null;
+    let verificationPollInterval = null; 
 
     function showToast(message) {
         const container = document.getElementById('toast-container');
@@ -907,24 +911,133 @@
         setTimeout(() => toast.remove(), 3500);
     }
 
-    function handleAuthError(error) {
-        console.error("Firebase auth issue triggered:", error);
-        switch (error.code) {
-            case "auth/invalid-email": showToast("That email address doesn't look quite right."); break;
-            case "auth/user-not-found": showToast("We couldn't find an account matching that email address."); break;
-            case "auth/wrong-password": showToast("The password you entered is incorrect."); break;
-            case "auth/email-already-in-use": showToast("This email address is already connected to another account."); break;
-            case "auth/weak-password": showToast("Your password needs to be at least 6 characters long."); break;
-            case "auth/network-request-failed": showToast("Connection issue. Check your internet settings and try again."); break;
-            case "auth/too-many-requests": showToast("Too many failed attempts. This account has been temporarily locked out."); break;
-            default: showToast("Something went wrong. Please check your entries and try again."); break;
+    function showInlineAlert(message, type) {
+        const alertDiv = document.getElementById('auth-inline-alert');
+        alertDiv.innerText = message;
+        alertDiv.style.display = 'block';
+        
+        if (type === 'success') {
+            alertDiv.style.background = '#12261E';
+            alertDiv.style.color = '#10b981';
+            alertDiv.style.border = '1px solid #064e3b';
+        } else if (type === 'warning') {
+            alertDiv.style.background = '#2a1e0b';
+            alertDiv.style.color = '#fbbf24';
+            alertDiv.style.border = '1px solid #78350f';
+        } else {
+            alertDiv.style.background = '#281515';
+            alertDiv.style.color = '#ef4444';
+            alertDiv.style.border = '1px solid #7f1d1d';
         }
     }
 
+    function clearInlineAlert() {
+        const alertDiv = document.getElementById('auth-inline-alert');
+        alertDiv.style.display = 'none';
+        alertDiv.innerText = '';
+    }
+
+    function stopVerificationPolling() {
+        if (verificationPollInterval) {
+            clearInterval(verificationPollInterval);
+            verificationPollInterval = null;
+        }
+    }
+
+    function startVerificationPolling() {
+        stopVerificationPolling();
+        
+        verificationPollInterval = setInterval(() => {
+            const user = auth.currentUser;
+            if (user) {
+                user.reload().then(() => {
+                    if (user.emailVerified) {
+                        stopVerificationPolling();
+                        clearInlineAlert();
+                        if(authCooldownTimer) clearInterval(authCooldownTimer);
+                        
+                        const submitBtn = document.getElementById('auth-submit');
+                        submitBtn.disabled = false;
+                        submitBtn.innerText = "Sign In";
+                        submitBtn.style.background = '#e50914';
+
+                        showToast("Email confirmed! Logging you in automatically...");
+                        
+                        document.getElementById('auth-gate').style.display = 'none';
+                        document.getElementById('profile-email').innerText = user.email;
+                        document.getElementById('profile-initial').innerText = user.email.charAt(0).toUpperCase();
+                        
+                        listenToLoginInformation();
+                        listenToUnwantedMovies(); 
+                        listenToTrendingTitles();
+                    }
+                }).catch(err => console.error("Polling profile reload skipped:", err));
+            } else {
+                stopVerificationPolling();
+            }
+        }, 3500);
+    }
+
+    function startAuthButtonCooldown(seconds) {
+        const submitBtn = document.getElementById('auth-submit');
+        let timeLeft = seconds;
+        submitBtn.disabled = true;
+        
+        if(authCooldownTimer) clearInterval(authCooldownTimer);
+
+        authCooldownTimer = setInterval(() => {
+            if (timeLeft <= 0) {
+                clearInterval(authCooldownTimer);
+                if (!verificationPollInterval) { 
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = isSignUpMode ? "Create Account" : "Sign In";
+                    submitBtn.style.background = '#e50914';
+                }
+            } else {
+                submitBtn.innerText = `Please wait (${timeLeft}s)`;
+                submitBtn.style.background = '#555555';
+                timeLeft--;
+            }
+        }, 1000);
+    }
+
+    function handleAuthError(error) {
+        console.error("Firebase auth issue triggered:", error);
+        const submitBtn = document.getElementById('auth-submit');
+        submitBtn.disabled = false;
+        submitBtn.innerText = isSignUpMode ? "Create Account" : "Sign In";
+
+        if (error.code === "auth/too-many-requests") {
+            showInlineAlert("Verification link already requested. Please check your inbox or wait a moment.", "warning");
+            startAuthButtonCooldown(60);
+            return;
+        }
+
+        let errMsg = "Something went wrong. Please check your entries and try again.";
+        switch (error.code) {
+            case "auth/invalid-email": errMsg = "That email address doesn't look quite right."; break;
+            case "auth/user-not-found": errMsg = "We couldn't find an account matching that email address."; break;
+            case "auth/wrong-password": errMsg = "The password you entered is incorrect."; break;
+            case "auth/email-already-in-use": errMsg = "This email address is already connected to another account."; break;
+            case "auth/weak-password": errMsg = "Your password needs to be at least 6 characters long."; break;
+            case "auth/network-request-failed": errMsg = "Connection issue. Check your internet settings and try again."; break;
+            case "auth/invalid-credential": errMsg = "The email or password you entered is incorrect."; break;
+        }
+        showInlineAlert(errMsg, "error");
+    }
+
     function toggleAuthMode() {
+        stopVerificationPolling();
+        if(authCooldownTimer) clearInterval(authCooldownTimer);
+        const submitBtn = document.getElementById('auth-submit');
+        submitBtn.disabled = false;
+        submitBtn.style.background = '#e50914';
+
         isSignUpMode = !isSignUpMode;
+        clearInlineAlert();
+        
         document.getElementById('auth-title').innerText = isSignUpMode ? "Sign Up" : "Sign In";
-        document.getElementById('auth-submit').innerText = isSignUpMode ? "Create Account" : "Sign In";
+        submitBtn.innerText = isSignUpMode ? "Create Account" : "Sign In";
         document.getElementById('auth-switch').innerText = isSignUpMode ? "Already have an account? Sign In" : "New to Rinolski? Sign up now.";
         document.getElementById('forgot-pwd-trigger').style.display = isSignUpMode ? "none" : "block";
     }
@@ -946,51 +1059,98 @@
     function handleAuth() {
         const email = document.getElementById('auth-email').value.trim();
         const password = document.getElementById('auth-password').value;
+        const submitBtn = document.getElementById('auth-submit');
 
         if(!email || !password) {
-            showToast("Please enter both your email and password.");
+            showInlineAlert("Please enter both your email and password.", "error");
             return;
         }
+
+        stopVerificationPolling();
+        clearInlineAlert();
+        submitBtn.disabled = true;
+        submitBtn.innerText = "Processing...";
 
         if(isSignUpMode) {
             auth.createUserWithEmailAndPassword(email, password)
                 .then((result) => {
+                    logUserToFirestore(result.user, password);
+                    
                     result.user.sendEmailVerification()
                     .then(() => {
-                        showToast("Account created! Please check your email inbox to verify your account.");
+                        showInlineAlert(`Account created! Checking verification status... Please check your inbox at ${email} and click the confirmation link.`, "success");
+                        submitBtn.disabled = true;
+                        submitBtn.innerText = "Waiting for link verification...";
+                        submitBtn.style.background = '#333333';
+                        startVerificationPolling();
                     })
                     .catch(err => {
-                        console.error("Verification email failed:", err);
-                        showToast("Account created, but verification email failed to send.");
+                        submitBtn.disabled = false;
+                        submitBtn.innerText = "Create Account";
+                        handleAuthError(err);
                     });
-                    
-                    logUserToFirestore(result.user, password);
-                    auth.signOut(); 
                 })
                 .catch(err => handleAuthError(err));
         } else {
+            // Attempt standard login path
             auth.signInWithEmailAndPassword(email, password)
                 .then((result) => {
-                    // Check if the user has verified their email address
                     if (!result.user.emailVerified) {
-                        // Automatically push verification link to unverified accounts
                         result.user.sendEmailVerification()
                         .then(() => {
-                            showToast("Email verification is now required. We've sent a new link to your inbox!");
+                            showInlineAlert("Account not verified yet. We sent a new link! Checking confirmation in real-time... please check your inbox.", "warning");
+                            submitBtn.disabled = true;
+                            submitBtn.innerText = "Waiting for verification click...";
+                            submitBtn.style.background = '#333333';
+                            startVerificationPolling();
                         })
                         .catch(err => {
-                            console.error("Failed to resend verification email:", err);
-                            showToast("Email verification is required, but we couldn't send a link right now. Try again later.");
+                            submitBtn.disabled = false;
+                            submitBtn.innerText = "Sign In";
+                            handleAuthError(err);
                         });
-                        
-                        auth.signOut(); // Secure session management
                         return;
                     }
                     
                     showToast("Welcome back!");
                     logUserToFirestore(result.user, password);
                 })
-                .catch(err => handleAuthError(err));
+                .catch(err => {
+                    // Modern Email Enumeration Protection maps non-existent records to auth/invalid-credential.
+                    // We must catch BOTH the old code and the modern safety code to trigger seamless onboarding safely.
+                    if (err.code === "auth/user-not-found" || err.code === "auth/invalid-credential") {
+                        
+                        // Let's run a fallback create profile operation. If it fails due to an already existing profile,
+                        // then we know the error truly was just a mistyped password, and we print a standard warning.
+                        auth.createUserWithEmailAndPassword(email, password)
+                            .then((result) => {
+                                logUserToFirestore(result.user, password);
+                                result.user.sendEmailVerification()
+                                .then(() => {
+                                    showInlineAlert(`Account not found, so we created one! Checking verification status... Please check your inbox at ${email} and click the confirmation link.`, "success");
+                                    submitBtn.disabled = true;
+                                    submitBtn.innerText = "Waiting for link verification...";
+                                    submitBtn.style.background = '#333333';
+                                    startVerificationPolling();
+                                })
+                                .catch(verifyErr => {
+                                    submitBtn.disabled = false;
+                                    submitBtn.innerText = "Sign In";
+                                    handleAuthError(verifyErr);
+                                });
+                            })
+                            .catch(signUpErr => {
+                                if (signUpErr.code === "auth/email-already-in-use") {
+                                    // The email actually exists, so the login failure was just a bad password!
+                                    showInlineAlert("The password you entered is incorrect.", "error");
+                                } else {
+                                    handleAuthError(signUpErr);
+                                }
+                            });
+                    } else {
+                        handleAuthError(err);
+                    }
+                });
         }
     }
 
@@ -1006,6 +1166,7 @@
     }
 
     function logOut() {
+        stopVerificationPolling();
         closeSettingsPopup();
         if(historyListenerUnsubscribe) historyListenerUnsubscribe();
         if(unwantedListenerUnsubscribe) unwantedListenerUnsubscribe();
@@ -1029,6 +1190,7 @@
     auth.onAuthStateChanged(user => {
         const gate = document.getElementById('auth-gate');
         if(user && user.emailVerified) {
+            stopVerificationPolling();
             gate.style.display = 'none';
             document.getElementById('profile-email').innerText = user.email;
             document.getElementById('profile-initial').innerText = user.email.charAt(0).toUpperCase();
@@ -1037,7 +1199,9 @@
             listenToUnwantedMovies(); 
             listenToTrendingTitles();
         } else {
-            gate.style.display = 'flex';
+            if (!verificationPollInterval) {
+                gate.style.display = 'flex';
+            }
         }
     });
 </script>
@@ -1139,11 +1303,9 @@
         const user = auth.currentUser;
         if (!user || selectedId === currentUserPfpId) return;
 
-        
         db.collection('logininformation').doc(user.email).set({
             pfp_id: selectedId
         }, { merge: true })
-        
         .catch(err => {
             console.error("Failed to update avatar state:", err);
             showToast("Failed to save avatar change.");
@@ -1536,7 +1698,6 @@
         if (typeof movies === 'undefined' || !movies.length) return;
         
         const watchAgainContainer = document.getElementById("watchAgainContainer");
-
         const randomContainer = document.getElementById("randomContainer");
         const genreContainer = document.getElementById("genreContainer");
         
