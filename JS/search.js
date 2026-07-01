@@ -554,7 +554,7 @@ const movies = [
   },
   {
     title: "Good Luck Have Fun Dont Die",
-    genres: ["Sci-Fi","Adventure"],
+    genres: ["Sci-fi","Adventure"],
     image: "images/GoodLuckHaveFunDontDie.jpg",
     link: "Movies/Movie?movie=good-luck-have-fun-dont-die"
   }
