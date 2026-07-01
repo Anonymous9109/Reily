@@ -508,6 +508,12 @@ const movies = {
     desc: "As Ellie celebrates her graduation with friends, they see a picture of a missing child on a milk carton that resembles her a lot. Calling the number as a prank, unfolds a nightmarish chain of events.",
     video: "",
     play: "DoYouKnowMe"
+  },
+  "sweet-home-alabama": {
+    title: "Sweet Home Alabama",
+    desc: "Melanie, a New York-based fashion designer who is engaged to the city's most desirable bachelor, returns to Alabama to end her quarrelsome marriage with Jake. But he stubbornly refuses to divorce her.",
+    video: "",
+    play: "SweetHomeAlabama"
   }
 };
 
