@@ -122,7 +122,7 @@ window.videoData = {
   "DreamScenario": "https://dl.dropboxusercontent.com/scl/fi/pwajl3xomgkjryt7lav6u/Dream.Scenario.mkv?rlkey=pfun6ln53wbih49wt0wwk2nyv&st=07t68t82&dl=1",
   "DoYouKnowMe": "https://dl.dropboxusercontent.com/scl/fi/gjbmisfcwut1x1ymndu63/Do.You.Know.Me.mp4?rlkey=rkbszuzo6aukfbi1x6jkjy3zf&st=y1ggmgrm&dl=1",
   "SweetHomeAlabama": "https://dl.dropboxusercontent.com/scl/fi/e526vrik0tj2p59uyl0rw/Sweet.Home.Alabama.mp4?rlkey=txvk7z1dbbw9076g228wecpix&st=rp3mjwdz&dl=1",
-  "GoodLuckHaveFunDontDie": "https://dl.dropboxusercontent.com/scl/fi/tl3uulgalxgajdonjv906/Good.Luck.Have.Fun.Dont.Die.mp4?rlkey=uobs9n9gsv8jg15sapsvjb75d&st=woerncss&dl=1",
+  "GoodLuckHaveFunDontDie": "https://dl.dropboxusercontent.com/scl/fi/tl3uulgalxgajdonjv906/.mp4?rlkey=uobs9n9gsv8jg15sapsvjb75d&st=d04wkdmt&dl=1",
   "TheDictator": "https://dl.dropboxusercontent.com/scl/fi/up916faio87c16z2vko7r/The.Dictator.mp4?rlkey=f16tjoj8sfo5ua3vgwy3i38eg&st=i7at4ao5&dl=1"
 };
 
