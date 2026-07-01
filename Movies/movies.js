@@ -520,6 +520,12 @@ const movies = {
     desc: "Claiming to be from the future, a man takes hostages at a Los Angeles diner to recruit unlikely heroes to help him save the world.",
     video: "",
     play: "GoodLuckHaveFunDontDie"
+  },
+  "the-dictator": {
+    title: "The Dictator",
+    desc: "Aladeen, a brutal dictator, travels to New York in order to address the United Nations Security Council. However, his plans go south when a hitman hired by his uncle, Tamir, kidnaps him.",
+    video: "",
+    play: "TheDictator"
   }
 };
 
