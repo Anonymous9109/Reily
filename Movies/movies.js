@@ -514,6 +514,12 @@ const movies = {
     desc: "Melanie, a New York-based fashion designer who is engaged to the city's most desirable bachelor, returns to Alabama to end her quarrelsome marriage with Jake. But he stubbornly refuses to divorce her.",
     video: "",
     play: "SweetHomeAlabama"
+  },
+  "good-luck-have-fun-dont-die": {
+    title: "Good Luck Have Fun Dont Die",
+    desc: "Claiming to be from the future, a man takes hostages at a Los Angeles diner to recruit unlikely heroes to help him save the world.",
+    video: "",
+    play: "GoodLuckHaveFunDontDie"
   }
 };
 
