@@ -563,6 +563,12 @@ const movies = [
     genres: ["Comedy","Drama"],
     image: "images/TheDictator.jpg",
     link: "Movies/Movie?movie=the-dictator"
+  },
+  {
+    title: "Honest Thief",
+    genres: ["Action","Thriller"],
+    image: "images/HonestThief.jpg",
+    link: "Movies/Movie?movie=honest-thief"
   }
 ];
 
