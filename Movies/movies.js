@@ -532,6 +532,12 @@ const movies = {
     desc: "Tom Dolan contacts the FBI to confess to stealing a large amount of money in the past years so that he can start his life with a clean conscience. But he gets double-crossed by two FBI agents.",
     video: "",
     play: "HonestThief"
+  },
+  "were-the-millers": {
+    title: "Were the millers",
+    desc: "David, a drug dealer, plans to go to Mexico to pick up a shipment of Marijuana. He hires a stripper, Rose, and two teenagers to pose as his family and cross the border without arousing suspicion.",
+    video: "",
+    play: "WeretheMillers"
   }
 };
 
