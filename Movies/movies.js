@@ -526,6 +526,12 @@ const movies = {
     desc: "Aladeen, a brutal dictator, travels to New York in order to address the United Nations Security Council. However, his plans go south when a hitman hired by his uncle, Tamir, kidnaps him.",
     video: "",
     play: "TheDictator"
+  },
+  "honest-thief": {
+    title: "Honest Thief",
+    desc: "Tom Dolan contacts the FBI to confess to stealing a large amount of money in the past years so that he can start his life with a clean conscience. But he gets double-crossed by two FBI agents.",
+    video: "",
+    play: "HonestThief"
   }
 };
 
