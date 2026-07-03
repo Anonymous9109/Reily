@@ -550,6 +550,12 @@ const movies = {
     desc: "An exfiltration specialist masquerades as a Hollywood producer in order to rescue six Americans, who are held captive in Tehran during the US hostage crisis in Iran.",
     video: "",
     play: "Argo"
+  },
+  "the-family-plan": {
+    title: "The Family Plan",
+    desc: "Dan Morgan is many things: a devoted husband, a loving father, a celebrated car salesman. He's also a former assassin. And when his past catches up to his present, he's forced to take his unsuspecting family on a road trip unlike any other.",
+    video: "",
+    play: "TheFamilyPlan"
   }
 };
 
