@@ -46,12 +46,7 @@ const movies = [
     image: "images/JohnWick.jpg",
     link: "Movies/Movie?movie=john-wick-1"
   },
-    {
-    title: "2 Broke Girls",
-    genres: ["Sitcom", "Comedy"],
-    image: "images/2BrokeGirls.jpg",
-    link: "Series/series?series=2BrokeGirls"
-  },
+    
   {
     title: "John Wick 2 ",
     genres: ["Action", "Thriller"],
@@ -197,115 +192,8 @@ const movies = [
     image: "images/InsideOut.jpg",
     link: "Movies/Movie?movie=InsideOut"
   },
-  {
-    title: "From",
-    genres: ["Action", "Horror", "Drama"],
-    image: "images/From.jpg",
-    link: "Series/series?series=From"
-  },
-  {
-    title: "Man on Fire",
-    genres: ["Action", "Crime", "Drama","Thriller"],
-    image: "images/ManonFire.jpg",
-    link: "Series/series?series=ManonFire"
-  },
-  {
-    title: "AlRawabi School for Girls",
-    genres: ["Action", "Drama"],
-    image: "images/AlrawabiSchoolforGirls.jpg",
-    link: "Series/series?series=AlRawabiSchoolforGirls"
-  },
-  {
-    title: "Big Mistakes",
-    genres: ["Action", "Crime"],
-    image: "images/BigMistakes.jpg",
-    link: "Series/series?series=BigMistakes"
-  },
-  {
-    title: "Margo's Got Money Troubles",
-    genres: ["Comedy", "Drama"],
-    image: "images/MargosGotMoneyTroubles.jpg",
-    link: "Series/series?series=MargosGotMoneyTroubles"
-  },
-  {
-    title: "Re:zero Kara Hajimeru Isekai Seikatsu 4th Season",
-    genres: ["Anime","Drama"],
-    image: "images/RezeroKaraHajimeru IsekaiSeikatsu.jpg",
-    link: "Series/series?series=RezeroKaraHajimeruIsekaiSeikatsu"
-  },
-  {
-    title: "Beef",
-    genres: ["Comedy", "Drama"],
-    image: "images/Beef.jpg",
-    link: "Series/series?series=Beef"
-  },
-  {
-    title: "Trust Me The False Prophet",
-    genres: ["Documentary", "Drama"],
-    image: "images/TrustMeTheFalseProphet.jpg",
-    link: "Series/series?series=TrustMeTheFalseProphet"
-  },
-  {
-    title: "The Pitt",
-    genres: ["Drama"],
-    image: "images/ThePitt.jpg",
-    link: "Series/series?series=ThePitt"
-  },
-  {
-    title: "Breaking Bad",
-    genres: ["Drama"],
-    image: "images/BreakingBad.jpg",
-    link: "Series/series?series=BreakingBad"
-  },
-  {
-    title: "Adventure Time",
-    genres: ["Drama","Animation","Adventure"],
-    image: "images/AdventureTime.jpg",
-    link: "Series/series?series=AdventureTime"
-  },
-  {
-    title: "Regular Show",
-    genres: ["Drama","Animation","Adventure"],
-    image: "images/RegularShow.jpg",
-    link: "Series/series?series=RegularShow"
-  },
-  {
-    title: "Regular Show: The Lost Tapes",
-    genres: ["Drama","Animation","Adventure"],
-    image: "images/RegularShowLostTapes.jpg",
-    link: "Series/series?series=RegularShowLostTapes"
-  },
 
-  {
-    title: "The Boys",
-    genres: ["Drama","Sci-Fi","Crime","Comedy","Action"],
-    image: "images/TheBoys.jpg",
-    link: "Series/series?series=TheBoys"
-  },
-  {
-    title: "Unchosen",
-    genres: ["Drama","psychological thriller"],
-    image: "images/Unchosen.jpg",
-    link: "Series/series?series=Unchosen"
-  },
-  {
-    title: "invincible",
-    genres: ["Action","Animation"],
-    image: "images/invincible.jpg",
-    link: "Series/series?series=Invincible"
-  },
-  {
-    title: "Widow's Bay",
-    genres: ["Horror","Comedy"],
-    image: "images/WidowsBay.jpg",
-    link: "Series/series?series=WidowsBay"
-  },
-  {
-    title: "MOB PSYCHO 100",
-    genres: ["Action","Comedy","Anime"],
-    image: "images/MOBPSYCHO100.jpg",
-    link: "Series/series?series=MOBPSYCHO100"
-  },
+  
   {
     title: "Virgin Territory",
     genres: ["Comedy", "Adventure"],
