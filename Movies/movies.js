@@ -544,6 +544,12 @@ const movies = {
     desc: "In the early 1900s, young Sarah Rector believes there's oil beneath the barren land she's allotted in Indian Territory. As greedy sharks close in, Sarah turns to family, friends, and some Texas wildcatters to maintain control of her oil-rich land.",
     video: "",
     play: "SarahsOil"
+  },
+  "argo": {
+    title: "Argo",
+    desc: "An exfiltration specialist masquerades as a Hollywood producer in order to rescue six Americans, who are held captive in Tehran during the US hostage crisis in Iran.",
+    video: "",
+    play: "Argo"
   }
 };
 
