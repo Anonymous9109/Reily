@@ -470,6 +470,12 @@ const movies = [
     genres: ["Action","Thriller"],
     image: "images/Argo.jpg",
     link: "Movies/Movie?movie=argo"
+  },
+  {
+    title: "The Family Plan",
+    genres: ["Action","Comedy"],
+    image: "images/TheFamilyPlan.jpg",
+    link: "Movies/Movie?movie=the-family-plan"
   }
 ];
 
