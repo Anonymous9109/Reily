@@ -69,15 +69,7 @@ const seriesData = {
         { number: 2, prefix: "TheBoys-S2E", totalEpisodes: 8 }
     ]
   },
-    "AdventureTimeFionnaandCake": {
-    title: "Adventure Time: Fionna and Cake",
-    desc: "The adventures of Fionna and Cake from the land of Ooo.",
-    video: "https://dl.dropboxusercontent.com/scl/fi/l8q45n55esdx76hnamb8i/Adventure-Time_-Fionna-and-Cake-_-S1E1-2023.mp4?rlkey=kfhlkxjfihvcei2lxbj3bjnkc&st=vuq8tfk3&dl=1",
-    seasons: [
-      { number: 1, prefix: "AdventureTimeFionnaandCake-S1E", totalEpisodes: 10 },
-      { number: 2, prefix: "AdventureTimeFionnaandCake-S2E", totalEpisodes: 10 }
-    ]
-  },
+    
     "AdventureTime": {
     title: "Adventure Time",
     desc: "Unlikely heroes Finn and Jake are buddies who traverse the mystical Land of Ooo. The best of friends, our heroes always find themselves in the middle of escapades. Finn and Jake depend on each other through thick and thin.",
