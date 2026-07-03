@@ -275,12 +275,7 @@ const movies = [
     image: "images/RegularShowLostTapes.jpg",
     link: "Series/series?series=RegularShowLostTapes"
   },
-  {
-    title: "Adventure Time: Fionna and Cake",
-    genres: ["Drama","Animation","Adventure"],
-    image: "images/AdventureTimeFionnaandCake.jpg",
-    link: "Series/series?series=AdventureTimeFionnaandCake"
-  },
+
   {
     title: "The Boys",
     genres: ["Drama","Sci-Fi","Crime","Comedy","Action"],
