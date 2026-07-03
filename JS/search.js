@@ -464,6 +464,12 @@ const movies = [
     genres: ["Drama"],
     image: "images/SarahsOil.jpg",
     link: "Movies/Movie?movie=sarahs-oil"
+  },
+  {
+    title: "Argo",
+    genres: ["Action","Thriller"],
+    image: "images/Argo.jpg",
+    link: "Movies/Movie?movie=argo"
   }
 ];
 
