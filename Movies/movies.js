@@ -538,6 +538,12 @@ const movies = {
     desc: "David, a drug dealer, plans to go to Mexico to pick up a shipment of Marijuana. He hires a stripper, Rose, and two teenagers to pose as his family and cross the border without arousing suspicion.",
     video: "",
     play: "WeretheMillers"
+  },
+  "sarahs-oil": {
+    title: "Sarahs Oil",
+    desc: "In the early 1900s, young Sarah Rector believes there's oil beneath the barren land she's allotted in Indian Territory. As greedy sharks close in, Sarah turns to family, friends, and some Texas wildcatters to maintain control of her oil-rich land.",
+    video: "",
+    play: "SarahsOil"
   }
 };
 
