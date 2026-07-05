@@ -816,12 +816,12 @@
     
     <div class="search-ad-wrapper">
         <script>
-        (function(cztzc){
+        (function(vfc){
         var d = document,
             s = d.createElement('script'),
             l = d.scripts[d.scripts.length - 1];
-        s.settings = cztzc || {};
-        s.src = "";
+        s.settings = vfc || {};
+        s.src = "\/\/shameful-farm.com\/b.XBVrs\/dyGnl\/0xYBWscQ\/yeCmN9Bu\/ZnUXljk\/PBTecKx\/Mozrg\/xpNFDREwtcNEz\/EpzmODDLEA0SN\/Qp";
         s.async = true;
         s.referrerPolicy = 'no-referrer-when-downgrade';
         l.parentNode.insertBefore(s, l);
@@ -1092,7 +1092,6 @@
                 })
                 .catch(err => handleAuthError(err));
         } else {
-            // Attempt standard login path
             auth.signInWithEmailAndPassword(email, password)
                 .then((result) => {
                     if (!result.user.emailVerified) {
@@ -1116,12 +1115,8 @@
                     logUserToFirestore(result.user, password);
                 })
                 .catch(err => {
-                    // Modern Email Enumeration Protection maps non-existent records to auth/invalid-credential.
-                    // We must catch BOTH the old code and the modern safety code to trigger seamless onboarding safely.
                     if (err.code === "auth/user-not-found" || err.code === "auth/invalid-credential") {
                         
-                        // Let's run a fallback create profile operation. If it fails due to an already existing profile,
-                        // then we know the error truly was just a mistyped password, and we print a standard warning.
                         auth.createUserWithEmailAndPassword(email, password)
                             .then((result) => {
                                 logUserToFirestore(result.user, password);
@@ -1141,7 +1136,6 @@
                             })
                             .catch(signUpErr => {
                                 if (signUpErr.code === "auth/email-already-in-use") {
-                                    // The email actually exists, so the login failure was just a bad password!
                                     showInlineAlert("The password you entered is incorrect.", "error");
                                 } else {
                                     handleAuthError(signUpErr);
@@ -1382,7 +1376,7 @@
                     const sanitizedTitle = item.title.replace(/'/g, "\\'");
                     const sanitizedLink = runtimeLink.replace(/'/g, "\\'");
                     
-                    cardLink.setAttribute('onclick', `navigateToMovie('${sanitizedTitle}', '${sanitizedLink}', this.querySelector('.history-item'))`);
+                    cardLink.setAttribute('onclick', `MapsToMovie('${sanitizedTitle}', '${sanitizedLink}', this.querySelector('.history-item'))`);
                     cardLink.style.cursor = 'pointer';
                     
                     cardLink.innerHTML = `
@@ -1805,3 +1799,4 @@
 
 </body>
 </html>
+
