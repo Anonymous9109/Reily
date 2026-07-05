@@ -128,6 +128,7 @@ window.videoData = {
   "WeretheMillers": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Movies/220143.mkv",
   "SarahsOil": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Movies/315311.mkv",
   "Argo": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Movies/332437.mkv",
-  "TheFamilyPlan": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Movies/405356326.mkv"
+  "TheFamilyPlan": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Movies/405356326.mkv",
+  "TheInvitation": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Movies/23317759.mkv"
 };
 
