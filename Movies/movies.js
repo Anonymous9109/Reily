@@ -556,6 +556,12 @@ const movies = {
     desc: "Dan Morgan is many things: a devoted husband, a loving father, a celebrated car salesman. He's also a former assassin. And when his past catches up to his present, he's forced to take his unsuspecting family on a road trip unlike any other.",
     video: "",
     play: "TheFamilyPlan"
+  },
+  "the-invitation": {
+    title: "The Invitation",
+    desc: "After the death of her mother and having no other known relatives, Evie takes a DNA test and discovers a long-lost cousin she never knew she had. Invited by her newfound family to a lavish wedding in the English countryside, Evie's at first seduced by the sexy aristocratic host. However, she's soon thrust into a nightmare of survival as she uncovers twisted secrets about her family history and the unsettling intentions behind their sinful generosity.",
+    video: "",
+    play: "TheInvitation"
   }
 };
 
