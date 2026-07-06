@@ -586,6 +586,12 @@ const movies = {
     desc: "After the death of his only friend, Finbar McBride sets out to live the life of a hermit. However, his attempts are put to rest as he starts interacting with his neighbours.",
     video: "",
     play: "TheStationAgent"
+  },
+  "war-dogs": {
+    title: "War Dogs",
+    desc: "David Packouz and Efraim Diveroli, two petty gun dealers, make it big when they find themselves being assigned a $300 million contract from the American government.",
+    video: "",
+    play: "WarDogs"
   }
 };
 
