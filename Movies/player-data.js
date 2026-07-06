@@ -130,6 +130,7 @@ window.videoData = {
   "Argo": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Movies/332437.mkv",
   "TheFamilyPlan": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Movies/405356326.mkv",
   "TheInvitation": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Movies/23317759.mkv",
-  "Limitless": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Movies/2162136.mp4"
+  "Limitless": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Movies/2162136.mp4",
+  "SectionEight": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Movies/2396281.mkv"
 };
 
