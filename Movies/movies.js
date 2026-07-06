@@ -580,6 +580,12 @@ const movies = {
     desc: "In the Mojave Desert, David passes by an old truck while travelling for a meeting. The driver of the truck is a psychopath who finds David's overtaking offensive and decides to kill him.",
     video: "",
     play: "Duel"
+  },
+  "the-station-agent": {
+    title: "The Station Agent",
+    desc: "After the death of his only friend, Finbar McBride sets out to live the life of a hermit. However, his attempts are put to rest as he starts interacting with his neighbours.",
+    video: "",
+    play: "TheStationAgent"
   }
 };
 
