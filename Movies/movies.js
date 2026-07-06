@@ -568,6 +568,12 @@ const movies = {
     desc: "Writer Eddie Morra is sure that he has a dismal future after he loses his job and is dumped by his girlfriend. But an untested drug given by his pal improves his acumen. It also leads to huge trouble.",
     video: "",
     play: "Limitless"
+  },
+  "section-8": {
+    title: "Section 8",
+    desc: "Sentenced to prison for avenging the murder of his family, a former soldier gets a second chance when a shadowy government agency recruits him for an assignment. However, he soon realizes that the very people who freed him are not what they seem.",
+    video: "",
+    play: "SectionEight"
   }
 };
 
