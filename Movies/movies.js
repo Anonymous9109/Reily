@@ -574,6 +574,12 @@ const movies = {
     desc: "Sentenced to prison for avenging the murder of his family, a former soldier gets a second chance when a shadowy government agency recruits him for an assignment. However, he soon realizes that the very people who freed him are not what they seem.",
     video: "",
     play: "SectionEight"
+  },
+  "duel": {
+    title: "Duel",
+    desc: "In the Mojave Desert, David passes by an old truck while travelling for a meeting. The driver of the truck is a psychopath who finds David's overtaking offensive and decides to kill him.",
+    video: "",
+    play: "Duel"
   }
 };
 
