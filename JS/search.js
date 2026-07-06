@@ -482,6 +482,12 @@ const movies = [
     genres: ["Horror","Drama"],
     image: "images/TheInvitation_.jpg",
     link: "Movies/Movie?movie=the-invitation"
+  },
+  {
+    title: "Limitless",
+    genres: ["Thriller","Sci-fi"],
+    image: "images/Limitless.jpg",
+    link: "Movies/Movie?movie=limitless"
   }
 ];
 
