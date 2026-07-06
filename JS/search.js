@@ -500,6 +500,12 @@ const movies = [
     genres: ["Thriller","Action"],
     image: "images/Duel.jpg",
     link: "Movies/Movie?movie=duel"
+  },
+  {
+    title: "The Station Agent",
+    genres: ["Comedy","Drama"],
+    image: "images/TheStationAgent.jpg",
+    link: "Movies/Movie?movie=the-station-agent"
   }
 ];
 
