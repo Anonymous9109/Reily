@@ -133,6 +133,7 @@ window.videoData = {
   "Limitless": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Movies/2162136.mp4",
   "SectionEight": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Movies/2396281.mkv",
   "Duel": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Movies/210108.mp4",
-  "TheStationAgent": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Movies/64067476.mp4"
+  "TheStationAgent": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Movies/64067476.mp4",
+  "WarDogs": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Movies/64558386.mp4"
 };
 
