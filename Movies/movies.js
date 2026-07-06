@@ -562,6 +562,12 @@ const movies = {
     desc: "After the death of her mother and having no other known relatives, Evie takes a DNA test and discovers a long-lost cousin she never knew she had. Invited by her newfound family to a lavish wedding in the English countryside, Evie's at first seduced by the sexy aristocratic host. However, she's soon thrust into a nightmare of survival as she uncovers twisted secrets about her family history and the unsettling intentions behind their sinful generosity.",
     video: "",
     play: "TheInvitation"
+  },
+  "limitless": {
+    title: "Limitless",
+    desc: "Writer Eddie Morra is sure that he has a dismal future after he loses his job and is dumped by his girlfriend. But an untested drug given by his pal improves his acumen. It also leads to huge trouble.",
+    video: "",
+    play: "Limitless"
   }
 };
 
