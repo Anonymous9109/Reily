@@ -518,6 +518,12 @@ const movies = [
     genres: ["Crime","Drama"],
     image: "images/TheShawshankRedemption.jpg",
     link: "Movies/Movie?movie=the-shawshank-redemption"
+  },
+  {
+    title: "The Secret Life of Walter Mitty",
+    genres: ["Adventure","Comedy"],
+    image: "images/a1c0c38081eabbc6cbc01ce823e62081eb934fde7f5fbb5951e44b3df881390d.jpg",
+    link: "Movies/Movie?movie=the-secret-life-of-walter-mitty"
   }
 ];
 
