@@ -592,6 +592,12 @@ const movies = {
     desc: "David Packouz and Efraim Diveroli, two petty gun dealers, make it big when they find themselves being assigned a $300 million contract from the American government.",
     video: "",
     play: "WarDogs"
+  },
+  "the-shawshank-redemption": {
+    title: "The Shawshank Redemption",
+    desc: "Andy Dufresne, a successful banker, is arrested for the murders of his wife and her lover, and is sentenced to life imprisonment at the Shawshank prison. He becomes the most unconventional prisoner.",
+    video: "",
+    play: "TheShawshankRedemption"
   }
 };
 
