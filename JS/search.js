@@ -512,6 +512,12 @@ const movies = [
     genres: ["Comedy","Crime"],
     image: "images/WarDogs.jpg",
     link: "Movies/Movie?movie=war-dogs"
+  },
+  {
+    title: "The Shawshank Redemption",
+    genres: ["Crime","Drama"],
+    image: "images/TheShawshankRedemption.jpg",
+    link: "Movies/Movie?movie=the-shawshank-redemption"
   }
 ];
 
