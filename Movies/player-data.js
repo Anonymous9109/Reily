@@ -135,6 +135,7 @@ window.videoData = {
   "Duel": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Movies/210108.mp4",
   "TheStationAgent": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Movies/64067476.mp4",
   "WarDogs": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Movies/64558386.mp4",
-  "TheShawshankRedemption": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Movies/71171287.mp4"
+  "TheShawshankRedemption": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Movies/71171287.mp4",
+  "TheSecretLifeofWalterMitty": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Movies/72188657.mp4"
 };
 
