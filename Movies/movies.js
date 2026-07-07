@@ -598,6 +598,12 @@ const movies = {
     desc: "Andy Dufresne, a successful banker, is arrested for the murders of his wife and her lover, and is sentenced to life imprisonment at the Shawshank prison. He becomes the most unconventional prisoner.",
     video: "",
     play: "TheShawshankRedemption"
+  },
+  "the-secret-life-of-walter-mitty": {
+    title: "The Secret Life of Walter Mitty",
+    desc: "A man living a dull life dreams up romantic and action-filled scenarios in order to escape from monotony. When his own job is threatened, he sets out on a real romantic and action-packed journey.",
+    video: "",
+    play: "TheSecretLifeofWalterMitty"
   }
 };
 
