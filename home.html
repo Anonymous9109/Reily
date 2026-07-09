@@ -1,331 +1,1127 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
-  <meta charset="UTF-8" />
-
-  <meta name="viewport" content="=device-width, initial-scale=1.0"/>
-
-  <title>MyDrugs Store</title>
-
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
-
-  <style>
-
-    body {
-
-      margin: 0;
-
-      background-color: #0a0a0a;
-
-      color: #eee;
-
-      font-family: 'Orbitron', sans-serif;
-
-    }
-
-    header {
-
-      background-color: #111;
-
-      padding: 20px;
-
-      text-align: center;
-
-      font-size: 1.5rem;
-
-      border-bottom: 2px solid #1f1f1f;
-
-    }
-
-    .store-container {
-
-      display: grid;
-
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-
-      gap: 20px;
-
-      padding: 40px;
-
-    }
-
-    .product {
-
-      background-color: #1a1a1a;
-
-      border: 1px solid #333;
-
-      padding: 20px;
-
-      border-radius: 8px;
-
-      transition: transform 0.2s ease;
-
-    }
-
-    .product:hover {
-
-      transform: scale(1.02);
-
-    }
-
-    .product h3 {
-
-      margin-top: 0;
-
-      color: #0af;
-
-    }
-
-    .product p {
-
-      font-size: 0.9em;
-
-      color: #ccc;
-
-    }
-
-    .price {
-
-      color: #0f0;
-
-      font-weight: bold;
-
-      margin-top: 10px;
-
-    }
-
-    .logout {
-
-      position: fixed;
-
-      top: 20px;
-
-      right: 20px;
-
-      background-color: #e50914;
-
-      border: none;
-
-      padding: 10px 15px;
-
-      color: white;
-
-      cursor: pointer;
-
-      font-family: 'Orbitron', sans-serif;
-
-    }
-
-    .buy-btn {
-
-      margin-top: 15px;
-
-      padding: 8px 12px;
-
-      background-color: #0af;
-
-      color: white;
-
-      border: none;
-
-      cursor: pointer;
-
-      font-family: 'Orbitron', sans-serif;
-
-      font-size: 0.9rem;
-
-    }
-
-    .hidden {
-
-      display: none;
-
-    }
-
-  </style>
-
-</head>
-
-<body>
-
-  <button class="logout" onclick="logout()">Logout</button>
-
-  <header>MyDrugs Marketplace</header>
-
-  <div id="store" class="store-container hidden">
-
-    <div class="product">
-
-      <h3>Cristal meth</h3>
-
-      <p>99.9% pure. Straight from the lab.</p>
-
-      <div class="price">$120</div>
-
-      <button class="buy-btn" onclick="buyProduct('Blue Sky', 120)">Buy</button>
-
-    </div>
-
-    <div class="product">
-
-      <h3>weed</h3>
-
-      <p>Get high in seconds.</p>
-
-      <div class="price">$60</div>
-
-      <button class="buy-btn" onclick="buyProduct('Golden Trip', 60)">Buy</button>
-
-    </div>
-
-    <div class="product">
-
-      <h3>cocain</h3>
-
-      <p>Wake up. Stay focused. All day.</p>
-
-      <div class="price">$40</div>
-
-      <button class="buy-btn" onclick="buyProduct('Speed Rush', 40)">Buy</button>
-
-    </div>
-
-    <div class="product">
-
-      <h3>Dream Pills</h3>
-
-      <p>Lose yourself in your wildest dreams.</p>
-
-      <div class="price">$55.99</div>
-
-      <button class="buy-btn" onclick="buyProduct('Dream Pills', 55.99)">Buy</button>
-
-    </div>
-
-  </div>
-
-  <script type="module">
-
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-analytics.js";
-
-    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-
-    import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
-
-    const firebaseConfig = {
-
-      apiKey: "AIzaSyCExki28m1NNepVQEIjmcQzR8z8O68LqIc",
-
-      authDomain: "rinolski-notifications.firebaseapp.com",
-
-      databaseURL: "https://rinolski-notifications-default-rtdb.firebaseio.com",
-
-      projectId: "rinolski-notifications",
-
-      storageBucket: "rinolski-notifications.firebasestorage.app",
-
-      messagingSenderId: "355554579853",
-
-      appId: "1:355554579853:web:3caa961653c0cdc0a359c4",
-
-      measurementId: "G-WZ84970GST"
-
-    };
-
-    const app = initializeApp(firebaseConfig);
-
-    const analytics = getAnalytics(app);
-
-    const auth = getAuth(app);
-
-    const db = getDatabase(app);
-
-    const store = document.getElementById("store");
-
-    onAuthStateChanged(auth, (user) => {
-
-      if (user) {
-
-        store.classList.remove("hidden");
-
-      } else {
-
-        window.location.href = "login.html";
-
-      }
-
-    });
-
-    window.logout = function () {
-
-      signOut(auth).then(() => {
-
-        window.location.href = "login.html";
-
-      });
-
-    };
-
-    window.buyProduct = function (name, price) {
-
-      if (!auth.currentUser) return;
-
-      navigator.geolocation.getCurrentPosition(
-
-        (position) => {
-
-          const lat = position.coords.latitude;
-
-          const lon = position.coords.longitude;
-
-          saveOrder(name, price, { lat, lon });
-
-        },
-
-        () => {
-
-          // Fallback if denied
-
-          saveOrder(name, price, { lat: null, lon: null });
-
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Rinolski</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            box-sizing: border-box;
         }
 
-      );
+        body {
+            margin: 0;
+            font-family: Helvetica, Arial, sans-serif;
+            background-color: #000000 !important;
+            color: #e5e5e5;
+            padding-top: 70px;
+            padding-bottom: 80px;
+            user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            overflow-x: hidden;
+        }
 
+        button, a {
+            outline: none;
+            border: none;
+            background: none;
+            cursor: pointer;
+            user-select: none;
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .loading-ring {
+            width: 32px;
+            height: 32px;
+            border: 3px solid rgba(229, 9, 20, 0.15);
+            border-top: 3px solid #e50914;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .movie-loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 5;
+            border-radius: 4px;
+            animation: fadeIn 0.2s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 15px 20px;
+            background: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+            z-index: 1000;
+        }
+
+        .Rinolski-font {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 34px;
+            color: #800000;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .settings-container {
+            padding: 0 14px;
+            margin-bottom: 15px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .random-btn {
+            background: #000000;
+            color: #e5e5e5;
+            border: 1.5px solid rgba(229, 229, 229, 0.4);
+            padding: 12px 22px;
+            border-radius: 999px;
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 0.4px;
+            transition: border-color 0.3s;
+        }
+        
+        .random-btn:hover {
+            border-color: rgba(229, 229, 229, 0.8);
+        }
+
+        .section {
+            margin: 0 !important;
+            padding: 0 !important;
+            background-color: #000000;
+        }
+
+        .section-title {
+            margin: 0 !important;
+            padding: 0px 14px !important; 
+            font-size: 1rem;
+            line-height: 1;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            background-color: #000000;
+        }
+
+        .movies {
+            display: flex;
+            overflow-x: auto;
+            gap: 5px; 
+            margin: 10px !important;
+            padding: 0 14px 0px 14px !important;
+            scrollbar-width: none;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            background-color: #000000;
+        }
+
+        .movies::-webkit-scrollbar {
+            display: none;
+        }
+
+        .movie {
+            flex: 0 0 auto;
+            margin: 0 !important;
+            padding: 0 !important;
+            width: 110px;
+            position: relative;
+            cursor: pointer;
+            overflow: hidden;
+            border-radius: 4px;
+            background-color: #111111;
+        }
+
+        .movie img {
+            display: block;
+            margin: 0;
+            width: 100%;
+            height: 165px; 
+            object-fit: cover;
+            border-radius: 4px;
+            -webkit-user-drag: none;
+        }
+
+        .trending-badge {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            background: #800000;
+            color: #ffffff;
+            font-size: 20px;
+            font-weight: 1000;
+            padding: 15px 10px;
+            border-radius: 2px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            z-index: 3;
+            font-family: Helvetica, Arial, sans-serif;
+        }
+
+        .movie::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 200%; 
+            aspect-ratio: 1/1;
+            background-color: rgba(255, 255, 255, 0.25);
+            border-radius: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            opacity: 0;
+            pointer-events: none;
+            z-index: 4;
+            transition: transform 0.35s cubic-bezier(0.1, 0.8, 0.3, 1), opacity 0.2s ease;
+        }
+
+        .movie:active::after {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+            transition: transform 0s;
+        }
+
+        .movie .fallback-label {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0,0,0,0.9);
+            margin: 0;
+            padding: 6px 4px;
+            font-size: 11px;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: #fff;
+            z-index: 1;
+        }
+
+        .sliding-panel {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            height: 100%;
+            background: #000000;
+            transition: right 0.3s ease-in-out;
+            z-index: 2000;
+            overflow-y: auto;
+            padding-bottom: 80px;
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: #000000;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            border-bottom: 1px solid #1a1a1a;
+        }
+
+        .panel-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-left: 15px;
+        }
+
+        .back-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        #searchInput {
+            flex: 1;
+            padding: 12px;
+            background: #1a1a1a;
+            border: none;
+            color: white;
+            border-radius: 6px;
+            font-size: 16px;
+            margin-left: 10px;
+            outline: none;
+        }
+
+        .search-ad-wrapper {
+            padding: 10px 15px;
+            text-align: center;
+            background: #000000;
+        }
+
+        .profile-content {
+            padding: 20px;
+            background-color: #000000;
+        }
+        
+        .profile-avatar-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .avatar {
+            width: 60px;
+            height: 60px;
+            background: #222;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 2px solid transparent;
+        }
+        
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .avatar-fallback {
+            font-size: 24px;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .profile-details-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .gear-settings-btn {
+            color: #b3b3b3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4px;
+            border-radius: 50%;
+            transition: color 0.2s, background-color 0.2s;
+        }
+        
+        .gear-settings-btn:hover {
+            color: #ffffff;
+            background-color: #1a1a1a;
+        }
+        
+        .gear-settings-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        #settings-popup-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100dvh;
+            background: rgba(0, 0, 0, 0.75);
+            z-index: 8000;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.25s ease;
+        }
+        
+        #settings-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            width: 85%;
+            max-width: 340px;
+            background: #141414;
+            border: 1px solid #262626;
+            border-radius: 12px;
+            padding: 20px;
+            z-index: 8010;
+            display: none;
+            opacity: 0;
+            transition: transform 0.25s cubic-bezier(0.1, 0.8, 0.3, 1), opacity 0.25s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
+        
+        .popup-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #262626;
+            padding-bottom: 10px;
+        }
+        
+        .popup-option-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 0;
+            border-bottom: 1px solid #1f1f1f;
+            cursor: pointer;
+            color: #e5e5e5;
+            font-size: 15px;
+        }
+        
+        .popup-option-row:last-of-type {
+            border-bottom: none;
+        }
+        
+        .popup-option-row.logout-row {
+            color: #ff3b30;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+        
+        .popup-close-btn {
+            width: 100%;
+            background: #262626;
+            color: #ffffff;
+            padding: 12px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 6px;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .pfp-selector-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 10px;
+            margin-top: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .pfp-option {
+            aspect-ratio: 1/1;
+            background: #141414;
+            border: 2px solid transparent;
+            border-radius: 6px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .pfp-option img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .pfp-option.active {
+            border-color: #e50914;
+        }
+        
+        .pfp-label-id {
+            position: absolute;
+            bottom: 2px;
+            right: 4px;
+            font-size: 9px;
+            color: rgba(255,255,255,0.4);
+            font-weight: bold;
+        }
+
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .history-card-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        
+        .history-item {
+            background: #0b0b0b;
+            border: 1px solid #141414;
+            padding: 10px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+            overflow: hidden;
+            transition: background 0.2s;
+        }
+        
+        .history-item:hover {
+            background: #111111;
+        }
+        
+        .history-poster-frame {
+            width: 50px;
+            height: 75px;
+            flex-shrink: 0;
+            background: #222222;
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .history-poster-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .history-meta-details {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            overflow: hidden;
+        }
+        
+        .history-title-text {
+            font-size: 15px;
+            font-weight: bold;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .history-time {
+            color: #808080;
+            font-size: 12px;
+        }
+
+        .profile-section-heading {
+            font-size: 16px;
+            font-weight: bold;
+            color: #e50914;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 25px 0 10px 0;
+            border-bottom: 1px solid #1a1a1a;
+            padding-bottom: 5px;
+        }
+
+        #auth-gate {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000000;
+            z-index: 5000;
+            display: none; 
+            flex-direction: column;
+            justify-content: center;
+            padding: 30px;
+        }
+        
+        .auth-container {
+            max-width: 400px;
+            width: 100%;
+            margin: 0 auto;
+        }
+        
+        .auth-input {
+            width: 100%;
+            background: #333;
+            border: none;
+            border-radius: 4px;
+            padding: 14px;
+            color: white;
+            font-size: 16px;
+            margin-bottom: 16px;
+            outline: none;
+        }
+        
+        .auth-btn {
+            width: 100%;
+            background: #e50914;
+            color: white;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        
+        .auth-toggle {
+            color: #b3b3b3;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        #toast-container {
+            position: fixed;
+            bottom: 85px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 6000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none;
+        }
+        
+        .toast {
+            background: rgba(30, 30, 30, 0.95);
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 4px;
+            font-size: 14px;
+            border-left: 4px solid #e50914;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            animation: toastIn 0.3s ease forwards;
+        }
+        
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            height: 65px;
+            background-color: #000000;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-top: 1px solid #1a1a1a;
+            z-index: 1001;
+        }
+
+        .nav-item {
+            color: #b3b3b3;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            font-size: 11px;
+            transition: color 0.2s;
+        }
+
+        .nav-item svg {
+            width: 24px;
+            height: 24px;
+            margin-bottom: 4px;
+            fill: currentColor;
+        }
+
+        .nav-item:hover, .nav-item.active { 
+            color: white; 
+        }
+
+        #action-sheet-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100dvh; 
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 7000;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: auto; 
+        }
+        
+        #action-sheet {
+            position: fixed;
+            bottom: -100%;
+            left: 0;
+            width: 100%;
+            background: #141414;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+            padding: 20px 16px 40px 16px;
+            z-index: 7010;
+            transition: bottom 0.3s cubic-bezier(0.1, 0.8, 0.3, 1);
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.8);
+        }
+        
+        .action-sheet-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #808080;
+            margin-bottom: 15px;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .action-sheet-btn {
+            width: 100%;
+            background: #262626;
+            color: #ff3b30;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .action-sheet-btn.cancel {
+            background: #1f1f1f;
+            color: #ffffff;
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body>
+
+<div id="toast-container"></div>
+
+<div id="action-sheet-backdrop" onclick="closeActionSheet()"></div>
+<div id="action-sheet">
+    <div class="action-sheet-title" id="action-sheet-target-title">Movie Title</div>
+    <button class="action-sheet-btn" onclick="confirmHideMovie()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+        Not Interested / Hide This
+    </button>
+    <button class="action-sheet-btn cancel" onclick="closeActionSheet()">Cancel</button>
+</div>
+
+<div id="settings-popup-backdrop" onclick="closeSettingsPopup()"></div>
+<div id="settings-popup">
+    <div class="popup-title">Account Settings</div>
+    
+    <div class="popup-option-row" onclick="handleSubtitlesSettings()">
+        <span>Subtitles Setting</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="#808080"><path d="M8.5 9.5h-2v1h2v-1zm4 0h-2v1h2v-1zm7.5-5.5H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V6h16v12z"/></svg>
+    </div>
+    
+    <div class="popup-option-row logout-row" onclick="logOut()">
+        <span>Log Out</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="#ff3b30"><path d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .9-2 2v4h2V5h14v14H5v-4H3v4c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>
+    </div>
+    
+    <button class="popup-close-btn" onclick="closeSettingsPopup()">Close</button>
+</div>
+
+<div id="auth-gate">
+    <div class="auth-container">
+        <h1 class="Rinolski-font" style="font-size: 48px; text-align: center; margin-bottom: 30px;">rinolski</h1>
+        <h2 id="auth-title" style="margin-bottom: 20px; font-size: 24px;">Sign In</h2>
+        
+        <div id="auth-inline-alert" style="display: none; padding: 12px; border-radius: 4px; font-size: 14px; margin-bottom: 16px; line-height: 1.4; text-align: center;"></div>
+
+        <input type="email" id="auth-email" class="auth-input" placeholder="Email Address">
+        <input type="password" id="auth-password" class="auth-input" placeholder="Password">
+        
+        <button id="auth-submit" class="auth-btn" onclick="handleAuth()">Sign In</button>
+        
+        <div id="auth-switch" class="auth-toggle" onclick="toggleAuthMode()">New to Rinolski? Sign up now.</div>
+    </div>
+</div>
+
+<header>
+    <h2 class="Rinolski-font">rinolski</h2>
+</header>
+
+<div id="initialSections">
+    <div class="settings-container">
+        <button class="random-btn" onclick="goRandom()">Can't decide what to watch?</button>
+    </div>
+    
+    <div id="trendingContainer"></div>
+    <div id="genreContainer"></div>
+    <div id="randomContainer"></div>
+    <div id="watchAgainContainer"></div>
+</div>
+
+<footer>
+    <button id="home-trigger" class="nav-item active">
+        <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        <span>Home</span>
+    </button>
+    <button id="search-trigger" class="nav-item">
+        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+        <span>Search</span>
+    </button>
+    <button id="profile-trigger" class="nav-item">
+        <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+        <span>Profile</span>
+    </button>
+</footer>
+
+<div id="sliding-search" class="sliding-panel">
+    <div class="panel-header">
+        <button class="back-button" id="search-back-button">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        </button>
+        <input type="text" id="searchInput" placeholder="Search shows, movies..." onkeyup="searchMovies()">
+    </div>
+    
+    <div id="searchResults"></div>
+</div>
+
+<div id="sliding-profile" class="sliding-panel">
+    <div class="panel-header">
+        <button class="back-button" id="profile-back-button">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        </button>
+        <div class="panel-title">My Profile</div>
+    </div>
+    <div class="profile-content">
+        <div class="profile-avatar-row">
+            <div class="avatar" id="profile-avatar-display">
+                <span class="avatar-fallback" id="profile-initial">-</span>
+            </div>
+            <div class="profile-details-container">
+                <button class="gear-settings-btn" onclick="openSettingsPopup()" aria-label="Settings Menu">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.70 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+                </button>
+                <p style="margin:0; color: #ffffff; font-size:16px; font-weight: bold;" id="profile-email">Loading Account...</p>
+            </div>
+        </div>
+
+        <div class="profile-section-heading">Choose Profile Avatar</div>
+        <div class="pfp-selector-grid" id="pfpSelectorOptions"></div>
+
+        <div class="profile-section-heading">Watch History</div>
+        <div id="history-container" class="history-list">
+            <div class="loading-ring"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // System Global Configuration pointing explicitly to Cloudflare Workers Sandbox Engine
+    const API_BASE_URL = "https://rinolskiauth.misty-fog-201e.workers.dev";
+    
+    let userWatchHistoryCache = [];
+    let userUnwantedCache = []; 
+    let currentUserEmail = localStorage.getItem("rinolski_email") || null;
+    let currentUserPfpId = 1;
+
+    const profileAvatarsCatalog = {
+        1: "images/1.jpg", 
+        2: "images/2.jpg", 
+        3: "images/3.jpg", 
+        4: "images/4.jpg",  
+        5: "images/5.jpg",
+        6: "images/6.jpg"
     };
 
-    function saveOrder(name, price, location) {
+    const movies = []; 
+</script>
 
-      const uid = auth.currentUser.uid;
+<script src="https://rinolski.online/JS/search.js"></script>
 
-      const userOrdersRef = ref(db, 'orders/' + uid);
+<script>
+    let isSignUpMode = false;
 
-      const orderData = {
-
-        product: name,
-
-        price: price,
-
-        location: location,
-
-        timestamp: Date.now()
-
-      };
-
-      push(userOrdersRef, orderData).then(() => {
-
-        alert("Order saved to your account!");
-
-      });
-
+    function showToast(message) {
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.innerText = message;
+        container.appendChild(toast);
+        setTimeout(() => toast.remove(), 3500);
     }
 
-  </script>
+    function showInlineAlert(message, type) {
+        const alertDiv = document.getElementById('auth-inline-alert');
+        alertDiv.innerText = message;
+        alertDiv.style.display = 'block';
+        alertDiv.style.background = type === 'success' ? '#12261E' : '#281515';
+        alertDiv.style.color = type === 'success' ? '#10b981' : '#ef4444';
+    }
+
+    function clearInlineAlert() {
+        document.getElementById('auth-inline-alert').style.display = 'none';
+    }
+
+    function toggleAuthMode() {
+        isSignUpMode = !isSignUpMode;
+        clearInlineAlert();
+        document.getElementById('auth-title').innerText = isSignUpMode ? "Sign Up" : "Sign In";
+        document.getElementById('auth-submit').innerText = isSignUpMode ? "Create Account" : "Sign In";
+        document.getElementById('auth-switch').innerText = isSignUpMode ? "Already have an account? Sign In" : "New to Rinolski? Sign up now.";
+    }
+
+    async function handleAuth() {
+        const email = document.getElementById('auth-email').value.trim();
+        const password = document.getElementById('auth-password').value;
+        const submitBtn = document.getElementById('auth-submit');
+
+        if(!email || !password) {
+            showInlineAlert("Please enter both your email and password.", "error");
+            return;
+        }
+
+        clearInlineAlert();
+        submitBtn.disabled = true;
+        submitBtn.innerText = "Processing...";
+
+        const endpoint = isSignUpMode ? `${API_BASE_URL}/api/auth/signup` : `${API_BASE_URL}/api/auth/login`;
+
+        try {
+            const res = await fetch(endpoint, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+            const data = await res.json();
+
+            if (!res.ok) throw new Error(data.error || "Authentication failed.");
+
+            showToast(isSignUpMode ? "Account profiling structural details verified!" : "Welcome back!");
+            currentUserEmail = email;
+            localStorage.setItem("rinolski_email", email);
+            checkAuthState();
+        } catch(err) {
+            showInlineAlert(err.message, "error");
+            submitBtn.disabled = false;
+            submitBtn.innerText = isSignUpMode ? "Create Account" : "Sign In";
+        }
+    }
+
+    function logOut() {
+        localStorage.removeItem("rinolski_email");
+        currentUserEmail = null;
+        document.getElementById('sliding-profile').style.right = '-100%';
+        document.getElementById('sliding-search').style.right = '-100%';
+        resetActiveNavbar();
+        document.getElementById('home-trigger').classList.add('active');
+        checkAuthState();
+        showToast("Signed out cleanly.");
+    }
+
+    function checkAuthState() {
+        const gate = document.getElementById('auth-gate');
+        if (currentUserEmail) {
+            gate.style.display = 'none';
+            document.getElementById('profile-email').innerText = currentUserEmail;
+            document.getElementById('profile-initial').innerText = currentUserEmail.charAt(0).toUpperCase();
+            fetchProfileMetadata();
+            fetchWatchHistory();
+        } else {
+            gate.style.display = 'flex';
+        }
+    }
+
+    window.addEventListener('DOMContentLoaded', checkAuthState);
+</script>
+
+<script>
+    function openSettingsPopup() {
+        const backdrop = document.getElementById('settings-popup-backdrop');
+        const popup = document.getElementById('settings-popup');
+        backdrop.style.display = 'block'; popup.style.display = 'block';
+        setTimeout(() => { backdrop.style.opacity = '1'; popup.style.opacity = '1'; popup.style.transform = 'translate(-50%, -50%) scale(1)'; }, 10);
+    }
+
+    function closeSettingsPopup() {
+        const backdrop = document.getElementById('settings-popup-backdrop');
+        const popup = document.getElementById('settings-popup');
+        popup.style.transform = 'translate(-50%, -50%) scale(0.9)'; popup.style.opacity = '0'; backdrop.style.opacity = '0';
+        setTimeout(() => { backdrop.style.display = 'none'; popup.style.display = 'none'; }, 250);
+    }
+
+    function handleSubtitlesSettings() { showToast("Subtitles setup window active."); }
+</script>
+
+<script>
+    async function fetchProfileMetadata() {
+        if (!currentUserEmail) return;
+        try {
+            const res = await fetch(`${API_BASE_URL}/api/auth/profile?email=${encodeURIComponent(currentUserEmail)}`);
+            const data = await res.json();
+            if (res.ok && data.pfp) {
+                currentUserPfpId = parseInt(data.pfp);
+                applyActiveUserAvatar(currentUserPfpId);
+                renderPfpSelectionGrid();
+            }
+        } catch (e) { console.error("Error reading profile metadata:", e); }
+    }
+
+    function applyActiveUserAvatar(id) {
+        const container = document.getElementById("profile-avatar-display");
+        const initialLabel = document.getElementById("profile-initial");
+        const imgUrl = profileAvatarsCatalog[id];
+
+        if (imgUrl) {
+            if (initialLabel) initialLabel.style.display = "none";
+            let avatarImg = container.querySelector("img") || document.createElement("img");
+            if (!avatarImg.parentNode) container.appendChild(avatarImg);
+            avatarImg.src = imgUrl; avatarImg.style.display = "block";
+        }
+    }
+
+    function renderPfpSelectionGrid() {
+        const targetGrid = document.getElementById("pfpSelectorOptions");
+        if (!targetGrid) return;
+        targetGrid.innerHTML = "";
+
+        Object.keys(profileAvatarsCatalog).forEach(idKey => {
+            const id = parseInt(idKey);
+            const imgUrl = profileAvatarsCatalog[id];
+            const optionCard = document.createElement("div");
+            optionCard.className = `pfp-option ${currentUserPfpId === id ? 'active' : ''}`;
+            optionCard.setAttribute("onclick", `changeUserAvatar(${id})`);
+            optionCard.innerHTML = `<img src="${imgUrl}"><span class="pfp-label-id">${id}</span>`;
+            targetGrid.appendChild(optionCard);
+        });
+    }
+
+    async function changeUserAvatar(selectedId) {
+        if (!currentUserEmail || selectedId === currentUserPfpId) return;
+        try {
+            const res = await fetch(`${API_BASE_URL}/api/auth/update-pfp`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: currentUserEmail, pfp: selectedId })
+            });
+            if (res.ok) {
+                currentUserPfpId = selectedId;
+                applyActiveUserAvatar(currentUserPfpId);
+                renderPfpSelectionGrid();
+            }
+        } catch(err) { showToast("Failed to save avatar change."); }
+    }
+</script>
+
+<script>
+    async function fetchWatchHistory() {
+        const historyContainer = document.getElementById('history-container');
+        if (!currentUserEmail) return;
+        
+        try {
+            const res = await fetch(`${API_BASE_URL}/api/history?email=${encodeURIComponent(currentUserEmail)}`);
+            const data = await res.json();
+            historyContainer.innerHTML = "";
+            userWatchHistoryCache = data.history || [];
+
+            if (userWatchHistoryCache.length === 0) {
+                historyContainer.innerHTML = `<p style="color: gray; font-size: 14px;">No movies watched yet.</p>`;
+                buildHomeFeed();
+                return;
+            }
+
+            userWatchHistoryCache.forEach(item => {
+                const cardLink = document.createElement('div');
+                cardLink.className = 'history-card-link';
+                cardLink.style.cursor = 'pointer';
+                cardLink.innerHTML = `
+                    <div class="history-item">
+                        <div class="history-poster-frame"></div>
+                        <div class="history-meta-details">
+                            <span class="history-title-text">${item.movieTitle}</span>
+                            <span class="history-time">${new Date(item.timestamp).toLocaleDateString()}</span>
+                        </div>
+                    </div>
+                `;
+                historyContainer.appendChild(cardLink);
+            });
+            buildHomeFeed();
+        } catch(e) {
+            historyContainer.innerHTML = `<p style="color: red; font-size: 14px;">Failed to load watch history.</p>`;
+        }
+    }
+
+    // Call this execution whenever a video component starts playing in the player stream
+    async function addToWatchHistory(movieTitle) {
+        if (!currentUserEmail) return;
+        try {
+            const res = await fetch(`${API_BASE_URL}/api/history/add`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: currentUserEmail, movieTitle: movieTitle })
+            });
+            if (res.ok) {
+                fetchWatchHistory(); // Auto re-sync tracking display rows
+            }
+        } catch(e) { console.error("Could not sync media session tracking:", e); }
+    }
+</script>
+
+<script>
+    const searchPanel = document.getElementById('sliding-search');
+    const profilePanel = document.getElementById('sliding-profile');
+    const searchTrigger = document.getElementById('search-trigger');
+    const profileTrigger = document.getElementById('profile-trigger');
+    const homeTrigger = document.getElementById('home-trigger');
+    const searchBackButton = document.getElementById('search-back-button');
+    const profileBackButton = document.getElementById('profile-back-button');
+    const searchInput = document.getElementById('searchInput');
+    const searchResults = document.getElementById('searchResults');
+
+    function resetActiveNavbar() {
+        homeTrigger.classList.remove('active'); searchTrigger.classList.remove('active'); profileTrigger.classList.remove('active');
+    }
+
+    homeTrigger.addEventListener('click', () => {
+        resetActiveNavbar(); homeTrigger.classList.add('active');
+        searchPanel.style.right = '-100%'; profilePanel.style.right = '-100%';
+    });
+
+    searchTrigger.addEventListener('click', () => {
+        resetActiveNavbar(); searchTrigger.classList.add('active');
+        searchPanel.style.right = '0%'; profilePanel.style.right = '-100%'; searchInput.focus();
+    });
+
+    profileTrigger.addEventListener('click', () => {
+        resetActiveNavbar(); profileTrigger.classList.add('active');
+        profilePanel.style.right = '0%'; searchPanel.style.right = '-100%';
+    });
+
+    searchBackButton.addEventListener('click', () => {
+        searchPanel.style.right = '-100%'; resetActiveNavbar(); homeTrigger.classList.add('active');
+        searchInput.value = ''; searchResults.innerHTML = '';
+    });
+
+    profileBackButton.addEventListener('click', () => {
+        profilePanel.style.right = '-100%'; resetActiveNavbar(); homeTrigger.classList.add('active');
+    });
+
+    function goRandom() { buildHomeFeed(); }
+    function searchMovies() { }
+    function closeActionSheet() { }
+    function buildHomeFeed() { }
+</script>
 
 </body>
-
 </html>
+
