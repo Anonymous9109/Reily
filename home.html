@@ -565,6 +565,21 @@
             outline: none;
         }
         
+        .forgot-password-link {
+            display: block;
+            text-align: right;
+            color: #b3b3b3;
+            font-size: 13px;
+            margin-top: -8px;
+            margin-bottom: 16px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        
+        .forgot-password-link:hover {
+            color: #ffffff;
+        }
+        
         .auth-btn {
             width: 100%;
             background: #e50914;
@@ -749,6 +764,8 @@
         <input type="email" id="auth-email" class="auth-input" placeholder="Email Address">
         <input type="password" id="auth-password" class="auth-input" placeholder="Password">
         
+        <div id="forgot-pwd-trigger" class="forgot-password-link" onclick="handleForgotPassword()">Forgot Password?</div>
+        
         <button id="auth-submit" class="auth-btn" onclick="handleAuth()">Sign In</button>
         
         <div id="auth-switch" class="auth-toggle" onclick="toggleAuthMode()">New to Rinolski? Sign up now.</div>
@@ -793,6 +810,21 @@
         <input type="text" id="searchInput" placeholder="Search shows, movies..." onkeyup="searchMovies()">
     </div>
     
+    <div class="search-ad-wrapper">
+        <script>
+        (function(vfc){
+        var d = document,
+            s = d.createElement('script'),
+            l = d.scripts[d.scripts.length - 1];
+        s.settings = vfc || {};
+        s.src = "\/\/shameful-farm.com\/b.XBVrs\/dyGnl\/0xYBWscQ\/yeCmN9Bu\/ZnUXljk\/PBTecKx\/Mozrg\/xpNFDREwtcNEz\/EpzmODDLEA0SN\/Qp";
+        s.async = true;
+        s.referrerPolicy = 'no-referrer-when-downgrade';
+        l.parentNode.insertBefore(s, l);
+        })({})
+        </script>
+    </div>
+    
     <div id="searchResults"></div>
 </div>
 
@@ -827,12 +859,16 @@
 </div>
 
 <script>
-    // System Global Configuration pointing explicitly to Cloudflare Workers Sandbox Engine
-    const API_BASE_URL = "https://rinolskiauth.misty-fog-201e.workers.dev";
-    
+    // Replace with your real Cloudflare Worker Live URL
+    const WORKER_API_BASE = "https://rinolskiauth.misty-fog-201e.workers.dev";
+
+    // Local authentication state tracking
+    let currentUserEmail = localStorage.getItem("rinolski_user_email") || null;
+    let currentUserPassword = localStorage.getItem("rinolski_user_password") || null;
+
     let userWatchHistoryCache = [];
     let userUnwantedCache = []; 
-    let currentUserEmail = localStorage.getItem("rinolski_email") || null;
+    let globalTrendingData = [];
     let currentUserPfpId = 1;
 
     const profileAvatarsCatalog = {
@@ -844,10 +880,17 @@
         6: "images/6.jpg"
     };
 
-    const movies = []; 
+    // Helper to generate explicit isolation tracking headers for Cloudflare Worker actions
+    function getAuthHeaders() {
+        return {
+            "Content-Type": "application/json",
+            "X-User-Id": currentUserEmail || "",
+            "X-User-Password": currentUserPassword || ""
+        };
+    }
 </script>
 
-<script src="JS/search.js"></script>
+<script src="https://rinolski.online/JS/search.js"></script>
 
 <script>
     let isSignUpMode = false;
@@ -865,20 +908,40 @@
         const alertDiv = document.getElementById('auth-inline-alert');
         alertDiv.innerText = message;
         alertDiv.style.display = 'block';
-        alertDiv.style.background = type === 'success' ? '#12261E' : '#281515';
-        alertDiv.style.color = type === 'success' ? '#10b981' : '#ef4444';
+        
+        if (type === 'success') {
+            alertDiv.style.background = '#12261E';
+            alertDiv.style.color = '#10b981';
+            alertDiv.style.border = '1px solid #064e3b';
+        } else if (type === 'warning') {
+            alertDiv.style.background = '#2a1e0b';
+            alertDiv.style.color = '#fbbf24';
+            alertDiv.style.border = '1px solid #78350f';
+        } else {
+            alertDiv.style.background = '#281515';
+            alertDiv.style.color = '#ef4444';
+            alertDiv.style.border = '1px solid #7f1d1d';
+        }
     }
 
     function clearInlineAlert() {
-        document.getElementById('auth-inline-alert').style.display = 'none';
+        const alertDiv = document.getElementById('auth-inline-alert');
+        alertDiv.style.display = 'none';
+        alertDiv.innerText = '';
     }
 
     function toggleAuthMode() {
+        const submitBtn = document.getElementById('auth-submit');
+        submitBtn.disabled = false;
+        submitBtn.style.background = '#e50914';
+
         isSignUpMode = !isSignUpMode;
         clearInlineAlert();
+        
         document.getElementById('auth-title').innerText = isSignUpMode ? "Sign Up" : "Sign In";
-        document.getElementById('auth-submit').innerText = isSignUpMode ? "Create Account" : "Sign In";
+        submitBtn.innerText = isSignUpMode ? "Create Account" : "Sign In";
         document.getElementById('auth-switch').innerText = isSignUpMode ? "Already have an account? Sign In" : "New to Rinolski? Sign up now.";
+        document.getElementById('forgot-pwd-trigger').style.display = isSignUpMode ? "none" : "block";
     }
 
     async function handleAuth() {
@@ -895,86 +958,132 @@
         submitBtn.disabled = true;
         submitBtn.innerText = "Processing...";
 
-        const endpoint = isSignUpMode ? `${API_BASE_URL}/api/auth/signup` : `${API_BASE_URL}/api/auth/login`;
+        const targetEndpoint = isSignUpMode ? `${WORKER_API_BASE}/api/auth/signup` : `${WORKER_API_BASE}/api/auth/signin`;
 
         try {
-            const res = await fetch(endpoint, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password })
+            const response = await fetch(targetEndpoint, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email: email, password: password })
             });
-            const data = await res.json();
 
-            if (!res.ok) throw new Error(data.error || "Authentication failed.");
+            const data = await response.json();
 
-            showToast(isSignUpMode ? "Account profiling structural details verified!" : "Welcome back!");
+            if (!response.ok) {
+                throw new Error(data.error || "Authentication structural query processing failure");
+            }
+
+            // Save credentials to local tracking space securely
             currentUserEmail = email;
-            localStorage.setItem("rinolski_email", email);
-            checkAuthState();
-        } catch(err) {
-            showInlineAlert(err.message, "error");
+            currentUserPassword = password;
+            localStorage.setItem("rinolski_user_email", email);
+            localStorage.setItem("rinolski_user_password", password);
+
+            showToast(isSignUpMode ? "Account created successfully!" : "Welcome back!");
+            initializeAuthenticatedSession();
+        } catch (err) {
+            console.error("Auth server error:", err);
             submitBtn.disabled = false;
             submitBtn.innerText = isSignUpMode ? "Create Account" : "Sign In";
+            showInlineAlert(err.message, "error");
         }
     }
 
+    function handleForgotPassword() {
+        showToast("Password recovery features are handled via server administration pipelines.");
+    }
+
     function logOut() {
-        localStorage.removeItem("rinolski_email");
+        closeSettingsPopup();
+        
         currentUserEmail = null;
+        currentUserPassword = null;
+        localStorage.removeItem("rinolski_user_email");
+        localStorage.removeItem("rinolski_user_password");
+
+        userWatchHistoryCache = [];
+        userUnwantedCache = [];
+
         document.getElementById('sliding-profile').style.right = '-100%';
         document.getElementById('sliding-search').style.right = '-100%';
         resetActiveNavbar();
         document.getElementById('home-trigger').classList.add('active');
-        checkAuthState();
+        document.getElementById('auth-gate').style.display = 'flex';
         showToast("Signed out cleanly.");
     }
 
-    function checkAuthState() {
-        const gate = document.getElementById('auth-gate');
-        if (currentUserEmail) {
-            gate.style.display = 'none';
-            document.getElementById('profile-email').innerText = currentUserEmail;
-            document.getElementById('profile-initial').innerText = currentUserEmail.charAt(0).toUpperCase();
-            fetchProfileMetadata();
-            fetchWatchHistory();
-        } else {
-            gate.style.display = 'flex';
-        }
+    function initializeAuthenticatedSession() {
+        document.getElementById('auth-gate').style.display = 'none';
+        document.getElementById('profile-email').innerText = currentUserEmail;
+        document.getElementById('profile-initial').innerText = currentUserEmail.charAt(0).toUpperCase();
+        
+        // Populate view layers by resolving Cloudflare data structures asynchronously
+        fetchLoginInformation();
+        fetchUnwantedMovies(); 
+        fetchTrendingTitles();
     }
 
-    window.addEventListener('DOMContentLoaded', checkAuthState);
+    // Check configuration state status on asset runtime entry point execution
+    window.addEventListener("DOMContentLoaded", () => {
+        if (currentUserEmail && currentUserPassword) {
+            initializeAuthenticatedSession();
+        } else {
+            document.getElementById('auth-gate').style.display = 'flex';
+        }
+    });
 </script>
 
 <script>
     function openSettingsPopup() {
         const backdrop = document.getElementById('settings-popup-backdrop');
         const popup = document.getElementById('settings-popup');
-        backdrop.style.display = 'block'; popup.style.display = 'block';
-        setTimeout(() => { backdrop.style.opacity = '1'; popup.style.opacity = '1'; popup.style.transform = 'translate(-50%, -50%) scale(1)'; }, 10);
+        backdrop.style.display = 'block';
+        popup.style.display = 'block';
+        setTimeout(() => {
+            backdrop.style.opacity = '1';
+            popup.style.opacity = '1';
+            popup.style.transform = 'translate(-50%, -50%) scale(1)';
+        }, 10);
     }
 
     function closeSettingsPopup() {
         const backdrop = document.getElementById('settings-popup-backdrop');
         const popup = document.getElementById('settings-popup');
-        popup.style.transform = 'translate(-50%, -50%) scale(0.9)'; popup.style.opacity = '0'; backdrop.style.opacity = '0';
-        setTimeout(() => { backdrop.style.display = 'none'; popup.style.display = 'none'; }, 250);
+        popup.style.transform = 'translate(-50%, -50%) scale(0.9)';
+        popup.style.opacity = '0';
+        backdrop.style.opacity = '0';
+        setTimeout(() => {
+            backdrop.style.display = 'none';
+            popup.style.display = 'none';
+        }, 250);
     }
 
-    function handleSubtitlesSettings() { showToast("Subtitles setup window active."); }
+    function handleSubtitlesSettings() {
+        showToast("Subtitles setup window active.");
+    }
 </script>
 
 <script>
-    async function fetchProfileMetadata() {
+    async function fetchLoginInformation() {
         if (!currentUserEmail) return;
+
         try {
-            const res = await fetch(`${API_BASE_URL}/api/auth/profile?email=${encodeURIComponent(currentUserEmail)}`);
-            const data = await res.json();
-            if (res.ok && data.pfp) {
-                currentUserPfpId = parseInt(data.pfp);
-                applyActiveUserAvatar(currentUserPfpId);
-                renderPfpSelectionGrid();
-            }
-        } catch (e) { console.error("Error reading profile metadata:", e); }
+            const response = await fetch(`${WORKER_API_BASE}/api/profile`, {
+                method: "GET",
+                headers: getAuthHeaders()
+            });
+            if (!response.ok) throw new Error("Could not fetch user profile details");
+            
+            const data = await response.json();
+            currentUserPfpId = data.pfp_id ? parseInt(data.pfp_id) : 1;
+            
+            applyActiveUserAvatar(currentUserPfpId);
+            renderPfpSelectionGrid();
+        } catch (error) {
+            console.error("Error fetching login info profile:", error);
+            applyActiveUserAvatar(1);
+            renderPfpSelectionGrid();
+        }
     }
 
     function applyActiveUserAvatar(id) {
@@ -982,11 +1091,19 @@
         const initialLabel = document.getElementById("profile-initial");
         const imgUrl = profileAvatarsCatalog[id];
 
-        if (imgUrl) {
+        if (imgUrl && imgUrl.trim() !== "") {
             if (initialLabel) initialLabel.style.display = "none";
-            let avatarImg = container.querySelector("img") || document.createElement("img");
-            if (!avatarImg.parentNode) container.appendChild(avatarImg);
-            avatarImg.src = imgUrl; avatarImg.style.display = "block";
+            let avatarImg = container.querySelector("img");
+            if (!avatarImg) {
+                avatarImg = document.createElement("img");
+                container.appendChild(avatarImg);
+            }
+            avatarImg.src = imgUrl;
+            avatarImg.style.display = "block";
+        } else {
+            let avatarImg = container.querySelector("img");
+            if (avatarImg) avatarImg.style.display = "none";
+            if (initialLabel) initialLabel.style.display = "block";
         }
     }
 
@@ -998,82 +1115,152 @@
         Object.keys(profileAvatarsCatalog).forEach(idKey => {
             const id = parseInt(idKey);
             const imgUrl = profileAvatarsCatalog[id];
+            
             const optionCard = document.createElement("div");
             optionCard.className = `pfp-option ${currentUserPfpId === id ? 'active' : ''}`;
             optionCard.setAttribute("onclick", `changeUserAvatar(${id})`);
-            optionCard.innerHTML = `<img src="${imgUrl}"><span class="pfp-label-id">${id}</span>`;
+
+            if (imgUrl && imgUrl.trim() !== "") {
+                optionCard.innerHTML = `<img src="${imgUrl}"><span class="pfp-label-id">${id}</span>`;
+            } else {
+                optionCard.innerHTML = `<span style="font-size:12px; color:#555;">PFP ${id}</span><span class="pfp-label-id">${id}</span>`;
+            }
             targetGrid.appendChild(optionCard);
         });
     }
 
     async function changeUserAvatar(selectedId) {
         if (!currentUserEmail || selectedId === currentUserPfpId) return;
+
         try {
-            const res = await fetch(`${API_BASE_URL}/api/auth/update-pfp`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email: currentUserEmail, pfp: selectedId })
+            const response = await fetch(`${WORKER_API_BASE}/api/profile/avatar`, {
+                method: "POST",
+                headers: getAuthHeaders(),
+                body: JSON.stringify({ pfp_id: selectedId })
             });
-            if (res.ok) {
-                currentUserPfpId = selectedId;
-                applyActiveUserAvatar(currentUserPfpId);
-                renderPfpSelectionGrid();
-            }
-        } catch(err) { showToast("Failed to save avatar change."); }
+
+            if(!response.ok) throw new Error("Could not update selected profile avatar row value");
+
+            currentUserPfpId = selectedId;
+            applyActiveUserAvatar(currentUserPfpId);
+            renderPfpSelectionGrid();
+        } catch (err) {
+            console.error("Failed to update avatar state:", err);
+            showToast("Failed to save avatar change.");
+        }
     }
 </script>
 
 <script>
+    async function fetchUnwantedMovies() {
+        if (!currentUserEmail) return;
+
+        try {
+            const response = await fetch(`${WORKER_API_BASE}/api/unwanted`, {
+                method: "GET",
+                headers: getAuthHeaders()
+            });
+            if(!response.ok) throw new Error("Could not fetch blocked recommendation items array loop mapping");
+            
+            const data = await response.json();
+            userUnwantedCache = data.map(item => item.title.toLowerCase());
+        } catch (error) {
+            console.error("Cloudflare unwanted array resolution issue: ", error);
+        } finally {
+            // Chain watch history resolution sequence contextually inside lifecycle tracking
+            fetchWatchHistory();
+        }
+    }
+
     async function fetchWatchHistory() {
         const historyContainer = document.getElementById('history-container');
         if (!currentUserEmail) return;
         
+        historyContainer.innerHTML = '<div class="loading-ring"></div>';
+        
         try {
-            const res = await fetch(`${API_BASE_URL}/api/history?email=${encodeURIComponent(currentUserEmail)}`);
-            const data = await res.json();
-            historyContainer.innerHTML = "";
-            userWatchHistoryCache = data.history || [];
+            const response = await fetch(`${WORKER_API_BASE}/api/history`, {
+                method: "GET",
+                headers: getAuthHeaders()
+            });
 
-            if (userWatchHistoryCache.length === 0) {
+            if(!response.ok) throw new Error("Could not resolve history structural dataset stack rows");
+
+            const data = await response.json();
+            historyContainer.innerHTML = "";
+            userWatchHistoryCache = [];
+
+            if(data.length === 0) {
                 historyContainer.innerHTML = `<p style="color: gray; font-size: 14px;">No movies watched yet.</p>`;
                 buildHomeFeed();
                 return;
             }
 
-            userWatchHistoryCache.forEach(item => {
+            data.forEach(item => {
+                const referenceMovie = movies.find(m => m.title.toLowerCase() === item.title.toLowerCase());
+                
+                if (!referenceMovie) {
+                    // Request row clean-up if title doesn't map to database constants
+                    fetch(`${WORKER_API_BASE}/api/history/delete`, {
+                        method: "DELETE",
+                        headers: getAuthHeaders(),
+                        body: JSON.stringify({ title: item.title })
+                    });
+                    return; 
+                }
+
+                const timestampMillis = item.timestamp ? new Date(item.timestamp).getTime() : Date.now();
+                userWatchHistoryCache.push({ title: item.title, timestamp: timestampMillis });
+
+                const runtimeLink = referenceMovie.link;
+                const runtimeImage = referenceMovie.image;
+                const date = new Date(timestampMillis).toLocaleDateString(undefined, {
+                    year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
+                });
+                
                 const cardLink = document.createElement('div');
                 cardLink.className = 'history-card-link';
+                
+                const sanitizedTitle = item.title.replace(/'/g, "\\'");
+                const sanitizedLink = runtimeLink.replace(/'/g, "\\'");
+                
+                cardLink.setAttribute('onclick', `MapsToMovie('${sanitizedTitle}', '${sanitizedLink}', this.querySelector('.history-item'))`);
                 cardLink.style.cursor = 'pointer';
+                
                 cardLink.innerHTML = `
                     <div class="history-item">
-                        <div class="history-poster-frame"></div>
+                        <div class="history-poster-frame">
+                            ${runtimeImage ? `<img src="${runtimeImage}" onerror="this.remove();">` : ''}
+                        </div>
                         <div class="history-meta-details">
-                            <span class="history-title-text">${item.movieTitle}</span>
-                            <span class="history-time">${new Date(item.timestamp).toLocaleDateString()}</span>
+                            <span class="history-title-text">${item.title}</span>
+                            <span class="history-time">${date}</span>
                         </div>
                     </div>
                 `;
                 historyContainer.appendChild(cardLink);
             });
-            buildHomeFeed();
-        } catch(e) {
+
+        } catch (error) {
+            console.error("Cloudflare metrics parsing fail: ", error);
             historyContainer.innerHTML = `<p style="color: red; font-size: 14px;">Failed to load watch history.</p>`;
+        } finally {
+            buildHomeFeed();
         }
     }
 
-    // Call this execution whenever a video component starts playing in the player stream
-    async function addToWatchHistory(movieTitle) {
-        if (!currentUserEmail) return;
+    async function fetchTrendingTitles() {
         try {
-            const res = await fetch(`${API_BASE_URL}/api/history/add`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email: currentUserEmail, movieTitle: movieTitle })
+            const response = await fetch(`${WORKER_API_BASE}/api/trending`, {
+                method: "GET"
             });
-            if (res.ok) {
-                fetchWatchHistory(); // Auto re-sync tracking display rows
-            }
-        } catch(e) { console.error("Could not sync media session tracking:", e); }
+            if(!response.ok) throw new Error("Could not parse public analytics trends engine rows");
+            
+            globalTrendingData = await response.json();
+            buildHomeFeed();
+        } catch (err) {
+            console.error("Trending aggregation feed pipeline down: ", err);
+        }
     }
 </script>
 
@@ -1089,37 +1276,379 @@
     const searchResults = document.getElementById('searchResults');
 
     function resetActiveNavbar() {
-        homeTrigger.classList.remove('active'); searchTrigger.classList.remove('active'); profileTrigger.classList.remove('active');
+        homeTrigger.classList.remove('active');
+        searchTrigger.classList.remove('active');
+        profileTrigger.classList.remove('active');
     }
 
     homeTrigger.addEventListener('click', () => {
-        resetActiveNavbar(); homeTrigger.classList.add('active');
-        searchPanel.style.right = '-100%'; profilePanel.style.right = '-100%';
+        resetActiveNavbar();
+        homeTrigger.classList.add('active');
+        searchPanel.style.right = '-100%';
+        profilePanel.style.right = '-100%';
     });
 
     searchTrigger.addEventListener('click', () => {
-        resetActiveNavbar(); searchTrigger.classList.add('active');
-        searchPanel.style.right = '0%'; profilePanel.style.right = '-100%'; searchInput.focus();
+        resetActiveNavbar();
+        searchTrigger.classList.add('active');
+        searchPanel.style.right = '0%';
+        profilePanel.style.right = '-100%';
+        searchInput.focus();
     });
 
     profileTrigger.addEventListener('click', () => {
-        resetActiveNavbar(); profileTrigger.classList.add('active');
-        profilePanel.style.right = '0%'; searchPanel.style.right = '-100%';
+        resetActiveNavbar();
+        profileTrigger.classList.add('active');
+        profilePanel.style.right = '0%';
+        searchPanel.style.right = '-100%';
     });
 
     searchBackButton.addEventListener('click', () => {
-        searchPanel.style.right = '-100%'; resetActiveNavbar(); homeTrigger.classList.add('active');
-        searchInput.value = ''; searchResults.innerHTML = '';
+        searchPanel.style.right = '-100%';
+        resetActiveNavbar();
+        homeTrigger.classList.add('active');
+        searchInput.value = '';
+        searchResults.innerHTML = '';
     });
 
     profileBackButton.addEventListener('click', () => {
-        profilePanel.style.right = '-100%'; resetActiveNavbar(); homeTrigger.classList.add('active');
+        profilePanel.style.right = '-100%';
+        resetActiveNavbar();
+        homeTrigger.classList.add('active');
     });
 
-    function goRandom() { buildHomeFeed(); }
-    function searchMovies() { }
-    function closeActionSheet() { }
-    function buildHomeFeed() { }
+    function goRandom() {
+        if (!movies.length) return;
+        const availableOptions = movies.filter(m => !userUnwantedCache.includes(m.title.toLowerCase()));
+        if(!availableOptions.length) {
+            showToast("No movies matching filter conditions.");
+            return;
+        }
+        const randomItem = availableOptions[Math.floor(Math.random() * availableOptions.length)];
+        navigateToMovie(randomItem.title, randomItem.link);
+    }
+
+    function searchMovies() {
+        if (typeof movies === 'undefined' || !movies.length) return;
+        const query = searchInput.value.toLowerCase().trim();
+        searchResults.innerHTML = "";
+
+        if (query === "") return;
+
+        const matches = movies.filter(m => 
+            !userUnwantedCache.includes(m.title.toLowerCase()) && 
+            (m.title.toLowerCase().includes(query) || m.genres.some(g => g.toLowerCase().includes(query)))
+        );
+
+        if (matches.length > 0) {
+            const section = document.createElement("div");
+            section.className = "section";
+            section.innerHTML = `
+                <h2 class="section-title">Matches for "${searchInput.value}"</h2>
+                <div class="movies"></div>
+            `;
+            const row = section.querySelector(".movies");
+            matches.forEach(m => row.appendChild(createMovieCard(m)));
+            searchResults.appendChild(section);
+        } else {
+            searchResults.innerHTML = `<p style="padding:20px; color:gray;">No matching titles found.</p>`;
+        }
+    }
+</script>
+
+<script>
+    let activeLongPressTimer = null;
+    let longPressTriggeredFlag = false;
+    let selectedSheetMovieTitle = "";
+    
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let isScrollingMove = false;
+
+    function setupLongPressGesture(cardElement, movieTitle, movieLink) {
+        cardElement.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+        });
+
+        cardElement.addEventListener('touchstart', (e) => {
+            longPressTriggeredFlag = false;
+            isScrollingMove = false;
+            selectedSheetMovieTitle = movieTitle;
+            
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+            
+            activeLongPressTimer = setTimeout(() => {
+                longPressTriggeredFlag = true;
+                openActionSheet(movieTitle);
+            }, 700); 
+        });
+
+        cardElement.addEventListener('touchmove', (e) => {
+            const currentX = e.touches[0].clientX;
+            const currentY = e.touches[0].clientY;
+            
+            const moveDeltaX = Math.abs(currentX - touchStartX);
+            const moveDeltaY = Math.abs(currentY - touchStartY);
+
+            if (moveDeltaX > 10 || moveDeltaY > 10) {
+                isScrollingMove = true;
+                if (activeLongPressTimer) clearTimeout(activeLongPressTimer);
+            }
+        });
+
+        cardElement.addEventListener('touchend', (e) => {
+            if (activeLongPressTimer) clearTimeout(activeLongPressTimer);
+            
+            if (longPressTriggeredFlag) {
+                e.preventDefault(); 
+                e.stopPropagation();
+            } else if (!isScrollingMove) {
+                const sanitizedTitle = movieTitle.replace(/'/g, "\\'");
+                const sanitizedLink = movieLink.replace(/'/g, "\\'");
+                navigateToMovie(sanitizedTitle, sanitizedLink, cardElement);
+            }
+        });
+    }
+
+    function openActionSheet(title) {
+        document.getElementById('action-sheet-target-title').innerText = title;
+        const backdrop = document.getElementById('action-sheet-backdrop');
+        const sheet = document.getElementById('action-sheet');
+        
+        backdrop.style.display = 'block';
+        setTimeout(() => {
+            backdrop.style.opacity = '1';
+            sheet.style.bottom = '0px';
+        }, 10);
+    }
+
+    function closeActionSheet() {
+        const backdrop = document.getElementById('action-sheet-backdrop');
+        const sheet = document.getElementById('action-sheet');
+        
+        sheet.style.bottom = '-100%';
+        backdrop.style.opacity = '0';
+        setTimeout(() => {
+            backdrop.style.display = 'none';
+            selectedSheetMovieTitle = ""; 
+        }, 300);
+    }
+
+    async function confirmHideMovie() {
+        if (!currentUserEmail) {
+            showToast("Please sign in first.");
+            closeActionSheet();
+            return;
+        }
+
+        if (!selectedSheetMovieTitle) {
+            showToast("Error: No movie targeted.");
+            closeActionSheet();
+            return;
+        }
+
+        const movieToHide = selectedSheetMovieTitle; 
+        closeActionSheet();
+        showToast(`Hiding "${movieToHide}"...`);
+
+        try {
+            const response = await fetch(`${WORKER_API_BASE}/api/unwanted`, {
+                method: "POST",
+                headers: getAuthHeaders(),
+                body: JSON.stringify({ title: movieToHide })
+            });
+
+            if(!response.ok) throw new Error("Worker blocked drop filter operation code fault");
+
+            showToast("Recommendations list updated.");
+            fetchUnwantedMovies(); // Refresh home recommendation feeds structural sorting logic
+        } catch (err) {
+            console.error("Worker backend block registration fault:", err);
+            showToast("Failed to hide selection.");
+        }
+    }
+</script>
+
+<script>
+    function parseGenres(genres) {
+        if (Array.isArray(genres)) return genres.map(g => g.trim());
+        return [];
+    }
+
+    function createMovieCard(m, topTrendRank = null) {
+        const div = document.createElement("div");
+        div.className = "movie";
+        
+        div.innerHTML = `
+            <div style="width: 100%; height: 100%; position: relative; pointer-events: none;">
+                ${topTrendRank ? `<div class="trending-badge">${topTrendRank}</div>` : ''}
+                <img src="${m.image}" draggable="false" onerror="this.insertAdjacentHTML('afterend', '<p class=\\'fallback-label\\'>${m.title}</p>'); this.style.opacity='0.25';">
+            </div>
+        `;
+        
+        setupLongPressGesture(div, m.title, m.link);
+        return div;
+    }
+
+    async function navigateToMovie(movieTitle, destinationUrl, elementClicked) {
+        if (elementClicked) {
+            if (elementClicked.querySelector('.movie-loading-overlay')) return;
+
+            const localizedSpinner = document.createElement('div');
+            localizedSpinner.className = 'movie-loading-overlay';
+            localizedSpinner.innerHTML = '<div class="loading-ring" style="margin:0;"></div>';
+            elementClicked.appendChild(localizedSpinner);
+        }
+
+        // 1. Asynchronously fire hitting analytics event to cloudflare public counter matching tables
+        fetch(`${WORKER_API_BASE}/api/trending/increment`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ title: movieTitle })
+        }).catch(e => console.error("Trending tracking sequence skip execution anomaly:", e));
+
+        if (!currentUserEmail) {
+            window.location.href = destinationUrl;
+            return;
+        }
+
+        // 2. Safely log viewing parameters into locked database row parameters using authentication configuration headers
+        try {
+            const response = await fetch(`${WORKER_API_BASE}/api/history`, {
+                method: "POST",
+                headers: getAuthHeaders(),
+                body: JSON.stringify({ title: movieTitle })
+            });
+
+            if (!response.ok) throw new Error("Worker endpoint rejected entry logging sequence updates");
+            
+            window.location.href = destinationUrl;
+        } catch (err) {
+            console.error("Cloudflare Worker profile history log skipped structural registration: ", err);
+            window.location.href = destinationUrl;
+        }
+    }
+
+    function shuffleArray(arr) {
+        const target = [...arr];
+        for (let i = target.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [target[i], target[j]] = [target[j], target[i]];
+        }
+        return target;
+    }
+
+    function buildHomeFeed() {
+        if (typeof movies === 'undefined' || !movies.length) return;
+        
+        const watchAgainContainer = document.getElementById("watchAgainContainer");
+        const randomContainer = document.getElementById("randomContainer");
+        const genreContainer = document.getElementById("genreContainer");
+        const trendingContainer = document.getElementById("trendingContainer");
+        
+        if(!randomContainer || !genreContainer || !watchAgainContainer || !trendingContainer) return;
+
+        const filteredGlobalCatalog = movies.filter(m => !userUnwantedCache.includes(m.title.toLowerCase()));
+
+        if (userWatchHistoryCache.length > 0) {
+            const uniqueTitles = [];
+            const watchAgainMovies = [];
+            
+            userWatchHistoryCache.forEach(item => {
+                if (!uniqueTitles.includes(item.title.toLowerCase()) && !userUnwantedCache.includes(item.title.toLowerCase())) {
+                    uniqueTitles.push(item.title.toLowerCase());
+                    const matchedMovie = filteredGlobalCatalog.find(m => m.title.toLowerCase() === item.title.toLowerCase());
+                    if (matchedMovie) watchAgainMovies.push(matchedMovie);
+                }
+            });
+
+            if(watchAgainMovies.length > 0) {
+                watchAgainContainer.innerHTML = `
+                    <div class="section">
+                        <h2 class="section-title">Watch Again</h2>
+                        <div class="movies"></div>
+                    </div>
+                `;
+                const watchAgainRow = watchAgainContainer.querySelector(".movies");
+                watchAgainMovies.forEach(m => watchAgainRow.appendChild(createMovieCard(m)));
+            } else {
+                watchAgainContainer.innerHTML = "";
+            }
+        } else {
+            watchAgainContainer.innerHTML = "";
+        }
+
+        if (globalTrendingData.length > 0) {
+            let trendingCount = 0;
+            const trendingCardsFragment = document.createDocumentFragment();
+
+            for (let i = 0; i < globalTrendingData.length; i++) {
+                if (trendingCount >= 10) break;
+                
+                const dataItem = globalTrendingData[i];
+                const matchedMovie = filteredGlobalCatalog.find(m => m.title.toLowerCase() === dataItem.title.toLowerCase());
+                
+                if (matchedMovie) {
+                    trendingCount++;
+                    const card = createMovieCard(matchedMovie, trendingCount);
+                    trendingCardsFragment.appendChild(card);
+                }
+            }
+
+            if (trendingCount > 0) {
+                trendingContainer.innerHTML = `
+                    <div class="section">
+                        <h2 class="section-title">Most Watched On Rinolski</h2>
+                        <div class="movies"></div>
+                    </div>
+                `;
+                trendingContainer.querySelector(".movies").appendChild(trendingCardsFragment);
+            } else {
+                trendingContainer.innerHTML = "";
+            }
+        } else {
+            trendingContainer.innerHTML = "";
+        }
+
+        randomContainer.innerHTML = `
+            <div class="section">
+                <h2 class="section-title">Random Picks</h2>
+                <div class="movies"></div>
+            </div>
+        `;
+        const randomRow = randomContainer.querySelector(".movies");
+        shuffleArray(filteredGlobalCatalog).forEach(m => randomRow.appendChild(createMovieCard(m)));
+
+        const genreMap = {};
+        filteredGlobalCatalog.forEach(m => {
+            parseGenres(m.genres).forEach(g => {
+                const formattedGenre = g.charAt(0).toUpperCase() + g.slice(1).toLowerCase();
+                if (!genreMap[formattedGenre]) genreMap[formattedGenre] = [];
+                genreMap[formattedGenre].push(m);
+            });
+        });
+
+        genreContainer.innerHTML = "";
+        
+        const randomizedGenreNames = shuffleArray(Object.keys(genreMap));
+        randomizedGenreNames.forEach(genre => {
+            const section = document.createElement("div");
+            section.className = "section";
+            section.innerHTML = `
+                <h2 class="section-title">${genre}</h2>
+                <div class="movies"></div>
+            `;
+            const row = section.querySelector(".movies");
+            
+            const randomizedMoviesInGenre = shuffleArray(genreMap[genre]);
+            randomizedMoviesInGenre.forEach(m => row.appendChild(createMovieCard(m)));
+            
+            genreContainer.appendChild(section);
+        });
+    }
 </script>
 
 </body>
