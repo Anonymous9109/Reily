@@ -524,6 +524,12 @@ const movies = [
     genres: ["Adventure","Comedy"],
     image: "images/a1c0c38081eabbc6cbc01ce823e62081eb934fde7f5fbb5951e44b3df881390d.jpg",
     link: "Movies/Movie?movie=the-secret-life-of-walter-mitty"
+  },
+  {
+    title: "I Saw the TV Glow",
+    genres: ["Horror","Drama"],
+    image: "images/ISawtheTVGlow.jpg",
+    link: "Movies/Movie?movie=i-saw-the-tv-glow"
   }
 ];
 
