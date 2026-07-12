@@ -1,1 +1,1785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Rinolski</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
 
+    <style>
+        * {
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Helvetica, Arial, sans-serif;
+            background-color: #000000 !important;
+            color: #e5e5e5;
+            padding-top: 105px; /* Adjusted to make space for the live status bar */
+            padding-bottom: 80px;
+            user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            overflow-x: hidden;
+        }
+
+        button, a {
+            outline: none;
+            border: none;
+            background: none;
+            cursor: pointer;
+            user-select: none;
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* Real-time Status Bar Styling */
+        
+
+        .loading-ring {
+            width: 32px;
+            height: 32px;
+            border: 3px solid rgba(229, 9, 20, 0.15);
+            border-top: 3px solid #e50914;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .movie-loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 5;
+            border-radius: 4px;
+            animation: fadeIn 0.2s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 15px 20px;
+            background: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+            z-index: 1000;
+        }
+
+        .Rinolski-font {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 34px;
+            color: #800000;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .settings-container {
+            padding: 0 14px;
+            margin-bottom: 15px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .random-btn {
+            background: #000000;
+            color: #e5e5e5;
+            border: 1.5px solid rgba(229, 229, 229, 0.4);
+            padding: 12px 22px;
+            border-radius: 999px;
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 0.4px;
+            transition: border-color 0.3s;
+        }
+        
+        .random-btn:hover {
+            border-color: rgba(229, 229, 229, 0.8);
+        }
+
+        .section {
+            margin: 0 !important;
+            padding: 0 !important;
+            background-color: #000000;
+        }
+
+        .section-title {
+            margin: 0 !important;
+            padding: 0px 14px !important; 
+            font-size: 1rem;
+            line-height: 1;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            background-color: #000000;
+        }
+
+        .movies {
+            display: flex;
+            overflow-x: auto;
+            gap: 5px; 
+            margin: 10px !important;
+            padding: 0 14px 0px 14px !important;
+            scrollbar-width: none;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            background-color: #000000;
+        }
+
+        .movies::-webkit-scrollbar {
+            display: none;
+        }
+
+        .movie {
+            flex: 0 0 auto;
+            margin: 0 !important;
+            padding: 0 !important;
+            width: 110px;
+            position: relative;
+            cursor: pointer;
+            overflow: hidden;
+            border-radius: 4px;
+            background-color: #111111;
+        }
+
+        .movie img {
+            display: block;
+            margin: 0;
+            width: 100%;
+            height: 165px; 
+            object-fit: cover;
+            border-radius: 4px;
+            -webkit-user-drag: none;
+        }
+
+        .movie::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 200%; 
+            aspect-ratio: 1/1;
+            background-color: rgba(255, 255, 255, 0.25);
+            border-radius: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            opacity: 0;
+            pointer-events: none;
+            z-index: 4;
+            transition: transform 0.35s cubic-bezier(0.1, 0.8, 0.3, 1), opacity 0.2s ease;
+        }
+
+        .movie:active::after {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+            transition: transform 0s;
+        }
+
+        .movie .fallback-label {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0,0,0,0.9);
+            margin: 0;
+            padding: 6px 4px;
+            font-size: 11px;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: #fff;
+            z-index: 1;
+        }
+
+        .sliding-panel {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            height: 100%;
+            background: #000000;
+            transition: right 0.3s ease-in-out;
+            z-index: 2000;
+            overflow-y: auto;
+            padding-bottom: 80px;
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: #000000;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            border-bottom: 1px solid #1a1a1a;
+        }
+
+        .panel-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-left: 15px;
+        }
+
+        .back-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        #searchInput {
+            flex: 1;
+            padding: 12px;
+            background: #1a1a1a;
+            border: none;
+            color: white;
+            border-radius: 6px;
+            font-size: 16px;
+            margin-left: 10px;
+            outline: none;
+        }
+
+        .search-ad-wrapper {
+            padding: 10px 15px;
+            text-align: center;
+            background: #000000;
+        }
+
+        .profile-content {
+            padding: 20px;
+            background-color: #000000;
+        }
+        
+        .profile-avatar-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .avatar {
+            width: 60px;
+            height: 60px;
+            background: #222;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 2px solid transparent;
+        }
+        
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .avatar-fallback {
+            font-size: 24px;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .profile-details-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .gear-settings-btn {
+            color: #b3b3b3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4px;
+            border-radius: 50%;
+            transition: color 0.2s, background-color 0.2s;
+        }
+        
+        .gear-settings-btn:hover {
+            color: #ffffff;
+            background-color: #1a1a1a;
+        }
+        
+        .gear-settings-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        #settings-popup-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100dvh;
+            background: rgba(0, 0, 0, 0.75);
+            z-index: 8000;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.25s ease;
+        }
+        
+        #settings-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            width: 85%;
+            max-width: 340px;
+            background: #141414;
+            border: 1px solid #262626;
+            border-radius: 12px;
+            padding: 20px;
+            z-index: 8010;
+            display: none;
+            opacity: 0;
+            transition: transform 0.25s cubic-bezier(0.1, 0.8, 0.3, 1), opacity 0.25s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
+        
+        .popup-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #262626;
+            padding-bottom: 10px;
+        }
+        
+        .popup-option-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 0;
+            border-bottom: 1px solid #1f1f1f;
+            cursor: pointer;
+            color: #e5e5e5;
+            font-size: 15px;
+        }
+        
+        .popup-option-row:last-of-type {
+            border-bottom: none;
+        }
+        
+        .popup-option-row.logout-row {
+            color: #ff3b30;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+        
+        .popup-close-btn {
+            width: 100%;
+            background: #262626;
+            color: #ffffff;
+            padding: 12px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 6px;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .pfp-selector-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 10px;
+            margin-top: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .pfp-option {
+            aspect-ratio: 1/1;
+            background: #141414;
+            border: 2px solid transparent;
+            border-radius: 6px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .pfp-option img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .pfp-option.active {
+            border-color: #e50914;
+        }
+        
+        .pfp-label-id {
+            position: absolute;
+            bottom: 2px;
+            right: 4px;
+            font-size: 9px;
+            color: rgba(255,255,255,0.4);
+            font-weight: bold;
+        }
+
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .history-card-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        
+        .history-item {
+            background: #0b0b0b;
+            border: 1px solid #141414;
+            padding: 10px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+            overflow: hidden;
+            transition: background 0.2s;
+        }
+        
+        .history-item:hover {
+            background: #111111;
+        }
+        
+        .history-poster-frame {
+            width: 50px;
+            height: 75px;
+            flex-shrink: 0;
+            background: #222222;
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .history-poster-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .history-meta-details {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            overflow: hidden;
+        }
+        
+        .history-title-text {
+            font-size: 15px;
+            font-weight: bold;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .history-time {
+            color: #808080;
+            font-size: 11px;
+        }
+
+        .profile-section-heading {
+            font-size: 16px;
+            font-weight: bold;
+            color: #e50914;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 25px 0 10px 0;
+            border-bottom: 1px solid #1a1a1a;
+            padding-bottom: 5px;
+        }
+
+        #auth-gate {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000000;
+            z-index: 5000;
+            display: none; 
+            flex-direction: column;
+            justify-content: center;
+            padding: 30px;
+        }
+        
+        .auth-container {
+            max-width: 400px;
+            width: 100%;
+            margin: 0 auto;
+        }
+        
+        .auth-input {
+            width: 100%;
+            background: #333;
+            border: none;
+            border-radius: 4px;
+            padding: 14px;
+            color: white;
+            font-size: 16px;
+            margin-bottom: 16px;
+            outline: none;
+        }
+        
+        .forgot-password-link {
+            display: block;
+            text-align: right;
+            color: #b3b3b3;
+            font-size: 13px;
+            margin-top: -8px;
+            margin-bottom: 16px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        
+        .forgot-password-link:hover {
+            color: #ffffff;
+        }
+        
+        .auth-btn {
+            width: 100%;
+            background: #e50914;
+            color: white;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        
+        .auth-toggle {
+            color: #b3b3b3;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        #toast-container {
+            position: fixed;
+            bottom: 85px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 6000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none;
+        }
+        
+        .toast {
+            background: rgba(30, 30, 30, 0.95);
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 4px;
+            font-size: 14px;
+            border-left: 4px solid #e50914;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            animation: toastIn 0.3s ease forwards;
+        }
+        
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            height: 65px;
+            background-color: #000000;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-top: 1px solid #1a1a1a;
+            z-index: 1001;
+        }
+
+        .nav-item {
+            color: #b3b3b3;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            font-size: 11px;
+            transition: color 0.2s;
+        }
+
+        .nav-item svg {
+            width: 24px;
+            height: 24px;
+            margin-bottom: 4px;
+            fill: currentColor;
+        }
+
+        .nav-item:hover, .nav-item.active { 
+            color: white; 
+        }
+
+        #action-sheet-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100dvh; 
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 7000;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: auto; 
+        }
+        
+        #action-sheet {
+            position: fixed;
+            bottom: -100%;
+            left: 0;
+            width: 100%;
+            background: #141414;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+            padding: 20px 16px 40px 16px;
+            z-index: 7010;
+            transition: bottom 0.3s cubic-bezier(0.1, 0.8, 0.3, 1);
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.8);
+        }
+        
+        .action-sheet-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #808080;
+            margin-bottom: 15px;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .action-sheet-btn {
+            width: 100%;
+            background: #262626;
+            color: #ff3b30;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .action-sheet-btn.cancel {
+            background: #1f1f1f;
+            color: #ffffff;
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body>
+
+<div id="toast-container"></div>
+
+<div id="action-sheet-backdrop" onclick="closeActionSheet()"></div>
+<div id="action-sheet">
+    <div class="action-sheet-title" id="action-sheet-target-title">Movie Title</div>
+    <button class="action-sheet-btn" onclick="confirmHideMovie()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+        Not Interested / Hide This
+    </button>
+    <button class="action-sheet-btn cancel" onclick="closeActionSheet()">Cancel</button>
+</div>
+
+<div id="settings-popup-backdrop" onclick="closeSettingsPopup()"></div>
+<div id="settings-popup">
+    <div class="popup-title">Account Settings</div>
+    
+    <div class="popup-option-row" onclick="handleSubtitlesSettings()">
+        <span>Subtitles Setting</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="#808080"><path d="M8.5 9.5h-2v1h2v-1zm4 0h-2v1h2v-1zm7.5-5.5H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V6h16v12z"/></svg>
+    </div>
+    
+    <div class="popup-option-row logout-row" onclick="logOut()">
+        <span>Log Out</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="#ff3b30"><path d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .9-2 2v4h2V5h14v14H5v-4H3v4c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>
+    </div>
+    
+    <button class="popup-close-btn" onclick="closeSettingsPopup()">Close</button>
+</div>
+
+<div id="auth-gate">
+    <div class="auth-container">
+        <h1 class="Rinolski-font" style="font-size: 48px; text-align: center; margin-bottom: 30px;">rinolski</h1>
+        <h2 id="auth-title" style="margin-bottom: 20px; font-size: 24px;">Sign In</h2>
+        
+        <div id="auth-inline-alert" style="display: none; padding: 12px; border-radius: 4px; font-size: 14px; margin-bottom: 16px; line-height: 1.4; text-align: center;"></div>
+
+        <input type="email" id="auth-email" class="auth-input" placeholder="Email Address">
+        <input type="password" id="auth-password" class="auth-input" placeholder="Password">
+        
+        <div id="forgot-pwd-trigger" class="forgot-password-link" onclick="handleForgotPassword()">Forgot Password?</div>
+        
+        <button id="auth-submit" class="auth-btn" onclick="handleAuth()">Sign In</button>
+        
+        <div id="auth-switch" class="auth-toggle" onclick="toggleAuthMode()">New to Rinolski? Sign up now.</div>
+    </div>
+</div>
+
+<header>
+    <h2 class="Rinolski-font">rinolski</h2>
+</header>
+
+
+
+<div id="initialSections">
+    <div class="settings-container">
+        <button class="random-btn" onclick="goRandom()">Can't decide what to watch?</button>
+    </div>
+    
+    <div id="genreContainer"></div>
+    <div id="randomContainer"></div>
+    <div id="watchAgainContainer"></div>
+</div>
+
+<footer>
+    <button id="home-trigger" class="nav-item active">
+        <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        <span>Home</span>
+    </button>
+    <button id="search-trigger" class="nav-item">
+        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+        <span>Search</span>
+    </button>
+    <button id="profile-trigger" class="nav-item">
+        <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+        <span>Profile</span>
+    </button>
+</footer>
+
+<div id="sliding-search" class="sliding-panel">
+    <div class="panel-header">
+        <button class="back-button" id="search-back-button">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        </button>
+        <input type="text" id="searchInput" placeholder="Search shows, movies..." onkeyup="searchMovies()">
+    </div>
+    
+    <div class="search-ad-wrapper">
+        <script>
+        (function(vfc){
+        var d = document,
+            s = d.createElement('script'),
+            l = d.scripts[d.scripts.length - 1];
+        s.settings = vfc || {};
+        s.src = "\/\/shameful-farm.com\/b.XBVrs\/dyGnl\/0xYBWscQ\/yeCmN9Bu\/ZnUXljk\/PBTecKx\/Mozrg\/xpNFDREwtcNEz\/EpzmODDLEA0SN\/Qp";
+        s.async = true;
+        s.referrerPolicy = 'no-referrer-when-downgrade';
+        l.parentNode.insertBefore(s, l);
+        })({})
+        </script>
+    </div>
+    
+    <div id="searchResults"></div>
+</div>
+
+<div id="sliding-profile" class="sliding-panel">
+    <div class="panel-header">
+        <button class="back-button" id="profile-back-button">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        </button>
+        <div class="panel-title">My Profile</div>
+    </div>
+    <div class="profile-content">
+        <div class="profile-avatar-row">
+            <div class="avatar" id="profile-avatar-display">
+                <span class="avatar-fallback" id="profile-initial">-</span>
+            </div>
+            <div class="profile-details-container">
+                <button class="gear-settings-btn" onclick="openSettingsPopup()" aria-label="Settings Menu">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.70 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+                </button>
+                <p style="margin:0; color: #ffffff; font-size:16px; font-weight: bold;" id="profile-email">Loading Account...</p>
+            </div>
+        </div>
+
+        <div class="profile-section-heading">Choose Profile Avatar</div>
+        <div class="pfp-selector-grid" id="pfpSelectorOptions"></div>
+
+        <div class="profile-section-heading">Watch History</div>
+        <div id="history-container" class="history-list">
+            <div class="loading-ring"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // CLOUDFLARE ROUTING SYSTEM ARTIFACT ARCHITECTURE
+    const WORKER_URL = "https://rinolski.misty-fog-201e.workers.dev";
+    let currentUser = null; 
+    let transientEmail = "";
+    let authState = "signin"; 
+
+    let userWatchHistoryCache = [];
+    let userUnwantedCache = []; 
+
+    const profileAvatarsCatalog = {
+        1: "images/1.jpg", 
+        2: "images/2.jpg", 
+        3: "images/3.jpg", 
+        4: "images/4.jpg",  
+        5: "images/5.jpg",
+        6: "images/6.jpg"
+    };
+    let currentUserPfpId = null;
+</script>
+
+<script src="https://rinolski.online/JS/search.js"></script>
+
+<script>
+    function showToast(message) {
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.innerText = message;
+        container.appendChild(toast);
+        setTimeout(() => toast.remove(), 3500);
+    }
+
+    function showInlineAlert(message, type) {
+        const alertDiv = document.getElementById('auth-inline-alert');
+        alertDiv.innerText = message;
+        alertDiv.style.display = 'block';
+        
+        if (type === 'success') {
+            alertDiv.style.background = '#12261E';
+            alertDiv.style.color = '#10b981';
+            alertDiv.style.border = '1px solid #064e3b';
+        } else if (type === 'warning') {
+            alertDiv.style.background = '#2a1e0b';
+            alertDiv.style.color = '#fbbf24';
+            alertDiv.style.border = '1px solid #78350f';
+        } else {
+            alertDiv.style.background = '#281515';
+            alertDiv.style.color = '#ef4444';
+            alertDiv.style.border = '1px solid #7f1d1d';
+        }
+    }
+
+    function clearInlineAlert() {
+        const alertDiv = document.getElementById('auth-inline-alert');
+        alertDiv.style.display = 'none';
+        alertDiv.innerText = '';
+    }
+
+    function renderAuthState() {
+        clearInlineAlert();
+        const title = document.getElementById('auth-title');
+        const emailInput = document.getElementById('auth-email');
+        const passwordInput = document.getElementById('auth-password');
+        const forgotLink = document.getElementById('forgot-pwd-trigger');
+        const submitBtn = document.getElementById('auth-submit');
+        const switchToggle = document.getElementById('auth-switch');
+
+        emailInput.style.display = 'block';
+        passwordInput.style.display = 'block';
+        forgotLink.style.display = 'block';
+
+        if (gameStateResetRequired()) {
+            emailInput.value = "";
+            passwordInput.value = "";
+        }
+
+        if (authState === "signin") {
+            title.innerText = "Sign In";
+            emailInput.placeholder = "Email Address";
+            passwordInput.placeholder = "Password";
+            submitBtn.innerText = "Sign In";
+            switchToggle.innerText = "New to Rinolski? Sign up now.";
+        } else if (authState === "signup") {
+            title.innerText = "Sign Up";
+            emailInput.placeholder = "Email Address";
+            passwordInput.placeholder = "Password";
+            forgotLink.style.display = 'none';
+            submitBtn.innerText = "Create Account";
+            switchToggle.innerText = "Already have an account? Sign In";
+        } else if (authState === "verify") {
+            title.innerText = "Enter Verification Code";
+            emailInput.placeholder = "6-Digit Verification Code";
+            passwordInput.style.display = 'none';
+            forgotLink.style.display = 'none';
+            submitBtn.innerText = "Verify Code";
+            switchToggle.innerText = "Back to Sign In";
+        } else if (authState === "forgot") {
+            title.innerText = "Reset Password";
+            emailInput.placeholder = "Email Address";
+            passwordInput.style.display = 'none';
+            forgotLink.style.display = 'none';
+            submitBtn.innerText = "Send Reset Code";
+            switchToggle.innerText = "Back to Sign In";
+        } else if (authState === "reset") {
+            title.innerText = "Create New Password";
+            emailInput.placeholder = "6-Digit Reset Code";
+            passwordInput.placeholder = "New Password";
+            forgotLink.style.display = 'none';
+            submitBtn.innerText = "Update Password";
+            switchToggle.innerText = "Back to Sign In";
+        }
+    }
+
+    function gameStateResetRequired() {
+        return authState === "verify" || authState === "reset";
+    }
+
+    function toggleAuthMode() {
+        if (authState === "signin") {
+            authState = "signup";
+        } else {
+            authState = "signin";
+        }
+        renderAuthState();
+    }
+
+    function handleForgotPassword() {
+        authState = "forgot";
+        renderAuthState();
+    }
+
+    async function handleAuth() {
+        const emailFieldVal = document.getElementById('auth-email').value.trim();
+        const passwordFieldVal = document.getElementById('auth-password').value;
+        const submitBtn = document.getElementById('auth-submit');
+
+        if ((authState === "signin" || authState === "signup" || authState === "forgot") && !emailFieldVal) {
+            showInlineAlert("Please enter your email address.", "error");
+            return;
+        }
+        if ((authState === "signin" || authState === "signup") && !passwordFieldVal) {
+            showInlineAlert("Please enter your password.", "error");
+            return;
+        }
+        if (authState === "verify" && !emailFieldVal) {
+            showInlineAlert("Please enter the 6-digit access token code.", "error");
+            return;
+        }
+        if (authState === "reset" && (!emailFieldVal || !passwordFieldVal)) {
+            showInlineAlert("Please fill in both the reset token code and your new password.", "error");
+            return;
+        }
+
+        submitBtn.disabled = true;
+        const originalBtnText = submitBtn.innerText;
+        submitBtn.innerText = "Processing...";
+
+        try {
+            if (authState === "signup") {
+                transientEmail = emailFieldVal;
+                const res = await fetch(`${WORKER_URL}/api/signup`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: emailFieldVal, password: passwordFieldVal })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    showInlineAlert(data.message || "Account initiated! Verification code sent.", "success");
+                    authState = "verify";
+                    renderAuthState();
+                } else {
+                    showInlineAlert(data.error || "Signup action failed.", "error");
+                }
+            } 
+            else if (authState === "verify") {
+                const res = await fetch(`${WORKER_URL}/api/verify`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: transientEmail, code: emailFieldVal })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    showInlineAlert(data.message || "Account verified! Proceeding to Sign In.", "success");
+                    authState = "signin";
+                    renderAuthState();
+                } else {
+                    showInlineAlert(data.error || "Verification tracking error.", "error");
+                }
+            }
+            else if (authState === "signin") {
+                const res = await fetch(`${WORKER_URL}/api/signin`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: emailFieldVal, password: passwordFieldVal })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    localStorage.setItem('session_token', data.token);
+                    showToast(data.message || "Welcome back!");
+                    await fetchAndDisplayUserData();
+                } else {
+                    showInlineAlert(data.error || "Invalid login credentials.", "error");
+                }
+            }
+            else if (authState === "forgot") {
+                transientEmail = emailFieldVal;
+                const res = await fetch(`${WORKER_URL}/api/forgot-password`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: emailFieldVal })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    showInlineAlert(data.message || "A 6-digit password reset key has been sent.", "success");
+                    authState = "reset";
+                    renderAuthState();
+                } else {
+                    showInlineAlert(data.error || "Failed to issue password recovery request.", "error");
+                }
+            }
+            else if (authState === "reset") {
+                const res = await fetch(`${WORKER_URL}/api/reset-password`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: transientEmail, code: emailFieldVal, newPassword: passwordFieldVal })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    showInlineAlert(data.message || "Password updated successfully. Please Sign In.", "success");
+                    authState = "signin";
+                    renderAuthState();
+                } else {
+                    showInlineAlert(data.error || "Password modification rejected.", "error");
+                }
+            }
+        } catch (err) {
+            console.error("Cloudflare Fetch Engine Fail Error Context:", err);
+            showInlineAlert("Connection error. Check your network or system worker configuration context.", "error");
+        } finally {
+            submitBtn.disabled = false;
+            if (submitBtn.innerText === "Processing...") {
+                submitBtn.innerText = originalBtnText;
+            }
+        }
+    }
+
+    async function fetchAndDisplayUserData() {
+        const sessionToken = localStorage.getItem('session_token');
+        if (!sessionToken) {
+            document.getElementById('auth-gate').style.display = 'flex';
+            renderAuthState();
+            return;
+        }
+
+        try {
+            const res = await fetch(`${WORKER_URL}/api/userdata`, {
+                headers: { 'Authorization': 'Bearer ' + sessionToken }
+            });
+            const result = await res.json();
+
+            if (res.ok && result.data) {
+                currentUser = { email: result.data.email };
+                document.getElementById('auth-gate').style.display = 'none';
+                document.getElementById('profile-email').innerText = currentUser.email;
+                document.getElementById('profile-initial').innerText = currentUser.email.charAt(0).toUpperCase();
+                
+                currentUserPfpId = result.data.pfp ? parseInt(result.data.pfp) : 1;
+                applyActiveUserAvatar(currentUserPfpId);
+                renderPfpSelectionGrid();
+
+                let rawHistory = result.data.watch_history || [];
+                if (typeof rawHistory === 'string') {
+                    try { rawHistory = JSON.parse(rawHistory); } catch(e) { rawHistory = []; }
+                }
+                
+                // Formulate historical objects using complete static string allocations
+                userWatchHistoryCache = rawHistory.map((item) => {
+                    const exactDate = new Date().toLocaleString('en-US', {
+                        year: 'numeric', month: 'short', day: 'numeric',
+                        hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true
+                    });
+                    if (typeof item === 'object' && item !== null) {
+                        return { title: item.title, watchedAt: item.watchedAt || exactDate };
+                    }
+                    return { title: item, watchedAt: exactDate };
+                });
+
+                renderWorkerWatchHistory(userWatchHistoryCache);
+                await fetchUnwantedMoviesCloudflare();
+            } else {
+                localStorage.removeItem('session_token');
+                currentUser = null;
+                authState = "signin";
+                renderAuthState();
+                document.getElementById('auth-gate').style.display = 'flex';
+            }
+        } catch (err) {
+            console.error("Identity collection structural context break:", err);
+            document.getElementById('auth-gate').style.display = 'flex';
+        }
+    }
+
+    function logOut() {
+        closeSettingsPopup();
+        localStorage.removeItem('session_token');
+        currentUser = null;
+        
+        document.getElementById('sliding-profile').style.right = '-100%';
+        document.getElementById('sliding-search').style.right = '-100%';
+        resetActiveNavbar();
+        document.getElementById('home-trigger').classList.add('active');
+        
+        authState = "signin";
+        renderAuthState();
+        document.getElementById('auth-gate').style.display = 'flex';
+        showToast("Signed out cleanly.");
+    }
+
+    // REAL-TIME OPTIMIZATION: Listen to pageshow instead of only DOMContentLoaded
+    // This catches when a user clicks the "back button" from an external stream and forces an instant refresh.
+    window.addEventListener('pageshow', (event) => {
+        fetchAndDisplayUserData();
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+        renderAuthState();
+        startCloudflareRealTimeSync();
+    });
+</script>
+
+<script>
+    function openSettingsPopup() {
+        const backdrop = document.getElementById('settings-popup-backdrop');
+        const popup = document.getElementById('settings-popup');
+        backdrop.style.display = 'block';
+        popup.style.display = 'block';
+        setTimeout(() => {
+            backdrop.style.opacity = '1';
+            popup.style.opacity = '1';
+            popup.style.transform = 'translate(-50%, -50%) scale(1)';
+        }, 10);
+    }
+
+    function closeSettingsPopup() {
+        const backdrop = document.getElementById('settings-popup-backdrop');
+        const popup = document.getElementById('settings-popup');
+        popup.style.transform = 'translate(-50%, -50%) scale(0.9)';
+        popup.style.opacity = '0';
+        backdrop.style.opacity = '0';
+        setTimeout(() => {
+            backdrop.style.display = 'none';
+            popup.style.display = 'none';
+        }, 250);
+    }
+
+    function handleSubtitlesSettings() {
+        showToast("Subtitles setup window active.");
+    }
+</script>
+
+<script>
+    function applyActiveUserAvatar(id) {
+        const container = document.getElementById("profile-avatar-display");
+        const initialLabel = document.getElementById("profile-initial");
+        const imgUrl = profileAvatarsCatalog[id];
+
+        if (imgUrl && imgUrl.trim() !== "") {
+            if (initialLabel) initialLabel.style.display = "none";
+            let avatarImg = container.querySelector("img");
+            if (!avatarImg) {
+                avatarImg = document.createElement("img");
+                container.appendChild(avatarImg);
+            }
+            avatarImg.src = imgUrl;
+            avatarImg.style.display = "block";
+        } else {
+            let avatarImg = container.querySelector("img");
+            if (avatarImg) avatarImg.style.display = "none";
+            if (initialLabel) initialLabel.style.display = "block";
+        }
+    }
+
+    function renderPfpSelectionGrid() {
+        const targetGrid = document.getElementById("pfpSelectorOptions");
+        if (!targetGrid) return;
+        targetGrid.innerHTML = "";
+
+        Object.keys(profileAvatarsCatalog).forEach(idKey => {
+            const id = parseInt(idKey);
+            const imgUrl = profileAvatarsCatalog[id];
+            
+            const optionCard = document.createElement("div");
+            optionCard.className = `pfp-option ${currentUserPfpId === id ? 'active' : ''}`;
+            optionCard.setAttribute("onclick", `changeUserAvatar(${id})`);
+
+            if (imgUrl && imgUrl.trim() !== "") {
+                optionCard.innerHTML = `<img src="${imgUrl}"><span class="pfp-label-id">${id}</span>`;
+            } else {
+                optionCard.innerHTML = `<span style="font-size:12px; color:#555;">PFP ${id}</span><span class="pfp-label-id">${id}</span>`;
+            }
+            targetGrid.appendChild(optionCard);
+        });
+    }
+
+    // REAL-TIME OPTIMIZATION: Optimistic Avatar update loop
+    async function changeUserAvatar(selectedId) {
+        const sessionToken = localStorage.getItem('session_token');
+        if (!currentUser || selectedId === currentUserPfpId || !sessionToken) return;
+
+        const previousPfpId = currentUserPfpId;
+
+        // INSTANT UI RESPONSE (Optimistic Update)
+        currentUserPfpId = selectedId;
+        applyActiveUserAvatar(currentUserPfpId);
+        renderPfpSelectionGrid();
+        showToast("Profile avatar updated successfully!");
+
+        try {
+            const res = await fetch(`${WORKER_URL}/api/update-pfp`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + sessionToken
+                },
+                body: JSON.stringify({ pfp: selectedId.toString() })
+            });
+            const data = await res.json();
+            if (!res.ok) {
+                showToast(data.error || "Failed to save avatar change.");
+                // Rollback if server fails
+                currentUserPfpId = previousPfpId;
+                applyActiveUserAvatar(currentUserPfpId);
+                renderPfpSelectionGrid();
+            }
+        } catch (err) {
+            console.error("Avatar update execution failed:", err);
+            showToast("Network error updating avatar.");
+            // Rollback if network breaks
+            currentUserPfpId = previousPfpId;
+            applyActiveUserAvatar(currentUserPfpId);
+            renderPfpSelectionGrid();
+        }
+    }
+</script>
+
+<script>
+    // Cloudflare Fetch Replacement for Legacy Firebase Recommendation Exclusions
+    async function fetchUnwantedMoviesCloudflare() {
+        if (!currentUser) return;
+        const sessionToken = localStorage.getItem('session_token');
+        if (!sessionToken) return;
+
+        try {
+            const res = await fetch(`${WORKER_URL}/api/unwanted`, {
+                headers: { 'Authorization': 'Bearer ' + sessionToken }
+            });
+            if (res.ok) {
+                const result = await res.json();
+                userUnwantedCache = (result.items || []).map(title => title.toLowerCase());
+            }
+            buildHomeFeed();
+        } catch(err) {
+            console.error("Failed fetching recommendation filter configurations:", err);
+            buildHomeFeed();
+        }
+    }
+
+    // Displays Exact Static Calendar Strings directly from Cache Object Context Arrays
+    function renderWorkerWatchHistory(historyArray) {
+        const historyContainer = document.getElementById('history-container');
+        historyContainer.innerHTML = "";
+
+        if(!historyArray || historyArray.length === 0) {
+            historyContainer.innerHTML = `<p style="color: gray; font-size: 14px;">No movies watched yet.</p>`;
+            return;
+        }
+
+        historyArray.forEach(item => {
+            const titleStr = typeof item === 'object' ? item.title : item;
+            const watchTimeStr = typeof item === 'object' ? item.watchedAt : "Just Now";
+
+            const referenceMovie = movies.find(m => m.title.toLowerCase() === titleStr.toLowerCase());
+            if (!referenceMovie) return;
+
+            const cardLink = document.createElement('div');
+            cardLink.className = 'history-card-link';
+            
+            const sanitizedTitle = titleStr.replace(/'/g, "\\'");
+            const sanitizedLink = referenceMovie.link.replace(/'/g, "\\'");
+            
+            cardLink.setAttribute('onclick', `MapsToMovie('${sanitizedTitle}', '${sanitizedLink}', this.querySelector('.history-item'))`);
+            cardLink.style.cursor = 'pointer';
+            
+            cardLink.innerHTML = `
+                <div class="history-item">
+                    <div class="history-poster-frame">
+                        ${referenceMovie.image ? `<img src="${referenceMovie.image}" onerror="this.remove();">` : ''}
+                    </div>
+                    <div class="history-meta-details">
+                        <span class="history-title-text">${titleStr}</span>
+                        <span class="history-time">Watched: ${watchTimeStr}</span>
+                    </div>
+                </div>
+            `;
+            historyContainer.appendChild(cardLink);
+        });
+    }
+
+    /* =========================================================
+       CLOUDFLARE HIGH-FREQUENCY REAL-TIME SYNC ENGINE (500ms)
+       ========================================================= */
+    function startCloudflareRealTimeSync() {
+        fetchRealTimeUpdates();
+        const pollingLoop = setInterval(fetchRealTimeUpdates, 500);
+        window.addEventListener('beforeunload', () => clearInterval(pollingLoop));
+    }
+
+    async function fetchRealTimeUpdates() {
+        const liveIndicator = document.getElementById('live-data-display');
+        try {
+            const response = await fetch(`${WORKER_URL}/api/realtime-update`, {
+                method: 'GET',
+                headers: { 'Cache-Control': 'no-cache' }
+            });
+            if (!response.ok) throw new Error('Stale frame stream link');
+            
+            const liveUpdate = await response.json();
+            if (liveUpdate && liveUpdate.statusText) {
+                liveIndicator.textContent = liveUpdate.statusText;
+            } else {
+                liveIndicator.textContent = "Active Sync";
+            }
+        } catch (err) {
+            liveIndicator.textContent = "Sync Standby";
+        }
+    }
+</script>
+
+<script>
+    const searchPanel = document.getElementById('sliding-search');
+    const profilePanel = document.getElementById('sliding-profile');
+    const searchTrigger = document.getElementById('search-trigger');
+    const profileTrigger = document.getElementById('profile-trigger');
+    const homeTrigger = document.getElementById('home-trigger');
+    const searchBackButton = document.getElementById('search-back-button');
+    const profileBackButton = document.getElementById('profile-back-button');
+    const searchInput = document.getElementById('searchInput');
+    const searchResults = document.getElementById('searchResults');
+
+    function resetActiveNavbar() {
+        homeTrigger.classList.remove('active');
+        searchTrigger.classList.remove('active');
+        profileTrigger.classList.remove('active');
+    }
+
+    homeTrigger.addEventListener('click', () => {
+        resetActiveNavbar();
+        homeTrigger.classList.add('active');
+        searchPanel.style.right = '-100%';
+        profilePanel.style.right = '-100%';
+    });
+
+    searchTrigger.addEventListener('click', () => {
+        resetActiveNavbar();
+        searchTrigger.classList.add('active');
+        searchPanel.style.right = '0%';
+        profilePanel.style.right = '-100%';
+        searchInput.focus();
+    });
+
+    profileTrigger.addEventListener('click', () => {
+        resetActiveNavbar();
+        profileTrigger.classList.add('active');
+        profilePanel.style.right = '0%';
+        searchPanel.style.right = '-100%';
+    });
+
+    searchBackButton.addEventListener('click', () => {
+        searchPanel.style.right = '-100%';
+        resetActiveNavbar();
+        homeTrigger.classList.add('active');
+        searchInput.value = '';
+        searchResults.innerHTML = '';
+    });
+
+    profileBackButton.addEventListener('click', () => {
+        profilePanel.style.right = '-100%';
+        resetActiveNavbar();
+        homeTrigger.classList.add('active');
+    });
+
+    function goRandom() {
+        if (!movies.length) return;
+        const availableOptions = movies.filter(m => !userUnwantedCache.includes(m.title.toLowerCase()));
+        if(!availableOptions.length) {
+            showToast("No movies matching filter conditions.");
+            return;
+        }
+        const randomItem = availableOptions[Math.floor(Math.random() * availableOptions.length)];
+        navigateToMovie(randomItem.title, randomItem.link);
+    }
+
+    function searchMovies() {
+        if (typeof movies === 'undefined' || !movies.length) return;
+        const query = searchInput.value.toLowerCase().trim();
+        searchResults.innerHTML = "";
+
+        if (query === "") return;
+
+        const matches = movies.filter(m => 
+            !userUnwantedCache.includes(m.title.toLowerCase()) && 
+            (m.title.toLowerCase().includes(query) || m.genres.some(g => g.toLowerCase().includes(query)))
+        );
+
+        if (matches.length > 0) {
+            const section = document.createElement("div");
+            section.className = "section";
+            section.innerHTML = `
+                <h2 class="section-title">Matches for "${searchInput.value}"</h2>
+                <div class="movies"></div>
+            `;
+            const row = section.querySelector(".movies");
+            matches.forEach(m => row.appendChild(createMovieCard(m)));
+            searchResults.appendChild(section);
+        } else {
+            searchResults.innerHTML = `<p style="padding:20px; color:gray;">No matching titles found.</p>`;
+        }
+    }
+</script>
+
+<script>
+    let activeLongPressTimer = null;
+    let longPressTriggeredFlag = false;
+    let selectedSheetMovieTitle = "";
+    
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let isScrollingMove = false;
+
+    function setupLongPressGesture(cardElement, movieTitle, movieLink) {
+        cardElement.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+        });
+
+        cardElement.addEventListener('touchstart', (e) => {
+            longPressTriggeredFlag = false;
+            isScrollingMove = false;
+            selectedSheetMovieTitle = movieTitle;
+            
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+            
+            activeLongPressTimer = setTimeout(() => {
+                longPressTriggeredFlag = true;
+                openActionSheet(movieTitle);
+            }, 700); 
+        });
+
+        cardElement.addEventListener('touchmove', (e) => {
+            const currentX = e.touches[0].clientX;
+            const currentY = e.touches[0].clientY;
+            
+            const moveDeltaX = Math.abs(currentX - touchStartX);
+            const moveDeltaY = Math.abs(currentY - touchStartY);
+
+            if (moveDeltaX > 10 || moveDeltaY > 10) {
+                isScrollingMove = true;
+                if (activeLongPressTimer) clearTimeout(activeLongPressTimer);
+            }
+        });
+
+        cardElement.addEventListener('touchend', (e) => {
+            if (activeLongPressTimer) clearTimeout(activeLongPressTimer);
+            
+            if (longPressTriggeredFlag) {
+                e.preventDefault(); 
+                e.stopPropagation();
+            } else if (!isScrollingMove) {
+                const sanitizedTitle = movieTitle.replace(/'/g, "\\'");
+                const sanitizedLink = movieLink.replace(/'/g, "\\'");
+                navigateToMovie(sanitizedTitle, sanitizedLink, cardElement);
+            }
+        });
+    }
+
+    function openActionSheet(title) {
+        document.getElementById('action-sheet-target-title').innerText = title;
+        const backdrop = document.getElementById('action-sheet-backdrop');
+        const sheet = document.getElementById('action-sheet');
+        
+        backdrop.style.display = 'block';
+        setTimeout(() => {
+            backdrop.style.opacity = '1';
+            sheet.style.bottom = '0px';
+        }, 10);
+    }
+
+    function closeActionSheet() {
+        const backdrop = document.getElementById('action-sheet-backdrop');
+        const sheet = document.getElementById('action-sheet');
+        
+        sheet.style.bottom = '-100%';
+        backdrop.style.opacity = '0';
+        setTimeout(() => {
+            backdrop.style.display = 'none';
+            selectedSheetMovieTitle = ""; 
+        }, 300);
+    }
+
+    // REAL-TIME OPTIMIZATION: Optimistic movie removal and feed re-render
+    async function confirmHideMovie() {
+        if (!currentUser) {
+            showToast("Please sign in first.");
+            closeActionSheet();
+            return;
+        }
+
+        if (!selectedSheetMovieTitle) {
+            showToast("Error: No movie targeted.");
+            closeActionSheet();
+            return;
+        }
+
+        const movieToHide = selectedSheetMovieTitle; 
+        closeActionSheet();
+        showToast(`Hiding "${movieToHide}"...`);
+
+        // INSTANT UI RESPONSE (Optimistic Update)
+        const lowerCaseTitle = movieToHide.toLowerCase();
+        const alreadyUnwanted = userUnwantedCache.includes(lowerCaseTitle);
+        
+        if (!alreadyUnwanted) {
+            userUnwantedCache.push(lowerCaseTitle);
+            buildHomeFeed(); // Re-render feeds immediately without waiting for server responses
+        }
+
+        const sessionToken = localStorage.getItem('session_token');
+        try {
+            const res = await fetch(`${WORKER_URL}/api/hide-movie`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + sessionToken
+                },
+                body: JSON.stringify({ movie: movieToHide })
+            });
+            if (res.ok) {
+                showToast("Recommendations list updated.");
+                // Background update cache to ensure exact sync
+                const freshRes = await fetch(`${WORKER_URL}/api/unwanted`, {
+                    headers: { 'Authorization': 'Bearer ' + sessionToken }
+                });
+                if (freshRes.ok) {
+                    const result = await freshRes.json();
+                    userUnwantedCache = (result.items || []).map(title => title.toLowerCase());
+                    buildHomeFeed();
+                }
+            } else {
+                showToast("Failed to hide selection.");
+                // Rollback if server rejects operation
+                if (!alreadyUnwanted) {
+                    userUnwantedCache = userUnwantedCache.filter(t => t !== lowerCaseTitle);
+                    buildHomeFeed();
+                }
+            }
+        } catch(err) {
+            console.error(err);
+            showToast("Network connection failure.");
+            // Rollback if connection times out or drops
+            if (!alreadyUnwanted) {
+                userUnwantedCache = userUnwantedCache.filter(t => t !== lowerCaseTitle);
+                buildHomeFeed();
+            }
+        }
+    }
+</script>
+
+<script>
+    function parseGenres(genres) {
+        if (Array.isArray(genres)) return genres.map(g => g.trim());
+        return [];
+    }
+
+    function createMovieCard(m, topTrendRank = null) {
+        const div = document.createElement("div");
+        div.className = "movie";
+        
+        div.innerHTML = `
+            <div style="width: 100%; height: 100%; position: relative; pointer-events: none;">
+                ${topTrendRank ? `<div class="trending-badge">${topTrendRank}</div>` : ''}
+                <img src="${m.image}" draggable="false" onerror="this.insertAdjacentHTML('afterend', '<p class=\\'fallback-label\\'>${m.title}</p>'); this.style.opacity='0.25';">
+            </div>
+        `;
+        
+        setupLongPressGesture(div, m.title, m.link);
+        return div;
+    }
+
+    // REAL-TIME OPTIMIZATION: Push history addition to local client cache optimistically right before redirecting
+    async function navigateToMovie(movieTitle, destinationUrl, elementClicked) {
+        if (elementClicked) {
+            if (elementClicked.querySelector('.movie-loading-overlay')) return;
+
+            const localizedSpinner = document.createElement('div');
+            localizedSpinner.className = 'movie-loading-overlay';
+            localizedSpinner.innerHTML = '<div class="loading-ring" style="margin:0;"></div>';
+            elementClicked.appendChild(localizedSpinner);
+        }
+
+        const exactTimeLabel = new Date().toLocaleString('en-US', {
+            year: 'numeric', month: 'short', day: 'numeric',
+            hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true
+        });
+
+        // Seed client-side cache immediately so back button traversal displays it instantly
+        userWatchHistoryCache.unshift({ title: movieTitle, watchedAt: exactTimeLabel });
+
+        if (!currentUser) {
+            window.location.href = destinationUrl;
+            return;
+        }
+
+        const sessionToken = localStorage.getItem('session_token');
+        if (!sessionToken) {
+            window.location.href = destinationUrl;
+            return;
+        }
+
+        try {
+            await fetch(`${WORKER_URL}/api/add-history`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + sessionToken
+                },
+                body: JSON.stringify({ 
+                    movie: movieTitle,
+                    watchedAt: exactTimeLabel
+                })
+            });
+            window.location.href = destinationUrl;
+        } catch (err) {
+            console.error("History tracking pipeline failure context:", err);
+            window.location.href = destinationUrl;
+        }
+    }
+
+    function shuffleArray(arr) {
+        const target = [...arr];
+        for (let i = target.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [target[i], target[j]] = [target[j], target[i]];
+        }
+        return target;
+    }
+
+    function buildHomeFeed() {
+        if (typeof movies === 'undefined' || !movies.length) return;
+        
+        const watchAgainContainer = document.getElementById("watchAgainContainer");
+        const randomContainer = document.getElementById("randomContainer");
+        const genreContainer = document.getElementById("genreContainer");
+        
+        if(!randomContainer || !genreContainer || !watchAgainContainer) return;
+
+        const filteredGlobalCatalog = movies.filter(m => !userUnwantedCache.includes(m.title.toLowerCase()));
+
+        if (userWatchHistoryCache.length > 0) {
+            const uniqueTitles = [];
+            const watchAgainMovies = [];
+            
+            userWatchHistoryCache.forEach(item => {
+                if (!uniqueTitles.includes(item.title.toLowerCase()) && !userUnwantedCache.includes(item.title.toLowerCase())) {
+                    uniqueTitles.push(item.title.toLowerCase());
+                    const matchedMovie = filteredGlobalCatalog.find(m => m.title.toLowerCase() === item.title.toLowerCase());
+                    if (matchedMovie) watchAgainMovies.push(matchedMovie);
+                }
+            });
+
+            if(watchAgainMovies.length > 0) {
+                watchAgainContainer.innerHTML = `
+                    <div class="section">
+                        <h2 class="section-title">Watch Again</h2>
+                        <div class="movies"></div>
+                    </div>
+                `;
+                const watchAgainRow = watchAgainContainer.querySelector(".movies");
+                watchAgainMovies.forEach(m => watchAgainRow.appendChild(createMovieCard(m)));
+            } else {
+                watchAgainContainer.innerHTML = "";
+            }
+        } else {
+            watchAgainContainer.innerHTML = "";
+        }
+
+        randomContainer.innerHTML = `
+            <div class="section">
+                <h2 class="section-title">Random Picks</h2>
+                <div class="movies"></div>
+            </div>
+        `;
+        const randomRow = randomContainer.querySelector(".movies");
+        shuffleArray(filteredGlobalCatalog).forEach(m => randomRow.appendChild(createMovieCard(m)));
+
+        const genreMap = {};
+        filteredGlobalCatalog.forEach(m => {
+            parseGenres(m.genres).forEach(g => {
+                const formattedGenre = g.charAt(0).toUpperCase() + g.slice(1).toLowerCase();
+                if (!genreMap[formattedGenre]) genreMap[formattedGenre] = [];
+                genreMap[formattedGenre].push(m);
+            });
+        });
+
+        genreContainer.innerHTML = "";
+        
+        const randomizedGenreNames = shuffleArray(Object.keys(genreMap));
+        randomizedGenreNames.forEach(genre => {
+            const section = document.createElement("div");
+            section.className = "section";
+            section.innerHTML = `
+                <h2 class="section-title">${genre}</h2>
+                <div class="movies"></div>
+            `;
+            const row = section.querySelector(".movies");
+            
+            const randomizedMoviesInGenre = shuffleArray(genreMap[genre]);
+            randomizedMoviesInGenre.forEach(m => row.appendChild(createMovieCard(m)));
+            
+            genreContainer.appendChild(section);
+        });
+    }
+</script>
+
+</body>
+</html>
