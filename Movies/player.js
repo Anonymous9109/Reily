@@ -1,4 +1,4 @@
-/* Cyrene Player (smart source detection + back button + portrait support + subtitles + Timer + Netflix Shadow + Cloudflare D1 Sync) */
+/* Cyrene Player (smart source detection + back button + portrait support + subtitles + Timer + Netflix Shadow + Cloudflare D1 Resume Fixed + Google IMA VAST Integration) */
 document.addEventListener("DOMContentLoaded", async () => {
 
   /********** 1) Inject CSS **********/
@@ -141,6 +141,14 @@ document.addEventListener("DOMContentLoaded", async () => {
       from{transform:translate(-50%,-50%) rotate(0deg);}  
       to{transform:translate(-50%,-50%) rotate(360deg);}  
     }
+
+    /* IMA Ad overlay layer styles */
+    #imaAdContainer {
+      position: absolute;
+      inset: 0;
+      z-index: 55;
+      pointer-events: auto;
+    }
   `;
   const styleTag = document.createElement("style");
   styleTag.textContent = css;
@@ -235,26 +243,93 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   /********** 4) Load Source **********/
-  const isM3u8 = /\.m3u8($|\?)/i.test(src);
-  if (isM3u8) {
-    if (!window.Hls) {
-      await new Promise(res => {
-        const s = document.createElement("script");
-        s.src = "https://cdn.jsdelivr.net/npm/hls.js@1.4.0/dist/hls.min.js";
-        s.onload = res;
-        document.head.appendChild(s);
-      });
-    }
-    if (window.Hls && window.Hls.isSupported()) {
-      const h = new Hls();
-      h.loadSource(src);
-      h.attachMedia(video);
-    } else video.src = src;
-  } else {
-    video.src = src;
+  async function attachSourceToVideo(url) {
+    const isM3u8 = /\.m3u8($|\?)/i.test(url);
+    if (isM3u8) {
+      if (!window.Hls) {
+        await new Promise(res => {
+          const s = document.createElement("script");
+          s.src = "https://cdn.jsdelivr.net/npm/hls.js@1.4.0/dist/hls.min.js";
+          s.onload = res;
+          document.head.appendChild(s);
+        });
+      }
+      if (window.Hls && window.Hls.isSupported()) {
+        const h = new Hls();
+        h.loadSource(url);
+        h.attachMedia(video);
+      } else video.src = url;
+    } else video.src = url;
   }
 
-  /********** CLOUDFLARE D1 TRACKING INTEGRATION **********/
+  /********** GOOGLE IMA VAST IMPLEMENTATION **********/
+  function initIMAAdWorkflow(movieUrl) {
+    if (!window.google || !window.google.ima) {
+      const imaScript = document.createElement("script");
+      imaScript.src = "https://imasdk.googleapis.com/js/sdkloader/ima3.js";
+      imaScript.onload = () => setupIMAManager(movieUrl);
+      imaScript.onerror = () => fallbackDirectToMovie(movieUrl);
+      document.head.appendChild(imaScript);
+    } else {
+      setupIMAManager(movieUrl);
+    }
+  }
+
+  function setupIMAManager(movieUrl) {
+    const adContainer = document.createElement("div");
+    adContainer.id = "imaAdContainer";
+    root.appendChild(adContainer);
+
+    const adDisplayContainer = new google.ima.AdDisplayContainer(adContainer, video);
+    const adsLoader = new google.ima.AdsLoader(adDisplayContainer);
+
+    let adsManager = null;
+
+    adsLoader.addEventListener(google.ima.AdsManagerLoadedEvent.Type.ADS_MANAGER_LOADED, (e) => {
+      adsManager = e.getAdsManager(video);
+      
+      adsManager.addEventListener(google.ima.AdErrorEvent.Type.AD_ERROR, () => cleanAdAndStartMovie(adContainer, movieUrl));
+      adsManager.addEventListener(google.ima.AdEvent.Type.ALL_ADS_COMPLETED, () => cleanAdAndStartMovie(adContainer, movieUrl));
+      adsManager.addEventListener(google.ima.AdEvent.Type.CONTENT_RESUME_REQUESTED, () => cleanAdAndStartMovie(adContainer, movieUrl));
+
+      try {
+        adDisplayContainer.initialize();
+        adsManager.init(root.clientWidth, root.clientHeight, google.ima.ViewMode.NORMAL);
+        adsManager.start();
+      } catch (err) {
+        cleanAdAndStartMovie(adContainer, movieUrl);
+      }
+    }, false);
+
+    adsLoader.addEventListener(google.ima.AdErrorEvent.Type.AD_ERROR, () => cleanAdAndStartMovie(adContainer, movieUrl), false);
+
+    const adsRequest = new google.ima.AdsRequest();
+    adsRequest.adTagUrl = "";
+    adsRequest.linearAdSlotWidth = root.clientWidth;
+    adsRequest.linearAdSlotHeight = root.clientHeight;
+    adsLoader.requestAds(adsRequest);
+  }
+
+  function cleanAdAndStartMovie(containerDom, movieUrl) {
+    if (containerDom && containerDom.parentNode) {
+      containerDom.remove();
+    }
+    fallbackDirectToMovie(movieUrl);
+  }
+
+  async function fallbackDirectToMovie(movieUrl) {
+    await attachSourceToVideo(movieUrl);
+  }
+
+  initIMAAdWorkflow(src);
+
+
+  /********** D1 CLOUDFLARE TRACKER SYSTEM CONFIG **********/
+  const CONFIG = {
+    API_BASE_URL: "https://rinolski.misty-fog-201e.workers.dev",
+    AUTH_TOKEN: localStorage.getItem("session_token") || ""
+  };
+
   const movieParamId = params.get("id") || params.get("movie") || ep; 
   let activeMovieTitle = "Unknown Media";
   
@@ -266,52 +341,32 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   let isResuming = true; 
   let lastSavedTime = 0;
-  let localTimestampStorage = null;
-  let pollingTimer = null;
-
-  const userSessionToken = localStorage.getItem("session_token") || "";
+  let serverTimestamp = null; 
 
   async function saveWatchProgress() {
-    if (!userSessionToken || !video.duration || isResuming) return;
+    if (!CONFIG.AUTH_TOKEN || !video.duration || isResuming) return;
     if (video.currentTime < 5 || video.currentTime > video.duration - 10) return;
 
-    const remainingTime = video.duration - video.currentTime;
-
     try {
-      await fetch(`/api/save-progress`, {
+      await fetch(`${CONFIG.API_BASE_URL}/api/save-progress`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${userSessionToken}`
+          "Authorization": `Bearer ${CONFIG.AUTH_TOKEN}`
         },
         body: JSON.stringify({
           movieId: movieParamId,
           movieTitle: activeMovieTitle,
-          left: remainingTime,
+          left: video.currentTime,
           duration: video.duration
         })
       });
       lastSavedTime = video.currentTime;
     } catch (error) {
-      console.error("Cloudflare D1 Tracking connection error:", error);
+      console.error("Failed to save progress to Cloudflare D1:", error);
     }
   }
 
-  function startPolling() {
-    if (pollingTimer) clearInterval(pollingTimer);
-    pollingTimer = setInterval(() => {
-      if (!video.paused && !isDragging) {
-        saveWatchProgress();
-      }
-    }, 5000); 
-  }
-
-  function stopPolling() {
-    if (pollingTimer) clearInterval(pollingTimer);
-  }
-
-  video.addEventListener("play", startPolling);
-  video.addEventListener("pause", stopPolling);
   window.addEventListener("beforeunload", saveWatchProgress);
   document.addEventListener("visibilitychange", () => {
     if (document.visibilityState === "hidden") saveWatchProgress();
@@ -488,6 +543,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (isFinite(video.duration) && !isDragging && !isResuming) {
       progressBar.style.width = (video.currentTime / video.duration) * 100 + "%";
       timerDisplay.textContent = `${formatTime(video.currentTime)} / ${formatTime(video.duration)}`;
+      
+      if (Math.abs(video.currentTime - lastSavedTime) >= 5) {
+        saveWatchProgress();
+      }
     }
   });
 
@@ -518,43 +577,44 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   root.addEventListener("click", () => { if(!isDragging) controlsVisible ? hideControls() : showControls(); });
 
-  /********** RESUME AT METADATA BLOCK **********/
-  video.addEventListener("loadedmetadata", () => {
-    if (localTimestampStorage && localTimestampStorage < video.duration - 15) {
-      video.currentTime = localTimestampStorage;
-      lastSavedTime = localTimestampStorage;
+  /********** THE JUMP FIX: TRACK LOADEDMETADATA **********/
+  video.addEventListener("loadedmetadata", async () => {
+    if (serverTimestamp && serverTimestamp < video.duration - 15) {
+      video.currentTime = serverTimestamp;
+      lastSavedTime = serverTimestamp;
     }
     
     isResuming = false;
     
-    video.play().catch(() => { 
+    try { 
+      await video.play(); 
+    } catch { 
       video.pause(); 
       showControls(5000); 
-    });
+    }
   });
 
-  async function fetchPlaybackHistory() {
-    if (!userSessionToken) {
-      isResuming = false;
-      return;
-    }
-    try {
-      const res = await fetch(`/api/get-progress`, {
-        method: "GET",
-        headers: { "Authorization": `Bearer ${userSessionToken}` }
-      });
-      const resData = await res.json();
-      
-      if (resData.progress && resData.progress[movieParamId]) {
-        const targetMovie = resData.progress[movieParamId];
-        localTimestampStorage = targetMovie.duration - targetMovie.left;
+  // REST API fetch sequence directly checking matching dictionary keys
+  (async function fetchSavedProgress() {
+    if (CONFIG.AUTH_TOKEN) {
+      try {
+        const response = await fetch(`${CONFIG.API_BASE_URL}/api/get-progress`, {
+          method: "GET",
+          headers: { "Authorization": `Bearer ${CONFIG.AUTH_TOKEN}` }
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          const progressMap = data.progress || {};
+          if (progressMap[movieParamId]) {
+            serverTimestamp = parseFloat(progressMap[movieParamId].left);
+          }
+        }
+      } catch (err) { 
+        console.error("Error pulling history from Cloudflare Worker: ", err); 
       }
-    } catch (err) {
-      console.error("Error pulling history mappings: ", err);
     }
-  }
-
-  fetchPlaybackHistory();
+  })();
 
   /********** 7) Portrait rotation **********/
   function rotateIfPortrait() {
@@ -614,4 +674,3 @@ document.addEventListener("fullscreenchange", () => {
   document.addEventListener("mousemove", (e) => { e.target.dispatchEvent(createTouchEvent("touchmove", e)); });
   document.addEventListener("mouseup", (e) => { e.target.dispatchEvent(createTouchEvent("touchend", e)); });
 })();
-
