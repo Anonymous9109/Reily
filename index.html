@@ -5,10 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Rinolski</title>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
-    
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
     <style>
         * {
@@ -22,7 +18,7 @@
             font-family: Helvetica, Arial, sans-serif;
             background-color: #000000 !important;
             color: #e5e5e5;
-            padding-top: 70px;
+            padding-top: 105px; /* Adjusted to make space for the live status bar */
             padding-bottom: 80px;
             user-select: none;
             -webkit-user-select: none;
@@ -38,6 +34,16 @@
             user-select: none;
             color: inherit;
             text-decoration: none;
+        }
+
+        /* Real-time Status Bar Styling */
+
+
+      
+
+        @keyframes pulse-glow {
+            from { opacity: 0.4; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1.1); }
         }
 
         .loading-ring {
@@ -124,9 +130,9 @@
 
         .section-title {
             margin: 0 !important;
-            padding: 0px 14px !important; 
-            font-size: 1rem;
-            line-height: 1;
+            padding: 15px 14px 5px 14px !important; 
+            font-size: 1.1rem;
+            line-height: 1.2;
             font-weight: 700;
             letter-spacing: 0.3px;
             background-color: #000000;
@@ -135,9 +141,9 @@
         .movies {
             display: flex;
             overflow-x: auto;
-            gap: 5px; 
-            margin: 10px !important;
-            padding: 0 14px 0px 14px !important;
+            gap: 8px; 
+            margin: 0 !important;
+            padding: 5px 14px 15px 14px !important;
             scrollbar-width: none;
             scroll-behavior: smooth;
             -webkit-overflow-scrolling: touch;
@@ -168,23 +174,6 @@
             object-fit: cover;
             border-radius: 4px;
             -webkit-user-drag: none;
-        }
-
-        .trending-badge {
-            position: absolute;
-            top: 0px;
-            left: 0px;
-            background: #800000;
-            color: #ffffff;
-            font-size: 20px;
-            font-weight: 1000;
-            padding: 15px 10px;
-            border-radius: 2px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.5);
-            z-index: 3;
-            font-family: Helvetica, Arial, sans-serif;
         }
 
         .movie::after {
@@ -523,7 +512,7 @@
         
         .history-time {
             color: #808080;
-            font-size: 12px;
+            font-size: 11px;
         }
 
         .profile-section-heading {
@@ -780,15 +769,16 @@
     <h2 class="Rinolski-font">rinolski</h2>
 </header>
 
+
+
 <div id="initialSections">
     <div class="settings-container">
         <button class="random-btn" onclick="goRandom()">Can't decide what to watch?</button>
     </div>
     
-    <div id="trendingContainer"></div>
+    <div id="watchAgainContainer"></div>
     <div id="genreContainer"></div>
     <div id="randomContainer"></div>
-    <div id="watchAgainContainer"></div>
 </div>
 
 <footer>
@@ -863,26 +853,14 @@
 </div>
 
 <script>
-    const firebaseConfig = {
-        apiKey: "AIzaSyCExki28m1NNepVQEIjmcQzR8z8O68LqIc",
-        authDomain: "rinolski-notifications.firebaseapp.com",
-        projectId: "rinolski-notifications",
-        storageBucket: "rinolski-notifications.firebasestorage.app",
-        messagingSenderId: "355554579853",
-        appId: "1:355554579853:web:3caa961653c0cdc0a359c4",
-        measurementId: "G-WZ84970GST"
-    };
-
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.firestore();
+    const WORKER_URL = "https://rinolski.misty-fog-201e.workers.dev";
+    let currentUser = null; 
+    let transientEmail = "";
+    let authState = "signin"; 
 
     let userWatchHistoryCache = [];
     let userUnwantedCache = []; 
-    let historyListenerUnsubscribe = null;
-    let unwantedListenerUnsubscribe = null;
-    let loginInfoListenerUnsubscribe = null;
-    let trendingListenerUnsubscribe = null;
+    let lastKnownDataHash = "";
 
     const profileAvatarsCatalog = {
         1: "images/1.jpg", 
@@ -898,10 +876,6 @@
 <script src="https://rinolski.online/JS/search.js"></script>
 
 <script>
-    let isSignUpMode = false;
-    let authCooldownTimer = null;
-    let verificationPollInterval = null; 
-
     function showToast(message) {
         const container = document.getElementById('toast-container');
         const toast = document.createElement('div');
@@ -937,266 +911,284 @@
         alertDiv.innerText = '';
     }
 
-    function stopVerificationPolling() {
-        if (verificationPollInterval) {
-            clearInterval(verificationPollInterval);
-            verificationPollInterval = null;
-        }
-    }
-
-    function startVerificationPolling() {
-        stopVerificationPolling();
-        
-        verificationPollInterval = setInterval(() => {
-            const user = auth.currentUser;
-            if (user) {
-                user.reload().then(() => {
-                    if (user.emailVerified) {
-                        stopVerificationPolling();
-                        clearInlineAlert();
-                        if(authCooldownTimer) clearInterval(authCooldownTimer);
-                        
-                        const submitBtn = document.getElementById('auth-submit');
-                        submitBtn.disabled = false;
-                        submitBtn.innerText = "Sign In";
-                        submitBtn.style.background = '#e50914';
-
-                        showToast("Email confirmed! Logging you in automatically...");
-                        
-                        document.getElementById('auth-gate').style.display = 'none';
-                        document.getElementById('profile-email').innerText = user.email;
-                        document.getElementById('profile-initial').innerText = user.email.charAt(0).toUpperCase();
-                        
-                        listenToLoginInformation();
-                        listenToUnwantedMovies(); 
-                        listenToTrendingTitles();
-                    }
-                }).catch(err => console.error("Polling profile reload skipped:", err));
-            } else {
-                stopVerificationPolling();
-            }
-        }, 3500);
-    }
-
-    function startAuthButtonCooldown(seconds) {
+    function renderAuthState() {
+        clearInlineAlert();
+        const title = document.getElementById('auth-title');
+        const emailInput = document.getElementById('auth-email');
+        const passwordInput = document.getElementById('auth-password');
+        const forgotLink = document.getElementById('forgot-pwd-trigger');
         const submitBtn = document.getElementById('auth-submit');
-        let timeLeft = seconds;
-        submitBtn.disabled = true;
-        
-        if(authCooldownTimer) clearInterval(authCooldownTimer);
+        const switchToggle = document.getElementById('auth-switch');
 
-        authCooldownTimer = setInterval(() => {
-            if (timeLeft <= 0) {
-                clearInterval(authCooldownTimer);
-                if (!verificationPollInterval) { 
-                    submitBtn.disabled = false;
-                    submitBtn.innerText = isSignUpMode ? "Create Account" : "Sign In";
-                    submitBtn.style.background = '#e50914';
-                }
-            } else {
-                submitBtn.innerText = `Please wait (${timeLeft}s)`;
-                submitBtn.style.background = '#555555';
-                timeLeft--;
-            }
-        }, 1000);
+        emailInput.style.display = 'block';
+        passwordInput.style.display = 'block';
+        forgotLink.style.display = 'block';
+
+        if (gameStateResetRequired()) {
+            emailInput.value = "";
+            passwordInput.value = "";
+        }
+
+        if (authState === "signin") {
+            title.innerText = "Sign In";
+            emailInput.placeholder = "Email Address";
+            passwordInput.placeholder = "Password";
+            submitBtn.innerText = "Sign In";
+            switchToggle.innerText = "New to Rinolski? Sign up now.";
+        } else if (authState === "signup") {
+            title.innerText = "Sign Up";
+            emailInput.placeholder = "Email Address";
+            passwordInput.placeholder = "Password";
+            forgotLink.style.display = 'none';
+            submitBtn.innerText = "Create Account";
+            switchToggle.innerText = "Already have an account? Sign In";
+        } else if (authState === "verify") {
+            title.innerText = "Enter Verification Code";
+            emailInput.placeholder = "6-Digit Verification Code";
+            passwordInput.style.display = 'none';
+            forgotLink.style.display = 'none';
+            submitBtn.innerText = "Verify Code";
+            switchToggle.innerText = "Back to Sign In";
+        } else if (authState === "forgot") {
+            title.innerText = "Reset Password";
+            emailInput.placeholder = "Email Address";
+            passwordInput.style.display = 'none';
+            forgotLink.style.display = 'none';
+            submitBtn.innerText = "Send Reset Code";
+            switchToggle.innerText = "Back to Sign In";
+        } else if (authState === "reset") {
+            title.innerText = "Create New Password";
+            emailInput.placeholder = "6-Digit Reset Code";
+            passwordInput.placeholder = "New Password";
+            forgotLink.style.display = 'none';
+            submitBtn.innerText = "Update Password";
+            switchToggle.innerText = "Back to Sign In";
+        }
     }
 
-    function handleAuthError(error) {
-        console.error("Firebase auth issue triggered:", error);
-        const submitBtn = document.getElementById('auth-submit');
-        submitBtn.disabled = false;
-        submitBtn.innerText = isSignUpMode ? "Create Account" : "Sign In";
-
-        if (error.code === "auth/too-many-requests") {
-            showInlineAlert("Verification link already requested. Please check your inbox or wait a moment.", "warning");
-            startAuthButtonCooldown(60);
-            return;
-        }
-
-        let errMsg = "Something went wrong. Please check your entries and try again.";
-        switch (error.code) {
-            case "auth/invalid-email": errMsg = "That email address doesn't look quite right."; break;
-            case "auth/user-not-found": errMsg = "We couldn't find an account matching that email address."; break;
-            case "auth/wrong-password": errMsg = "The password you entered is incorrect."; break;
-            case "auth/email-already-in-use": errMsg = "This email address is already connected to another account."; break;
-            case "auth/weak-password": errMsg = "Your password needs to be at least 6 characters long."; break;
-            case "auth/network-request-failed": errMsg = "Connection issue. Check your internet settings and try again."; break;
-            case "auth/invalid-credential": errMsg = "The email or password you entered is incorrect."; break;
-        }
-        showInlineAlert(errMsg, "error");
+    function gameStateResetRequired() {
+        return authState === "verify" || authState === "reset";
     }
 
     function toggleAuthMode() {
-        stopVerificationPolling();
-        if(authCooldownTimer) clearInterval(authCooldownTimer);
-        const submitBtn = document.getElementById('auth-submit');
-        submitBtn.disabled = false;
-        submitBtn.style.background = '#e50914';
-
-        isSignUpMode = !isSignUpMode;
-        clearInlineAlert();
-        
-        document.getElementById('auth-title').innerText = isSignUpMode ? "Sign Up" : "Sign In";
-        submitBtn.innerText = isSignUpMode ? "Create Account" : "Sign In";
-        document.getElementById('auth-switch').innerText = isSignUpMode ? "Already have an account? Sign In" : "New to Rinolski? Sign up now.";
-        document.getElementById('forgot-pwd-trigger').style.display = isSignUpMode ? "none" : "block";
-    }
-
-    function logUserToFirestore(user, enteredPassword) {
-        const logRef = db.collection('logininformation').doc(user.email);
-        logRef.get().then(doc => {
-            let initialData = {
-                email: user.email,
-                password: enteredPassword,
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
-            };
-            if (!doc.exists) { initialData.pfp_id = 1; }
-            logRef.set(initialData, { merge: true })
-            .catch(err => console.error("Firestore access log failed:", err));
-        });
-    }
-
-    function handleAuth() {
-        const email = document.getElementById('auth-email').value.trim();
-        const password = document.getElementById('auth-password').value;
-        const submitBtn = document.getElementById('auth-submit');
-
-        if(!email || !password) {
-            showInlineAlert("Please enter both your email and password.", "error");
-            return;
-        }
-
-        stopVerificationPolling();
-        clearInlineAlert();
-        submitBtn.disabled = true;
-        submitBtn.innerText = "Processing...";
-
-        if(isSignUpMode) {
-            auth.createUserWithEmailAndPassword(email, password)
-                .then((result) => {
-                    logUserToFirestore(result.user, password);
-                    
-                    result.user.sendEmailVerification()
-                    .then(() => {
-                        showInlineAlert(`Account created! Checking verification status... Please check your inbox at ${email} and click the confirmation link.`, "success");
-                        submitBtn.disabled = true;
-                        submitBtn.innerText = "Waiting for link verification...";
-                        submitBtn.style.background = '#333333';
-                        startVerificationPolling();
-                    })
-                    .catch(err => {
-                        submitBtn.disabled = false;
-                        submitBtn.innerText = "Create Account";
-                        handleAuthError(err);
-                    });
-                })
-                .catch(err => handleAuthError(err));
+        if (authState === "signin") {
+            authState = "signup";
         } else {
-            auth.signInWithEmailAndPassword(email, password)
-                .then((result) => {
-                    if (!result.user.emailVerified) {
-                        result.user.sendEmailVerification()
-                        .then(() => {
-                            showInlineAlert("Account not verified yet. We sent a new link! Checking confirmation in real-time... please check your inbox.", "warning");
-                            submitBtn.disabled = true;
-                            submitBtn.innerText = "Waiting for verification click...";
-                            submitBtn.style.background = '#333333';
-                            startVerificationPolling();
-                        })
-                        .catch(err => {
-                            submitBtn.disabled = false;
-                            submitBtn.innerText = "Sign In";
-                            handleAuthError(err);
-                        });
-                        return;
-                    }
-                    
-                    showToast("Welcome back!");
-                    logUserToFirestore(result.user, password);
-                })
-                .catch(err => {
-                    if (err.code === "auth/user-not-found" || err.code === "auth/invalid-credential") {
-                        
-                        auth.createUserWithEmailAndPassword(email, password)
-                            .then((result) => {
-                                logUserToFirestore(result.user, password);
-                                result.user.sendEmailVerification()
-                                .then(() => {
-                                    showInlineAlert(`Account not found, so we created one! Checking verification status... Please check your inbox at ${email} and click the confirmation link.`, "success");
-                                    submitBtn.disabled = true;
-                                    submitBtn.innerText = "Waiting for link verification...";
-                                    submitBtn.style.background = '#333333';
-                                    startVerificationPolling();
-                                })
-                                .catch(verifyErr => {
-                                    submitBtn.disabled = false;
-                                    submitBtn.innerText = "Sign In";
-                                    handleAuthError(verifyErr);
-                                });
-                            })
-                            .catch(signUpErr => {
-                                if (signUpErr.code === "auth/email-already-in-use") {
-                                    showInlineAlert("The password you entered is incorrect.", "error");
-                                } else {
-                                    handleAuthError(signUpErr);
-                                }
-                            });
-                    } else {
-                        handleAuthError(err);
-                    }
-                });
+            authState = "signin";
         }
+        renderAuthState();
     }
 
     function handleForgotPassword() {
-        const email = document.getElementById('auth-email').value.trim();
-        if(!email) {
-            showToast("Please enter your email address first.");
+        authState = "forgot";
+        renderAuthState();
+    }
+
+    async function handleAuth() {
+        const emailFieldVal = document.getElementById('auth-email').value.trim();
+        const passwordFieldVal = document.getElementById('auth-password').value;
+        const submitBtn = document.getElementById('auth-submit');
+
+        if ((authState === "signin" || authState === "signup" || authState === "forgot") && !emailFieldVal) {
+            showInlineAlert("Please enter your email address.", "error");
             return;
         }
-        auth.sendPasswordResetEmail(email)
-            .then(() => showToast("Password reset link sent to your email."))
-            .catch(err => handleAuthError(err));
+        if ((authState === "signin" || authState === "signup") && !passwordFieldVal) {
+            showInlineAlert("Please enter your password.", "error");
+            return;
+        }
+        if (authState === "verify" && !emailFieldVal) {
+            showInlineAlert("Please enter the 6-digit access token code.", "error");
+            return;
+        }
+        if (authState === "reset" && (!emailFieldVal || !passwordFieldVal)) {
+            showInlineAlert("Please fill in both the reset token code and your new password.", "error");
+            return;
+        }
+
+        submitBtn.disabled = true;
+        const originalBtnText = submitBtn.innerText;
+        submitBtn.innerText = "Processing...";
+
+        try {
+            if (authState === "signup") {
+                transientEmail = emailFieldVal;
+                const res = await fetch(`${WORKER_URL}/api/signup`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: emailFieldVal, password: passwordFieldVal })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    showInlineAlert(data.message || "Account initiated! Verification code sent.", "success");
+                    authState = "verify";
+                    renderAuthState();
+                } else {
+                    showInlineAlert(data.error || "Signup action failed.", "error");
+                }
+            } 
+            else if (authState === "verify") {
+                const res = await fetch(`${WORKER_URL}/api/verify`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: transientEmail, code: emailFieldVal })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    showInlineAlert(data.message || "Account verified! Proceeding to Sign In.", "success");
+                    authState = "signin";
+                    renderAuthState();
+                } else {
+                    showInlineAlert(data.error || "Verification tracking error.", "error");
+                }
+            }
+            else if (authState === "signin") {
+                const res = await fetch(`${WORKER_URL}/api/signin`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: emailFieldVal, password: passwordFieldVal })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    localStorage.setItem('session_token', data.token);
+                    showToast(data.message || "Welcome back!");
+                    await fetchAndDisplayUserData(true); // Force immediate rendering
+                } else {
+                    showInlineAlert(data.error || "Invalid login credentials.", "error");
+                }
+            }
+            else if (authState === "forgot") {
+                transientEmail = emailFieldVal;
+                const res = await fetch(`${WORKER_URL}/api/forgot-password`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: emailFieldVal })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    showInlineAlert(data.message || "A 6-digit password reset key has been sent.", "success");
+                    authState = "reset";
+                    renderAuthState();
+                } else {
+                    showInlineAlert(data.error || "Failed to issue password recovery request.", "error");
+                }
+            }
+            else if (authState === "reset") {
+                const res = await fetch(`${WORKER_URL}/api/reset-password`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: transientEmail, code: emailFieldVal, newPassword: passwordFieldVal })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    showInlineAlert(data.message || "Password updated successfully. Please Sign In.", "success");
+                    authState = "signin";
+                    renderAuthState();
+                } else {
+                    showInlineAlert(data.error || "Password modification rejected.", "error");
+                }
+            }
+        } catch (err) {
+            console.error("Cloudflare Fetch Engine Fail Error Context:", err);
+            showInlineAlert("Connection error. Check your network.", "error");
+        } finally {
+            submitBtn.disabled = false;
+            if (submitBtn.innerText === "Processing...") {
+                submitBtn.innerText = originalBtnText;
+            }
+        }
+    }
+
+    async function fetchAndDisplayUserData(forceRebuild = false) {
+        const sessionToken = localStorage.getItem('session_token');
+        if (!sessionToken) {
+            document.getElementById('auth-gate').style.display = 'flex';
+            renderAuthState();
+            return;
+        }
+
+        try {
+            const res = await fetch(`${WORKER_URL}/api/userdata`, {
+                headers: { 'Authorization': 'Bearer ' + sessionToken }
+            });
+            const result = await res.json();
+
+            if (res.ok && result.data) {
+                // Generate a quick structural snapshot hash to look for mutations before thrashing DOM nodes
+                const dataSnapshotString = JSON.stringify(result.data);
+                if (dataSnapshotString === lastKnownDataHash && !forceRebuild) {
+                    return; // Data hasn't changed, cancel wasteful UI updates
+                }
+                lastKnownDataHash = dataSnapshotString;
+
+                currentUser = { email: result.data.email };
+                document.getElementById('auth-gate').style.display = 'none';
+                document.getElementById('profile-email').innerText = currentUser.email;
+                document.getElementById('profile-initial').innerText = currentUser.email.charAt(0).toUpperCase();
+                
+                currentUserPfpId = result.data.pfp ? parseInt(result.data.pfp) : 1;
+                applyActiveUserAvatar(currentUserPfpId);
+                renderPfpSelectionGrid();
+
+                let rawHistory = result.data.watch_history || [];
+                if (typeof rawHistory === 'string') {
+                    try { rawHistory = JSON.parse(rawHistory); } catch(e) { rawHistory = []; }
+                }
+                
+                userWatchHistoryCache = rawHistory.map((item) => {
+                    const exactDate = new Date().toLocaleString('en-US', {
+                        year: 'numeric', month: 'short', day: 'numeric',
+                        hour: '2-digit', minute: '2-digit', hour12: true
+                    });
+                    if (typeof item === 'object' && item !== null) {
+                        return { title: item.title, watchedAt: item.watchedAt || exactDate };
+                    }
+                    return { title: item, watchedAt: exactDate };
+                });
+
+                renderWorkerWatchHistory(userWatchHistoryCache);
+                await fetchUnwantedMoviesCloudflare();
+            } else {
+                localStorage.removeItem('session_token');
+                currentUser = null;
+                authState = "signin";
+                renderAuthState();
+                document.getElementById('auth-gate').style.display = 'flex';
+            }
+        } catch (err) {
+            console.error("Identity collection structural context break:", err);
+            // Don't violently drop user to gate on single network ping drops
+            if (forceRebuild) {
+                document.getElementById('auth-gate').style.display = 'flex';
+            }
+        }
     }
 
     function logOut() {
-        stopVerificationPolling();
         closeSettingsPopup();
-        if(historyListenerUnsubscribe) historyListenerUnsubscribe();
-        if(unwantedListenerUnsubscribe) unwantedListenerUnsubscribe();
-        if(loginInfoListenerUnsubscribe) loginInfoListenerUnsubscribe();
-        if(trendingListenerUnsubscribe) trendingListenerUnsubscribe();
-        historyListenerUnsubscribe = null;
-        unwantedListenerUnsubscribe = null;
-        loginInfoListenerUnsubscribe = null;
-        trendingListenerUnsubscribe = null;
+        localStorage.removeItem('session_token');
+        currentUser = null;
+        lastKnownDataHash = "";
         
-        auth.signOut().then(() => {
-            document.getElementById('sliding-profile').style.right = '-100%';
-            document.getElementById('sliding-search').style.right = '-100%';
-            resetActiveNavbar();
-            document.getElementById('home-trigger').classList.add('active');
-            document.getElementById('auth-gate').style.display = 'flex';
-            showToast("Signed out cleanly.");
-        });
+        document.getElementById('sliding-profile').style.right = '-100%';
+        document.getElementById('sliding-search').style.right = '-100%';
+        resetActiveNavbar();
+        document.getElementById('home-trigger').classList.add('active');
+        
+        authState = "signin";
+        renderAuthState();
+        document.getElementById('auth-gate').style.display = 'flex';
+        showToast("Signed out cleanly.");
     }
 
-    auth.onAuthStateChanged(user => {
-        const gate = document.getElementById('auth-gate');
-        if(user && user.emailVerified) {
-            stopVerificationPolling();
-            gate.style.display = 'none';
-            document.getElementById('profile-email').innerText = user.email;
-            document.getElementById('profile-initial').innerText = user.email.charAt(0).toUpperCase();
-            
-            listenToLoginInformation();
-            listenToUnwantedMovies(); 
-            listenToTrendingTitles();
-        } else {
-            if (!verificationPollInterval) {
-                gate.style.display = 'flex';
-            }
-        }
+    window.addEventListener('pageshow', (event) => {
+        fetchAndDisplayUserData(true);
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+        renderAuthState();
+        fetchAndDisplayUserData(true);
+        startCloudflareRealTimeSync();
     });
 </script>
 
@@ -1231,25 +1223,6 @@
 </script>
 
 <script>
-    function listenToLoginInformation() {
-        const user = auth.currentUser;
-        if (!user) return;
-
-        loginInfoListenerUnsubscribe = db.collection('logininformation').doc(user.email)
-            .onSnapshot(doc => {
-                if (doc.exists) {
-                    const data = doc.data();
-                    currentUserPfpId = data.pfp_id ? parseInt(data.pfp_id) : 1;
-                } else {
-                    currentUserPfpId = 1;
-                }
-                applyActiveUserAvatar(currentUserPfpId);
-                renderPfpSelectionGrid();
-            }, error => {
-                console.error("Error watching login structural metrics:", error);
-            });
-    }
-
     function applyActiveUserAvatar(id) {
         const container = document.getElementById("profile-avatar-display");
         const initialLabel = document.getElementById("profile-initial");
@@ -1293,130 +1266,139 @@
         });
     }
 
-    function changeUserAvatar(selectedId) {
-        const user = auth.currentUser;
-        if (!user || selectedId === currentUserPfpId) return;
+    async function changeUserAvatar(selectedId) {
+        const sessionToken = localStorage.getItem('session_token');
+        if (!currentUser || selectedId === currentUserPfpId || !sessionToken) return;
 
-        db.collection('logininformation').doc(user.email).set({
-            pfp_id: selectedId
-        }, { merge: true })
-        .catch(err => {
-            console.error("Failed to update avatar state:", err);
-            showToast("Failed to save avatar change.");
-        });
+        const previousPfpId = currentUserPfpId;
+
+        currentUserPfpId = selectedId;
+        applyActiveUserAvatar(currentUserPfpId);
+        renderPfpSelectionGrid();
+        showToast("Profile avatar updated successfully!");
+
+        try {
+            const res = await fetch(`${WORKER_URL}/api/update-pfp`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + sessionToken
+                },
+                body: JSON.stringify({ pfp: selectedId.toString() })
+            });
+            const data = await res.json();
+            if (!res.ok) {
+                showToast(data.error || "Failed to save avatar change.");
+                currentUserPfpId = previousPfpId;
+                applyActiveUserAvatar(currentUserPfpId);
+                renderPfpSelectionGrid();
+            }
+        } catch (err) {
+            console.error("Avatar update execution failed:", err);
+            currentUserPfpId = previousPfpId;
+            applyActiveUserAvatar(currentUserPfpId);
+            renderPfpSelectionGrid();
+        }
     }
 </script>
 
 <script>
-    function listenToUnwantedMovies() {
-        const user = auth.currentUser;
-        if (!user) return;
+    async function fetchUnwantedMoviesCloudflare() {
+        if (!currentUser) return;
+        const sessionToken = localStorage.getItem('session_token');
+        if (!sessionToken) return;
 
-        unwantedListenerUnsubscribe = db.collection('unwanted').doc(user.email).collection('items')
-            .onSnapshot(snapshot => {
-                userUnwantedCache = [];
-                snapshot.forEach(doc => {
-                    const data = doc.data();
-                    if(data.title) userUnwantedCache.push(data.title.toLowerCase());
-                });
-                
-                if(!historyListenerUnsubscribe) {
-                    listenToWatchHistory();
-                } else {
-                    buildHomeFeed();
-                }
-            }, error => {
-                console.error("Firestore unwanted listeners broke layout context stream: ", error);
-                listenToWatchHistory();
+        try {
+            const res = await fetch(`${WORKER_URL}/api/unwanted`, {
+                headers: { 'Authorization': 'Bearer ' + sessionToken }
             });
+            if (res.ok) {
+                const result = await res.json();
+                userUnwantedCache = (result.items || []).map(title => title.toLowerCase());
+            }
+            buildHomeFeed();
+        } catch(err) {
+            console.error("Failed fetching recommendation filter configurations:", err);
+            buildHomeFeed();
+        }
     }
 
-    function listenToWatchHistory() {
+    function renderWorkerWatchHistory(historyArray) {
         const historyContainer = document.getElementById('history-container');
-        const user = auth.currentUser;
-        if (!user) return;
-        
-        historyContainer.innerHTML = '<div class="loading-ring"></div>';
-        
-        historyListenerUnsubscribe = db.collection('users').doc(user.email).collection('history')
-            .orderBy('timestamp', 'desc')
-            .onSnapshot(snapshot => {
-                historyContainer.innerHTML = "";
-                userWatchHistoryCache = [];
+        if (!historyContainer) return;
+        historyContainer.innerHTML = "";
 
-                if(snapshot.empty) {
-                    historyContainer.innerHTML = `<p style="color: gray; font-size: 14px;">No movies watched yet.</p>`;
-                    buildHomeFeed();
-                    return;
-                }
+        if(!historyArray || historyArray.length === 0) {
+            historyContainer.innerHTML = `<p style="color: gray; font-size: 14px; padding: 5px;">No movies watched yet.</p>`;
+            return;
+        }
 
-                snapshot.forEach(doc => {
-                    const item = doc.data();
-                    const docId = doc.id;
-                    
-                    const referenceMovie = movies.find(m => m.title.toLowerCase() === item.title.toLowerCase());
-                    
-                    if (!referenceMovie) {
-                        db.collection('users').doc(user.email).collection('history').doc(docId).delete();
-                        return; 
-                    }
+        historyArray.forEach(item => {
+            const titleStr = typeof item === 'object' ? item.title : item;
+            const watchTimeStr = typeof item === 'object' ? item.watchedAt : "Just Now";
 
-                    const timestampMillis = item.timestamp ? item.timestamp.toMillis() : Date.now();
-                    userWatchHistoryCache.push({ title: item.title, timestamp: timestampMillis });
+            if (typeof movies === 'undefined') return;
+            const referenceMovie = movies.find(m => m.title.toLowerCase() === titleStr.toLowerCase());
+            if (!referenceMovie) return;
 
-                    const runtimeLink = referenceMovie.link;
-                    const runtimeImage = referenceMovie.image;
-                    const date = new Date(timestampMillis).toLocaleDateString(undefined, {
-                        year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
-                    });
-                    
-                    const cardLink = document.createElement('div');
-                    cardLink.className = 'history-card-link';
-                    
-                    const sanitizedTitle = item.title.replace(/'/g, "\\'");
-                    const sanitizedLink = runtimeLink.replace(/'/g, "\\'");
-                    
-                    cardLink.setAttribute('onclick', `MapsToMovie('${sanitizedTitle}', '${sanitizedLink}', this.querySelector('.history-item'))`);
-                    cardLink.style.cursor = 'pointer';
-                    
-                    cardLink.innerHTML = `
-                        <div class="history-item">
-                            <div class="history-poster-frame">
-                                ${runtimeImage ? `<img src="${runtimeImage}" onerror="this.remove();">` : ''}
-                            </div>
-                            <div class="history-meta-details">
-                                <span class="history-title-text">${item.title}</span>
-                                <span class="history-time">${date}</span>
-                            </div>
-                        </div>
-                    `;
-                    historyContainer.appendChild(cardLink);
-                });
-
-                buildHomeFeed();
-            }, error => {
-                console.error("Firestore snapshot pipeline disrupted: ", error);
-                historyContainer.innerHTML = `<p style="color: red; font-size: 14px;">Failed to load watch history.</p>`;
-            });
+            const cardLink = document.createElement('div');
+            cardLink.className = 'history-card-link';
+            
+            const sanitizedTitle = titleStr.replace(/'/g, "\\'");
+            const sanitizedLink = referenceMovie.link.replace(/'/g, "\\'");
+            
+            cardLink.setAttribute('onclick', `MapsToMovie('${sanitizedTitle}', '${sanitizedLink}', this.querySelector('.history-item'))`);
+            cardLink.style.cursor = 'pointer';
+            
+            cardLink.innerHTML = `
+                <div class="history-item">
+                    <div class="history-poster-frame">
+                        ${referenceMovie.image ? `<img src="${referenceMovie.image}" onerror="this.remove();">` : ''}
+                    </div>
+                    <div class="history-meta-details">
+                        <span class="history-title-text">${titleStr}</span>
+                        <span class="history-time">Watched: ${watchTimeStr}</span>
+                    </div>
+                </div>
+            `;
+            historyContainer.appendChild(cardLink);
+        });
     }
 
-    let globalTrendingData = [];
-    function listenToTrendingTitles() {
-        trendingListenerUnsubscribe = db.collection('public_analytics').doc('trending_counters').collection('titles')
-            .orderBy('hitCount', 'desc')
-            .limit(15) 
-            .onSnapshot(snapshot => {
-                globalTrendingData = [];
-                snapshot.forEach(doc => {
-                    globalTrendingData.push({
-                        title: doc.id,
-                        hitCount: doc.data().hitCount || 0
-                    });
-                });
-                buildHomeFeed(); 
-            }, err => {
-                console.error("Trending aggregation feed pipeline down: ", err);
+    /* =========================================================
+       FIXED REAL-TIME SYNC LOOP
+       ========================================================= */
+    function startCloudflareRealTimeSync() {
+        // Runs separate system synchronization pings
+        setInterval(fetchRealTimeUpdates, 3000);
+        
+        // This structural poll ensures userdata and save states match downstream mutations without freezing inputs
+        setInterval(() => {
+            if (localStorage.getItem('session_token') && (!document.getElementById('auth-gate') || document.getElementById('auth-gate').style.display !== 'flex')) {
+                fetchAndDisplayUserData(false);
+            }
+        }, 1500);
+    }
+
+    async function fetchRealTimeUpdates() {
+        const liveIndicator = document.getElementById('live-data-display');
+        if (!liveIndicator) return;
+        try {
+            const response = await fetch(`${WORKER_URL}/api/realtime-update`, {
+                method: 'GET',
+                headers: { 'Cache-Control': 'no-cache' }
             });
+            if (!response.ok) throw new Error('Stale frame stream link');
+            
+            const liveUpdate = await response.json();
+            if (liveUpdate && liveUpdate.statusText) {
+                liveIndicator.textContent = liveUpdate.statusText;
+            } else {
+                liveIndicator.textContent = "Connected Sync Engine";
+            }
+        } catch (err) {
+            liveIndicator.textContent = "Local Standby Mode";
+        }
     }
 </script>
 
@@ -1474,7 +1456,7 @@
     });
 
     function goRandom() {
-        if (!movies.length) return;
+        if (typeof movies === 'undefined' || !movies.length) return;
         const availableOptions = movies.filter(m => !userUnwantedCache.includes(m.title.toLowerCase()));
         if(!availableOptions.length) {
             showToast("No movies matching filter conditions.");
@@ -1593,9 +1575,8 @@
         }, 300);
     }
 
-    function confirmHideMovie() {
-        const user = auth.currentUser;
-        if (!user) {
+    async function confirmHideMovie() {
+        if (!currentUser) {
             showToast("Please sign in first.");
             closeActionSheet();
             return;
@@ -1611,15 +1592,49 @@
         closeActionSheet();
         showToast(`Hiding "${movieToHide}"...`);
 
-        db.collection('unwanted').doc(user.email).collection('items').doc(movieToHide).set({
-            title: movieToHide,
-            timestamp: firebase.firestore.FieldValue.serverTimestamp()
-        })
-        .then(() => showToast("Recommendations list updated."))
-        .catch(err => {
-            console.error("Firestore drop block exception: ", err);
-            showToast("Failed to hide selection.");
-        });
+        const lowerCaseTitle = movieToHide.toLowerCase();
+        const alreadyUnwanted = userUnwantedCache.includes(lowerCaseTitle);
+        
+        if (!alreadyUnwanted) {
+            userUnwantedCache.push(lowerCaseTitle);
+            buildHomeFeed(); 
+        }
+
+        const sessionToken = localStorage.getItem('session_token');
+        try {
+            const res = await fetch(`${WORKER_URL}/api/hide-movie`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + sessionToken
+                },
+                body: JSON.stringify({ movie: movieToHide })
+            });
+            if (res.ok) {
+                showToast("Recommendations list updated.");
+                const freshRes = await fetch(`${WORKER_URL}/api/unwanted`, {
+                    headers: { 'Authorization': 'Bearer ' + sessionToken }
+                });
+                if (freshRes.ok) {
+                    const result = await freshRes.json();
+                    userUnwantedCache = (result.items || []).map(title => title.toLowerCase());
+                    buildHomeFeed();
+                }
+            } else {
+                showToast("Failed to hide selection.");
+                if (!alreadyUnwanted) {
+                    userUnwantedCache = userUnwantedCache.filter(t => t !== lowerCaseTitle);
+                    buildHomeFeed();
+                }
+            }
+        } catch(err) {
+            console.error(err);
+            showToast("Network connection failure.");
+            if (!alreadyUnwanted) {
+                userUnwantedCache = userUnwantedCache.filter(t => t !== lowerCaseTitle);
+                buildHomeFeed();
+            }
+        }
     }
 </script>
 
@@ -1644,9 +1659,7 @@
         return div;
     }
 
-    function navigateToMovie(movieTitle, destinationUrl, elementClicked) {
-        const user = auth.currentUser;
-        
+    async function navigateToMovie(movieTitle, destinationUrl, elementClicked) {
         if (elementClicked) {
             if (elementClicked.querySelector('.movie-loading-overlay')) return;
 
@@ -1656,27 +1669,41 @@
             elementClicked.appendChild(localizedSpinner);
         }
 
-        const globalTrendRef = db.collection('public_analytics').doc('trending_counters').collection('titles').doc(movieTitle.toLowerCase());
-        globalTrendRef.set({
-            hitCount: firebase.firestore.FieldValue.increment(1)
-        }, { merge: true }).catch(e => console.error("Trending sync skipped:", e));
+        const exactTimeLabel = new Date().toLocaleString('en-US', {
+            year: 'numeric', month: 'short', day: 'numeric',
+            hour: '2-digit', minute: '2-digit', hour12: true
+        });
 
-        if (!user) {
+        userWatchHistoryCache.unshift({ title: movieTitle, watchedAt: exactTimeLabel });
+
+        if (!currentUser) {
             window.location.href = destinationUrl;
             return;
         }
 
-        db.collection('users').doc(user.email).collection('history').doc(movieTitle).set({
-            title: movieTitle,
-            timestamp: firebase.firestore.FieldValue.serverTimestamp()
-        })
-        .then(() => {
+        const sessionToken = localStorage.getItem('session_token');
+        if (!sessionToken) {
             window.location.href = destinationUrl;
-        })
-        .catch(err => {
-            console.error("History tracking failed: ", err);
+            return;
+        }
+
+        try {
+            await fetch(`${WORKER_URL}/api/add-history`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + sessionToken
+                },
+                body: JSON.stringify({ 
+                    movie: movieTitle,
+                    watchedAt: exactTimeLabel
+                })
+            });
             window.location.href = destinationUrl;
-        });
+        } catch (err) {
+            console.error("History tracking pipeline failure context:", err);
+            window.location.href = destinationUrl;
+        }
     }
 
     function shuffleArray(arr) {
@@ -1695,7 +1722,7 @@
         const randomContainer = document.getElementById("randomContainer");
         const genreContainer = document.getElementById("genreContainer");
         
-        if(!randomContainer || !genreContainer || !watchAgainContainer || !trendingContainer) return;
+        if(!randomContainer || !genreContainer || !watchAgainContainer) return;
 
         const filteredGlobalCatalog = movies.filter(m => !userUnwantedCache.includes(m.title.toLowerCase()));
 
@@ -1727,38 +1754,6 @@
             watchAgainContainer.innerHTML = "";
         }
 
-        if (globalTrendingData.length > 0) {
-            let trendingCount = 0;
-            const trendingCardsFragment = document.createDocumentFragment();
-
-            for (let i = 0; i < globalTrendingData.length; i++) {
-                if (trendingCount >= 10) break;
-                
-                const dataItem = globalTrendingData[i];
-                const matchedMovie = filteredGlobalCatalog.find(m => m.title.toLowerCase() === dataItem.title);
-                
-                if (matchedMovie) {
-                    trendingCount++;
-                    const card = createMovieCard(matchedMovie, trendingCount);
-                    trendingCardsFragment.appendChild(card);
-                }
-            }
-
-            if (trendingCount > 0) {
-                trendingContainer.innerHTML = `
-                    <div class="section">
-                        <h2 class="section-title">Most Watched On Rinolski</h2>
-                        <div class="movies"></div>
-                    </div>
-                `;
-                trendingContainer.querySelector(".movies").appendChild(trendingCardsFragment);
-            } else {
-                trendingContainer.innerHTML = "";
-            }
-        } else {
-            trendingContainer.innerHTML = "";
-        }
-
         randomContainer.innerHTML = `
             <div class="section">
                 <h2 class="section-title">Random Picks</h2>
@@ -1766,7 +1761,7 @@
             </div>
         `;
         const randomRow = randomContainer.querySelector(".movies");
-        shuffleArray(filteredGlobalCatalog).forEach(m => randomRow.appendChild(createMovieCard(m)));
+        shuffleArray(filteredGlobalCatalog).slice(0, 12).forEach(m => randomRow.appendChild(createMovieCard(m)));
 
         const genreMap = {};
         filteredGlobalCatalog.forEach(m => {
@@ -1779,7 +1774,7 @@
 
         genreContainer.innerHTML = "";
         
-        const randomizedGenreNames = shuffleArray(Object.keys(genreMap));
+        const randomizedGenreNames = Object.keys(genreMap).sort();
         randomizedGenreNames.forEach(genre => {
             const section = document.createElement("div");
             section.className = "section";
@@ -1789,9 +1784,7 @@
             `;
             const row = section.querySelector(".movies");
             
-            const randomizedMoviesInGenre = shuffleArray(genreMap[genre]);
-            randomizedMoviesInGenre.forEach(m => row.appendChild(createMovieCard(m)));
-            
+            genreMap[genre].forEach(m => row.appendChild(createMovieCard(m)));
             genreContainer.appendChild(section);
         });
     }
