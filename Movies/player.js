@@ -1,4 +1,4 @@
-/* Cyrene Player (smart source detection + back button + portrait support + subtitles + Timer + Netflix Shadow + Cloudflare D1 Sync + Google IMA VAST Integration) */
+/* Cyrene Player (smart source detection + back button + portrait support + subtitles + Timer + Netflix Shadow + Cloudflare D1 Sync) */
 document.addEventListener("DOMContentLoaded", async () => {
 
   /********** 1) Inject CSS **********/
@@ -141,14 +141,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       from{transform:translate(-50%,-50%) rotate(0deg);}  
       to{transform:translate(-50%,-50%) rotate(360deg);}  
     }
-
-    /* IMA Ad overlay layer styles */
-    #imaAdContainer {
-      position: absolute;
-      inset: 0;
-      z-index: 55;
-      pointer-events: auto;
-    }
   `;
   const styleTag = document.createElement("style");
   styleTag.textContent = css;
@@ -243,88 +235,26 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   /********** 4) Load Source **********/
-  async function attachSourceToVideo(url) {
-    const isM3u8 = /\.m3u8($|\?)/i.test(url);
-    if (isM3u8) {
-      if (!window.Hls) {
-        await new Promise(res => {
-          const s = document.createElement("script");
-          s.src = "https://cdn.jsdelivr.net/npm/hls.js@1.4.0/dist/hls.min.js";
-          s.onload = res;
-          document.head.appendChild(s);
-        });
-      }
-      if (window.Hls && window.Hls.isSupported()) {
-        const h = new Hls();
-        h.loadSource(url);
-        h.attachMedia(video);
-      } else video.src = url;
-    } else video.src = url;
-  }
-
-  /********** GOOGLE IMA VAST IMPLEMENTATION **********/
-  function initIMAAdWorkflow(movieUrl) {
-    if (!window.google || !window.google.ima) {
-      const imaScript = document.createElement("script");
-      imaScript.src = "https://imasdk.googleapis.com/js/sdkloader/ima3.js";
-      imaScript.onload = () => setupIMAManager(movieUrl);
-      imaScript.onerror = () => fallbackDirectToMovie(movieUrl);
-      document.head.appendChild(imaScript);
-    } else {
-      setupIMAManager(movieUrl);
+  const isM3u8 = /\.m3u8($|\?)/i.test(src);
+  if (isM3u8) {
+    if (!window.Hls) {
+      await new Promise(res => {
+        const s = document.createElement("script");
+        s.src = "https://cdn.jsdelivr.net/npm/hls.js@1.4.0/dist/hls.min.js";
+        s.onload = res;
+        document.head.appendChild(s);
+      });
     }
+    if (window.Hls && window.Hls.isSupported()) {
+      const h = new Hls();
+      h.loadSource(src);
+      h.attachMedia(video);
+    } else video.src = src;
+  } else {
+    video.src = src;
   }
 
-  function setupIMAManager(movieUrl) {
-    const adContainer = document.createElement("div");
-    adContainer.id = "imaAdContainer";
-    root.appendChild(adContainer);
-
-    const adDisplayContainer = new google.ima.AdDisplayContainer(adContainer, video);
-    const adsLoader = new google.ima.AdsLoader(adDisplayContainer);
-
-    let adsManager = null;
-
-    adsLoader.addEventListener(google.ima.AdsManagerLoadedEvent.Type.ADS_MANAGER_LOADED, (e) => {
-      adsManager = e.getAdsManager(video);
-      
-      adsManager.addEventListener(google.ima.AdErrorEvent.Type.AD_ERROR, () => cleanAdAndStartMovie(adContainer, movieUrl));
-      adsManager.addEventListener(google.ima.AdEvent.Type.ALL_ADS_COMPLETED, () => cleanAdAndStartMovie(adContainer, movieUrl));
-      adsManager.addEventListener(google.ima.AdEvent.Type.CONTENT_RESUME_REQUESTED, () => cleanAdAndStartMovie(adContainer, movieUrl));
-
-      try {
-        adDisplayContainer.initialize();
-        adsManager.init(root.clientWidth, root.clientHeight, google.ima.ViewMode.NORMAL);
-        adsManager.start();
-      } catch (err) {
-        cleanAdAndStartMovie(adContainer, movieUrl);
-      }
-    }, false);
-
-    adsLoader.addEventListener(google.ima.AdErrorEvent.Type.AD_ERROR, () => cleanAdAndStartMovie(adContainer, movieUrl), false);
-
-    const adsRequest = new google.ima.AdsRequest();
-    adsRequest.adTagUrl = "";
-    adsRequest.linearAdSlotWidth = root.clientWidth;
-    adsRequest.linearAdSlotHeight = root.clientHeight;
-    adsLoader.requestAds(adsRequest);
-  }
-
-  function cleanAdAndStartMovie(containerDom, movieUrl) {
-    if (containerDom && containerDom.parentNode) {
-      containerDom.remove();
-    }
-    fallbackDirectToMovie(movieUrl);
-  }
-
-  async function fallbackDirectToMovie(movieUrl) {
-    await attachSourceToVideo(movieUrl);
-  }
-
-  initIMAAdWorkflow(src);
-
-
-  /********** CLOUDFLARE D1 RELATIONAL TRACKING & POLLING CONFIG **********/
+  /********** CLOUDFLARE D1 TRACKING INTEGRATION **********/
   const movieParamId = params.get("id") || params.get("movie") || ep; 
   let activeMovieTitle = "Unknown Media";
   
@@ -339,9 +269,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   let localTimestampStorage = null;
   let pollingTimer = null;
 
-  // Assumes token is saved in localStorage following /api/signin
   const userSessionToken = localStorage.getItem("session_token") || "";
-  const baseApiUrl = ""; // Leave blank if hosted together or fill out base URL path
 
   async function saveWatchProgress() {
     if (!userSessionToken || !video.duration || isResuming) return;
@@ -350,7 +278,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const remainingTime = video.duration - video.currentTime;
 
     try {
-      await fetch(`${baseApiUrl}/api/save-progress`, {
+      await fetch(`/api/save-progress`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -369,14 +297,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
-  // Polling control operations
   function startPolling() {
     if (pollingTimer) clearInterval(pollingTimer);
     pollingTimer = setInterval(() => {
       if (!video.paused && !isDragging) {
         saveWatchProgress();
       }
-    }, 5000); // Polling every 5 seconds
+    }, 5000); 
   }
 
   function stopPolling() {
@@ -428,7 +355,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if(edge === 'dropShadow') {
         el.style.textShadow = `${shadowAmt}em ${shadowAmt}em 0.15em rgba(0,0,0,0.9)`;
     } else if(edge === 'outline') {
-        el.style.textShadow = `-\${shadowAmt/2}em -\${shadowAmt/2}em 0 #000, \${shadowAmt/2}em -\${shadowAmt/2}em 0 #000, -\${shadowAmt/2}em \${shadowAmt/2}em 0 #000, \${shadowAmt/2}em \${shadowAmt/2}em 0 #000`;
+        el.style.textShadow = `-${shadowAmt/2}em -${shadowAmt/2}em 0 #000, ${shadowAmt/2}em -${shadowAmt/2}em 0 #000, -${shadowAmt/2}em ${shadowAmt/2}em 0 #000, ${shadowAmt/2}em ${shadowAmt/2}em 0 #000`;
     } else if(edge === 'raised') {
         el.style.textShadow = `0 -0.03em 0 #000, 0 0.03em 0 #fff`;
     } else {
@@ -447,7 +374,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (this.mode === 'hidden') {
           const cue = this.activeCues[0];
           if (cue) {
-            subDisplay.innerHTML = `<span>\${cue.text}</span>`;
+            subDisplay.innerHTML = `<span>${cue.text}</span>`;
             const span = subDisplay.querySelector('span');
             if(span) await applySubAppearance(span);
           } else {
@@ -511,7 +438,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const h = Math.floor(seconds / 3600);
     const m = Math.floor((seconds % 3600) / 60);
     const s = Math.floor(seconds % 60);
-    return h > 0 ? `\${h}:\${m.toString().padStart(2,'0')}:\${s.toString().padStart(2,'0')}` : `\${m}:\${s.toString().padStart(2,'0')}`;
+    return h > 0 ? `${h}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}` : `${m}:${s.toString().padStart(2,'0')}`;
   };
 
   const showControls = (timeout = 3000) => {
@@ -560,7 +487,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   video.addEventListener("timeupdate", () => {
     if (isFinite(video.duration) && !isDragging && !isResuming) {
       progressBar.style.width = (video.currentTime / video.duration) * 100 + "%";
-      timerDisplay.textContent = `\${formatTime(video.currentTime)} / \${formatTime(video.duration)}`;
+      timerDisplay.textContent = `${formatTime(video.currentTime)} / ${formatTime(video.duration)}`;
     }
   });
 
@@ -574,7 +501,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     pct = Math.max(0, Math.min(1, pct));
     progressBar.style.width = pct * 100 + "%";
     const targetTime = pct * video.duration;
-    timerDisplay.textContent = `\${formatTime(targetTime)} / \${formatTime(video.duration)}`;
+    timerDisplay.textContent = `${formatTime(targetTime)} / ${formatTime(video.duration)}`;
     video.currentTime = targetTime;
   };
 
@@ -591,8 +518,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   root.addEventListener("click", () => { if(!isDragging) controlsVisible ? hideControls() : showControls(); });
 
-  /********** THE JUMP FIX: TRACK LOADEDMETADATA **********/
-  video.addEventListener("loadedmetadata", async () => {
+  /********** RESUME AT METADATA BLOCK **********/
+  video.addEventListener("loadedmetadata", () => {
     if (localTimestampStorage && localTimestampStorage < video.duration - 15) {
       video.currentTime = localTimestampStorage;
       lastSavedTime = localTimestampStorage;
@@ -600,22 +527,19 @@ document.addEventListener("DOMContentLoaded", async () => {
     
     isResuming = false;
     
-    try { 
-      await video.play(); 
-    } catch { 
+    video.play().catch(() => { 
       video.pause(); 
       showControls(5000); 
-    }
+    });
   });
 
-  // Pull history map row records directly from the database early on initialization
   async function fetchPlaybackHistory() {
     if (!userSessionToken) {
       isResuming = false;
       return;
     }
     try {
-      const res = await fetch(`${baseApiUrl}/api/get-progress`, {
+      const res = await fetch(`/api/get-progress`, {
         method: "GET",
         headers: { "Authorization": `Bearer ${userSessionToken}` }
       });
@@ -623,7 +547,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       
       if (resData.progress && resData.progress[movieParamId]) {
         const targetMovie = resData.progress[movieParamId];
-        // calculate standard playback time location from duration minus left remaining values
         localTimestampStorage = targetMovie.duration - targetMovie.left;
       }
     } catch (err) {
@@ -643,8 +566,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       root.style.left = "50%";
       root.style.transform = `translate(-50%, -50%) rotate(90deg)`;
       root.style.transformOrigin = "center center";
-      root.style.width = `\${vh}px`;
-      root.style.height = `\${vw}px`;
+      root.style.width = `${vh}px`;
+      root.style.height = `${vw}px`;
     } else {
       root.style.position = "fixed";
       root.style.top = "0";
