@@ -5,47 +5,8 @@
   <meta name="force-landscape" content="yes">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Player</title>
-  <style>
-    /* 1. HIDE EVERYTHING BY DEFAULT UNTIL AUTHENTICATED */
-    body {
-      display: none;
-    }
-    
-  </style>
 </head>
 <body>
-
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-
-    // Same credentials from your project setup
-    const firebaseConfig = {
-      apiKey: "AIzaSyCExki28m1NNepVQEIjmcQzR8z8O68LqIc",
-      authDomain: "rinolski-notifications.firebaseapp.com",
-      databaseURL: "https://rinolski-notifications-default-rtdb.firebaseio.com",
-      projectId: "rinolski-notifications",
-      storageBucket: "rinolski-notifications.firebasestorage.app",
-      messagingSenderId: "355554579853",
-      appId: "1:355554579853:web:3caa961653c0cdc0a359c4",
-      measurementId: "G-WZ84970GST"
-    };
-
-    // Initialize standalone instance for the player page
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-
-    // Monitor login status
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        // Logged in! Make the player page visible
-        document.body.style.display = "block";
-      } else {
-        // Not logged in! Kick back to index
-        window.location.href = "../index.html";
-      }
-    });
-  </script>
 
   <script src="player-data.js"></script>
   <script src="player.js"></script>
