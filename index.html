@@ -38,9 +38,6 @@
 
         /* Real-time Status Bar Styling */
 
-
-      
-
         @keyframes pulse-glow {
             from { opacity: 0.4; transform: scale(0.9); }
             to { opacity: 1; transform: scale(1.1); }
@@ -769,8 +766,6 @@
     <h2 class="Rinolski-font">rinolski</h2>
 </header>
 
-
-
 <div id="initialSections">
     <div class="settings-container">
         <button class="random-btn" onclick="goRandom()">Can't decide what to watch?</button>
@@ -924,7 +919,11 @@
         passwordInput.style.display = 'block';
         forgotLink.style.display = 'block';
 
-        if (gameStateResetRequired()) {
+        // Always clean up fields when shifting between standard configurations or token triggers
+        if (authState === "signin" || authState === "signup" || authState === "forgot") {
+            emailInput.value = "";
+            passwordInput.value = "";
+        } else if (gameStateResetRequired()) {
             emailInput.value = "";
             passwordInput.value = "";
         }
@@ -1012,6 +1011,7 @@
 
         try {
             if (authState === "signup") {
+                window.temporarySignupPassword = passwordFieldVal; 
                 transientEmail = emailFieldVal;
                 const res = await fetch(`${WORKER_URL}/api/signup`, {
                     method: 'POST',
@@ -1035,9 +1035,25 @@
                 });
                 const data = await res.json();
                 if (res.ok) {
-                    showInlineAlert(data.message || "Account verified! Proceeding to Sign In.", "success");
-                    authState = "signin";
-                    renderAuthState();
+                    showInlineAlert("Account verified! Logging in automatically...", "success");
+                    
+                    const loginRes = await fetch(`${WORKER_URL}/api/signin`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email: transientEmail, password: window.temporarySignupPassword || "" })
+                    });
+                    const loginData = await loginRes.json();
+                    delete window.temporarySignupPassword;
+                    
+                    if (loginRes.ok) {
+                        localStorage.setItem('session_token', loginData.token);
+                        showToast(loginData.message || "Welcome to Rinolski!");
+                        await fetchAndDisplayUserData(true);
+                    } else {
+                        authState = "signin";
+                        renderAuthState();
+                        showInlineAlert("Verified successfully. Please log in manually.", "warning");
+                    }
                 } else {
                     showInlineAlert(data.error || "Verification tracking error.", "error");
                 }
@@ -1081,9 +1097,24 @@
                 });
                 const data = await res.json();
                 if (res.ok) {
-                    showInlineAlert(data.message || "Password updated successfully. Please Sign In.", "success");
-                    authState = "signin";
-                    renderAuthState();
+                    showInlineAlert("Password changed! Logging in automatically...", "success");
+                    
+                    const loginRes = await fetch(`${WORKER_URL}/api/signin`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email: transientEmail, password: passwordFieldVal })
+                    });
+                    const loginData = await loginRes.json();
+                    
+                    if (loginRes.ok) {
+                        localStorage.setItem('session_token', loginData.token);
+                        showToast(loginData.message || "Password updated successfully!");
+                        await fetchAndDisplayUserData(true);
+                    } else {
+                        authState = "signin";
+                        renderAuthState();
+                        showInlineAlert("Password reset complete. Please sign in.", "success");
+                    }
                 } else {
                     showInlineAlert(data.error || "Password modification rejected.", "error");
                 }
@@ -1114,10 +1145,9 @@
             const result = await res.json();
 
             if (res.ok && result.data) {
-                // Generate a quick structural snapshot hash to look for mutations before thrashing DOM nodes
                 const dataSnapshotString = JSON.stringify(result.data);
                 if (dataSnapshotString === lastKnownDataHash && !forceRebuild) {
-                    return; // Data hasn't changed, cancel wasteful UI updates
+                    return; 
                 }
                 lastKnownDataHash = dataSnapshotString;
 
@@ -1157,7 +1187,6 @@
             }
         } catch (err) {
             console.error("Identity collection structural context break:", err);
-            // Don't violently drop user to gate on single network ping drops
             if (forceRebuild) {
                 document.getElementById('auth-gate').style.display = 'flex';
             }
@@ -1365,14 +1394,8 @@
         });
     }
 
-    /* =========================================================
-       FIXED REAL-TIME SYNC LOOP
-       ========================================================= */
     function startCloudflareRealTimeSync() {
-        // Runs separate system synchronization pings
         setInterval(fetchRealTimeUpdates, 3000);
-        
-        // This structural poll ensures userdata and save states match downstream mutations without freezing inputs
         setInterval(() => {
             if (localStorage.getItem('session_token') && (!document.getElementById('auth-gate') || document.getElementById('auth-gate').style.display !== 'flex')) {
                 fetchAndDisplayUserData(false);
