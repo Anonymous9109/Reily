@@ -39,7 +39,7 @@ window.videoData = {
   "RideAlong": "https://dl.dropboxusercontent.com/scl/fi/d93kmm5d8mp0d6pj5pym1/RideAlong.mp4?rlkey=m9jrg8inl12bczgle6if9tg75&st=9vaa4oxl&dl=1",
   "DiaryOfAWimpyKid": "https://dl.dropboxusercontent.com/scl/fi/763idgnq6tfj53gzm2ev9/Diary.Of.A.Wimpy.Kid.2010.720p.x264.mkv?rlkey=zxyozuir567oqrzgd7rnomowj&st=9zunu9om&dl=1",
   "DiaryOfAWimpyKidTheLongHaul": "https://dl.dropboxusercontent.com/scl/fi/j9ywhxgafntjykozbxcef/Diary.Of.A.Wimpy.Kid.The.Long.Haul.mp4?rlkey=71wl80qtj1wdu9nuu0nx0jj2h&st=ze81sht8&dl=1",
-  "DiaryofAWimpyKidRodrickRules": "https://dl.dropboxusercontent.com/scl/fi/f7jqvfjxl3gskuay80erq/Diary.Of.A.Wimpy.Kid.Rodrick.Rules.2011.mp4?rlkey=xr67pjfqqf365rgjtknoa9hwi&st=eshk5m7v&dl=1",
+  "DiaryofAWimpyKidRodrickRules": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Movies/1276212.mp4",
   "TheIdeaOfYou": "https://dl.dropboxusercontent.com/scl/fi/99l7zqpxf552015ilesgz/The.Idea.of.You.mkv?rlkey=iz8nme1b3i1ndxqalwzpgelds&st=c4lyyb9t&dl=1",
   "TheMazeRunner": "https://dl.dropboxusercontent.com/scl/fi/zitz54jyti9imtn5bnwaj/TheMazeRunner.mp4?rlkey=d5pijxulpmp3ndk2cbjgb02ay&st=qait2ips&dl=1",
   "TheRebound": "https://dl.dropboxusercontent.com/scl/fi/4cs3fomz7sy6w47tktwgb/The.Rebound.2009.720p.BrRip.x264.YIFY.mp4?rlkey=5d73d8ikcgwq4n9cd3ue6ezl2&st=vdo15w12&dl=1",
