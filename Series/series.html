@@ -1,58 +1,95 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Series Detail</title>
-    <link rel="stylesheet" href="style.css">
-    <style>
-        * { -webkit-tap-highlight-color: transparent; tap-highlight-color: transparent; }
-        button, a { outline: none; border: none; }
-        .season-btn { padding: 10px 15px; background: rgba(255,255,255,0.1); color: white; border-radius: 5px; cursor: pointer;
-     margin-bottom: 20px;  
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Movie</title>
 
+<link rel="stylesheet" href="style.css">
 
-        .season-btn.active { background: red; font-weight: bold; }
-        .back-btn {
-            position: fixed; top: 20px; left: 20px; width: 45px; height: 45px;
-            background: rgba(0,0,0,0.6); border-radius: 50%; display: flex; 
-            align-items: center; justify-content: center; cursor: pointer; z-index: 10;
-        }
-    </style>
+<style>
+/* Kill blue tap highlight + focus styles */
+* {
+  -webkit-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
+}
+
+button, a {
+  outline: none;
+  border: none;
+}
+
+button:focus,
+button:active,
+a:focus,
+a:active {
+  outline: none;
+  box-shadow: none;
+}
+
+/* Flex layout to keep the SVG icon and text aligned nicely */
+.play-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px; /* Adds space between the icon and the text */
+  cursor: pointer;
+}
+</style>
+
 </head>
 <body>
-    <video class="bg-video" autoplay muted loop id="bgVideo"></video>
-    <div class="overlay"></div>
 
-    <button id="back-btn" class="back-btn">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
-            <polyline points="15 18 9 12 15 6"></polyline>
-        </svg>
+<video class="bg-video" autoplay muted loop id="bgVideo"></video>
+<div class="overlay"></div>
+
+<button class="back-btn" onclick="goBack()">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+    <polyline points="15 18 9 12 15 6"></polyline>
+  </svg>
+</button>
+
+<div class="content">
+  <div class="text">
+    <h1 id="title"></h1>
+    <p id="desc"></p>
+    <button class="play-btn" onclick="play()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+        <polygon points="5 3 19 12 5 21 5 3"></polygon>
+      </svg>
+      Play
     </button>
+  </div>
+</div>
 
-    <div class="content">
-        <h1 id="title"></h1>
-        <p id="desc"></p>
+<script>
+// Extra safety: inject style via JS too (some devices ignore CSS-only)
+document.addEventListener("DOMContentLoaded", () => {
+  const style = document.createElement("style");
+  style.innerHTML = `
+    * {
+      -webkit-tap-highlight-color: transparent !important;
+    }
 
-        <div id="seasonNav" class="season-container"></div>
+    button, a {
+      outline: none !important;
+      -webkit-focus-ring-color: transparent !important;
+    }
 
-        <div class="episodes-wrapper">
-            <div id="episodeList" class="episode-list"></div>
-        </div>
-    </div>
+    button:focus,
+    button:active,
+    a:focus,
+    a:active {
+      outline: none !important;
+      box-shadow: none !important;
+    }
+  `;
+  document.head.appendChild(style);
+});
+</script>
 
-    <script src="series.js"></script>
-    <script src="script.js"></script>
-
-    <script>
-        document.getElementById('back-btn').onclick = () => {
-            window.history.length > 1 ? window.history.back() : window.location.href = '../index.html';
-        };
-    </script>
-        
-    
-    
-    
+<script src="/JS/moviepage.js" defer></script>
+<script src="movies.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
