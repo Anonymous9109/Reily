@@ -610,6 +610,12 @@ const movies = {
     desc: "A classmate introduces teenage Owen to a mysterious late-night TV show -- a vision of a supernatural world beneath their own. In the pale glow of the television, Owen's view of reality begins to crack.",
     video: "",
     play: "ISawtheTVGlow"
+  },
+  "seven-pounds": {
+    title: "Seven Pounds",
+    desc: "Ben Thomas, an IRS agent, is guilt-ridden for his mistake that killed seven people including his fiancee. He embarks on an extraordinary journey in order to change the lives of seven strangers.",
+    video: "",
+    play: "SevenPounds"
   }
 };
 
