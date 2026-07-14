@@ -18,6 +18,7 @@ async function loadDataFiles() {
     // 1. Fetch and parse search.js safely
     const searchResponse = await fetch("/JS/search.js");
     const searchText = await searchResponse.text();
+    // Convert the 'const movies =' declaration to a safe localized object evaluation
     const cleanSearchText = searchText.replace(/const\s+movies\s*=/, "return ");
     const parseSearch = new Function(cleanSearchText);
     window.searchArray = parseSearch();
@@ -25,6 +26,7 @@ async function loadDataFiles() {
     // 2. Fetch and parse movies.js safely
     const moviesResponse = await fetch("/Movies/movies.js");
     const moviesText = await moviesResponse.text();
+    // Convert the 'const movies =' declaration to a safe localized object evaluation
     const cleanMoviesText = moviesText.replace(/const\s+movies\s*=/, "return ");
     const parseMovies = new Function(cleanMoviesText);
     window.movieDetailsDict = parseMovies();
@@ -42,6 +44,7 @@ async function loadDataFiles() {
  * Handles building the UI and background assets now that data maps are secure.
  */
 function renderPage(id) {
+  // Case-insensitive lookup protects against "SAW" vs "saw" mismatching
   const exactKey = Object.keys(window.movieDetailsDict).find(key => key.toLowerCase() === id.toLowerCase());
   const movieData = exactKey ? window.movieDetailsDict[exactKey] : null;
 
@@ -50,8 +53,10 @@ function renderPage(id) {
     return;
   }
 
+  // Bind to global window scope so play() and fallback handlers can access it cleanly
   window.currentMovie = movieData;
 
+  // Pre-locate structural poster layout images from search array
   const targetId = id || new URLSearchParams(window.location.search).get("movie") || new URLSearchParams(window.location.search).get("series");
   const matchedSearchItem = window.searchArray ? window.searchArray.find(m => {
     if (!m.link) return false;
@@ -67,8 +72,10 @@ function renderPage(id) {
     imagePath = `/images/${filename}`;
   }
 
+  // Safely prepare layout containers for landscape layout requirements
   setupLandscapeDOMArchitecture(imagePath);
 
+  // Populate UI
   document.getElementById("title").textContent = movieData.title;
   
   const descEl = document.getElementById("desc");
@@ -76,6 +83,7 @@ function renderPage(id) {
     descEl.textContent = movieData.desc || "";
   }
 
+  // Handle Video / Background Stream initialization
   const video = document.getElementById("bgVideo");
   
   if (movieData.video && video) {
@@ -89,8 +97,10 @@ function renderPage(id) {
     applyFallbackBackground(id);
   }
 
-  // Handle baseline sync tasks with Cloudflare API backend using normalized key
-  checkContinueWatchingAndInitRatings(exactKey);
+  checkContinueWatchingStatus();
+  
+  // Initialize rating logic with the current active movie identifier
+  initializeRatingSystem(targetId);
 }
 
 /**
@@ -102,6 +112,7 @@ function setupLandscapeDOMArchitecture(imagePath) {
   let posterImg = document.getElementById("moviePosterImg");
   let ambientBg = document.getElementById("ambientBg");
 
+  // Create an ambient blur backdrop background element
   if (!ambientBg) {
     ambientBg = document.createElement("div");
     ambientBg.id = "ambientBg";
@@ -111,6 +122,7 @@ function setupLandscapeDOMArchitecture(imagePath) {
     ambientBg.style.backgroundImage = `url('${imagePath}')`;
   }
 
+  // Group text elements into a clean grid tracking network for landscape requirements
   if (!mainWrapper) {
     mainWrapper = document.createElement("div");
     mainWrapper.id = "movieContentWrapper";
@@ -124,29 +136,44 @@ function setupLandscapeDOMArchitecture(imagePath) {
     posterContainer.appendChild(posterImg);
     mainWrapper.appendChild(posterContainer);
     
+    // Select your loose document items and append them to the responsive wrapper pipeline
     const titleEl = document.getElementById("title");
     const descEl = document.getElementById("desc");
     const playBtn = document.querySelector(".play-btn");
+    
+    // Create Rating System Elements Dynamically
+    const ratingContainer = document.createElement("div");
+    ratingContainer.id = "movieRatingContainer";
+    ratingContainer.className = "rating-container";
+    ratingContainer.innerHTML = `
+      <div class="rating-stats" id="rating-stats">0 Ratings</div>
+      <div class="stars-wrapper" id="stars-group">
+        <button class="star-btn" data-value="5">
+          <svg viewBox="0 0 24 24"><path d="M12 .587l3.668 7.431 8.2 1.192-5.934 5.787 1.4 8.168L12 18.896l-7.334 3.857 1.4-8.168L.132 9.21l8.2-1.192z"/></svg>
+        </button>
+        <button class="star-btn" data-value="4">
+          <svg viewBox="0 0 24 24"><path d="M12 .587l3.668 7.431 8.2 1.192-5.934 5.787 1.4 8.168L12 18.896l-7.334 3.857 1.4-8.168L.132 9.21l8.2-1.192z"/></svg>
+        </button>
+        <button class="star-btn" data-value="3">
+          <svg viewBox="0 0 24 24"><path d="M12 .587l3.668 7.431 8.2 1.192-5.934 5.787 1.4 8.168L12 18.896l-7.334 3.857 1.4-8.168L.132 9.21l8.2-1.192z"/></svg>
+        </button>
+        <button class="star-btn" data-value="2">
+          <svg viewBox="0 0 24 24"><path d="M12 .587l3.668 7.431 8.2 1.192-5.934 5.787 1.4 8.168L12 18.896l-7.334 3.857 1.4-8.168L.132 9.21l8.2-1.192z"/></svg>
+        </button>
+        <button class="star-btn" data-value="1">
+          <svg viewBox="0 0 24 24"><path d="M12 .587l3.668 7.431 8.2 1.192-5.934 5.787 1.4 8.168L12 18.896l-7.334 3.857 1.4-8.168L.132 9.21l8.2-1.192z"/></svg>
+        </button>
+      </div>
+    `;
     
     if (titleEl) mainWrapper.appendChild(titleEl); 
     if (descEl) mainWrapper.appendChild(descEl);   
     if (playBtn) mainWrapper.appendChild(playBtn); 
     
-    // Create and Append the Interactive Star Rating System Layout Directly under Play Button
-    const ratingContainer = document.createElement("div");
-    ratingContainer.id = "movieRatingContainer";
-    ratingContainer.innerHTML = `
-      <span id="ratingCount">0 ratings</span>
-      <div class="star-wrapper">
-        <span class="star" data-value="1">★</span>
-        <span class="star" data-value="2">★</span>
-        <span class="star" data-value="3">★</span>
-        <span class="star" data-value="4">★</span>
-        <span class="star" data-value="5">★</span>
-      </div>
-    `;
+    // Injected directly underneath the play button
     mainWrapper.appendChild(ratingContainer);
     
+    // INJECTION FIX: Insert at the absolute top of the body to block ghost HTML elements from creating top whitespace
     document.body.insertBefore(mainWrapper, document.body.firstChild);
   }
 
@@ -155,7 +182,7 @@ function setupLandscapeDOMArchitecture(imagePath) {
   }
 }
 
-// Kickoff loading engine
+// Kickoff the sandboxed loading process immediately
 loadDataFiles();
 
 // ==========================================================================
@@ -171,6 +198,7 @@ function applyFallbackBackground(id) {
   const bgContainer = document.body;
   const targetId = id || new URLSearchParams(window.location.search).get("movie") || new URLSearchParams(window.location.search).get("series");
 
+  // Find the item in your search array matching this exact ID string from the URL
   const matchedSearchItem = window.searchArray ? window.searchArray.find(m => {
     if (!m.link) return false;
     const urlPart = m.link.includes('?') ? m.link.split('?')[1] : m.link;
@@ -180,51 +208,53 @@ function applyFallbackBackground(id) {
   }) : null;
 
   if (matchedSearchItem && matchedSearchItem.image) {
+    // Isolates the clean filename safely regardless of extension
     const filename = matchedSearchItem.image.split('/').pop();
     const absoluteImagePath = `/images/${filename}`;
+    
+    console.log(`Setting background image from ID link match:`, absoluteImagePath);
+    
     bgContainer.style.backgroundImage = `url('${absoluteImagePath}')`;
     bgContainer.style.backgroundSize = "cover";
     bgContainer.style.backgroundPosition = "center";
     bgContainer.style.backgroundRepeat = "no-repeat";
     bgContainer.style.backgroundAttachment = "fixed";
   } else {
+    console.warn(`No attached image property found in search array for ID: "${targetId}". Using black background.`);
     bgContainer.style.backgroundColor = "#000000";
     bgContainer.style.backgroundImage = "none";
   }
 }
 
 // ==========================================================================
-// 3. CLOUDFLARE D1 TRACKING & RATING SYNC BRIDGE (FIREBASE REMOVED)
+// 3. FIRESTORE INTEGRATION & USER PROGRESS
 // ==========================================================================
 
-async function checkContinueWatchingAndInitRatings(normalizedId) {
-  // Base endpoint location configuration for Cloudflare Worker
-  const API_BASE = ""; 
-  const token = localStorage.getItem("session_token") || "";
+async function checkContinueWatchingStatus() {
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get("movie") || params.get("series");
+  
+  try {
+    const { getFirestore, doc, getDoc } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+    const { getAuth } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js");
 
-  // Always kick off rating engine with active credentials using sanitized key id
-  initRatingSystem(normalizedId, token);
+    const auth = getAuth();
+    const db = getFirestore();
 
-  // Sync playback tracking with Cloudflare D1 backend metrics
-  if (token && normalizedId) {
-    try {
-      const res = await fetch(`${API_BASE}/api/get-progress`, {
-        headers: { "Authorization": `Bearer ${token}` }
-      });
-      
-      if (res.ok) {
-        const data = await res.json();
-        const progressMap = data.progress || {};
-        const movieProgress = progressMap[normalizedId];
+    auth.onAuthStateChanged(async (user) => {
+      if (user && user.email && id) {
+        const docRef = doc(db, "watchHistory", user.email, "movies", id);
+        const docSnap = await getDoc(docRef);
 
-        if (movieProgress) {
-          const left = movieProgress.left || 0;
-          const duration = movieProgress.duration || 0;
-          const currentTime = duration - left;
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          const currentTime = data.currentTime || 0;
+          const duration = data.duration || 0;
 
-          // Check if user is in an active watch sequence window
           if (currentTime > 5 && currentTime < (duration - 15)) {
-            const timeLeftMinutes = Math.ceil(left / 60);
+            const timeLeftSeconds = duration - currentTime;
+            const timeLeftMinutes = Math.ceil(timeLeftSeconds / 60);
+
             const playBtn = document.querySelector(".play-btn");
             if (playBtn) {
               playBtn.innerHTML = `
@@ -237,83 +267,84 @@ async function checkContinueWatchingAndInitRatings(normalizedId) {
           }
         }
       }
-    } catch (error) {
-      console.error("Error reading continue watching status from D1:", error);
-    }
+    });
+  } catch (error) {
+    console.error("Error reading continue watching status:", error);
   }
 }
 
 // ==========================================================================
-// 4. FRONTEND INTERACTIVE STAR RATING SYSTEM LOGIC
+// 4. MOVIE RATINGS MANAGEMENT ENGINE
 // ==========================================================================
 
-async function initRatingSystem(movieId, token) {
-  if (!movieId) return;
+async function initializeRatingSystem(movieId) {
+  // Replace this with your actual Cloudflare Worker domain address
+  const API_BASE = "https://your-worker-subdomain.workers.dev"; 
+  const SESSION_TOKEN = localStorage.getItem("session_token") || "";
 
-  const API_BASE = ""; 
-  const countEl = document.getElementById("ratingCount");
-  const stars = document.querySelectorAll(".star");
+  const statsElement = document.getElementById("rating-stats");
+  const starButtons = document.querySelectorAll(".star-btn");
 
-  // Fetch data directly out of Cloudflare D1 JSON rating matrix engine
-  try {
-    const headers = token ? { "Authorization": `Bearer ${token}` } : {};
-    const res = await fetch(`${API_BASE}/api/get-rating?movieId=${encodeURIComponent(movieId)}`, { headers });
-    if (res.ok) {
+  if (!statsElement || starButtons.length === 0) return;
+
+  async function loadRatings() {
+    try {
+      const res = await fetch(`${API_BASE}/api/get-rating?movieId=${encodeURIComponent(movieId)}`, {
+        method: "GET",
+        headers: { "Authorization": `Bearer ${SESSION_TOKEN}` }
+      });
       const data = await res.json();
-      countEl.textContent = `${data.totalRatings || 0} ratings`;
-      highlightStars(data.userRating || 0);
+      
+      if (res.ok) {
+        statsElement.textContent = `${data.totalRatings} Ratings`;
+        highlightStars(data.userRating || 0);
+      }
+    } catch (err) {
+      console.error("Error loading rating setup:", err);
     }
-  } catch (err) {
-    console.error("Failed to sync structural rating data components:", err);
   }
 
-  // Handle mapping star user engagement listeners
-  stars.forEach(star => {
-    star.onmouseenter = null;
-    star.onclick = null;
-
-    star.addEventListener("click", async () => {
-      if (!token) {
-        alert("Please log in to submit ratings!");
-        return;
+  function highlightStars(ratingValue) {
+    starButtons.forEach(btn => {
+      const val = parseInt(btn.getAttribute("data-value"));
+      if (val <= ratingValue) {
+        btn.classList.add("active");
+      } else {
+        btn.classList.remove("active");
       }
-      const ratingValue = parseInt(star.getAttribute("data-value"), 10);
-      
-      // Optimistic UI layout design update
-      highlightStars(ratingValue);
+    });
+  }
+
+  starButtons.forEach(button => {
+    button.addEventListener("click", async () => {
+      const selectedRating = parseInt(button.getAttribute("data-value"));
+      highlightStars(selectedRating);
 
       try {
-        const response = await fetch(`${API_BASE}/api/rate`, {
+        const res = await fetch(`${API_BASE}/api/rate`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
+            "Authorization": `Bearer ${SESSION_TOKEN}`
           },
-          body: JSON.stringify({ movieId, rating: ratingValue })
+          body: JSON.stringify({ movieId: movieId, rating: selectedRating })
         });
-        
-        if (response.ok) {
-          const updatedData = await response.json();
-          countEl.textContent = `${updatedData.totalRatings || 0} ratings`;
+
+        const data = await res.json();
+
+        if (res.ok) {
+          statsElement.textContent = `${data.totalRatings} Ratings`;
         } else {
-          console.error("Server rejected rating tracking operation payload framework.");
+          console.error("Worker rating error:", data.error);
         }
       } catch (err) {
-        console.error("Failed communicating out to JSON rating database engine:", err);
+        console.error("Error sending rating details:", err);
       }
     });
   });
 
-  function highlightStars(rating) {
-    stars.forEach(star => {
-      const val = parseInt(star.getAttribute("data-value"), 10);
-      if (val <= rating) {
-        star.classList.add("filled");
-      } else {
-        star.classList.remove("filled");
-      }
-    });
-  }
+  // Call the initial fetching state
+  loadRatings();
 }
 
 // ==========================================================================
@@ -339,22 +370,25 @@ function goBack() {
 // ==========================================================================
 
 (function () {
+  // 1. Create and inject the subtle fading background overlay
   const overlay = document.createElement('div');
   overlay.id = "bottomFadeOverlay";
   
+  // Set up layout and the light linear-gradient
   Object.assign(overlay.style, {
     position: "fixed",
     bottom: "0",
     left: "0",
     width: "100%",
-    height: "55vh",
+    height: "55vh", // Controls how high up the viewport the gradient climbs
     background: "linear-gradient(to top, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0) 100%)",
-    pointerEvents: "none",
-    zIndex: "1"
+    pointerEvents: "none", // Allows clicks to pass through completely
+    zIndex: "1" // Places it over backgrounds, but behind UI typography elements
   });
   
   document.body.appendChild(overlay);
 
+  // 2. Clear mobile tap delays, outline styling, and stack text layers explicitly
   const style = document.createElement('style');
   style.innerHTML = `
     * {
@@ -373,51 +407,73 @@ function goBack() {
       background-color: transparent !important;
     }
     
-    #title, #desc, .play-btn, .back-btn, .text-container-wrapper, .info-container, #movieRatingContainer {
+    /* Forces elements out of the stacking index loop to sit cleanly over the fade overlay */
+    #title, #desc, .play-btn, .back-btn, .text-container-wrapper, .info-container, .rating-container {
       position: relative;
       z-index: 2;
     }
 
-    /* STAR RATING COMPONENT CUSTOM STYLES */
-    #movieRatingContainer {
-      grid-column: 1 / span 2;
-      grid-row: 4;
-      display: flex;
+    /* Rating Component Core Styles */
+    .rating-container {
+      display: inline-flex;
       align-items: center;
       gap: 12px;
-      margin-top: -5px;
+      background: rgba(34, 34, 34, 0.7);
+      padding: 10px 18px;
+      border-radius: 8px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      margin-top: 15px;
     }
 
-    #ratingCount {
-      color: rgba(255, 255, 255, 0.7);
+    .rating-stats {
+      font-size: 0.9rem;
+      color: #b3b3b3;
+      font-weight: bold;
       font-family: sans-serif;
-      font-size: 1rem;
-      font-weight: 600;
-      min-width: 75px;
     }
 
-    .star-wrapper {
+    .stars-wrapper {
       display: flex;
-      gap: 4px;
+      flex-direction: row-reverse;
     }
 
-    .star {
-      font-size: 1.65rem;
+    .star-btn {
+      background: none;
+      border: none;
       cursor: pointer;
-      color: #000000;
-      -webkit-text-stroke: 1.5px #ffffff;
-      text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
-      transition: transform 0.12s ease-in-out, color 0.12s ease-in-out;
-      user-select: none;
+      padding: 0 2px;
+      outline: none;
     }
 
-    .star:hover {
-      transform: scale(1.15);
+    .star-btn svg {
+      width: 26px;
+      height: 26px;
+      transition: transform 0.1s ease;
     }
 
-    .star.filled {
-      color: #ffffff;
-      -webkit-text-stroke: 1.5px #000000;
+    /* DEFAULT STATE: White fill, black outline */
+    .star-btn svg path {
+      fill: #ffffff;
+      stroke: #000000;
+      stroke-width: 2px;
+    }
+
+    /* HOVER & ACTIVE STATE: Black fill, white outline */
+    .star-btn:hover svg,
+    .star-btn:hover ~ .star-btn svg,
+    .star-btn.active svg,
+    .star-btn.active ~ .star-btn svg {
+      transform: scale(1.1);
+    }
+
+    .star-btn:hover svg path,
+    .star-btn:hover ~ .star-btn svg path,
+    .star-btn.active svg path,
+    .star-btn.active ~ .star-btn svg path {
+      fill: #000000;
+      stroke: #ffffff;
+      stroke-width: 1.5px;
     }
 
     /* ==========================================
@@ -426,16 +482,18 @@ function goBack() {
     @media (orientation: landscape) {
       body {
         display: block !important;
-        overflow-y: auto !important;
+        overflow-y: auto !important; /* Enables smooth document scrolling */
         min-height: 10vh;
         margin: 0 !important;
         padding: 0 !important;
       }
 
+      /* Disables potential leftover structural container blocks from pushing down layout flow */
       .text-container-wrapper, .info-container {
         display: none !important;
       }
 
+      /* Ambient Blurred Canvas Element Styling */
       #ambientBg {
         display: block !important;
         position: fixed;
@@ -452,24 +510,26 @@ function goBack() {
         pointer-events: none;
       }
 
+      /* Grid structure setup to coordinate elements */
       #movieContentWrapper {
         display: grid;
-        grid-template-columns: 240px 1fr;
+        grid-template-columns: 240px 1fr; /* Left: Poster width constraint, Right: Flexible space */
         gap: 24px;
         width: 800px;
         max-width: 75vw;
-        margin: 0px 0 80px 60px !important;
-        padding-top: 10px !important;
+        margin: 0px 0 80px 60px !important; /* Zeroed out top margin completely */
+        padding-top: 10px !important;       /* Clean minimal padding spacing right from screen edge boundary */
         position: relative;
         z-index: 3;
       }
 
+      /* 1. Image element rendered styled as a vertical Movie Poster */
       #moviePosterContainer {
         grid-column: 1;
         grid-row: 1;
         display: block !important;
         width: 100%;
-        aspect-ratio: 2 / 3;
+        aspect-ratio: 2 / 3; /* Standard professional movie poster aspect dimensional scale */
         border-radius: 12px;
         overflow: hidden;
         box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
@@ -482,10 +542,11 @@ function goBack() {
         object-fit: cover;
       }
 
+      /* 2. Title cleanly positioned onto the Right Side of the Movie Poster Box */
       #title {
         grid-column: 2;
         grid-row: 1;
-        align-self: center;
+        align-self: center; /* Vertically centers the title inline with the poster's height */
         color: #ffffff;
         font-size: 2.8rem;
         font-weight: 800;
@@ -497,6 +558,7 @@ function goBack() {
         z-index: 4;
       }
 
+      /* 3. Description positioned underneath the top item structure rows */
       #desc {
         grid-column: 1 / span 2;
         grid-row: 2;
@@ -508,6 +570,7 @@ function goBack() {
         z-index: 4;
       }
 
+      /* 4. Action Play Controller Box positions underneath the description track layout */
       .play-btn {
         grid-column: 1 / span 2;
         grid-row: 3;
@@ -515,6 +578,14 @@ function goBack() {
         justify-self: start !important;
         position: relative;
         z-index: 4;
+      }
+
+      /* Rating Container sits cleanly under the Play Button in Row 4 */
+      .rating-container {
+        grid-column: 1 / span 2;
+        grid-row: 4;
+        align-self: flex-start !important;
+        justify-self: start !important;
       }
       
       .back-btn {
@@ -526,9 +597,10 @@ function goBack() {
     }
 
     /* ==========================================
-     * PORTRAIT ORIENTATION STABILIZER 
+     * PORTRAIT ORIENTATION STABILIZER (CENTERED IN THE MIDDLE)
      * ========================================== */
     @media (orientation: portrait) {
+      /* Targets the text wrapper container and centers it directly in the dead center of the screen */
       #movieContentWrapper {
         display: flex !important;
         flex-direction: column !important;
@@ -546,10 +618,13 @@ function goBack() {
         z-index: 3 !important;
       }
 
-      #moviePosterContainer, #moviePosterImg, #ambientBg {
-        display: none !important;
+      #moviePosterContainer, 
+      #moviePosterImg, 
+      #ambientBg {
+        display: none !important; /* Disables landscape dynamic nodes to retain layout rules */
       }
 
+      /* Enforces complete horizontal copy text alignment */
       #title, #desc {
         text-align: center !important;
         margin-left: auto !important;
@@ -557,8 +632,13 @@ function goBack() {
         width: 100%;
       }
 
-      #title { margin: 0 0 16px 0 !important; }
-      #desc { margin: 0 0 24px 0 !important; }
+      #title {
+        margin: 0 0 16px 0 !important;
+      }
+
+      #desc {
+        margin: 0 0 24px 0 !important;
+      }
 
       .play-btn {
         margin: 0 auto !important;
@@ -567,10 +647,15 @@ function goBack() {
         align-items: center !important;
       }
 
-      #movieRatingContainer {
+      /* Centers the rating system nicely beneath the play button in portrait */
+      .rating-container {
         margin: 15px auto 0 auto !important;
-        justify-content: center;
+        display: inline-flex !important;
+        justify-content: center !important;
+        align-items: center !important;
       }
+      
+      /* Note: .back-btn is left completely untouched here, keeping its native template placement intact */
     }
   `;
   document.head.appendChild(style);
