@@ -530,6 +530,12 @@ const movies = [
     genres: ["Horror","Drama"],
     image: "images/ISawtheTVGlow.jpg",
     link: "Movies/Movie?movie=i-saw-the-tv-glow"
+  },
+  {
+    title: "Seven Pounds",
+    genres: ["Thriller","Drama"],
+    image: "images/SevenPounds.jpg",
+    link: "Movies/Movie?movie=seven-pounds"
   }
 ];
 
