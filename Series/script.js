@@ -89,7 +89,8 @@ function renderPage(id) {
     applyFallbackBackground(id);
   }
 
-  checkContinueWatchingStatus();
+  // Handle baseline sync tasks
+  checkContinueWatchingAndInitRatings();
 }
 
 /**
@@ -147,9 +148,6 @@ function setupLandscapeDOMArchitecture(imagePath) {
     mainWrapper.appendChild(ratingContainer);
     
     document.body.insertBefore(mainWrapper, document.body.firstChild);
-
-    // Bootstrap rating engine listener actions
-    initRatingSystem();
   }
 
   if (imagePath && posterImg) {
@@ -196,10 +194,10 @@ function applyFallbackBackground(id) {
 }
 
 // ==========================================================================
-// 3. FIRESTORE INTEGRATION & USER PROGRESS
+// 3. FIRESTORE AUTH INTEGRATION, WATCH STATUS & RATING SYNC BRIDGE
 // ==========================================================================
 
-async function checkContinueWatchingStatus() {
+async function checkContinueWatchingAndInitRatings() {
   const params = new URLSearchParams(window.location.search);
   const id = params.get("movie") || params.get("series");
   
@@ -211,6 +209,12 @@ async function checkContinueWatchingStatus() {
     const db = getFirestore();
 
     auth.onAuthStateChanged(async (user) => {
+      // Safely check if a localized token is available or if fallback session token is tracking
+      const token = localStorage.getItem("session_token") || "";
+
+      // Initialize or refresh rating engine UI elements based on authentication parameters
+      initRatingSystem(id, token);
+
       if (user && user.email && id) {
         const docRef = doc(db, "watchHistory", user.email, "movies", id);
         const docSnap = await getDoc(docRef);
@@ -239,6 +243,9 @@ async function checkContinueWatchingStatus() {
     });
   } catch (error) {
     console.error("Error reading continue watching status:", error);
+    // Dynamic fallback initialization if Firebase modules drop out cleanly
+    const token = localStorage.getItem("session_token") || "";
+    initRatingSystem(id, token);
   }
 }
 
@@ -246,17 +253,13 @@ async function checkContinueWatchingStatus() {
 // 4. FRONTEND INTERACTIVE STAR RATING SYSTEM LOGIC
 // ==========================================================================
 
-async function initRatingSystem() {
-  const params = new URLSearchParams(window.location.search);
-  const movieId = params.get("movie") || params.get("series");
-  const token = localStorage.getItem("session_token") || ""; 
-  
+async function initRatingSystem(movieId, token) {
   if (!movieId) return;
 
   const countEl = document.getElementById("ratingCount");
   const stars = document.querySelectorAll(".star");
 
-  // Load baseline statistics
+  // Fetch data cleanly from the backend
   try {
     const headers = token ? { "Authorization": `Bearer ${token}` } : {};
     const res = await fetch(`/api/get-rating?movieId=${encodeURIComponent(movieId)}`, { headers });
@@ -269,8 +272,12 @@ async function initRatingSystem() {
     console.error("Failed to sync structural rating data components:", err);
   }
 
-  // Handle pointer interactions across stars
+  // Handle star interactions
   stars.forEach(star => {
+    // Prevent duplicated interaction listeners on reassignment bindings
+    star.onmouseenter = null;
+    star.onclick = null;
+
     star.addEventListener("click", async () => {
       if (!token) {
         alert("Please log in to submit ratings!");
@@ -278,7 +285,7 @@ async function initRatingSystem() {
       }
       const ratingValue = parseInt(star.getAttribute("data-value"));
       
-      // Optimistic Instant Color-Inversion UI Switch
+      // Optimistic layout colorization change
       highlightStars(ratingValue);
 
       try {
@@ -294,6 +301,8 @@ async function initRatingSystem() {
         if (response.ok) {
           const updatedData = await response.json();
           countEl.textContent = `${updatedData.totalRatings} ratings`;
+        } else {
+          console.error("Server rejected rating tracking operation payload framework.");
         }
       } catch (err) {
         console.error("Failed communicating out to JSON rating database engine:", err);
