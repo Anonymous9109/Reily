@@ -89,7 +89,7 @@ function renderPage(id) {
     applyFallbackBackground(id);
   }
 
-  // Handle baseline sync tasks
+  // Handle baseline sync tasks with Cloudflare API backend
   checkContinueWatchingAndInitRatings();
 }
 
@@ -194,40 +194,40 @@ function applyFallbackBackground(id) {
 }
 
 // ==========================================================================
-// 3. FIRESTORE AUTH INTEGRATION, WATCH STATUS & RATING SYNC BRIDGE
+// 3. CLOUDFLARE D1 TRACKING & RATING SYNC BRIDGE (FIREBASE REMOVED)
 // ==========================================================================
 
 async function checkContinueWatchingAndInitRatings() {
   const params = new URLSearchParams(window.location.search);
   const id = params.get("movie") || params.get("series");
   
-  try {
-    const { getFirestore, doc, getDoc } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
-    const { getAuth } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js");
+  // Base endpoint location configuration for Cloudflare Worker
+  const API_BASE = ""; 
+  const token = localStorage.getItem("session_token") || "";
 
-    const auth = getAuth();
-    const db = getFirestore();
+  // Always kick off rating engine with active credentials
+  initRatingSystem(id, token);
 
-    auth.onAuthStateChanged(async (user) => {
-      // Safely check if a localized token is available or if fallback session token is tracking
-      const token = localStorage.getItem("session_token") || "";
+  // Sync playback tracking with Cloudflare D1 backend metrics
+  if (token && id) {
+    try {
+      const res = await fetch(`${API_BASE}/api/get-progress`, {
+        headers: { "Authorization": `Bearer ${token}` }
+      });
+      
+      if (res.ok) {
+        const data = await res.json();
+        const progressMap = data.progress || {};
+        const movieProgress = progressMap[id];
 
-      // Initialize or refresh rating engine UI elements based on authentication parameters
-      initRatingSystem(id, token);
+        if (movieProgress) {
+          const left = movieProgress.left || 0;
+          const duration = movieProgress.duration || 0;
+          const currentTime = duration - left;
 
-      if (user && user.email && id) {
-        const docRef = doc(db, "watchHistory", user.email, "movies", id);
-        const docSnap = await getDoc(docRef);
-
-        if (docSnap.exists()) {
-          const data = docSnap.data();
-          const currentTime = data.currentTime || 0;
-          const duration = data.duration || 0;
-
+          // Check if user is in an active watch sequence window
           if (currentTime > 5 && currentTime < (duration - 15)) {
-            const timeLeftSeconds = duration - currentTime;
-            const timeLeftMinutes = Math.ceil(timeLeftSeconds / 60);
-
+            const timeLeftMinutes = Math.ceil(left / 60);
             const playBtn = document.querySelector(".play-btn");
             if (playBtn) {
               playBtn.innerHTML = `
@@ -240,12 +240,9 @@ async function checkContinueWatchingAndInitRatings() {
           }
         }
       }
-    });
-  } catch (error) {
-    console.error("Error reading continue watching status:", error);
-    // Dynamic fallback initialization if Firebase modules drop out cleanly
-    const token = localStorage.getItem("session_token") || "";
-    initRatingSystem(id, token);
+    } catch (error) {
+      console.error("Error reading continue watching status from D1:", error);
+    }
   }
 }
 
@@ -256,25 +253,25 @@ async function checkContinueWatchingAndInitRatings() {
 async function initRatingSystem(movieId, token) {
   if (!movieId) return;
 
+  const API_BASE = ""; 
   const countEl = document.getElementById("ratingCount");
   const stars = document.querySelectorAll(".star");
 
-  // Fetch data cleanly from the backend
+  // Fetch data directly out of Cloudflare D1 JSON rating matrix engine
   try {
     const headers = token ? { "Authorization": `Bearer ${token}` } : {};
-    const res = await fetch(`/api/get-rating?movieId=${encodeURIComponent(movieId)}`, { headers });
+    const res = await fetch(`${API_BASE}/api/get-rating?movieId=${encodeURIComponent(movieId)}`, { headers });
     if (res.ok) {
       const data = await res.json();
-      countEl.textContent = `${data.totalRatings} ratings`;
-      highlightStars(data.userRating);
+      countEl.textContent = `${data.totalRatings || 0} ratings`;
+      highlightStars(data.userRating || 0);
     }
   } catch (err) {
     console.error("Failed to sync structural rating data components:", err);
   }
 
-  // Handle star interactions
+  // Handle mapping star user engagement listeners
   stars.forEach(star => {
-    // Prevent duplicated interaction listeners on reassignment bindings
     star.onmouseenter = null;
     star.onclick = null;
 
@@ -283,13 +280,13 @@ async function initRatingSystem(movieId, token) {
         alert("Please log in to submit ratings!");
         return;
       }
-      const ratingValue = parseInt(star.getAttribute("data-value"));
+      const ratingValue = parseInt(star.getAttribute("data-value"), 10);
       
-      // Optimistic layout colorization change
+      // Optimistic UI layout design update
       highlightStars(ratingValue);
 
       try {
-        const response = await fetch("/api/rate", {
+        const response = await fetch(`${API_BASE}/api/rate`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -300,7 +297,7 @@ async function initRatingSystem(movieId, token) {
         
         if (response.ok) {
           const updatedData = await response.json();
-          countEl.textContent = `${updatedData.totalRatings} ratings`;
+          countEl.textContent = `${updatedData.totalRatings || 0} ratings`;
         } else {
           console.error("Server rejected rating tracking operation payload framework.");
         }
@@ -312,7 +309,7 @@ async function initRatingSystem(movieId, token) {
 
   function highlightStars(rating) {
     stars.forEach(star => {
-      const val = parseInt(star.getAttribute("data-value"));
+      const val = parseInt(star.getAttribute("data-value"), 10);
       if (val <= rating) {
         star.classList.add("filled");
       } else {
