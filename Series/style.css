@@ -1,95 +1,112 @@
-/* 1. Layout & Core Styles */
-body { 
-  margin: 0; 
-  padding: 0;
-  background: #000; 
-  color: #fff; 
-  font-family: sans-serif; 
-  
-  /* These lines force content to the bottom */
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end; 
-  overflow-x: hidden;
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: black;
+  color: white;
 }
 
-/* 2. Background Video - Fixed and Centered */
-.bg-video { 
-  position: fixed; 
-  top: 50%; 
-  left: 50%; 
-  min-width: 100vw; 
-  min-height: 100vh; 
-  width: auto; 
-  height: auto; 
-  object-fit: cover; 
-  transform: translate(-50%, -50%); 
-  z-index: -1; 
-  background-color: black;
-  opacity: 0; /* Handled by JS for fade-in usually */
-  transition: opacity 0.8s ease-in-out;
+/* Background Video */
+.bg-video {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  filter: brightness(1);
+  z-index: -1;
 }
 
-/* 3. The Bottom Shadow Gradient */
-.overlay { 
-  position: fixed; 
-  bottom: 0; 
-  left: 0;
-  width: 100%;  
-  height: 100%; 
-  background: linear-gradient(to top, black 10%, transparent 60%); 
-  z-index: 0; 
-  pointer-events: none; /* Allows clicking through the gradient */
-}
-
-/* 4. Content Area - Sticking to Bottom */
-.content { 
-  position: relative; 
-  z-index: 10; 
-  padding: 80px 20px 40px; /* Large top padding for smooth gradient fade */
-  
-  /* This gradient ensures text legibility over the video */
-  background: linear-gradient(to top, rgba(0,0,0,0.9) 20%, rgba(0,0,0,0.4) 70%, transparent 100%);
-}
-
-/* 5. Swiping Episodes Wrapper */
-.episodes-wrapper {
-  width: 100%;
-  overflow-x: auto;
-  display: flex;
-  padding-bottom: 10px; /* Space for scroll physics */
-  -webkit-overflow-scrolling: touch; 
-}
-
-/* Hide scrollbar for Chrome/Safari/IE/Edge */
-.episodes-wrapper::-webkit-scrollbar { display: none; }
-.episodes-wrapper { -ms-overflow-style: none; scrollbar-width: none; }
-
-.episode-list { 
-  display: flex; 
-  gap: 15px; 
-}
-
-/* 6. Episode Buttons */
-.ep-btn {
-  flex: 0 0 auto;
-  background: white;
-  border: 5px ;
-  color: black;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-weight: bold;
+/* Back Button */
+.back-btn {
+  position: fixed;
+  top: 20px; left: 20px;
+  width: 45px; height: 45px;
+  background: rgba(0,0,0,0.6);
+  border: none;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
   cursor: pointer;
-  backdrop-filter: blur(12px);
-  transition: background 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+  transition: 0.3s;
+  z-index: 9999;
 }
 
-.ep-btn:hover {
-  background: rgba(255, 255, 255, 0.25);
-  transform: translateY(-2px);
+.back-btn:hover {
+  background: rgba(0,0,0,0.85);
+  transform: scale(1.1);
+  box-shadow: 0 0 20px rgba(0,0,0,0.7);
 }
 
-.ep-btn:active {
-  
+/* Content */
+.content {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  padding-left: 80px;
 }
+
+.text {
+  max-width: 500px;
+}
+
+h1 {
+  font-size: 56px;
+  margin-bottom: 15px;
+}
+
+p {
+  color: #ccc;
+  line-height: 1.6;
+  margin-bottom: 25px;
+}
+
+/* Play Button */
+.play-btn {
+  display: flex;
+  align-items: left;
+  gap: 10px;
+  padding: 14px 25px;
+  font-size: 18px;
+  border-radius: 5px;
+  background: white;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: black;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.play-btn:hover {
+  /* Add hover styles here if needed */
+}
+
+/* Mobile & Tablet */
+@media (max-width: 900px) {
+  .content {
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+    height: 100vh;
+  }
+
+  .text {
+    max-width: 100%;
+  }
+
+  h1 {
+    font-size: 32px;
+  }
+
+  p {
+    font-size: 14px;
+  }
+
+  .play-btn {
+    width: 100%;
+    padding: 16px;
+    justify-content: center;
+  }
+
+  .bg-video {
+    height: 60%;
+  }
+    }
