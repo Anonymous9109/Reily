@@ -89,8 +89,8 @@ function renderPage(id) {
     applyFallbackBackground(id);
   }
 
-  // Handle baseline sync tasks with Cloudflare API backend
-  checkContinueWatchingAndInitRatings();
+  // Handle baseline sync tasks with Cloudflare API backend using normalized key
+  checkContinueWatchingAndInitRatings(exactKey);
 }
 
 /**
@@ -197,19 +197,16 @@ function applyFallbackBackground(id) {
 // 3. CLOUDFLARE D1 TRACKING & RATING SYNC BRIDGE (FIREBASE REMOVED)
 // ==========================================================================
 
-async function checkContinueWatchingAndInitRatings() {
-  const params = new URLSearchParams(window.location.search);
-  const id = params.get("movie") || params.get("series");
-  
+async function checkContinueWatchingAndInitRatings(normalizedId) {
   // Base endpoint location configuration for Cloudflare Worker
   const API_BASE = ""; 
   const token = localStorage.getItem("session_token") || "";
 
-  // Always kick off rating engine with active credentials
-  initRatingSystem(id, token);
+  // Always kick off rating engine with active credentials using sanitized key id
+  initRatingSystem(normalizedId, token);
 
   // Sync playback tracking with Cloudflare D1 backend metrics
-  if (token && id) {
+  if (token && normalizedId) {
     try {
       const res = await fetch(`${API_BASE}/api/get-progress`, {
         headers: { "Authorization": `Bearer ${token}` }
@@ -218,7 +215,7 @@ async function checkContinueWatchingAndInitRatings() {
       if (res.ok) {
         const data = await res.json();
         const progressMap = data.progress || {};
-        const movieProgress = progressMap[id];
+        const movieProgress = progressMap[normalizedId];
 
         if (movieProgress) {
           const left = movieProgress.left || 0;
