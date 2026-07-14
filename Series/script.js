@@ -99,7 +99,7 @@ function renderPage(id) {
 
   checkContinueWatchingStatus();
   
-  // Initialize rating logic with the current active movie identifier
+  // Initialize rating logic with the current active movie or series identifier
   initializeRatingSystem(targetId);
 }
 
@@ -278,7 +278,7 @@ async function checkContinueWatchingStatus() {
 // ==========================================================================
 
 async function initializeRatingSystem(movieId) {
-  // Replace this with your actual Cloudflare Worker domain address
+  // Replace this with your actual running Cloudflare Worker domain address
   const API_BASE = "https://your-worker-subdomain.workers.dev"; 
   const SESSION_TOKEN = localStorage.getItem("session_token") || "";
 
@@ -660,4 +660,3 @@ function goBack() {
   `;
   document.head.appendChild(style);
 })();
-
