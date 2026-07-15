@@ -616,6 +616,12 @@ const movies = {
     desc: "Ben Thomas, an IRS agent, is guilt-ridden for his mistake that killed seven people including his fiancee. He embarks on an extraordinary journey in order to change the lives of seven strangers.",
     video: "",
     play: "SevenPounds"
+  },
+  "the-terminal": {
+    title: "The Terminal",
+    desc: "Viktor, who hails from Krakozhia, lands at John F Kennedy International Airport but finds out that his passport is revoked by the airport authorities due to a civil war between the two countries.",
+    video: "",
+    play: "TheTerminal"
   }
 };
 
