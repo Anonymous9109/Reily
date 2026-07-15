@@ -138,6 +138,7 @@ window.videoData = {
   "TheShawshankRedemption": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Movies/71171287.mp4",
   "TheSecretLifeofWalterMitty": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Movies/72188657.mp4",
   "ISawtheTVGlow": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Movies/114000911.mp4",
-  "SevenPounds": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Movies/1485114524.mp4"
+  "SevenPounds": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Movies/1485114524.mp4",
+  "TheTerminal": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Movies/61687515.mp4"
 };
 
