@@ -16,6 +16,13 @@ window.videoData = {
   "JohnWick4": "https://dl.dropboxusercontent.com/scl/fi/o1a49oi393nd0nhhjhm6y/John.Wick.Chapter.4.2023.mkv?rlkey=hk3c46dbpx2trlptjqeuv0i7p&st=3j74an96&dl=1",
   "CatchMeIfYouCan": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Movies/4531148.mkv",
   "Barbie2023": "https://dl.dropboxusercontent.com/scl/fi/hq78j526i9a7np9i1qtx7/Barbie.2023.WEBRip.mkv?rlkey=42pcrbnfwobaq1mp5lcafnoh2&st=qr279ra0&dl=1",
+  "Barbie-subs": [
+    { 
+      label: "Arabic", 
+      lang: "ar", 
+      src: "../Subtitles/Barbie/Barbie-Arabic.txt"
+    }
+    ],
   "TheSocialNetwork": "https://dl.dropboxusercontent.com/scl/fi/3x4ht4mp93dzoja3f5a4h/The-Social-Network-2010-720p-BrRip-x264.mp4?rlkey=e6fkuur578xn7qv1ll3pk8x35&st=0sruvxjh&dl=1",
   "TheBlindSide": "https://dl.dropboxusercontent.com/scl/fi/gu49yy42a1ngmhs7adyii/The.Blind.Side.2009.720p.BluRay.x264.YIFY.mp4?rlkey=wc7ofwl18gns6ky45gaej3u6a&st=3b5krz0a&dl=1",
   "FastAndFurious-TokyoDrift": "https://dl.dropboxusercontent.com/scl/fi/p0befj1w8ne3echabire9/The.Fast.And.The.Furious.Tokyo.Drift.mkv?rlkey=yecigymxws69iqgz8lqfw59qm&st=am556hwa&dl=1",
