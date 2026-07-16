@@ -98,9 +98,6 @@ function renderPage(id) {
   }
 
   checkContinueWatchingStatus();
-  
-  // Initialize rating logic with the current active movie or series identifier
-  initializeRatingSystem(targetId);
 }
 
 /**
@@ -141,37 +138,9 @@ function setupLandscapeDOMArchitecture(imagePath) {
     const descEl = document.getElementById("desc");
     const playBtn = document.querySelector(".play-btn");
     
-    // Create Rating System Elements Dynamically
-    const ratingContainer = document.createElement("div");
-    ratingContainer.id = "movieRatingContainer";
-    ratingContainer.className = "rating-container";
-    ratingContainer.innerHTML = `
-      <div class="rating-stats" id="rating-stats">0 Ratings</div>
-      <div class="stars-wrapper" id="stars-group">
-        <button class="star-btn" data-value="5">
-          <svg viewBox="0 0 24 24"><path d="M12 .587l3.668 7.431 8.2 1.192-5.934 5.787 1.4 8.168L12 18.896l-7.334 3.857 1.4-8.168L.132 9.21l8.2-1.192z"/></svg>
-        </button>
-        <button class="star-btn" data-value="4">
-          <svg viewBox="0 0 24 24"><path d="M12 .587l3.668 7.431 8.2 1.192-5.934 5.787 1.4 8.168L12 18.896l-7.334 3.857 1.4-8.168L.132 9.21l8.2-1.192z"/></svg>
-        </button>
-        <button class="star-btn" data-value="3">
-          <svg viewBox="0 0 24 24"><path d="M12 .587l3.668 7.431 8.2 1.192-5.934 5.787 1.4 8.168L12 18.896l-7.334 3.857 1.4-8.168L.132 9.21l8.2-1.192z"/></svg>
-        </button>
-        <button class="star-btn" data-value="2">
-          <svg viewBox="0 0 24 24"><path d="M12 .587l3.668 7.431 8.2 1.192-5.934 5.787 1.4 8.168L12 18.896l-7.334 3.857 1.4-8.168L.132 9.21l8.2-1.192z"/></svg>
-        </button>
-        <button class="star-btn" data-value="1">
-          <svg viewBox="0 0 24 24"><path d="M12 .587l3.668 7.431 8.2 1.192-5.934 5.787 1.4 8.168L12 18.896l-7.334 3.857 1.4-8.168L.132 9.21l8.2-1.192z"/></svg>
-        </button>
-      </div>
-    `;
-    
     if (titleEl) mainWrapper.appendChild(titleEl); 
     if (descEl) mainWrapper.appendChild(descEl);   
     if (playBtn) mainWrapper.appendChild(playBtn); 
-    
-    // Injected directly underneath the play button
-    mainWrapper.appendChild(ratingContainer);
     
     // INJECTION FIX: Insert at the absolute top of the body to block ghost HTML elements from creating top whitespace
     document.body.insertBefore(mainWrapper, document.body.firstChild);
@@ -274,81 +243,7 @@ async function checkContinueWatchingStatus() {
 }
 
 // ==========================================================================
-// 4. MOVIE RATINGS MANAGEMENT ENGINE
-// ==========================================================================
-
-async function initializeRatingSystem(movieId) {
-  // Replace this with your actual running Cloudflare Worker domain address
-  const API_BASE = "https://your-worker-subdomain.workers.dev"; 
-  const SESSION_TOKEN = localStorage.getItem("session_token") || "";
-
-  const statsElement = document.getElementById("rating-stats");
-  const starButtons = document.querySelectorAll(".star-btn");
-
-  if (!statsElement || starButtons.length === 0) return;
-
-  async function loadRatings() {
-    try {
-      const res = await fetch(`${API_BASE}/api/get-rating?movieId=${encodeURIComponent(movieId)}`, {
-        method: "GET",
-        headers: { "Authorization": `Bearer ${SESSION_TOKEN}` }
-      });
-      const data = await res.json();
-      
-      if (res.ok) {
-        statsElement.textContent = `${data.totalRatings} Ratings`;
-        highlightStars(data.userRating || 0);
-      }
-    } catch (err) {
-      console.error("Error loading rating setup:", err);
-    }
-  }
-
-  function highlightStars(ratingValue) {
-    starButtons.forEach(btn => {
-      const val = parseInt(btn.getAttribute("data-value"));
-      if (val <= ratingValue) {
-        btn.classList.add("active");
-      } else {
-        btn.classList.remove("active");
-      }
-    });
-  }
-
-  starButtons.forEach(button => {
-    button.addEventListener("click", async () => {
-      const selectedRating = parseInt(button.getAttribute("data-value"));
-      highlightStars(selectedRating);
-
-      try {
-        const res = await fetch(`${API_BASE}/api/rate`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${SESSION_TOKEN}`
-          },
-          body: JSON.stringify({ movieId: movieId, rating: selectedRating })
-        });
-
-        const data = await res.json();
-
-        if (res.ok) {
-          statsElement.textContent = `${data.totalRatings} Ratings`;
-        } else {
-          console.error("Worker rating error:", data.error);
-        }
-      } catch (err) {
-        console.error("Error sending rating details:", err);
-      }
-    });
-  });
-
-  // Call the initial fetching state
-  loadRatings();
-}
-
-// ==========================================================================
-// 5. USER INTERACTIVE NAVIGATION CONTROLS
+// 4. USER INTERACTIVE NAVIGATION CONTROLS
 // ==========================================================================
 
 function play() {
@@ -366,7 +261,7 @@ function goBack() {
 }
 
 // ==========================================================================
-// 6. GLOBAL STYLE DECORATORS & FADING OVERLAYS (UI/UX)
+// 5. GLOBAL STYLE DECORATORS & FADING OVERLAYS (UI/UX)
 // ==========================================================================
 
 (function () {
@@ -408,72 +303,9 @@ function goBack() {
     }
     
     /* Forces elements out of the stacking index loop to sit cleanly over the fade overlay */
-    #title, #desc, .play-btn, .back-btn, .text-container-wrapper, .info-container, .rating-container {
+    #title, #desc, .play-btn, .back-btn, .text-container-wrapper, .info-container {
       position: relative;
       z-index: 2;
-    }
-
-    /* Rating Component Core Styles */
-    .rating-container {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      background: rgba(34, 34, 34, 0.7);
-      padding: 10px 18px;
-      border-radius: 8px;
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      margin-top: 15px;
-    }
-
-    .rating-stats {
-      font-size: 0.9rem;
-      color: #b3b3b3;
-      font-weight: bold;
-      font-family: sans-serif;
-    }
-
-    .stars-wrapper {
-      display: flex;
-      flex-direction: row-reverse;
-    }
-
-    .star-btn {
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 0 2px;
-      outline: none;
-    }
-
-    .star-btn svg {
-      width: 26px;
-      height: 26px;
-      transition: transform 0.1s ease;
-    }
-
-    /* DEFAULT STATE: White fill, black outline */
-    .star-btn svg path {
-      fill: #ffffff;
-      stroke: #000000;
-      stroke-width: 2px;
-    }
-
-    /* HOVER & ACTIVE STATE: Black fill, white outline */
-    .star-btn:hover svg,
-    .star-btn:hover ~ .star-btn svg,
-    .star-btn.active svg,
-    .star-btn.active ~ .star-btn svg {
-      transform: scale(1.1);
-    }
-
-    .star-btn:hover svg path,
-    .star-btn:hover ~ .star-btn svg path,
-    .star-btn.active svg path,
-    .star-btn.active ~ .star-btn svg path {
-      fill: #000000;
-      stroke: #ffffff;
-      stroke-width: 1.5px;
     }
 
     /* ==========================================
@@ -579,14 +411,6 @@ function goBack() {
         position: relative;
         z-index: 4;
       }
-
-      /* Rating Container sits cleanly under the Play Button in Row 4 */
-      .rating-container {
-        grid-column: 1 / span 2;
-        grid-row: 4;
-        align-self: flex-start !important;
-        justify-self: start !important;
-      }
       
       .back-btn {
         position: fixed;
@@ -646,17 +470,11 @@ function goBack() {
         justify-content: center !important;
         align-items: center !important;
       }
-
-      /* Centers the rating system nicely beneath the play button in portrait */
-      .rating-container {
-        margin: 15px auto 0 auto !important;
-        display: inline-flex !important;
-        justify-content: center !important;
-        align-items: center !important;
-      }
       
       /* Note: .back-btn is left completely untouched here, keeping its native template placement intact */
     }
   `;
   document.head.appendChild(style);
 })();
+
+
