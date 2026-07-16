@@ -20,7 +20,7 @@ window.videoData = {
     { 
       label: "Arabic", 
       lang: "ar", 
-      src: "../Subtitles/Barbie/Barbie-Arabic.txt"
+      src: "../subtitles/Barbie/Barbie-Arabic.txt"
     }
     ],
   "TheSocialNetwork": "https://dl.dropboxusercontent.com/scl/fi/3x4ht4mp93dzoja3f5a4h/The-Social-Network-2010-720p-BrRip-x264.mp4?rlkey=e6fkuur578xn7qv1ll3pk8x35&st=0sruvxjh&dl=1",
