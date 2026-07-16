@@ -16,7 +16,7 @@ window.videoData = {
   "JohnWick4": "https://dl.dropboxusercontent.com/scl/fi/o1a49oi393nd0nhhjhm6y/John.Wick.Chapter.4.2023.mkv?rlkey=hk3c46dbpx2trlptjqeuv0i7p&st=3j74an96&dl=1",
   "CatchMeIfYouCan": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Movies/4531148.mkv",
   "Barbie2023": "https://dl.dropboxusercontent.com/scl/fi/hq78j526i9a7np9i1qtx7/Barbie.2023.WEBRip.mkv?rlkey=42pcrbnfwobaq1mp5lcafnoh2&st=qr279ra0&dl=1",
-  "Barbie-subs": [
+  "Barbie2023-subs": [
     { 
       label: "Arabic", 
       lang: "ar", 
