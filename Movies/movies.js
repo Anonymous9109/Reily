@@ -628,6 +628,12 @@ const movies = {
     desc: "A strange doorway appears in the basement of a furniture showroom, leading to an endless network of interconnected rooms where time bends and the only thing scarier than getting lost is the sense that something is lying in wait.",
     video: "",
     play: "Backrooms"
+  },
+  "almost-heroes": {
+    title: "Almost Heroes",
+    desc: "Bartholomew Hunt and Leslie Edwards are explorers who are trying to outdo their rivals Lewis and Clark. Their journey opens doors to unexpected adventures and experiences.",
+    video: "",
+    play: "AlmostHeroes"
   }
 };
 
