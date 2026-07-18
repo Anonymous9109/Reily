@@ -548,6 +548,12 @@ const movies = [
     genres: ["Sci-fi","Horror"],
     image: "images/Backrooms.jpg",
     link: "Movies/Movie?movie=backrooms"
+  },
+  {
+    title: "Almost Heroes",
+    genres: ["Comedy"],
+    image: "images/AlmostHeroes.jpg",
+    link: "Movies/Movie?movie=almost-heroes"
   }
 ];
 
