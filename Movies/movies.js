@@ -622,6 +622,12 @@ const movies = {
     desc: "Viktor, who hails from Krakozhia, lands at John F Kennedy International Airport but finds out that his passport is revoked by the airport authorities due to a civil war between the two countries.",
     video: "",
     play: "TheTerminal"
+  },
+  "backrooms": {
+    title: "Backrooms",
+    desc: "A strange doorway appears in the basement of a furniture showroom, leading to an endless network of interconnected rooms where time bends and the only thing scarier than getting lost is the sense that something is lying in wait.",
+    video: "",
+    play: "Backrooms"
   }
 };
 
