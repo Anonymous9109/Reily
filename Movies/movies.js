@@ -634,6 +634,12 @@ const movies = {
     desc: "Bartholomew Hunt and Leslie Edwards are explorers who are trying to outdo their rivals Lewis and Clark. Their journey opens doors to unexpected adventures and experiences.",
     video: "",
     play: "AlmostHeroes"
+  },
+  "white-chicks": {
+    title: "White Chicks",
+    desc: "Two disgraced FBI agents, Kevin Copeland and Marcus Copeland, are assigned a new case where they must protect Tiffany and Brittany Wilson, two cruise line heiresses, from getting abducted.",
+    video: "",
+    play: "WhiteChicks"
   }
 };
 
