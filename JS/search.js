@@ -572,6 +572,12 @@ const movies = [
     genres: ["Adventure","Mystery"],
     image: "images/EnolaHolmes.jpg",
     link: "Movies/Movie?movie=enola-holmes"
+  },
+  {
+    title: "Enola Holmes 2",
+    genres: ["Mystery","Adventure"],
+    image: "images/EnolaHolmes2.jpg",
+    link: "Movies/Movie?movie=enola-holmes-2"
   }
 ];
 
