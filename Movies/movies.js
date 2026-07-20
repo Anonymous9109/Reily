@@ -646,6 +646,12 @@ const movies = {
     desc: "Two friends, an unemployed slacker and a small-time drug dealer, find themselves indebted to a gangster. They set out to secure money to save themselves from being killed.",
     video: "",
     play: "Friday"
+  },
+  "enola-holmes": {
+    title: "Enola Holmes",
+    desc: "Overshadowed by the legacy of her brothers, an intrepid teenager sets out to prove herself after her mother disappears. While forming unlikely alliances along the way, she discovers her true worth.",
+    video: "",
+    play: "EnolaHolmes"
   }
 };
 
