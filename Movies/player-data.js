@@ -148,6 +148,34 @@ window.videoData = {
   "SevenPounds": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Movies/1485114524.mp4",
   "TheTerminal": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Movies/61687515.mp4",
   "Backrooms": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Movies/18124809918.mp4",
-  "AlmostHeroes": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Movies/1835375018.mp4"
+  "AlmostHeroes": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Movies/1835375018.mp4",
+  "WhiteChicks": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Movies/2015108820.mp4",
+    "WhiteChicks-subs": [
+      {
+        label: "English",
+        lang: "en",
+        src: "../subtitles/WhiteChicks/WhiteChicks-english.txt"
+      },
+      {
+        label: "Spanish",
+        lang: "es",
+        src: "../subtitles/WhiteChicks/WhiteChicks-spanish.txt"
+      },
+      {
+        label: "Arabic",
+        lang: "ar",
+        src: "../subtitles/WhiteChicks/WhiteChicks-arabic.txt"
+      },
+      {
+        label: "Greek",
+        lang: "el",
+        src: "../subtitles/WhiteChicks/WhiteChicks-greek.txt"
+      },
+      {
+        label: "Malay",
+        lang: "ms",
+        src: "../subtitles/WhiteChicks/WhiteChicks-malay.txt"
+      }
+    ]
 };
 
