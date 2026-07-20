@@ -194,6 +194,19 @@ window.videoData = {
         lang: "ar",
         src: "../subtitles/Friday/Friday-arabic.txt"
       }
+    ],
+  "EnolaHolmes": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Movies/2053411020.mp4",
+    "EnolaHolmes-subs": [
+      {
+        label: "English",
+        lang: "en",
+        src: "../subtitles/EnolaHolmes/EnolaHolmes-english.vtt"
+      },
+      {
+        label: "Arabic",
+        lang: "ar",
+        src: "../subtitles/EnolaHolmes/EnolaHolmes-arabic.vtt"
+      }
     ]
 };
 
