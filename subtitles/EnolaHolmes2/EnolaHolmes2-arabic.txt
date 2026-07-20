@@ -28,9 +28,8 @@
 00:00:52.083 --> 00:00:53.125
 ‫‫أوقفوها!‬
 
-00:00:53.149 --> 00:01:08.149
-{\fad(400,200)\1c&H000000&\3c&HFFE87C&\bord2}<b><font face="Arabic Typesetting" size="22"><font face="29LT Bukra Bold"><font color="#ff0000"># الأصلية NETFLIX ترجمة #</font>
-{\fad(400,200)\1c&H000000&\3c&HFFE87C&\bord2}<b><font face="Arabic Typesetting" size="16"><font face="29LT Bukra Bold">|| MUHAMMED KHAN سحب و رفع ||
+
+
 
 00:01:09.166 --> 00:01:10.708
 ‫‫ربما يجب أن أشرح.‬
@@ -5516,7 +5515,3 @@
 02:04:09.458 --> 02:04:12.083
 ‫{\an8}‫"من هو رفيق (شيرلوك) الجديد؟"‬
 
-02:08:43.166 --> 02:08:48.166
-‫‫ترجمة "موريال ضو"‬
-{\fad(400,200)\1c&H000000&\3c&HFFE87C&\bord2}<b><font face="Arabic Typesetting" size="22"><font face="29LT Bukra Bold"><font color="#ff0000"># الأصلية NETFLIX ترجمة #</font>
-{\fad(400,200)\1c&H000000&\3c&HFFE87C&\bord2}<b><font face="Arabic Typesetting" size="16"><font face="29LT Bukra Bold">|| MUHAMMED KHAN سحب و رفع ||
