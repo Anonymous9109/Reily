@@ -1,0 +1,5567 @@
+﻿WEBVTT
+
+00:00:38.083 --> 00:00:39.163
+Stop, police!
+
+00:00:40.458 --> 00:00:42.166
+Stop that girl!
+
+00:00:43.125 --> 00:00:44.601
+Excuse me!
+
+00:00:46.083 --> 00:00:47.559
+- Terribly sorry.
+- Oi!
+
+00:00:47.583 --> 00:00:50.083
+Watch where you're sodding going!
+
+00:00:52.083 --> 00:00:53.125
+Stop her!
+
+00:01:09.208 --> 00:01:10.541
+Perhaps I should explain.
+
+00:01:13.500 --> 00:01:14.958
+<i>My name is Enola Holmes.</i>
+
+00:01:15.041 --> 00:01:16.666
+<i>You may remember me.</i>
+
+00:01:17.666 --> 00:01:19.333
+<i>After solving my first case...</i>
+
+00:01:19.875 --> 00:01:21.583
+Hello.
+
+00:01:22.458 --> 00:01:23.958
+<i>...I started a business.</i>
+
+00:01:25.125 --> 00:01:26.833
+<i>A detective agency.</i>
+
+00:01:28.166 --> 00:01:31.375
+<i>Open and ready for my first clients.</i>
+
+00:01:32.333 --> 00:01:35.583
+<i>I was going to join the pantheon
+of great Victorian detectives.</i>
+
+00:01:36.208 --> 00:01:37.476
+<i>- Detective Field.
+- Yes.</i>
+
+00:01:37.500 --> 00:01:38.892
+<i>- Mackenzie Macintosh.
+- Hi.</i>
+
+00:01:38.916 --> 00:01:40.636
+<i>- Sir Alfred Hornblower.
+- Tally-ho!</i>
+
+00:01:40.708 --> 00:01:44.166
+<i>And the infamous Reginald Swain.</i>
+
+00:01:44.250 --> 00:01:47.541
+<i>And best of all,
+I would be joining my brother.</i>
+
+00:01:47.625 --> 00:01:48.791
+<i>I would be his equal.</i>
+
+00:01:50.625 --> 00:01:52.666
+<i>A detective in my own right,</i>
+
+00:01:53.791 --> 00:01:55.666
+<i>worthy of the Holmes name.</i>
+
+00:01:57.333 --> 00:01:58.458
+Congratulations.
+
+00:02:01.750 --> 00:02:03.583
+<i>Or so I thought.</i>
+
+00:02:09.166 --> 00:02:11.166
+Am I addressing the secretary?
+
+00:02:12.000 --> 00:02:13.708
+You're how old?
+
+00:02:13.791 --> 00:02:16.391
+- Stone the crows, you're young.
+- My age is an advantage.
+
+00:02:16.458 --> 00:02:20.208
+I can go to places others can't,
+explore where others won't.
+
+00:02:20.291 --> 00:02:22.375
+And I can fight. I know jujitsu.
+
+00:02:25.791 --> 00:02:28.125
+But you're a girl.
+
+00:02:28.208 --> 00:02:30.000
+Yes, I am. Um...
+
+00:02:30.083 --> 00:02:32.208
+What experience have you had?
+
+00:02:35.208 --> 00:02:38.000
+- The Tewkesbury case?
+- Well, that was Sherlock Holmes.
+
+00:02:38.083 --> 00:02:39.226
+- That was Sherlock...
+- Sherlock...
+
+00:02:39.250 --> 00:02:43.083
+- Sherlock Holmes, wasn't it?
+- I assure you, it was mine.
+
+00:02:43.166 --> 00:02:46.083
+Good man, that Tewkesbury. Brave lad.
+
+00:02:46.166 --> 00:02:47.166
+- Tell me...
+- Tell me...
+
+00:02:47.208 --> 00:02:49.125
+- Tell me...
+- Yes?
+
+00:02:50.083 --> 00:02:51.375
+Might your brother be free?
+
+00:02:53.000 --> 00:02:55.833
+Read all about it! Read all about it!
+
+00:02:55.916 --> 00:02:59.708
+Sherlock Holmes
+and the case of the Brixton corpse.
+
+00:02:59.791 --> 00:03:01.208
+<i>So, my brother.</i>
+
+00:03:01.958 --> 00:03:05.875
+<i>While I had not a single case,
+Sherlock has been drowning in them.</i>
+
+00:03:07.958 --> 00:03:10.875
+<i>Though his latest
+appears to be vexing him.</i>
+
+00:03:12.958 --> 00:03:15.916
+<i>My mother, meanwhile, is still on the run.</i>
+
+00:03:17.791 --> 00:03:20.208
+<i>And trying not to draw
+attention to herself.</i>
+
+00:03:23.583 --> 00:03:25.916
+<i>Though that's never
+been her forte.</i>
+
+00:03:41.291 --> 00:03:45.666
+<i>Yes, and then there is... him.</i>
+
+00:03:45.750 --> 00:03:49.291
+My lords,
+reform is not a task to be accomplished,
+
+00:03:49.375 --> 00:03:50.958
+nor a bill that can be passed.
+
+00:03:51.500 --> 00:03:54.083
+Rather it is a constant need for change.
+
+00:03:56.583 --> 00:04:01.250
+<i>Lord Tewkesbury,
+the champion of change and progress.</i>
+
+00:04:01.750 --> 00:04:04.375
+<i>A man to approach with the noblest cause.</i>
+
+00:04:05.166 --> 00:04:10.458
+<i>♪ Till we have built Jerusalem ♪</i>
+
+00:04:16.916 --> 00:04:19.041
+<i>But I had no time
+for distractions.</i>
+
+00:04:19.125 --> 00:04:21.416
+<i>And besides, he's still a nincompoop.</i>
+
+00:04:22.541 --> 00:04:25.833
+Too many people
+make it their sole purpose in life
+
+00:04:25.916 --> 00:04:28.250
+to fit into the world around them.
+
+00:04:29.333 --> 00:04:30.666
+This is a mistake.
+
+00:04:31.833 --> 00:04:33.750
+It's your path, Enola.
+
+00:04:34.750 --> 00:04:36.333
+<i>Sometimes, you'll stumble.</i>
+
+00:04:37.500 --> 00:04:38.916
+<i>Sometimes, you'll fall.</i>
+
+00:04:39.583 --> 00:04:41.708
+<i>But no matter how lost you feel,</i>
+
+00:04:42.375 --> 00:04:44.166
+<i>if you stay true to yourself,</i>
+
+00:04:44.666 --> 00:04:47.708
+<i>the path will always find you again.</i>
+
+00:04:50.750 --> 00:04:53.708
+<i>But my path, it seemed,
+had come to an end.</i>
+
+00:04:56.250 --> 00:04:57.250
+<i>I was a failure.</i>
+
+00:04:59.583 --> 00:05:01.250
+<i>All I could do now was go home.</i>
+
+00:05:25.750 --> 00:05:26.750
+Enola Holmes?
+
+00:05:27.333 --> 00:05:28.333
+Yes?
+
+00:05:28.708 --> 00:05:30.416
+I've come to the right place then.
+
+00:05:32.708 --> 00:05:34.500
+Is it true you find lost people?
+
+00:05:37.916 --> 00:05:39.083
+Where did you get this?
+
+00:05:39.750 --> 00:05:40.750
+It's months old.
+
+00:05:41.250 --> 00:05:42.583
+I found it on the street.
+
+00:05:44.875 --> 00:05:45.916
+Who have you lost?
+
+00:05:48.583 --> 00:05:49.583
+My sister.
+
+00:06:04.625 --> 00:06:05.625
+Watch the gap.
+
+00:06:13.791 --> 00:06:15.500
+She disappeared a week ago.
+
+00:06:16.041 --> 00:06:19.083
+Everyone says she's run away,
+but Sarah wouldn't do that,
+
+00:06:19.166 --> 00:06:20.166
+not to me.
+
+00:06:21.291 --> 00:06:22.750
+She's my only family now.
+
+00:06:27.166 --> 00:06:28.166
+This way.
+
+00:06:31.791 --> 00:06:33.500
+The other girls are still at work.
+
+00:06:36.750 --> 00:06:37.750
+Tea?
+
+00:06:38.833 --> 00:06:39.833
+Thank you.
+
+00:06:41.666 --> 00:06:42.875
+Might I see her bedroom?
+
+00:06:43.500 --> 00:06:44.625
+Ours, you mean?
+
+00:06:45.875 --> 00:06:47.291
+You're standing in it.
+
+00:06:50.583 --> 00:06:53.125
+We're lucky.
+Most girls here are five to a room.
+
+00:06:58.875 --> 00:06:59.875
+This might help.
+
+00:07:03.750 --> 00:07:06.458
+Oh. Sarah likes
+to leave cheese out for 'em.
+
+00:07:08.208 --> 00:07:09.208
+She's soft.
+
+00:07:12.666 --> 00:07:14.750
+What does she look like, Sarah?
+
+00:07:14.833 --> 00:07:16.458
+About this tall.
+
+00:07:17.458 --> 00:07:18.291
+Pretty.
+
+00:07:18.375 --> 00:07:19.500
+Very pretty.
+
+00:07:19.583 --> 00:07:22.541
+Green eyes, red hair, freckles...
+
+00:07:22.625 --> 00:07:23.875
+Red hair?
+
+00:07:24.583 --> 00:07:26.666
+We weren't sisters in the usual way.
+
+00:07:27.250 --> 00:07:28.250
+Found sisters.
+
+00:07:29.041 --> 00:07:30.041
+Sarah took her in.
+
+00:07:30.833 --> 00:07:32.291
+Who's this, Bess?
+
+00:07:32.958 --> 00:07:35.208
+- Enola Holmes.
+- She's a detective.
+
+00:07:35.291 --> 00:07:37.291
+She looks like
+she'll blow over in the wind.
+
+00:07:37.375 --> 00:07:38.375
+Mae!
+
+00:07:41.625 --> 00:07:45.416
+So, Bessie, what was Sarah wearing
+the day she disappeared?
+
+00:07:46.458 --> 00:07:48.208
+- What's she doing?
+- Shh.
+
+00:07:48.791 --> 00:07:50.083
+She's wasting her time.
+
+00:07:51.083 --> 00:07:53.250
+It was her other dress, the green one.
+
+00:07:56.125 --> 00:07:57.458
+Does she like reading?
+
+00:07:57.541 --> 00:07:59.583
+Oh yes. She taught herself.
+
+00:08:00.208 --> 00:08:03.375
+Sarah said you had to learn about
+the world if you're gonna live in it.
+
+00:08:08.750 --> 00:08:09.750
+Makeup.
+
+00:08:11.125 --> 00:08:12.250
+Did she have a suitor?
+
+00:08:12.333 --> 00:08:15.208
+Nah. But there's plenty
+have taken an interest.
+
+00:08:18.375 --> 00:08:19.916
+She weren't much of a gardener.
+
+00:08:23.583 --> 00:08:25.958
+Look, how about you quit sniffing round?
+
+00:08:26.041 --> 00:08:28.250
+Quiet, Mae!
+Just let her do her job.
+
+00:08:43.541 --> 00:08:47.208
+The 12th of March.
+Does that date mean anything to you?
+
+00:08:47.291 --> 00:08:48.291
+That's enough.
+
+00:08:48.791 --> 00:08:50.833
+We don't need help from people like you.
+
+00:08:51.583 --> 00:08:53.708
+I found her, so she's staying.
+
+00:08:58.541 --> 00:09:00.941
+Bloody girls poking their nose in.
+
+00:09:02.166 --> 00:09:04.916
+- And she didn't leave a note?
+- Just this.
+
+00:09:07.833 --> 00:09:10.916
+She worked two jobs, you see.
+We couldn't get by without it.
+
+00:09:11.000 --> 00:09:12.708
+Washed glasses at a pub.
+
+00:09:13.291 --> 00:09:15.333
+Some place called The Stag Antlers.
+
+00:09:16.500 --> 00:09:17.500
+You can have it.
+
+00:09:18.250 --> 00:09:22.416
+Oh. No, it's all right.
+We'll figure that out later.
+
+00:09:23.291 --> 00:09:25.916
+So tell me,
+when was the last time you saw her?
+
+00:09:26.000 --> 00:09:29.208
+A week ago, at the match factory.
+
+00:09:29.291 --> 00:09:32.916
+She had a fight with Mr. Crouch,
+the foreman, in his office.
+
+00:09:33.000 --> 00:09:35.208
+- What about?
+- He said she was thieving.
+
+00:09:35.708 --> 00:09:36.916
+But Sarah's honest.
+
+00:09:37.000 --> 00:09:39.958
+The match factory,
+is that where she works?
+
+00:09:40.041 --> 00:09:43.291
+Where we all work.
+We're match girls, ain't we?
+
+00:09:45.000 --> 00:09:49.416
+- Then that's where we'll start.
+- So you'll take it? You'll take the case?
+
+00:09:53.625 --> 00:09:54.875
+Thank you, Miss Holmes.
+
+00:09:55.416 --> 00:09:56.416
+Thank you.
+
+00:09:58.041 --> 00:10:00.333
+<i>At last, my first case.</i>
+
+00:10:00.416 --> 00:10:01.791
+<i>Well, actually, my second.</i>
+
+00:10:02.375 --> 00:10:04.208
+<i>I shall find you, Sarah Chapman.</i>
+
+00:10:04.291 --> 00:10:08.375
+<i>Red hair, green dress,
+makeup, science books, 12th March.</i>
+
+00:10:08.458 --> 00:10:09.833
+<i>Whatever you've been up to...</i>
+
+00:10:12.166 --> 00:10:13.625
+<i>...the game is afoot.</i>
+
+00:10:15.041 --> 00:10:16.916
+Stay with me. Follow my way.
+
+00:10:18.750 --> 00:10:23.083
+- How many girls work here?
+- Five hundred, maybe six.
+
+00:10:24.541 --> 00:10:25.583
+How do I look?
+
+00:10:25.666 --> 00:10:28.791
+- Is my neckerchief all right?
+- Oh, well, it's around your neck.
+
+00:10:29.833 --> 00:10:30.833
+Morning, Bessie.
+
+00:10:30.916 --> 00:10:31.916
+Morning, Doris.
+
+00:10:38.375 --> 00:10:39.458
+<i>Mouth.</i>
+
+00:10:40.666 --> 00:10:41.666
+Mouth.
+
+00:10:43.041 --> 00:10:44.250
+- Mouth.
+- Come on.
+
+00:10:45.208 --> 00:10:46.666
+- Next.
+- Out.
+
+00:10:46.750 --> 00:10:48.791
+- Please, Mr. Crouch.
+- I said, out.
+
+00:10:49.500 --> 00:10:51.833
+- Mouth.
+- What are you looking at?
+
+00:10:52.541 --> 00:10:55.166
+Oi, new girl.
+Name in the register.
+
+00:11:02.000 --> 00:11:03.000
+Mouth.
+
+00:11:04.583 --> 00:11:06.916
+- What are you looking for?
+- Typhus.
+
+00:11:15.125 --> 00:11:16.541
+That's the phosphorus.
+
+00:11:17.458 --> 00:11:19.666
+Don't worry, you get used to the smell.
+
+00:11:29.708 --> 00:11:31.458
+Is this where she worked?
+
+00:11:32.458 --> 00:11:33.875
+Put the matches on the comb...
+
+00:11:36.291 --> 00:11:37.291
+slide 'em along,
+
+00:11:38.375 --> 00:11:39.541
+up and into the box.
+
+00:11:40.250 --> 00:11:41.250
+Simple enough.
+
+00:11:43.125 --> 00:11:45.416
+You try.
+
+00:11:58.458 --> 00:12:00.333
+That is a penny off your wages.
+
+00:12:01.458 --> 00:12:04.250
+She's just learning the way,
+Mr. Crouch.
+
+00:12:04.333 --> 00:12:07.166
+She better learn quicker,
+or it's a penny off yours too.
+
+00:12:08.083 --> 00:12:09.833
+Anyone else want a money dock?
+
+00:12:10.583 --> 00:12:11.833
+How about you, eh?
+
+00:12:12.458 --> 00:12:14.083
+No, didn't think so.
+
+00:12:17.291 --> 00:12:18.458
+Right, back to work.
+
+00:12:25.208 --> 00:12:27.041
+I need to get up into that office.
+
+00:12:27.541 --> 00:12:28.958
+Not a hope.
+
+00:12:42.541 --> 00:12:43.875
+No talking.
+
+00:12:45.708 --> 00:12:48.083
+<i>All it takes is one small thing</i>
+
+00:12:48.166 --> 00:12:50.583
+to change the rules of the world.
+
+00:13:10.916 --> 00:13:13.291
+Oi. Faster fingers, faster fingers.
+
+00:13:18.000 --> 00:13:19.000
+Hurrah!
+
+00:13:19.625 --> 00:13:21.250
+How did that bloody happen, eh?
+
+00:13:22.666 --> 00:13:23.750
+Well, pick 'em up.
+
+00:13:24.541 --> 00:13:25.541
+Oi, pick 'em up.
+
+00:13:26.166 --> 00:13:27.416
+Pick 'em up, pick 'em up.
+
+00:13:31.875 --> 00:13:33.916
+Right! Back to work.
+
+00:13:38.833 --> 00:13:40.083
+Why were you here?
+
+00:13:44.125 --> 00:13:45.333
+Come on, girls.
+
+00:13:47.750 --> 00:13:48.958
+Red.
+
+00:13:49.041 --> 00:13:50.333
+Time's a-wasting.
+
+00:13:51.833 --> 00:13:53.333
+Don't you look at me like that, girl.
+
+00:14:05.500 --> 00:14:07.958
+Oi, stop talking!
+
+00:14:15.375 --> 00:14:18.000
+Green eyes, red hair.
+
+00:14:22.833 --> 00:14:24.708
+So you did steal something.
+
+00:14:25.250 --> 00:14:30.041
+Charles! This is not what I was
+expecting when we made our arrangement.
+
+00:14:30.125 --> 00:14:31.875
+This is blatant extortion.
+
+00:14:31.958 --> 00:14:32.958
+Criminal!
+
+00:14:33.750 --> 00:14:36.250
+- My pockets are empty.
+- You think mine full?
+
+00:14:36.333 --> 00:14:39.458
+You gave me your word you'd find
+whoever was doing this to us.
+
+00:14:40.125 --> 00:14:42.541
+You sound almost threatening, Mr. Lyon.
+
+00:14:42.625 --> 00:14:45.791
+This is not what I expected
+when we began our arrangement.
+
+00:14:47.041 --> 00:14:49.125
+And now theft, on top of everything else.
+
+00:14:49.208 --> 00:14:52.708
+- You heard the man. Get this dealt with.
+- Come along, William.
+
+00:14:56.916 --> 00:15:00.375
+Sir, do you have any suspicions
+as to who this perpetrator might be?
+
+00:15:00.458 --> 00:15:02.541
+Would I be asking you if I did?
+
+00:15:05.541 --> 00:15:09.750
+But, sir, perhaps if we were to consider
+whether this theft is connected.
+
+00:15:09.833 --> 00:15:12.416
+- I have ideas...
+- Did I ask for your advice?
+
+00:15:13.083 --> 00:15:15.125
+Or did I simply tell you to get it done?
+
+00:15:15.958 --> 00:15:18.000
+I'll make sure the right people know, sir.
+
+00:15:24.333 --> 00:15:25.333
+Miss Troy!
+
+00:15:25.833 --> 00:15:26.875
+Yes, sir.
+
+00:15:28.000 --> 00:15:31.500
+Our ladies are working at the highest
+level of production and efficiency.
+
+00:15:31.583 --> 00:15:33.208
+- Are they not, William?
+- Yes, Father.
+
+00:15:34.875 --> 00:15:37.666
+Please, if you will...
+
+00:15:37.750 --> 00:15:41.333
+Doris, how are you? How's your sister?
+Is she, um, still unwell?
+
+00:15:41.416 --> 00:15:43.000
+Uh, yes, Mr. Lyon.
+
+00:15:43.708 --> 00:15:44.708
+Typhus.
+
+00:15:46.000 --> 00:15:47.750
+Really is the plague of our time.
+
+00:15:48.625 --> 00:15:51.333
+Two years it's been killing these girls.
+
+00:15:51.416 --> 00:15:52.458
+Breaks my heart.
+
+00:15:53.625 --> 00:15:59.250
+Well, Lord McIntyre, if I might suggest
+a little lunch. I think we've earned it.
+
+00:16:03.625 --> 00:16:06.500
+How did Sarah do it?
+Get into the office?
+
+00:16:06.583 --> 00:16:10.291
+There was a fire at one of the stations.
+Foreman got distracted.
+
+00:16:12.708 --> 00:16:13.708
+Whose station?
+
+00:16:14.375 --> 00:16:15.375
+Mae's?
+
+00:16:15.750 --> 00:16:16.791
+Yes.
+
+00:16:18.041 --> 00:16:20.333
+You're a good detective, Enola Holmes.
+
+00:16:29.833 --> 00:16:32.791
+Everyone thinks detecting
+is a profession littered with rules,
+
+00:16:32.875 --> 00:16:35.125
+but in truth, there's only one.
+
+00:16:35.208 --> 00:16:38.916
+Pull on every loose thread you find.
+
+00:16:41.583 --> 00:16:42.958
+She's a loose thread.
+
+00:16:48.125 --> 00:16:49.583
+So I'm pulling at her.
+
+00:16:53.458 --> 00:16:54.958
+- Oh.
+- Hello, sir.
+
+00:16:55.750 --> 00:16:58.833
+- What a pleasant evening.
+- Young lady, I'm afraid I'm married.
+
+00:17:18.833 --> 00:17:21.708
+Hello, dearie. Forgot your ticket?
+
+00:17:21.791 --> 00:17:25.250
+That's tuppence for a sweet,
+cheating face like yours.
+
+00:17:25.833 --> 00:17:26.916
+Ha'penny a piece.
+
+00:17:28.166 --> 00:17:30.375
+- Genuine toffee.
+- Out of my way, girl.
+
+00:17:30.458 --> 00:17:31.791
+Ha'penny a piece.
+
+00:17:31.875 --> 00:17:33.333
+<i>Where are you, Mae?</i>
+
+00:17:35.166 --> 00:17:36.250
+Excuse me, sir.
+
+00:17:37.666 --> 00:17:39.958
+I've never seen anything like it!
+
+00:17:44.791 --> 00:17:47.583
+And here she comes!
+
+00:17:58.500 --> 00:18:00.875
+One, two,
+a-one, two, three four.
+
+00:18:04.500 --> 00:18:07.916
+<i>♪ Where did you get that hat?
+Where did you get that tile? ♪</i>
+
+00:18:08.500 --> 00:18:11.500
+<i>♪ Isn't it a nobby one
+And just the proper style? ♪</i>
+
+00:18:12.250 --> 00:18:15.875
+<i>♪ I should like to have one
+Just the same as that ♪</i>
+
+00:18:15.958 --> 00:18:19.500
+<i>♪ Where'er I go, they shout
+"Hello, where did you get that hat?" ♪</i>
+
+00:18:19.583 --> 00:18:23.500
+<i>♪ Where'er I go, they shout
+"Hello, where did you get that hat?" ♪</i>
+
+00:18:24.125 --> 00:18:27.875
+<i>♪ Where did you get that hat?
+Where did you get that tile? ♪</i>
+
+00:18:27.958 --> 00:18:31.500
+<i>♪ Isn't it a nobby one
+And just the proper style? ♪</i>
+
+00:18:31.583 --> 00:18:35.125
+<i>♪ I should like to have one
+Just the same as that ♪</i>
+
+00:18:35.708 --> 00:18:41.833
+<i>♪ Where'er I go, they shout
+"Hello, where did you get that hat?" ♪</i>
+
+00:18:46.208 --> 00:18:49.458
+And now, all the way from Shanghai,
+
+00:18:49.541 --> 00:18:53.416
+Mr. Li and his world of illusions!
+
+00:18:56.166 --> 00:18:57.500
+My next trick...
+
+00:19:02.833 --> 00:19:04.916
+You the foozler who took my pan stick?
+
+00:19:05.875 --> 00:19:09.208
+Um, no. I'm looking for a girl called M...
+
+00:19:09.291 --> 00:19:10.291
+Uh...
+
+00:19:11.083 --> 00:19:12.083
+Hm.
+
+00:19:22.291 --> 00:19:23.875
+She worked two jobs, you see.
+
+00:19:24.875 --> 00:19:26.875
+Some place called The Stag Antlers.
+
+00:19:29.125 --> 00:19:32.583
+<i>♪ Where'er I go, they shout
+"Hello, where did you get that hat?" ♪</i>
+
+00:19:39.000 --> 00:19:41.083
+You got five seconds
+to tell me why you're here.
+
+00:19:41.166 --> 00:19:43.666
+Did Sarah work here?
+
+00:19:44.708 --> 00:19:47.250
+She did, didn't she?
+And Bessie doesn't know.
+
+00:19:47.750 --> 00:19:50.708
+There's plenty Bessie don't know.
+And plenty you don't need to tell her.
+
+00:19:50.791 --> 00:19:54.625
+I know you helped her into that office.
+She took those pages. Why?
+
+00:19:55.750 --> 00:19:58.416
+- What's happened to her?
+- Just leave us be, all right?
+
+00:19:59.041 --> 00:20:01.083
+Posh girls like you
+don't belong in this fight.
+
+00:20:04.458 --> 00:20:06.916
+Posh or not,
+one thing I am good at is fighting.
+
+00:20:07.000 --> 00:20:09.458
+Now tell me, where is she hiding
+and what does she know?
+
+00:20:10.333 --> 00:20:11.875
+You got more to you than I thought.
+
+00:20:12.500 --> 00:20:17.583
+Whatever this is,
+Mae is on stage in 30 ticks,
+
+00:20:17.666 --> 00:20:19.416
+and she's still dressed as a gent.
+
+00:20:20.333 --> 00:20:22.708
+So let go of her, now.
+
+00:20:25.875 --> 00:20:28.041
+- Get her out of here.
+- Be my pleasure.
+
+00:20:30.208 --> 00:20:32.708
+Come on.
+
+00:20:35.000 --> 00:20:36.916
+Where did Sarah Chapman do her makeup?
+
+00:20:41.125 --> 00:20:44.000
+Full of secrets that one,
+and not a bad actress.
+
+00:20:44.083 --> 00:20:46.291
+I'd have given her the boot
+if she weren't so good,
+
+00:20:46.375 --> 00:20:48.625
+but she did attract the men
+with big pockets.
+
+00:20:48.708 --> 00:20:50.250
+Always useful that. Shift it.
+
+00:20:52.208 --> 00:20:53.208
+Which men?
+
+00:20:57.541 --> 00:21:01.083
+There was this one gent, society type,
+and he came regular.
+
+00:21:01.166 --> 00:21:06.500
+Very keen on him she was.
+He'd send flowers, letters.
+
+00:21:12.083 --> 00:21:13.083
+His name?
+
+00:21:16.333 --> 00:21:17.583
+Never gave one.
+
+00:21:18.583 --> 00:21:22.541
+You see, they all think there's
+hope. That love is coming their way.
+
+00:21:23.583 --> 00:21:25.000
+But it never is.
+
+00:21:25.083 --> 00:21:27.250
+Blokes like that, they want cheap,
+
+00:21:27.750 --> 00:21:29.375
+but they marry dear.
+
+00:21:33.458 --> 00:21:35.500
+<i>"As we two ate of the fruit of love..."</i>
+
+00:21:35.583 --> 00:21:38.083
+The fruit of love? Ugh.
+
+00:21:38.166 --> 00:21:40.666
+<i>"A bell did ring in the sky above"</i>
+
+00:21:40.750 --> 00:21:43.750
+<i>"So wander that place
+With its blossoms white"</i>
+
+00:21:43.833 --> 00:21:45.833
+<i>"A chapel awaits us out of sight"</i>
+
+00:21:47.791 --> 00:21:48.791
+And a poppy.
+
+00:21:49.500 --> 00:21:50.500
+Is that his name?
+
+00:21:52.541 --> 00:21:53.958
+<i>Why did she leave?</i>
+
+00:21:59.125 --> 00:22:00.833
+<i>Did she run away with this fellow?</i>
+
+00:22:04.125 --> 00:22:05.875
+<i>Or is she running from him?</i>
+
+00:22:07.625 --> 00:22:10.916
+I hope it's the latter.
+His poetry is extremely bad.
+
+00:23:00.958 --> 00:23:02.541
+Be away with you, boy.
+
+00:23:03.083 --> 00:23:04.083
+All right.
+
+00:23:08.208 --> 00:23:10.250
+- Sherlock?
+- Enola.
+
+00:23:11.250 --> 00:23:13.625
+What are you doing here? It's not safe.
+
+00:23:13.708 --> 00:23:15.333
+There are scary people about.
+
+00:23:16.541 --> 00:23:19.141
+Yes, let me know when you meet one.
+
+00:23:19.791 --> 00:23:22.208
+- Brother, are you quite yourself?
+- I'm fine.
+
+00:23:22.291 --> 00:23:25.833
+It was just a disagreement
+over a glass of wine
+
+00:23:26.375 --> 00:23:27.583
+and whose wine it was.
+
+00:23:27.666 --> 00:23:28.666
+And, uh...
+
+00:23:30.541 --> 00:23:33.833
+I find after wine, it's very difficult
+to make your arms and legs move.
+
+00:23:33.916 --> 00:23:34.916
+Let's get you home.
+
+00:23:37.458 --> 00:23:40.000
+I don't usually imbibe,
+but I'm on a case, you see.
+
+00:23:40.083 --> 00:23:42.708
+- It's proven rather tricky.
+- Cab.
+
+00:23:42.791 --> 00:23:44.208
+- Hello.
+- Hello.
+
+00:23:44.708 --> 00:23:47.166
+- Where are we going?
+- 221 Baker Street.
+
+00:23:52.875 --> 00:23:56.416
+<i>As it turns out,
+my brother is medievally heavy.</i>
+
+00:23:56.500 --> 00:24:01.250
+It's like carrying a dead horse
+on which sits another dead horse.
+
+00:24:03.500 --> 00:24:04.916
+That's A, and I'm B.
+
+00:24:09.250 --> 00:24:10.916
+I didn't know you had steps.
+
+00:24:11.000 --> 00:24:14.500
+One should always have steps
+to avoid people stepping on you.
+
+00:24:14.583 --> 00:24:17.708
+That's a tip.
+You should probably write that down.
+
+00:24:17.791 --> 00:24:20.541
+All right. Lift your right leg.
+
+00:24:21.333 --> 00:24:22.333
+Mm-hmm.
+
+00:24:23.875 --> 00:24:24.875
+Now your left.
+
+00:24:26.041 --> 00:24:28.833
+Better leg, the left.
+You should write that down.
+
+00:24:31.333 --> 00:24:32.708
+Here we go.
+
+00:24:34.041 --> 00:24:36.875
+Ha! Home. Well done, Sherlock.
+
+00:24:39.125 --> 00:24:40.125
+I can do it.
+
+00:24:43.666 --> 00:24:44.666
+See?
+
+00:24:50.541 --> 00:24:51.541
+Baker Street.
+
+00:24:58.458 --> 00:25:02.541
+- Oh, but it's such a mess.
+- It's perfect. Don't touch anything.
+
+00:25:02.625 --> 00:25:04.458
+What are you investigating?
+
+00:25:04.541 --> 00:25:06.941
+None of your business.
+I work alone. It's private.
+
+00:25:07.791 --> 00:25:09.291
+Now shh, I'm thinking.
+
+00:25:09.791 --> 00:25:11.875
+One should never be interrupted
+when thinking.
+
+00:25:13.041 --> 00:25:15.125
+- Oh. You should...
+- Write that down?
+
+00:25:17.458 --> 00:25:19.041
+Shh!
+
+00:25:21.000 --> 00:25:22.166
+Don't go in there.
+
+00:25:23.250 --> 00:25:24.333
+No.
+
+00:25:38.375 --> 00:25:40.000
+Sherlock's latest case.
+
+00:25:48.333 --> 00:25:49.458
+Fascinating.
+
+00:25:52.291 --> 00:25:56.000
+And why, pray, have you moved everything?
+
+00:26:00.541 --> 00:26:03.833
+- Nothing looks different to me.
+- Nothing looks different? Ev...
+
+00:26:05.000 --> 00:26:07.125
+Your head is sore? I can't think why.
+
+00:26:07.208 --> 00:26:09.916
+This is why
+I don't have people in my rooms.
+
+00:26:10.708 --> 00:26:14.250
+Look what you've done.
+My papers are entirely out of order.
+
+00:26:15.500 --> 00:26:17.583
+Your case, it's vexing you.
+
+00:26:18.541 --> 00:26:21.708
+Seems to be an awful lot of question marks
+on that map of yours.
+
+00:26:21.791 --> 00:26:23.708
+Dundee cake. Door.
+
+00:26:23.791 --> 00:26:26.125
+- I will see you again.
+<i>- </i>Is that why you're drinking?
+
+00:26:26.208 --> 00:26:29.041
+I'm more than certain...
+...it's not so old.
+
+00:26:29.125 --> 00:26:31.416
+- Maybe I can help.
+- You can help by leaving.
+
+00:26:32.791 --> 00:26:35.958
+Huh. Yes. The world
+will be a much safer place
+
+00:26:36.041 --> 00:26:39.208
+if we don't see the inside
+of Sherlock Holmes, only the out.
+
+00:26:41.208 --> 00:26:42.208
+Crazy idea.
+
+00:26:43.125 --> 00:26:45.208
+Have you ever considered a flatmate?
+
+00:26:45.291 --> 00:26:48.041
+- For what purpose?
+- To stop you descending into this.
+
+00:26:52.375 --> 00:26:53.375
+Strange
+
+00:26:54.083 --> 00:26:58.250
+how those seeking advice
+so often like to dispense it.
+
+00:26:58.333 --> 00:27:01.041
+Did I ask for advice?
+I found you on the street, drunk.
+
+00:27:01.125 --> 00:27:04.333
+- Now what may I observe about you?
+- We're not playing this game.
+
+00:27:04.416 --> 00:27:05.936
+Shoes a state. Hair's not much better.
+
+00:27:06.000 --> 00:27:09.000
+- You and Mycroft are so similar.
+- You need to wash your clothes.
+
+00:27:09.125 --> 00:27:11.208
+- Unwilling to look past...
+- You are pale...
+
+00:27:11.291 --> 00:27:14.208
+- Stop!
+- And then there's your fingernails.
+
+00:27:14.833 --> 00:27:17.666
+- Why are you working in a match factory?
+- What?
+
+00:27:17.750 --> 00:27:21.416
+Last night, they were dirty with green
+traces. This morning, they are black.
+
+00:27:21.500 --> 00:27:24.041
+The phosphorous from the match-making
+has mixed with oxygen.
+
+00:27:24.125 --> 00:27:27.041
+I wasn't in such a state
+as to not see that.
+
+00:27:27.666 --> 00:27:29.642
+- How did you...
+- And your neck is red.
+
+00:27:29.666 --> 00:27:31.586
+Someone has gripped it
+or held a knife against...
+
+00:27:37.500 --> 00:27:39.100
+Are you involved in something dangerous?
+
+00:27:40.125 --> 00:27:41.250
+You are still my ward.
+
+00:27:41.333 --> 00:27:44.041
+If you need my help,
+my offer remains on the table.
+
+00:27:45.583 --> 00:27:48.125
+Don't be so desperate
+to prove yourself, Enola.
+
+00:27:49.666 --> 00:27:54.083
+I am not desperate,
+and I don't need your or anyone's help.
+
+00:27:59.500 --> 00:28:00.625
+But this I will have.
+
+00:28:08.250 --> 00:28:11.041
+How dare he?
+How dare he lecture me?
+
+00:28:11.708 --> 00:28:13.416
+When he can't even solve his own case
+
+00:28:13.500 --> 00:28:16.666
+and he lives in a bed of flummoxing papers
+and bewildering mold.
+
+00:28:16.750 --> 00:28:19.375
+How dare he claim I'm desperate?
+It is not true.
+
+00:28:19.875 --> 00:28:21.750
+- And this is not fair.
+- Enola?
+
+00:28:26.500 --> 00:28:27.500
+It is you.
+
+00:28:29.375 --> 00:28:30.375
+And it is you.
+
+00:28:32.041 --> 00:28:33.041
+How are you?
+
+00:28:34.250 --> 00:28:36.333
+Are you well? You look...
+
+00:28:36.416 --> 00:28:40.708
+I'm on a case. Undercover. Forget
+I told you that piece of information.
+
+00:28:40.791 --> 00:28:44.625
+It's the strangest thing. I could have
+sworn I've seen you here before.
+
+00:28:46.166 --> 00:28:47.166
+Is that right?
+
+00:28:47.208 --> 00:28:50.250
+Well, this is my...
+My route through to the Lords.
+
+00:28:50.916 --> 00:28:53.458
+Is it? How lovely.
+
+00:28:53.541 --> 00:28:56.083
+Well, I... I breakfast here on occasion.
+
+00:28:59.458 --> 00:29:03.750
+I mean, yes, it's a lovely place.
+I-I know the gardener here.
+
+00:29:04.625 --> 00:29:07.000
+We've been discussing
+what to sow for next year's crop.
+
+00:29:07.083 --> 00:29:08.416
+Some fine sunflowers.
+
+00:29:08.500 --> 00:29:11.375
+Uh, Sweet Williams,
+for their lovely vivid reds.
+
+00:29:11.458 --> 00:29:13.000
+I've seen all you're doing.
+
+00:29:14.166 --> 00:29:16.625
+Oh. Well, it's... It's nothing.
+
+00:29:16.708 --> 00:29:18.041
+In the society pages.
+
+00:29:21.791 --> 00:29:23.625
+You are quite the eligible bachelor.
+
+00:29:26.750 --> 00:29:28.125
+Don't believe all you read.
+
+00:29:33.208 --> 00:29:34.250
+I wrote to you.
+
+00:29:36.375 --> 00:29:37.375
+You didn't reply.
+
+00:29:37.875 --> 00:29:38.875
+Uh...
+
+00:29:39.666 --> 00:29:41.583
+I... was busy.
+
+00:29:42.083 --> 00:29:44.625
+Starting my own business.
+A perpetual challenge.
+
+00:29:45.125 --> 00:29:46.833
+Perhaps, not something you'd understand.
+
+00:29:47.625 --> 00:29:50.041
+- Well, Enola, if you need help...
+- I do not.
+
+00:29:51.583 --> 00:29:54.583
+Should my problem become horticultural,
+I shall seek you out.
+
+00:29:56.166 --> 00:29:57.166
+Right.
+
+00:29:57.583 --> 00:30:00.250
+Well, you know where to find me
+
+00:30:02.166 --> 00:30:03.500
+should a plant go missing.
+
+00:30:04.041 --> 00:30:05.583
+I hope you enjoy your breakfast.
+
+00:30:09.916 --> 00:30:10.916
+Yeah.
+
+00:30:15.000 --> 00:30:16.500
+Is he looking back?
+
+00:30:20.583 --> 00:30:22.458
+Oh. Good, he isn't.
+
+00:30:24.750 --> 00:30:26.250
+I don't come here every day.
+
+00:30:27.166 --> 00:30:28.791
+Just on days when I feel a need.
+
+00:30:29.708 --> 00:30:33.833
+And sometimes he doesn't take this path.
+Sometimes he takes the parallel one.
+
+00:30:36.916 --> 00:30:41.125
+You know where to find me.
+
+00:30:46.500 --> 00:30:48.500
+"You know where to find me."
+
+00:30:48.583 --> 00:30:50.125
+<i>"Out of sight"</i>
+
+00:30:50.208 --> 00:30:53.583
+<i>"The chapel awaits us
+With its blossoms white"</i>
+
+00:30:54.166 --> 00:30:55.166
+Whitechapel.
+
+00:30:55.916 --> 00:30:57.666
+<i>"As we two ate of the fruit of love"</i>
+
+00:30:57.750 --> 00:30:59.541
+<i>"As we two ate..."</i>
+
+00:31:00.250 --> 00:31:01.916
+"Two ate." Two-eight.
+
+00:31:02.000 --> 00:31:03.000
+Twenty-eight.
+
+00:31:03.750 --> 00:31:06.458
+<i>"A bell did ring in the sky above"</i>
+
+00:31:06.541 --> 00:31:07.625
+Bell?
+
+00:31:07.708 --> 00:31:08.875
+<i>"So wander that place"</i>
+
+00:31:10.083 --> 00:31:12.166
+Bell. Place. <i>"Out of sight"</i>
+
+00:31:14.083 --> 00:31:17.083
+28 Bell Place, Whitechapel!
+
+00:31:17.166 --> 00:31:18.333
+Shh!
+
+00:31:18.416 --> 00:31:20.041
+Oh, sorry.
+
+00:31:22.750 --> 00:31:24.708
+The game has found its feet again.
+
+00:31:28.875 --> 00:31:30.125
+I will not lie.
+
+00:31:30.208 --> 00:31:33.041
+There is a certain satisfaction
+that you feel as a detective
+
+00:31:33.125 --> 00:31:35.750
+when your case comes closer to resolution.
+
+00:31:35.833 --> 00:31:36.958
+Like sewing a new skirt...
+
+00:31:39.541 --> 00:31:42.416
+...which I don't do,
+or teaching a dog to sit.
+
+00:31:43.416 --> 00:31:46.500
+You begin to glow with the acknowledgement
+of a job well done.
+
+00:31:46.583 --> 00:31:48.500
+There's a new Holmes in town.
+
+00:31:48.583 --> 00:31:51.500
+That's right. Sherlock Holmes
+has met his match.
+
+00:31:52.166 --> 00:31:55.541
+My name will be known,
+and Bessie will have a sister once again.
+
+00:31:56.541 --> 00:31:58.083
+And that is a job well...
+
+00:32:00.791 --> 00:32:01.791
+done.
+
+00:32:26.208 --> 00:32:27.291
+Sarah?
+
+00:32:42.958 --> 00:32:44.541
+What happened here?
+
+00:32:54.958 --> 00:32:56.333
+Mr. Poppy.
+
+00:33:06.958 --> 00:33:08.916
+Oh, Mae.
+
+00:33:11.541 --> 00:33:13.791
+What happened? Who did this to you?
+
+00:33:13.875 --> 00:33:17.750
+Was it him, Sarah's man? Mae!
+
+00:33:18.500 --> 00:33:19.708
+No, no. It's all right.
+
+00:33:20.375 --> 00:33:22.500
+I'll fetch a doctor for you.
+
+00:33:23.916 --> 00:33:25.541
+No! No, no, no.
+
+00:33:26.125 --> 00:33:27.125
+No.
+
+00:33:27.625 --> 00:33:28.458
+Come back.
+
+00:34:05.125 --> 00:34:06.125
+Miss Holmes?
+
+00:34:07.000 --> 00:34:09.750
+Inspector Lestrade.
+
+00:34:09.833 --> 00:34:11.666
+- Enola Holmes.
+- Lestrade.
+
+00:34:11.750 --> 00:34:13.416
+- She... She's...
+- Dead.
+
+00:34:14.958 --> 00:34:15.958
+How'd that happen?
+
+00:34:20.583 --> 00:34:24.333
+Oh, no, no, no. I'm investigating a case.
+A disappearance of a girl.
+
+00:34:24.416 --> 00:34:27.458
+- What, that girl?
+- No. No, no, no. H-Her name is Mae.
+
+00:34:28.000 --> 00:34:31.000
+She worked at the Paragon Theater,
+the matchstick factory.
+
+00:34:31.083 --> 00:34:34.458
+She was a dancer. She's friends...
+
+00:34:48.791 --> 00:34:50.071
+Superintendent Grail.
+
+00:34:55.541 --> 00:34:57.958
+- Good morning.
+- Good morning, sir.
+
+00:34:58.041 --> 00:35:00.541
+I was sent to investigate
+a possible disturbance.
+
+00:35:00.625 --> 00:35:03.791
+Someone heard some screams,
+and then I discovered this young lady.
+
+00:35:03.875 --> 00:35:04.916
+Her name?
+
+00:35:05.000 --> 00:35:06.291
+Enola Holmes.
+
+00:35:07.833 --> 00:35:08.958
+Uh, his sister.
+
+00:35:09.666 --> 00:35:10.708
+A detective too.
+
+00:35:10.791 --> 00:35:13.875
+Good God, another one.
+
+00:35:13.958 --> 00:35:15.916
+Shouldn't you be in finishing school?
+
+00:35:16.708 --> 00:35:19.500
+Investigating the disappearance of a...
+
+00:35:19.583 --> 00:35:20.833
+- Sarah Chapman.
+- Yeah.
+
+00:35:20.916 --> 00:35:24.458
+Sarah Chapman?
+Well, well, how intriguing. So am I.
+
+00:35:24.541 --> 00:35:27.625
+- She's wanted for theft and blackmail.
+- Blackmail?
+
+00:35:27.708 --> 00:35:29.375
+Yes, detective.
+
+00:35:31.583 --> 00:35:33.958
+Still warm. No rigor mortis.
+
+00:35:34.583 --> 00:35:37.666
+- When were the screams heard, inspector?
+- Ten past the hour, sir.
+
+00:35:38.250 --> 00:35:40.625
+When did you arrive, detective?
+
+00:35:41.166 --> 00:35:42.333
+A-Around the same time.
+
+00:35:45.625 --> 00:35:46.875
+Even more intriguing.
+
+00:35:46.958 --> 00:35:51.333
+Uh, no, I was trying to suppress
+the blood. I-I was trying to save her.
+
+00:35:51.416 --> 00:35:53.666
+Or trying to get information out of her.
+
+00:35:55.375 --> 00:35:56.875
+Give her a search, inspector.
+
+00:35:56.958 --> 00:35:59.666
+Oh, I couldn't. I can't pat her down, sir.
+
+00:36:00.208 --> 00:36:03.625
+Come along, Lestrade.
+Let's not be coy about this.
+
+00:36:03.708 --> 00:36:06.750
+- She's a detective. She knows the rules.
+- Yes.
+
+00:36:09.375 --> 00:36:11.125
+Um...
+
+00:36:11.208 --> 00:36:12.416
+Give me that bag!
+
+00:36:21.666 --> 00:36:22.666
+What's this?
+
+00:36:23.750 --> 00:36:24.750
+My evidence.
+
+00:36:26.291 --> 00:36:27.208
+And that?
+
+00:36:30.041 --> 00:36:31.208
+It's nothing.
+
+00:36:31.291 --> 00:36:32.750
+Then why are you hiding it?
+
+00:36:33.750 --> 00:36:37.041
+Found at a murder scene
+with a freshly dead corpse,
+
+00:36:37.125 --> 00:36:39.583
+harboring evidence isn't gonna look good.
+
+00:36:39.666 --> 00:36:41.875
+Superintendent Grail, you can't believe...
+
+00:36:41.958 --> 00:36:44.333
+What can't I believe, missy?
+
+00:36:44.875 --> 00:36:47.625
+That young ladies
+don't have the hands for killing?
+
+00:36:47.708 --> 00:36:48.750
+Now, give them here.
+
+00:36:54.125 --> 00:36:55.541
+Oh!
+
+00:37:05.916 --> 00:37:08.125
+- Go on!
+- After her, all of ya!
+
+00:37:09.750 --> 00:37:11.375
+Why ever would she ever do that?
+
+00:37:11.875 --> 00:37:14.708
+Get out of the way! Move!
+
+00:37:14.791 --> 00:37:16.708
+Stop that girl!
+
+00:37:19.416 --> 00:37:20.625
+You've seen this before.
+
+00:37:25.041 --> 00:37:28.416
+Ah. Lestrade of Scotland Yard.
+You remember me, I hope.
+
+00:37:32.875 --> 00:37:35.958
+We're looking for your sister.
+She's caused a bit of trouble.
+
+00:37:45.458 --> 00:37:46.458
+May I?
+
+00:37:56.250 --> 00:37:57.250
+Is it, sir?
+
+00:37:58.708 --> 00:37:59.875
+Is it?
+
+00:37:59.958 --> 00:38:02.125
+Take it. I have others.
+
+00:38:02.208 --> 00:38:03.958
+Take it? I can't.
+
+00:38:04.041 --> 00:38:05.083
+I can.
+
+00:38:05.166 --> 00:38:06.166
+I can't.
+
+00:38:07.750 --> 00:38:09.000
+Perhaps I can.
+
+00:38:15.541 --> 00:38:17.750
+And this, the famous fiddle?
+
+00:38:19.375 --> 00:38:21.291
+That I do not have two of.
+
+00:38:22.458 --> 00:38:25.416
+Perhaps you can explain
+what you believe Enola has done.
+
+00:38:25.500 --> 00:38:27.416
+I wish I was at liberty to say, sir.
+
+00:38:28.250 --> 00:38:29.083
+Do you mind?
+
+00:38:41.041 --> 00:38:43.041
+Oh, your latest case.
+
+00:38:43.541 --> 00:38:45.041
+What's it concerning?
+
+00:38:45.750 --> 00:38:47.708
+Is it another Brixton Strangler?
+
+00:38:48.458 --> 00:38:49.458
+Or a Periwinkle?
+
+00:38:50.791 --> 00:38:52.458
+Don't tell me it's a Clerkenwell.
+
+00:38:52.541 --> 00:38:54.416
+What evidence do they have
+against my sister?
+
+00:38:55.000 --> 00:38:58.166
+Perhaps, uh, you tell me yours
+and I'll tell you mine.
+
+00:39:01.041 --> 00:39:02.750
+Government case, some missing money.
+
+00:39:04.125 --> 00:39:05.125
+<i>Now you.</i>
+
+00:39:05.750 --> 00:39:07.416
+<i>Super wants to talk her.</i>
+
+00:39:08.208 --> 00:39:10.500
+<i>- Why?</i>
+- Just following orders, Mr. Holmes.
+
+00:39:10.583 --> 00:39:12.166
+Or may I call you Sherlock?
+
+00:39:14.416 --> 00:39:17.000
+Graydon. Graydon Lestrade.
+
+00:39:17.083 --> 00:39:20.791
+My father thought it distinguished,
+and it is rather.
+
+00:39:25.416 --> 00:39:28.708
+Well, anyway, should you ever
+wish to call me that...
+
+00:39:30.208 --> 00:39:31.041
+Right.
+
+00:39:34.083 --> 00:39:35.083
+As you were.
+
+00:39:45.833 --> 00:39:47.041
+Oh dear.
+
+00:39:49.083 --> 00:39:50.875
+Whoa!
+
+00:39:51.666 --> 00:39:54.333
+My mistake.
+I should have warned you I was opening it.
+
+00:39:57.416 --> 00:39:58.416
+No.
+
+00:40:04.000 --> 00:40:05.000
+Dare I ask?
+
+00:40:11.750 --> 00:40:12.875
+Good afternoon.
+
+00:40:13.375 --> 00:40:15.208
+May I ask a favor?
+
+00:40:20.625 --> 00:40:23.333
+Never mind. Tell me everything.
+
+00:40:24.166 --> 00:40:25.708
+- A government case?
+- No.
+
+00:40:26.916 --> 00:40:28.916
+<i>Is it
+another Brixton Strangler?</i>
+
+00:40:29.833 --> 00:40:32.125
+Or... Or a Periwinkle?
+
+00:40:32.708 --> 00:40:34.875
+"You tell me yours
+and I'll tell you mine."
+
+00:40:36.041 --> 00:40:38.500
+He's a ninny. I needed to know
+what he had on you.
+
+00:40:43.041 --> 00:40:46.083
+Money. Unaccounted transfers
+going in and out of government offices.
+
+00:40:46.833 --> 00:40:49.458
+My theory is either bribery,
+extortion, or blackmail.
+
+00:40:49.541 --> 00:40:50.875
+And what have you found?
+
+00:40:52.666 --> 00:40:54.750
+Separate filings
+from five different accounts
+
+00:40:54.833 --> 00:40:58.041
+going via the Treasury
+into one private bank.
+
+00:40:58.125 --> 00:41:00.791
+- So someone is getting rich from this?
+- Yes.
+
+00:41:02.250 --> 00:41:04.041
+- Who?
+- No name.
+
+00:41:04.125 --> 00:41:05.541
+Just a number.
+
+00:41:05.625 --> 00:41:08.583
+I visited the bank and inquired.
+The money disappeared,
+
+00:41:08.666 --> 00:41:10.833
+arriving at another bank,
+and then another,
+
+00:41:10.916 --> 00:41:13.083
+and another, and another,
+and another, and another.
+
+00:41:13.166 --> 00:41:16.833
+Every one of them hidden
+using different account numbers.
+
+00:41:16.916 --> 00:41:18.083
+Twenty-seven in total.
+
+00:41:18.166 --> 00:41:21.583
+- Well, what can you deduce from that?
+- Three things.
+
+00:41:22.166 --> 00:41:25.916
+Firstly, the man's a game player,
+perhaps a genius in mathematics,
+
+00:41:26.000 --> 00:41:28.083
+capable of covering his traces
+at every turn.
+
+00:41:28.166 --> 00:41:30.541
+Secondly, the sources are varied.
+
+00:41:30.625 --> 00:41:33.958
+Five banks, south of the river,
+but no clear link between them.
+
+00:41:34.541 --> 00:41:35.875
+All anonymous.
+
+00:41:35.958 --> 00:41:39.125
+All going into one pocket.
+
+00:41:40.541 --> 00:41:41.541
+And the third?
+
+00:41:44.791 --> 00:41:45.875
+He knows I'm onto him.
+
+00:41:47.416 --> 00:41:48.250
+What? How?
+
+00:41:48.333 --> 00:41:51.833
+Every time I pull a thread,
+it loosens, vanishes,
+
+00:41:51.916 --> 00:41:54.625
+reappears somewhere else.
+He's leading me a merry dance.
+
+00:41:54.708 --> 00:41:55.708
+It's...
+
+00:41:57.958 --> 00:41:58.958
+It's infuriating.
+
+00:42:00.083 --> 00:42:02.083
+So no leads whatsoever?
+
+00:42:02.666 --> 00:42:04.416
+One. A week before the first transfer,
+
+00:42:04.500 --> 00:42:06.180
+there was a break-in
+at the Treasury office
+
+00:42:06.250 --> 00:42:07.708
+by a man in a taper crown hat.
+
+00:42:07.791 --> 00:42:08.916
+A taper crown hat.
+
+00:42:09.583 --> 00:42:10.875
+- What was taken?
+- A document.
+
+00:42:10.958 --> 00:42:13.666
+They won't talk about it.
+Sensitive information presumably.
+
+00:42:14.166 --> 00:42:18.000
+But how it connects to all of this
+has so far eluded me.
+
+00:42:18.541 --> 00:42:21.000
+Your turn. I hope the blood's not yours.
+
+00:42:22.333 --> 00:42:24.500
+I'm looking for a girl, Sarah Chapman.
+
+00:42:24.583 --> 00:42:27.041
+Her sister employed me. Bessie.
+
+00:42:28.125 --> 00:42:31.458
+She worked at Lyons match factory by day,
+and the music hall at night.
+
+00:42:32.375 --> 00:42:33.375
+She has a lover,
+
+00:42:34.541 --> 00:42:36.291
+whose flat I visited.
+
+00:42:37.750 --> 00:42:39.041
+He'd given her this.
+
+00:42:42.458 --> 00:42:43.666
+28 Bell Place?
+
+00:42:45.083 --> 00:42:46.458
+Whitechapel, yes.
+
+00:42:46.541 --> 00:42:48.791
+And there I found her friend,
+
+00:42:50.083 --> 00:42:51.083
+murdered.
+
+00:42:55.208 --> 00:42:57.541
+And who killed her? This poppy fellow?
+
+00:43:01.666 --> 00:43:03.041
+I suspect so.
+
+00:43:03.125 --> 00:43:05.791
+Perhaps he kidnapped Sarah
+and her friend discovered it.
+
+00:43:06.291 --> 00:43:08.041
+Love.
+
+00:43:09.041 --> 00:43:10.250
+What it does to people.
+
+00:43:12.791 --> 00:43:14.351
+- How was she killed?
+- A kitchen knife.
+
+00:43:14.416 --> 00:43:15.875
+- Did you touch this weapon?
+- No.
+
+00:43:17.750 --> 00:43:18.833
+Then why did you run?
+
+00:43:18.916 --> 00:43:20.500
+I found more evidence on her.
+
+00:43:20.583 --> 00:43:22.416
+This policeman wanted it.
+
+00:43:22.500 --> 00:43:24.333
+- He has this walk.
+- Grail.
+
+00:43:26.125 --> 00:43:27.250
+We have a history.
+
+00:43:28.875 --> 00:43:30.375
+This was in her pocket.
+
+00:43:51.041 --> 00:43:52.250
+It's as bad as the poem.
+
+00:43:54.041 --> 00:43:55.625
+- Leave it with me.
+- No.
+
+00:43:56.125 --> 00:43:58.333
+It's mine, and it's important.
+
+00:43:59.666 --> 00:44:03.041
+Grail said she had stolen something
+and that she was blackmailing them.
+
+00:44:03.666 --> 00:44:06.916
+- Though Sarah wouldn't do that.
+- You don't know this person.
+
+00:44:08.083 --> 00:44:09.083
+I feel I do.
+
+00:44:09.916 --> 00:44:11.958
+You came here running from the police.
+
+00:44:12.041 --> 00:44:13.791
+Someone is already dead,
+
+00:44:13.875 --> 00:44:16.125
+and you are now a suspect
+in a murder case.
+
+00:44:16.208 --> 00:44:18.166
+You've let your emotions
+get the better of you.
+
+00:44:18.250 --> 00:44:21.583
+Stay here. Don't leave.
+I will look into this.
+
+00:44:21.666 --> 00:44:25.541
+But Sarah Chapman is my responsibility.
+No one else cares for these girls.
+
+00:44:26.125 --> 00:44:27.666
+I promised her sister.
+
+00:44:27.750 --> 00:44:29.541
+The first mistake a detective makes
+
+00:44:29.625 --> 00:44:33.250
+is to make it about themselves
+and not the case.
+
+00:44:40.291 --> 00:44:43.416
+Enola, I know you're not a fan
+of unnecessary advice,
+
+00:44:43.500 --> 00:44:44.875
+but please...
+
+00:44:48.083 --> 00:44:49.125
+...don't turn into me.
+
+00:44:53.875 --> 00:44:55.583
+I should probably write that down.
+
+00:44:56.916 --> 00:44:59.750
+Matches, matches!
+Come buy your matches!
+
+00:44:59.833 --> 00:45:01.083
+Only a penny a box.
+
+00:45:02.750 --> 00:45:05.375
+Matches, matches! Only a penny a box.
+
+00:45:05.458 --> 00:45:06.916
+Come buy your matches!
+
+00:45:07.000 --> 00:45:09.080
+<i>Posh girls like you
+don't belong in this fight.</i>
+
+00:45:09.125 --> 00:45:11.125
+We don't need help from people like you.
+
+00:45:13.208 --> 00:45:17.791
+<i>See, they all think there's hope.
+That love is coming their way.</i>
+
+00:45:17.875 --> 00:45:19.125
+But it never is.
+
+00:45:20.291 --> 00:45:22.375
+<i>Gents like that, they want cheap,</i>
+
+00:45:22.458 --> 00:45:23.958
+<i>but they marry dear.</i>
+
+00:45:27.000 --> 00:45:29.583
+<i>So, Poppy, you're a gent, are you?</i>
+
+00:45:30.166 --> 00:45:33.333
+<i>And a well-heeled one
+to afford a love nest like that.</i>
+
+00:45:35.750 --> 00:45:37.500
+- Sir...
+- Don't be ridiculous.
+
+00:46:23.333 --> 00:46:26.291
+<i>There was a break-in
+at the Treasury office</i>
+
+00:46:26.375 --> 00:46:27.875
+<i>by a man in a taper crown hat.</i>
+
+00:46:33.166 --> 00:46:36.625
+<i>Five banks, south of the river,
+but no clear link between them.</i>
+
+00:46:42.000 --> 00:46:43.750
+"Match makers ball."
+
+00:46:44.583 --> 00:46:48.625
+"Hosted by Henry and Hilda Lyon.
+12 Marchmont Square."
+
+00:46:50.250 --> 00:46:51.958
+Does that date mean anything to you?
+
+00:46:54.250 --> 00:46:55.583
+It's not a date at all.
+
+00:46:57.958 --> 00:47:01.166
+"Their eldest son, William Lyon,
+will be leading the first..."
+
+00:47:02.125 --> 00:47:04.541
+Sweet Williams,
+for their wonderfully vivid reds.
+
+00:47:05.125 --> 00:47:08.375
+Our ladies are working at the highest
+level of production and efficiency.
+
+00:47:08.458 --> 00:47:10.250
+- Are they not, William?
+- Yes, Father.
+
+00:47:10.333 --> 00:47:13.833
+And all along, I thought you were a poppy.
+
+00:47:16.541 --> 00:47:19.666
+Let's see how sweet you are,
+Sweet William.
+
+00:47:22.916 --> 00:47:23.916
+I'm going to a ball.
+
+00:47:26.958 --> 00:47:27.958
+Ugh.
+
+00:47:49.291 --> 00:47:50.291
+'Tis I.
+
+00:47:51.958 --> 00:47:53.250
+'Tis not I.
+
+00:47:54.083 --> 00:47:56.833
+Which, when you're wanted
+by the police, is most useful.
+
+00:47:57.458 --> 00:48:00.875
+Pray silence
+for his Lordship Viscount McIntyre.
+
+00:48:00.958 --> 00:48:03.541
+I-I'm sorry to break apart
+this glorious occasion,
+
+00:48:03.625 --> 00:48:05.250
+but, well, I'm a politician.
+
+00:48:05.333 --> 00:48:08.291
+Any chance to stand on a stage,
+I'll always take it.
+
+00:48:09.458 --> 00:48:12.916
+And I must speak
+to thank our host
+
+00:48:13.000 --> 00:48:14.958
+and applaud his achievements.
+
+00:48:17.166 --> 00:48:18.625
+No masks, no matter.
+
+00:48:18.708 --> 00:48:22.416
+For Henry Lyon
+turns all before him into gold.
+
+00:48:22.500 --> 00:48:24.583
+Ha, nonsense! Pewter at best.
+
+00:48:25.666 --> 00:48:28.041
+What he has done with matches
+is legendary.
+
+00:48:28.541 --> 00:48:31.458
+In two years, he's turned red into black.
+
+00:48:31.541 --> 00:48:32.916
+Or should I say,
+
+00:48:33.875 --> 00:48:36.208
+red into white?
+
+00:48:36.291 --> 00:48:38.541
+And to have this humble man
+turn his attention
+
+00:48:38.625 --> 00:48:40.666
+to typhoid and the working poor,
+
+00:48:41.333 --> 00:48:44.166
+raising funds,
+diagnosing cases in the community,
+
+00:48:44.250 --> 00:48:46.416
+I'm overwhelmed. I'm simply overwhelmed.
+
+00:48:46.916 --> 00:48:51.041
+Ladies and gentlemen,
+I give you Henry Lyon.
+
+00:48:51.125 --> 00:48:56.000
+And to his fine son, his heir, William.
+
+00:48:58.458 --> 00:48:59.541
+To the future.
+
+00:49:00.333 --> 00:49:04.291
+- To the future.
+- May it ever be bright.
+
+00:49:06.208 --> 00:49:08.041
+Right, Henry, light us up.
+
+00:49:09.625 --> 00:49:10.625
+Gladly.
+
+00:49:15.291 --> 00:49:17.250
+Now go and enjoy yourselves.
+
+00:49:23.833 --> 00:49:25.916
+I believe I've seen that dress
+somewhere before.
+
+00:49:26.000 --> 00:49:28.083
+Oh yes, last year.
+
+00:49:30.416 --> 00:49:32.333
+I think it's charming, elegant.
+
+00:49:32.958 --> 00:49:34.208
+I think you are kind.
+
+00:49:48.583 --> 00:49:49.666
+Gentlemen.
+
+00:49:50.541 --> 00:49:51.541
+Ma'am.
+
+00:49:52.250 --> 00:49:53.250
+Good evening.
+
+00:49:56.250 --> 00:49:58.750
+This is a wonderful occasion, is it not?
+
+00:50:02.125 --> 00:50:07.041
+I mean, the guests are just... delightful.
+
+00:50:08.250 --> 00:50:11.791
+And the orchestra is most tuneful.
+
+00:50:16.083 --> 00:50:18.125
+I was wondering if
+
+00:50:19.291 --> 00:50:21.666
+I might be able to speak to you, Mr. Lyon.
+
+00:50:24.583 --> 00:50:27.500
+- Uh, have I said something wrong?
+- Where is your chaperone?
+
+00:50:28.291 --> 00:50:29.291
+Chaperone?
+
+00:50:30.250 --> 00:50:33.708
+My dear, you can hardly expect my son
+to talk to you unaccompanied.
+
+00:50:36.541 --> 00:50:38.083
+Oh.
+
+00:50:44.458 --> 00:50:47.208
+I cannot talk to you without a chaperone?
+
+00:50:47.291 --> 00:50:48.833
+No, of course not.
+
+00:50:48.916 --> 00:50:49.916
+Honestly?
+
+00:50:52.208 --> 00:50:53.208
+Honestly?
+
+00:50:54.083 --> 00:50:55.375
+Who is this woman?
+
+00:50:55.458 --> 00:50:57.125
+Well, they are talking.
+
+00:50:57.208 --> 00:50:58.458
+They are dancing.
+
+00:50:59.166 --> 00:51:00.875
+Good evening, my dear.
+
+00:51:02.000 --> 00:51:03.000
+Yes.
+
+00:51:03.083 --> 00:51:04.375
+How foolish of me.
+
+00:51:06.125 --> 00:51:07.125
+Good evening.
+
+00:51:23.250 --> 00:51:25.875
+It could be claimed,
+with some justification,
+
+00:51:25.958 --> 00:51:27.750
+that I might have prepared
+more thoroughly.
+
+00:51:27.833 --> 00:51:30.000
+But dancing is not
+one of my core strengths.
+
+00:51:31.000 --> 00:51:32.291
+Well, except...
+
+00:51:32.375 --> 00:51:36.125
+<i>♪ Knees up Mother Brown
+Under the table you must go ♪</i>
+
+00:51:36.208 --> 00:51:37.708
+<i>♪ Ee-aye, ee-aye, oh! ♪</i>
+
+00:51:39.208 --> 00:51:40.750
+You see my situation.
+
+00:51:51.958 --> 00:51:53.125
+Who are you?
+
+00:51:56.000 --> 00:51:57.400
+<i>The man's a game player.</i>
+
+00:51:57.458 --> 00:51:59.500
+<i>Separate filings
+from five different accounts.</i>
+
+00:51:59.583 --> 00:52:02.708
+<i>Capable of covering his traces
+at every turn. One private bank.</i>
+
+00:52:02.791 --> 00:52:06.166
+<i>Vanishes and reappears.
+No name. Just a number.</i>
+
+00:52:13.708 --> 00:52:15.666
+<i>Perhaps
+a genius in mathematics.</i>
+
+00:52:15.750 --> 00:52:19.083
+Leading me a merry dance.
+
+00:52:19.666 --> 00:52:20.541
+It's a cipher.
+
+00:52:26.375 --> 00:52:27.375
+The polka.
+
+00:52:28.708 --> 00:52:31.291
+The promenade. The two-step.
+
+00:52:32.208 --> 00:52:33.708
+They're all dances.
+
+00:52:33.791 --> 00:52:35.416
+<i>Dance, dance, dance, dance.</i>
+
+00:52:35.500 --> 00:52:36.875
+<i>Twenty-seven, turn on...</i>
+
+00:52:42.375 --> 00:52:44.416
+<i>Yes. </i>The Language of the Dance.
+
+00:52:44.500 --> 00:52:46.458
+<i>"Twenty-seven dances."</i>
+
+00:52:47.250 --> 00:52:48.125
+<i>I've got you.</i>
+
+00:52:48.208 --> 00:52:51.166
+<i>Dance one, then 14.22.</i>
+
+00:52:55.916 --> 00:52:58.625
+Terrible, aren't they? These things.
+
+00:52:59.583 --> 00:53:01.583
+All pompidou and popinjay.
+
+00:53:02.291 --> 00:53:03.750
+Have we met somewhere before?
+
+00:53:04.875 --> 00:53:08.166
+I feel I recognize you from somewhere.
+
+00:53:08.250 --> 00:53:11.416
+I simply have one of those faces.
+
+00:53:13.875 --> 00:53:14.875
+Mira Troy,
+
+00:53:15.375 --> 00:53:17.291
+private secretary to Lord McIntyre,
+
+00:53:18.291 --> 00:53:19.333
+Treasury Minister.
+
+00:53:20.541 --> 00:53:21.541
+Tabitha.
+
+00:53:22.708 --> 00:53:24.250
+Tabitha Timothy.
+
+00:53:27.333 --> 00:53:29.166
+You mustn't let them concern you.
+
+00:53:29.791 --> 00:53:31.250
+It's just a performance.
+
+00:53:32.083 --> 00:53:34.375
+Everyone here is playing a part.
+
+00:53:35.166 --> 00:53:36.166
+Testing each other.
+
+00:53:38.916 --> 00:53:39.916
+Winning.
+
+00:53:41.375 --> 00:53:42.375
+Losing.
+
+00:53:43.541 --> 00:53:44.750
+And it's fun,
+
+00:53:45.708 --> 00:53:47.125
+once you know the rules.
+
+00:53:53.500 --> 00:53:55.500
+What are they doing with those fans?
+
+00:53:58.166 --> 00:53:59.666
+Sending messages.
+
+00:54:00.166 --> 00:54:03.416
+Saying everything that is forbidden,
+
+00:54:05.208 --> 00:54:08.541
+or too embarrassing to say aloud.
+
+00:54:13.458 --> 00:54:15.041
+Thank you for the lesson.
+
+00:54:16.708 --> 00:54:18.208
+It's a lesson hard learned.
+
+00:54:20.625 --> 00:54:24.166
+Without power, we women
+must rely on our wits for our fortune,
+
+00:54:24.791 --> 00:54:27.375
+because our chances are short. Here.
+
+00:54:28.083 --> 00:54:29.083
+Take my fan.
+
+00:54:30.291 --> 00:54:31.583
+I have no use for it.
+
+00:54:33.083 --> 00:54:35.958
+And if you wish to speak to William,
+
+00:54:37.958 --> 00:54:39.541
+you could always try with that.
+
+00:54:57.166 --> 00:54:58.583
+No, not... No, not you. Oh.
+
+00:55:01.541 --> 00:55:02.541
+Help.
+
+00:55:05.083 --> 00:55:06.458
+It would be my delight.
+
+00:55:10.500 --> 00:55:12.791
+Really, there's no need to be rude.
+
+00:55:12.875 --> 00:55:14.291
+I-I didn't mean to.
+
+00:55:30.000 --> 00:55:31.291
+Tewkesbury!
+
+00:55:31.375 --> 00:55:33.791
+- Your timing's impeccable!
+- Enola?
+
+00:55:33.875 --> 00:55:36.791
+Don't speak to me here, otherwise
+you'll be thrown onto the street.
+
+00:55:41.041 --> 00:55:44.125
+- I need you to teach me to dance.
+- Teach you to dance? When?
+
+00:55:44.208 --> 00:55:46.250
+- Teach me to dance now.
+- Wh...
+
+00:55:46.333 --> 00:55:48.541
+You understand
+I've been learning since I was five?
+
+00:55:48.625 --> 00:55:51.625
+Good. I'd feared
+you'd be a terrible teacher.
+
+00:55:51.708 --> 00:55:54.375
+- What are you doing here?
+- I'm looking for a murderer.
+
+00:55:55.000 --> 00:55:57.416
+Though I shouldn't have told you.
+Forget I told you that.
+
+00:55:57.916 --> 00:56:01.916
+- I'm trying to save a girl's life.
+- Through dance?
+
+00:56:02.000 --> 00:56:03.250
+Please, Tewkesbury.
+
+00:56:06.458 --> 00:56:09.083
+All right. Hold your back straight.
+
+00:56:11.083 --> 00:56:14.125
+And I'll place my hand here and here.
+
+00:56:14.208 --> 00:56:15.583
+Oh. Yes.
+
+00:56:16.916 --> 00:56:17.916
+Hold your arm out.
+
+00:56:19.375 --> 00:56:20.375
+Good.
+
+00:56:20.875 --> 00:56:22.958
+Now, I will lead and you will follow.
+
+00:56:23.041 --> 00:56:25.541
+- That seems like a mistake.
+- Face over my shoulder.
+
+00:56:27.458 --> 00:56:30.500
+And now, one, two, three.
+
+00:56:31.041 --> 00:56:33.166
+Two, three. Two, three.
+
+00:56:33.250 --> 00:56:36.208
+Four, two, three. One, two, three.
+
+00:56:36.708 --> 00:56:37.708
+Two, three.
+
+00:56:38.875 --> 00:56:39.750
+Good.
+
+00:56:46.208 --> 00:56:48.333
+You seem different since last we spoke.
+
+00:56:49.541 --> 00:56:51.221
+Tell me why you've been
+coming to the park.
+
+00:56:51.250 --> 00:56:53.291
+Why... Why watch me walk to the Lords?
+
+00:56:54.125 --> 00:56:55.541
+Simply keeping an eye on you,
+
+00:56:56.041 --> 00:56:58.083
+in case you get yourself
+into any more scrapes.
+
+00:56:58.166 --> 00:57:00.625
+- Getting thrown out of trains.
+- Enola...
+
+00:57:00.708 --> 00:57:02.875
+You cannot be trusted
+to take care of yourself.
+
+00:57:03.583 --> 00:57:04.458
+I'm a man now.
+
+00:57:04.541 --> 00:57:06.250
+You're a man when I tell you you're a man.
+
+00:57:06.333 --> 00:57:09.333
+And the scrapes I find myself in
+are far less visceral.
+
+00:57:13.125 --> 00:57:14.165
+Now, come on.
+
+00:57:16.750 --> 00:57:18.708
+Two, three. Two, three.
+
+00:57:18.791 --> 00:57:19.916
+Look into my eyes.
+
+00:57:20.500 --> 00:57:22.625
+The rhythm is always there.
+
+00:57:23.583 --> 00:57:25.541
+Dancing is a trust, it's a union.
+
+00:57:25.625 --> 00:57:27.250
+That's why I've always loved it,
+
+00:57:27.750 --> 00:57:29.958
+even when I was being tutored by my uncle.
+
+00:57:30.041 --> 00:57:31.750
+That man likes a pork mustard pie.
+
+00:57:32.625 --> 00:57:33.625
+His breath...
+
+00:57:34.166 --> 00:57:35.166
+Turn, two.
+
+00:57:36.791 --> 00:57:37.833
+Turn. Feel it?
+
+00:57:38.750 --> 00:57:39.583
+I can feel it.
+
+00:57:48.375 --> 00:57:49.375
+Good.
+
+00:57:50.416 --> 00:57:52.583
+- You dance well.
+- Perhaps I have a fine teacher.
+
+00:57:53.500 --> 00:57:56.875
+Though his breath has less mustard
+on it than I'd hoped.
+
+00:58:18.291 --> 00:58:21.041
+We have an urgent situation.
+
+00:58:21.125 --> 00:58:22.125
+I should go.
+
+00:58:22.833 --> 00:58:24.083
+You'll need a dance card.
+
+00:58:25.416 --> 00:58:26.875
+But I don't know enough.
+
+00:58:30.041 --> 00:58:31.791
+- What does that mean?
+- You'll learn.
+
+00:58:36.458 --> 00:58:39.416
+Don't touch the ginger cake.
+Plays hopscotch with your bowels.
+
+00:58:51.791 --> 00:58:52.791
+Oh.
+
+00:58:53.666 --> 00:58:54.666
+Hello.
+
+00:58:59.833 --> 00:59:02.416
+- Mr. Lyon.
+- Yes.
+
+00:59:02.500 --> 00:59:05.000
+I was wondering
+if we might have a dance this evening.
+
+00:59:05.750 --> 00:59:07.166
+My dance card is full.
+
+00:59:07.250 --> 00:59:08.291
+May I see it?
+
+00:59:16.333 --> 00:59:18.000
+Your last waltz is still free.
+
+00:59:18.666 --> 00:59:19.791
+How fitting.
+
+00:59:21.875 --> 00:59:22.875
+Would you mind?
+
+00:59:34.583 --> 00:59:35.583
+Until then.
+
+00:59:55.166 --> 00:59:56.166
+'Tis he.
+
+01:00:04.000 --> 01:00:05.625
+You admire Lord Tewkesbury?
+
+01:00:06.291 --> 01:00:07.291
+No!
+
+01:00:08.125 --> 01:00:09.583
+No.
+
+01:00:10.750 --> 01:00:12.416
+We are old friends.
+
+01:00:13.041 --> 01:00:15.708
+I hear he's a good man,
+and a great reformer.
+
+01:00:16.500 --> 01:00:17.500
+Hm.
+
+01:00:18.166 --> 01:00:21.041
+Well, if you wish to dance with him,
+you may have to wait.
+
+01:00:21.125 --> 01:00:22.250
+There's quite a queue.
+
+01:00:25.250 --> 01:00:27.125
+Yes, I mustn't lose my chance.
+
+01:00:29.625 --> 01:00:31.208
+Good evening, Miss...?
+
+01:00:31.291 --> 01:00:32.291
+Tabitha.
+
+01:00:33.041 --> 01:00:34.041
+Cicely.
+
+01:00:41.625 --> 01:00:43.791
+Forgive me for interrupting.
+My name is Cicely.
+
+01:00:43.875 --> 01:00:47.208
+Um, your friend Tabitha
+suggested we might dance.
+
+01:00:48.250 --> 01:00:49.166
+Did she?
+
+01:00:56.416 --> 01:01:01.000
+Ladies and gentlemen, please
+take your partners for the last waltz.
+
+01:01:27.458 --> 01:01:29.916
+You know, I swear I know your face.
+
+01:01:30.000 --> 01:01:31.333
+What must it be?
+
+01:01:31.916 --> 01:01:33.375
+We have never met before,
+
+01:01:34.250 --> 01:01:36.208
+but I've seen you looking. Why?
+
+01:01:39.958 --> 01:01:42.500
+<i>Of course. The Paragon Music Hall.</i>
+
+01:01:43.166 --> 01:01:45.666
+I saw you talking
+with a young woman there.
+
+01:01:46.333 --> 01:01:47.666
+Sarah Chapman.
+
+01:01:49.541 --> 01:01:52.000
+Dislocate from me and I will scream.
+
+01:01:52.083 --> 01:01:55.666
+The police are onto you, Mr. Lyon.
+As it happens, they are onto us both.
+
+01:01:57.875 --> 01:01:59.958
+You were not invited here.
+What do you want?
+
+01:02:00.041 --> 01:02:03.625
+<i>I'm a private detective,
+hired by Sarah's sister to find her.</i>
+
+01:02:04.208 --> 01:02:05.500
+Bessie hired you?
+
+01:02:05.583 --> 01:02:06.666
+You know Bessie?
+
+01:02:08.500 --> 01:02:10.125
+Leave me be, please,
+
+01:02:11.041 --> 01:02:12.500
+or you will ruin everything.
+
+01:02:13.125 --> 01:02:16.000
+- How? What will I ruin?
+<i>- </i>They're watching.
+
+01:02:17.166 --> 01:02:21.000
+If you must persist with this,
+meet me in the library at midnight.
+
+01:02:22.041 --> 01:02:23.333
+Say nothing more now.
+
+01:02:24.916 --> 01:02:26.041
+Midnight it is.
+
+01:02:55.750 --> 01:02:56.791
+"Moriarty."
+
+01:02:59.333 --> 01:03:00.333
+Who are you?
+
+01:03:12.000 --> 01:03:14.958
+- My word, you do get in awkward places.
+- Why are you holding a poker?
+
+01:03:15.041 --> 01:03:17.208
+You must leave. I'm waiting for another.
+
+01:03:17.291 --> 01:03:19.416
+Another you're scared of
+such that you need a weapon?
+
+01:03:19.500 --> 01:03:21.750
+You are always here
+when I don't want you to be.
+
+01:03:21.833 --> 01:03:23.416
+And sometimes here when you do.
+
+01:03:23.958 --> 01:03:26.500
+- What's the matter with you?
+- Nothing that need concern you.
+
+01:03:28.166 --> 01:03:32.166
+I like the look of the one you were
+dancing with. What's her name, Cicely?
+
+01:03:32.250 --> 01:03:33.958
+She would make you an excellent wife.
+
+01:03:34.458 --> 01:03:36.291
+Enola, I am concerned only for you.
+
+01:03:36.375 --> 01:03:39.333
+Tewkesbury, if you're still here,
+you may scare him away.
+
+01:03:39.416 --> 01:03:42.375
+"Scare him"? All of this is over a man?
+
+01:03:43.750 --> 01:03:45.250
+Just leave.
+
+01:03:55.875 --> 01:03:56.875
+Lord Tewkesbury.
+
+01:04:00.458 --> 01:04:02.416
+Enola Holmes, you're under arrest.
+
+01:04:02.500 --> 01:04:04.958
+Try to escape,
+and we will make this difficult.
+
+01:04:05.041 --> 01:04:08.416
+Let's make it quiet and spare
+the fine people any embarrassment.
+
+01:04:09.000 --> 01:04:11.625
+- Sir, whatever this is about, I'm sure...
+- Murder, sir.
+
+01:04:13.458 --> 01:04:14.708
+It's about murder.
+
+01:04:17.916 --> 01:04:19.500
+Tewkesbury, it's all right.
+
+01:04:20.375 --> 01:04:21.666
+Constable, go on.
+
+01:04:23.291 --> 01:04:24.375
+Keep them safe.
+
+01:04:25.875 --> 01:04:27.916
+- Please.
+- Come along.
+
+01:04:31.750 --> 01:04:32.833
+Ow.
+
+01:04:35.541 --> 01:04:37.666
+- Oh, I say.
+- I knew she didn't belong here.
+
+01:04:45.958 --> 01:04:47.875
+- Despicable.
+- Disgraceful.
+
+01:04:57.791 --> 01:04:59.041
+Quite a party.
+
+01:05:00.333 --> 01:05:03.541
+You danced with young Master Lyon, I hear.
+
+01:05:04.916 --> 01:05:08.166
+May I ask, impertinently, I'm sure,
+
+01:05:08.250 --> 01:05:09.708
+did you want to kiss him,
+
+01:05:10.416 --> 01:05:12.541
+or find out more about your case,
+
+01:05:13.250 --> 01:05:14.666
+this Sarah Chapman?
+
+01:05:19.625 --> 01:05:23.541
+Look, if you're trying to protect her,
+
+01:05:24.458 --> 01:05:25.458
+know this.
+
+01:05:26.291 --> 01:05:28.750
+I will protect her better.
+
+01:05:30.125 --> 01:05:32.000
+There's someone wants to talk to her,
+
+01:05:32.750 --> 01:05:34.625
+and they're not as kind as me.
+
+01:05:35.250 --> 01:05:36.250
+"Someone"?
+
+01:05:39.125 --> 01:05:39.958
+Who?
+
+01:05:42.166 --> 01:05:44.750
+Why were you following me that night?
+
+01:05:47.916 --> 01:05:50.416
+You were following Mae too, weren't you?
+
+01:05:51.416 --> 01:05:52.958
+That's why you found the flat.
+
+01:05:57.416 --> 01:05:58.416
+Nice shirt.
+
+01:05:59.333 --> 01:06:00.333
+Silk?
+
+01:06:01.041 --> 01:06:02.375
+On a policeman's salary?
+
+01:06:04.583 --> 01:06:07.541
+Who's paying you, Superintendent Grail?
+
+01:06:07.625 --> 01:06:10.000
+Who's paying you to kill match girls?
+
+01:06:10.083 --> 01:06:11.916
+Where's Sarah Chapman?
+
+01:06:12.000 --> 01:06:14.416
+- I don't know.
+- She's a thief and a troublemaker.
+
+01:06:14.500 --> 01:06:16.875
+You don't want to risk your skin for her.
+
+01:06:19.458 --> 01:06:23.125
+Well, if I can't find it out from you,
+I'll find it out from someone else,
+
+01:06:23.208 --> 01:06:26.041
+like her sister, little Bessie.
+
+01:06:27.250 --> 01:06:28.541
+She's just a little girl.
+
+01:06:28.625 --> 01:06:31.291
+Oh, but that's how it starts,
+Enola Holmes!
+
+01:06:31.375 --> 01:06:35.708
+With little girls like her,
+and you, and Sarah Chapman,
+
+01:06:35.791 --> 01:06:38.583
+asking questions,
+doubting those in charge,
+
+01:06:38.666 --> 01:06:40.958
+not seeing their protection
+for what it is,
+
+01:06:41.041 --> 01:06:42.583
+trying to tear it down.
+
+01:06:43.250 --> 01:06:47.041
+Well, it only takes one little flame
+to start a fire,
+
+01:06:47.125 --> 01:06:50.083
+and my job is to keep
+crushing those bloody flames out.
+
+01:06:54.000 --> 01:06:55.166
+Now, I'll be kind
+
+01:06:55.666 --> 01:06:57.500
+and give you one last chance.
+
+01:06:59.833 --> 01:07:00.833
+Where is she?
+
+01:07:02.333 --> 01:07:03.333
+I don't know.
+
+01:07:10.916 --> 01:07:12.375
+Then you're for the noose.
+
+01:07:12.958 --> 01:07:14.458
+Some detective you were.
+
+01:07:16.041 --> 01:07:17.791
+Should have stuck to needlework.
+
+01:07:31.541 --> 01:07:32.666
+Sir?
+
+01:07:32.750 --> 01:07:34.101
+- Sir.
+- Don't be ridi...
+
+01:07:37.833 --> 01:07:39.166
+Superintendent Grail.
+
+01:07:40.666 --> 01:07:42.166
+Mr. Holmes.
+
+01:07:44.000 --> 01:07:45.360
+I'm here for my sister.
+
+01:07:45.833 --> 01:07:47.708
+If you can arrange her release,
+
+01:07:49.416 --> 01:07:50.583
+I'd much appreciate it.
+
+01:07:52.625 --> 01:07:54.041
+She is my ward and a minor.
+
+01:07:54.791 --> 01:07:55.791
+And a murderer.
+
+01:07:55.875 --> 01:07:58.208
+Any evidence you think
+you have against her...
+
+01:07:58.291 --> 01:07:59.541
+I have plenty.
+
+01:08:00.875 --> 01:08:04.375
+She was seen arguing with the victim,
+following the victim,
+
+01:08:04.458 --> 01:08:08.166
+fighting with the victim, and lastly,
+standing over the victim's dead body.
+
+01:08:08.250 --> 01:08:11.041
+And when we find her there,
+with blood on her hands,
+
+01:08:11.125 --> 01:08:12.541
+she bloody runs.
+
+01:08:15.416 --> 01:08:16.583
+I saw your murder site.
+
+01:08:20.791 --> 01:08:24.416
+Marks on and around the door
+show that it was forced open,
+
+01:08:24.500 --> 01:08:25.791
+and recently.
+
+01:08:25.875 --> 01:08:27.208
+There were signs of a scuffle
+
+01:08:27.291 --> 01:08:30.291
+and boot marks
+from three separate intruders.
+
+01:08:30.375 --> 01:08:31.833
+One of them heavyset,
+
+01:08:32.625 --> 01:08:35.416
+judging by the height and extent
+of the subsequent damage.
+
+01:08:36.416 --> 01:08:38.833
+Traces of fabric and spots of blood
+
+01:08:38.916 --> 01:08:42.750
+suggests that there was
+another occupant, likely female,
+
+01:08:42.833 --> 01:08:44.500
+who seems to have fought back,
+
+01:08:44.583 --> 01:08:47.583
+using a sharp and improvised weapon...
+
+01:08:50.916 --> 01:08:52.791
+before escaping through the window.
+
+01:08:52.875 --> 01:08:55.125
+This was a targeted
+search and interrogation
+
+01:08:55.208 --> 01:08:57.291
+in which two women were discovered,
+
+01:08:57.375 --> 01:08:59.416
+and then my sister arrived,
+
+01:09:00.375 --> 01:09:03.041
+and you were curiously fast
+to arrive after her.
+
+01:09:03.625 --> 01:09:06.250
+Now, are you going to release her,
+or shall I?
+
+01:09:09.333 --> 01:09:12.416
+- Sergeant Beeston, if you please.
+- Sir.
+
+01:09:13.875 --> 01:09:15.375
+Fingerprint matching.
+
+01:09:15.458 --> 01:09:17.375
+New invention, Swiss.
+
+01:09:17.458 --> 01:09:20.166
+- You have heard of it?
+- I have.
+
+01:09:20.250 --> 01:09:22.041
+Would you care to look?
+
+01:09:24.791 --> 01:09:27.083
+Makes our work so much more efficient,
+
+01:09:28.125 --> 01:09:29.916
+especially in a murder case.
+
+01:09:36.333 --> 01:09:38.166
+My sister never touched that weapon.
+
+01:09:39.500 --> 01:09:41.125
+Then why are her prints on it?
+
+01:09:47.250 --> 01:09:49.750
+It's a great age we live in,
+isn't it, Mr. Holmes?
+
+01:10:13.041 --> 01:10:15.250
+Have you any sense
+what time it is?
+
+01:10:16.333 --> 01:10:19.583
+- Hello, Edith.
+- You're lucky, I almost broke your legs.
+
+01:10:20.375 --> 01:10:22.083
+Then I recognized the shoulders.
+
+01:10:22.708 --> 01:10:25.916
+- You have very recognizable shoulders.
+- Enola's been arrested.
+
+01:10:27.416 --> 01:10:28.458
+For why?
+
+01:10:29.291 --> 01:10:30.208
+Murder.
+
+01:10:32.875 --> 01:10:34.833
+<i>What she's got tangled with,</i>
+
+01:10:35.416 --> 01:10:37.333
+<i>it may go wider than I thought.</i>
+
+01:10:39.666 --> 01:10:41.791
+And there's something
+about this case that...
+
+01:10:43.250 --> 01:10:45.750
+Deduction alone will not solve?
+
+01:10:47.875 --> 01:10:50.000
+I may need your...
+
+01:10:53.500 --> 01:10:54.500
+I need your help.
+
+01:10:56.541 --> 01:10:58.291
+<i>We need your help.</i>
+
+01:10:58.833 --> 01:11:01.416
+Exercise for 15 minutes.
+
+01:11:01.500 --> 01:11:04.083
+<i>Well, like my mother always said,</i>
+
+01:11:04.166 --> 01:11:06.500
+<i>"Those who can turn to others
+when they're in need</i>
+
+01:11:06.583 --> 01:11:08.500
+<i>are the truly brave amongst us."</i>
+
+01:11:09.333 --> 01:11:11.458
+Your mother sounds very different to mine.
+
+01:11:22.666 --> 01:11:24.125
+I did try to stop her,
+
+01:11:24.208 --> 01:11:27.541
+but she's full of this fight.
+
+01:11:30.583 --> 01:11:32.166
+There we go. Finally.
+
+01:11:32.250 --> 01:11:34.625
+<i>You can't control Enola Holmes.</i>
+
+01:11:34.708 --> 01:11:37.041
+She's a force of nature,
+
+01:11:37.791 --> 01:11:38.916
+<i>a law unto herself.</i>
+
+01:11:39.000 --> 01:11:40.541
+Go easy on her, girls.
+
+01:11:43.083 --> 01:11:44.083
+Yes, she is.
+
+01:11:46.083 --> 01:11:47.375
+And I fear she will hang.
+
+01:12:04.833 --> 01:12:05.833
+Hm?
+
+01:12:19.458 --> 01:12:20.458
+Come on, girls!
+
+01:12:22.833 --> 01:12:23.666
+In there.
+
+01:12:25.458 --> 01:12:26.625
+'Tis I.
+
+01:12:28.833 --> 01:12:30.958
+Yah!
+
+01:12:32.541 --> 01:12:33.750
+Oh, it is good to see you.
+
+01:12:34.666 --> 01:12:35.906
+Yah!
+
+01:12:35.958 --> 01:12:37.041
+Hang on!
+
+01:12:41.166 --> 01:12:42.166
+Yah!
+
+01:12:44.583 --> 01:12:46.000
+They're onto us!
+
+01:12:47.083 --> 01:12:49.125
+- Yah!
+- Be ready in there!
+
+01:12:51.125 --> 01:12:53.208
+So this case of yours, how's it going?
+
+01:12:53.291 --> 01:12:54.166
+I don't know.
+
+01:12:54.250 --> 01:12:57.375
+I was trying to help a girl find
+her sister, and I've made things worse.
+
+01:12:57.458 --> 01:12:58.458
+Nonsense.
+
+01:12:58.500 --> 01:13:01.208
+You stirred up a hornet's nest.
+You are onto something.
+
+01:13:03.000 --> 01:13:05.333
+- Standby!
+- Why else would they try and silence you?
+
+01:13:07.291 --> 01:13:09.375
+Don't worry, it's completely harmless.
+
+01:13:12.250 --> 01:13:14.000
+- On your left!
+- My left or yours?
+
+01:13:14.833 --> 01:13:15.916
+Yours!
+
+01:13:33.083 --> 01:13:35.500
+This match factory,
+what do you know about it?
+
+01:13:35.583 --> 01:13:36.958
+It's a roaring success.
+
+01:13:37.041 --> 01:13:39.166
+In two years, it's doubled its profits.
+
+01:13:39.250 --> 01:13:41.416
+- And now there's typhus.
+- Typhus?
+
+01:13:41.500 --> 01:13:44.125
+Yes, the girls are going down with it.
+They're dying.
+
+01:13:45.416 --> 01:13:46.416
+That's a loose thread.
+
+01:13:46.500 --> 01:13:48.125
+- What?
+- They're back!
+
+01:13:48.833 --> 01:13:49.833
+Yah!
+
+01:13:50.708 --> 01:13:53.416
+Here they come! Brace yourselves!
+
+01:14:01.458 --> 01:14:03.208
+We know about these factories.
+
+01:14:03.291 --> 01:14:04.750
+Come on, come on!
+
+01:14:04.833 --> 01:14:06.958
+Girls like Sarah Chapman,
+they're expendable.
+
+01:14:07.041 --> 01:14:09.750
+They go missing,
+too often they die, no one cares.
+
+01:14:09.833 --> 01:14:12.791
+But this girl, they care about.
+And greatly.
+
+01:14:12.875 --> 01:14:14.291
+So, what does she know?
+
+01:14:14.375 --> 01:14:16.375
+Get up here now!
+
+01:14:16.458 --> 01:14:18.458
+She stole something. Some papers.
+
+01:14:18.541 --> 01:14:22.708
+Aha! So what's she gonna do with them?
+What's her plan? She's not a thief.
+
+01:14:22.791 --> 01:14:26.291
+She's not a blackmailer.
+She is a troublemaker.
+
+01:14:26.375 --> 01:14:28.250
+She knows something,
+
+01:14:28.333 --> 01:14:30.875
+and that is infinitely more dangerous.
+
+01:14:31.375 --> 01:14:32.375
+Come on, lads!
+
+01:14:39.291 --> 01:14:41.791
+- Stand by to the right!
+- Would you mind?
+
+01:14:41.875 --> 01:14:43.500
+- Wait for it.
+- W-W-Where?
+
+01:14:43.583 --> 01:14:45.333
+- Wait for it!
+- Straight.
+
+01:14:46.041 --> 01:14:47.041
+Now!
+
+01:14:48.208 --> 01:14:50.250
+Get it out!
+Get it out of here!
+
+01:15:03.500 --> 01:15:06.500
+Now, whatever Sarah's hiding, Enola,
+
+01:15:07.625 --> 01:15:08.625
+it's a secret.
+
+01:15:10.916 --> 01:15:13.666
+You need to look
+for what she knows, Enola.
+
+01:15:16.208 --> 01:15:18.375
+Find that out,
+and everything else will follow.
+
+01:15:20.666 --> 01:15:22.083
+She's probably under your nose.
+
+01:15:24.250 --> 01:15:26.041
+- Huh?
+- Get down!
+
+01:15:28.125 --> 01:15:29.041
+That's just rude.
+
+01:15:32.041 --> 01:15:33.875
+Grail.
+
+01:15:39.000 --> 01:15:40.240
+You all right, Edith?
+
+01:15:40.291 --> 01:15:41.583
+Just about! Yah!
+
+01:15:48.500 --> 01:15:49.500
+Yah!
+
+01:15:56.208 --> 01:15:57.541
+Yah!
+
+01:15:59.291 --> 01:16:00.833
+Oh, for goodness sake!
+
+01:16:06.625 --> 01:16:07.625
+Oh!
+
+01:16:18.958 --> 01:16:19.958
+That's not good.
+
+01:16:20.041 --> 01:16:21.583
+Get 'em to the bank!
+
+01:16:22.875 --> 01:16:24.583
+You all right? You all right?
+
+01:16:26.500 --> 01:16:27.860
+- All right?
+- I'm all right, yeah.
+
+01:16:28.791 --> 01:16:29.833
+Oh no.
+
+01:16:29.916 --> 01:16:30.916
+Sir.
+
+01:16:35.416 --> 01:16:36.791
+Glory be.
+
+01:16:37.833 --> 01:16:38.958
+It's the Holy Trinity.
+
+01:16:41.916 --> 01:16:43.583
+I'll make commissioner for this.
+
+01:16:44.916 --> 01:16:45.916
+Take 'em.
+
+01:16:47.791 --> 01:16:48.916
+Must we?
+
+01:16:49.000 --> 01:16:49.875
+I fear so.
+
+01:16:57.208 --> 01:16:58.583
+<i>♪ Hallelujah ♪</i>
+
+01:16:58.666 --> 01:17:00.250
+<i>♪ Hallelujah ♪</i>
+
+01:17:00.333 --> 01:17:02.000
+<i>♪ Hallelujah ♪</i>
+
+01:17:02.083 --> 01:17:05.583
+<i>♪ Hallelujah, halle-lu-jah</i> ♪
+
+01:17:05.666 --> 01:17:07.583
+<i>♪ Hallelujah</i> ♪
+
+01:17:08.166 --> 01:17:09.875
+<i>♪ Hallelujah</i> ♪
+
+01:17:09.958 --> 01:17:12.958
+<i>♪ Hallelujah, hallelujah, hallelujah</i> ♪
+
+01:17:13.041 --> 01:17:16.625
+<i>♪ Hallelujah, halle-lu-jah</i> ♪
+
+01:17:16.708 --> 01:17:22.708
+<i>♪ For the Lord God omnipotent reigneth</i> ♪
+
+01:17:22.791 --> 01:17:25.708
+<i>♪ Hallelujah, hallelujah, hallelujah</i> ♪
+
+01:17:26.291 --> 01:17:30.000
+<i>♪ King of Kings, and Lord of Lords... ♪</i>
+
+01:17:30.708 --> 01:17:32.166
+Enola.
+
+01:17:32.250 --> 01:17:34.875
+<i>♪ And Lord of Lords ♪</i>
+
+01:17:34.958 --> 01:17:37.000
+<i>♪ And He shall reign... ♪</i>
+
+01:17:37.083 --> 01:17:40.625
+Enola<i>... </i>this is not harmless.
+
+01:17:40.708 --> 01:17:41.916
+Run!
+
+01:17:42.000 --> 01:17:44.958
+<i>♪ King of Kings, and Lord of Lords ♪</i>
+
+01:17:45.958 --> 01:17:49.333
+<i>♪ Hallelujah, hallelujah
+Hallelujah, hallelujah... ♪</i>
+
+01:17:52.125 --> 01:17:57.958
+<i>♪ Hallelujah ♪</i>
+
+01:18:02.666 --> 01:18:05.583
+Good thing
+I never valued my pelvis.
+
+01:18:06.291 --> 01:18:07.541
+How about you, Edith?
+
+01:18:07.625 --> 01:18:09.166
+- How are the kidneys?
+- Fine.
+
+01:18:09.750 --> 01:18:10.916
+I quite enjoyed it.
+
+01:18:11.000 --> 01:18:14.083
+Hm. You enjoy everything.
+It's most irritating.
+
+01:18:14.625 --> 01:18:16.750
+Come on, this way.
+Better get a move on.
+
+01:18:16.833 --> 01:18:17.833
+All right.
+
+01:18:19.958 --> 01:18:23.958
+So, um, how's that useless boy of yours?
+
+01:18:25.458 --> 01:18:26.875
+I hear he's doing good work.
+
+01:18:29.125 --> 01:18:30.583
+- He is.
+- Uh-huh.
+
+01:18:31.625 --> 01:18:34.708
+Well then,
+perhaps not so useless after all.
+
+01:18:35.875 --> 01:18:38.541
+I wouldn't say he's "my boy."
+
+01:18:42.250 --> 01:18:46.458
+You know, I sometimes think
+I brought you up to be too independent.
+
+01:18:47.041 --> 01:18:49.208
+- Mother!
+- I did it with all of you.
+
+01:18:49.291 --> 01:18:53.458
+Your purpose must be to find who you are.
+
+01:18:53.541 --> 01:18:56.333
+<i>You, Sherlock, Mycroft.</i>
+
+01:18:56.833 --> 01:18:59.458
+Strong, formidable, individual children,
+
+01:18:59.541 --> 01:19:03.166
+but, well, perhaps a little lonely.
+
+01:19:06.041 --> 01:19:08.166
+You will do very well on your own, Enola.
+
+01:19:08.916 --> 01:19:13.250
+But with others, you could be magnificent.
+
+01:19:15.875 --> 01:19:19.375
+Who do you think
+organized all of this after all? Hm?
+
+01:19:19.875 --> 01:19:20.875
+Me?
+
+01:19:23.291 --> 01:19:25.791
+No, you find your allies.
+
+01:19:26.375 --> 01:19:29.750
+Work with them,
+and you will become more of who you are.
+
+01:19:31.041 --> 01:19:32.541
+You speak with one voice,
+
+01:19:33.083 --> 01:19:36.208
+and you will make more noise
+than you could ever have imagined.
+
+01:19:38.416 --> 01:19:42.041
+Come on. She should go.
+We'll put them off her scent.
+
+01:19:43.250 --> 01:19:46.291
+So, you dust yourself down...
+
+01:19:49.333 --> 01:19:50.416
+...keep facing forward.
+
+01:19:52.500 --> 01:19:55.500
+And if you ever get condemned
+for murder again, you give me a shout.
+
+01:19:56.666 --> 01:19:57.666
+I will.
+
+01:20:02.125 --> 01:20:03.208
+Thank you, Edith.
+
+01:20:08.416 --> 01:20:09.250
+Be careful.
+
+01:20:25.291 --> 01:20:26.666
+And get a haircut.
+
+01:20:26.750 --> 01:20:27.875
+It's a mess.
+
+01:20:30.375 --> 01:20:31.750
+I think my hair is fine.
+
+01:20:45.083 --> 01:20:46.250
+Come on.
+
+01:20:51.208 --> 01:20:52.833
+<i>I need you to pack your things.</i>
+
+01:20:52.916 --> 01:20:55.125
+I need you to be in a safer place.
+
+01:20:55.208 --> 01:20:57.833
+Is... Is my sister gone?
+
+01:20:57.916 --> 01:20:59.500
+- Like Mae?
+- No.
+
+01:20:59.583 --> 01:21:00.750
+- Is she...
+- No.
+
+01:21:00.833 --> 01:21:02.333
+I'm sure she's all right.
+
+01:21:02.416 --> 01:21:04.333
+I'm closer to finding her.
+
+01:21:06.250 --> 01:21:07.250
+Doris,
+
+01:21:08.583 --> 01:21:09.666
+she'll take me in.
+
+01:21:10.291 --> 01:21:12.000
+She's got a spare bed now.
+
+01:21:13.916 --> 01:21:14.916
+Her sister?
+
+01:21:16.291 --> 01:21:17.291
+Dead.
+
+01:21:17.375 --> 01:21:18.375
+Typhus.
+
+01:21:23.333 --> 01:21:24.333
+Dead.
+
+01:21:36.291 --> 01:21:38.416
+There's traces of something in this soil.
+
+01:21:41.083 --> 01:21:42.958
+One has red, and one has white in it.
+
+01:21:46.416 --> 01:21:50.166
+The matches you make,
+when did they change from red to white?
+
+01:21:50.250 --> 01:21:52.625
+I dunno. Around two years ago.
+
+01:21:52.708 --> 01:21:58.541
+In two years, he's turned red into black.
+Or should I say red into white?
+
+01:21:59.125 --> 01:22:00.916
+Typhus.
+The plague of our times.
+
+01:22:01.000 --> 01:22:03.583
+Two years it's been killing these girls.
+
+01:22:23.541 --> 01:22:24.541
+Out.
+
+01:22:25.625 --> 01:22:26.833
+What are you looking at?
+
+01:23:00.875 --> 01:23:01.875
+I need your help.
+
+01:23:04.416 --> 01:23:06.166
+Don't make me repeat it! May I come in?
+
+01:23:08.208 --> 01:23:11.541
+Firstly, I would like to apologize
+for so much.
+
+01:23:11.625 --> 01:23:14.083
+I have failed
+to see allies in plain sight.
+
+01:23:14.166 --> 01:23:15.250
+- And I have...
+- Enola.
+
+01:23:16.250 --> 01:23:17.916
+There's something I wish to say too.
+
+01:23:18.000 --> 01:23:19.520
+- All right.
+- If you'd just...
+
+01:23:25.166 --> 01:23:29.041
+All day, every day,
+all I do is compromise.
+
+01:23:30.208 --> 01:23:33.476
+If I vote for this lord's bill that will
+allow him to pump bilge water into a lake,
+
+01:23:33.500 --> 01:23:35.583
+then he will vote for my forestry reform.
+
+01:23:35.666 --> 01:23:39.083
+I want to stand up and say,
+"This isn't right," but I have no allies.
+
+01:23:39.875 --> 01:23:42.500
+So to do so
+would be to risk all that is good,
+
+01:23:42.583 --> 01:23:45.291
+so I lie awake trying to work out
+which path to follow,
+
+01:23:46.166 --> 01:23:47.166
+alone.
+
+01:23:48.833 --> 01:23:50.416
+There is no search for a wife,
+
+01:23:51.375 --> 01:23:54.708
+because politics consumes me constantly.
+
+01:23:57.625 --> 01:23:59.625
+That is the speech I stored up for you.
+
+01:24:02.875 --> 01:24:03.875
+You're a good man.
+
+01:24:05.166 --> 01:24:06.166
+I'm a man now?
+
+01:24:06.583 --> 01:24:07.750
+On occasion.
+
+01:24:08.416 --> 01:24:11.500
+But I understand your struggle,
+because I struggle too.
+
+01:24:12.291 --> 01:24:14.250
+I am sorry we cannot talk more,
+because I have...
+
+01:24:14.333 --> 01:24:16.208
+A case to solve?
+
+01:24:20.666 --> 01:24:22.916
+The girl I'm looking for, Sarah Chapman,
+
+01:24:23.791 --> 01:24:25.541
+she has proof that girls are dying
+
+01:24:25.625 --> 01:24:27.958
+from the phosphorus
+they work with every day.
+
+01:24:28.041 --> 01:24:31.541
+And the factory
+are trying to cover it up as typhus.
+
+01:24:32.583 --> 01:24:33.583
+She knows it,
+
+01:24:34.750 --> 01:24:36.833
+and someone is going to kill her for it.
+
+01:24:36.916 --> 01:24:38.000
+Then what can we do?
+
+01:24:40.333 --> 01:24:41.333
+We?
+
+01:24:47.333 --> 01:24:50.373
+- Don't open it. it could be the police.
+- You're still wanted by the police?
+
+01:24:50.416 --> 01:24:52.583
+- Of course. I escaped jail.
+- You escaped?
+
+01:24:52.666 --> 01:24:53.833
+Forget I told you that.
+
+01:24:55.416 --> 01:24:58.500
+The lights are on. If I don't answer,
+they'll suspect more. Hide.
+
+01:24:58.583 --> 01:25:00.343
+Coming.
+
+01:25:02.750 --> 01:25:04.670
+- Miss Cicely.
+- I'm sorry it's so late.
+
+01:25:04.708 --> 01:25:08.375
+No, no, not at all.
+I-I told you to come. I-I want to help.
+
+01:25:08.458 --> 01:25:10.625
+- Is anyone else here?
+- No.
+
+01:25:10.708 --> 01:25:11.958
+- Um...
+- Good.
+
+01:25:12.500 --> 01:25:15.458
+Better we are alone, for it is imperative
+that I speak with you.
+
+01:25:15.958 --> 01:25:18.541
+Sir, I feel that you're a man
+of great character
+
+01:25:18.625 --> 01:25:19.750
+and that I can trust you.
+
+01:25:20.250 --> 01:25:23.750
+Which is why I fear I may have to unburden
+myself, and it may prove shocking.
+
+01:25:23.833 --> 01:25:24.916
+Miss Cicely...
+
+01:25:25.000 --> 01:25:29.041
+It's just, I've been wanting
+to speak with you about... a relationship.
+
+01:25:29.125 --> 01:25:32.416
+Oh, that. Yes. Uh, perhaps
+we can discuss this another time?
+
+01:25:33.458 --> 01:25:34.291
+Please, sir.
+
+01:25:34.375 --> 01:25:37.750
+I'm terribly sorry. Let me assure you,
+I do share your interest.
+
+01:25:37.833 --> 01:25:40.291
+- We will talk again.
+- Thank you.
+
+01:25:43.291 --> 01:25:45.625
+She's gone. She was flustered.
+
+01:25:48.458 --> 01:25:51.291
+Do not think of doubting me.
+Cicely was here for my help.
+
+01:25:51.875 --> 01:25:55.000
+She told me at the ball that she's working
+on a bill to change factory law.
+
+01:25:56.333 --> 01:25:58.833
+She's unearthed something,
+some corruption or other.
+
+01:25:59.458 --> 01:26:00.708
+She's doing what?
+
+01:26:05.291 --> 01:26:09.125
+Enola, if you have any concerns,
+I tell you categorically, I...
+
+01:26:09.208 --> 01:26:10.875
+I have no eyes for anyone, but...
+
+01:26:12.541 --> 01:26:14.666
+Well, no, this is not
+quite how I wanted to say that.
+
+01:26:15.708 --> 01:26:18.583
+But to say,
+in terms of romantic interests,
+
+01:26:19.083 --> 01:26:21.250
+yes, my interest is...
+
+01:26:21.750 --> 01:26:24.517
+The reason I don't have to search,
+I'm busy with politics, like I said...
+
+01:26:24.541 --> 01:26:25.981
+<i>You admire Lord Tewkesbury?</i>
+
+01:26:26.041 --> 01:26:28.666
+I hear he is a good man
+and a great reformer.
+
+01:26:28.750 --> 01:26:31.125
+The woman I would be most interested in...
+
+01:26:31.208 --> 01:26:32.583
+I mustn't lose my chance.
+
+01:26:33.916 --> 01:26:34.916
+You're not listening.
+
+01:26:35.000 --> 01:26:36.791
+Good evening, Lord Tewkesbury.
+
+01:26:36.875 --> 01:26:38.583
+She didn't have a chaperone.
+
+01:26:40.833 --> 01:26:43.208
+You got five seconds
+to tell me why you're here.
+
+01:26:44.000 --> 01:26:45.291
+<i>I have been blind!</i>
+
+01:26:45.375 --> 01:26:48.250
+The phosphorus in the match-making
+has mixed with oxygen.
+
+01:26:49.166 --> 01:26:50.666
+I have missed everything.
+
+01:26:50.750 --> 01:26:52.208
+She's probably under your nose.
+
+01:26:55.541 --> 01:26:56.875
+Cicely.
+
+01:27:05.458 --> 01:27:07.583
+Sarah is Cicely.
+
+01:27:09.375 --> 01:27:11.250
+Cicely is Sarah!
+
+01:27:11.875 --> 01:27:13.083
+Enola!
+
+01:27:13.708 --> 01:27:15.000
+Enola, what on Earth...
+
+01:27:17.458 --> 01:27:19.375
+Enola, did you understand what I said?
+
+01:27:20.083 --> 01:27:24.083
+Or rather what I didn't say?
+Did you understand... what I didn't say?
+
+01:27:24.166 --> 01:27:26.375
+Yes. You were saying that you...
+
+01:27:34.833 --> 01:27:35.916
+<i>You'll learn.</i>
+
+01:27:37.041 --> 01:27:40.833
+That message
+you sent me with the fan at the ball,
+
+01:27:40.916 --> 01:27:41.916
+what did it mean?
+
+01:27:45.666 --> 01:27:46.708
+It means I love you.
+
+01:27:55.083 --> 01:27:58.250
+Ladies and gentlemen,
+to the future.
+
+01:28:02.750 --> 01:28:03.750
+Of course.
+
+01:28:06.000 --> 01:28:08.333
+They were working together, in love.
+
+01:28:09.458 --> 01:28:10.833
+They had a plan.
+
+01:28:12.208 --> 01:28:16.583
+To expose the corruption in that factory
+and stop what his father was doing.
+
+01:28:17.375 --> 01:28:18.625
+They wanted your help.
+
+01:28:18.708 --> 01:28:20.833
+William Lyon invited you to that ball.
+
+01:28:20.916 --> 01:28:22.458
+He's a radical just like you.
+
+01:28:23.125 --> 01:28:25.166
+They needed my help. You're right.
+
+01:28:25.958 --> 01:28:27.750
+But, Enola, we must return inside.
+
+01:28:27.833 --> 01:28:30.166
+The police are pursuing you,
+and we have much to talk of.
+
+01:28:30.250 --> 01:28:32.916
+No! I know we have much to talk of,
+my dear, dear lord.
+
+01:28:33.000 --> 01:28:34.125
+You love me.
+
+01:28:34.208 --> 01:28:36.250
+And as it turns out, I love you too.
+
+01:28:37.583 --> 01:28:38.583
+You love me too?
+
+01:28:41.041 --> 01:28:42.833
+You really are a nincompoop.
+
+01:28:45.000 --> 01:28:46.000
+Now hail a cab.
+
+01:28:57.083 --> 01:29:00.875
+- Shh. You're walking loudly.
+- But it's gravel.
+
+01:29:00.958 --> 01:29:03.118
+- You've got large feet.
+- I know.
+
+01:29:08.291 --> 01:29:10.541
+Wait here. Keep guard.
+
+01:29:10.625 --> 01:29:12.916
+If anyone comes,
+just tell them you're a lord.
+
+01:29:13.708 --> 01:29:14.708
+I am a lord.
+
+01:29:15.291 --> 01:29:16.916
+Then they'll likely believe you.
+
+01:29:17.583 --> 01:29:18.583
+All right.
+
+01:30:09.833 --> 01:30:11.041
+You.
+
+01:30:13.458 --> 01:30:15.750
+- How ridiculous you are.
+- I'm ridiculous?
+
+01:30:15.833 --> 01:30:18.000
+I told you to stay safe and stay away.
+
+01:30:18.083 --> 01:30:20.791
+Now you're breaking out of prison
+and have the police after you.
+
+01:30:21.291 --> 01:30:24.125
+Oh. Are you hurt? I am sorry.
+
+01:30:24.208 --> 01:30:25.666
+Are you not hurt?
+
+01:30:27.208 --> 01:30:28.208
+It seems not.
+
+01:30:29.125 --> 01:30:30.125
+Hm.
+
+01:30:30.458 --> 01:30:32.583
+I wonder who taught you
+to fight like that.
+
+01:30:33.333 --> 01:30:35.083
+Another thing our mother
+has to answer for.
+
+01:30:35.166 --> 01:30:37.583
+She should have fed me as well as you
+is what I think.
+
+01:30:38.625 --> 01:30:41.458
+Hang on. Why are you here?
+Is it my case, or your own?
+
+01:30:42.041 --> 01:30:45.416
+Both. I know how Grail
+got your fingerprints.
+
+01:30:45.500 --> 01:30:47.416
+Oxidized phosphorus dust
+
+01:30:48.333 --> 01:30:50.708
+lifted from the table
+and applied to the knife.
+
+01:30:51.791 --> 01:30:52.791
+You're innocent.
+
+01:30:53.916 --> 01:30:55.041
+You doubted it?
+
+01:30:55.791 --> 01:30:57.541
+Nothing's certain till it's proved.
+
+01:30:59.416 --> 01:31:00.500
+And your case?
+
+01:31:01.000 --> 01:31:03.166
+My adversary, his trail,
+
+01:31:03.791 --> 01:31:04.916
+it leads here.
+
+01:31:06.875 --> 01:31:08.833
+It seems our cases are connected.
+
+01:31:11.083 --> 01:31:11.958
+Shall we?
+
+01:31:44.500 --> 01:31:45.500
+William Lyon.
+
+01:31:46.875 --> 01:31:48.416
+Sarah's love.
+
+01:31:48.500 --> 01:31:50.791
+And my thief in a taper crown hat.
+
+01:31:57.458 --> 01:32:01.000
+Stay unemotional. There's nothing more
+we can do for him now.
+
+01:32:01.708 --> 01:32:04.375
+Need to keep our minds fresh
+and our eyes sharp.
+
+01:32:04.875 --> 01:32:06.250
+He was seized.
+
+01:32:07.583 --> 01:32:10.500
+- Yes, and searched.
+- For the document he took?
+
+01:32:11.833 --> 01:32:12.833
+A knife?
+
+01:32:13.250 --> 01:32:14.250
+No, bigger.
+
+01:32:15.833 --> 01:32:16.833
+A cutlass.
+
+01:32:18.916 --> 01:32:20.208
+Heavy boot scuffs,
+
+01:32:21.625 --> 01:32:24.208
+and scratch marks from a cane
+that has a metal ferrule.
+
+01:32:26.083 --> 01:32:27.250
+Grail.
+
+01:32:28.291 --> 01:32:29.791
+But at whose behest?
+
+01:32:30.916 --> 01:32:32.666
+There was another in this room.
+
+01:32:32.750 --> 01:32:34.333
+This cigar had a holder.
+
+01:32:38.041 --> 01:32:39.708
+And traces of wool.
+
+01:32:42.083 --> 01:32:44.625
+Astrakhan, the finest.
+
+01:32:44.708 --> 01:32:49.083
+Well, Lord McIntyre,
+if I, um, might suggest a little lunch.
+
+01:32:50.416 --> 01:32:53.166
+<i>Leave me be, please.
+They're watching.</i>
+
+01:32:56.583 --> 01:32:58.041
+Where did William steal from?
+
+01:32:58.541 --> 01:33:00.583
+- The Treasury Office?
+- Yes.
+
+01:33:00.666 --> 01:33:03.333
+The office of Lord McIntyre,
+Treasury Minister.
+
+01:33:03.916 --> 01:33:05.166
+How did you come to that?
+
+01:33:06.375 --> 01:33:08.500
+I think what William stole was proof
+
+01:33:08.583 --> 01:33:11.500
+that Lyon and McIntyre
+were conspiring together.
+
+01:33:12.583 --> 01:33:14.208
+- Corruption.
+- Yes.
+
+01:33:14.291 --> 01:33:16.041
+Fueled by greed.
+
+01:33:16.708 --> 01:33:20.083
+McIntyre has been secretly profiting
+from the factory.
+
+01:33:20.166 --> 01:33:23.041
+They changed the match formula
+to a cheaper phosphorus,
+
+01:33:24.541 --> 01:33:25.708
+and it's deadly.
+
+01:33:26.333 --> 01:33:27.208
+Enola?
+
+01:33:27.291 --> 01:33:28.833
+Enola, I was concerned for you.
+
+01:33:28.916 --> 01:33:31.708
+You left me out there in the dark,
+and I nearly tore my...
+
+01:33:35.208 --> 01:33:37.125
+- Sherlock Holmes? How do...
+- Not the time.
+
+01:33:39.416 --> 01:33:40.416
+Oh my...
+
+01:33:41.666 --> 01:33:43.000
+- Is he...
+- Stay unemotional.
+
+01:33:44.833 --> 01:33:47.166
+- Who did this?
+- Lord McIntyre.
+
+01:33:47.750 --> 01:33:49.791
+- No.
+- But it all fits.
+
+01:33:49.875 --> 01:33:53.083
+No one has sat in this chair.
+No marks on the carpet, no indentation.
+
+01:33:53.166 --> 01:33:56.291
+The cigar has been smoked, but cold.
+
+01:33:57.125 --> 01:33:59.625
+And look, no ash.
+
+01:34:01.875 --> 01:34:04.541
+- No lips have touched that glass.
+- Exactly.
+
+01:34:04.625 --> 01:34:07.125
+These clues
+have been planted for us to find,
+
+01:34:07.708 --> 01:34:09.250
+to mislead us from the true villain.
+
+01:34:10.250 --> 01:34:11.500
+This has all been staged.
+
+01:34:13.250 --> 01:34:14.250
+By who?
+
+01:34:14.833 --> 01:34:18.958
+Not McIntyre, but by someone who had
+a lot to lose without that document.
+
+01:34:19.041 --> 01:34:22.000
+Someone who knew what they were up to
+and was blackmailing them.
+
+01:34:23.375 --> 01:34:24.375
+My opponent.
+
+01:34:27.208 --> 01:34:28.875
+Someone who likes a game.
+
+01:34:30.833 --> 01:34:34.083
+- Did they get what they wanted?
+- No, I don't think so.
+
+01:34:36.958 --> 01:34:37.958
+Poor William.
+
+01:34:47.708 --> 01:34:48.708
+Hm.
+
+01:34:55.416 --> 01:34:58.541
+- They did get something.
+- Mae's terrible music.
+
+01:34:59.208 --> 01:35:00.916
+"The Truth of the Gods."
+
+01:35:01.000 --> 01:35:02.750
+Could be biblical, mythical.
+
+01:35:02.833 --> 01:35:03.833
+Theatrical?
+
+01:35:07.416 --> 01:35:10.166
+The Gods is the top row of the theater.
+
+01:35:10.833 --> 01:35:11.833
+<i>The balcony.</i>
+
+01:35:12.916 --> 01:35:14.125
+Doesn't everyone know that?
+
+01:35:16.083 --> 01:35:17.208
+This isn't music.
+
+01:35:26.125 --> 01:35:27.125
+It's a map.
+
+01:35:36.958 --> 01:35:39.625
+Just to be clear
+as to what we might be about to face...
+
+01:35:40.958 --> 01:35:43.541
+There may be some violence.
+You've faced it before.
+
+01:35:44.458 --> 01:35:45.458
+Yes.
+
+01:35:46.000 --> 01:35:47.791
+I did have part of a suit of armor on.
+
+01:35:48.291 --> 01:35:51.416
+But yes, fighting will be...
+
+01:35:52.458 --> 01:35:53.291
+Yes.
+
+01:35:53.375 --> 01:35:55.750
+- You've been in a fight before?
+- Yes, plenty of fights.
+
+01:35:55.833 --> 01:35:56.958
+Fenced for my school.
+
+01:35:57.875 --> 01:35:58.875
+Mm.
+
+01:36:02.458 --> 01:36:04.458
+Fine. Can you teach me to fight?
+
+01:36:05.375 --> 01:36:07.833
+What, right now? In a carriage?
+
+01:36:07.916 --> 01:36:10.916
+Did I not teach you to dance
+in five minutes in a bathroom?
+
+01:36:12.083 --> 01:36:14.166
+All right. Fine.
+
+01:36:18.166 --> 01:36:21.750
+There are two secrets to fighting.
+Avoid the punch, make the counterpunch.
+
+01:36:23.250 --> 01:36:24.916
+I don't see how two secrets... Ow!
+
+01:36:26.041 --> 01:36:27.375
+Your first lesson.
+
+01:36:27.458 --> 01:36:28.458
+Ow.
+
+01:36:29.416 --> 01:36:30.416
+Ow!
+
+01:36:30.458 --> 01:36:32.583
+Your second. You didn't avoid the punch.
+
+01:36:32.666 --> 01:36:35.833
+- You can hardly expect me to hit a girl.
+- Oh dear.
+
+01:36:35.916 --> 01:36:36.916
+I'm not some... Ow!
+
+01:36:37.625 --> 01:36:38.958
+Ow! Will you stop that?
+
+01:36:39.458 --> 01:36:41.000
+I can't stop.
+
+01:36:42.583 --> 01:36:45.958
+We're approaching.
+
+01:37:11.416 --> 01:37:13.166
+I may need more of those lessons.
+
+01:37:38.583 --> 01:37:40.250
+X marks the spot.
+
+01:37:59.791 --> 01:38:00.791
+Sarah.
+
+01:38:03.583 --> 01:38:04.583
+It's all there.
+
+01:38:06.250 --> 01:38:07.750
+All the proof we need.
+
+01:38:09.458 --> 01:38:12.666
+The contract
+between Lyon and McIntyre
+
+01:38:13.541 --> 01:38:15.083
+to change the phosphorus.
+
+01:38:17.375 --> 01:38:19.000
+What William stole for you.
+
+01:38:24.166 --> 01:38:27.541
+And the pages from the factory register.
+
+01:38:27.625 --> 01:38:29.750
+That's what you stole from the office.
+
+01:38:31.125 --> 01:38:33.333
+These are the names
+of the girls they killed.
+
+01:38:33.416 --> 01:38:35.208
+I couldn't let 'em be forgotten.
+
+01:38:37.125 --> 01:38:40.958
+And it's proof that match girls
+are dying from working in that factory,
+
+01:38:41.458 --> 01:38:42.833
+and they knew it all along.
+
+01:38:45.000 --> 01:38:47.291
+You're a bloody good detective,
+Enola Holmes.
+
+01:38:49.708 --> 01:38:51.250
+You are too, Sarah Chapman.
+
+01:38:55.416 --> 01:38:57.750
+I will share this with the world,
+I promise you.
+
+01:38:59.875 --> 01:39:00.875
+Thank you.
+
+01:39:02.291 --> 01:39:05.041
+Now we must find William.
+He was supposed to meet me six hours ago.
+
+01:39:07.500 --> 01:39:10.083
+I'm afraid William won't be coming.
+
+01:39:15.833 --> 01:39:16.833
+What?
+
+01:39:20.250 --> 01:39:21.250
+I'm sorry.
+
+01:39:22.750 --> 01:39:24.083
+I'm so sorry.
+
+01:39:30.041 --> 01:39:32.000
+I told him we had everything we needed.
+
+01:39:33.250 --> 01:39:34.750
+That we should just go public.
+
+01:39:37.625 --> 01:39:41.583
+He said nobody would care unless we had
+someone in power who would listen.
+
+01:39:44.458 --> 01:39:46.583
+He was just trying to keep me safe.
+
+01:39:48.916 --> 01:39:50.041
+And now I've lost him.
+
+01:39:50.791 --> 01:39:53.000
+We must move quickly,
+or we'll lose you too.
+
+01:39:54.083 --> 01:39:55.791
+Losing this...
+
+01:39:58.458 --> 01:39:59.708
+losing that.
+
+01:40:03.458 --> 01:40:05.625
+- Seems you've lost everything.
+- Bessie!
+
+01:40:06.166 --> 01:40:08.083
+You've all been very careless.
+
+01:40:14.083 --> 01:40:15.083
+I'll take those.
+
+01:40:15.125 --> 01:40:16.333
+Let go of her.
+
+01:40:19.000 --> 01:40:20.708
+Give me the papers and I will.
+
+01:40:35.875 --> 01:40:37.208
+Run, Bessie!
+
+01:40:43.250 --> 01:40:46.333
+Don't just stand there!
+
+01:40:51.500 --> 01:40:53.375
+Ow!
+
+01:40:53.458 --> 01:40:56.750
+Get after them!
+
+01:41:12.750 --> 01:41:14.833
+Ow.
+
+01:41:20.166 --> 01:41:21.958
+Avoid the punch, make the counterpunch.
+
+01:41:44.916 --> 01:41:45.916
+Tewkesbury!
+
+01:42:47.041 --> 01:42:48.250
+Argh!
+
+01:42:48.333 --> 01:42:49.333
+Argh.
+
+01:42:54.541 --> 01:42:55.541
+No!
+
+01:43:05.750 --> 01:43:07.125
+Bessie!
+
+01:43:08.708 --> 01:43:10.000
+Run.
+
+01:43:11.291 --> 01:43:12.541
+I said run!
+
+01:43:57.041 --> 01:43:58.041
+Enola!
+
+01:44:05.166 --> 01:44:08.125
+<i>You got more to you than I thought.</i>
+
+01:45:14.250 --> 01:45:15.250
+Huh.
+
+01:45:17.416 --> 01:45:19.583
+What places we find ourselves in.
+
+01:45:24.666 --> 01:45:26.291
+What places indeed.
+
+01:45:30.458 --> 01:45:32.833
+I've always loved the theater.
+
+01:45:36.958 --> 01:45:37.791
+Got it?
+
+01:45:37.875 --> 01:45:41.916
+I used to dream
+I'd end up on the stage.
+
+01:45:43.875 --> 01:45:45.083
+You're not rid of me yet,
+
+01:45:45.166 --> 01:45:47.250
+Viscount Tewkesbury,
+Marquess of Basilwether.
+
+01:45:57.583 --> 01:45:59.083
+Enola!
+
+01:46:06.208 --> 01:46:07.541
+Hurrah!
+
+01:46:18.833 --> 01:46:19.875
+Are you all right?
+
+01:46:26.500 --> 01:46:27.875
+You were made to fight.
+
+01:46:39.500 --> 01:46:40.958
+Congratulations.
+
+01:46:43.083 --> 01:46:45.416
+Lord McIntyre.
+What are you doing here?
+
+01:46:45.500 --> 01:46:47.833
+I was summoned.
+
+01:46:48.666 --> 01:46:52.416
+Your brother knew that I would want
+to see the right people shown justice.
+
+01:46:52.500 --> 01:46:54.666
+And I don't know how to thank you
+
+01:46:54.750 --> 01:46:57.291
+for retrieving this government property
+
+01:46:57.375 --> 01:46:59.666
+and, uh, bringing this killer to light.
+
+01:46:59.750 --> 01:47:03.583
+A rot amongst our ranks.
+
+01:47:06.166 --> 01:47:09.416
+The world shall know
+the name Enola Holmes,
+
+01:47:09.500 --> 01:47:10.666
+I'll make sure of it.
+
+01:47:12.500 --> 01:47:14.541
+Lestrade, arrest that girl.
+
+01:47:15.541 --> 01:47:17.833
+She's done nothing wrong.
+
+01:47:17.916 --> 01:47:19.833
+On what charge, sir?
+
+01:47:19.916 --> 01:47:23.458
+- Theft.
+- All she stole from you was the truth.
+
+01:47:23.541 --> 01:47:25.708
+She took personal information,
+
+01:47:26.625 --> 01:47:30.625
+which she used
+for extortion and blackmail.
+
+01:47:30.708 --> 01:47:33.416
+Which is why she will serve her time.
+
+01:47:33.916 --> 01:47:34.916
+Ah.
+
+01:47:36.958 --> 01:47:38.083
+But you are mistaken.
+
+01:47:39.166 --> 01:47:42.041
+She was not your blackmailer.
+
+01:47:42.541 --> 01:47:45.416
+I summoned you here
+to draw that very person out.
+
+01:47:46.041 --> 01:47:47.791
+The accounting was masterful.
+
+01:47:48.500 --> 01:47:52.791
+A tangle of roots,
+but all pointed to one pocket.
+
+01:47:53.500 --> 01:47:57.375
+One person
+receiving the fruits of their schemes
+
+01:47:57.458 --> 01:47:58.750
+with no one noticing.
+
+01:48:00.375 --> 01:48:03.416
+Hearing everything, seeing everything.
+
+01:48:04.791 --> 01:48:06.833
+Ignored for years.
+
+01:48:06.916 --> 01:48:08.333
+Playing them all.
+
+01:48:09.708 --> 01:48:10.708
+It's all a game.
+
+01:48:12.708 --> 01:48:15.750
+And it's fun, once you know the rules.
+
+01:48:21.500 --> 01:48:22.416
+Miss Mira Troy.
+
+01:48:22.500 --> 01:48:24.583
+Absurd.
+
+01:48:25.541 --> 01:48:27.083
+Oh, I don't believe it.
+
+01:48:28.500 --> 01:48:32.125
+It's remarkable
+what can be done
+
+01:48:32.208 --> 01:48:35.875
+when people underestimate you.
+
+01:48:37.208 --> 01:48:38.666
+And then came the problem.
+
+01:48:39.875 --> 01:48:41.125
+William stole the contract.
+
+01:48:41.208 --> 01:48:43.083
+He threatened to cut off your money train.
+
+01:48:43.166 --> 01:48:44.541
+And you couldn't have that.
+
+01:48:45.250 --> 01:48:47.708
+You hired Grail to retrieve the document,
+
+01:48:48.666 --> 01:48:50.916
+but things got out of hand,
+
+01:48:51.000 --> 01:48:53.208
+so you tried to point us to Lord McIntyre.
+
+01:48:54.208 --> 01:48:56.083
+A rare misstep in your game...
+
+01:48:58.125 --> 01:48:59.166
+Moriarty.
+
+01:49:06.291 --> 01:49:10.833
+Such a shame our divertissement
+has to end, Mr. Holmes.
+
+01:49:12.083 --> 01:49:16.208
+I was so enjoying it.
+
+01:49:17.791 --> 01:49:20.416
+And you, Enola.
+
+01:49:21.500 --> 01:49:24.458
+Miss Troy, you have been behind this?
+
+01:49:25.916 --> 01:49:29.333
+Of course, you never can find
+the proper staff.
+
+01:49:30.041 --> 01:49:31.750
+I only wanted the agreements back.
+
+01:49:32.708 --> 01:49:35.333
+Though I couldn't be seen
+to question William myself,
+
+01:49:35.416 --> 01:49:37.291
+you were so obliging.
+
+01:49:39.083 --> 01:49:43.166
+If you wish to speak with William,
+you could always try with that.
+
+01:49:46.875 --> 01:49:51.041
+Just a pity he was smarter
+and braver in the end than I'd expected.
+
+01:49:51.125 --> 01:49:55.666
+They both were.
+Their deaths were so unnecessary.
+
+01:49:56.291 --> 01:50:02.958
+But Superintendent Grail
+was somewhat of a blunt instrument.
+
+01:50:03.541 --> 01:50:04.958
+You!
+
+01:50:05.041 --> 01:50:07.875
+How dare you take advantage
+of your position!
+
+01:50:10.833 --> 01:50:13.166
+I take advantage?
+
+01:50:14.875 --> 01:50:17.583
+What were my advantages?
+
+01:50:19.000 --> 01:50:22.833
+Treated like a common servant
+when I have twice the mind of yours.
+
+01:50:24.958 --> 01:50:26.416
+Any of yours.
+
+01:50:28.833 --> 01:50:32.625
+Why shouldn't I have a share
+of your ill-begotten riches
+
+01:50:32.708 --> 01:50:35.125
+and punish you at the same time?
+
+01:50:36.208 --> 01:50:39.458
+Why shouldn't I be rewarded
+for what I can do?
+
+01:50:40.791 --> 01:50:46.041
+Where is my place in this... society?
+
+01:50:46.750 --> 01:50:48.416
+I am a woman.
+
+01:50:49.000 --> 01:50:50.833
+I cannot join clubs,
+
+01:50:51.500 --> 01:50:52.583
+I cannot own shares,
+
+01:50:52.666 --> 01:50:55.583
+I cannot advance myself as they can.
+
+01:50:56.791 --> 01:50:57.791
+So...
+
+01:51:00.416 --> 01:51:03.000
+I found my own way.
+
+01:51:05.375 --> 01:51:10.125
+And it was fun.
+
+01:51:14.500 --> 01:51:15.833
+Lestrade,
+
+01:51:17.666 --> 01:51:19.666
+take her away.
+
+01:51:19.750 --> 01:51:20.750
+Yes, sir.
+
+01:51:23.041 --> 01:51:24.041
+On what charge, sir?
+
+01:51:24.958 --> 01:51:26.833
+- Extortion.
+- Uh, yes, yes.
+
+01:51:26.916 --> 01:51:27.916
+Blackmail, murder.
+
+01:51:28.750 --> 01:51:29.750
+Go.
+
+01:51:30.083 --> 01:51:33.708
+Such a shame our little dance has to end.
+
+01:51:35.041 --> 01:51:36.666
+For now at least.
+
+01:51:36.750 --> 01:51:38.833
+Perhaps we shall take to the floor again.
+
+01:51:47.083 --> 01:51:48.083
+No!
+
+01:51:48.791 --> 01:51:50.208
+No!
+
+01:51:52.041 --> 01:51:54.250
+Well, there. That's that then.
+
+01:51:56.166 --> 01:51:59.166
+I accidentally burnt my own property.
+What of it?
+
+01:52:00.458 --> 01:52:03.041
+You are corrupt, sir.
+
+01:52:03.125 --> 01:52:05.833
+And complicit in the deaths
+of hundreds of match girls.
+
+01:52:07.208 --> 01:52:08.500
+Where is your proof?
+
+01:52:10.250 --> 01:52:11.291
+Good.
+
+01:52:11.375 --> 01:52:14.958
+So... back to business.
+
+01:52:16.291 --> 01:52:18.166
+- Sir, you cannot...
+- Tewkesbury.
+
+01:52:20.875 --> 01:52:21.875
+Patience.
+
+01:52:28.833 --> 01:52:29.833
+Glory be.
+
+01:52:41.916 --> 01:52:44.833
+All those names, those lives,
+
+01:52:45.833 --> 01:52:46.916
+I failed 'em, Enola.
+
+01:52:47.583 --> 01:52:48.708
+Don't say that.
+
+01:52:50.458 --> 01:52:51.458
+Mae gone...
+
+01:52:54.375 --> 01:52:55.375
+William gone,
+
+01:52:56.791 --> 01:52:58.541
+and they're gonna get away with it.
+
+01:52:59.750 --> 01:53:01.750
+You heard the man. "Where's your proof?"
+
+01:53:03.291 --> 01:53:04.291
+What do we have now?
+
+01:53:09.166 --> 01:53:10.375
+We have each other...
+
+01:53:13.583 --> 01:53:15.166
+and we have the truth.
+
+01:53:27.041 --> 01:53:29.875
+You're late, Bess Chapman.
+Docking you a penny.
+
+01:53:32.625 --> 01:53:33.625
+Oi.
+
+01:53:35.000 --> 01:53:36.625
+You're not welcome here no more.
+
+01:53:38.208 --> 01:53:40.125
+What are you doing? Oi!
+
+01:53:40.708 --> 01:53:41.708
+Get down.
+
+01:53:42.250 --> 01:53:43.541
+Get down!
+
+01:53:44.041 --> 01:53:45.750
+Let her speak!
+
+01:53:49.833 --> 01:53:51.041
+A few weeks ago,
+
+01:53:52.750 --> 01:53:55.666
+Mae Izley, William Lyon, and I
+
+01:53:55.750 --> 01:53:57.375
+set out to prove something.
+
+01:53:59.041 --> 01:54:01.333
+To prove that this factory
+was killing people,
+
+01:54:02.791 --> 01:54:03.958
+and they knew it.
+
+01:54:04.041 --> 01:54:07.458
+But they decided that profit
+mattered more than we did.
+
+01:54:08.916 --> 01:54:11.166
+- You're coming with me.
+- Shh!
+
+01:54:11.250 --> 01:54:14.333
+It ain't typhus that's killing us.
+It's the phosphorus.
+
+01:54:15.041 --> 01:54:16.750
+What we work with every day.
+
+01:54:17.750 --> 01:54:19.750
+You lying little toerag.
+
+01:54:19.833 --> 01:54:21.375
+That's a penny off your wages!
+
+01:54:23.750 --> 01:54:25.083
+These were our friends...
+
+01:54:27.416 --> 01:54:28.500
+our sisters...
+
+01:54:33.791 --> 01:54:35.083
+and our children.
+
+01:54:36.875 --> 01:54:39.291
+Well, it stops now.
+
+01:54:41.458 --> 01:54:44.625
+It's time for us to use
+the only thing we have. Ourselves.
+
+01:54:45.500 --> 01:54:49.250
+It's time for us to refuse to work.
+
+01:54:49.333 --> 01:54:51.000
+It's time to tell 'em no.
+
+01:54:51.791 --> 01:54:53.666
+- Right, get back to work.
+- No!
+
+01:54:55.208 --> 01:54:57.625
+You leave here, there is no coming back.
+
+01:54:59.125 --> 01:55:01.375
+You will not get employed here again.
+
+01:55:02.875 --> 01:55:05.958
+Well, will you join me?
+
+01:55:09.541 --> 01:55:11.000
+Think of your families.
+
+01:55:11.833 --> 01:55:13.125
+Don't do it, girls.
+
+01:55:13.208 --> 01:55:15.666
+It is not worth the risk.
+
+01:55:16.375 --> 01:55:17.375
+Well,
+
+01:55:18.916 --> 01:55:19.916
+will ya?
+
+01:55:20.375 --> 01:55:22.416
+This is how the world works.
+
+01:55:23.625 --> 01:55:24.458
+Please, girls.
+
+01:55:26.333 --> 01:55:28.541
+I know you're scared. I am too.
+
+01:55:28.625 --> 01:55:30.333
+But it's the only power we have!
+
+01:55:37.791 --> 01:55:38.791
+Right,
+
+01:55:40.416 --> 01:55:42.916
+get that machine back on
+and get back to work.
+
+01:55:49.833 --> 01:55:50.833
+Right.
+
+01:55:54.166 --> 01:55:55.166
+No.
+
+01:55:56.500 --> 01:55:58.000
+This can't be their future.
+
+01:55:59.208 --> 01:56:00.208
+I'm sorry, Enola.
+
+01:56:09.000 --> 01:56:10.541
+Stop that.
+
+01:56:19.083 --> 01:56:20.750
+Stop that.
+
+01:56:25.958 --> 01:56:27.250
+Be one voice.
+
+01:56:31.458 --> 01:56:33.541
+That's enough!
+
+01:56:45.916 --> 01:56:46.916
+Stop that!
+
+01:56:57.500 --> 01:56:59.541
+Can't anyone control these bloody women?
+
+01:57:06.083 --> 01:57:07.083
+Come on, girls.
+
+01:57:44.916 --> 01:57:47.375
+- Where are you going?
+- Westminster!
+
+01:57:50.083 --> 01:57:51.083
+There they go.
+
+01:57:52.041 --> 01:57:53.500
+That's a whole lot of noise.
+
+01:57:54.958 --> 01:57:56.916
+She likes causing trouble, doesn't she?
+
+01:57:57.500 --> 01:57:59.958
+It's as if she was molded that way.
+
+01:58:03.333 --> 01:58:04.916
+She still needs that haircut.
+
+01:58:15.083 --> 01:58:17.458
+Seems your boy has learned how to fight.
+
+01:58:19.500 --> 01:58:20.916
+Lord McIntyre.
+
+01:58:25.333 --> 01:58:26.333
+Indeed.
+
+01:58:27.375 --> 01:58:28.375
+He's not my boy.
+
+01:58:35.083 --> 01:58:36.583
+"Pay what you can."
+
+01:58:37.291 --> 01:58:39.916
+And what will people pay you in?
+Potatoes and gratitude?
+
+01:58:40.000 --> 01:58:41.333
+If that's all they have.
+
+01:58:41.416 --> 01:58:44.541
+You can deal with the hoits and toits.
+This is where I should be.
+
+01:58:45.125 --> 01:58:47.125
+Edith said she'll be kind with the rent.
+
+01:58:48.750 --> 01:58:54.291
+You know, you are aware, should you wish
+some finer surrounds, I could, uh...
+
+01:58:56.416 --> 01:58:57.416
+I was thinking...
+
+01:59:00.250 --> 01:59:01.416
+Holmes and Holmes?
+
+01:59:04.250 --> 01:59:05.250
+A partnership?
+
+01:59:09.041 --> 01:59:11.041
+That is the kindest offer.
+
+01:59:12.333 --> 01:59:15.458
+But if I did that,
+I would always be in your shadow.
+
+01:59:16.250 --> 01:59:17.458
+Hm. Yes.
+
+01:59:21.833 --> 01:59:24.083
+Though I do like this new version of you.
+
+01:59:24.875 --> 01:59:26.708
+No one should be alone all the time.
+
+01:59:28.083 --> 01:59:29.375
+A friend would do you well.
+
+01:59:31.875 --> 01:59:33.541
+Perhaps I should write that down.
+
+01:59:37.500 --> 01:59:39.375
+I shall drop by to check on you.
+
+01:59:40.041 --> 01:59:41.125
+I would like that.
+
+01:59:41.916 --> 01:59:45.125
+Perhaps you could come to Baker Street
+from time to time...
+
+01:59:47.208 --> 01:59:48.208
+to check on me.
+
+01:59:52.416 --> 01:59:56.000
+Perhaps we can fix on Thursday, 4 p.m.
+
+01:59:56.916 --> 01:59:58.166
+Thursday at 4:00 it is.
+
+02:00:00.666 --> 02:00:03.416
+It seems I shan't be the last
+to interrupt you today.
+
+02:00:05.625 --> 02:00:06.625
+And he has flowers.
+
+02:00:09.500 --> 02:00:11.666
+- Sherlock.
+- Tewkesbury.
+
+02:00:11.750 --> 02:00:14.041
+- See you on Thursday.
+- Bye, Sherlock.
+
+02:00:23.208 --> 02:00:24.375
+- Sherlock?
+- Yes.
+
+02:00:24.458 --> 02:00:25.458
+Your paper.
+
+02:00:26.250 --> 02:00:27.250
+Thank you.
+
+02:00:27.666 --> 02:00:28.666
+And...
+
+02:00:30.125 --> 02:00:32.666
+thank you... for everything.
+
+02:00:51.708 --> 02:00:54.708
+Tewkesbury, when did I give you
+the impression that I like flowers?
+
+02:00:54.791 --> 02:00:57.458
+They're called Spreading Bellflowers.
+Wild, of course.
+
+02:00:58.041 --> 02:01:00.791
+Attracted to ancient woodland,
+wiry, deceptive,
+
+02:01:01.458 --> 02:01:03.458
+refuse to behave according to any rules,
+
+02:01:03.541 --> 02:01:07.958
+but their petals are so delicate,
+and their flowers...
+
+02:01:08.041 --> 02:01:09.041
+Two things.
+
+02:01:09.083 --> 02:01:12.041
+Your metaphor is tortured,
+and I don't have delicate petals.
+
+02:01:12.125 --> 02:01:13.500
+Oh, and, and, and...
+
+02:01:14.916 --> 02:01:18.166
+It is an invitation to a ball
+being given by...
+
+02:01:18.250 --> 02:01:22.333
+Uh, I am not going to a ball with you.
+I got arrested at the last one.
+
+02:01:23.666 --> 02:01:26.875
+Well, all the more reason to dance again,
+wouldn't you say?
+
+02:01:26.958 --> 02:01:30.083
+- You're a nincompoop.
+- And you are a coward.
+
+02:01:30.166 --> 02:01:33.041
+How dare you speak to a lady
+like that? You are a disgrace, sir.
+
+02:01:33.125 --> 02:01:35.250
+And yet
+you still hold my arm.
+
+02:01:36.041 --> 02:01:37.958
+And yet I still hold your arm.
+
+02:02:18.250 --> 02:02:19.291
+Sherlock Holmes?
+
+02:02:20.166 --> 02:02:21.291
+Yes.
+
+02:02:22.166 --> 02:02:23.583
+I'm here for my appointment.
+
+02:02:25.458 --> 02:02:26.498
+You're seeking a flatmate?
+
+02:02:28.000 --> 02:02:30.125
+- You must have the wrong address.
+- Really?
+
+02:02:32.958 --> 02:02:35.958
+The young lady was very clear
+as to the place a-and the time.
+
+02:02:37.208 --> 02:02:39.166
+"Thursday at 4:00," she said.
+
+02:02:39.250 --> 02:02:41.000
+- You are Sherlock Holmes?
+- Hm.
+
+02:02:42.708 --> 02:02:43.708
+Yes.
+
+02:02:44.791 --> 02:02:46.791
+Please, do come in, Mr...?
+
+02:02:46.875 --> 02:02:47.875
+Doctor.
+
+02:02:48.791 --> 02:02:49.791
+Watson.
+
+02:02:50.500 --> 02:02:51.625
+John Watson.
