@@ -176,6 +176,24 @@ window.videoData = {
         lang: "ms",
         src: "../subtitles/WhiteChicks/WhiteChicks-malay.txt"
       }
+    ],
+  "Friday": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Movies/2023965020.mp4",
+    "Friday-subs": [
+      {
+        label: "English",
+        lang: "en",
+        src: "../subtitles/Friday/Friday-english.txt"
+      },
+      {
+        label: "French",
+        lang: "fr",
+        src: "../subtitles/Friday/Friday-french.txt"
+      },
+      {
+        label: "Arabic",
+        lang: "ar",
+        src: "../subtitles/Friday/Friday-arabic.txt"
+      }
     ]
 };
 
