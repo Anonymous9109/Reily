@@ -652,6 +652,12 @@ const movies = {
     desc: "Overshadowed by the legacy of her brothers, an intrepid teenager sets out to prove herself after her mother disappears. While forming unlikely alliances along the way, she discovers her true worth.",
     video: "",
     play: "EnolaHolmes"
+  },
+  "enola-holmes-2": {
+    title: "Enola Holmes 2",
+    desc: "Enola Holmes takes on her first case as a detective, but to unravel the mystery of a missing girl, she'll need some help from friends -- and brother Sherlock.",
+    video: "",
+    play: "EnolaHolmes2"
   }
 };
 
