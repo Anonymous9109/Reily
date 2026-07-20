@@ -640,6 +640,12 @@ const movies = {
     desc: "Two disgraced FBI agents, Kevin Copeland and Marcus Copeland, are assigned a new case where they must protect Tiffany and Brittany Wilson, two cruise line heiresses, from getting abducted.",
     video: "",
     play: "WhiteChicks"
+  },
+  "friday": {
+    title: "Friday",
+    desc: "Two friends, an unemployed slacker and a small-time drug dealer, find themselves indebted to a gangster. They set out to secure money to save themselves from being killed.",
+    video: "",
+    play: "Friday"
   }
 };
 
