@@ -554,6 +554,12 @@ const movies = [
     genres: ["Comedy"],
     image: "images/AlmostHeroes.jpg",
     link: "Movies/Movie?movie=almost-heroes"
+  },
+  {
+    title: "White Chicks",
+    genres: ["Comedy","Crime"],
+    image: "images/WhiteChicks.jpg",
+    link: "Movies/Movie?movie=white-chicks"
   }
 ];
 
