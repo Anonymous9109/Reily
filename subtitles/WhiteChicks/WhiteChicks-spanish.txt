@@ -1,8 +1,5 @@
 ﻿WEBVTT
 
-00:00:06.000 --> 00:00:12.074
-Anuncie su producto o marca aquí
-contáctenos www.SubtitleDB.org hoy
 
 00:01:23.917 --> 00:01:25.407
 ¿Dónde está Manny?
@@ -5254,10 +5251,3 @@ Podemos reunirnos, y salir de...
 01:49:05.187 --> 01:49:07.621
 ¡Compras!
 
-01:49:08.903 --> 01:49:15.903
-Traducido y subtitulado por
-www.aRGENTeaM.net.
-
-01:49:16.305 --> 01:49:22.856
-Apóyanos y conviértete en miembro VIP Para
-eliminar todos los anuncios www.SubtitleDB.org
