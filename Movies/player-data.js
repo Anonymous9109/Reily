@@ -207,6 +207,29 @@ window.videoData = {
         lang: "ar",
         src: "../subtitles/EnolaHolmes/EnolaHolmes-arabic.vtt"
       }
+    ],
+  "EnolaHolmes2": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Movies/2063311120.mp4",
+    "EnolaHolmes2-subs": [
+      {
+        label: "English",
+        lang: "en",
+        src: "../subtitles/EnolaHolmes2/EnolaHolmes2-english.txt"
+      },
+      {
+        label: "Arabic",
+        lang: "ar",
+        src: "../subtitles/EnolaHolmes2/EnolaHolmes2-arabic.txt"
+      },
+      {
+        label: "Norwegian",
+        lang: "no",
+        src: "../subtitles/EnolaHolmes2/EnolaHolmes2-norwegian.txt"
+      },
+      {
+        label: "French",
+        lang: "fr",
+        src: "../subtitles/EnolaHolmes2/EnolaHolmes2-french.txt"
+      }
     ]
 };
 
