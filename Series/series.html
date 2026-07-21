@@ -238,3 +238,444 @@ document.addEventListener("DOMContentLoaded", () => {
 
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rinolski - Reviews</title>
+  <style>
+    :root {
+      --bg-color: #000000;
+      --card-bg: #0a0a0a;
+      --panel-bg: #141414;
+      --input-bg: #0f0f0f;
+      --border-color: #262626;
+      --border-accent: #404040;
+      --text-main: #ffffff;
+      --text-muted: #888888;
+      --accent: #ffffff;
+      --accent-hover: #cccccc;
+      --danger: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      padding: 24px 16px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .reviews-container {
+      width: 100%;
+      max-width: 750px;
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 10px 30px rgba(255, 255, 255, 0.03);
+    }
+
+    .header-zone {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 16px;
+      margin-bottom: 20px;
+    }
+
+    .header-zone h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-main);
+      letter-spacing: -0.5px;
+    }
+
+    .series-badge {
+      background-color: var(--panel-bg);
+      color: var(--text-main);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      border: 1px solid var(--border-accent);
+    }
+
+    .status-banner {
+      display: none;
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-size: 0.875rem;
+      margin-bottom: 16px;
+      font-weight: 500;
+    }
+    .status-banner.error {
+      background-color: #1a1a1a;
+      border: 1px solid #ffffff;
+      color: #ffffff;
+    }
+    .status-banner.success {
+      background-color: #1a1a1a;
+      border: 1px solid #888888;
+      color: #ffffff;
+    }
+
+    .modal-box {
+      background-color: var(--panel-bg);
+      border: 1px solid var(--border-accent);
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+
+    .modal-box p {
+      color: var(--text-main);
+      margin-bottom: 12px;
+      font-size: 0.95rem;
+    }
+
+    .modal-input-group {
+      display: flex;
+      gap: 10px;
+    }
+
+    .modal-input-group input {
+      flex: 1;
+      padding: 10px 12px;
+      border-radius: 6px;
+      border: 1px solid var(--border-accent);
+      background-color: var(--input-bg);
+      color: #fff;
+      font-size: 0.9rem;
+    }
+
+    .review-input-zone {
+      margin-bottom: 24px;
+    }
+
+    .review-input-zone textarea {
+      width: 100%;
+      height: 110px;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border-accent);
+      background-color: var(--input-bg);
+      color: var(--text-main);
+      font-family: inherit;
+      resize: vertical;
+      margin-bottom: 12px;
+      transition: border-color 0.2s;
+    }
+
+    .review-input-zone textarea:focus,
+    .modal-input-group input:focus,
+    .reply-input-group input:focus {
+      outline: none;
+      border-color: var(--text-main);
+    }
+
+    .btn-primary {
+      padding: 10px 20px;
+      background-color: #ffffff;
+      color: #000000;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .btn-primary:hover {
+      background-color: #cccccc;
+    }
+
+    .review-card {
+      background-color: var(--input-bg);
+      border: 1px solid var(--border-color);
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+    }
+
+    .review-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .review-header strong {
+      color: var(--text-main);
+    }
+
+    .review-body {
+      font-size: 0.975rem;
+      line-height: 1.5;
+      color: #eeeeee;
+      margin-bottom: 12px;
+      white-space: pre-line;
+    }
+
+    .replies-zone {
+      margin-left: 12px;
+      border-left: 2px solid var(--border-accent);
+      padding-left: 12px;
+      margin-top: 12px;
+    }
+
+    .reply-card {
+      background-color: var(--panel-bg);
+      padding: 10px 12px;
+      border-radius: 6px;
+      margin-bottom: 8px;
+      font-size: 0.875rem;
+      border: 1px solid var(--border-color);
+    }
+
+    .reply-card strong {
+      color: var(--text-main);
+    }
+
+    .reply-time {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-align: right;
+      margin-top: 4px;
+    }
+
+    .reply-input-group {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .reply-input-group input {
+      flex: 1;
+      padding: 8px 12px;
+      border-radius: 4px;
+      border: 1px solid var(--border-accent);
+      background-color: var(--input-bg);
+      color: #fff;
+      font-size: 0.875rem;
+    }
+
+    .btn-secondary {
+      padding: 8px 14px;
+      background-color: #262626;
+      color: #ffffff;
+      border: 1px solid var(--border-accent);
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 600;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .btn-secondary:hover {
+      background-color: #404040;
+      border-color: #ffffff;
+    }
+
+    .empty-state {
+      text-align: center;
+      color: var(--text-muted);
+      padding: 30px 0;
+    }
+  </style>
+</head>
+<body>
+
+<div class="reviews-container">
+  
+  <div class="header-zone">
+    <h2>Reviews</h2>
+    <span class="series-badge" id="displaySeriesName">...</span>
+  </div>
+
+  <div id="statusBanner" class="status-banner"></div>
+
+  <!-- Account Setup Container -->
+  <div class="modal-box" id="usernameModal" style="display: none;">
+    <p>Please enter a display name to participate in discussions:</p>
+    <div class="modal-input-group">
+      <input type="text" id="usernameInput" placeholder="Enter username" />
+      <button class="btn-secondary" onclick="saveUsername()">Set Name</button>
+    </div>
+  </div>
+
+  <!-- Review Composer Zone -->
+  <div class="review-input-zone">
+    <textarea id="mainReviewText" placeholder="Write your thoughts..."></textarea>
+    <button class="btn-primary" onclick="submitReview()">Post Review</button>
+  </div>
+
+  <!-- Main Feed Area -->
+  <div id="reviewsList">
+    <div class="empty-state">Loading reviews...</div>
+  </div>
+
+</div>
+
+<script>
+  // Cloudflare Worker backend target
+  const API_BASE = "https://rinolski.misty-fog-201e.workers.dev";
+  const urlParams = new URLSearchParams(window.location.search);
+  const currentSeries = urlParams.get("series") || "";
+  const token = localStorage.getItem("session_token") || "";
+
+  document.getElementById("displaySeriesName").innerText = currentSeries 
+    ? currentSeries.replace(/-/g, ' ').toUpperCase() 
+    : 'GENERAL';
+
+  function showStatus(message, isError = false) {
+    const banner = document.getElementById("statusBanner");
+    banner.className = `status-banner ${isError ? 'error' : 'success'}`;
+    banner.innerText = message;
+    banner.style.display = "block";
+    setTimeout(() => { banner.style.display = "none"; }, 4000);
+  }
+
+  async function loadReviews() {
+    const listEl = document.getElementById("reviewsList");
+    
+    try {
+      const res = await fetch(`${API_BASE}/api/get-reviews?movie=${encodeURIComponent(currentSeries)}`, {
+        headers: { "Authorization": `Bearer ${token}` }
+      });
+      const data = await res.json();
+
+      if (!data.reviews || data.reviews.length === 0) {
+        listEl.innerHTML = `<div class="empty-state">No reviews yet. Be the first to publish one!</div>`;
+        return;
+      }
+
+      // Sort array so newest reviews appear on top
+      const sortedReviews = [...data.reviews].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+      listEl.innerHTML = sortedReviews.map(r => {
+        const safeEmailId = r.authorEmail.replace(/[^a-zA-Z0-9]/g, '_');
+        return `
+          <div class="review-card">
+            <div class="review-header">
+              <strong>@${escapeHtml(r.authorUsername)}</strong>
+              <span>${new Date(r.timestamp).toLocaleDateString()}</span>
+            </div>
+            <div class="review-body">${escapeHtml(r.text)}</div>
+
+            <div class="replies-zone">
+              ${(r.replies || []).map(rep => `
+                <div class="reply-card">
+                  <strong>@${escapeHtml(rep.replierUsername)}:</strong> ${escapeHtml(rep.text)}
+                  <div class="reply-time">${new Date(rep.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
+                </div>
+              `).join('')}
+
+              <div class="reply-input-group">
+                <input type="text" id="reply-input-${safeEmailId}" placeholder="Reply..." />
+                <button class="btn-secondary" onclick="submitReply('${r.authorEmail}')">Reply</button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+    } catch(err) {
+      listEl.innerHTML = `<div class="empty-state" style="color: var(--danger);">Unable to load reviews right now.</div>`;
+    }
+  }
+
+  async function saveUsername() {
+    const username = document.getElementById("usernameInput").value.trim();
+    if (!username) return showStatus("Username cannot be empty.", true);
+
+    try {
+      const res = await fetch(`${API_BASE}/api/set-username`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+        body: JSON.stringify({ username })
+      });
+      const data = await res.json();
+
+      if (res.ok) {
+        showStatus("Username saved successfully!");
+        document.getElementById("usernameModal").style.display = "none";
+      } else {
+        showStatus(data.error || "Failed to save username.", true);
+      }
+    } catch (err) {
+      showStatus("Connection error. Please try again.", true);
+    }
+  }
+
+  async function submitReview() {
+    const text = document.getElementById("mainReviewText").value.trim();
+    if (!text) return showStatus("Please write something before publishing.", true);
+
+    try {
+      const res = await fetch(`${API_BASE}/api/add-review`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+        body: JSON.stringify({ movie: currentSeries, reviewText: text })
+      });
+      const data = await res.json();
+
+      if (data.requireUsername) {
+        document.getElementById("usernameModal").style.display = "block";
+      } else if (res.ok) {
+        document.getElementById("mainReviewText").value = "";
+        loadReviews();
+      } else {
+        showStatus(data.error || "Could not publish review.", true);
+      }
+    } catch (err) {
+      showStatus("Connection error. Please try again.", true);
+    }
+  }
+
+  async function submitReply(targetEmail) {
+    const safeEmailId = targetEmail.replace(/[^a-zA-Z0-9]/g, '_');
+    const inputEl = document.getElementById(`reply-input-${safeEmailId}`);
+    const replyText = inputEl ? inputEl.value.trim() : "";
+    
+    if (!replyText) return showStatus("Reply cannot be empty.", true);
+
+    try {
+      const res = await fetch(`${API_BASE}/api/add-reply`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+        body: JSON.stringify({ movie: currentSeries, targetEmail, replyText })
+      });
+      const data = await res.json();
+
+      if (data.requireUsername) {
+        document.getElementById("usernameModal").style.display = "block";
+      } else if (res.ok) {
+        loadReviews();
+      } else {
+        showStatus(data.error || "Could not post reply.", true);
+      }
+    } catch (err) {
+      showStatus("Connection error. Please try again.", true);
+    }
+  }
+
+  function escapeHtml(str) {
+    return str ? str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") : "";
+  }
+
+  loadReviews();
+</script>
+
+</body>
+</html>
