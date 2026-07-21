@@ -91,5 +91,142 @@ document.addEventListener("DOMContentLoaded", () => {
 <script src="/JS/moviepage.js" defer></script>
 <script src="movies.js"></script>
 <script src="script.js"></script>
+  <!-- Reviews Section Container -->
+<div id="reviewsContainer" style="max-width: 750px; margin: 40px auto; padding: 20px; font-family: sans-serif;">
+  <h2 style="border-bottom: 2px solid #333; padding-bottom: 8px;">User Reviews</h2>
+
+  <!-- Username Creation Modal / Box (Hidden by default) -->
+  <div id="usernameModal" style="display: none; background: #1a1a1a; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+    <p style="color: #fff; margin-top: 0;">Set a unique username to leave reviews and replies:</p>
+    <input type="text" id="usernameInput" placeholder="Enter username..." style="padding: 8px; width: 60%; border-radius: 4px; border: 1px solid #444;" />
+    <button onclick="saveUsername()" style="padding: 8px 16px; background: #7c3aed; color: white; border: none; border-radius: 4px; cursor: pointer;">Save Username</button>
+  </div>
+
+  <!-- Review Input Box -->
+  <div id="reviewInputBox" style="margin-bottom: 30px;">
+    <textarea id="mainReviewText" placeholder="Write your review here..." style="width: 100%; height: 90px; padding: 10px; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    <button onclick="submitReview()" style="margin-top: 8px; padding: 10px 20px; background: #7c3aed; color: white; border: none; border-radius: 6px; cursor: pointer;">Publish Review</button>
+  </div>
+
+  <!-- Reviews Feed -->
+  <div id="reviewsList">Loading reviews...</div>
+</div>
+
+<script>
+  const API_BASE = "https://rinolski.misty-fog-201e.workers.dev"; // Replace with your Worker URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const currentSeries = urlParams.get("series"); // Extracts 'rush-hour' dynamically
+  const token = localStorage.getItem("session_token"); // Retrieve active user session token
+
+  async function loadReviews() {
+    if (!currentSeries) return;
+    
+    const res = await fetch(`${API_BASE}/api/get-reviews?series=${encodeURIComponent(currentSeries)}`, {
+      headers: { "Authorization": `Bearer ${token}` }
+    });
+    const data = await res.json();
+
+    const listEl = document.getElementById("reviewsList");
+    if (!data.reviews || data.reviews.length === 0) {
+      listEl.innerHTML = "<p style='color: #777;'>No reviews yet. Be the first to write one!</p>";
+      return;
+    }
+
+    listEl.innerHTML = data.reviews.map(r => `
+      <div style="border: 1px solid #333; padding: 15px; border-radius: 8px; margin-bottom: 15px; background: #111; color: #fff;">
+        <div style="display: flex; justify-content: space-between; font-size: 0.85em; color: #aaa;">
+          <strong>@${r.authorUsername}</strong>
+          <span>${new Date(r.timestamp).toLocaleString()}</span>
+        </div>
+        <p style="margin: 10px 0; font-size: 1em;">${escapeHtml(r.reviewText)}</p>
+
+        <!-- Nested Replies -->
+        <div style="margin-left: 20px; border-left: 2px solid #333; padding-left: 10px; margin-top: 10px;">
+          ${(r.replies || []).map(rep => `
+            <div style="margin-bottom: 8px; font-size: 0.9em; background: #222; padding: 8px; border-radius: 5px;">
+              <strong style="color: #a78bfa;">@${rep.replierUsername}:</strong> ${escapeHtml(rep.text)}
+              <div style="font-size: 0.75em; color: #777; text-align: right;">${new Date(rep.timestamp).toLocaleTimeString()}</div>
+            </div>
+          `).join('')}
+
+          <!-- Reply Box -->
+          <div style="display: flex; gap: 8px; margin-top: 10px;">
+            <input type="text" id="reply-input-${r.authorEmail}" placeholder="Reply to @${r.authorUsername}..." style="flex: 1; padding: 6px; border-radius: 4px; border: 1px solid #444; background: #000; color: #fff;" />
+            <button onclick="submitReply('${r.authorEmail}')" style="padding: 6px 12px; background: #4f46e5; color: white; border: none; border-radius: 4px; cursor: pointer;">Reply</button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  async function saveUsername() {
+    const username = document.getElementById("usernameInput").value.trim();
+    if (!username) return alert("Username cannot be empty");
+
+    const res = await fetch(`${API_BASE}/api/set-username`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+      body: JSON.stringify({ username })
+    });
+    const data = await res.json();
+
+    if (res.ok) {
+      alert("Username set!");
+      document.getElementById("usernameModal").style.display = "none";
+    } else {
+      alert(data.error);
+    }
+  }
+
+  async function submitReview() {
+    const text = document.getElementById("mainReviewText").value.trim();
+    if (!text) return alert("Review text is empty!");
+
+    const res = await fetch(`${API_BASE}/api/add-review`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+      body: JSON.stringify({ series: currentSeries, reviewText: text })
+    });
+    const data = await res.json();
+
+    if (data.requireUsername) {
+      document.getElementById("usernameModal").style.display = "block";
+    } else if (res.ok) {
+      document.getElementById("mainReviewText").value = "";
+      loadReviews();
+    } else {
+      alert(data.error);
+    }
+  }
+
+  async function submitReply(targetEmail) {
+    const inputEl = document.getElementById(`reply-input-${targetEmail}`);
+    const replyText = inputEl.value.trim();
+    if (!replyText) return;
+
+    const res = await fetch(`${API_BASE}/api/add-reply`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+      body: JSON.stringify({ series: currentSeries, targetAuthorEmail: targetEmail, replyText })
+    });
+    const data = await res.json();
+
+    if (data.requireUsername) {
+      document.getElementById("usernameModal").style.display = "block";
+    } else if (res.ok) {
+      loadReviews();
+    } else {
+      alert(data.error);
+    }
+  }
+
+  function escapeHtml(str) {
+    return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+
+  // Load reviews on page mount
+  loadReviews();
+</script>
+
 </body>
 </html>
