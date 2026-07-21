@@ -98,6 +98,9 @@ function renderPage(id) {
   }
 
   checkContinueWatchingStatus();
+  
+  // Build and load the reviews system directly under the play button
+  initReviewsSystem(targetId);
 }
 
 /**
@@ -155,7 +158,242 @@ function setupLandscapeDOMArchitecture(imagePath) {
 loadDataFiles();
 
 // ==========================================================================
-// 2. BACKGROUND FALLBACK (DYNAMIC EXTENSION EXTRACTION VIA MATCHED ID)
+// 2. REVIEWS SYSTEM ENGINE & DOM INJECTION
+// ==========================================================================
+
+function initReviewsSystem(seriesId) {
+  // Ensure we don't duplicate if called multiple times
+  let container = document.querySelector(".reviews-container");
+  if (!container) {
+    container = document.createElement("div");
+    container.className = "reviews-container";
+    container.innerHTML = `
+      <div class="header-zone">
+        <h2>Reviews</h2>
+        <span class="series-badge" id="displaySeriesName">${escapeHtml(seriesId.replace(/-/g, ' ').toUpperCase())}</span>
+      </div>
+
+      <div id="statusBanner" class="status-banner"></div>
+
+      <!-- Account Setup Container -->
+      <div class="modal-box" id="usernameModal" style="display: none;">
+        <p>Please enter a display name to participate in discussions:</p>
+        <div class="modal-input-group">
+          <input type="text" id="usernameInput" placeholder="Enter username" />
+          <button class="btn-secondary" onclick="saveUsername()">Set Name</button>
+        </div>
+      </div>
+
+      <!-- Review Composer Zone -->
+      <div class="review-input-zone">
+        <textarea id="mainReviewText" placeholder="Write your thoughts..."></textarea>
+        <button class="btn-primary" onclick="submitReview()">Post Review</button>
+      </div>
+
+      <!-- Main Feed Area -->
+      <div id="reviewsList">
+        <div class="empty-state">Loading reviews...</div>
+      </div>
+    `;
+
+    const mainWrapper = document.getElementById("movieContentWrapper");
+    if (mainWrapper) {
+      mainWrapper.appendChild(container);
+    } else {
+      document.body.appendChild(container);
+    }
+  }
+
+  loadReviews(seriesId);
+}
+
+const API_BASE = "https://rinolski.misty-fog-201e.workers.dev";
+const token = localStorage.getItem("session_token") || "";
+
+function showStatus(message, isError = false) {
+  const banner = document.getElementById("statusBanner");
+  if (!banner) return;
+  banner.className = `status-banner ${isError ? 'error' : ''}`;
+  banner.innerText = message;
+  banner.style.display = "block";
+  setTimeout(() => { banner.style.display = "none"; }, 4000);
+}
+
+function toggleReplyInput(id) {
+  const el = document.getElementById(`reply-box-${id}`);
+  if (el) {
+    el.style.display = el.style.display === "none" ? "flex" : "none";
+  }
+}
+
+async function loadReviews(seriesId) {
+  const currentSeries = seriesId || new URLSearchParams(window.location.search).get("movie") || new URLSearchParams(window.location.search).get("series") || "rush-hour";
+  const listEl = document.getElementById("reviewsList");
+  if (!listEl) return;
+  
+  try {
+    const res = await fetch(`${API_BASE}/api/get-reviews?movie=${encodeURIComponent(currentSeries)}&series=${encodeURIComponent(currentSeries)}`, {
+      headers: { "Authorization": `Bearer ${token}` }
+    });
+    const data = await res.json();
+
+    const reviewsArr = data.reviews || data.data || [];
+
+    if (!reviewsArr || reviewsArr.length === 0) {
+      listEl.innerHTML = `<div class="empty-state">No reviews yet. Be the first to publish one!</div>`;
+      return;
+    }
+
+    // Sort array so newest reviews appear on top
+    const sortedReviews = [...reviewsArr].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+    listEl.innerHTML = sortedReviews.map(r => {
+      const authorEmail = r.authorEmail || r.email || "user";
+      const safeEmailId = authorEmail.replace(/[^a-zA-Z0-9]/g, '_');
+      const reviewContent = r.reviewText || r.text || r.content || "";
+      const username = r.authorUsername || r.username || "Anonymous";
+
+      return `
+        <div class="review-card">
+          <!-- Top Header: White Username on Top Left -->
+          <div class="review-header">
+            <span class="review-author">@${escapeHtml(username)}</span>
+            <span class="review-date">${r.timestamp ? new Date(r.timestamp).toLocaleDateString() : ''}</span>
+          </div>
+
+          <!-- Full-Width Review Body Placed Directly Under Username -->
+          <div class="review-body">${escapeHtml(reviewContent)}</div>
+
+          <!-- Reply Button on Bottom Right -->
+          <div class="review-actions">
+            <button class="btn-secondary" onclick="toggleReplyInput('${safeEmailId}')">Reply</button>
+          </div>
+
+          <!-- Replies Sub-zone -->
+          <div class="replies-zone">
+            ${(r.replies || []).map(rep => `
+              <div class="reply-card">
+                <strong>@${escapeHtml(rep.replierUsername || rep.username || 'User')}:</strong> ${escapeHtml(rep.text || rep.replyText || '')}
+                <div class="reply-time">${rep.timestamp ? new Date(rep.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : ''}</div>
+              </div>
+            `).join('')}
+
+            <div class="reply-input-group" id="reply-box-${safeEmailId}" style="display: none;">
+              <input type="text" id="reply-input-${safeEmailId}" placeholder="Reply..." />
+              <button class="btn-secondary" onclick="submitReply('${authorEmail}')">Send</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+  } catch(err) {
+    listEl.innerHTML = `<div class="empty-state">Unable to load reviews right now.</div>`;
+  }
+}
+
+async function saveUsername() {
+  const username = document.getElementById("usernameInput").value.trim();
+  if (!username) return showStatus("Username cannot be empty.", true);
+
+  try {
+    const res = await fetch(`${API_BASE}/api/set-username`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+      body: JSON.stringify({ username })
+    });
+    const data = await res.json();
+
+    if (res.ok) {
+      showStatus("Username saved successfully!");
+      document.getElementById("usernameModal").style.display = "none";
+    } else {
+      showStatus(data.error || "Failed to save username.", true);
+    }
+  } catch (err) {
+    showStatus("Connection error. Please try again.", true);
+  }
+}
+
+async function submitReview() {
+  const currentSeries = new URLSearchParams(window.location.search).get("movie") || new URLSearchParams(window.location.search).get("series") || "rush-hour";
+  const textareaEl = document.getElementById("mainReviewText");
+  const text = textareaEl ? textareaEl.value.trim() : "";
+  
+  if (!text) return showStatus("Please write something before publishing.", true);
+
+  try {
+    const res = await fetch(`${API_BASE}/api/add-review`, {
+      method: "POST",
+      headers: { 
+        "Content-Type": "application/json", 
+        "Authorization": `Bearer ${token}` 
+      },
+      body: JSON.stringify({ 
+        movie: currentSeries, 
+        series: currentSeries, 
+        reviewText: text,
+        text: text
+      })
+    });
+    const data = await res.json();
+
+    if (data.requireUsername) {
+      document.getElementById("usernameModal").style.display = "block";
+    } else if (res.ok) {
+      textareaEl.value = "";
+      loadReviews(currentSeries);
+    } else {
+      showStatus(data.error || "Could not publish review.", true);
+    }
+  } catch (err) {
+    showStatus("Connection error. Please try again.", true);
+  }
+}
+
+async function submitReply(targetEmail) {
+  const currentSeries = new URLSearchParams(window.location.search).get("movie") || new URLSearchParams(window.location.search).get("series") || "rush-hour";
+  const safeEmailId = targetEmail.replace(/[^a-zA-Z0-9]/g, '_');
+  const inputEl = document.getElementById(`reply-input-${safeEmailId}`);
+  const replyText = inputEl ? inputEl.value.trim() : "";
+  
+  if (!replyText) return showStatus("Reply cannot be empty.", true);
+
+  try {
+    const res = await fetch(`${API_BASE}/api/add-reply`, {
+      method: "POST",
+      headers: { 
+        "Content-Type": "application/json", 
+        "Authorization": `Bearer ${token}` 
+      },
+      body: JSON.stringify({ 
+        movie: currentSeries, 
+        series: currentSeries, 
+        targetEmail: targetEmail, 
+        replyText: replyText,
+        text: replyText
+      })
+    });
+    const data = await res.json();
+
+    if (data.requireUsername) {
+      document.getElementById("usernameModal").style.display = "block";
+    } else if (res.ok) {
+      loadReviews(currentSeries);
+    } else {
+      showStatus(data.error || "Could not post reply.", true);
+    }
+  } catch (err) {
+    showStatus("Connection error. Please try again.", true);
+  }
+}
+
+function escapeHtml(str) {
+  return str ? String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") : "";
+}
+
+// ==========================================================================
+// 3. BACKGROUND FALLBACK (DYNAMIC EXTENSION EXTRACTION VIA MATCHED ID)
 // ==========================================================================
 
 function applyFallbackBackground(id) {
@@ -196,7 +434,7 @@ function applyFallbackBackground(id) {
 }
 
 // ==========================================================================
-// 3. FIRESTORE INTEGRATION & USER PROGRESS
+// 4. FIRESTORE INTEGRATION & USER PROGRESS
 // ==========================================================================
 
 async function checkContinueWatchingStatus() {
@@ -243,7 +481,7 @@ async function checkContinueWatchingStatus() {
 }
 
 // ==========================================================================
-// 4. USER INTERACTIVE NAVIGATION CONTROLS
+// 5. USER INTERACTIVE NAVIGATION CONTROLS
 // ==========================================================================
 
 function play() {
@@ -261,7 +499,7 @@ function goBack() {
 }
 
 // ==========================================================================
-// 5. GLOBAL STYLE DECORATORS & FADING OVERLAYS (UI/UX)
+// 6. GLOBAL STYLE DECORATORS & FADING OVERLAYS (UI/UX)
 // ==========================================================================
 
 (function () {
@@ -306,6 +544,255 @@ function goBack() {
     #title, #desc, .play-btn, .back-btn, .text-container-wrapper, .info-container {
       position: relative;
       z-index: 2;
+    }
+
+    /* ==========================================
+     * DEDICATED REVIEWS SYSTEM STYLING
+     * ========================================== */
+    :root {
+      --rev-bg: #000000;
+      --rev-card-bg: #0a0a0a;
+      --rev-panel-bg: #141414;
+      --rev-input-bg: #0f0f0f;
+      --rev-border: #262626;
+      --rev-border-accent: #404040;
+      --rev-text-main: #ffffff;
+      --rev-text-muted: #888888;
+    }
+
+    .reviews-container {
+      width: 100%;
+      background-color: var(--rev-bg) !important;
+      border: 1px solid var(--rev-border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 24px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+      color: var(--rev-text-main);
+      box-sizing: border-box;
+      text-align: left !important;
+      position: relative;
+      z-index: 4;
+    }
+
+    .reviews-container .header-zone {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--rev-border);
+      padding-bottom: 12px;
+      margin-bottom: 16px;
+    }
+
+    .reviews-container .header-zone h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--rev-text-main);
+      letter-spacing: -0.5px;
+      margin: 0;
+    }
+
+    .reviews-container .series-badge {
+      background-color: var(--rev-panel-bg);
+      color: var(--rev-text-main);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      border: 1px solid var(--rev-border-accent);
+    }
+
+    .reviews-container .status-banner {
+      display: none;
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-size: 0.875rem;
+      margin-bottom: 16px;
+      font-weight: 500;
+      background-color: #1a1a1a;
+      border: 1px solid #888888;
+      color: #ffffff;
+    }
+
+    .reviews-container .modal-box {
+      background-color: var(--rev-panel-bg);
+      border: 1px solid var(--rev-border-accent);
+      padding: 14px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+    }
+
+    .reviews-container .modal-box p {
+      color: var(--rev-text-main);
+      margin-bottom: 10px;
+      font-size: 0.9rem;
+    }
+
+    .reviews-container .modal-input-group {
+      display: flex;
+      gap: 8px;
+    }
+
+    .reviews-container .modal-input-group input {
+      flex: 1;
+      padding: 8px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--rev-border-accent);
+      background-color: var(--rev-input-bg);
+      color: #fff;
+      font-size: 0.85rem;
+    }
+
+    .reviews-container .review-input-zone {
+      margin-bottom: 20px;
+    }
+
+    .reviews-container .review-input-zone textarea {
+      width: 100%;
+      height: 90px;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid var(--rev-border-accent);
+      background-color: var(--rev-input-bg);
+      color: var(--rev-text-main);
+      font-family: inherit;
+      resize: vertical;
+      margin-bottom: 10px;
+    }
+
+    .reviews-container .review-input-zone textarea:focus,
+    .reviews-container .modal-input-group input:focus,
+    .reviews-container .reply-input-group input:focus {
+      outline: none;
+      border-color: var(--rev-text-main);
+    }
+
+    .reviews-container .btn-primary {
+      padding: 8px 16px;
+      background-color: #ffffff;
+      color: #000000;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.85rem;
+      transition: background 0.2s;
+    }
+
+    .reviews-container .btn-primary:hover {
+      background-color: #cccccc;
+    }
+
+    .reviews-container .review-card {
+      background-color: var(--rev-card-bg);
+      border: 1px solid var(--rev-border);
+      padding: 14px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .reviews-container .review-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+    }
+
+    .reviews-container .review-author {
+      color: #ffffff !important;
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+
+    .reviews-container .review-date {
+      color: var(--rev-text-muted);
+      font-size: 0.75rem;
+    }
+
+    .reviews-container .review-body {
+      width: 100%;
+      font-size: 0.9rem;
+      line-height: 1.4;
+      color: #eeeeee;
+      white-space: pre-line;
+      word-break: break-word;
+    }
+
+    .reviews-container .review-actions {
+      display: flex;
+      justify-content: flex-end;
+      width: 100%;
+      margin-top: 2px;
+    }
+
+    .reviews-container .replies-zone {
+      margin-left: 8px;
+      border-left: 2px solid var(--rev-border-accent);
+      padding-left: 10px;
+      margin-top: 6px;
+    }
+
+    .reviews-container .reply-card {
+      background-color: var(--rev-panel-bg);
+      padding: 8px 10px;
+      border-radius: 6px;
+      margin-bottom: 6px;
+      font-size: 0.8rem;
+      border: 1px solid var(--rev-border);
+    }
+
+    .reviews-container .reply-card strong {
+      color: #ffffff;
+    }
+
+    .reviews-container .reply-time {
+      font-size: 0.7rem;
+      color: var(--rev-text-muted);
+      text-align: right;
+      margin-top: 2px;
+    }
+
+    .reviews-container .reply-input-group {
+      display: flex;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .reviews-container .reply-input-group input {
+      flex: 1;
+      padding: 6px 10px;
+      border-radius: 4px;
+      border: 1px solid var(--rev-border-accent);
+      background-color: var(--rev-input-bg);
+      color: #fff;
+      font-size: 0.8rem;
+    }
+
+    .reviews-container .btn-secondary {
+      padding: 6px 12px;
+      background-color: #262626;
+      color: #ffffff;
+      border: 1px solid var(--rev-border-accent);
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+
+    .reviews-container .btn-secondary:hover {
+      background-color: #404040;
+    }
+
+    .reviews-container .empty-state {
+      text-align: center;
+      color: var(--rev-text-muted);
+      padding: 20px 0;
+      font-size: 0.85rem;
     }
 
     /* ==========================================
@@ -411,6 +898,12 @@ function goBack() {
         position: relative;
         z-index: 4;
       }
+
+      /* 5. Reviews System placed right below Play Button in grid */
+      .reviews-container {
+        grid-column: 1 / span 2;
+        grid-row: 4;
+      }
       
       .back-btn {
         position: fixed;
@@ -424,20 +917,25 @@ function goBack() {
      * PORTRAIT ORIENTATION STABILIZER (CENTERED IN THE MIDDLE)
      * ========================================== */
     @media (orientation: portrait) {
+      body {
+        overflow-y: auto !important;
+        padding-bottom: 40px !important;
+      }
+
       /* Targets the text wrapper container and centers it directly in the dead center of the screen */
       #movieContentWrapper {
         display: flex !important;
         flex-direction: column !important;
-        justify-content: center !important;
+        justify-content: flex-start !important;
         align-items: center !important;
         text-align: center !important;
-        position: absolute !important;
-        top: 70% !important;
-        left: 50% !important;
-        transform: translate(-50%, -50%) !important;
+        position: relative !important;
+        top: 0 !important;
+        left: 0 !important;
+        transform: none !important;
         width: 100% !important;
-        max-width: 88vw !important;
-        margin: 0 !important;
+        max-width: 90vw !important;
+        margin: 40vh auto 0 auto !important;
         padding: 0 !important;
         z-index: 3 !important;
       }
@@ -465,15 +963,12 @@ function goBack() {
       }
 
       .play-btn {
-        margin: 0 auto !important;
+        margin: 0 auto 24px auto !important;
         display: inline-flex !important;
         justify-content: center !important;
         align-items: center !important;
       }
-      
-      /* Note: .back-btn is left completely untouched here, keeping its native template placement intact */
     }
   `;
   document.head.appendChild(style);
 })();
-
