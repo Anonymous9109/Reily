@@ -45,7 +45,7 @@ async function loadDataFiles() {
  */
 function renderPage(id) {
   // Case-insensitive lookup protects against "SAW" vs "saw" mismatching
-  const exactKey = Object.keys(window.movieDetailsDict).find(key => key.toLowerCase() === id.toLowerCase());
+  const exactKey = Object.keys(window.movieDetailsDict || {}).find(key => key.toLowerCase() === id.toLowerCase());
   const movieData = exactKey ? window.movieDetailsDict[exactKey] : null;
 
   if (!movieData) {
@@ -76,8 +76,9 @@ function renderPage(id) {
   setupLandscapeDOMArchitecture(imagePath);
 
   // Populate UI
-  document.getElementById("title").textContent = movieData.title;
-  
+  const titleEl = document.getElementById("title");
+  if (titleEl) titleEl.textContent = movieData.title;
+
   const descEl = document.getElementById("desc");
   if (descEl) {
     descEl.textContent = movieData.desc || "";
@@ -85,7 +86,7 @@ function renderPage(id) {
 
   // Handle Video / Background Stream initialization
   const video = document.getElementById("bgVideo");
-  
+
   if (movieData.video && video) {
     video.innerHTML = `<source src="${movieData.video}" type="video/mp4">`;
     video.load();
@@ -97,8 +98,10 @@ function renderPage(id) {
     applyFallbackBackground(id);
   }
 
-  checkContinueWatchingStatus();
-  
+  if (typeof checkContinueWatchingStatus === "function") {
+    checkContinueWatchingStatus();
+  }
+
   // Build and load the reviews system directly under the play button
   initReviewsSystem(targetId);
 
@@ -129,26 +132,26 @@ function setupLandscapeDOMArchitecture(imagePath) {
   if (!mainWrapper) {
     mainWrapper = document.createElement("div");
     mainWrapper.id = "movieContentWrapper";
-    
+
     posterContainer = document.createElement("div");
     posterContainer.id = "moviePosterContainer";
-    
+
     posterImg = document.createElement("img");
     posterImg.id = "moviePosterImg";
-    
+
     posterContainer.appendChild(posterImg);
     mainWrapper.appendChild(posterContainer);
-    
-    // Select your loose document items and append them to the responsive wrapper pipeline
+
+    // Select loose document items and append them to the responsive wrapper pipeline
     const titleEl = document.getElementById("title");
     const descEl = document.getElementById("desc");
     const playBtn = document.querySelector(".play-btn");
-    
-    if (titleEl) mainWrapper.appendChild(titleEl); 
-    if (descEl) mainWrapper.appendChild(descEl);   
-    if (playBtn) mainWrapper.appendChild(playBtn); 
-    
-    // INJECTION FIX: Insert at the absolute top of the body to block ghost HTML elements from creating top whitespace
+
+    if (titleEl) mainWrapper.appendChild(titleEl);
+    if (descEl) mainWrapper.appendChild(descEl);
+    if (playBtn) mainWrapper.appendChild(playBtn);
+
+    // INJECTION FIX: Insert at the absolute top of the body
     document.body.insertBefore(mainWrapper, document.body.firstChild);
   }
 
@@ -161,7 +164,7 @@ function setupLandscapeDOMArchitecture(imagePath) {
 loadDataFiles();
 
 // ==========================================================================
-// 2. REVIEWS SYSTEM ENGINE & DOM INJECTION
+// 2. REVIEWS SYSTEM ENGINE & DOM INJECTION (FIXED INTERNAL SCROLL)
 // ==========================================================================
 
 function toggleReviewComposer() {
@@ -203,9 +206,12 @@ function initReviewsSystem(seriesId) {
         <button class="btn-primary" onclick="submitReview()">Post Review</button>
       </div>
 
-      <!-- Main Feed Area -->
-      <div id="reviewsList">
-        <div class="empty-state">Loading reviews...</div>
+      <!-- Scrollable Container Wrapper for Reviews Feed -->
+      <div id="reviewsListWrapper" class="reviews-list-wrapper">
+        <!-- Main Feed Area -->
+        <div id="reviewsList">
+          <div class="empty-state">Loading reviews...</div>
+        </div>
       </div>
     `;
 
@@ -243,7 +249,7 @@ async function loadReviews(seriesId) {
   const currentSeries = seriesId || new URLSearchParams(window.location.search).get("movie") || new URLSearchParams(window.location.search).get("series") || "rush-hour";
   const listEl = document.getElementById("reviewsList");
   if (!listEl) return;
-  
+
   try {
     const res = await fetch(`${API_BASE}/api/get-reviews?movie=${encodeURIComponent(currentSeries)}&series=${encodeURIComponent(currentSeries)}`, {
       headers: { "Authorization": `Bearer ${token}` }
@@ -268,7 +274,7 @@ async function loadReviews(seriesId) {
 
       return `
         <div class="review-card">
-          <!-- Top Header: White Username on Top Left -->
+          <!-- Top Header: Username on Top Left -->
           <div class="review-header">
             <span class="review-author">@${escapeHtml(username)}</span>
             <span class="review-date">${r.timestamp ? new Date(r.timestamp).toLocaleDateString() : ''}</span>
@@ -332,7 +338,7 @@ async function submitReview() {
   const currentSeries = new URLSearchParams(window.location.search).get("movie") || new URLSearchParams(window.location.search).get("series") || "rush-hour";
   const textareaEl = document.getElementById("mainReviewText");
   const text = textareaEl ? textareaEl.value.trim() : "";
-  
+
   if (!text) return showStatus("Please write something before publishing.", true);
 
   try {
@@ -356,7 +362,13 @@ async function submitReview() {
     } else if (res.ok) {
       textareaEl.value = "";
       toggleReviewComposer(); // Hide composer after submitting
-      loadReviews(currentSeries);
+      await loadReviews(currentSeries);
+
+      // Scroll the internal review container to the top to see the new review
+      const scrollWrapper = document.getElementById("reviewsListWrapper");
+      if (scrollWrapper) {
+        scrollWrapper.scrollTop = 0;
+      }
     } else {
       showStatus(data.error || "Could not publish review.", true);
     }
@@ -370,7 +382,7 @@ async function submitReply(targetEmail) {
   const safeEmailId = targetEmail.replace(/[^a-zA-Z0-9]/g, '_');
   const inputEl = document.getElementById(`reply-input-${safeEmailId}`);
   const replyText = inputEl ? inputEl.value.trim() : "";
-  
+
   if (!replyText) return showStatus("Reply cannot be empty.", true);
 
   try {
@@ -429,12 +441,11 @@ function applyFallbackBackground(id) {
   }) : null;
 
   if (matchedSearchItem && matchedSearchItem.image) {
-    // Isolates the clean filename safely regardless of extension
     const filename = matchedSearchItem.image.split('/').pop();
     const absoluteImagePath = `/images/${filename}`;
-    
+
     console.log(`Setting background image from ID link match:`, absoluteImagePath);
-    
+
     bgContainer.style.backgroundImage = `url('${absoluteImagePath}')`;
     bgContainer.style.backgroundSize = "cover";
     bgContainer.style.backgroundPosition = "center";
@@ -454,7 +465,7 @@ function applyFallbackBackground(id) {
 async function checkContinueWatchingStatus() {
   const params = new URLSearchParams(window.location.search);
   const id = params.get("movie") || params.get("series");
-  
+
   try {
     const { getFirestore, doc, getDoc } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
     const { getAuth } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js");
@@ -502,7 +513,7 @@ function play() {
   const params = new URLSearchParams(window.location.search);
   const id = params.get("movie") || params.get("series");
   const movie = window.currentMovie; 
-  
+
   if (movie && id) {
     window.location.href = `videoplayer?ep=${movie.play || ''}&movie=${id}`;
   }
@@ -513,29 +524,28 @@ function goBack() {
 }
 
 // ==========================================================================
-// 6. GLOBAL STYLE DECORATORS & FADING OVERLAYS (UI/UX)
+// 6. GLOBAL STYLE DECORATORS & STABILIZED CSS RULES
 // ==========================================================================
 
 (function () {
   // 1. Create and inject the subtle fading background overlay
   const overlay = document.createElement('div');
   overlay.id = "bottomFadeOverlay";
-  
-  // Set up layout and the light linear-gradient
+
   Object.assign(overlay.style, {
     position: "fixed",
     bottom: "0",
     left: "0",
     width: "100%",
-    height: "55vh", // Controls how high up the viewport the gradient climbs
+    height: "55vh",
     background: "linear-gradient(to top, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0) 100%)",
-    pointerEvents: "none", // Allows clicks to pass through completely
-    zIndex: "1" // Places it over backgrounds, but behind UI typography elements
+    pointerEvents: "none",
+    zIndex: "1"
   });
-  
+
   document.body.appendChild(overlay);
 
-  // 2. Clear mobile tap delays, outline styling, and stack text layers explicitly
+  // 2. Clear mobile tap delays, outline styling, and enforce internal scroll limits
   const style = document.createElement('style');
   style.innerHTML = `
     * {
@@ -564,14 +574,14 @@ function goBack() {
       cursor: pointer;
     }
 
-    /* Forces elements out of the stacking index loop to sit cleanly over the fade overlay */
+    /* Forces elements out of the stacking index loop */
     #title, #desc, .play-btn, .text-container-wrapper, .info-container {
       position: relative;
       z-index: 2;
     }
 
     /* ==========================================
-     * DEDICATED REVIEWS SYSTEM STYLING
+     * DEDICATED REVIEWS SYSTEM STYLING & FIXED SCROLL
      * ========================================== */
     :root {
       --rev-bg: transparent;
@@ -584,7 +594,7 @@ function goBack() {
       --rev-text-muted: #888888;
     }
 
-    /* Outer Container Background set to Transparent */
+    /* Outer Container Background set to Transparent with Fixed Flow */
     .reviews-container {
       width: 100%;
       background-color: var(--rev-bg) !important;
@@ -597,6 +607,28 @@ function goBack() {
       text-align: left !important;
       position: relative;
       z-index: 4;
+    }
+
+    /* ISOLATED INTERNAL SCROLL WRAPPER FOR REVIEWS */
+    .reviews-list-wrapper {
+      max-height: 380px;         /* Keeps reviews locked within fixed height */
+      overflow-y: auto;          /* Enables internal vertical scrolling */
+      overflow-x: hidden;
+      padding-right: 6px;
+      margin-top: 10px;
+    }
+
+    /* Scrollbar Styling for Reviews Container */
+    .reviews-list-wrapper::-webkit-scrollbar {
+      width: 6px;
+    }
+    .reviews-list-wrapper::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 4px;
+    }
+    .reviews-list-wrapper::-webkit-scrollbar-thumb {
+      background: var(--rev-border-accent);
+      border-radius: 4px;
     }
 
     .reviews-container .header-zone {
@@ -668,7 +700,7 @@ function goBack() {
       font-size: 0.85rem;
     }
 
-    /* Review Input Composer Box - Solid Black Container */
+    /* Review Input Composer Box */
     .reviews-container .review-input-zone {
       background-color: #0a0a0a;
       border: 1px solid var(--rev-border);
@@ -713,7 +745,7 @@ function goBack() {
       background-color: #cccccc;
     }
 
-    /* Black Cards for Individual Reviews */
+    /* Individual Review Cards */
     .reviews-container .review-card {
       background-color: #0a0a0a !important;
       border: 1px solid var(--rev-border);
@@ -835,13 +867,12 @@ function goBack() {
     @media (orientation: landscape) {
       body {
         display: block !important;
-        overflow-y: auto !important; /* Enables smooth document scrolling */
+        overflow-y: auto !important;
         min-height: 10vh;
         margin: 0 !important;
         padding: 0 !important;
       }
 
-      /* Disables potential leftover structural container blocks from pushing down layout flow */
       .text-container-wrapper, .info-container {
         display: none !important;
       }
@@ -866,23 +897,23 @@ function goBack() {
       /* Grid structure setup to coordinate elements */
       #movieContentWrapper {
         display: grid;
-        grid-template-columns: 240px 1fr; /* Left: Poster width constraint, Right: Flexible space */
+        grid-template-columns: 240px 1fr;
         gap: 24px;
         width: 800px;
         max-width: 75vw;
-        margin: 0px 0 80px 60px !important; /* Zeroed out top margin completely */
-        padding-top: 10px !important;       /* Clean minimal padding spacing right from screen edge boundary */
+        margin: 0px 0 80px 60px !important;
+        padding-top: 10px !important;
         position: relative;
         z-index: 3;
       }
 
-      /* 1. Image element rendered styled as a vertical Movie Poster */
+      /* Movie Poster Container */
       #moviePosterContainer {
         grid-column: 1;
         grid-row: 1;
         display: block !important;
         width: 100%;
-        aspect-ratio: 2 / 3; /* Standard professional movie poster aspect dimensional scale */
+        aspect-ratio: 2 / 3;
         border-radius: 12px;
         overflow: hidden;
         box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
@@ -895,11 +926,11 @@ function goBack() {
         object-fit: cover;
       }
 
-      /* 2. Title cleanly positioned onto the Right Side of the Movie Poster Box */
+      /* Title Positioning */
       #title {
         grid-column: 2;
         grid-row: 1;
-        align-self: center; /* Vertically centers the title inline with the poster's height */
+        align-self: center;
         color: #ffffff;
         font-size: 2.8rem;
         font-weight: 800;
@@ -911,7 +942,7 @@ function goBack() {
         z-index: 4;
       }
 
-      /* 3. Description positioned underneath the top item structure rows */
+      /* Description */
       #desc {
         grid-column: 1 / span 2;
         grid-row: 2;
@@ -923,7 +954,7 @@ function goBack() {
         z-index: 4;
       }
 
-      /* 4. Action Play Controller Box positions underneath the description track layout */
+      /* Action Play Controller Box */
       .play-btn {
         grid-column: 1 / span 2;
         grid-row: 3;
@@ -933,7 +964,7 @@ function goBack() {
         z-index: 4;
       }
 
-      /* 5. Reviews System placed right below Play Button in grid */
+      /* Reviews Container placed in grid */
       .reviews-container {
         grid-column: 1 / span 2;
         grid-row: 4;
@@ -941,7 +972,7 @@ function goBack() {
     }
 
     /* ==========================================
-     * PORTRAIT ORIENTATION STABILIZER (LOWER STARTING CENTER FLOW)
+     * PORTRAIT ORIENTATION STABILIZER
      * ========================================== */
     @media (orientation: portrait) {
       body {
@@ -950,7 +981,6 @@ function goBack() {
         margin: 0 !important;
       }
 
-      /* Starts title text lower down at 60vh so header info is centered and reviews flow naturally downward */
       #movieContentWrapper {
         display: flex !important;
         flex-direction: column !important;
@@ -970,10 +1000,9 @@ function goBack() {
       #moviePosterContainer, 
       #moviePosterImg, 
       #ambientBg {
-        display: none !important; /* Disables landscape dynamic nodes to retain layout rules */
+        display: none !important;
       }
 
-      /* Enforces complete horizontal copy text alignment */
       #title, #desc {
         text-align: center !important;
         margin-left: auto !important;
