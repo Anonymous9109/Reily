@@ -79,9 +79,31 @@ function renderPage(id) {
   const titleEl = document.getElementById("title");
   if (titleEl) titleEl.textContent = movieData.title;
 
+  // Description 3-line truncation and toggle expand logic
   const descEl = document.getElementById("desc");
   if (descEl) {
-    descEl.textContent = movieData.desc || "";
+    const textContent = movieData.desc || "";
+    descEl.textContent = textContent;
+
+    descEl.classList.remove("clamped");
+    descEl.onclick = null;
+
+    if (textContent.trim()) {
+      descEl.classList.add("clamped");
+
+      // Check if text exceeds 3 lines
+      const isOverflowing = descEl.scrollHeight > descEl.clientHeight;
+
+      if (isOverflowing) {
+        descEl.style.cursor = "pointer";
+        descEl.onclick = function () {
+          descEl.classList.toggle("clamped");
+        };
+      } else {
+        descEl.classList.remove("clamped");
+        descEl.style.cursor = "default";
+      }
+    }
   }
 
   // Handle Video / Background Stream initialization
@@ -559,6 +581,22 @@ function goBack() {
     }
 
     /* ==========================================
+     * DESCRIPTION CLAMPING & EXPANSION
+     * ========================================== */
+    #desc {
+      user-select: none;
+      transition: max-height 0.3s ease;
+    }
+
+    #desc.clamped {
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* ==========================================
      * DEDICATED REVIEWS SYSTEM STYLING
      * ========================================== */
     :root {
@@ -913,11 +951,6 @@ function goBack() {
         padding: 0 !important;
       }
 
-      /* 
-       * FIXED POSITIONING FIX:
-       * - Replaced transform: translateY(-50%) with margin-top: 50vh.
-       * - Now title starts consistently in lower-middle screen and never shifts up when reviews grow!
-       */
       #movieContentWrapper {
         display: flex !important;
         flex-direction: column !important;
