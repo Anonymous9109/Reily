@@ -102,7 +102,7 @@ function renderPage(id) {
   // Build and load the reviews system directly under the play button
   initReviewsSystem(targetId);
 
-  // Ensure view snaps to the top when page loads
+  // Snap window back to top on initial page render
   window.scrollTo(0, 0);
 }
 
@@ -920,15 +920,16 @@ function goBack() {
     }
 
     /* ==========================================
-     * PORTRAIT ORIENTATION STABILIZER (FIXED TOP MARGIN)
+     * PORTRAIT ORIENTATION STABILIZER (CENTERED FLOW DOWNWARD)
      * ========================================== */
     @media (orientation: portrait) {
       body {
         overflow-y: auto !important;
-        padding-bottom: 40px !important;
+        padding-bottom: 60px !important;
+        margin: 0 !important;
       }
 
-      /* Targets the text wrapper container and aligns it starting cleanly from top */
+      /* Starts content directly at center height (50vh) and flows downward */
       #movieContentWrapper {
         display: flex !important;
         flex-direction: column !important;
@@ -936,13 +937,11 @@ function goBack() {
         align-items: center !important;
         text-align: center !important;
         position: relative !important;
-        top: 0 !important;
-        left: 0 !important;
-        transform: none !important;
+        top: 50vh !important;
+        transform: translateY(-50%) !important;
         width: 100% !important;
         max-width: 90vw !important;
-        /* Replaced 40vh push-down with clean 20px spacing */
-        margin: 20px auto 0 auto !important;
+        margin: 0 auto !important;
         padding: 0 !important;
         z-index: 3 !important;
       }
