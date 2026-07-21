@@ -164,6 +164,13 @@ loadDataFiles();
 // 2. REVIEWS SYSTEM ENGINE & DOM INJECTION
 // ==========================================================================
 
+function toggleReviewComposer() {
+  const zone = document.getElementById("reviewInputZone");
+  if (!zone) return;
+  const isHidden = zone.style.display === "none" || zone.style.display === "";
+  zone.style.display = isHidden ? "block" : "none";
+}
+
 function initReviewsSystem(seriesId) {
   // Ensure we don't duplicate if called multiple times
   let container = document.querySelector(".reviews-container");
@@ -173,7 +180,10 @@ function initReviewsSystem(seriesId) {
     container.innerHTML = `
       <div class="header-zone">
         <h2>Reviews</h2>
-        <span class="series-badge" id="displaySeriesName">${escapeHtml(seriesId.replace(/-/g, ' ').toUpperCase())}</span>
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <button class="btn-primary toggle-add-btn" onclick="toggleReviewComposer()">+ Add a Review</button>
+          <span class="series-badge" id="displaySeriesName">${escapeHtml(seriesId.replace(/-/g, ' ').toUpperCase())}</span>
+        </div>
       </div>
 
       <div id="statusBanner" class="status-banner"></div>
@@ -187,8 +197,8 @@ function initReviewsSystem(seriesId) {
         </div>
       </div>
 
-      <!-- Review Composer Zone -->
-      <div class="review-input-zone">
+      <!-- Review Composer Zone (Hidden by default, opened via Add a Review button) -->
+      <div class="review-input-zone" id="reviewInputZone" style="display: none;">
         <textarea id="mainReviewText" placeholder="Write your thoughts..."></textarea>
         <button class="btn-primary" onclick="submitReview()">Post Review</button>
       </div>
@@ -345,6 +355,7 @@ async function submitReview() {
       document.getElementById("usernameModal").style.display = "block";
     } else if (res.ok) {
       textareaEl.value = "";
+      toggleReviewComposer(); // Hide composer after submitting
       loadReviews(currentSeries);
     } else {
       showStatus(data.error || "Could not publish review.", true);
@@ -563,7 +574,7 @@ function goBack() {
      * DEDICATED REVIEWS SYSTEM STYLING
      * ========================================== */
     :root {
-      --rev-bg: #000000;
+      --rev-bg: transparent;
       --rev-card-bg: #0a0a0a;
       --rev-panel-bg: #141414;
       --rev-input-bg: #0f0f0f;
@@ -573,14 +584,14 @@ function goBack() {
       --rev-text-muted: #888888;
     }
 
+    /* Outer Container Background set to Transparent */
     .reviews-container {
       width: 100%;
       background-color: var(--rev-bg) !important;
-      border: 1px solid var(--rev-border);
+      border: none;
       border-radius: 12px;
-      padding: 20px;
+      padding: 10px 0;
       margin-top: 24px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
       color: var(--rev-text-main);
       box-sizing: border-box;
       text-align: left !important;
@@ -606,7 +617,7 @@ function goBack() {
     }
 
     .reviews-container .series-badge {
-      background-color: var(--rev-panel-bg);
+      background-color: #0a0a0a;
       color: var(--rev-text-main);
       padding: 4px 10px;
       border-radius: 20px;
@@ -623,13 +634,13 @@ function goBack() {
       font-size: 0.875rem;
       margin-bottom: 16px;
       font-weight: 500;
-      background-color: #1a1a1a;
+      background-color: #0a0a0a;
       border: 1px solid #888888;
       color: #ffffff;
     }
 
     .reviews-container .modal-box {
-      background-color: var(--rev-panel-bg);
+      background-color: #0a0a0a;
       border: 1px solid var(--rev-border-accent);
       padding: 14px;
       border-radius: 8px;
@@ -657,7 +668,12 @@ function goBack() {
       font-size: 0.85rem;
     }
 
+    /* Review Input Composer Box - Solid Black Container */
     .reviews-container .review-input-zone {
+      background-color: #0a0a0a;
+      border: 1px solid var(--rev-border);
+      padding: 14px;
+      border-radius: 8px;
       margin-bottom: 20px;
     }
 
@@ -697,8 +713,9 @@ function goBack() {
       background-color: #cccccc;
     }
 
+    /* Black Cards for Individual Reviews */
     .reviews-container .review-card {
-      background-color: var(--rev-card-bg);
+      background-color: #0a0a0a !important;
       border: 1px solid var(--rev-border);
       padding: 14px;
       border-radius: 8px;
@@ -706,6 +723,7 @@ function goBack() {
       display: flex;
       flex-direction: column;
       gap: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
     }
 
     .reviews-container .review-header {
@@ -750,7 +768,7 @@ function goBack() {
     }
 
     .reviews-container .reply-card {
-      background-color: var(--rev-panel-bg);
+      background-color: #141414;
       padding: 8px 10px;
       border-radius: 6px;
       margin-bottom: 6px;
@@ -806,6 +824,9 @@ function goBack() {
       color: var(--rev-text-muted);
       padding: 20px 0;
       font-size: 0.85rem;
+      background-color: #0a0a0a;
+      border-radius: 8px;
+      border: 1px solid var(--rev-border);
     }
 
     /* ==========================================
@@ -920,16 +941,16 @@ function goBack() {
     }
 
     /* ==========================================
-     * PORTRAIT ORIENTATION STABILIZER (CENTERED FLOW DOWNWARD)
+     * PORTRAIT ORIENTATION STABILIZER (LOWER STARTING CENTER FLOW)
      * ========================================== */
     @media (orientation: portrait) {
       body {
         overflow-y: auto !important;
-        padding-bottom: 60px !important;
+        padding-bottom: 80px !important;
         margin: 0 !important;
       }
 
-      /* Starts content directly at center height (50vh) and flows downward */
+      /* Starts title text lower down at 60vh so header info is centered and reviews flow naturally downward */
       #movieContentWrapper {
         display: flex !important;
         flex-direction: column !important;
@@ -937,7 +958,7 @@ function goBack() {
         align-items: center !important;
         text-align: center !important;
         position: relative !important;
-        top: 50vh !important;
+        top: 60vh !important;
         transform: translateY(-50%) !important;
         width: 100% !important;
         max-width: 90vw !important;
@@ -978,4 +999,3 @@ function goBack() {
   `;
   document.head.appendChild(style);
 })();
-
