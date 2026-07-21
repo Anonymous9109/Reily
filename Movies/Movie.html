@@ -50,18 +50,21 @@ a:active {
     --rev-text-muted: #888888;
   }
 
-  /* Solid Black Container */
+  /* Force natural layout positioning below hero controls */
   .reviews-container {
-    width: 100%;
+    position: relative !important;
+    z-index: 10 !important;
+    margin: 40px 0 0 24px !important; /* Positions it nicely on the left under play button zone */
+    width: calc(100% - 48px);
     max-width: 750px;
-    background-color: var(--rev-bg);
+    background-color: var(--rev-bg) !important;
     border: 1px solid var(--rev-border);
     border-radius: 12px;
     padding: 24px;
-    margin-top: 24px;
-    box-shadow: 0 10px 30px rgba(255, 255, 255, 0.03);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
     color: var(--rev-text-main);
     box-sizing: border-box;
+    text-align: left !important;
   }
 
   .reviews-container * {
@@ -82,6 +85,7 @@ a:active {
     font-weight: 700;
     color: var(--rev-text-main);
     letter-spacing: -0.5px;
+    margin: 0;
   }
 
   .reviews-container .series-badge {
@@ -311,40 +315,39 @@ a:active {
       </svg>
       Play
     </button>
-
-    <!-- Reviews System Start -->
-    <div class="reviews-container">
-      <div class="header-zone">
-        <h2>Reviews</h2>
-        <span class="series-badge" id="displaySeriesName">...</span>
-      </div>
-
-      <div id="statusBanner" class="status-banner"></div>
-
-      <!-- Account Setup Container -->
-      <div class="modal-box" id="usernameModal" style="display: none;">
-        <p>Please enter a display name to participate in discussions:</p>
-        <div class="modal-input-group">
-          <input type="text" id="usernameInput" placeholder="Enter username" />
-          <button class="btn-secondary" onclick="saveUsername()">Set Name</button>
-        </div>
-      </div>
-
-      <!-- Review Composer Zone -->
-      <div class="review-input-zone">
-        <textarea id="mainReviewText" placeholder="Write your thoughts..."></textarea>
-        <button class="btn-primary" onclick="submitReview()">Post Review</button>
-      </div>
-
-      <!-- Main Feed Area -->
-      <div id="reviewsList">
-        <div class="empty-state">Loading reviews...</div>
-      </div>
-    </div>
-    <!-- Reviews System End -->
-
   </div>
 </div>
+
+<!-- Reviews System Placed Outside .content to prevent position/centering inheritance -->
+<div class="reviews-container">
+  <div class="header-zone">
+    <h2>Reviews</h2>
+    <span class="series-badge" id="displaySeriesName">...</span>
+  </div>
+
+  <div id="statusBanner" class="status-banner"></div>
+
+  <!-- Account Setup Container -->
+  <div class="modal-box" id="usernameModal" style="display: none;">
+    <p>Please enter a display name to participate in discussions:</p>
+    <div class="modal-input-group">
+      <input type="text" id="usernameInput" placeholder="Enter username" />
+      <button class="btn-secondary" onclick="saveUsername()">Set Name</button>
+    </div>
+  </div>
+
+  <!-- Review Composer Zone -->
+  <div class="review-input-zone">
+    <textarea id="mainReviewText" placeholder="Write your thoughts..."></textarea>
+    <button class="btn-primary" onclick="submitReview()">Post Review</button>
+  </div>
+
+  <!-- Main Feed Area -->
+  <div id="reviewsList">
+    <div class="empty-state">Loading reviews...</div>
+  </div>
+</div>
+<!-- Reviews System End -->
 
 <script>
 // Extra safety: inject style via JS too (some devices ignore CSS-only)
@@ -585,3 +588,4 @@ document.addEventListener("DOMContentLoaded", () => {
 <script src="script.js"></script>
 </body>
 </html>
+
