@@ -540,8 +540,18 @@ function goBack() {
       background-color: transparent !important;
     }
     
+    /* Global Back Button Positioning: Top Left Fixed Anchor */
+    .back-btn {
+      position: fixed !important;
+      top: 40px !important;
+      left: 40px !important;
+      right: auto !important;
+      z-index: 10 !important;
+      cursor: pointer;
+    }
+
     /* Forces elements out of the stacking index loop to sit cleanly over the fade overlay */
-    #title, #desc, .play-btn, .back-btn, .text-container-wrapper, .info-container {
+    #title, #desc, .play-btn, .text-container-wrapper, .info-container {
       position: relative;
       z-index: 2;
     }
@@ -904,13 +914,6 @@ function goBack() {
         grid-column: 1 / span 2;
         grid-row: 4;
       }
-      
-      .back-btn {
-        position: fixed;
-        top: 40px;
-        right: 40px;
-        z-index: 5;
-      }
     }
 
     /* ==========================================
@@ -960,7 +963,7 @@ function goBack() {
 
       #desc {
         margin: 0 0 24px 0 !important;
-      }
+      
 
       .play-btn {
         margin: 0 auto 24px auto !important;
@@ -972,3 +975,4 @@ function goBack() {
   `;
   document.head.appendChild(style);
 })();
+
