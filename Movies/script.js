@@ -557,8 +557,8 @@ function goBack() {
     /* Global Back Button Positioning: Top Left Fixed Anchor */
     .back-btn {
       position: fixed !important;
-      top: 40px !important;
-      left: 0px !important;
+      top: 20px !important;
+      left: 10px !important;
       right: auto !important;
       z-index: 10 !important;
       cursor: pointer;
