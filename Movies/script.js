@@ -558,7 +558,7 @@ function goBack() {
     .back-btn {
       position: fixed !important;
       top: 40px !important;
-      left: 40px !important;
+      left: 0px !important;
       right: auto !important;
       z-index: 10 !important;
       cursor: pointer;
