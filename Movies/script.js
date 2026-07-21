@@ -110,7 +110,7 @@ function renderPage(id) {
 }
 
 /**
- * Builds non-intrusive container wrappers needed for the landscape layout modifications
+ * Builds non-intrusive container wrappers needed for layout modifications
  */
 function setupLandscapeDOMArchitecture(imagePath) {
   let mainWrapper = document.getElementById("movieContentWrapper");
@@ -128,7 +128,7 @@ function setupLandscapeDOMArchitecture(imagePath) {
     ambientBg.style.backgroundImage = `url('${imagePath}')`;
   }
 
-  // Group text elements into a clean grid tracking network for landscape requirements
+  // Group text elements into a clean wrapper network
   if (!mainWrapper) {
     mainWrapper = document.createElement("div");
     mainWrapper.id = "movieContentWrapper";
@@ -151,7 +151,7 @@ function setupLandscapeDOMArchitecture(imagePath) {
     if (descEl) mainWrapper.appendChild(descEl);
     if (playBtn) mainWrapper.appendChild(playBtn);
 
-    // INJECTION FIX: Insert at the absolute top of the body
+    // Insert at top of body
     document.body.insertBefore(mainWrapper, document.body.firstChild);
   }
 
@@ -164,7 +164,7 @@ function setupLandscapeDOMArchitecture(imagePath) {
 loadDataFiles();
 
 // ==========================================================================
-// 2. REVIEWS SYSTEM ENGINE & DOM INJECTION (FIXED INTERNAL SCROLL)
+// 2. REVIEWS SYSTEM ENGINE & DOM INJECTION
 // ==========================================================================
 
 function toggleReviewComposer() {
@@ -175,7 +175,6 @@ function toggleReviewComposer() {
 }
 
 function initReviewsSystem(seriesId) {
-  // Ensure we don't duplicate if called multiple times
   let container = document.querySelector(".reviews-container");
   if (!container) {
     container = document.createElement("div");
@@ -200,18 +199,15 @@ function initReviewsSystem(seriesId) {
         </div>
       </div>
 
-      <!-- Review Composer Zone (Hidden by default, opened via Add a Review button) -->
+      <!-- Review Composer Zone -->
       <div class="review-input-zone" id="reviewInputZone" style="display: none;">
         <textarea id="mainReviewText" placeholder="Write your thoughts..."></textarea>
         <button class="btn-primary" onclick="submitReview()">Post Review</button>
       </div>
 
-      <!-- Scrollable Container Wrapper for Reviews Feed -->
-      <div id="reviewsListWrapper" class="reviews-list-wrapper">
-        <!-- Main Feed Area -->
-        <div id="reviewsList">
-          <div class="empty-state">Loading reviews...</div>
-        </div>
+      <!-- Main Feed Area -->
+      <div id="reviewsList">
+        <div class="empty-state">Loading reviews...</div>
       </div>
     `;
 
@@ -274,21 +270,17 @@ async function loadReviews(seriesId) {
 
       return `
         <div class="review-card">
-          <!-- Top Header: Username on Top Left -->
           <div class="review-header">
             <span class="review-author">@${escapeHtml(username)}</span>
             <span class="review-date">${r.timestamp ? new Date(r.timestamp).toLocaleDateString() : ''}</span>
           </div>
 
-          <!-- Full-Width Review Body Placed Directly Under Username -->
           <div class="review-body">${escapeHtml(reviewContent)}</div>
 
-          <!-- Reply Button on Bottom Right -->
           <div class="review-actions">
             <button class="btn-secondary" onclick="toggleReplyInput('${safeEmailId}')">Reply</button>
           </div>
 
-          <!-- Replies Sub-zone -->
           <div class="replies-zone">
             ${(r.replies || []).map(rep => `
               <div class="reply-card">
@@ -361,14 +353,8 @@ async function submitReview() {
       document.getElementById("usernameModal").style.display = "block";
     } else if (res.ok) {
       textareaEl.value = "";
-      toggleReviewComposer(); // Hide composer after submitting
-      await loadReviews(currentSeries);
-
-      // Scroll the internal review container to the top to see the new review
-      const scrollWrapper = document.getElementById("reviewsListWrapper");
-      if (scrollWrapper) {
-        scrollWrapper.scrollTop = 0;
-      }
+      toggleReviewComposer();
+      loadReviews(currentSeries);
     } else {
       showStatus(data.error || "Could not publish review.", true);
     }
@@ -431,7 +417,6 @@ function applyFallbackBackground(id) {
   const bgContainer = document.body;
   const targetId = id || new URLSearchParams(window.location.search).get("movie") || new URLSearchParams(window.location.search).get("series");
 
-  // Find the item in your search array matching this exact ID string from the URL
   const matchedSearchItem = window.searchArray ? window.searchArray.find(m => {
     if (!m.link) return false;
     const urlPart = m.link.includes('?') ? m.link.split('?')[1] : m.link;
@@ -444,15 +429,12 @@ function applyFallbackBackground(id) {
     const filename = matchedSearchItem.image.split('/').pop();
     const absoluteImagePath = `/images/${filename}`;
 
-    console.log(`Setting background image from ID link match:`, absoluteImagePath);
-
     bgContainer.style.backgroundImage = `url('${absoluteImagePath}')`;
     bgContainer.style.backgroundSize = "cover";
     bgContainer.style.backgroundPosition = "center";
     bgContainer.style.backgroundRepeat = "no-repeat";
     bgContainer.style.backgroundAttachment = "fixed";
   } else {
-    console.warn(`No attached image property found in search array for ID: "${targetId}". Using black background.`);
     bgContainer.style.backgroundColor = "#000000";
     bgContainer.style.backgroundImage = "none";
   }
@@ -524,11 +506,10 @@ function goBack() {
 }
 
 // ==========================================================================
-// 6. GLOBAL STYLE DECORATORS & STABILIZED CSS RULES
+// 6. GLOBAL STYLE DECORATORS & FIXED PORTRAIT POSITIONING
 // ==========================================================================
 
 (function () {
-  // 1. Create and inject the subtle fading background overlay
   const overlay = document.createElement('div');
   overlay.id = "bottomFadeOverlay";
 
@@ -545,7 +526,6 @@ function goBack() {
 
   document.body.appendChild(overlay);
 
-  // 2. Clear mobile tap delays, outline styling, and enforce internal scroll limits
   const style = document.createElement('style');
   style.innerHTML = `
     * {
@@ -563,8 +543,7 @@ function goBack() {
     button:active, a:active {
       background-color: transparent !important;
     }
-    
-    /* Global Back Button Positioning: Top Left Fixed Anchor */
+
     .back-btn {
       position: fixed !important;
       top: 20px !important;
@@ -574,14 +553,13 @@ function goBack() {
       cursor: pointer;
     }
 
-    /* Forces elements out of the stacking index loop */
     #title, #desc, .play-btn, .text-container-wrapper, .info-container {
       position: relative;
       z-index: 2;
     }
 
     /* ==========================================
-     * DEDICATED REVIEWS SYSTEM STYLING & FIXED SCROLL
+     * DEDICATED REVIEWS SYSTEM STYLING
      * ========================================== */
     :root {
       --rev-bg: transparent;
@@ -594,7 +572,6 @@ function goBack() {
       --rev-text-muted: #888888;
     }
 
-    /* Outer Container Background set to Transparent with Fixed Flow */
     .reviews-container {
       width: 100%;
       background-color: var(--rev-bg) !important;
@@ -607,28 +584,6 @@ function goBack() {
       text-align: left !important;
       position: relative;
       z-index: 4;
-    }
-
-    /* ISOLATED INTERNAL SCROLL WRAPPER FOR REVIEWS */
-    .reviews-list-wrapper {
-      max-height: 380px;         /* Keeps reviews locked within fixed height */
-      overflow-y: auto;          /* Enables internal vertical scrolling */
-      overflow-x: hidden;
-      padding-right: 6px;
-      margin-top: 10px;
-    }
-
-    /* Scrollbar Styling for Reviews Container */
-    .reviews-list-wrapper::-webkit-scrollbar {
-      width: 6px;
-    }
-    .reviews-list-wrapper::-webkit-scrollbar-track {
-      background: rgba(0, 0, 0, 0.2);
-      border-radius: 4px;
-    }
-    .reviews-list-wrapper::-webkit-scrollbar-thumb {
-      background: var(--rev-border-accent);
-      border-radius: 4px;
     }
 
     .reviews-container .header-zone {
@@ -700,7 +655,6 @@ function goBack() {
       font-size: 0.85rem;
     }
 
-    /* Review Input Composer Box */
     .reviews-container .review-input-zone {
       background-color: #0a0a0a;
       border: 1px solid var(--rev-border);
@@ -722,13 +676,6 @@ function goBack() {
       margin-bottom: 10px;
     }
 
-    .reviews-container .review-input-zone textarea:focus,
-    .reviews-container .modal-input-group input:focus,
-    .reviews-container .reply-input-group input:focus {
-      outline: none;
-      border-color: var(--rev-text-main);
-    }
-
     .reviews-container .btn-primary {
       padding: 8px 16px;
       background-color: #ffffff;
@@ -741,11 +688,6 @@ function goBack() {
       transition: background 0.2s;
     }
 
-    .reviews-container .btn-primary:hover {
-      background-color: #cccccc;
-    }
-
-    /* Individual Review Cards */
     .reviews-container .review-card {
       background-color: #0a0a0a !important;
       border: 1px solid var(--rev-border);
@@ -844,11 +786,6 @@ function goBack() {
       cursor: pointer;
       font-size: 0.8rem;
       font-weight: 600;
-      transition: background 0.2s;
-    }
-
-    .reviews-container .btn-secondary:hover {
-      background-color: #404040;
     }
 
     .reviews-container .empty-state {
@@ -862,7 +799,7 @@ function goBack() {
     }
 
     /* ==========================================
-     * LANDSCAPE ORIENTATION DESIGN MODIFICATIONS
+     * LANDSCAPE ORIENTATION DESIGN
      * ========================================== */
     @media (orientation: landscape) {
       body {
@@ -877,7 +814,6 @@ function goBack() {
         display: none !important;
       }
 
-      /* Ambient Blurred Canvas Element Styling */
       #ambientBg {
         display: block !important;
         position: fixed;
@@ -894,7 +830,6 @@ function goBack() {
         pointer-events: none;
       }
 
-      /* Grid structure setup to coordinate elements */
       #movieContentWrapper {
         display: grid;
         grid-template-columns: 240px 1fr;
@@ -907,7 +842,6 @@ function goBack() {
         z-index: 3;
       }
 
-      /* Movie Poster Container */
       #moviePosterContainer {
         grid-column: 1;
         grid-row: 1;
@@ -926,7 +860,6 @@ function goBack() {
         object-fit: cover;
       }
 
-      /* Title Positioning */
       #title {
         grid-column: 2;
         grid-row: 1;
@@ -942,7 +875,6 @@ function goBack() {
         z-index: 4;
       }
 
-      /* Description */
       #desc {
         grid-column: 1 / span 2;
         grid-row: 2;
@@ -954,7 +886,6 @@ function goBack() {
         z-index: 4;
       }
 
-      /* Action Play Controller Box */
       .play-btn {
         grid-column: 1 / span 2;
         grid-row: 3;
@@ -964,7 +895,6 @@ function goBack() {
         z-index: 4;
       }
 
-      /* Reviews Container placed in grid */
       .reviews-container {
         grid-column: 1 / span 2;
         grid-row: 4;
@@ -972,15 +902,22 @@ function goBack() {
     }
 
     /* ==========================================
-     * PORTRAIT ORIENTATION STABILIZER
+     * PORTRAIT ORIENTATION STABILIZER (FIXED POSITIONING)
      * ========================================== */
     @media (orientation: portrait) {
-      body {
+      html, body {
         overflow-y: auto !important;
-        padding-bottom: 80px !important;
+        height: auto !important;
+        min-height: 100vh !important;
         margin: 0 !important;
+        padding: 0 !important;
       }
 
+      /* 
+       * FIXED POSITIONING FIX:
+       * - Replaced transform: translateY(-50%) with margin-top: 50vh.
+       * - Now title starts consistently in lower-middle screen and never shifts up when reviews grow!
+       */
       #movieContentWrapper {
         display: flex !important;
         flex-direction: column !important;
@@ -988,12 +925,14 @@ function goBack() {
         align-items: center !important;
         text-align: center !important;
         position: relative !important;
-        top: 60vh !important;
-        transform: translateY(-50%) !important;
+        top: 0 !important;
+        transform: none !important;
+        margin-top: 50vh !important; 
+        padding-bottom: 80px !important;
         width: 100% !important;
         max-width: 90vw !important;
-        margin: 0 auto !important;
-        padding: 0 !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
         z-index: 3 !important;
       }
 
@@ -1028,3 +967,4 @@ function goBack() {
   `;
   document.head.appendChild(style);
 })();
+
