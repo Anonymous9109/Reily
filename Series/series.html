@@ -1,246 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Movie</title>
-
-<link rel="stylesheet" href="style.css">
-
-<style>
-/* Kill blue tap highlight + focus styles */
-* {
-  -webkit-tap-highlight-color: transparent;
-  tap-highlight-color: transparent;
-}
-
-button, a {
-  outline: none;
-  border: none;
-}
-
-button:focus,
-button:active,
-a:focus,
-a:active {
-  outline: none;
-  box-shadow: none;
-}
-
-/* Flex layout to keep the SVG icon and text aligned nicely */
-.play-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px; /* Adds space between the icon and the text */
-  cursor: pointer;
-}
-</style>
-
-</head>
-<body>
-
-<video class="bg-video" autoplay muted loop id="bgVideo"></video>
-<div class="overlay"></div>
-
-<button class="back-btn" onclick="goBack()">
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
-    <polyline points="15 18 9 12 15 6"></polyline>
-  </svg>
-</button>
-
-<div class="content">
-  <div class="text">
-    <h1 id="title"></h1>
-    <p id="desc"></p>
-    <button class="play-btn" onclick="play()">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-        <polygon points="5 3 19 12 5 21 5 3"></polygon>
-      </svg>
-      Play
-    </button>
-  </div>
-</div>
-
-<script>
-// Extra safety: inject style via JS too (some devices ignore CSS-only)
-document.addEventListener("DOMContentLoaded", () => {
-  const style = document.createElement("style");
-  style.innerHTML = `
-    * {
-      -webkit-tap-highlight-color: transparent !important;
-    }
-
-    button, a {
-      outline: none !important;
-      -webkit-focus-ring-color: transparent !important;
-    }
-
-    button:focus,
-    button:active,
-    a:focus,
-    a:active {
-      outline: none !important;
-      box-shadow: none !important;
-    }
-  `;
-  document.head.appendChild(style);
-});
-</script>
-
-<script src="/JS/moviepage.js" defer></script>
-<script src="movies.js"></script>
-<script src="script.js"></script>
-<!-- Reviews Section Container -->
-<div id="reviewsContainer" style="max-width: 750px; margin: 40px auto; padding: 20px; font-family: sans-serif;">
-  <h2 style="border-bottom: 2px solid #333; padding-bottom: 8px;">User Reviews</h2>
-
-  <!-- Username Creation Modal / Box (Hidden by default) -->
-  <div id="usernameModal" style="display: none; background: #1a1a1a; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
-    <p style="color: #fff; margin-top: 0;">Set a unique username to leave reviews and replies:</p>
-    <input type="text" id="usernameInput" placeholder="Enter username..." style="padding: 8px; width: 60%; border-radius: 4px; border: 1px solid #444;" />
-    <button onclick="saveUsername()" style="padding: 8px 16px; background: #7c3aed; color: white; border: none; border-radius: 4px; cursor: pointer;">Save Username</button>
-  </div>
-
-  <!-- Review Input Box -->
-  <div id="reviewInputBox" style="margin-bottom: 30px;">
-    <textarea id="mainReviewText" placeholder="Write your review here..." style="width: 100%; height: 90px; padding: 10px; border-radius: 6px; border: 1px solid #ccc;"></textarea>
-    <button onclick="submitReview()" style="margin-top: 8px; padding: 10px 20px; background: #7c3aed; color: white; border: none; border-radius: 4px; cursor: pointer;">Publish Review</button>
-  </div>
-
-  <!-- Reviews Feed -->
-  <div id="reviewsList">Loading reviews...</div>
-</div>
-
-<script>
-  // Ensure this points to your deployed Cloudflare Worker domain
-  const API_BASE = "https://your-worker-subdomain.workers.dev"; 
-  
-  const urlParams = new URLSearchParams(window.location.search);
-  const currentSeries = urlParams.get("series"); // Extracts 'rush-hour' dynamically
-  const token = localStorage.getItem("session_token"); // Retrieve active user session token
-
-  async function loadReviews() {
-    if (!currentSeries) return;
-    
-    // Updated parameter from 'series' to 'movie'
-    const res = await fetch(`${API_BASE}/api/get-reviews?movie=${encodeURIComponent(currentSeries)}`, {
-      headers: { "Authorization": `Bearer ${token}` }
-    });
-    const data = await res.json();
-
-    const listEl = document.getElementById("reviewsList");
-    if (!data.reviews || data.reviews.length === 0) {
-      listEl.innerHTML = "<p style='color: #777;'>No reviews yet. Be the first to write one!</p>";
-      return;
-    }
-
-    listEl.innerHTML = data.reviews.map(r => `
-      <div style="border: 1px solid #333; padding: 15px; border-radius: 8px; margin-bottom: 15px; background: #111; color: #fff;">
-        <div style="display: flex; justify-content: space-between; font-size: 0.85em; color: #aaa;">
-          <strong>@${r.authorUsername}</strong>
-          <span>${new Date(r.timestamp).toLocaleString()}</span>
-        </div>
-        <!-- Updated property from r.reviewText to r.text -->
-        <p style="margin: 10px 0; font-size: 1em;">${escapeHtml(r.text)}</p>
-
-        <!-- Nested Replies -->
-        <div style="margin-left: 20px; border-left: 2px solid #333; padding-left: 10px; margin-top: 10px;">
-          ${(r.replies || []).map(rep => `
-            <div style="margin-bottom: 8px; font-size: 0.9em; background: #222; padding: 8px; border-radius: 5px;">
-              <strong style="color: #a78bfa;">@${rep.replierUsername}:</strong> ${escapeHtml(rep.text)}
-              <div style="font-size: 0.75em; color: #777; text-align: right;">${new Date(rep.timestamp).toLocaleTimeString()}</div>
-            </div>
-          `).join('')}
-
-          <!-- Reply Box -->
-          <div style="display: flex; gap: 8px; margin-top: 10px;">
-            <input type="text" id="reply-input-${r.authorEmail.replace(/[^a-zA-Z0-9]/g, '_')}" placeholder="Reply to @${r.authorUsername}..." style="flex: 1; padding: 6px; border-radius: 4px; border: 1px solid #444; background: #000; color: #fff;" />
-            <button onclick="submitReply('${r.authorEmail}')" style="padding: 6px 12px; background: #4f46e5; color: white; border: none; border-radius: 4px; cursor: pointer;">Reply</button>
-          </div>
-        </div>
-      </div>
-    `).join('');
-  }
-
-  async function saveUsername() {
-    const username = document.getElementById("usernameInput").value.trim();
-    if (!username) return alert("Username cannot be empty");
-
-    const res = await fetch(`${API_BASE}/api/set-username`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
-      body: JSON.stringify({ username })
-    });
-    const data = await res.json();
-
-    if (res.ok) {
-      alert("Username set!");
-      document.getElementById("usernameModal").style.display = "none";
-    } else {
-      alert(data.error);
-    }
-  }
-
-  async function submitReview() {
-    const text = document.getElementById("mainReviewText").value.trim();
-    if (!text) return alert("Review text is empty!");
-
-    // Updated payload key from 'series' to 'movie'
-    const res = await fetch(`${API_BASE}/api/add-review`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
-      body: JSON.stringify({ movie: currentSeries, reviewText: text })
-    });
-    const data = await res.json();
-
-    if (data.requireUsername) {
-      document.getElementById("usernameModal").style.display = "block";
-    } else if (res.ok) {
-      document.getElementById("mainReviewText").value = "";
-      loadReviews();
-    } else {
-      alert(data.error);
-    }
-  }
-
-  async function submitReply(targetEmail) {
-    const inputId = `reply-input-${targetEmail.replace(/[^a-zA-Z0-9]/g, '_')}`;
-    const inputEl = document.getElementById(inputId);
-    const replyText = inputEl ? inputEl.value.trim() : "";
-    if (!replyText) return;
-
-    // Updated payload keys: 'movie' and 'targetEmail'
-    const res = await fetch(`${API_BASE}/api/add-reply`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
-      body: JSON.stringify({ movie: currentSeries, targetEmail, replyText })
-    });
-    const data = await res.json();
-
-    if (data.requireUsername) {
-      document.getElementById("usernameModal").style.display = "block";
-    } else if (res.ok) {
-      loadReviews();
-    } else {
-      alert(data.error);
-    }
-  }
-
-  function escapeHtml(str) {
-    return str ? str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") : "";
-  }
-
-  // Load reviews on page mount
-  loadReviews();
-</script>
-
-
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Rinolski - Reviews</title>
@@ -254,9 +14,6 @@ document.addEventListener("DOMContentLoaded", () => {
       --border-accent: #404040;
       --text-main: #ffffff;
       --text-muted: #888888;
-      --accent: #ffffff;
-      --accent-hover: #cccccc;
-      --danger: #ffffff;
     }
 
     * {
@@ -318,16 +75,12 @@ document.addEventListener("DOMContentLoaded", () => {
       font-size: 0.875rem;
       margin-bottom: 16px;
       font-weight: 500;
-    }
-    .status-banner.error {
-      background-color: #1a1a1a;
-      border: 1px solid #ffffff;
-      color: #ffffff;
-    }
-    .status-banner.success {
       background-color: #1a1a1a;
       border: 1px solid #888888;
       color: #ffffff;
+    }
+    .status-banner.error {
+      border-color: #ffffff;
     }
 
     .modal-box {
@@ -392,7 +145,7 @@ document.addEventListener("DOMContentLoaded", () => {
       border-radius: 6px;
       cursor: pointer;
       font-weight: 700;
-      transition: background 0.2s, color 0.2s;
+      transition: background 0.2s;
     }
 
     .btn-primary:hover {
@@ -479,12 +232,11 @@ document.addEventListener("DOMContentLoaded", () => {
       cursor: pointer;
       font-size: 0.875rem;
       font-weight: 600;
-      transition: background 0.2s, border-color 0.2s;
+      transition: background 0.2s;
     }
 
     .btn-secondary:hover {
       background-color: #404040;
-      border-color: #ffffff;
     }
 
     .empty-state {
@@ -528,19 +280,35 @@ document.addEventListener("DOMContentLoaded", () => {
 </div>
 
 <script>
-  // Cloudflare Worker backend target
   const API_BASE = "https://rinolski.misty-fog-201e.workers.dev";
-  const urlParams = new URLSearchParams(window.location.search);
-  const currentSeries = urlParams.get("series") || "";
   const token = localStorage.getItem("session_token") || "";
 
+  // Universal URL extractor (handles ?series=, ?Series=, ?movie=, or URL paths)
+  function getSeriesFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    for (const key of params.keys()) {
+      if (key.toLowerCase() === "series" || key.toLowerCase() === "movie") {
+        return params.get(key);
+      }
+    }
+    // Fallback: Check last path segment if query params aren't used
+    const pathSegments = window.location.pathname.split('/').filter(Boolean);
+    const lastSegment = pathSegments[pathSegments.length - 1];
+    if (lastSegment && lastSegment.toLowerCase() !== "series" && lastSegment.toLowerCase() !== "movie") {
+      return lastSegment;
+    }
+    return "rush-hour";
+  }
+
+  const currentSeries = getSeriesFromUrl();
+
   document.getElementById("displaySeriesName").innerText = currentSeries 
-    ? currentSeries.replace(/-/g, ' ').toUpperCase() 
-    : 'GENERAL';
+    .replace(/-/g, ' ')
+    .toUpperCase();
 
   function showStatus(message, isError = false) {
     const banner = document.getElementById("statusBanner");
-    banner.className = `status-banner ${isError ? 'error' : 'success'}`;
+    banner.className = `status-banner ${isError ? 'error' : ''}`;
     banner.innerText = message;
     banner.style.display = "block";
     setTimeout(() => { banner.style.display = "none"; }, 4000);
@@ -550,40 +318,46 @@ document.addEventListener("DOMContentLoaded", () => {
     const listEl = document.getElementById("reviewsList");
     
     try {
-      const res = await fetch(`${API_BASE}/api/get-reviews?movie=${encodeURIComponent(currentSeries)}`, {
+      const res = await fetch(`${API_BASE}/api/get-reviews?movie=${encodeURIComponent(currentSeries)}&series=${encodeURIComponent(currentSeries)}`, {
         headers: { "Authorization": `Bearer ${token}` }
       });
       const data = await res.json();
 
-      if (!data.reviews || data.reviews.length === 0) {
+      const reviewsArr = data.reviews || data.data || [];
+
+      if (!reviewsArr || reviewsArr.length === 0) {
         listEl.innerHTML = `<div class="empty-state">No reviews yet. Be the first to publish one!</div>`;
         return;
       }
 
       // Sort array so newest reviews appear on top
-      const sortedReviews = [...data.reviews].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+      const sortedReviews = [...reviewsArr].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
       listEl.innerHTML = sortedReviews.map(r => {
-        const safeEmailId = r.authorEmail.replace(/[^a-zA-Z0-9]/g, '_');
+        const authorEmail = r.authorEmail || r.email || "user";
+        const safeEmailId = authorEmail.replace(/[^a-zA-Z0-9]/g, '_');
+        const reviewContent = r.reviewText || r.text || r.content || "";
+        const username = r.authorUsername || r.username || "Anonymous";
+
         return `
           <div class="review-card">
             <div class="review-header">
-              <strong>@${escapeHtml(r.authorUsername)}</strong>
-              <span>${new Date(r.timestamp).toLocaleDateString()}</span>
+              <strong>@${escapeHtml(username)}</strong>
+              <span>${r.timestamp ? new Date(r.timestamp).toLocaleDateString() : ''}</span>
             </div>
-            <div class="review-body">${escapeHtml(r.text)}</div>
+            <div class="review-body">${escapeHtml(reviewContent)}</div>
 
             <div class="replies-zone">
               ${(r.replies || []).map(rep => `
                 <div class="reply-card">
-                  <strong>@${escapeHtml(rep.replierUsername)}:</strong> ${escapeHtml(rep.text)}
-                  <div class="reply-time">${new Date(rep.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
+                  <strong>@${escapeHtml(rep.replierUsername || rep.username || 'User')}:</strong> ${escapeHtml(rep.text || rep.replyText || '')}
+                  <div class="reply-time">${rep.timestamp ? new Date(rep.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : ''}</div>
                 </div>
               `).join('')}
 
               <div class="reply-input-group">
                 <input type="text" id="reply-input-${safeEmailId}" placeholder="Reply..." />
-                <button class="btn-secondary" onclick="submitReply('${r.authorEmail}')">Reply</button>
+                <button class="btn-secondary" onclick="submitReply('${authorEmail}')">Reply</button>
               </div>
             </div>
           </div>
@@ -591,7 +365,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }).join('');
 
     } catch(err) {
-      listEl.innerHTML = `<div class="empty-state" style="color: var(--danger);">Unable to load reviews right now.</div>`;
+      listEl.innerHTML = `<div class="empty-state" style="color: var(--text-muted);">Unable to load reviews right now.</div>`;
     }
   }
 
@@ -619,21 +393,32 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   async function submitReview() {
-    const text = document.getElementById("mainReviewText").value.trim();
+    const textareaEl = document.getElementById("mainReviewText");
+    const text = textareaEl ? textareaEl.value.trim() : "";
+    
     if (!text) return showStatus("Please write something before publishing.", true);
 
     try {
+      // Send normalized payload keys so it works regardless of worker variable names
       const res = await fetch(`${API_BASE}/api/add-review`, {
         method: "POST",
-        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
-        body: JSON.stringify({ movie: currentSeries, reviewText: text })
+        headers: { 
+          "Content-Type": "application/json", 
+          "Authorization": `Bearer ${token}` 
+        },
+        body: JSON.stringify({ 
+          movie: currentSeries, 
+          series: currentSeries, 
+          reviewText: text,
+          text: text
+        })
       });
       const data = await res.json();
 
       if (data.requireUsername) {
         document.getElementById("usernameModal").style.display = "block";
       } else if (res.ok) {
-        document.getElementById("mainReviewText").value = "";
+        textareaEl.value = "";
         loadReviews();
       } else {
         showStatus(data.error || "Could not publish review.", true);
@@ -653,8 +438,17 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       const res = await fetch(`${API_BASE}/api/add-reply`, {
         method: "POST",
-        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
-        body: JSON.stringify({ movie: currentSeries, targetEmail, replyText })
+        headers: { 
+          "Content-Type": "application/json", 
+          "Authorization": `Bearer ${token}` 
+        },
+        body: JSON.stringify({ 
+          movie: currentSeries, 
+          series: currentSeries, 
+          targetEmail: targetEmail, 
+          replyText: replyText,
+          text: replyText
+        })
       });
       const data = await res.json();
 
@@ -671,7 +465,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function escapeHtml(str) {
-    return str ? str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") : "";
+    return str ? String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") : "";
   }
 
   loadReviews();
