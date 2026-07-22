@@ -658,6 +658,12 @@ const movies = {
     desc: "Enola Holmes takes on her first case as a detective, but to unravel the mystery of a missing girl, she'll need some help from friends -- and brother Sherlock.",
     video: "",
     play: "EnolaHolmes2"
+  },
+  "night-school": {
+    title: "Night School",
+    desc: "After accidentally blowing up his workplace, Teddy Walker is forced to attend night school. While there, he is forced to deal with a group of misfits and a teacher who thinks he is dull-witted.",
+    video: "",
+    play: "NightSchool"
   }
 };
 
