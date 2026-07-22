@@ -284,6 +284,8 @@
         .avatar {
             width: 60px;
             height: 60px;
+            min-width: 60px;
+            min-height: 60px;
             background: #222;
             border-radius: 4px;
             display: flex;
@@ -291,6 +293,7 @@
             justify-content: center;
             overflow: hidden;
             border: 2px solid transparent;
+            flex-shrink: 0;
         }
         
         .avatar img {
@@ -303,6 +306,60 @@
             font-size: 24px;
             font-weight: bold;
             color: #fff;
+        }
+
+        .pfp-selector-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 10px;
+            margin-top: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .pfp-option {
+            aspect-ratio: 1/1;
+            background: #141414;
+            border: 2px solid transparent;
+            border-radius: 6px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+        
+        .pfp-option img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .pfp-option.active {
+            border-color: #e50914;
+        }
+
+        /* Fixed avatar dimensions and grid sizing strictly for landscape mode */
+        @media screen and (orientation: landscape) {
+            .avatar {
+                width: 50px;
+                height: 50px;
+                min-width: 50px;
+                min-height: 50px;
+            }
+
+            .pfp-selector-grid {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+
+            .pfp-option {
+                width: 50px;
+                height: 50px;
+                flex: 0 0 50px;
+            }
         }
 
         .profile-details-container {
@@ -404,37 +461,6 @@
             margin-top: 15px;
         }
 
-        .pfp-selector-grid {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 10px;
-            margin-top: 12px;
-            margin-bottom: 20px;
-        }
-        
-        .pfp-option {
-            aspect-ratio: 1/1;
-            background: #141414;
-            border: 2px solid transparent;
-            border-radius: 6px;
-            overflow: hidden;
-            position: relative;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .pfp-option img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        .pfp-option.active {
-            border-color: #e50914;
-        }
-        
         .pfp-label-id {
             position: absolute;
             bottom: 2px;
@@ -919,7 +945,6 @@
         passwordInput.style.display = 'block';
         forgotLink.style.display = 'block';
 
-        // Always clean up fields when shifting between standard configurations or token triggers
         if (authState === "signin" || authState === "signup" || authState === "forgot") {
             emailInput.value = "";
             passwordInput.value = "";
@@ -1068,7 +1093,7 @@
                 if (res.ok) {
                     localStorage.setItem('session_token', data.token);
                     showToast(data.message || "Welcome back!");
-                    await fetchAndDisplayUserData(true); // Force immediate rendering
+                    await fetchAndDisplayUserData(true);
                 } else {
                     showInlineAlert(data.error || "Invalid login credentials.", "error");
                 }
@@ -1769,7 +1794,7 @@
                     </div>
                 `;
                 const watchAgainRow = watchAgainContainer.querySelector(".movies");
-                watchAgainMovies.forEach(m => watchAgainRow.appendChild(createMovieCard(m)));
+                shuffleArray(watchAgainMovies).forEach(m => watchAgainRow.appendChild(createMovieCard(m)));
             } else {
                 watchAgainContainer.innerHTML = "";
             }
@@ -1797,7 +1822,7 @@
 
         genreContainer.innerHTML = "";
         
-        const randomizedGenreNames = Object.keys(genreMap).sort();
+        const randomizedGenreNames = shuffleArray(Object.keys(genreMap));
         randomizedGenreNames.forEach(genre => {
             const section = document.createElement("div");
             section.className = "section";
@@ -1807,7 +1832,7 @@
             `;
             const row = section.querySelector(".movies");
             
-            genreMap[genre].forEach(m => row.appendChild(createMovieCard(m)));
+            shuffleArray(genreMap[genre]).forEach(m => row.appendChild(createMovieCard(m)));
             genreContainer.appendChild(section);
         });
     }
