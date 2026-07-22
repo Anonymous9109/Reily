@@ -230,6 +230,29 @@ window.videoData = {
         lang: "fr",
         src: "../subtitles/EnolaHolmes2/EnolaHolmes2-french.txt"
       }
+    ],
+  "NightSchool": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Movies/22123309622.mp4",
+    "NightSchool-subs": [
+      {
+        label: "English",
+        lang: "en",
+        src: "../subtitles/NightSchool/NightSchool-english.txt"
+      },
+      {
+        label: "Arabic",
+        lang: "ar",
+        src: "../subtitles/NightSchool/NightSchool-arabic.txt"
+      },
+      {
+        label: "Spanish",
+        lang: "es",
+        src: "../subtitles/NightSchool/NightSchool-spanish.txt"
+      },
+      {
+        label: "French",
+        lang: "fr",
+        src: "../subtitles/NightSchool/NightSchool-french.txt"
+      }
     ]
 };
 
