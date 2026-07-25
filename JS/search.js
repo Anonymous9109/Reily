@@ -584,6 +584,12 @@ const movies = [
     genres: ["Comedy","Drama"],
     image: "images/NightSchool.jpg",
     link: "Movies/Movie?movie=night-school"
+  },
+  {
+    title: "Little Women",
+    genres: ["Romance","Drama"],
+    image: "images/LittleWomen.jpg",
+    link: "Movies/Movie?movie=little-women"
   }
 ];
 
