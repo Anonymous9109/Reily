@@ -664,6 +664,12 @@ const movies = {
     desc: "After accidentally blowing up his workplace, Teddy Walker is forced to attend night school. While there, he is forced to deal with a group of misfits and a teacher who thinks he is dull-witted.",
     video: "",
     play: "NightSchool"
+  },
+  "little-women": {
+    title: "Little Women",
+    desc: "While the March sisters enter the threshold of womanhood, they go through many ups and downs in life and endeavour to make important decisions that can affect their future.",
+    video: "",
+    play: "LittleWomen"
   }
 };
 
