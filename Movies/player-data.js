@@ -253,6 +253,29 @@ window.videoData = {
         lang: "fr",
         src: "../subtitles/NightSchool/NightSchool-french.txt"
       }
+    ],
+  "LittleWomen": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Movies/1302512125.mp4",
+    "LittleWomen-subs": [
+      {
+        label: "Arabic",
+        lang: "ar",
+        src: "../subtitles/LittleWomen/LittleWomen-arabic.txt"
+      },
+      {
+        label: "French",
+        lang: "fr",
+        src: "../subtitles/LittleWomen/LittleWomen-french.txt"
+      },
+      {
+        label: "Spanish",
+        lang: "es",
+        src: "../subtitles/LittleWomen/LittleWomen-spanish.txt"
+      },
+      {
+        label: "English",
+        lang: "en",
+        src: "../subtitles/LittleWomen/LittleWomen-english.txt"
+      }
     ]
 };
 
