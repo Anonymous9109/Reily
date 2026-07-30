@@ -616,7 +616,7 @@ function goBack() {
       border: none;
       border-radius: 12px;
       padding: 10px 0;
-      margin-top: 44px;
+      margin-top: 24px;
       color: var(--rev-text-main);
       box-sizing: border-box;
       text-align: left !important;
@@ -629,8 +629,8 @@ function goBack() {
       justify-content: space-between;
       align-items: center;
       border-bottom: 1px solid var(--rev-border);
-      padding-bottom: 12px;
-      margin-bottom: 6px;
+      padding-bottom: 1px;
+      margin-bottom: 16px;
     }
 
     .reviews-container .header-zone h2 {
