@@ -616,7 +616,7 @@ function goBack() {
       border: none;
       border-radius: 12px;
       padding: 10px 0;
-      margin-top: 100px;
+      margin-top: 16px;
       color: var(--rev-text-main);
       box-sizing: border-box;
       text-align: left !important;
@@ -629,7 +629,7 @@ function goBack() {
       justify-content: space-between;
       align-items: center;
       border-bottom: 1px solid var(--rev-border);
-      padding-bottom: 100px;
+      padding-bottom: 10px;
       margin-bottom: 16px;
     }
 
