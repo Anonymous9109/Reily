@@ -946,7 +946,7 @@ function goBack() {
       html, body {
         overflow-y: auto !important;
         height: auto !important;
-        min-height: 100vh !important;
+        min-height: 130vh !important;
         margin: 0 !important;
         padding: 0 !important;
       }
