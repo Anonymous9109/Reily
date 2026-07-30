@@ -670,6 +670,12 @@ const movies = {
     desc: "While the March sisters enter the threshold of womanhood, they go through many ups and downs in life and endeavour to make important decisions that can affect their future.",
     video: "",
     play: "LittleWomen"
+  },
+  "the-sheep-detectives": {
+    title: "The Sheep Detectives",
+    desc: "George Hardy is a shepherd who loves to read murder mysteries to his sheep, never suspecting that they can understand him. When George is found dead under mysterious circumstances, the sheep decide to solve the crime themselves, even if it means leaving their meadow for the first time and facing the fact that the human world isn't as simple as it appears in books.",
+    video: "",
+    play: "thesheepdetectives"
   }
 };
 
