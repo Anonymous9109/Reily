@@ -590,6 +590,12 @@ const movies = [
     genres: ["Romance","Drama"],
     image: "images/LittleWomen.jpg",
     link: "Movies/Movie?movie=little-women"
+  },
+  {
+    title: "The Sheep Detectives",
+    genres: ["Comedy","Mystery"],
+    image: "images/thesheepdetectives.jpg",
+    link: "Movies/Movie?movie=the-sheep-detectives"
   }
 ];
 
