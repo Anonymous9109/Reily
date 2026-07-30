@@ -276,6 +276,24 @@ window.videoData = {
         lang: "en",
         src: "../subtitles/LittleWomen/LittleWomen-english.txt"
       }
+    ],
+  "thesheepdetectives": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Movies/3472928091.mp4",
+    "thesheepdetectives-subs": [
+      {
+        label: "English",
+        lang: "en",
+        src: "../subtitles/thesheepdetectives/thesheepdetectives-english.txt"
+      },
+      {
+        label: "Arabic",
+        lang: "ar",
+        src: "../subtitles/thesheepdetectives/thesheepdetectives-arabic.txt"
+      },
+      {
+        label: "Indonesian",
+        lang: "id",
+        src: "../subtitles/thesheepdetectives/thesheepdetectives-indonesian.txt"
+      }
     ]
 };
 
