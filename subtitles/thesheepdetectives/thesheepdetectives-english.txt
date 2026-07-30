@@ -1,0 +1,7947 @@
+﻿WEBVTT
+
+00:00:08.000 --> 00:00:10.000
+[intriguing music playing]
+
+00:00:16.000 --> 00:00:17.333
+[sheep bleats]
+
+00:00:19.750 --> 00:00:21.250
+{\an8}[sheep bleats]
+
+00:00:45.541 --> 00:00:47.541
+[lambs bleating]
+
+00:00:49.375 --> 00:00:50.958
+[George] <i>Dearest Rebecca:</i>
+
+00:00:52.250 --> 00:00:54.916
+<i>I know</i>
+<i>you have many questions.</i>
+
+00:00:56.083 --> 00:00:57.291
+<i>So do I.</i>
+
+00:00:57.458 --> 00:01:00.583
+[chuckling] <i>After all,</i>
+<i>life is a mystery.</i>
+
+00:01:01.166 --> 00:01:02.291
+<i>But if there's one answer</i>
+
+00:01:02.416 --> 00:01:04.208
+<i>to all the great</i>
+<i>riddles of the universe,</i>
+
+00:01:04.375 --> 00:01:06.041
+<i>one secret to happiness,</i>
+
+00:01:06.208 --> 00:01:08.541
+<i>I propose</i>
+<i>it would be simply this...</i>
+
+00:01:08.666 --> 00:01:09.583
+[thuds]
+
+00:01:10.666 --> 00:01:11.958
+-[George] <i>Sheep.</i>
+<i>-</i>[bleats]
+
+00:01:12.083 --> 00:01:13.083
+[sighs]
+
+00:01:15.083 --> 00:01:16.583
+[George] <i>No, seriously.</i>
+[chuckles]
+
+00:01:16.708 --> 00:01:18.166
+<i>It really is sheep.</i>
+
+00:01:18.291 --> 00:01:20.291
+{\an8}[muffled sheep bleating]
+
+00:01:20.416 --> 00:01:22.208
+{\an8}Okay, I'm coming.
+
+00:01:22.916 --> 00:01:24.791
+[bleating]
+
+00:01:24.916 --> 00:01:26.208
+[lamb yelping]
+
+00:01:29.458 --> 00:01:31.416
+[lambs bleating]
+
+00:01:35.250 --> 00:01:36.500
+[George] <i>Now</i>
+<i>in your last letter,</i>
+
+00:01:36.625 --> 00:01:38.708
+<i>you asked me if any</i>
+<i>of my sheep were special.</i>
+
+00:01:38.875 --> 00:01:40.833
+<i>Well, they're all special.</i>
+
+00:01:40.958 --> 00:01:43.416
+<i>That's why I gave</i>
+<i>each one a name.</i>
+
+00:01:43.583 --> 00:01:45.500
+<i>-For instance:</i>
+-[rams blatting]
+
+00:01:45.625 --> 00:01:47.500
+<i>There are these</i>
+<i>rowdy twin rams</i>
+
+00:01:47.625 --> 00:01:49.500
+<i>I've named Ronnie and Reggie.</i>
+
+00:01:50.000 --> 00:01:53.333
+<i>And the very proud</i>
+<i>and dignified Sir Ritchfield.</i>
+
+00:01:54.125 --> 00:01:55.875
+<i>Cloud, the fluffiest.</i>
+
+00:01:56.041 --> 00:01:58.583
+<i>-Bit of a diva, that one.</i>
+-[bleats softly]
+
+00:01:58.708 --> 00:02:01.000
+<i>Zora, the most curious.</i>
+
+00:02:01.500 --> 00:02:04.166
+-[grunts]
+<i>-Mopple, the most patient.</i>
+
+00:02:04.916 --> 00:02:06.833
+-[George] <i>And Wool-Eyes...</i>
+-[baas]
+
+00:02:07.166 --> 00:02:09.791
+<i>Well, because I haven't</i>
+<i>thought of a better name.</i>
+
+00:02:10.083 --> 00:02:13.041
+{\an8}<i>And, okay, I know I said</i>
+<i>they're all special,</i>
+
+00:02:13.208 --> 00:02:14.875
+<i>but I have to admit</i>
+
+00:02:15.000 --> 00:02:17.875
+<i>that two of my sheep</i>
+<i>are the most special.</i>
+
+00:02:18.583 --> 00:02:19.666
+<i>There's Sebastian.</i>
+
+00:02:19.833 --> 00:02:21.250
+<i>My biggest ram,</i>
+
+00:02:21.416 --> 00:02:23.875
+<i>and like me, bit of a loner.</i>
+
+00:02:24.458 --> 00:02:27.083
+<i>Sooner or later</i>
+<i>he wanders away.</i>
+
+00:02:27.416 --> 00:02:30.500
+<i>And sooner or later</i>
+<i>he comes back.</i>
+
+00:02:34.041 --> 00:02:36.708
+<i>And finally, Lily.</i>
+
+00:02:37.166 --> 00:02:38.708
+<i>My smartest sheep.</i>
+
+00:02:38.875 --> 00:02:40.416
+<i>The one</i>
+<i>who always seems to know</i>
+
+00:02:40.541 --> 00:02:42.041
+<i>what I'm thinking in my head</i>
+
+00:02:42.208 --> 00:02:44.416
+<i>and feeling in my heart.</i>
+
+00:02:44.583 --> 00:02:46.083
+<i>Above all others,</i>
+
+00:02:46.208 --> 00:02:48.250
+<i>she brings me</i>
+<i>the kind of peace</i>
+
+00:02:48.375 --> 00:02:49.916
+<i>that only shepherds know.</i>
+
+00:02:50.083 --> 00:02:51.541
+<i>A peace that comes</i>
+
+00:02:51.708 --> 00:02:54.375
+<i>from taking care of</i>
+<i>the kindest creatures</i>
+
+00:02:54.500 --> 00:02:56.166
+<i>on earth.</i>
+
+00:03:01.458 --> 00:03:03.833
+<i>Each day starts</i>
+<i>by tending to their health.</i>
+
+00:03:05.958 --> 00:03:07.708
+[George] <i>I keep them</i>
+<i>well-fed...</i>
+
+00:03:08.458 --> 00:03:09.583
+<i>-well-groomed.</i>
+-[trimmer whirrs]
+
+00:03:10.375 --> 00:03:11.458
+[bleats]
+
+00:03:11.583 --> 00:03:14.333
+[George] <i>I do my best</i>
+<i>to keep them entertained.</i>
+
+00:03:14.500 --> 00:03:17.500
+♪ <i>When I wake up</i>
+<i>Well, I know I'm gonna be </i>♪
+
+00:03:17.666 --> 00:03:20.333
+♪ <i>I'm gonna be the man</i>
+<i>who wakes up next to you </i>♪
+
+00:03:22.041 --> 00:03:23.916
+<i>And I make sure</i>
+<i>they get their medicine,</i>
+
+00:03:24.041 --> 00:03:26.125
+<i>which I think</i>
+<i>they'd say they enjoy...</i>
+
+00:03:26.291 --> 00:03:27.791
+<i>if only they could speak.</i>
+
+00:03:27.958 --> 00:03:30.750
+Time for your medicine, mate.
+There ya go.
+
+00:03:31.083 --> 00:03:32.625
+<i>And when my chores</i>
+<i>are finished</i>
+
+00:03:32.750 --> 00:03:35.250
+<i>and the sun starts to sink</i>
+<i>low in the sky,</i>
+
+00:03:35.416 --> 00:03:37.583
+<i>I choose a book</i>
+<i>to read out loud to them.</i>
+
+00:03:37.750 --> 00:03:42.041
+<i>Detective novels, mysteries,</i>
+<i>whodunits. All my favorites.</i>
+
+00:03:42.208 --> 00:03:43.208
+[imitating posh accent]
+"I know when
+
+00:03:43.333 --> 00:03:44.958
+Rodney Hollingshead
+was murdered,
+
+00:03:45.125 --> 00:03:48.416
+and I know
+who the real killer was."
+
+00:03:48.541 --> 00:03:50.083
+-[scattered bleating]
+<i>-I like to pretend</i>
+
+00:03:50.208 --> 00:03:51.625
+<i>that they</i>
+<i>follow along with the story.</i>
+
+00:03:52.291 --> 00:03:55.375
+<i>But I know in my heart that,</i>
+<i>as special as they are,</i>
+
+00:03:55.500 --> 00:03:56.708
+<i>they're still...</i>
+
+00:03:57.208 --> 00:03:59.416
+<i>-sheep.</i>
+<i>-</i>[all bleat loudly]
+
+00:03:59.541 --> 00:04:00.833
+[George] No, no more.
+
+00:04:01.416 --> 00:04:02.833
+Go on, the lot of you.
+
+00:04:03.000 --> 00:04:05.083
+I'll read the ending tomorrow.
+
+00:04:05.208 --> 00:04:07.166
+[lambs bleating loudly]
+
+00:04:08.875 --> 00:04:10.041
+[thuds]
+
+00:04:11.250 --> 00:04:13.500
+[groans] Why would
+he stop there?!
+
+00:04:13.666 --> 00:04:15.000
+-[all groan]
+-He was just about to say
+
+00:04:15.125 --> 00:04:16.125
+who the killer was!
+
+00:04:16.250 --> 00:04:18.083
+This is torture!
+It was the maid, right?
+
+00:04:18.250 --> 00:04:19.791
+Of course it's the maid.
+
+00:04:19.958 --> 00:04:22.750
+[Sir Ritchfield] <i>No, no, no,</i>
+<i>it was the gardener.</i>
+
+00:04:22.916 --> 00:04:25.625
+Always cutting the grass
+but never eating any?
+
+00:04:25.791 --> 00:04:27.125
+Yeah. Suspicious.
+
+00:04:27.291 --> 00:04:28.708
+Are you all nuts?
+The doctor did it.
+
+00:04:28.875 --> 00:04:30.666
+No way.
+It was the creepy aunt.
+
+00:04:30.833 --> 00:04:33.750
+The creepy aunt
+was three stories ago, genius.
+
+00:04:33.916 --> 00:04:35.666
+How do we have
+the same parents?!
+
+00:04:35.833 --> 00:04:37.333
+Oh, here we go.
+
+00:04:37.500 --> 00:04:39.166
+-Right. [grunts]
+-[groans]
+
+00:04:39.291 --> 00:04:40.875
+Oh, they're off again.
+
+00:04:41.041 --> 00:04:43.625
+You're all wrong.
+
+00:04:43.791 --> 00:04:46.333
+I figured it out
+two chapters ago.
+
+00:04:46.458 --> 00:04:47.958
+Mmm-hmm, mmm-hmm.
+The maid, right?
+
+00:04:48.125 --> 00:04:49.291
+Not the maid.
+
+00:04:49.458 --> 00:04:52.500
+The nephew,
+Bertie Hollingshead.
+
+00:04:52.666 --> 00:04:55.000
+But, Lily,
+didn't the detective prove
+
+00:04:55.125 --> 00:04:56.833
+all the evidence against
+Bertie Hollingshead
+
+00:04:57.000 --> 00:04:59.291
+had been forged
+by the real killer?
+
+00:04:59.458 --> 00:05:00.666
+Exactly.
+
+00:05:00.833 --> 00:05:02.250
+Don't you see?
+
+00:05:02.416 --> 00:05:06.291
+To escape conviction, he
+forged the evidence himself.
+
+00:05:08.833 --> 00:05:11.583
+Bertie Hollingshead
+<i>was</i> the real killer.
+
+00:05:11.708 --> 00:05:12.791
+[Reggie grunts]
+
+00:05:12.916 --> 00:05:13.958
+[Ronnie] What'd
+you do that for?
+
+00:05:14.083 --> 00:05:15.083
+[grunting]
+
+00:05:15.583 --> 00:05:18.416
+[scoffs] George is gonna
+finish the story tomorrow.
+
+00:05:18.541 --> 00:05:19.791
+You'll see.
+
+00:05:23.208 --> 00:05:25.000
+I still think it's the maid.
+
+00:05:25.333 --> 00:05:27.666
+[George] <i>"Bertie knew</i>
+<i>all about the law</i>
+
+00:05:28.041 --> 00:05:30.666
+that said a person cannot be
+prosecuted twice
+
+00:05:30.791 --> 00:05:32.000
+for the same crime.
+
+00:05:32.166 --> 00:05:34.666
+And so, to escape conviction,
+
+00:05:34.791 --> 00:05:36.833
+he forged the evidence
+himself.
+
+00:05:37.458 --> 00:05:41.916
+Bertie Hollingshead
+<i>was</i> the real killer."
+
+00:05:42.791 --> 00:05:43.958
+[gloating bleat]
+
+00:05:44.083 --> 00:05:45.750
+[all bleating in surprise]
+
+00:05:47.375 --> 00:05:49.750
+[George] <i>Now most of my sheep</i>
+<i>seem to spend their day</i>
+
+00:05:49.875 --> 00:05:50.958
+<i>either eating,</i>
+
+00:05:51.125 --> 00:05:52.958
+<i>or thinking about eating.</i>
+
+00:05:53.500 --> 00:05:55.916
+<i>But I have three</i>
+<i>rambunctious lambs</i>
+
+00:05:56.041 --> 00:05:57.375
+<i>with boundless energy.</i>
+
+00:05:57.916 --> 00:06:00.125
+<i>Happy,</i>
+<i>carefree little creatures</i>
+
+00:06:00.250 --> 00:06:02.125
+<i>who were born in the spring.</i>
+
+00:06:02.500 --> 00:06:06.250
+<i>Actually, almost all lambs</i>
+<i>are born in the spring.</i>
+
+00:06:06.833 --> 00:06:11.041
+<i>And then, there's my one lamb</i>
+<i>who was born in the winter.</i>
+
+00:06:11.166 --> 00:06:12.333
+[Oliver] Huh?
+
+00:06:12.458 --> 00:06:14.375
+Oh. Hello.
+
+00:06:14.541 --> 00:06:15.541
+[whimpers]
+
+00:06:16.833 --> 00:06:18.000
+-I'm Daisy.
+-I'm Oliver.
+
+00:06:18.166 --> 00:06:20.125
+-I'm Pickles.
+-What's your name?
+
+00:06:20.250 --> 00:06:22.375
+Mmm, I don't have a name.
+
+00:06:22.541 --> 00:06:24.208
+Do you want to play with us?
+
+00:06:24.625 --> 00:06:26.291
+-No! Shoo!
+-[exclaims]
+
+00:06:27.000 --> 00:06:29.791
+You're not to play
+with that winter lamb.
+
+00:06:29.958 --> 00:06:32.583
+He doesn't belong
+in this flock.
+
+00:06:33.375 --> 00:06:36.125
+[George] <i>For reasons that</i>
+<i>only make sense to a sheep,</i>
+
+00:06:36.291 --> 00:06:37.833
+<i>-a flock will often reject...</i>
+<i>-</i>[bleats]
+
+00:06:37.958 --> 00:06:39.625
+[George] ...<i>a lamb</i>
+<i>born in the winter.</i>
+
+00:06:39.791 --> 00:06:40.916
+It's okay. Oh, come here.
+
+00:06:41.041 --> 00:06:42.666
+<i>-Just because a winter lamb...</i>
+<i>-</i>[bleats]
+
+00:06:42.791 --> 00:06:44.375
+<i>-...is different.</i>
+-You're okay. [shushes]
+
+00:06:44.541 --> 00:06:47.125
+-Oh, that's it. Good.
+-[sheep bleating in reproof]
+
+00:06:50.041 --> 00:06:52.000
+[all bleating in disapproval]
+
+00:06:53.625 --> 00:06:55.375
+[whispers indistinctly]
+
+00:06:55.791 --> 00:06:57.083
+I have a question.
+
+00:06:57.250 --> 00:06:59.708
+Why is George always so nice
+to that lamb?
+
+00:06:59.875 --> 00:07:01.583
+George isn't a sheep.
+
+00:07:01.750 --> 00:07:04.666
+No one's ever taught him
+about winter lambs.
+
+00:07:04.791 --> 00:07:07.041
+[distant church bell tolling]
+
+00:07:14.333 --> 00:07:16.583
+[bleats hoarsely]
+
+00:07:16.708 --> 00:07:18.083
+[George] <i>Oh,</i>
+<i>and one last thing,</i>
+
+00:07:18.208 --> 00:07:19.208
+<i>if you accept my invitation,</i>
+
+00:07:19.375 --> 00:07:22.291
+<i>you should know that I live</i>
+<i>near a town called Denbrook.</i>
+
+00:07:22.625 --> 00:07:24.791
+{\an8}<i>It has its own special types.</i>
+
+00:07:24.958 --> 00:07:26.041
+{\an8}<i>For instance...</i>
+
+00:07:26.208 --> 00:07:27.208
+[together] Morning, Caleb.
+
+00:07:27.333 --> 00:07:28.458
+[George] <i>Caleb,</i>
+<i>also a shepherd.</i>
+
+00:07:28.583 --> 00:07:29.416
+Good morning, ladies.
+
+00:07:29.541 --> 00:07:30.375
+[George] <i>Don't like him.</i>
+
+00:07:30.708 --> 00:07:32.166
+<i>Ham, the butcher.</i>
+
+00:07:32.333 --> 00:07:34.208
+<i>Really don't like him.</i>
+
+00:07:34.375 --> 00:07:35.791
+<i>-Beth, the innkeeper.</i>
+<i>-</i>[groans]
+
+00:07:35.958 --> 00:07:37.083
+[George] <i>Doesn't like me.</i>
+
+00:07:37.250 --> 00:07:38.750
+Ugh! I could kill that man.
+
+00:07:38.916 --> 00:07:41.875
+{\an8}-[George] <i>Tim, the policeman.</i>
+<i>-</i>[yelps and pants]
+
+00:07:42.000 --> 00:07:43.083
+[George] <i>An idiot.</i>
+
+00:07:43.250 --> 00:07:44.500
+<i>And Reverend Hillcoate,</i>
+
+00:07:44.625 --> 00:07:47.041
+<i>who fancies himself</i>
+<i>a shepherd of men.</i>
+
+00:07:47.208 --> 00:07:50.291
+<i>We have</i>
+<i>a complicated relationship.</i>
+
+00:07:50.458 --> 00:07:52.708
+And now today's reading:
+the Parable
+
+00:07:52.833 --> 00:07:54.541
+-of the Lost Sheep.
+-[door opens]
+
+00:07:56.958 --> 00:07:58.958
+[indistinct whispers]
+
+00:08:03.500 --> 00:08:04.875
+[sighs]
+
+00:08:05.250 --> 00:08:06.958
+[Hillcoate] George,
+have you come to join us?
+
+00:08:07.750 --> 00:08:10.333
+All are welcome
+in the house of the Lord.
+
+00:08:11.250 --> 00:08:12.541
+Even butchers, hmm?
+
+00:08:14.333 --> 00:08:15.333
+[clinks]
+
+00:08:19.000 --> 00:08:20.916
+-I'm not here to join you.
+-[clacks]
+
+00:08:21.916 --> 00:08:23.500
+I'm here to settle a debt.
+
+00:08:23.625 --> 00:08:24.916
+-[thuds]
+-[all exclaim]
+
+00:08:27.500 --> 00:08:29.500
+-[thuds]
+-[Hillcoate chuckles]
+
+00:08:30.208 --> 00:08:31.750
+Good ol' George.
+
+00:08:34.041 --> 00:08:35.416
+Good ol' George.
+
+00:08:35.750 --> 00:08:37.625
+[George] <i>But enough</i>
+<i>about the people.</i>
+
+00:08:38.041 --> 00:08:40.208
+<i>I want you to meet my flock.</i>
+
+00:08:40.375 --> 00:08:42.541
+<i>They're longing to see you.</i>
+
+00:08:43.583 --> 00:08:45.250
+<i>And so am I.</i>
+
+00:08:45.958 --> 00:08:47.625
+<i>Please come soon.</i>
+
+00:08:47.750 --> 00:08:50.583
+[breathes deeply]
+
+00:08:50.708 --> 00:08:52.333
+[George] <i>Love, George.</i>
+
+00:08:52.458 --> 00:08:54.583
+[sighs]
+
+00:08:59.583 --> 00:09:00.666
+Cloud?
+
+00:09:00.791 --> 00:09:02.291
+-Mmm-hmm?
+-I have a question.
+
+00:09:02.458 --> 00:09:04.000
+Will dandelions
+make my eyelashes
+
+00:09:04.125 --> 00:09:05.125
+pretty like yours?
+
+00:09:05.291 --> 00:09:07.833
+No, they do nothing
+for the lashes.
+
+00:09:08.000 --> 00:09:10.041
+But they do wonders
+for the wool.
+
+00:09:10.208 --> 00:09:11.500
+Just look at Wool-Eyes.
+
+00:09:11.666 --> 00:09:13.250
+He eats nothing
+but dandelions.
+
+00:09:13.416 --> 00:09:16.083
+Oh, is that what these are?
+Mm-kay.
+
+00:09:16.250 --> 00:09:18.875
+We should save some of those
+dandelions for Sebastian.
+
+00:09:19.000 --> 00:09:20.166
+He's been gone for days.
+
+00:09:20.333 --> 00:09:21.291
+Who cares?
+
+00:09:21.416 --> 00:09:23.958
+Ever since George brought him
+here from who knows where,
+
+00:09:24.125 --> 00:09:26.125
+he keeps wandering off
+into that town.
+
+00:09:26.291 --> 00:09:27.541
+Let him go hungry.
+
+00:09:27.708 --> 00:09:29.541
+Just because
+he doesn't care about us
+
+00:09:29.666 --> 00:09:31.541
+doesn't mean we shouldn't care
+about him.
+
+00:09:31.708 --> 00:09:33.958
+Sebastian's part of our flock.
+
+00:09:34.208 --> 00:09:36.708
+-[car whirring]
+-Oh, oh, look! It's Caleb!
+
+00:09:37.625 --> 00:09:39.458
+[sheep bleating]
+
+00:09:39.583 --> 00:09:40.916
+[all] Doggies!
+
+00:09:41.083 --> 00:09:42.083
+Doggies, doggies,
+
+00:09:42.208 --> 00:09:45.041
+-doggies, doggies, doggies.
+-[whistles]
+
+00:09:46.791 --> 00:09:48.833
+[female sheep] Caleb!
+Over here!
+
+00:09:49.000 --> 00:09:52.041
+Oh, I always love
+the way he smells.
+
+00:09:52.208 --> 00:09:53.625
+It's his woolen sweaters.
+
+00:09:53.750 --> 00:09:55.875
+Mmm...
+They're so beautifully dyed.
+
+00:09:57.125 --> 00:09:58.458
+-Can I come in?
+-[George] Go away!
+
+00:09:58.583 --> 00:09:59.750
+I'm coming in.
+
+00:10:00.250 --> 00:10:04.333
+It's so new
+and beautiful and shiny.
+
+00:10:04.750 --> 00:10:06.833
+Are you thinking
+what I'm thinking?
+
+00:10:07.166 --> 00:10:09.541
+-I wanna bash it!
+-I wanna bash it so bad!
+
+00:10:09.666 --> 00:10:11.625
+-[both scream]
+-[exclaims] Reggie! Ronnie!
+
+00:10:11.750 --> 00:10:12.875
+[both grunt]
+
+00:10:13.000 --> 00:10:14.041
+We've been over this.
+
+00:10:14.166 --> 00:10:16.708
+We don't bash things
+unless...?
+
+00:10:16.875 --> 00:10:18.541
+[together] Unless
+there's a legitimate
+
+00:10:18.666 --> 00:10:20.000
+cause for bashing.
+
+00:10:20.166 --> 00:10:21.166
+There ya go.
+
+00:10:21.333 --> 00:10:23.791
+This is Caleb's
+third visit this month.
+
+00:10:23.958 --> 00:10:24.958
+There's only one thing
+
+00:10:25.083 --> 00:10:26.541
+they could be talking about
+in there.
+
+00:10:26.666 --> 00:10:28.250
+[gasps] Combining flocks.
+
+00:10:28.416 --> 00:10:30.333
+-Combining flocks!
+-New sheep.
+
+00:10:30.500 --> 00:10:32.250
+-New fields!
+-Doggies?
+
+00:10:32.416 --> 00:10:33.750
+[George] I am
+thinking about it!
+
+00:10:33.916 --> 00:10:36.500
+I gave you a chance
+and you lied to me, Caleb!
+
+00:10:36.666 --> 00:10:37.833
+And don't come back.
+
+00:10:38.500 --> 00:10:39.500
+[door thuds]
+
+00:10:41.375 --> 00:10:42.375
+[whistles]
+
+00:10:43.916 --> 00:10:45.375
+[dogs panting]
+
+00:10:45.500 --> 00:10:48.125
+Whoops, sounds like we won't
+be combining flocks, then.
+
+00:10:48.250 --> 00:10:49.750
+[engine starts, whirrs]
+
+00:10:49.875 --> 00:10:51.166
+[Zora] I felt so happy.
+
+00:10:51.333 --> 00:10:52.958
+And now I feel sad and upset.
+
+00:10:53.125 --> 00:10:54.708
+I want to forget
+this happened!
+
+00:10:54.875 --> 00:10:56.875
+You're right.
+It's too disappointing.
+
+00:10:57.041 --> 00:10:58.291
+Okay, everyone?
+
+00:10:58.458 --> 00:11:01.250
+We will choose to forget
+Caleb's entire visit
+
+00:11:01.375 --> 00:11:02.375
+on the count of three.
+
+00:11:02.541 --> 00:11:04.208
+One. Two--
+
+00:11:04.375 --> 00:11:07.333
+But what about Mopple?
+He can't forget things.
+
+00:11:07.500 --> 00:11:08.333
+Why not?
+
+00:11:08.500 --> 00:11:09.958
+Poor Mopple.
+
+00:11:10.125 --> 00:11:12.166
+He was born
+with a terrible affliction.
+
+00:11:12.458 --> 00:11:13.791
+Unlike the rest of us,
+
+00:11:13.916 --> 00:11:15.875
+he cannot choose
+to forget things.
+
+00:11:16.041 --> 00:11:17.125
+Oh, yeah.
+
+00:11:17.291 --> 00:11:19.500
+Mopple, once we've forgotten,
+
+00:11:19.625 --> 00:11:21.791
+please do not remind us
+that this happened.
+
+00:11:21.958 --> 00:11:24.416
+Are you sure, though?
+It really wasn't that bad.
+
+00:11:24.583 --> 00:11:26.666
+No. But it wasn't
+that good, either.
+
+00:11:26.791 --> 00:11:27.833
+So why bother?
+
+00:11:28.541 --> 00:11:29.541
+Ready?
+
+00:11:29.875 --> 00:11:30.875
+One.
+
+00:11:31.375 --> 00:11:32.458
+Two.
+
+00:11:32.791 --> 00:11:33.916
+Three.
+
+00:11:36.583 --> 00:11:38.125
+-Cloud?
+-Mmm-hmm?
+
+00:11:38.250 --> 00:11:39.416
+I have a question.
+
+00:11:39.583 --> 00:11:41.250
+Will dandelions
+make my eyelashes
+
+00:11:41.375 --> 00:11:42.375
+pretty like yours?
+
+00:11:42.541 --> 00:11:44.875
+No, they do nothing
+for the lashes.
+
+00:11:45.083 --> 00:11:48.291
+[together] But they do wonders
+for the wool.
+
+00:11:51.833 --> 00:11:52.833
+[sighs]
+
+00:11:55.208 --> 00:11:56.208
+[grunts]
+
+00:11:58.291 --> 00:11:59.291
+I'm fine.
+
+00:12:12.750 --> 00:12:14.708
+I will be fine, I promise.
+
+00:12:14.875 --> 00:12:15.916
+It's just...
+
+00:12:17.000 --> 00:12:18.291
+I don't know.
+
+00:12:19.541 --> 00:12:21.333
+[sniffing]
+
+00:12:21.875 --> 00:12:23.625
+Well, because I was hoping
+
+00:12:23.750 --> 00:12:25.500
+things would
+be different soon.
+
+00:12:26.750 --> 00:12:29.375
+-But you don't have to worry.
+-[bleats softly]
+
+00:12:29.500 --> 00:12:30.875
+[George] You'll be okay.
+
+00:12:32.166 --> 00:12:34.125
+And I'll be okay too.
+
+00:12:35.333 --> 00:12:37.333
+[hopeful music playing]
+
+00:13:03.541 --> 00:13:05.291
+[door opens, squeaks]
+
+00:13:05.416 --> 00:13:06.416
+[Jo] Hiya.
+
+00:13:06.583 --> 00:13:09.458
+Oh. Hello, hello.
+Anything exciting?
+
+00:13:09.625 --> 00:13:14.208
+{\an8}Not much post for a Monday.
+Just bills and junk.
+
+00:13:14.333 --> 00:13:16.250
+George.
+Who's he sending letters to?
+
+00:13:16.416 --> 00:13:18.750
+[Jo] Well, I shouldn't
+say anything, but...
+
+00:13:19.625 --> 00:13:23.041
+A Miss Rebecca Hampstead.
+In America.
+
+00:13:23.625 --> 00:13:24.875
+Whoever she is,
+they've been mailing
+
+00:13:25.000 --> 00:13:26.833
+back and forth for months now.
+
+00:13:27.208 --> 00:13:28.333
+And...
+
+00:13:28.500 --> 00:13:29.666
+Go on.
+
+00:13:30.083 --> 00:13:31.166
+Smell it.
+
+00:13:31.708 --> 00:13:33.208
+Rose-scented paper.
+
+00:13:33.500 --> 00:13:34.625
+They're love letters.
+
+00:13:34.791 --> 00:13:35.875
+Can you believe it?
+
+00:13:36.041 --> 00:13:40.000
+Grouchy-pants George Hardy,
+a corny old romantic.
+
+00:13:40.125 --> 00:13:41.791
+-[chuckles]
+-[Jo] Who knew.
+
+00:13:43.916 --> 00:13:45.500
+Corny George.
+
+00:13:45.708 --> 00:13:46.708
+[Jo chuckles] Yeah.
+
+00:13:47.083 --> 00:13:48.458
+-[Beth] Take care.
+-[Jo] Yeah, you too.
+
+00:13:48.583 --> 00:13:49.625
+Bye!
+
+00:13:51.333 --> 00:13:52.625
+-Hello! Hi!
+-Hello!
+
+00:13:52.791 --> 00:13:54.500
+I am just in from the city
+
+00:13:54.625 --> 00:13:55.750
+for the
+Denbrook Cultural Festival.
+
+00:13:55.916 --> 00:13:57.500
+Oh, fantastic.
+
+00:13:57.833 --> 00:13:59.250
+This is it.
+
+00:14:00.083 --> 00:14:01.375
+Follow me.
+
+00:14:01.833 --> 00:14:03.708
+This is what.
+
+00:14:04.125 --> 00:14:07.833
+Welcome to the
+Denbrook Cultural Festival.
+
+00:14:07.958 --> 00:14:09.833
+[symphonic music plays]
+
+00:14:10.625 --> 00:14:13.083
+{\an8}-[flies buzzing]
+-[man] You're joking.
+
+00:14:13.250 --> 00:14:16.000
+What?
+This is our town's heritage.
+
+00:14:16.625 --> 00:14:17.625
+What...
+
+00:14:18.583 --> 00:14:21.291
+Wha is... <i>Return...</i>
+<i>Return to Oz?</i>
+
+00:14:21.625 --> 00:14:23.625
+{\an8}Yeah, that's the best film
+ever made.
+
+00:14:24.041 --> 00:14:26.541
+{\an8}And they shot it
+just 40 miles down the road.
+
+00:14:26.916 --> 00:14:29.708
+Most people agree
+it's better than the original.
+
+00:14:30.083 --> 00:14:31.083
+Never seen it.
+
+00:14:31.250 --> 00:14:33.375
+[Beth] Who hasn't seen
+<i>Return to Oz?</i>
+
+00:14:33.541 --> 00:14:37.500
+Okay, I'm sorry. Why would you
+make a huge banner for this?
+
+00:14:37.666 --> 00:14:38.708
+I want people to come.
+
+00:14:38.833 --> 00:14:40.541
+Hardly a festival
+without people.
+
+00:14:41.041 --> 00:14:44.208
+Oh no,
+it's not a festival at all.
+
+00:14:44.375 --> 00:14:46.500
+No. It's just some tables.
+
+00:14:47.666 --> 00:14:49.916
+Are you telling me
+how to run my business?
+
+00:14:50.541 --> 00:14:51.541
+No.
+
+00:14:52.541 --> 00:14:54.250
+You're right. I'm sorry.
+
+00:14:55.000 --> 00:14:56.916
+We got off
+on the wrong foot there.
+
+00:14:57.041 --> 00:14:58.333
+Um...
+
+00:14:58.458 --> 00:14:59.666
+My name is Elliot Matthews.
+
+00:15:00.458 --> 00:15:01.541
+I'm a reporter
+for the <i>Gazette.</i>
+
+00:15:03.541 --> 00:15:05.083
+Junior reporter.
+
+00:15:07.958 --> 00:15:10.125
+Okay. Fine.
+I work on the obituaries desk.
+
+00:15:10.291 --> 00:15:13.333
+But I've been looking
+for a real story for so long,
+
+00:15:13.500 --> 00:15:17.500
+and my features editor
+gave me this:
+
+00:15:18.250 --> 00:15:20.125
+The Denbrook
+Cultural Festival.
+
+00:15:20.291 --> 00:15:23.041
+-So? Sounds like a dream.
+-Yeah, that's pretty cool.
+
+00:15:23.208 --> 00:15:27.541
+I'm not gonna get a promotion
+writing about this, am I? No.
+
+00:15:27.875 --> 00:15:30.166
+-Too bad.
+-Hmm...
+
+00:15:30.291 --> 00:15:31.750
+Ten. Cash.
+
+00:15:32.125 --> 00:15:33.208
+For what?
+
+00:15:33.375 --> 00:15:35.125
+-Admission fee.
+-Admission fee.
+
+00:15:35.625 --> 00:15:36.625
+Oh...
+
+00:15:38.458 --> 00:15:39.541
+Ten.
+
+00:15:39.708 --> 00:15:41.041
+Take--
+
+00:15:41.708 --> 00:15:42.916
+Take all of it.
+
+00:15:44.041 --> 00:15:45.291
+Just--
+
+00:15:46.416 --> 00:15:47.583
+[softly] Weirdo.
+
+00:15:50.125 --> 00:15:51.625
+[thunder rumbling]
+
+00:15:53.000 --> 00:15:54.000
+[sighs]
+
+00:15:56.708 --> 00:15:57.916
+[thunder breaks]
+
+00:15:58.041 --> 00:16:00.041
+[whimsical music playing]
+
+00:16:06.666 --> 00:16:09.833
+Where's George?
+Where's our nighttime story?
+
+00:16:10.000 --> 00:16:11.333
+He should've come out by now.
+
+00:16:12.666 --> 00:16:13.791
+[thunder breaks]
+
+00:16:13.916 --> 00:16:17.208
+Aw, that sound is nothing
+to be frightened of.
+
+00:16:17.375 --> 00:16:18.500
+Sir Ritchfield?
+
+00:16:18.666 --> 00:16:21.708
+Yes, it's time you were told,
+little lambs,
+
+00:16:22.000 --> 00:16:25.291
+for this is the way of things.
+
+00:16:25.458 --> 00:16:28.708
+All those clouds
+were once sheep,
+
+00:16:28.833 --> 00:16:30.166
+just like you and me.
+
+00:16:30.333 --> 00:16:33.666
+And when they see
+the ground has become too dry,
+
+00:16:33.833 --> 00:16:36.083
+they begin to dance.
+
+00:16:36.250 --> 00:16:38.166
+Big booming noises
+
+00:16:38.291 --> 00:16:40.208
+as they kick the rain
+out of the sky
+
+00:16:40.375 --> 00:16:43.291
+to make the grass
+and clover grow.
+
+00:16:43.458 --> 00:16:45.500
+Do all sheep become clouds?
+
+00:16:45.666 --> 00:16:48.208
+Yes, Pickles. All of us.
+
+00:16:48.375 --> 00:16:50.416
+I'll become a cloud one day,
+
+00:16:50.541 --> 00:16:52.625
+just like my parents did
+before me.
+
+00:16:52.958 --> 00:16:54.458
+Even though...
+
+00:16:54.583 --> 00:16:56.458
+[chuckles] for some reason,
+
+00:16:56.583 --> 00:16:57.916
+I can't remember
+what it was like
+
+00:16:58.083 --> 00:17:00.416
+when my parents
+turned into clouds.
+
+00:17:00.541 --> 00:17:03.333
+[chuckles] Mopple,
+you remember everything.
+
+00:17:03.708 --> 00:17:06.583
+That day must
+have been wonderful, right?
+
+00:17:07.291 --> 00:17:08.583
+Um...
+
+00:17:11.250 --> 00:17:12.250
+[sighs]
+
+00:17:12.375 --> 00:17:14.833
+Well, yes. Of course.
+
+00:17:15.000 --> 00:17:16.333
+They said goodbye
+
+00:17:16.458 --> 00:17:18.791
+and joyously floated off
+into the sky,
+
+00:17:18.958 --> 00:17:21.750
+becoming two beautiful
+fluffy clouds
+
+00:17:21.916 --> 00:17:24.541
+looking down upon us all
+
+00:17:24.791 --> 00:17:26.041
+with love.
+
+00:17:27.291 --> 00:17:28.375
+Forever.
+
+00:17:30.083 --> 00:17:31.250
+Thank you.
+
+00:17:32.166 --> 00:17:33.166
+Mmm-hmm...
+
+00:17:33.875 --> 00:17:35.208
+-[thunder rumbles]
+-[rain pattering]
+
+00:17:35.333 --> 00:17:36.916
+And there it is!
+
+00:17:37.291 --> 00:17:39.458
+Just as it should be.
+
+00:17:41.291 --> 00:17:42.458
+-[Lily] <i>Yes.</i>
+-[whimpers]
+
+00:17:42.791 --> 00:17:45.791
+[Lily] <i>Everything</i>
+<i>is just as it should be.</i>
+
+00:17:45.916 --> 00:17:47.625
+[Winter Lamb whimpers]
+
+00:17:47.750 --> 00:17:49.166
+[thunder breaks]
+
+00:17:49.291 --> 00:17:51.291
+[suspenseful music playing]
+
+00:17:58.458 --> 00:18:00.458
+-[whirring]
+-[scraping]
+
+00:18:11.541 --> 00:18:13.500
+[grunting]
+
+00:18:13.625 --> 00:18:14.833
+[clatters]
+
+00:18:14.958 --> 00:18:16.583
+-[screams]
+-[crashing]
+
+00:18:16.708 --> 00:18:18.708
+{\an8}[buzzing]
+
+00:18:22.583 --> 00:18:24.625
+[Elliot sighs]
+
+00:18:24.750 --> 00:18:25.750
+[grunts]
+
+00:18:28.666 --> 00:18:29.750
+[sighs]
+
+00:18:30.625 --> 00:18:32.458
+On the bright side,
+
+00:18:32.583 --> 00:18:35.500
+you picked the perfect time
+to wind up here.
+
+00:18:35.916 --> 00:18:38.708
+It's the Denbrook
+Cultural Festival!
+
+00:18:39.125 --> 00:18:42.125
+-You lucky thing!
+-[wipers squeaking]
+
+00:18:42.250 --> 00:18:44.791
+[woman] Well, I went
+last weekend with my sister,
+
+00:18:44.916 --> 00:18:46.291
+and we had some local cheese.
+
+00:18:46.458 --> 00:18:48.458
+And it was much better
+than anything
+
+00:18:48.625 --> 00:18:51.583
+you could buy in those fancy
+cheese stores in the city.
+
+00:18:51.750 --> 00:18:53.000
+My sister said that I'm--
+
+00:18:53.166 --> 00:18:54.500
+Did you see that?
+
+00:18:55.250 --> 00:18:56.541
+[woman] See what?
+
+00:19:02.333 --> 00:19:04.583
+[snoring]
+
+00:19:04.708 --> 00:19:06.166
+-[thunder breaks]
+-[grunts]
+
+00:19:06.291 --> 00:19:07.583
+[bleats]
+
+00:19:09.375 --> 00:19:11.000
+[thunder breaks]
+
+00:19:13.958 --> 00:19:15.458
+[thunder breaks]
+
+00:19:15.583 --> 00:19:18.166
+[sighs, shudders]
+
+00:19:19.458 --> 00:19:20.666
+-[knocking on door]
+-[gasps]
+
+00:19:20.791 --> 00:19:22.708
+[pants]
+
+00:19:27.708 --> 00:19:29.750
+-[birds chirping]
+-[rooster crows]
+
+00:19:29.875 --> 00:19:32.250
+-[snoring]
+-[birds chirping]
+
+00:19:33.750 --> 00:19:34.750
+-[thuds]
+-[grunts]
+
+00:19:34.875 --> 00:19:36.416
+Yay! You're awake!
+
+00:19:36.583 --> 00:19:38.000
+I've asked you
+a number of times
+
+00:19:38.125 --> 00:19:39.583
+-not to do this. [grunts]
+-[thuds]
+
+00:19:39.708 --> 00:19:40.708
+[together] We forgot!
+
+00:19:40.875 --> 00:19:42.541
+We forgot.
+
+00:19:42.708 --> 00:19:43.750
+[Mopple] Of course you did.
+
+00:19:43.916 --> 00:19:44.916
+[Pickles] Look at that!
+
+00:19:45.083 --> 00:19:46.791
+-[Oliver] Wait for me!
+-[Daisy] Wait, slow down!
+
+00:19:47.750 --> 00:19:48.750
+-[yawns]
+-[birds chirping]
+
+00:19:50.958 --> 00:19:52.208
+[Mopple] ♪ <i>When I wake up </i>♪
+
+00:19:54.458 --> 00:19:57.166
+♪ <i>I'm gonna be the man</i>
+<i>who wakes up next-- </i>♪
+
+00:20:00.833 --> 00:20:02.916
+-Lily? What are you--?
+-[Lily shushes]
+
+00:20:03.250 --> 00:20:05.750
+I think it's a game.
+Don't move.
+
+00:20:05.916 --> 00:20:08.666
+The first one who moves loses.
+
+00:20:18.666 --> 00:20:19.666
+[sighs]
+
+00:20:21.458 --> 00:20:23.416
+He's not playing a game.
+
+00:20:23.583 --> 00:20:26.791
+Well, then, what's he doing?
+
+00:20:28.125 --> 00:20:29.125
+[Mopple] Uh...
+
+00:20:29.625 --> 00:20:30.791
+Lily.
+
+00:20:31.125 --> 00:20:32.250
+He's...
+
+00:20:33.083 --> 00:20:34.541
+He's dead.
+
+00:20:35.000 --> 00:20:36.875
+George is dead.
+
+00:20:37.333 --> 00:20:39.791
+Wha--? What do you mean dead?
+
+00:20:40.833 --> 00:20:42.208
+That's not real.
+
+00:20:42.375 --> 00:20:44.250
+That's just in books.
+
+00:20:44.875 --> 00:20:47.541
+[Lily breathing heavily]
+
+00:20:48.208 --> 00:20:49.625
+It is real?
+
+00:20:49.750 --> 00:20:52.666
+[Lily gasping softly]
+
+00:20:53.708 --> 00:20:55.583
+People die?
+
+00:20:56.083 --> 00:20:57.666
+[sighs]
+
+00:20:57.791 --> 00:21:00.083
+Will he turn into a cloud?
+
+00:21:01.166 --> 00:21:04.416
+No. Only sheep do that.
+
+00:21:15.250 --> 00:21:17.250
+[sighs deeply]
+
+00:21:32.666 --> 00:21:33.875
+[sheep bleats]
+
+00:21:34.000 --> 00:21:35.416
+-"Dead"?
+-[Cloud] "Dead"?
+
+00:21:35.583 --> 00:21:36.916
+That's a real thing?
+
+00:21:37.375 --> 00:21:38.958
+It appears so.
+
+00:21:39.125 --> 00:21:41.000
+Does that mean sheep can die?
+
+00:21:41.166 --> 00:21:44.083
+No, Pickles,
+we turn into clouds, but--
+
+00:21:44.250 --> 00:21:45.541
+George can't be dead.
+
+00:21:45.708 --> 00:21:48.250
+I need my medicine.
+I have orf.
+
+00:21:48.416 --> 00:21:49.416
+What's orf?
+
+00:21:49.583 --> 00:21:50.833
+This is orf.
+
+00:21:50.958 --> 00:21:52.500
+[all groan]
+
+00:21:52.625 --> 00:21:53.666
+That's gross!
+
+00:21:53.833 --> 00:21:56.750
+I don't think any of you
+understand what I'm saying.
+
+00:21:57.333 --> 00:21:59.000
+George is gone.
+
+00:21:59.166 --> 00:22:00.958
+He's never coming back.
+
+00:22:01.125 --> 00:22:03.833
+But George was our shepherd.
+What will we do?
+
+00:22:04.000 --> 00:22:06.000
+Yes, you're the smartest sheep
+in the world, Lily.
+
+00:22:06.125 --> 00:22:07.208
+Tell us what to do!
+
+00:22:07.375 --> 00:22:09.666
+There's only one thing
+we can do.
+
+00:22:10.791 --> 00:22:12.375
+We have to forget George.
+
+00:22:12.541 --> 00:22:15.291
+What? But, Lily, it's George.
+We can't just rem--
+
+00:22:15.458 --> 00:22:18.791
+Remembering him
+hurts too much. I can't do it.
+
+00:22:18.958 --> 00:22:20.000
+She's right.
+
+00:22:20.125 --> 00:22:22.708
+Sheep are not meant
+to feel such things.
+
+00:22:22.875 --> 00:22:25.791
+We must choose to forget.
+
+00:22:25.916 --> 00:22:29.500
+[sobs softly]
+On the count of three.
+
+00:22:29.666 --> 00:22:30.791
+But hold on. Don't--
+
+00:22:30.958 --> 00:22:31.958
+One.
+
+00:22:32.125 --> 00:22:33.500
+No, please don't! It's George!
+
+00:22:33.875 --> 00:22:34.916
+Two.
+
+00:22:35.083 --> 00:22:37.125
+[Sebastian] You'll
+forget nothing.
+
+00:22:37.250 --> 00:22:38.250
+[all exclaim]
+
+00:22:38.541 --> 00:22:39.541
+Sebastian.
+
+00:22:39.708 --> 00:22:41.916
+Did you really think
+that I would let you
+
+00:22:42.041 --> 00:22:44.125
+forget my shepherd so easily?
+
+00:22:44.291 --> 00:22:46.166
+He was our
+shepherd, Sebastian.
+
+00:22:46.333 --> 00:22:47.750
+We all loved him.
+
+00:22:48.041 --> 00:22:50.000
+It's too painful to bear.
+
+00:22:50.541 --> 00:22:52.250
+And we're going to forget.
+
+00:22:52.416 --> 00:22:54.416
+No, you won't.
+
+00:22:54.583 --> 00:22:57.333
+You'll remember him
+because it's right.
+
+00:22:57.500 --> 00:22:58.958
+Because it's just.
+
+00:22:59.291 --> 00:23:00.458
+Just what?
+
+00:23:00.625 --> 00:23:02.833
+No, not ju-- I mean justice.
+
+00:23:03.750 --> 00:23:04.791
+Just us what?
+
+00:23:04.958 --> 00:23:07.333
+Jus-tice. Justice.
+
+00:23:07.500 --> 00:23:09.875
+It means the good should
+not be harmed by the bad.
+
+00:23:10.041 --> 00:23:12.375
+The weak should not be harmed
+by the strong.
+
+00:23:12.541 --> 00:23:15.416
+And a friend
+should never be forgotten.
+
+00:23:15.833 --> 00:23:18.791
+George showed me justice once.
+
+00:23:19.125 --> 00:23:21.083
+He deserves it in return.
+
+00:23:21.250 --> 00:23:22.375
+It's true.
+
+00:23:22.500 --> 00:23:24.500
+George was always
+so kind to me.
+
+00:23:24.666 --> 00:23:25.666
+To all of you.
+
+00:23:25.833 --> 00:23:28.333
+It's why he raised you
+only for your wool.
+
+00:23:28.500 --> 00:23:30.125
+Why else
+would anyone raise sheep?
+
+00:23:30.250 --> 00:23:31.375
+No other reason.
+Just the wool.
+
+00:23:31.500 --> 00:23:32.500
+Only the lovely wool.
+
+00:23:32.625 --> 00:23:33.916
+Ooh! I have a question.
+
+00:23:34.208 --> 00:23:35.666
+What's the meaning
+of human life
+
+00:23:35.791 --> 00:23:38.000
+if it can all just end one day
+in the blink of an eye?
+
+00:23:38.125 --> 00:23:39.625
+In fact,
+why are humans here at all?
+
+00:23:39.750 --> 00:23:41.000
+And who made them?
+And who made us?
+
+00:23:41.125 --> 00:23:41.958
+And what's inside a tree
+
+00:23:42.083 --> 00:23:43.250
+and where does the moon go
+during the day?
+
+00:23:43.375 --> 00:23:45.666
+-And why was George murdered?
+-[all exclaim]
+
+00:23:45.791 --> 00:23:48.250
+"Murdered"?
+What do you mean "murdered"?
+
+00:23:48.416 --> 00:23:49.583
+In the nighttime stories,
+
+00:23:49.708 --> 00:23:51.166
+the dead people
+are always murdered.
+
+00:23:51.333 --> 00:23:52.416
+[Cloud] No, no, Zora.
+
+00:23:52.583 --> 00:23:54.958
+Those are all pretend.
+This is real.
+
+00:23:55.125 --> 00:23:56.208
+Isn't that right, Lily?
+
+00:23:56.375 --> 00:23:57.458
+Yes, exactly.
+
+00:23:57.583 --> 00:23:59.750
+There's no reason
+to think that George was--
+
+00:24:00.125 --> 00:24:01.291
+[gasps]
+
+00:24:01.416 --> 00:24:02.916
+His hat.
+
+00:24:04.250 --> 00:24:06.458
+[sirens wailing]
+
+00:24:16.458 --> 00:24:18.458
+[birds chirping]
+
+00:24:20.375 --> 00:24:22.375
+I came by to have him sign
+some papers
+
+00:24:22.500 --> 00:24:23.875
+and found him like this.
+
+00:24:25.166 --> 00:24:26.583
+Would you like
+to say a few words?
+
+00:24:26.750 --> 00:24:27.583
+No.
+
+00:24:27.708 --> 00:24:29.708
+[intriguing music playing]
+
+00:24:30.875 --> 00:24:32.000
+Caleb.
+
+00:24:34.083 --> 00:24:35.958
+What's the butcher doing here?
+
+00:24:38.166 --> 00:24:39.375
+Five.
+
+00:24:40.291 --> 00:24:41.333
+Six.
+
+00:24:42.708 --> 00:24:44.083
+He wants the sheep.
+
+00:24:45.875 --> 00:24:47.500
+Fifteen.
+
+00:24:49.041 --> 00:24:50.583
+Sixteen.
+
+00:24:51.083 --> 00:24:52.500
+Lily. What are you up to?
+
+00:24:52.666 --> 00:24:54.375
+It may be nothing...
+
+00:24:54.541 --> 00:24:55.583
+but I can't stop thinking
+
+00:24:55.708 --> 00:24:57.541
+about George's hat
+and raincoat.
+
+00:24:57.708 --> 00:24:58.875
+What hat and raincoat?
+
+00:24:59.041 --> 00:24:59.916
+Exactly.
+
+00:25:00.041 --> 00:25:02.333
+He came out in a storm.
+Why didn't he put them on?
+
+00:25:02.500 --> 00:25:03.750
+Unless...
+
+00:25:03.875 --> 00:25:05.875
+[scoffs] Boost me up.
+
+00:25:07.333 --> 00:25:09.208
+[Mopple grumbling]
+
+00:25:09.333 --> 00:25:10.375
+What?
+
+00:25:10.750 --> 00:25:12.916
+I said,
+I wish I could forget this.
+
+00:25:16.041 --> 00:25:17.791
+Do you see anything?
+
+00:25:19.708 --> 00:25:22.208
+I see everything.
+
+00:25:22.791 --> 00:25:24.750
+[snoring]
+
+00:25:24.875 --> 00:25:26.666
+[vehicle approaching]
+
+00:25:31.375 --> 00:25:33.375
+[indistinct radio chatter]
+
+00:25:37.416 --> 00:25:38.791
+[Tim] Excuse me?
+
+00:25:38.958 --> 00:25:40.000
+Morning.
+
+00:25:40.166 --> 00:25:42.375
+[Tim] I'm sorry, what are you
+still doing in town?
+
+00:25:42.541 --> 00:25:44.375
+Car troubles. Who's this?
+
+00:25:44.750 --> 00:25:47.208
+His name's George Hardy.
+He's a shepherd.
+
+00:25:47.541 --> 00:25:48.875
+What happened?
+
+00:25:49.041 --> 00:25:50.541
+Probably a heart attack.
+
+00:25:50.708 --> 00:25:53.041
+Not much of a story for you,
+I'm afraid.
+
+00:25:53.416 --> 00:25:56.208
+Unless there's anything
+out of the ordinary. Right?
+
+00:25:56.375 --> 00:25:58.166
+Nope.
+And I've looked everywhere.
+
+00:25:58.333 --> 00:26:00.250
+Around the caravan.
+
+00:26:01.291 --> 00:26:02.833
+Underneath the caravan.
+
+00:26:03.000 --> 00:26:04.958
+What about inside the caravan?
+
+00:26:08.458 --> 00:26:09.458
+Mmm...
+
+00:26:10.250 --> 00:26:11.750
+Worth a shot.
+
+00:26:12.625 --> 00:26:14.583
+Oh, maybe it wouldn't do...
+
+00:26:15.875 --> 00:26:16.916
+What?
+
+00:26:17.083 --> 00:26:18.875
+There's fingerprints, innit?
+
+00:26:19.958 --> 00:26:22.833
+Right. Forensics.
+
+00:26:23.500 --> 00:26:24.541
+Yep.
+
+00:26:33.375 --> 00:26:35.625
+Well, all looks in order.
+
+00:26:35.791 --> 00:26:37.291
+Wait, hang on, hang on.
+
+00:26:38.333 --> 00:26:40.041
+Why would a man
+having a heart attack
+
+00:26:40.166 --> 00:26:43.125
+just get up and walk outside?
+
+00:26:43.458 --> 00:26:45.166
+Probably outside
+when it happened.
+
+00:26:45.333 --> 00:26:47.166
+No, no. It happened here.
+
+00:26:47.833 --> 00:26:49.583
+He knocked his chair over.
+
+00:26:53.416 --> 00:26:54.916
+[softly] And he wasn't alone.
+
+00:26:55.208 --> 00:26:56.875
+And he wasn't alone.
+
+00:26:59.000 --> 00:27:00.250
+[Tim] Come on, mate.
+
+00:27:00.833 --> 00:27:02.291
+It was a heart attack.
+
+00:27:02.458 --> 00:27:04.416
+Seems to me that you're
+willfully ignoring the fact
+
+00:27:04.541 --> 00:27:06.333
+there is evidence
+to suggest otherwise.
+
+00:27:06.458 --> 00:27:09.541
+What are you saying?
+That I'm scared it's a murder?
+
+00:27:09.916 --> 00:27:10.750
+Are you?
+
+00:27:11.666 --> 00:27:12.666
+Please.
+
+00:27:12.833 --> 00:27:15.000
+I wish there was
+a murder in Denbrook.
+
+00:27:15.125 --> 00:27:16.458
+I wish there was
+a murder a day.
+
+00:27:16.625 --> 00:27:18.208
+Nothing would make me happier.
+
+00:27:20.125 --> 00:27:24.291
+{\an8}Look, I know you need a story
+for your big newspaper career.
+
+00:27:24.458 --> 00:27:25.875
+{\an8}But I'm sorry...
+
+00:27:27.750 --> 00:27:28.875
+{\an8}[car honks]
+
+00:27:29.000 --> 00:27:31.708
+{\an8}George Hardy was not murdered.
+
+00:27:32.500 --> 00:27:33.916
+George Hardy was murdered.
+
+00:27:34.041 --> 00:27:35.208
+[all gasp]
+
+00:27:35.333 --> 00:27:37.708
+The policeman
+said it was murder?
+
+00:27:37.875 --> 00:27:40.000
+No. The policeman
+said it was a heart attack.
+
+00:27:40.125 --> 00:27:41.125
+But he's wrong.
+
+00:27:41.291 --> 00:27:44.583
+Oh. So it's not really murder.
+
+00:27:44.750 --> 00:27:48.625
+It's just a wild guess
+made by a barnyard animal.
+
+00:27:49.666 --> 00:27:51.333
+[clicks tongue] Okay.
+
+00:27:52.000 --> 00:27:53.875
+George was visited by someone
+
+00:27:54.000 --> 00:27:56.083
+he knew well enough
+to offer a drink.
+
+00:27:56.250 --> 00:27:57.833
+He then got sick.
+
+00:27:58.000 --> 00:28:01.041
+The failure of his guest
+to alert anyone
+
+00:28:01.166 --> 00:28:02.791
+suggests that
+they were responsible,
+
+00:28:02.958 --> 00:28:06.375
+and the lack of visible injury
+suggests poison.
+
+00:28:06.708 --> 00:28:09.041
+The grassy green stain
+on his hand
+
+00:28:09.166 --> 00:28:10.666
+points to a struggle.
+
+00:28:10.875 --> 00:28:12.583
+The killer escaped.
+
+00:28:12.750 --> 00:28:16.041
+George succumbed
+to the poison and died.
+
+00:28:16.666 --> 00:28:18.208
+[indistinct chatter]
+
+00:28:18.458 --> 00:28:19.625
+I never guess.
+
+00:28:20.458 --> 00:28:21.833
+-Hmm...
+-[Lily] The policeman
+
+00:28:21.958 --> 00:28:23.541
+is completely hopeless,
+the way they always are
+
+00:28:23.666 --> 00:28:24.625
+in the nighttime stories.
+
+00:28:24.791 --> 00:28:26.958
+That's why someone else
+has to come along
+
+00:28:27.083 --> 00:28:28.166
+and solve the crime.
+
+00:28:28.333 --> 00:28:29.416
+Who?
+
+00:28:29.708 --> 00:28:31.208
+George fed us.
+
+00:28:31.375 --> 00:28:33.500
+George cared for us.
+
+00:28:33.666 --> 00:28:35.541
+George loved us.
+
+00:28:36.000 --> 00:28:37.458
+We owe him everything.
+
+00:28:37.875 --> 00:28:39.500
+What are you saying?
+
+00:28:39.666 --> 00:28:42.208
+Our shepherd
+has been murdered.
+
+00:28:42.375 --> 00:28:45.125
+And we shall solve the crime.
+
+00:28:46.125 --> 00:28:47.916
+[Sebastian laughing]
+
+00:28:49.500 --> 00:28:50.500
+What's so funny?
+
+00:28:50.666 --> 00:28:52.833
+Oh, wow.
+
+00:28:53.666 --> 00:28:55.041
+To start with...
+
+00:28:55.208 --> 00:28:57.541
+you're sheep!
+
+00:28:57.875 --> 00:28:59.000
+He's talking about you.
+
+00:28:59.166 --> 00:29:03.500
+You all think you're
+smart enough to solve a crime?
+
+00:29:03.666 --> 00:29:07.041
+Do you know what humans call
+stupid people
+
+00:29:07.166 --> 00:29:08.416
+who can't think
+for themselves?
+
+00:29:08.583 --> 00:29:09.583
+[gasps] Ducks!
+
+00:29:09.750 --> 00:29:10.583
+Sheep!
+
+00:29:10.750 --> 00:29:13.541
+And you. The "smartest
+sheep in the world."
+
+00:29:13.708 --> 00:29:16.458
+Where have you been
+"in the world"?
+
+00:29:16.750 --> 00:29:19.541
+Over here? And over there?
+
+00:29:19.916 --> 00:29:20.958
+Please.
+
+00:29:21.125 --> 00:29:22.541
+Just go back to your hay
+
+00:29:22.666 --> 00:29:25.208
+and your dandelions
+and your naps
+
+00:29:25.375 --> 00:29:28.125
+and leave the murder cases
+to the humans.
+
+00:29:29.666 --> 00:29:32.125
+So. Shall we begin?
+
+00:29:34.250 --> 00:29:37.916
+Look for clues.
+Don't disturb any evidence.
+
+00:29:38.041 --> 00:29:39.958
+[chewing]
+
+00:29:40.083 --> 00:29:42.916
+And no eating the crime scene!
+
+00:29:43.041 --> 00:29:43.875
+[spits]
+
+00:29:44.250 --> 00:29:45.541
+[Wool-Eyes] Hey, what is this?
+
+00:29:45.708 --> 00:29:48.750
+Guys! I may be inside a clue!
+
+00:29:48.875 --> 00:29:50.166
+-[clangs]
+-[Wool-Eyes] Ow!
+
+00:29:50.291 --> 00:29:52.625
+Oh, gosh. Hello?
+
+00:29:52.750 --> 00:29:54.750
+Okay, let's just
+forget about the clues.
+
+00:29:54.916 --> 00:29:58.375
+Did anyone see anything
+the night of the murder?
+
+00:29:58.541 --> 00:30:00.000
+I did.
+
+00:30:01.166 --> 00:30:03.208
+I saw you, Sebastian.
+
+00:30:04.250 --> 00:30:05.458
+Sebastian did it!
+
+00:30:05.625 --> 00:30:07.166
+Murderer!
+
+00:30:07.708 --> 00:30:09.666
+Right. I did it.
+
+00:30:09.833 --> 00:30:11.875
+I went in a door
+I don't fit through,
+
+00:30:12.000 --> 00:30:13.833
+sat in a chair
+that won't hold me,
+
+00:30:14.000 --> 00:30:16.083
+and I killed my own shepherd
+for no reason
+
+00:30:16.250 --> 00:30:17.583
+by delicately squeezing
+
+00:30:17.708 --> 00:30:20.166
+droplets of poison
+into his glass
+
+00:30:20.416 --> 00:30:22.166
+using this.
+
+00:30:22.333 --> 00:30:24.041
+-He has a point.
+-[Wool-Eyes] What's happening?
+
+00:30:24.208 --> 00:30:26.541
+Did any of you see any people?
+
+00:30:27.291 --> 00:30:29.041
+I saw George's ghost.
+
+00:30:29.166 --> 00:30:30.166
+[all groan]
+
+00:30:30.291 --> 00:30:32.083
+-No, you didn't.
+-[Winter Lamb] I did.
+
+00:30:34.166 --> 00:30:36.333
+The ghost got up
+from his body.
+
+00:30:36.500 --> 00:30:39.875
+I mean, I couldn't see it
+very well in the dark,
+
+00:30:40.041 --> 00:30:42.333
+but it smelled
+like George and--
+
+00:30:42.500 --> 00:30:43.875
+Please, Winter Lamb,
+
+00:30:44.000 --> 00:30:45.375
+-this is not the time.
+-[church bell tolling]
+
+00:30:45.833 --> 00:30:48.500
+[Cloud] Bells? But there were
+bells two days ago.
+
+00:30:48.833 --> 00:30:51.625
+They use the bells
+to call town gatherings.
+
+00:30:51.791 --> 00:30:53.041
+This is about George.
+
+00:30:53.208 --> 00:30:54.250
+Of course!
+
+00:30:54.416 --> 00:30:55.791
+In the nighttime stories,
+
+00:30:55.916 --> 00:30:58.916
+there's always a gathering
+to announce the murder.
+
+00:30:59.083 --> 00:31:01.000
+And the killer
+is always among them.
+
+00:31:01.166 --> 00:31:03.125
+-We need to be there.
+-[chuckles]
+
+00:31:03.250 --> 00:31:05.458
+You think you're brave enough
+to leave home?
+
+00:31:05.625 --> 00:31:07.458
+None of you
+have ever left this meadow.
+
+00:31:07.625 --> 00:31:10.083
+Your hooves have never touched
+anything but grass.
+
+00:31:10.250 --> 00:31:12.083
+What's so hard
+about leaving home?
+
+00:31:12.250 --> 00:31:13.625
+We're not scared.
+
+00:31:19.000 --> 00:31:21.000
+-Mopple, what is that?
+-I think it's a road.
+
+00:31:21.125 --> 00:31:22.166
+But what is it made of?
+
+00:31:22.291 --> 00:31:23.541
+Well, not grass,
+I can tell you that.
+
+00:31:23.666 --> 00:31:24.750
+[Sebastian] Lily?
+
+00:31:25.291 --> 00:31:26.291
+Yes!
+
+00:31:26.458 --> 00:31:27.916
+Are you coming?
+
+00:31:28.083 --> 00:31:29.750
+I'm just, um...
+
+00:31:30.083 --> 00:31:32.125
+You go on ahead.
+
+00:31:32.291 --> 00:31:34.458
+Why are you yelling?
+
+00:31:34.625 --> 00:31:36.916
+I'm only a few feet away
+from you.
+
+00:31:38.666 --> 00:31:40.333
+But it feels so far.
+
+00:31:40.500 --> 00:31:43.958
+All you have to do
+is cross the road.
+
+00:31:44.083 --> 00:31:45.833
+[inhales deeply]
+
+00:31:48.250 --> 00:31:49.833
+[shudders]
+
+00:31:49.958 --> 00:31:52.750
+-[rumbling]
+-[Lily panting]
+
+00:31:55.416 --> 00:31:56.541
+[sighs]
+
+00:31:56.666 --> 00:31:59.166
+No. No, I can't.
+
+00:31:59.333 --> 00:32:00.625
+It's impossible.
+
+00:32:00.750 --> 00:32:01.750
+[sighs]
+
+00:32:03.291 --> 00:32:06.291
+[clucking]
+
+00:32:12.708 --> 00:32:13.916
+[sighs]
+
+00:32:14.041 --> 00:32:15.291
+[sighs]
+
+00:32:15.416 --> 00:32:17.083
+It's not your fault.
+
+00:32:17.250 --> 00:32:18.750
+We are who we are.
+
+00:32:21.666 --> 00:32:25.541
+Maybe if
+you and I cross together.
+
+00:32:27.416 --> 00:32:28.708
+For George?
+
+00:32:30.541 --> 00:32:32.125
+For George.
+
+00:32:33.125 --> 00:32:34.458
+Together.
+
+00:32:36.791 --> 00:32:37.791
+[clack]
+
+00:32:37.916 --> 00:32:39.916
+[dramatic music playing]
+
+00:32:45.833 --> 00:32:48.208
+-I wanna go back.
+-So do I. Keep going.
+
+00:32:49.583 --> 00:32:51.458
+[exclaiming]
+
+00:32:51.583 --> 00:32:54.541
+[gasps] We made it!
+We left home!
+
+00:32:54.708 --> 00:32:56.875
+See? Sheep can do things.
+
+00:32:57.041 --> 00:32:59.583
+In fact, we can do anything.
+
+00:32:59.750 --> 00:33:01.125
+Whoop-de-do.
+
+00:33:01.291 --> 00:33:03.458
+Just two more miles to go.
+
+00:33:03.625 --> 00:33:05.291
+Not a problem.
+
+00:33:05.916 --> 00:33:08.000
+And how many miles was that?
+
+00:33:08.666 --> 00:33:10.333
+[Sebastian] I'll admit,
+I'm impressed.
+
+00:33:10.500 --> 00:33:12.375
+You won't solve the mystery,
+
+00:33:12.500 --> 00:33:14.791
+but at least you're seeing
+a bit of the world.
+
+00:33:14.958 --> 00:33:17.000
+Of course
+I'll solve the mystery.
+
+00:33:17.166 --> 00:33:19.250
+-I'll solve it by tonight.
+-[insects buzzing]
+
+00:33:19.666 --> 00:33:20.791
+[Lily] George read us dozens
+
+00:33:20.916 --> 00:33:22.291
+-of these nighttime stories.
+-[Mopple pants and gasps]
+
+00:33:22.458 --> 00:33:23.500
+They follow
+
+00:33:23.625 --> 00:33:25.208
+-very simple rules.
+-[exclaims]
+
+00:33:25.375 --> 00:33:26.583
+[Lily] Mopple?
+
+00:33:27.333 --> 00:33:29.166
+Huh? Oh. One!
+
+00:33:29.333 --> 00:33:31.500
+The killer always returns
+to the scene of the crime.
+
+00:33:31.666 --> 00:33:33.500
+-Two!
+-The police always
+
+00:33:33.625 --> 00:33:34.625
+think a drifter did it.
+
+00:33:34.791 --> 00:33:36.333
+Oh, they're always going on
+about a drifter.
+
+00:33:36.458 --> 00:33:37.291
+Three.
+
+00:33:37.416 --> 00:33:40.625
+An unexpected person arrives
+and changes everything.
+
+00:33:40.791 --> 00:33:41.625
+Four!
+
+00:33:41.791 --> 00:33:44.625
+The victim
+is the most important clue.
+
+00:33:44.958 --> 00:33:47.250
+Well, that is simple.
+
+00:33:47.416 --> 00:33:49.416
+But you'll find the real world
+
+00:33:49.541 --> 00:33:52.500
+is a bit more complicated
+than a book.
+
+00:33:52.666 --> 00:33:53.833
+Speaking of...
+
+00:33:54.000 --> 00:33:56.583
+Welcome to Denbrook.
+
+00:33:56.958 --> 00:33:58.208
+What is this?
+
+00:33:58.375 --> 00:34:01.291
+This is the church where
+someone named "God" lives.
+
+00:34:01.458 --> 00:34:02.458
+[Lily] Who's God?
+
+00:34:02.625 --> 00:34:03.958
+[Sebastian] It's a bit
+confusing.
+
+00:34:04.125 --> 00:34:05.541
+God is a shepherd.
+
+00:34:05.708 --> 00:34:07.125
+So he could be our shepherd?
+
+00:34:07.291 --> 00:34:09.875
+No. Because he's also a lamb.
+
+00:34:10.000 --> 00:34:10.833
+What?
+
+00:34:10.958 --> 00:34:12.666
+And he's also invisible.
+
+00:34:12.833 --> 00:34:14.083
+And he's made of bread.
+
+00:34:14.250 --> 00:34:15.625
+And he damns things.
+
+00:34:15.750 --> 00:34:17.708
+Dams things. Like a beaver?
+
+00:34:17.875 --> 00:34:18.875
+Yes.
+
+00:34:19.041 --> 00:34:22.541
+So God is a big, invisible
+lamb-beaver made of bread?
+
+00:34:22.708 --> 00:34:24.666
+Yes. And they eat him
+on Sundays.
+
+00:34:25.625 --> 00:34:26.916
+Poor God.
+
+00:34:27.250 --> 00:34:28.583
+I know I was
+supposed to be back,
+
+00:34:28.750 --> 00:34:30.375
+but I may have stumbled
+
+00:34:30.500 --> 00:34:32.375
+upon my first
+small-town murder mystery.
+
+00:34:32.541 --> 00:34:34.333
+I've gotta go, gotta go.
+
+00:34:34.500 --> 00:34:36.333
+Come on.
+They won't see us from here.
+
+00:34:36.500 --> 00:34:38.875
+They already see you
+and nobody cares.
+
+00:34:39.041 --> 00:34:41.416
+For the 100th time,
+you're sheep.
+
+00:34:41.541 --> 00:34:43.875
+-[shushes]
+-[Tim] Citizens of Denbrook.
+
+00:34:44.291 --> 00:34:45.833
+I know there are rumors
+
+00:34:45.958 --> 00:34:48.791
+that George Hardy's death
+was suspicious.
+
+00:34:48.958 --> 00:34:51.333
+But I'm not allowed to comment
+on the poisoning
+
+00:34:51.458 --> 00:34:52.583
+-until the investigation--
+-[all exclaim]
+
+00:34:52.708 --> 00:34:54.625
+Wait! George was murdered?
+
+00:34:55.500 --> 00:34:56.625
+Oh, crap.
+
+00:34:56.791 --> 00:34:59.041
+Sorry, what kind of poison?
+
+00:34:59.208 --> 00:35:00.208
+Look.
+
+00:35:00.750 --> 00:35:03.250
+George was poisoned
+by something called taxine.
+
+00:35:03.541 --> 00:35:05.166
+It's found in the berries
+of the yew tree.
+
+00:35:05.333 --> 00:35:07.666
+And these trees,
+do they grow around here?
+
+00:35:09.375 --> 00:35:11.916
+-Right there.
+-[people exclaim]
+
+00:35:12.041 --> 00:35:13.625
+Then it was one of us
+who killed him.
+
+00:35:13.791 --> 00:35:15.083
+[Tim] No, no. No. No.
+
+00:35:15.250 --> 00:35:18.333
+Please. It was
+almost certainly a drifter.
+
+00:35:18.458 --> 00:35:21.083
+[sheep bleating
+in frustration]
+
+00:35:22.833 --> 00:35:24.541
+-What's with them?
+-[car honks]
+
+00:35:31.333 --> 00:35:33.333
+[dreamy music playing]
+
+00:35:44.958 --> 00:35:46.416
+[woman] Officer Derry?
+
+00:35:47.291 --> 00:35:48.583
+Officer Derry.
+
+00:35:49.500 --> 00:35:50.583
+Yes.
+
+00:35:50.916 --> 00:35:53.500
+Wha--? Uh, I am that person.
+
+00:35:53.666 --> 00:35:56.375
+Lydia Harbottle?
+Harbottle and Bloom?
+
+00:35:56.625 --> 00:35:57.458
+We spoke earlier.
+
+00:35:57.583 --> 00:36:00.125
+I am the late
+George Hardy's lawyer.
+
+00:36:00.291 --> 00:36:02.750
+Right. And you are?
+
+00:36:02.958 --> 00:36:04.916
+I'm Rebecca Hampstead.
+
+00:36:05.083 --> 00:36:06.833
+I'm, um, George's daughter.
+
+00:36:06.958 --> 00:36:08.333
+-[all exclaim]
+-He had a daughter?
+
+00:36:08.458 --> 00:36:10.166
+[woman] George has a daughter?
+
+00:36:10.666 --> 00:36:15.291
+An unexpected person arrives
+and changes everything.
+
+00:36:15.875 --> 00:36:16.708
+[clangs]
+
+00:36:16.833 --> 00:36:18.125
+[Tim] That's your
+phone number right there
+
+00:36:18.250 --> 00:36:19.541
+at the bottom of the page.
+
+00:36:19.708 --> 00:36:21.541
+That's how I knew to call you.
+
+00:36:21.708 --> 00:36:23.291
+I'm always detecting.
+
+00:36:23.458 --> 00:36:25.125
+Hmm... You're not a detective,
+though, are you?
+
+00:36:25.291 --> 00:36:26.291
+I know, but--
+
+00:36:26.416 --> 00:36:28.541
+You found this document
+sitting out in the open
+
+00:36:28.666 --> 00:36:30.333
+on a desk
+in a miniscule caravan.
+
+00:36:30.458 --> 00:36:31.708
+That's just
+"noticing," isn't it?
+
+00:36:31.875 --> 00:36:32.708
+Well...
+
+00:36:32.833 --> 00:36:34.458
+So you noticed this document
+
+00:36:34.583 --> 00:36:37.250
+the second time you went
+into Mr. Hardy's caravan?
+
+00:36:37.416 --> 00:36:38.333
+[clears throat] That's right.
+
+00:36:38.500 --> 00:36:40.333
+So, I had to go back there,
+
+00:36:40.458 --> 00:36:41.708
+give the scene
+a good searching.
+
+00:36:42.125 --> 00:36:45.250
+I put up the police tape.
+Stickier than I expected.
+
+00:36:45.375 --> 00:36:47.000
+Don't care,
+nor would anyone ever.
+
+00:36:47.125 --> 00:36:49.791
+Have you read it?
+Have you even looked at it?
+
+00:36:49.958 --> 00:36:51.958
+No. Not my business.
+
+00:36:52.125 --> 00:36:53.708
+It very specifically is.
+
+00:36:54.208 --> 00:36:56.166
+I'll do a reading of the will
+later this afternoon.
+
+00:36:56.333 --> 00:36:57.875
+The following people
+are named,
+
+00:36:58.000 --> 00:37:00.125
+so do make sure
+that they are present.
+
+00:37:00.291 --> 00:37:04.291
+The Reverend Hillcoate,
+Caleb Merrow...
+
+00:37:04.458 --> 00:37:05.875
+Write this down.
+
+00:37:06.041 --> 00:37:09.791
+The Reverend Hillcoate,
+Caleb Merrow, Beth Pennock,
+
+00:37:09.958 --> 00:37:14.416
+Ham Gilyard, you,
+and Rebecca Hampstead.
+
+00:37:14.583 --> 00:37:16.708
+I'll be staying
+at the Partridge Inn.
+
+00:37:17.291 --> 00:37:19.875
+We'll do the reading there
+at 5:00 p.m. sharp.
+
+00:37:20.041 --> 00:37:22.125
+Five p.m. 1700.
+
+00:37:22.291 --> 00:37:25.458
+You know, I told you
+that Rebecca lives in America
+
+00:37:25.583 --> 00:37:27.625
+and yet here she is
+in Denbrook
+
+00:37:27.791 --> 00:37:30.833
+on the very day you told me
+that her father was dead.
+
+00:37:31.000 --> 00:37:32.958
+Meaning that she was already
+in this country
+
+00:37:33.083 --> 00:37:34.083
+the night he was killed.
+
+00:37:34.208 --> 00:37:35.750
+But you didn't
+pick up on that, did you?
+
+00:37:37.000 --> 00:37:38.083
+Yeah.
+
+00:37:38.416 --> 00:37:40.916
+No. Yeah. Of course I did.
+
+00:37:41.333 --> 00:37:43.750
+This is your first murder,
+isn't it?
+
+00:37:43.916 --> 00:37:44.958
+What?
+
+00:37:46.000 --> 00:37:47.833
+You think I killed him?
+
+00:37:51.333 --> 00:37:53.291
+Oh. Oh.
+
+00:37:54.041 --> 00:37:57.541
+Yeah, you mean
+my first murder case.
+
+00:37:58.500 --> 00:38:01.833
+Well, it's all on your
+shoulders now, Officer Derry.
+
+00:38:02.166 --> 00:38:03.250
+I'll see you at 5:00.
+
+00:38:03.416 --> 00:38:05.083
+See you at 5:00,
+Miss Harbottle.
+
+00:38:05.250 --> 00:38:06.541
+Madam Harbottle.
+
+00:38:08.791 --> 00:38:10.916
+We have to get
+to that will reading.
+
+00:38:11.500 --> 00:38:13.083
+{\an8}[Sebastian] This is
+the Partridge Inn.
+
+00:38:13.250 --> 00:38:15.291
+I eat flowers here sometimes.
+
+00:38:15.458 --> 00:38:18.750
+Although, I don't know how any
+of this is meant to matter.
+
+00:38:18.916 --> 00:38:20.208
+[Lily]
+In the nighttime stories,
+
+00:38:20.333 --> 00:38:21.291
+there's always a will,
+
+00:38:21.458 --> 00:38:24.625
+and the people in the will
+are always the suspects.
+
+00:38:25.375 --> 00:38:27.000
+[groans]
+
+00:38:27.125 --> 00:38:28.458
+I need to see their faces.
+
+00:38:28.625 --> 00:38:29.458
+Why?
+
+00:38:29.625 --> 00:38:31.458
+Because humans often lie,
+
+00:38:31.583 --> 00:38:33.125
+and you can see it
+in their eyes.
+
+00:38:33.291 --> 00:38:34.541
+Exactly.
+
+00:38:35.083 --> 00:38:36.041
+Hmm...
+
+00:38:36.166 --> 00:38:37.791
+Mopple,
+while we work on the window,
+
+00:38:37.916 --> 00:38:39.541
+look around and see
+if there's a better one.
+
+00:38:39.708 --> 00:38:40.791
+On it.
+
+00:38:41.458 --> 00:38:42.791
+Shall we?
+
+00:38:45.166 --> 00:38:47.375
+[Elliot] What do you know
+about your birth mother?
+
+00:38:47.541 --> 00:38:51.208
+In his letters, he said that
+she died giving birth to me.
+
+00:38:51.375 --> 00:38:52.791
+And that he was very young
+
+00:38:52.916 --> 00:38:54.291
+and very scared
+and very poor...
+
+00:38:55.750 --> 00:38:57.708
+and he put me up for adoption.
+
+00:38:58.250 --> 00:38:59.500
+By the church, actually.
+
+00:39:01.291 --> 00:39:02.208
+Uh...
+
+00:39:02.333 --> 00:39:04.250
+-I have a question as well.
+-[gasps]
+
+00:39:04.416 --> 00:39:06.500
+Sorry, mate. Um...
+
+00:39:06.750 --> 00:39:08.250
+Nice to see you.
+
+00:39:08.416 --> 00:39:10.166
+Uh, I just realized,
+
+00:39:10.916 --> 00:39:12.166
+all by myself,
+
+00:39:12.333 --> 00:39:14.166
+that you couldn't have
+got here
+
+00:39:14.291 --> 00:39:16.166
+today from America, right?
+
+00:39:16.333 --> 00:39:19.458
+Which means you were already
+in this country last night
+
+00:39:19.625 --> 00:39:22.708
+when George was... murdered.
+
+00:39:23.166 --> 00:39:24.916
+I'm not accusing you
+or anything,
+
+00:39:25.041 --> 00:39:26.458
+but that... Is that right?
+
+00:39:26.833 --> 00:39:28.750
+That's so smart, detective.
+[chuckles]
+
+00:39:28.916 --> 00:39:31.166
+No, [chuckles] I'm...
+I'm not a detective.
+
+00:39:31.333 --> 00:39:33.083
+I'm just an officer...
+
+00:39:33.250 --> 00:39:36.083
+who is always detecting.
+
+00:39:36.583 --> 00:39:39.708
+Well, I... [chuckles] I, uh...
+
+00:39:40.500 --> 00:39:41.666
+I was in this country,
+
+00:39:41.791 --> 00:39:44.041
+but I... I've never been
+to Denbrook until today.
+
+00:39:44.583 --> 00:39:46.458
+[Tim clears throat]
+Follow-up question:
+
+00:39:46.625 --> 00:39:48.125
+Do you have
+
+00:39:48.291 --> 00:39:49.541
+a boyfriend?
+
+00:39:49.666 --> 00:39:51.833
+-[all groan]
+-Ugh! This is hard to watch.
+
+00:39:52.000 --> 00:39:53.875
+What?
+That's a standard question
+
+00:39:54.041 --> 00:39:57.791
+any investigator would ask
+in this situation.
+
+00:39:57.958 --> 00:39:59.916
+So funny you ask that.
+We just, uh...
+
+00:40:00.041 --> 00:40:01.041
+We just broke up.
+
+00:40:01.541 --> 00:40:02.750
+Oh, no.
+
+00:40:04.125 --> 00:40:05.541
+[Lily] Do you see what I see?
+
+00:40:05.708 --> 00:40:06.750
+The daughter.
+
+00:40:06.916 --> 00:40:09.083
+Her face is happy...
+
+00:40:09.250 --> 00:40:11.958
+[Lily] But her eyes
+are scared.
+
+00:40:12.125 --> 00:40:14.791
+[Elliot] So, what time did you
+arrive last night exactly?
+
+00:40:14.958 --> 00:40:17.541
+[Rebecca] I got in around
+7:00 p.m. and...
+
+00:40:19.375 --> 00:40:20.375
+[sighs] I'm sorry.
+
+00:40:22.041 --> 00:40:23.375
+-That's all right.
+-[Rebecca] I was supposed
+
+00:40:23.500 --> 00:40:24.708
+to meet him today.
+And I'm just...
+
+00:40:24.875 --> 00:40:26.250
+I'm so overwhelmed.
+
+00:40:26.375 --> 00:40:28.000
+[sobs]
+
+00:40:28.333 --> 00:40:30.208
+-Oh, thank you.
+-Go on. Go on.
+
+00:40:30.375 --> 00:40:31.833
+[Rebecca] Thank you.
+
+00:40:32.250 --> 00:40:34.125
+It's okay. Thank you so much.
+
+00:40:34.583 --> 00:40:36.166
+Window, window, window.
+
+00:40:36.291 --> 00:40:38.083
+If I was a window
+where would I go?
+
+00:40:38.208 --> 00:40:39.916
+Ooh!
+
+00:40:40.041 --> 00:40:41.208
+Vegetables.
+
+00:40:41.416 --> 00:40:44.291
+Hello. Just a little carrot.
+
+00:40:44.416 --> 00:40:45.375
+[munches]
+
+00:40:45.500 --> 00:40:49.250
+[strained] Oh.
+Oh, no. Oh no-no-no.
+
+00:40:49.625 --> 00:40:51.375
+He also told me
+that I have a brother,
+
+00:40:51.500 --> 00:40:53.375
+a twin actually, um...
+
+00:40:53.541 --> 00:40:55.458
+who was sent to South Africa,
+I think?
+
+00:40:55.625 --> 00:40:59.000
+A South African twin you've
+never met. This is gold.
+
+00:40:59.500 --> 00:41:01.125
+And who are you?
+
+00:41:01.875 --> 00:41:03.708
+Uh, I'm Elliot Matthews.
+
+00:41:03.833 --> 00:41:04.833
+I'm covering
+this story for the--
+
+00:41:05.000 --> 00:41:06.416
+Don't care. Out.
+
+00:41:07.666 --> 00:41:09.541
+Well, actually,
+as a journalist, I have--
+
+00:41:09.666 --> 00:41:13.125
+Absolutely no rights
+whatsoever. Get out.
+
+00:41:13.500 --> 00:41:14.333
+Fine.
+
+00:41:14.458 --> 00:41:16.166
+And no lurking.
+
+00:41:16.333 --> 00:41:18.291
+I'll be in
+the "Presidential Suite,"
+
+00:41:18.416 --> 00:41:20.833
+basking in all
+the luxurious amenities.
+
+00:41:21.000 --> 00:41:22.166
+Lily!
+
+00:41:22.666 --> 00:41:24.291
+Lily, Sebastian!
+
+00:41:24.458 --> 00:41:25.791
+Help!
+
+00:41:28.125 --> 00:41:31.458
+Mr. Van Vuuren,
+this is Lydia Harbottle.
+
+00:41:31.583 --> 00:41:32.541
+Can you hear me?
+
+00:41:32.708 --> 00:41:34.333
+[Peter] Ja. <i>Very good</i>
+<i>connection. Thank you.</i>
+
+00:41:34.500 --> 00:41:37.208
+Mr. Van Vuuren
+is Mr. Hardy's son,
+
+00:41:37.375 --> 00:41:41.791
+and he lives in South Africa,
+hence is joining us by phone.
+
+00:41:41.958 --> 00:41:45.208
+Now, Mr. Hardy
+sent me a copy of his will
+
+00:41:45.333 --> 00:41:48.000
+some two months ago.
+[clears throat]
+
+00:41:48.875 --> 00:41:52.375
+But this is not the will
+that I shall be reading today.
+
+00:41:52.541 --> 00:41:53.708
+He wrote a new will.
+
+00:41:54.041 --> 00:41:55.625
+-I found that.
+-Shush.
+
+00:41:55.791 --> 00:41:58.041
+Dated three days
+before his death.
+
+00:41:58.208 --> 00:42:02.250
+Of course.
+There's always a new will.
+
+00:42:02.708 --> 00:42:05.666
+"This is the last will
+and testament
+
+00:42:05.791 --> 00:42:07.000
+of Mr. George Hardy.
+
+00:42:07.500 --> 00:42:10.000
+I have gathered
+the seven of you here
+
+00:42:10.166 --> 00:42:14.041
+because I have unfinished
+business with each of you.
+
+00:42:14.208 --> 00:42:17.083
+I have done wrong
+to some of you,
+
+00:42:17.250 --> 00:42:20.375
+and some of you
+have done wrong to me.
+
+00:42:20.833 --> 00:42:24.041
+Among you now,
+in this very room,
+
+00:42:24.208 --> 00:42:27.708
+is a Fool, a Bad Shepherd,
+
+00:42:27.875 --> 00:42:31.291
+a Spring Lamb, a Winter Lamb,
+
+00:42:31.458 --> 00:42:32.791
+a Victim,
+
+00:42:34.250 --> 00:42:35.583
+and Two Murderers."
+
+00:42:35.750 --> 00:42:36.958
+Two Murderers?!
+
+00:42:37.125 --> 00:42:38.333
+Calling me a Bad Shepherd.
+
+00:42:38.500 --> 00:42:39.625
+How am I supposed
+to figure that out?
+
+00:42:39.750 --> 00:42:41.208
+At least we know
+who the Fool is.
+
+00:42:41.375 --> 00:42:43.500
+I raise French sheep.
+Finest breed there is.
+
+00:42:43.666 --> 00:42:45.208
+And what's this
+about another victim?
+
+00:42:45.375 --> 00:42:46.708
+So one of us is next.
+
+00:42:46.875 --> 00:42:48.416
+One of us
+could be the murderer.
+
+00:42:48.541 --> 00:42:49.583
+Why don't you ask questions
+
+00:42:49.708 --> 00:42:52.208
+-instead of flirting?
+-[clamoring]
+
+00:42:53.250 --> 00:42:54.625
+Two Murderers?
+
+00:42:54.791 --> 00:42:56.625
+A Winter Lamb.
+
+00:42:56.750 --> 00:42:58.750
+[clamoring continues]
+
+00:42:59.750 --> 00:43:01.375
+"This is what I leave to you."
+
+00:43:01.541 --> 00:43:02.666
+Hey! Hey!
+
+00:43:05.166 --> 00:43:07.541
+"This is what I leave to you.
+
+00:43:08.291 --> 00:43:11.541
+The knowledge that I saw you
+for who you really were.
+
+00:43:12.416 --> 00:43:15.708
+And for most of you,
+that's all you're getting."
+
+00:43:16.208 --> 00:43:18.375
+What does he mean
+that's all we're getting?
+
+00:43:18.500 --> 00:43:20.000
+What am I doing here, then?
+
+00:43:20.166 --> 00:43:21.625
+Sit down and shut up, Ham.
+
+00:43:22.333 --> 00:43:23.375
+I will not.
+
+00:43:23.541 --> 00:43:25.166
+No, that's the next line
+in the will.
+
+00:43:25.291 --> 00:43:27.125
+"Sit down and shut up, Ham."
+
+00:43:27.750 --> 00:43:29.541
+-Oh...
+-It seems George
+
+00:43:29.666 --> 00:43:31.666
+knew you pretty well.
+
+00:43:32.291 --> 00:43:33.375
+Have some class about you.
+
+00:43:33.541 --> 00:43:34.833
+-Shut your face.
+-You shut yours.
+
+00:43:35.000 --> 00:43:37.291
+"To my son, Peter Van Vuuren,
+
+00:43:37.458 --> 00:43:41.708
+the 300 acres currently leased
+to Caleb Merrow."
+
+00:43:41.875 --> 00:43:43.291
+[Peter] <i>Oh, that's very kind.</i>
+
+00:43:43.458 --> 00:43:45.500
+"To my daughter,
+Rebecca Hampstead,
+
+00:43:45.666 --> 00:43:49.458
+the adjoining 300 acres,
+which I call home,
+
+00:43:49.625 --> 00:43:54.916
+including my caravan, my barn,
+their contents and my sheep."
+
+00:43:55.083 --> 00:43:56.291
+Now, in the prior will,
+
+00:43:56.416 --> 00:43:59.000
+Mr. Hardy left the remainder
+of his assets
+
+00:43:59.166 --> 00:44:00.166
+to a charity,
+
+00:44:00.291 --> 00:44:02.041
+the Society for
+the Protection of Animals.
+
+00:44:02.791 --> 00:44:06.166
+In the new will, however, this
+paragraph reads as follows:
+
+00:44:06.333 --> 00:44:09.125
+"I bequeath
+the remainder of my assets
+
+00:44:09.250 --> 00:44:11.541
+to my daughter,
+Rebecca Hampstead."
+
+00:44:11.708 --> 00:44:14.166
+Yeah, don't get too excited.
+The man had nothing.
+
+00:44:14.333 --> 00:44:19.125
+Well, actually there is one
+nonoperational muck spreader,
+
+00:44:19.291 --> 00:44:22.125
+three pre-purchased bags
+of fertilizer...
+
+00:44:22.291 --> 00:44:23.708
+It could be very useful.
+
+00:44:23.875 --> 00:44:26.416
+...and one
+money market account
+
+00:44:26.541 --> 00:44:28.250
+in the sum of approximately...
+
+00:44:28.416 --> 00:44:29.583
+thirty million dollars.
+
+00:44:29.708 --> 00:44:30.541
+-[spits]
+-[all exclaim]
+
+00:44:30.666 --> 00:44:32.083
+[Peter] <i>Did she say</i>
+<i>thirty million?</i>
+
+00:44:32.250 --> 00:44:35.125
+So, we have our motive.
+
+00:44:35.916 --> 00:44:37.625
+Thirty million? How?
+
+00:44:37.791 --> 00:44:40.750
+Two years ago,
+George Hardy created a remedy
+
+00:44:40.916 --> 00:44:44.208
+for a sheep disease
+known as orf.
+
+00:44:44.375 --> 00:44:46.125
+-Orf?
+-Orf.
+
+00:44:46.291 --> 00:44:47.500
+So you're telling me
+that blue goop
+
+00:44:47.625 --> 00:44:49.083
+he was always mixing up,
+that was medicine?
+
+00:44:49.208 --> 00:44:50.208
+He sold the patent
+
+00:44:50.333 --> 00:44:53.208
+to a large agricultural
+corporation for the sum of--
+
+00:44:53.333 --> 00:44:54.625
+Thirty million.
+
+00:44:55.750 --> 00:44:56.750
+For orf.
+
+00:44:57.583 --> 00:44:58.833
+[grunting loudly]
+
+00:45:01.958 --> 00:45:03.166
+Hmm?
+
+00:45:03.291 --> 00:45:04.625
+[loud clattering]
+
+00:45:04.750 --> 00:45:05.875
+[exclaims]
+
+00:45:07.875 --> 00:45:08.791
+[grunts, bleats]
+
+00:45:08.916 --> 00:45:10.541
+-There's someone out there.
+-Tim.
+
+00:45:10.708 --> 00:45:12.875
+[Beth] Go get them. Go! Go.
+
+00:45:23.000 --> 00:45:25.875
+-[panicked bleating]
+-[dramatic music playing]
+
+00:45:26.000 --> 00:45:27.916
+Hey-Hey! Hey!
+
+00:45:28.291 --> 00:45:29.833
+[screams]
+
+00:45:29.958 --> 00:45:30.791
+[sighs]
+
+00:45:32.666 --> 00:45:33.791
+[bleating continues]
+
+00:45:36.000 --> 00:45:38.125
+[all exclaiming]
+
+00:45:38.250 --> 00:45:40.041
+I'm fine. I'm fine.
+
+00:45:41.041 --> 00:45:41.875
+Oh, it's back!
+
+00:45:42.000 --> 00:45:43.833
+-[bleating continues]
+-[all scream]
+
+00:45:47.833 --> 00:45:49.333
+[crashing, clattering]
+
+00:45:49.458 --> 00:45:51.458
+[panicked bleating continues]
+
+00:45:53.541 --> 00:45:54.916
+[all exclaiming]
+
+00:46:02.250 --> 00:46:03.708
+Get him out!
+
+00:46:03.875 --> 00:46:05.750
+-Out!
+-[piano keys jarring]
+
+00:46:07.125 --> 00:46:08.166
+-[loud thud]
+-[groans]
+
+00:46:08.291 --> 00:46:09.291
+[glass squeaks]
+
+00:46:09.416 --> 00:46:13.000
+Lily, I found the window.
+
+00:46:14.083 --> 00:46:15.875
+[Caleb] There you go.
+Good boy.
+
+00:46:16.041 --> 00:46:17.291
+There you are.
+
+00:46:20.583 --> 00:46:21.833
+These sheep
+will keep running amok
+
+00:46:21.958 --> 00:46:23.875
+if they don't have a shepherd,
+all right?
+
+00:46:24.125 --> 00:46:25.125
+Especially that big one.
+
+00:46:26.583 --> 00:46:28.625
+George got him
+from a carnival.
+
+00:46:28.958 --> 00:46:30.541
+He's practically wild.
+
+00:46:35.666 --> 00:46:39.208
+[Elliot] Wait, Tim! Would you
+like to make a statement?
+
+00:46:39.375 --> 00:46:42.000
+No. No. No comment.
+And call me officer.
+
+00:46:42.166 --> 00:46:44.416
+What about leads?
+Do you have any leads?
+
+00:46:44.541 --> 00:46:46.041
+Yes. Yeah,
+I have a ton of leads,
+
+00:46:46.166 --> 00:46:48.291
+and I'm completely
+on top of this.
+
+00:46:49.625 --> 00:46:53.833
+Look. I need a story.
+You need an arrest.
+
+00:46:53.958 --> 00:46:55.416
+[sighs] Wouldn't it be nice
+
+00:46:55.541 --> 00:46:57.916
+to just have
+some respect for once?
+
+00:46:58.083 --> 00:47:00.750
+Hey. People respect me.
+
+00:47:02.458 --> 00:47:05.666
+If you solve this,
+you would be a hero.
+
+00:47:08.958 --> 00:47:10.708
+We could work together.
+
+00:47:12.250 --> 00:47:13.250
+I could help.
+
+00:47:13.416 --> 00:47:16.083
+Last night when my car
+was getting towed,
+
+00:47:16.250 --> 00:47:17.750
+I saw a flashlight
+around 9:00 p.m.
+
+00:47:17.875 --> 00:47:19.208
+near George's field.
+
+00:47:20.000 --> 00:47:21.958
+-[chuckles]
+-All right. All right.
+
+00:47:22.500 --> 00:47:23.916
+That fits.
+
+00:47:24.208 --> 00:47:27.666
+The coroner said George died
+between 8:00 and 11:00.
+
+00:47:29.125 --> 00:47:30.375
+[sighs]
+
+00:47:30.500 --> 00:47:32.333
+You took pictures
+of the body, right?
+
+00:47:32.458 --> 00:47:34.000
+Because I really
+should have done that.
+
+00:47:34.125 --> 00:47:38.041
+I... I took so many pictures.
+I'll send them all to you.
+
+00:47:39.833 --> 00:47:41.041
+What do you say...
+
+00:47:41.625 --> 00:47:44.333
+-Officer Hero?
+-[birds chirping]
+
+00:47:44.958 --> 00:47:46.625
+[Tim scoffs]
+
+00:47:48.750 --> 00:47:50.791
+[Lily] And then
+she said a Fool,
+
+00:47:50.916 --> 00:47:52.375
+a Victim, Two Murderers--
+
+00:47:52.541 --> 00:47:53.958
+I still think it's the maid.
+
+00:47:54.125 --> 00:47:55.750
+There is no maid!
+
+00:47:55.916 --> 00:47:57.083
+That was a story,
+
+00:47:57.208 --> 00:47:58.833
+and even in the story,
+it wasn't the maid.
+
+00:47:58.958 --> 00:48:00.041
+No more maids!
+
+00:48:00.166 --> 00:48:01.958
+Ugh, sheep.
+
+00:48:02.125 --> 00:48:05.750
+Caleb will be our
+new shepherd, won't he, Lily?
+
+00:48:05.916 --> 00:48:06.916
+Of course.
+
+00:48:07.041 --> 00:48:09.666
+We... We just need to wait
+for the mystery to be solved.
+
+00:48:09.833 --> 00:48:10.833
+[Zora] I have a question.
+
+00:48:11.000 --> 00:48:12.791
+Why haven't you solved
+the mystery yet, Lily?
+
+00:48:12.958 --> 00:48:13.833
+You solve them
+
+00:48:13.958 --> 00:48:15.333
+in the nighttime stories
+right away.
+
+00:48:15.500 --> 00:48:19.208
+I know, but the real world
+is a bit more complicated
+
+00:48:19.375 --> 00:48:21.916
+than a... book.
+
+00:48:22.583 --> 00:48:23.958
+A book.
+
+00:48:24.625 --> 00:48:26.458
+That might be the answer.
+
+00:48:26.625 --> 00:48:29.125
+I just need to get inside
+George's trailer and...
+
+00:48:29.291 --> 00:48:30.375
+Look.
+
+00:48:32.500 --> 00:48:34.250
+[Lily] Is that Rebecca?
+
+00:48:36.041 --> 00:48:37.958
+What is she looking for?
+
+00:48:38.083 --> 00:48:39.083
+[sighs]
+
+00:48:46.083 --> 00:48:47.333
+[Winter Lamb bleats]
+
+00:48:49.583 --> 00:48:51.541
+-[Rebecca chuckles]
+-[bleats]
+
+00:49:04.541 --> 00:49:06.250
+What's your name?
+
+00:49:06.750 --> 00:49:08.666
+That's George's daughter?
+
+00:49:08.833 --> 00:49:11.875
+She smells like him.
+But she doesn't look like him.
+
+00:49:12.041 --> 00:49:13.875
+I'll bet
+she was born in winter.
+
+00:49:14.041 --> 00:49:16.208
+That's why George
+didn't want her around.
+
+00:49:16.375 --> 00:49:19.791
+Of course. A winter lamb.
+That proves it.
+
+00:49:19.958 --> 00:49:21.041
+Rebecca did it!
+
+00:49:21.208 --> 00:49:22.333
+Murderer!
+
+00:49:22.500 --> 00:49:23.791
+We don't know that!
+
+00:49:23.958 --> 00:49:24.791
+[Ronnie] I knew it!
+
+00:49:24.916 --> 00:49:26.125
+[Cloud] That's what
+I've been trying to say.
+
+00:49:26.250 --> 00:49:27.541
+[Reggie] Immediately,
+I was like, "Rebecca,
+
+00:49:27.666 --> 00:49:28.541
+I think she's trouble."
+
+00:49:28.666 --> 00:49:30.000
+[Cloud] I said it
+right from the beginning.
+
+00:49:30.166 --> 00:49:31.500
+Sebastian?
+
+00:49:33.041 --> 00:49:34.416
+Lily?
+
+00:49:34.541 --> 00:49:36.500
+You were saying something
+about George's trailer?
+
+00:49:36.666 --> 00:49:38.291
+And a book?
+
+00:49:39.375 --> 00:49:41.791
+All right. The last book
+George read to us
+
+00:49:41.916 --> 00:49:43.958
+was all about
+how to narrow down a suspect.
+
+00:49:44.083 --> 00:49:47.000
+I need to find that book
+and bring it to the policeman.
+
+00:49:47.166 --> 00:49:49.708
+If we're lucky, he'll read it
+and learn something.
+
+00:49:49.833 --> 00:49:51.375
+Oh! Oh! let me! Let me!
+
+00:49:51.500 --> 00:49:52.541
+-Let me!
+-No, no. Zora!
+
+00:49:52.708 --> 00:49:54.666
+I want to be the detective!
+Let me!
+
+00:49:54.833 --> 00:49:56.583
+Well, all right. I just need
+you to find the book
+
+00:49:56.708 --> 00:49:58.500
+George had started
+reading to us
+
+00:49:58.666 --> 00:50:00.916
+with the chapter on means,
+motive and opportunity.
+
+00:50:01.083 --> 00:50:02.916
+I have a question.
+What's a chapter?
+
+00:50:03.083 --> 00:50:03.958
+It doesn't matter.
+
+00:50:04.083 --> 00:50:05.625
+Just find the book
+with the train on the cover.
+
+00:50:05.791 --> 00:50:07.291
+I have a question.
+What's a train?
+
+00:50:07.416 --> 00:50:08.875
+It's a long
+skinny line of trailers.
+
+00:50:09.041 --> 00:50:09.916
+[Zora] I have a question.
+
+00:50:10.041 --> 00:50:11.750
+[Lily] Wait a minute.
+Wool-Eyes, what are you doing?
+
+00:50:11.916 --> 00:50:13.000
+[Wool-Eyes] Stand back,
+everyone.
+
+00:50:13.125 --> 00:50:15.791
+I'll find this book using
+my keen sense of smell.
+
+00:50:15.916 --> 00:50:17.666
+[clangs, clatters]
+
+00:50:17.791 --> 00:50:20.750
+Oh, there's some tomatoes.
+You can have those.
+
+00:50:20.875 --> 00:50:21.875
+[thuds, clatters]
+
+00:50:22.000 --> 00:50:23.083
+[Wool-Eyes] Come on,
+Wool-Eyes.
+
+00:50:23.208 --> 00:50:24.250
+Everyone's counting on you.
+
+00:50:24.416 --> 00:50:26.125
+{\an8}-No, we're not.
+-[objects clattering]
+
+00:50:26.250 --> 00:50:28.500
+{\an8}[Wool-Eyes] Uh, it was the
+last book George touched, eh?
+
+00:50:28.666 --> 00:50:30.000
+{\an8}-Is it--? No, that's a carrot.
+-[object clunks]
+
+00:50:30.125 --> 00:50:31.291
+{\an8}Oh my word.
+
+00:50:31.416 --> 00:50:32.750
+{\an8}Might come back
+for that later, actually.
+
+00:50:33.750 --> 00:50:35.750
+[sniffs] Ha-ha!
+
+00:50:37.000 --> 00:50:38.375
+Is this
+what you're looking for?
+
+00:50:38.500 --> 00:50:40.166
+[gasps] No!
+
+00:50:40.416 --> 00:50:42.375
+Oh. What about this?
+
+00:50:42.958 --> 00:50:45.541
+That's it!
+Wool-Eyes, you found it!
+
+00:50:45.708 --> 00:50:46.958
+Of course I did.
+
+00:50:47.125 --> 00:50:48.708
+Lily, I expect, is it?
+
+00:50:48.875 --> 00:50:50.958
+I am, after all,
+a sheep detective.
+
+00:50:51.083 --> 00:50:51.916
+[groans]
+
+00:51:05.583 --> 00:51:06.583
+[thuds]
+
+00:51:13.208 --> 00:51:14.208
+[exhales sharply]
+
+00:51:19.083 --> 00:51:20.000
+Hmm?
+
+00:51:22.875 --> 00:51:24.333
+[grunts softly]
+
+00:51:38.083 --> 00:51:40.125
+It's nice up here.
+
+00:51:40.708 --> 00:51:42.500
+But a bit lonely.
+
+00:51:46.000 --> 00:51:48.416
+Oh, I gave a book
+to the policeman
+
+00:51:48.541 --> 00:51:50.291
+to help him solve the case.
+
+00:51:55.541 --> 00:51:57.166
+What's a carnival?
+
+00:51:58.083 --> 00:52:00.666
+It's nothing.
+Go back to your flock.
+
+00:52:01.333 --> 00:52:02.916
+Our flock.
+
+00:52:08.250 --> 00:52:09.708
+[Sebastian] It's music.
+
+00:52:10.458 --> 00:52:13.000
+A carnival is music.
+
+00:52:14.000 --> 00:52:15.208
+And rides.
+
+00:52:16.625 --> 00:52:21.375
+Every day children would come
+and pet me and feed me.
+
+00:52:21.875 --> 00:52:23.791
+I loved that.
+
+00:52:24.041 --> 00:52:26.375
+Until I grew too big.
+
+00:52:27.500 --> 00:52:30.208
+And then when night fell,
+
+00:52:30.375 --> 00:52:32.291
+the men from the carnival
+would come
+
+00:52:32.416 --> 00:52:34.041
+and lead me into a circle.
+
+00:52:34.166 --> 00:52:35.500
+[cheering]
+
+00:52:35.625 --> 00:52:39.333
+And in that circle was a dog.
+
+00:52:39.458 --> 00:52:41.166
+-[clangs]
+-[barks]
+
+00:52:41.291 --> 00:52:43.458
+And they would make me fight.
+
+00:52:43.583 --> 00:52:45.500
+-[growls]
+-[cheers]
+
+00:52:46.083 --> 00:52:48.500
+Fight until I bled.
+
+00:52:50.500 --> 00:52:52.375
+Then one night...
+
+00:52:53.375 --> 00:52:54.833
+<i>he found me.</i>
+
+00:52:56.458 --> 00:52:57.541
+[startled bleat]
+
+00:52:57.666 --> 00:53:00.916
+[tender music playing]
+
+00:53:07.583 --> 00:53:09.416
+He paid them...
+
+00:53:10.250 --> 00:53:11.541
+and took me away.
+
+00:53:11.666 --> 00:53:14.083
+[muffled cheers]
+
+00:53:14.208 --> 00:53:18.041
+And that's what a carnival is.
+
+00:53:21.416 --> 00:53:24.750
+But how did you even end up
+in such a terrible place?
+
+00:53:24.916 --> 00:53:26.791
+Why weren't you
+with your flock?
+
+00:53:27.583 --> 00:53:29.750
+I thought Lily
+the Great Sheep Detective
+
+00:53:29.875 --> 00:53:31.750
+would have
+figured that out by now.
+
+00:53:34.041 --> 00:53:35.625
+So you were a winter--
+
+00:53:35.750 --> 00:53:40.166
+Sooner or later,
+a winter lamb wants to leave.
+
+00:53:46.833 --> 00:53:48.833
+[birds chirping]
+
+00:53:57.250 --> 00:53:59.541
+[Elliot] There he is! Yes!
+
+00:54:00.083 --> 00:54:01.333
+-[Elliot chuckles]
+-[door opens]
+
+00:54:01.458 --> 00:54:03.625
+[Elliot] Oh, I hope
+you're hungry, Tim.
+
+00:54:03.791 --> 00:54:05.708
+-Are we?
+-[clacks]
+
+00:54:06.458 --> 00:54:08.083
+-[sighs]
+-Hello?
+
+00:54:08.833 --> 00:54:12.041
+Every time
+something interesting
+
+00:54:12.166 --> 00:54:14.125
+happens with this case,
+
+00:54:15.125 --> 00:54:16.583
+there they are.
+
+00:54:22.666 --> 00:54:24.208
+You've lost it.
+
+00:54:24.708 --> 00:54:27.375
+You've lost it,
+and you've done nothing! Tim!
+
+00:54:27.541 --> 00:54:31.208
+Not quite nothing.
+
+00:54:32.291 --> 00:54:35.708
+"Who killed George?"
+
+00:54:35.875 --> 00:54:37.666
+{\an8}Five suspects
+named in the will.
+
+00:54:37.791 --> 00:54:41.791
+Whoever killed George
+needed three things.
+
+00:54:41.916 --> 00:54:45.625
+{\an8}Means, motive, opportunity.
+
+00:54:45.750 --> 00:54:48.375
+[Lily whispers]
+It worked! He read the book!
+
+00:54:48.500 --> 00:54:51.000
+{\an8}Let's take them one by one,
+shall we?
+
+00:54:51.125 --> 00:54:54.541
+Means. Taxine from the berries
+of a yew tree.
+
+00:54:54.666 --> 00:54:57.625
+{\an8}We've got yew trees
+all over the church grounds.
+
+00:54:57.750 --> 00:54:59.958
+{\an8}Everyone had the means.
+
+00:55:00.083 --> 00:55:02.666
+{\an8}Motive. Why kill George?
+
+00:55:02.791 --> 00:55:04.458
+{\an8}Rebecca's got
+the clearest motive.
+
+00:55:04.583 --> 00:55:06.625
+But any of the others
+could have a reason.
+
+00:55:06.750 --> 00:55:08.125
+What are they hiding?
+
+00:55:08.250 --> 00:55:11.666
+Opportunity. Do any
+of these people have an alibi?
+
+00:55:11.791 --> 00:55:15.000
+{\an8}Means, motive, opportunity.
+
+00:55:15.125 --> 00:55:16.916
+Find the one with all three
+
+00:55:17.041 --> 00:55:19.958
+and catch
+the Denbrook Poisoner.
+
+00:55:20.416 --> 00:55:22.541
+-[ruler clatters]
+-[scoffs]
+
+00:55:22.666 --> 00:55:25.833
+Tim, this is actually
+really good.
+
+00:55:25.958 --> 00:55:28.625
+Yeah, well, it just sort of...
+
+00:55:29.916 --> 00:55:31.333
+came to me in the night.
+
+00:55:32.833 --> 00:55:36.208
+[Tim] Okay. Let's get started.
+
+00:55:36.333 --> 00:55:37.750
+Ham.
+
+00:55:37.875 --> 00:55:40.250
+{\an8}[Tim] And which one are you
+from George's will?
+
+00:55:40.916 --> 00:55:42.500
+Probably the Murderer.
+
+00:55:44.083 --> 00:55:46.583
+He was a vegetarian.
+
+00:55:46.708 --> 00:55:50.583
+I can forgive that in a woman.
+But in a man?
+
+00:55:50.708 --> 00:55:52.375
+Disgusting.
+
+00:55:52.500 --> 00:55:53.833
+[Tim] Beth.
+
+00:55:53.958 --> 00:55:57.750
+George's letter to Rebecca.
+Why did you have it?
+
+00:55:57.875 --> 00:56:00.375
+[Beth] <i>Maybe the postal</i>
+<i>service made a mistake</i>
+
+00:56:00.500 --> 00:56:01.833
+<i>for the first time in history.</i>
+
+00:56:01.958 --> 00:56:04.958
+And the day
+before George died,
+
+00:56:05.083 --> 00:56:07.541
+you told me
+you could "kill that man."
+
+00:56:07.666 --> 00:56:09.291
+I'm not the killer.
+I'm the Victim.
+
+00:56:09.416 --> 00:56:10.583
+And that's all I'm saying.
+
+00:56:10.708 --> 00:56:12.000
+-I know my rights!
+-[Tim gasps]
+
+00:56:12.125 --> 00:56:13.416
+[Tim] Caleb.
+
+00:56:13.541 --> 00:56:15.083
+And the morning
+you found George,
+
+00:56:15.208 --> 00:56:17.666
+you told me you were
+bringing him some papers.
+
+00:56:17.791 --> 00:56:19.791
+Yeah, he just
+canceled my lease.
+
+00:56:19.916 --> 00:56:22.541
+You know, I was bringing him
+a proposal to reconsider.
+
+00:56:22.666 --> 00:56:23.916
+So much for that.
+
+00:56:25.250 --> 00:56:29.666
+{\an8}Hold on. George canceled
+your lease. Why?
+
+00:56:29.791 --> 00:56:32.916
+You heard the will.
+Apparently I'm a Bad Shepherd.
+
+00:56:33.041 --> 00:56:34.541
+[Tim] Hillcoate.
+
+00:56:34.666 --> 00:56:36.416
+George never set foot
+in your church.
+
+00:56:36.541 --> 00:56:39.750
+And suddenly he walks in
+on the day before he dies
+
+00:56:39.875 --> 00:56:41.250
+and makes a large donation.
+
+00:56:43.583 --> 00:56:44.416
+Why?
+
+00:56:44.541 --> 00:56:46.791
+[groans] Why am I always
+on the bottom?
+
+00:56:46.916 --> 00:56:48.500
+-[Lily] Shh!
+-[Mopple grunts] Ow!
+
+00:56:48.625 --> 00:56:51.458
+George came to me a while ago
+and told me about the church
+
+00:56:51.583 --> 00:56:53.750
+putting his children
+up for adoption.
+
+00:56:53.875 --> 00:56:55.375
+<i>But as soon as he got</i>
+<i>back on his feet,</i>
+
+00:56:55.500 --> 00:56:57.625
+<i>he started searching for them.</i>
+
+00:56:57.750 --> 00:57:00.125
+<i>The church wouldn't tell him</i>
+<i>where they were.</i>
+
+00:57:00.250 --> 00:57:02.416
+<i>Strict policy, apparently.</i>
+
+00:57:02.541 --> 00:57:04.791
+And so, he asked
+what it would take
+
+00:57:04.916 --> 00:57:09.416
+for me to, uh,
+get the information for him.
+
+00:57:09.541 --> 00:57:11.541
+[stammers] And if the church
+found out,
+
+00:57:11.666 --> 00:57:13.000
+I could have been defrocked.
+
+00:57:13.125 --> 00:57:15.375
+-Ew.
+-It means fired.
+
+00:57:15.500 --> 00:57:16.458
+[Tim] Mmm-hmm.
+
+00:57:16.583 --> 00:57:18.208
+But that money
+was never for me.
+
+00:57:18.333 --> 00:57:20.875
+This church
+is in dire need of repair.
+
+00:57:21.958 --> 00:57:25.833
+George came to me in need,
+and I took advantage.
+
+00:57:26.750 --> 00:57:28.500
+Caleb is not the Bad Shepherd.
+
+00:57:31.333 --> 00:57:32.291
+I am.
+
+00:57:32.416 --> 00:57:34.000
+[Tim] And Rebecca.
+
+00:57:34.125 --> 00:57:35.375
+-Miss Hampstead.
+-[gasps]
+
+00:57:36.958 --> 00:57:39.291
+Enjoying the Denbrook
+Cultural Festival?
+
+00:57:40.041 --> 00:57:41.166
+[chuckles]
+
+00:57:41.291 --> 00:57:43.250
+Yeah. Very much so.
+
+00:57:44.125 --> 00:57:46.416
+[blows air through tongue]
+Easy. Easy questions.
+
+00:57:46.541 --> 00:57:48.500
+Um, where were you
+between the hours
+
+00:57:48.625 --> 00:57:50.958
+of 8:00 and 11:00
+on the night of the murder?
+
+00:57:51.833 --> 00:57:54.000
+Uh, at the hotel
+near the airport.
+
+00:57:54.125 --> 00:57:56.750
+I, uh, checked in
+and then was watching TV.
+
+00:57:56.875 --> 00:57:58.083
+-[Elliot] Hmm.
+-Couldn't sleep.
+
+00:57:58.208 --> 00:57:59.625
+-Jet lag. You know?
+-[Elliot chuckles] Yeah.
+
+00:58:00.291 --> 00:58:01.708
+[stammers] What
+were you watching?
+
+00:58:03.625 --> 00:58:06.083
+24-hour news channel.
+[chuckles]
+
+00:58:06.833 --> 00:58:10.833
+-24-hour news channel.
+-24-hour news channel.
+
+00:58:10.958 --> 00:58:13.541
+All right. That...
+That answers that.
+
+00:58:13.666 --> 00:58:14.875
+Have a lovely day,
+Miss Hampstead.
+
+00:58:15.000 --> 00:58:17.000
+You too. Bye.
+
+00:58:18.083 --> 00:58:19.958
+Or should I say Miss Crampfs?
+
+00:58:26.250 --> 00:58:30.625
+Chastity Crampfs
+is your real name, isn't it?
+
+00:58:30.750 --> 00:58:32.583
+And could you think
+of any reason
+
+00:58:32.708 --> 00:58:34.375
+why someone would
+wanna change their name
+
+00:58:34.500 --> 00:58:35.583
+from Chastity Crampfs?
+
+00:58:35.708 --> 00:58:38.416
+Fair enough. But I did run
+a background check.
+
+00:58:38.541 --> 00:58:40.791
+And it turns out,
+at one point,
+
+00:58:40.916 --> 00:58:42.833
+you were associating
+with a known criminal.
+
+00:58:42.958 --> 00:58:44.500
+Multiple counts of forgery.
+
+00:58:44.625 --> 00:58:46.166
+Even shared
+a bank account with him.
+
+00:58:46.291 --> 00:58:47.875
+[Rebecca] Okay.
+I don't know anyone
+
+00:58:48.000 --> 00:58:49.125
+who doesn't regret
+a relationship.
+
+00:58:49.250 --> 00:58:51.750
+And I didn't even know.
+And it was three years ago.
+
+00:58:51.875 --> 00:58:54.291
+Right. Oh, so not
+a recent breakup, then.
+
+00:58:54.416 --> 00:58:56.500
+-Not a real name.
+-A bit of a pattern.
+
+00:58:56.625 --> 00:58:58.000
+Bit of a pattern
+emerging here.
+
+00:58:58.125 --> 00:58:59.875
+[Tim] So, tell me.
+
+00:59:00.000 --> 00:59:01.916
+Have you ever been
+near the yew tree
+
+00:59:02.041 --> 00:59:03.291
+on the church grounds?
+
+00:59:03.416 --> 00:59:05.041
+No. Absolutely not.
+
+00:59:05.166 --> 00:59:08.541
+[Tim] And what about
+George's farm?
+
+00:59:09.166 --> 00:59:10.458
+Ever been there?
+
+00:59:11.625 --> 00:59:12.708
+Never.
+
+00:59:14.083 --> 00:59:15.458
+[Lily] Caleb had the lease...
+
+00:59:15.583 --> 00:59:17.416
+Oh, but then Beth said...
+
+00:59:17.541 --> 00:59:18.875
+Why is Rebecca lying?
+
+00:59:19.000 --> 00:59:20.500
+And what's a vegetarian?
+
+00:59:20.625 --> 00:59:22.000
+How does it all fit?
+
+00:59:22.125 --> 00:59:24.750
+Think, you stupid sheep,
+think!
+
+00:59:24.875 --> 00:59:28.125
+Stop thinking so hard, Lily.
+The daughter clearly did it.
+
+00:59:28.250 --> 00:59:29.583
+[Ronnie] 'Course
+it was Rebecca!
+
+00:59:29.708 --> 00:59:30.583
+She's right.
+
+00:59:30.708 --> 00:59:31.875
+-[all clamoring]
+-[Winter Lamb] No, she didn't!
+
+00:59:32.875 --> 00:59:35.375
+You don't know her.
+She's good.
+
+00:59:35.500 --> 00:59:39.291
+She smells just like George,
+and George loved me.
+
+00:59:39.416 --> 00:59:42.125
+Loved you?
+No one loves a winter lamb.
+
+00:59:42.250 --> 00:59:45.000
+One winter lamb
+sticking up for another.
+
+00:59:45.125 --> 00:59:46.416
+That's how it is with them.
+
+00:59:46.541 --> 00:59:49.083
+Wait. What did you say?
+
+00:59:49.208 --> 00:59:51.875
+I said George loved me.
+
+00:59:52.000 --> 00:59:54.125
+No. Before that.
+
+00:59:54.250 --> 00:59:57.833
+You said Rebecca
+smells just like George.
+
+00:59:57.958 --> 01:00:00.208
+Someone said that before.
+
+01:00:00.333 --> 01:00:02.083
+The wrong someone.
+
+01:00:02.208 --> 01:00:03.166
+Who?
+
+01:00:04.791 --> 01:00:06.291
+-You.
+-[all gasping]
+
+01:00:06.416 --> 01:00:07.666
+What, me?
+
+01:00:07.791 --> 01:00:09.541
+[stammers]
+What do you mean, me?
+
+01:00:09.666 --> 01:00:10.750
+-Cloud did it!
+-[Cloud gasps]
+
+01:00:10.875 --> 01:00:12.708
+Murderer!
+
+01:00:12.833 --> 01:00:16.041
+No. But she has been
+keeping a secret.
+
+01:00:16.166 --> 01:00:17.708
+-Haven't you, Cloud?
+-[Cloud] What do you--
+
+01:00:17.833 --> 01:00:21.000
+Last night, you said Rebecca
+smelled just like George.
+
+01:00:21.125 --> 01:00:23.833
+But she was so far away,
+you couldn't have known
+
+01:00:23.958 --> 01:00:25.083
+-what she smelled like.
+-[Cloud] But--
+
+01:00:25.208 --> 01:00:28.291
+Unless Rebecca
+had been here before.
+
+01:00:28.416 --> 01:00:30.458
+[Cloud groans]
+
+01:00:30.583 --> 01:00:33.375
+But it's so beautiful!
+
+01:00:33.500 --> 01:00:35.500
+What is so beautiful?
+
+01:00:35.625 --> 01:00:37.625
+Uh... [sighs]
+
+01:00:37.750 --> 01:00:39.458
+The Thing With No end.
+
+01:00:43.083 --> 01:00:45.208
+-[flock gasping]
+-You see?
+
+01:00:45.333 --> 01:00:48.875
+It's so beautiful
+and it just never ends.
+
+01:00:49.000 --> 01:00:50.458
+I've looked at it for hours,
+
+01:00:50.583 --> 01:00:53.541
+going around
+and around and around.
+
+01:00:53.666 --> 01:00:55.750
+-Cloud. Cloud!
+-[gasps]
+
+01:00:55.875 --> 01:00:57.625
+Where did you get this?
+
+01:00:58.250 --> 01:00:59.166
+[Cloud sighs]
+
+01:01:00.291 --> 01:01:02.000
+Rebecca was here that night.
+
+01:01:02.125 --> 01:01:04.458
+-[surprised chatter]
+-The night George was killed.
+
+01:01:04.583 --> 01:01:06.125
+[flock gasping]
+
+01:01:06.250 --> 01:01:08.458
+[sighs] I woke up
+and I felt hungry,
+
+01:01:08.583 --> 01:01:11.083
+so I wandered into the meadow
+and... and there she was.
+
+01:01:11.208 --> 01:01:12.750
+<i>And she saw me, and she said,</i>
+
+01:01:12.875 --> 01:01:14.416
+"Aren't you pretty?"
+Because I am.
+
+01:01:14.541 --> 01:01:16.375
+I mean, I am...
+I am the most beautiful.
+
+01:01:16.500 --> 01:01:18.208
+And... And she stroked
+my wool,
+
+01:01:18.333 --> 01:01:19.916
+<i>and the Thing slipped off,</i>
+<i>so I--</i>
+
+01:01:20.041 --> 01:01:21.208
+-[flock murmuring]
+-[sheep] Oh.
+
+01:01:21.333 --> 01:01:22.916
+I decided that...
+
+01:01:23.500 --> 01:01:25.583
+that it should be mine.
+
+01:01:25.708 --> 01:01:28.333
+So we're having things now.
+
+01:01:28.458 --> 01:01:30.583
+Sheep don't have things!
+
+01:01:30.708 --> 01:01:31.791
+I know, but...
+
+01:01:32.750 --> 01:01:34.000
+It has no end.
+
+01:01:35.125 --> 01:01:36.958
+And so it's solved.
+
+01:01:37.083 --> 01:01:38.291
+Rebecca did it.
+
+01:01:38.416 --> 01:01:39.250
+Murderer!
+
+01:01:39.375 --> 01:01:42.791
+A bit of shiny metal
+doesn't solve anything.
+
+01:01:42.916 --> 01:01:45.250
+Of course it does.
+It's evidence.
+
+01:01:45.375 --> 01:01:47.958
+Evidence, huh?
+Evidence of what?
+
+01:01:48.083 --> 01:01:50.750
+She told the policeman
+she'd never been here,
+
+01:01:50.875 --> 01:01:52.541
+but she was here last night
+
+01:01:52.666 --> 01:01:54.833
+and the very night
+George was murdered.
+
+01:01:54.958 --> 01:01:57.541
+She's a liar, she's a fake,
+and she's a winter--
+
+01:01:58.375 --> 01:02:00.291
+She's a what?
+
+01:02:00.416 --> 01:02:01.375
+Say it.
+
+01:02:02.291 --> 01:02:04.333
+You've hated her
+from the start.
+
+01:02:04.458 --> 01:02:05.291
+All of you!
+
+01:02:05.416 --> 01:02:07.125
+-[low chatter]
+-And why?
+
+01:02:07.250 --> 01:02:10.000
+Because she happened
+to be born in winter.
+
+01:02:10.125 --> 01:02:14.250
+[gasps] The worst crime
+imaginable.
+
+01:02:14.375 --> 01:02:15.875
+Haven't you heard?
+
+01:02:16.000 --> 01:02:17.541
+-No one wants you.
+-[Winter Lamb whimpers]
+
+01:02:17.666 --> 01:02:19.541
+You deserve nothing!
+
+01:02:19.666 --> 01:02:20.791
+[Winter Lamb pants]
+
+01:02:21.583 --> 01:02:24.583
+That's what a winter lamb
+hears, over and over,
+
+01:02:24.708 --> 01:02:26.000
+until one day,
+
+01:02:26.666 --> 01:02:29.000
+he starts to believe
+it's true.
+
+01:02:29.125 --> 01:02:31.208
+-Sebastian--
+-She didn't do it.
+
+01:02:31.333 --> 01:02:32.500
+But how do you know?
+
+01:02:32.625 --> 01:02:35.125
+Because I looked in her eyes.
+
+01:02:35.250 --> 01:02:36.750
+Because it's obvious.
+
+01:02:37.791 --> 01:02:39.583
+But not to you.
+
+01:02:39.708 --> 01:02:41.041
+No.
+
+01:02:41.166 --> 01:02:43.791
+Not to some flock of sheep.
+
+01:02:45.250 --> 01:02:47.125
+We're your flock of sheep.
+
+01:02:48.916 --> 01:02:50.500
+I told you.
+
+01:02:50.625 --> 01:02:52.416
+I don't have a flock.
+
+01:02:54.125 --> 01:02:55.375
+I never have.
+
+01:02:58.375 --> 01:02:59.500
+Lily.
+
+01:03:00.333 --> 01:03:02.625
+What should we do
+about The Thing With No end?
+
+01:03:06.625 --> 01:03:08.083
+Of course!
+
+01:03:08.208 --> 01:03:09.333
+The chauffeur!
+
+01:03:09.458 --> 01:03:10.625
+[sheep bleats]
+
+01:03:13.333 --> 01:03:14.416
+What?
+
+01:03:17.166 --> 01:03:18.250
+What?
+
+01:03:20.833 --> 01:03:21.791
+Hey!
+
+01:03:24.833 --> 01:03:26.125
+Come on. Hey!
+
+01:03:28.208 --> 01:03:29.250
+Hey!
+
+01:03:30.875 --> 01:03:32.500
+Get back here!
+
+01:03:32.625 --> 01:03:34.000
+That's my hat!
+
+01:03:35.000 --> 01:03:36.291
+Stop! Stop it!
+
+01:03:36.416 --> 01:03:38.125
+[panting]
+
+01:04:05.083 --> 01:04:06.166
+[bleating]
+
+01:04:07.750 --> 01:04:09.583
+Thanks. Thanks for this.
+
+01:04:13.541 --> 01:04:14.958
+Thank you, all.
+
+01:04:15.791 --> 01:04:17.791
+[flock bleating]
+
+01:04:17.916 --> 01:04:19.375
+[bleating continues]
+
+01:04:20.583 --> 01:04:21.750
+[knocking on door]
+
+01:04:22.750 --> 01:04:24.208
+-[inaudible]
+-[door unlocks]
+
+01:04:25.875 --> 01:04:27.666
+I think I found
+something of yours.
+
+01:04:28.833 --> 01:04:30.291
+Matches your other ones.
+
+01:04:31.791 --> 01:04:33.416
+Uh, it must have slipped off.
+Thank you--
+
+01:04:33.541 --> 01:04:35.541
+I found it in George's meadow.
+
+01:04:36.291 --> 01:04:38.458
+You know, where
+you've never been before?
+
+01:04:40.041 --> 01:04:42.625
+I have a warrant
+to search your room.
+
+01:04:45.000 --> 01:04:46.750
+[Rebecca] <i>What are</i>
+<i>you looking for?</i>
+
+01:04:46.875 --> 01:04:48.083
+[Tim] <i>I don't know.</i>
+
+01:04:59.625 --> 01:05:01.333
+Never been
+near the yew trees, eh?
+
+01:05:01.458 --> 01:05:02.416
+I knew it.
+
+01:05:02.541 --> 01:05:04.916
+[stammers] I haven't.
+I wouldn't.
+
+01:05:05.041 --> 01:05:06.916
+Tim, Tim,
+you have to believe me.
+
+01:05:07.041 --> 01:05:08.833
+Officer Derry.
+
+01:05:09.625 --> 01:05:12.750
+Officer Derry, I...
+I swear to you.
+
+01:05:12.875 --> 01:05:14.875
+I didn't kill my father.
+
+01:05:15.000 --> 01:05:17.666
+Rebecca Hampstead,
+you're under arrest
+
+01:05:17.791 --> 01:05:19.291
+for the murder
+of George Hardy.
+
+01:05:26.333 --> 01:05:27.500
+<i>Suspect interview,</i>
+
+01:05:27.625 --> 01:05:32.041
+Chastity Crampfs,
+aka Rebecca Hampstead.
+
+01:05:33.083 --> 01:05:35.791
+Miss Crampfs, will you confirm
+you're waiving your right
+
+01:05:35.916 --> 01:05:37.666
+to have a lawyer present?
+
+01:05:37.791 --> 01:05:41.166
+Yes. I don't care. I'm ready
+to tell you everything.
+
+01:05:41.291 --> 01:05:43.500
+Right.
+Then let's start with this.
+
+01:05:44.166 --> 01:05:46.500
+Were you on George Hardy's
+property
+
+01:05:46.625 --> 01:05:48.250
+on the night of his murder?
+
+01:05:49.125 --> 01:05:50.250
+Yes.
+
+01:05:50.375 --> 01:05:53.875
+All right, so all those
+pretty smiles and,
+
+01:05:54.000 --> 01:05:55.500
+"Oh, you're very smart,
+Detective."
+
+01:05:55.625 --> 01:05:57.875
+That's all been an act.
+Hasn't it?
+
+01:05:58.000 --> 01:05:59.666
+Fact is, you haven't said
+a single true thing
+
+01:05:59.791 --> 01:06:00.750
+since you showed up.
+
+01:06:01.916 --> 01:06:04.375
+The letters.
+That part was true.
+
+01:06:05.083 --> 01:06:06.708
+He wrote that he had been
+looking for me
+
+01:06:06.833 --> 01:06:07.958
+for over 20 years,
+
+01:06:08.083 --> 01:06:11.083
+and he was starting
+to get things in order,
+
+01:06:11.208 --> 01:06:12.958
+and he even sent me
+a copy of his will.
+
+01:06:13.083 --> 01:06:14.916
+The will where you get
+30 million
+
+01:06:15.041 --> 01:06:17.375
+or the will where you get
+a bunch of sheep?
+
+01:06:17.500 --> 01:06:19.500
+No, the one without the money.
+
+01:06:21.375 --> 01:06:23.375
+He said that he wanted
+to meet me.
+
+01:06:23.500 --> 01:06:24.458
+So...
+
+01:06:25.583 --> 01:06:26.875
+You fly in,
+
+01:06:27.000 --> 01:06:31.000
+and then you drive to his farm
+on the night of the murder.
+
+01:06:32.375 --> 01:06:33.708
+And then what happened?
+
+01:06:35.375 --> 01:06:36.458
+We talked.
+
+01:06:36.583 --> 01:06:37.666
+About what?
+
+01:06:39.666 --> 01:06:41.125
+Sheep.
+
+01:06:41.250 --> 01:06:43.083
+[chuckles] We talked
+about sheep.
+
+01:06:43.208 --> 01:06:45.125
+And their names.
+
+01:06:45.250 --> 01:06:48.000
+He said every sheep
+should have a name.
+
+01:06:48.125 --> 01:06:52.041
+And he picked each one
+by looking in their eyes.
+
+01:06:52.708 --> 01:06:54.875
+And he wanted me
+to have them some day.
+
+01:06:57.291 --> 01:06:58.375
+He picked me.
+
+01:07:00.125 --> 01:07:02.750
+But, look, I'm not stupid.
+
+01:07:03.083 --> 01:07:05.833
+I was alone with him the night
+that he was murdered.
+
+01:07:05.958 --> 01:07:08.791
+And the new will
+and all of that money
+
+01:07:08.916 --> 01:07:10.958
+and everything
+that's happened in my past?
+
+01:07:11.083 --> 01:07:13.958
+My only choice was to lie.
+
+01:07:15.625 --> 01:07:17.250
+You have to believe me.
+
+01:07:18.958 --> 01:07:21.041
+"I lied, so believe me."
+
+01:07:22.750 --> 01:07:23.625
+Is that right?
+
+01:07:27.250 --> 01:07:31.291
+In the morning, you'll be
+taken to the county court
+
+01:07:31.416 --> 01:07:33.875
+and officially charged
+with the willful murder
+
+01:07:34.000 --> 01:07:35.208
+of George Hardy.
+
+01:07:35.333 --> 01:07:36.500
+[cell door slams]
+
+01:07:37.708 --> 01:07:39.125
+[cell door locking]
+
+01:07:49.083 --> 01:07:51.125
+So it was her.
+
+01:07:54.500 --> 01:07:55.875
+[sighing] Money.
+
+01:07:56.000 --> 01:07:57.208
+What people won't do.
+
+01:07:58.500 --> 01:08:01.916
+Apparently, George Hardy
+picked the wrong lamb.
+
+01:08:03.750 --> 01:08:05.958
+Oh, speaking of which,
+Van Vuuren has agreed
+
+01:08:06.083 --> 01:08:08.583
+to sell his sheep and land
+to Caleb Merrow,
+
+01:08:08.708 --> 01:08:11.833
+so we'll do the paperwork
+for that tomorrow at noon.
+
+01:08:12.750 --> 01:08:13.583
+Good.
+
+01:08:14.458 --> 01:08:17.041
+I misjudged you, Officer.
+
+01:08:17.166 --> 01:08:18.208
+I did.
+
+01:08:18.333 --> 01:08:20.541
+It seems
+you're not the Fool after all.
+
+01:08:21.583 --> 01:08:22.541
+Well done.
+
+01:08:23.375 --> 01:08:24.583
+[window whirring]
+
+01:08:24.708 --> 01:08:26.000
+[engine starts]
+
+01:08:36.250 --> 01:08:37.708
+[panting anxiously]
+
+01:08:42.333 --> 01:08:43.291
+[grunts]
+
+01:08:43.416 --> 01:08:45.333
+[thudding]
+
+01:08:56.166 --> 01:08:57.250
+[chuckles softly]
+
+01:09:01.666 --> 01:09:02.958
+-[Mopple] Lily?
+-[Lily gasps]
+
+01:09:04.125 --> 01:09:06.875
+What are you doing out here?
+[pants] Are you okay?
+
+01:09:07.000 --> 01:09:10.125
+Yes. I'm more than okay.
+I'm happy.
+
+01:09:10.250 --> 01:09:11.541
+They arrested Rebecca.
+
+01:09:11.666 --> 01:09:13.541
+Tomorrow, Caleb
+will become our new shepherd.
+
+01:09:13.666 --> 01:09:15.000
+That's wonderful.
+
+01:09:15.125 --> 01:09:16.583
+She denies it all, of course,
+
+01:09:16.708 --> 01:09:19.000
+but I'm right
+and Sebastian's wrong.
+
+01:09:20.833 --> 01:09:23.541
+Rebecca did do it, right?
+
+01:09:23.666 --> 01:09:24.916
+Of course she did it.
+
+01:09:25.041 --> 01:09:26.166
+Thank you.
+
+01:09:26.291 --> 01:09:28.208
+Because you said she did it.
+
+01:09:29.041 --> 01:09:29.916
+What?
+
+01:09:30.041 --> 01:09:31.916
+Well, you always figure out
+how the stories end
+
+01:09:32.041 --> 01:09:33.458
+before they end.
+
+01:09:33.583 --> 01:09:34.833
+I trust you.
+
+01:09:34.958 --> 01:09:36.916
+But those were just stories.
+
+01:09:37.041 --> 01:09:39.708
+This is a real person.
+What if I'm--
+
+01:09:39.833 --> 01:09:40.791
+[Mopple] Lily, look.
+
+01:09:40.916 --> 01:09:43.833
+Caleb's meadow is just on
+the other side of that fence.
+
+01:09:43.958 --> 01:09:46.458
+Why don't we go over
+and meet our new flock?
+
+01:09:47.250 --> 01:09:49.708
+But we've never gone
+into Caleb's meadow before.
+
+01:09:49.833 --> 01:09:52.708
+Well, we never used
+to cross roads before either.
+
+01:09:52.833 --> 01:09:53.833
+Come on.
+
+01:10:02.291 --> 01:10:03.291
+[distant owl hoots]
+
+01:10:04.291 --> 01:10:06.458
+It's like we're in a cloud.
+
+01:10:06.583 --> 01:10:08.458
+Do you think
+we're in the wrong place?
+
+01:10:08.583 --> 01:10:10.041
+I don't think so.
+
+01:10:10.875 --> 01:10:12.125
+[bells clanking]
+
+01:10:12.708 --> 01:10:13.958
+Hello? [breathes heavily]
+
+01:10:15.375 --> 01:10:17.125
+[bells clanking]
+
+01:10:17.250 --> 01:10:19.250
+[foreboding music playing]
+
+01:10:31.708 --> 01:10:32.833
+[pants]
+
+01:10:32.958 --> 01:10:34.666
+Hello! [chuckles]
+
+01:10:34.791 --> 01:10:36.875
+Uh, my name is Lily.
+
+01:10:37.000 --> 01:10:39.375
+And this is Mopple.
+
+01:10:39.791 --> 01:10:42.000
+We're from the other part
+of the meadow.
+
+01:10:43.416 --> 01:10:45.541
+Caleb's gonna be
+our shepherd too.
+
+01:10:46.458 --> 01:10:48.125
+[speaking French]
+
+01:10:49.833 --> 01:10:50.958
+[in English] What?
+
+01:10:51.083 --> 01:10:53.166
+[sheep whispering in French]
+
+01:10:53.291 --> 01:10:54.375
+[bell clanking]
+
+01:10:58.666 --> 01:10:59.708
+[in English] Run.
+
+01:10:59.833 --> 01:11:01.625
+What? [stammers] But I don't--
+
+01:11:01.750 --> 01:11:04.750
+-[distant dog 1 barking]
+-[nervous chatter]
+
+01:11:04.875 --> 01:11:06.166
+[dog 2 barking]
+
+01:11:07.541 --> 01:11:08.375
+[Mopple] Hmm.
+
+01:11:08.500 --> 01:11:12.333
+Maybe we shouldn't have
+come over here, actually.
+
+01:11:12.458 --> 01:11:13.708
+We should go.
+
+01:11:13.833 --> 01:11:15.541
+[Lily] Uh, okay.
+
+01:11:15.666 --> 01:11:17.041
+Which way is back?
+
+01:11:17.166 --> 01:11:18.791
+[Mopple] I think over there?
+
+01:11:23.458 --> 01:11:25.208
+Look! There's a light.
+
+01:11:28.750 --> 01:11:30.416
+This must be Caleb's barn.
+
+01:11:30.541 --> 01:11:31.375
+[sighs in relief]
+
+01:11:31.500 --> 01:11:33.625
+We'll be safe in here.
+
+01:11:37.083 --> 01:11:38.333
+[Mopple] Hmm.
+
+01:11:38.458 --> 01:11:41.000
+I don't think
+this is a barn at all.
+
+01:11:42.166 --> 01:11:43.916
+-Maybe we should, uh...
+-Wait.
+
+01:11:45.166 --> 01:11:46.500
+What is this?
+
+01:11:46.625 --> 01:11:47.916
+[Mopple gasps]
+
+01:11:48.041 --> 01:11:50.333
+[whispers] Lily, don't.
+We should go.
+
+01:11:54.291 --> 01:11:56.083
+{\an8}[Lily] Why is that sheep
+like that?
+
+01:11:56.208 --> 01:11:58.625
+{\an8}[stammers] What are they
+doing to them?
+
+01:12:00.375 --> 01:12:01.666
+[Lily gasps]
+
+01:12:01.791 --> 01:12:03.250
+Caleb? [gasps]
+
+01:12:04.625 --> 01:12:05.583
+He...
+
+01:12:06.250 --> 01:12:07.083
+He...
+
+01:12:07.208 --> 01:12:08.458
+[dogs growling]
+
+01:12:08.583 --> 01:12:10.500
+Oh. Hello, doggies.
+
+01:12:10.625 --> 01:12:12.791
+[barking]
+
+01:12:12.916 --> 01:12:14.083
+What's wrong with them?
+
+01:12:14.208 --> 01:12:15.666
+[barking continues]
+
+01:12:15.791 --> 01:12:17.750
+We're not supposed to be here.
+
+01:12:17.875 --> 01:12:19.083
+[barking, growling]
+
+01:12:19.208 --> 01:12:20.583
+Run!
+
+01:12:20.708 --> 01:12:22.333
+[both panting]
+
+01:12:23.875 --> 01:12:25.250
+[panting]
+
+01:12:25.375 --> 01:12:26.583
+[barking]
+
+01:12:27.250 --> 01:12:28.916
+[both grunt]
+
+01:12:29.041 --> 01:12:30.208
+[barking]
+
+01:12:30.333 --> 01:12:31.708
+[barking continues]
+
+01:12:31.833 --> 01:12:33.208
+Faster, Lily!
+
+01:12:33.333 --> 01:12:35.375
+I can't!
+I'm not gonna make it!
+
+01:12:37.333 --> 01:12:38.583
+[whimpers]
+
+01:12:38.708 --> 01:12:41.041
+[Lily pants, gasps]
+
+01:12:41.166 --> 01:12:43.541
+-[growling]
+-[barking]
+
+01:12:43.666 --> 01:12:46.000
+[hooves thudding]
+
+01:12:46.125 --> 01:12:47.166
+[exhales sharply]
+
+01:12:47.291 --> 01:12:48.541
+Sebastian.
+
+01:12:48.666 --> 01:12:50.250
+[barking]
+
+01:12:50.375 --> 01:12:51.541
+[Sebastian grunts]
+
+01:12:51.666 --> 01:12:53.541
+-[pants, grunts]
+-[dog whimpers]
+
+01:12:53.666 --> 01:12:54.500
+[Sebastian grunts]
+
+01:12:54.625 --> 01:12:56.291
+[dog growling]
+
+01:12:56.416 --> 01:12:58.750
+[Sebastian grunting]
+
+01:13:00.000 --> 01:13:02.291
+[growling]
+
+01:13:02.416 --> 01:13:03.625
+[Lily shudders]
+
+01:13:03.750 --> 01:13:04.583
+No!
+
+01:13:05.291 --> 01:13:06.125
+[Sebastian grunts]
+
+01:13:06.250 --> 01:13:07.500
+-[dog growls]
+-[Sebastian groans]
+
+01:13:07.625 --> 01:13:08.625
+[Lily yelps]
+
+01:13:08.750 --> 01:13:09.708
+[dogs growling]
+
+01:13:09.833 --> 01:13:11.833
+[Sebastian grunts]
+
+01:13:11.958 --> 01:13:13.541
+[Sebastian panting]
+
+01:13:13.666 --> 01:13:16.125
+[snorting, huffing]
+
+01:13:16.250 --> 01:13:17.916
+[both whimpering]
+
+01:13:18.041 --> 01:13:19.500
+[Sebastian panting]
+
+01:13:19.625 --> 01:13:20.750
+Sebastian.
+
+01:13:20.875 --> 01:13:23.291
+Oh, thank goodness you came.
+I thought we were gonna--
+
+01:13:23.416 --> 01:13:24.291
+[Sebastian grunts]
+
+01:13:26.000 --> 01:13:27.041
+Sebastian?
+
+01:13:28.291 --> 01:13:29.583
+Sebastian, get up!
+
+01:13:29.708 --> 01:13:32.375
+-[Sebastian panting]
+-[Lily breathing heavily]
+
+01:13:32.500 --> 01:13:33.583
+Lily.
+
+01:13:33.708 --> 01:13:35.708
+[Lily breathes heavily]
+
+01:13:35.833 --> 01:13:37.625
+I... I can't.
+
+01:13:38.958 --> 01:13:40.291
+Why not?
+
+01:13:40.416 --> 01:13:41.875
+I... I don't unders--
+
+01:13:43.583 --> 01:13:44.583
+[groans]
+
+01:13:46.000 --> 01:13:46.833
+[exhales sharply]
+
+01:13:47.583 --> 01:13:49.291
+-Lily.
+-[Lily inhales softly]
+
+01:13:49.416 --> 01:13:50.625
+He's dying.
+
+01:13:50.750 --> 01:13:51.916
+[stammers] What?
+
+01:13:52.666 --> 01:13:55.000
+No, sheep don't die.
+
+01:13:55.125 --> 01:13:56.791
+[voice breaking]
+We turn into clouds.
+
+01:13:56.916 --> 01:14:01.041
+Turn into a cloud, Sebastian.
+Turn into a cloud. [sobs]
+
+01:14:03.083 --> 01:14:04.250
+[Sebastian panting]
+
+01:14:04.375 --> 01:14:05.708
+I wish I could.
+
+01:14:06.875 --> 01:14:08.958
+You shouldn't have come back.
+
+01:14:10.000 --> 01:14:11.958
+Why did you come back?
+
+01:14:12.083 --> 01:14:13.291
+[Sebastian] I had to.
+
+01:14:14.333 --> 01:14:15.791
+You're my flock.
+
+01:14:21.708 --> 01:14:23.208
+[exhales sharply]
+
+01:14:23.333 --> 01:14:25.375
+I see him. [pants]
+
+01:14:26.708 --> 01:14:28.375
+I see George.
+
+01:14:30.583 --> 01:14:31.583
+[Sebastian pants]
+
+01:14:33.125 --> 01:14:33.958
+[grunts]
+
+01:14:35.625 --> 01:14:36.458
+[exhales]
+
+01:14:39.250 --> 01:14:40.166
+No.
+
+01:14:43.541 --> 01:14:45.583
+-[distant barking]
+-[gasps]
+
+01:14:46.333 --> 01:14:47.166
+[Mopple] It's Caleb.
+
+01:14:47.291 --> 01:14:48.875
+We have to go.
+
+01:14:49.000 --> 01:14:49.958
+Now, Lily!
+
+01:14:52.541 --> 01:14:54.000
+[Lily gasping]
+
+01:14:54.125 --> 01:14:55.666
+-[barking continues]
+-[panting]
+
+01:15:01.833 --> 01:15:04.083
+Wake up! Everybody, wake up!
+
+01:15:04.208 --> 01:15:06.166
+-Wake up!
+-Wake up!
+
+01:15:06.291 --> 01:15:07.583
+-Wake up!
+-Wake up!
+
+01:15:07.708 --> 01:15:09.375
+Follow me!
+
+01:15:09.500 --> 01:15:10.958
+-[sheep 1] Follow her!
+-[sheep 2] Follow her!
+
+01:15:11.083 --> 01:15:11.916
+[sheep 3] Follow her!
+
+01:15:12.041 --> 01:15:13.291
+[Wool-Eyes] Follow her!
+
+01:15:17.541 --> 01:15:18.375
+[gasps]
+
+01:15:20.250 --> 01:15:22.000
+-Stop!
+-[flock gasping]
+
+01:15:22.125 --> 01:15:24.958
+Don't stop!
+We need to leave! Now!
+
+01:15:25.083 --> 01:15:27.458
+Leave?
+What are you talking about?
+
+01:15:28.500 --> 01:15:30.541
+-Sebastian is dead.
+-[flock gasping]
+
+01:15:30.666 --> 01:15:33.375
+But you said
+we turn into clouds.
+
+01:15:33.500 --> 01:15:35.041
+I was wrong.
+
+01:15:35.166 --> 01:15:36.541
+We die.
+
+01:15:36.666 --> 01:15:38.791
+I saw Sebastian die.
+
+01:15:38.916 --> 01:15:42.833
+And if we don't leave tonight,
+we're all gonna die too.
+
+01:15:42.958 --> 01:15:43.791
+[flock gasps]
+
+01:15:43.916 --> 01:15:45.916
+Caleb turns sheep
+into food and--
+
+01:15:46.041 --> 01:15:49.583
+Stop it! Stop saying
+these awful things!
+
+01:15:49.708 --> 01:15:52.000
+I'm forgetting this happened.
+Right now!
+
+01:15:52.125 --> 01:15:53.583
+-No, you can't!
+-Why?
+
+01:15:53.708 --> 01:15:56.041
+Why would I want to remember
+something so terrible?
+
+01:15:56.166 --> 01:15:57.583
+Because it's true!
+
+01:15:57.708 --> 01:15:59.875
+It's not true
+if I don't remember.
+
+01:16:00.000 --> 01:16:00.833
+-One.
+-Wait!
+
+01:16:00.958 --> 01:16:01.791
+Two.
+
+01:16:01.916 --> 01:16:04.333
+Ronnie, Reggie, please.
+Be brave.
+
+01:16:04.458 --> 01:16:05.708
+Three!
+
+01:16:08.875 --> 01:16:10.125
+[cheerfully] Oh, hello, Lily.
+
+01:16:10.916 --> 01:16:12.208
+I have a question.
+
+01:16:12.333 --> 01:16:13.875
+What are we doing out here?
+
+01:16:14.000 --> 01:16:16.041
+I don't like it.
+Back to the meadow.
+
+01:16:16.166 --> 01:16:17.166
+Back to the meadow.
+
+01:16:17.833 --> 01:16:21.375
+No! Don't! Please don't!
+
+01:16:23.833 --> 01:16:24.791
+[sighs]
+
+01:16:24.916 --> 01:16:27.500
+Sebastian was right about us.
+
+01:16:27.625 --> 01:16:30.750
+We're just stupid,
+frightened sheep.
+
+01:16:32.541 --> 01:16:37.375
+Tonight isn't the first time
+I saw a sheep die, is it?
+
+01:16:38.041 --> 01:16:38.958
+No.
+
+01:16:39.083 --> 01:16:41.125
+How many times
+have I forgotten?
+
+01:16:41.250 --> 01:16:42.166
+[Mopple sighs]
+
+01:16:42.708 --> 01:16:44.208
+More than I can count.
+
+01:16:45.000 --> 01:16:48.708
+You've carried this all alone,
+all this time?
+
+01:16:49.833 --> 01:16:50.750
+Yes.
+
+01:16:51.416 --> 01:16:53.250
+I remember every bad thing.
+
+01:16:54.083 --> 01:16:56.541
+But I remember
+good things, too.
+
+01:16:58.416 --> 01:17:01.208
+I remember my mother's face.
+
+01:17:01.333 --> 01:17:04.458
+I remember old friends
+and how they loved me.
+
+01:17:04.583 --> 01:17:07.333
+And you will
+remember Sebastian.
+
+01:17:09.500 --> 01:17:11.000
+It hurts.
+
+01:17:11.125 --> 01:17:12.958
+[crying] Remembering hurts.
+
+01:17:13.750 --> 01:17:14.916
+I know.
+
+01:17:15.041 --> 01:17:17.875
+But if you forget,
+you can't save the others
+
+01:17:18.000 --> 01:17:19.916
+and Sebastian
+will have died for nothing.
+
+01:17:20.916 --> 01:17:22.500
+Caleb will come for you
+tomorrow,
+
+01:17:22.625 --> 01:17:24.833
+and you'll follow
+your new shepherd
+
+01:17:24.958 --> 01:17:28.041
+just like the other
+"stupid, frightened sheep."
+
+01:17:28.708 --> 01:17:31.250
+And... we'll all die.
+
+01:17:33.000 --> 01:17:36.000
+I'm sorry, Lily. I am.
+
+01:17:36.125 --> 01:17:39.875
+But it's our memory that keeps
+the ones we love alive.
+
+01:17:54.583 --> 01:17:55.958
+[cries softly]
+
+01:18:00.666 --> 01:18:02.333
+I'm sorry, Sebastian.
+
+01:18:03.750 --> 01:18:05.875
+I'm not as strong as you.
+
+01:18:06.000 --> 01:18:08.291
+[inhales sharply]
+
+01:18:08.416 --> 01:18:10.666
+One. Two.
+
+01:18:10.791 --> 01:18:12.791
+[George] <i>You may be</i>
+<i>the smartest sheep,</i>
+
+01:18:12.916 --> 01:18:15.000
+<i>but Mopple's the wisest.</i>
+
+01:18:18.958 --> 01:18:20.333
+{\an8}I lost someone once.
+
+01:18:21.916 --> 01:18:23.333
+{\an8}I know it hurts.
+
+01:18:23.916 --> 01:18:27.375
+But, in time, all that's left
+is all that's good.
+
+01:18:28.208 --> 01:18:30.708
+Are you...
+Are you really here?
+
+01:18:31.458 --> 01:18:33.000
+'Course I am.
+
+01:18:33.125 --> 01:18:35.333
+'Cause you didn't forget me.
+See how that works?
+
+01:18:35.458 --> 01:18:37.500
+Well, yes,
+
+01:18:37.625 --> 01:18:39.666
+but it doesn't matter anymore.
+Caleb is gonna--
+
+01:18:39.791 --> 01:18:42.375
+Caleb isn't gonna do
+anything to my flock
+
+01:18:42.500 --> 01:18:44.208
+because you're gonna
+save them.
+
+01:18:44.875 --> 01:18:45.916
+But how?
+
+01:18:46.041 --> 01:18:47.708
+You already know how.
+
+01:18:48.750 --> 01:18:51.416
+If you figure out
+who really did it, Lily,
+
+01:18:51.541 --> 01:18:54.000
+Rebecca will get the flock
+and you'll all be safe.
+
+01:18:54.125 --> 01:18:56.833
+But what if I don't know
+who really did it?
+
+01:18:56.958 --> 01:18:59.458
+Honestly, I've read you
+dozens of these stories.
+
+01:18:59.583 --> 01:19:01.166
+They follow very simple rules.
+
+01:19:01.291 --> 01:19:03.291
+But the rules haven't helped.
+
+01:19:03.416 --> 01:19:05.458
+The police know
+it wasn't a drifter.
+
+01:19:05.583 --> 01:19:07.500
+Anyone could have returned
+to the scene of the crime.
+
+01:19:07.625 --> 01:19:10.083
+Rebecca was the unexpected
+person and--
+
+01:19:10.208 --> 01:19:11.083
+And?
+
+01:19:13.500 --> 01:19:16.375
+The victim
+is the most important clue.
+
+01:19:18.833 --> 01:19:22.208
+[Lily echoing] <i>Grassy green</i>
+<i>stain on his hand.</i>
+
+01:19:22.333 --> 01:19:24.791
+[Cloud] <i>So beautifully dyed.</i>
+
+01:19:24.916 --> 01:19:26.375
+[Harbottle]
+<i>Picked the wrong lamb.</i>
+
+01:19:26.500 --> 01:19:28.416
+[Winter Lamb]
+<i>I saw George's ghost.</i>
+
+01:19:30.250 --> 01:19:31.500
+Attagirl.
+
+01:19:39.250 --> 01:19:40.083
+[gasps]
+
+01:19:40.208 --> 01:19:42.500
+-Rebecca didn't do it!
+-Lily, slow down.
+
+01:19:42.625 --> 01:19:44.375
+I know who did.
+And if I can prove it--
+
+01:19:44.500 --> 01:19:46.083
+-[Mopple] Prove what?
+-It wasn't a grass stain.
+
+01:19:46.208 --> 01:19:47.708
+-And how am I supposed to--
+-Wait, wait, wait.
+
+01:19:47.833 --> 01:19:49.166
+Unless... Yes!
+
+01:19:49.291 --> 01:19:51.625
+Oh, but I'm too big.
+I can't fit.
+
+01:19:51.750 --> 01:19:53.041
+[Winter Lamb]
+I can fit places.
+
+01:19:55.333 --> 01:19:57.750
+And I didn't forget.
+
+01:19:59.750 --> 01:20:01.666
+Put your whole leg in.
+
+01:20:02.416 --> 01:20:03.875
+[grunts]
+
+01:20:04.000 --> 01:20:06.791
+[Lily] Now put your other leg
+into that one.
+
+01:20:07.583 --> 01:20:08.916
+[panting]
+
+01:20:10.708 --> 01:20:12.708
+Okay. It's time to go.
+
+01:20:18.125 --> 01:20:18.958
+[Rebecca grunts]
+
+01:20:22.000 --> 01:20:24.541
+-[Winter Lamb grunts]
+-That's it. Through there.
+
+01:20:38.833 --> 01:20:39.750
+[bleats]
+
+01:20:40.916 --> 01:20:41.833
+[bleats]
+
+01:20:47.083 --> 01:20:48.416
+-[gasps, chuckles]
+-[thuds]
+
+01:20:49.416 --> 01:20:50.666
+[hooves clopping]
+
+01:20:56.833 --> 01:20:59.208
+-[Lily bleating]
+-[bleats]
+
+01:21:07.291 --> 01:21:08.583
+[bleating]
+
+01:21:17.875 --> 01:21:20.208
+This is such a weird town.
+
+01:21:21.833 --> 01:21:24.416
+Do you think it'll work?
+
+01:21:24.541 --> 01:21:27.458
+I don't know.
+All we can do is wait.
+
+01:21:30.041 --> 01:21:33.791
+What did George say to you
+the morning before he died?
+
+01:21:34.750 --> 01:21:37.250
+I saw him whisper
+something in your ear.
+
+01:21:38.333 --> 01:21:42.500
+He said a winter lamb
+is the best lamb.
+
+01:21:56.625 --> 01:21:58.875
+-Hey, Ronnie.
+-Yeah?
+
+01:21:59.000 --> 01:22:02.500
+You ever get the feeling,
+like, you forgot something?
+
+01:22:02.625 --> 01:22:05.750
+You mean something that Lily
+tried to tell us last night,
+
+01:22:05.875 --> 01:22:07.083
+but then we chose to forget it
+
+01:22:07.208 --> 01:22:09.125
+because we were,
+you know, scared?
+
+01:22:09.250 --> 01:22:11.875
+Well, not scared.
+Definitely not scared.
+
+01:22:12.000 --> 01:22:14.083
+But yeah. That's it.
+
+01:22:14.208 --> 01:22:15.333
+What should we do, brother?
+
+01:22:15.458 --> 01:22:17.166
+I have no idea,
+but we can't do nothing,
+
+01:22:17.291 --> 01:22:19.208
+so we gotta do... something!
+
+01:22:20.208 --> 01:22:21.083
+That's genius.
+
+01:22:21.208 --> 01:22:23.791
+Well, come on, then!
+Are we lambs?
+
+01:22:23.916 --> 01:22:26.375
+[both] Or are we rams?
+
+01:22:30.500 --> 01:22:32.375
+-[breathes deeply]
+-[door unlocks]
+
+01:22:32.500 --> 01:22:33.500
+[keys jingle]
+
+01:22:34.000 --> 01:22:36.250
+-[soft gasp]
+-[door closes]
+
+01:22:39.416 --> 01:22:40.458
+Who did this?
+
+01:22:41.083 --> 01:22:43.333
+A lamb came in
+through the transom.
+
+01:22:43.458 --> 01:22:46.458
+A lamb came in
+through the transom.
+
+01:22:46.583 --> 01:22:47.791
+It gets worse.
+
+01:22:48.625 --> 01:22:51.125
+It can't get worse
+than a transom lamb.
+
+01:22:52.000 --> 01:22:53.916
+I'm pretty sure
+
+01:22:54.541 --> 01:22:58.500
+the lamb was taking orders
+from another sheep.
+
+01:23:00.333 --> 01:23:01.875
+[smacks lips] Right.
+
+01:23:02.000 --> 01:23:03.333
+[inhales sharply]
+
+01:23:06.958 --> 01:23:08.208
+[Rebecca] What does it mean?
+
+01:23:14.541 --> 01:23:16.291
+[stammers] It means...
+
+01:23:19.250 --> 01:23:20.291
+Nothing.
+
+01:23:21.375 --> 01:23:22.541
+Nothing!
+
+01:23:23.166 --> 01:23:24.041
+They're sheep.
+
+01:23:25.625 --> 01:23:26.583
+[quietly] They're sheep.
+
+01:23:34.750 --> 01:23:36.375
+[sighs]
+
+01:23:38.000 --> 01:23:39.166
+[indistinct chatter]
+
+01:23:41.375 --> 01:23:43.791
+[man chattering excitedly]
+
+01:24:02.666 --> 01:24:03.500
+[camera clicking]
+
+01:24:09.666 --> 01:24:11.875
+If you sign the transfer,
+we'll be off.
+
+01:24:12.000 --> 01:24:13.083
+All right.
+
+01:24:15.000 --> 01:24:16.666
+It didn't work.
+
+01:24:16.791 --> 01:24:18.333
+Give him a moment.
+
+01:24:18.458 --> 01:24:19.791
+[pen clicks]
+
+01:24:21.041 --> 01:24:22.000
+[officer] Officer Derry.
+
+01:24:23.416 --> 01:24:24.500
+The form.
+
+01:24:26.541 --> 01:24:27.500
+[pen clicks]
+
+01:24:30.000 --> 01:24:31.916
+[inhales sharply] Don't do it.
+
+01:24:56.666 --> 01:24:57.833
+[bleats]
+
+01:24:59.666 --> 01:25:01.583
+Stop! Stop!
+
+01:25:01.708 --> 01:25:02.833
+[indistinct chatter]
+
+01:25:03.541 --> 01:25:05.875
+She didn't do it.
+She didn't do it.
+
+01:25:07.000 --> 01:25:08.500
+But I know who did.
+
+01:25:08.625 --> 01:25:10.125
+I know who killed
+George Hardy.
+
+01:25:10.250 --> 01:25:12.375
+[Lily pants]
+
+01:25:15.791 --> 01:25:16.791
+Mrs. Harbottle.
+
+01:25:16.916 --> 01:25:18.041
+-[gasps]
+-[indistinct chatter]
+
+01:25:18.166 --> 01:25:19.166
+N... No, no, no!
+
+01:25:19.291 --> 01:25:24.000
+It turns out I was the Fool,
+but maybe not anymore.
+
+01:25:25.708 --> 01:25:28.208
+From the moment Rebecca
+Hampstead arrived in Denbrook,
+
+01:25:28.333 --> 01:25:29.916
+she was the prime suspect.
+
+01:25:30.041 --> 01:25:32.375
+She had the strongest motive.
+
+01:25:32.500 --> 01:25:33.375
+Plus, she lied.
+
+01:25:33.500 --> 01:25:35.708
+She was at George's farm
+on the night of the murder.
+
+01:25:35.833 --> 01:25:38.166
+Exactly what the killer
+was counting on.
+
+01:25:38.291 --> 01:25:40.291
+A killer we never considered
+
+01:25:40.416 --> 01:25:43.208
+because they weren't
+even a suspect.
+
+01:25:43.333 --> 01:25:47.083
+The only person
+named in George's will
+
+01:25:47.208 --> 01:25:49.125
+who had an alibi.
+
+01:25:49.250 --> 01:25:50.833
+A perfect alibi.
+
+01:25:50.958 --> 01:25:52.708
+A not-even-in-the-country
+alibi.
+
+01:25:52.833 --> 01:25:54.333
+-You don't mean--
+-[Tim] Yes.
+
+01:25:54.458 --> 01:25:55.666
+Peter Van Vuuren.
+
+01:25:55.791 --> 01:25:57.083
+-Of South Africa.
+-[Tim] Of South Africa.
+
+01:25:57.208 --> 01:25:59.916
+Rebecca, you said George
+sent you a copy of his will.
+
+01:26:00.041 --> 01:26:03.416
+But I'm betting he also
+sent one to your brother,
+
+01:26:03.541 --> 01:26:06.000
+who did some digging
+and found out
+
+01:26:06.125 --> 01:26:07.708
+what George was really worth,
+
+01:26:07.833 --> 01:26:10.541
+and decided he was gonna
+get that 30 million
+
+01:26:10.666 --> 01:26:12.416
+even if he had to kill for it.
+
+01:26:12.541 --> 01:26:13.916
+[people murmuring]
+
+01:26:14.041 --> 01:26:16.416
+But he had
+one massive problem.
+
+01:26:16.541 --> 01:26:17.416
+Motive!
+
+01:26:18.041 --> 01:26:19.250
+I wanted to say that.
+
+01:26:19.375 --> 01:26:21.875
+Well, you just made it seem
+like I was the murderer.
+
+01:26:23.875 --> 01:26:24.750
+Motive!
+
+01:26:25.500 --> 01:26:28.708
+If a murder victim leaves you
+a fortune in his will,
+
+01:26:28.833 --> 01:26:30.291
+then you're the prime suspect.
+
+01:26:30.416 --> 01:26:32.375
+But if he leaves it
+to your sister
+
+01:26:32.500 --> 01:26:33.916
+and she goes down
+for the crime...
+
+01:26:34.041 --> 01:26:36.125
+The money automatically
+goes to the--
+
+01:26:36.250 --> 01:26:37.250
+[both] Next of kin!
+
+01:26:37.375 --> 01:26:39.416
+Would you, please?
+I'm having a moment here.
+
+01:26:39.541 --> 01:26:40.583
+I'm so sorry.
+
+01:26:41.208 --> 01:26:43.416
+-The next of kin!
+-[surprised chatter]
+
+01:26:43.541 --> 01:26:45.583
+The only question left...
+
+01:26:45.708 --> 01:26:47.333
+is where is he hiding?
+
+01:26:47.458 --> 01:26:49.333
+Who am I looking for?
+
+01:26:49.458 --> 01:26:52.166
+Someone hiding in plain sight.
+
+01:26:52.291 --> 01:26:54.333
+Someone who changed his name.
+
+01:26:55.125 --> 01:26:58.875
+For example,
+Chastity Crampfs...
+
+01:26:59.000 --> 01:27:01.083
+became Rebecca Hampstead.
+
+01:27:01.208 --> 01:27:02.791
+And Peter Van Vuuren...
+
+01:27:02.916 --> 01:27:04.500
+And Peter Van Vuuren...
+
+01:27:06.833 --> 01:27:08.583
+-became Elliot Matthews.
+-[people gasping]
+
+01:27:08.708 --> 01:27:10.000
+-[man] No!
+-[woman] Oh!
+
+01:27:11.208 --> 01:27:13.000
+George's ghost.
+
+01:27:14.500 --> 01:27:16.000
+I never guess.
+
+01:27:17.250 --> 01:27:19.000
+Tim, you're embarrassing
+yourself.
+
+01:27:19.625 --> 01:27:22.000
+I don't live in South Africa.
+I live in this country,
+
+01:27:22.125 --> 01:27:23.208
+and I work for a newspaper--
+
+01:27:23.333 --> 01:27:24.333
+I know.
+
+01:27:24.458 --> 01:27:26.250
+I assume you've been living
+in this country
+
+01:27:26.375 --> 01:27:29.375
+for some time now
+as "Elliot Matthews."
+
+01:27:29.500 --> 01:27:31.458
+Putting on an accent.
+
+01:27:31.583 --> 01:27:34.416
+George told you
+
+01:27:34.541 --> 01:27:35.916
+Rebecca was coming to visit,
+didn't he?
+
+01:27:36.708 --> 01:27:39.458
+A perfect opportunity
+for you to frame her.
+
+01:27:39.583 --> 01:27:43.083
+All you needed was some reason
+to come to Denbrook.
+
+01:27:44.000 --> 01:27:46.250
+<i>-Like a cultural festival.</i>
+-[camera clicks]
+
+01:27:46.375 --> 01:27:48.333
+<i>Your plan was simple.</i>
+
+01:27:48.458 --> 01:27:49.291
+<i>First...</i>
+
+01:27:49.833 --> 01:27:51.833
+make a big show
+of leaving Denbrook.
+
+01:27:52.375 --> 01:27:55.458
+<i>Then some convenient</i>
+<i>car trouble brought you back.</i>
+
+01:27:55.583 --> 01:27:56.416
+[thuds]
+
+01:27:57.875 --> 01:27:59.625
+<i>Later that night,</i>
+
+01:27:59.750 --> 01:28:01.458
+<i>-after Rebecca left...</i>
+-[knocking on door]
+
+01:28:01.583 --> 01:28:04.041
+<i>...you did</i>
+<i>what you came to do.</i>
+
+01:28:06.583 --> 01:28:08.375
+-[thunderclap]
+-[George] Come, come, come.
+
+01:28:14.791 --> 01:28:15.791
+[softly] Peter.
+
+01:28:17.666 --> 01:28:19.500
+-[glasses clink]
+-Cheers.
+
+01:28:19.625 --> 01:28:21.333
+[Tim] <i>You poisoned</i>
+<i>your father...</i>
+
+01:28:22.208 --> 01:28:23.041
+[George grunts]
+
+01:28:23.166 --> 01:28:25.291
+<i>...and planted the new will.</i>
+
+01:28:25.416 --> 01:28:27.916
+[thunder rumbling]
+
+01:28:28.625 --> 01:28:30.666
+<i>But your father was stronger</i>
+<i>than you expected.</i>
+
+01:28:31.291 --> 01:28:32.583
+[George grunts]
+
+01:28:32.708 --> 01:28:34.125
+There was a struggle.
+
+01:28:34.250 --> 01:28:35.916
+[both grunting]
+
+01:28:36.583 --> 01:28:37.791
+[Elliot cries out]
+
+01:28:37.916 --> 01:28:40.625
+[both grunting]
+
+01:28:41.375 --> 01:28:42.375
+[Elliot panting]
+
+01:28:42.500 --> 01:28:45.083
+[Tim] <i>But you won out</i>
+<i>in the end.</i>
+
+01:28:45.791 --> 01:28:47.750
+All that was left to do
+was make sure
+
+01:28:47.875 --> 01:28:49.916
+your sister took the fall.
+
+01:28:50.041 --> 01:28:52.125
+You were clever.
+
+01:28:52.250 --> 01:28:54.208
+The day Mrs. Harbottle
+read the will,
+
+01:28:54.333 --> 01:28:55.833
+you knew she'd kick you out.
+
+01:28:56.541 --> 01:28:57.666
+[doors slam]
+
+01:28:57.791 --> 01:28:59.458
+[Harbottle on phone]
+<i>Mr. Van Vuuren,</i>
+
+01:28:59.583 --> 01:29:02.083
+<i>this is Lydia Harbottle.</i>
+<i>Can you hear me?</i>
+
+01:29:02.208 --> 01:29:03.125
+[in South African accent]<i> Ja.</i>
+
+01:29:03.250 --> 01:29:04.458
+Very good connection.
+Thank you.
+
+01:29:04.583 --> 01:29:06.000
+[Tim] As for the yew berries,
+
+01:29:06.125 --> 01:29:08.958
+planting those
+in Rebecca's room was a cinch.
+
+01:29:09.083 --> 01:29:10.583
+<i>Small-town inn.</i>
+
+01:29:10.708 --> 01:29:12.083
+<i>Easy-to-pick locks.</i>
+
+01:29:13.416 --> 01:29:15.250
+It was nearly perfect, Elliot.
+
+01:29:15.375 --> 01:29:16.833
+But what you didn't know
+
+01:29:16.958 --> 01:29:18.833
+and what I didn't understand
+until now
+
+01:29:18.958 --> 01:29:20.625
+is that you left behind
+a clue.
+
+01:29:21.666 --> 01:29:23.250
+George's hands.
+
+01:29:23.375 --> 01:29:25.125
+George's hands.
+
+01:29:25.250 --> 01:29:26.583
+[indistinct chatter]
+
+01:29:26.708 --> 01:29:30.000
+One was blue, one was green.
+
+01:29:30.125 --> 01:29:32.958
+<i>The blue made sense.</i>
+<i>The stuff that made him rich.</i>
+
+01:29:33.083 --> 01:29:34.875
+But green? Why green?
+
+01:29:35.916 --> 01:29:38.833
+And then some friends...
+
+01:29:39.250 --> 01:29:42.000
+some friends who are
+very good detectives...
+
+01:29:45.916 --> 01:29:47.041
+made me think.
+
+01:29:48.291 --> 01:29:50.041
+Blue and yellow.
+
+01:29:50.166 --> 01:29:54.041
+Blue and yellow
+mixed together make green.
+
+01:29:54.166 --> 01:29:57.291
+Like the green stain
+I saw on George's hand.
+
+01:29:57.416 --> 01:29:58.791
+Like the green stain I saw
+
+01:29:58.916 --> 01:30:01.125
+on a blue pillowcase
+at the inn
+
+01:30:01.250 --> 01:30:04.208
+that you slept on
+the night you murdered George!
+
+01:30:05.708 --> 01:30:08.500
+Both of George's hands
+were stained blue that night
+
+01:30:08.625 --> 01:30:09.708
+from the medication.
+
+01:30:09.833 --> 01:30:12.875
+But then he grabbed
+someone's hair.
+
+01:30:13.000 --> 01:30:13.875
+[George grunts]
+
+01:30:14.000 --> 01:30:17.750
+Someone who used the kind of
+quick, cheap yellow hair dye
+
+01:30:17.875 --> 01:30:19.708
+that runs a little
+in the rain,
+
+01:30:19.833 --> 01:30:22.625
+<i>-turning George's hand green.</i>
+-[thunderclap]
+
+01:30:22.750 --> 01:30:26.208
+Someone who hastily went blond
+before coming to Denbrook
+
+01:30:26.333 --> 01:30:29.291
+because he didn't want anyone
+to think, even for a second,
+
+01:30:29.416 --> 01:30:32.041
+that he looked too much
+like his sister or his father.
+
+01:30:32.791 --> 01:30:33.875
+Isn't that right, Peter?
+
+01:30:34.000 --> 01:30:34.833
+Yes!
+
+01:30:34.958 --> 01:30:35.875
+No!
+
+01:30:36.500 --> 01:30:39.458
+No, it's nuts
+and completely unproveable.
+
+01:30:39.583 --> 01:30:42.291
+Then you won't mind
+
+01:30:42.416 --> 01:30:43.541
+if I take this.
+
+01:30:47.958 --> 01:30:49.000
+Not at all.
+
+01:30:50.458 --> 01:30:53.750
+[stammers] I must admit
+I am not a natural blond.
+
+01:30:53.875 --> 01:30:55.416
+Though I suppose
+I must also confess
+
+01:30:55.541 --> 01:30:58.666
+that I bleach my teeth
+and wax my chest. [chuckles]
+
+01:30:58.791 --> 01:31:00.916
+I'll bet he's a vegetarian.
+
+01:31:01.041 --> 01:31:03.750
+So if you have the gall
+to charge me with murder
+
+01:31:03.875 --> 01:31:05.333
+because there's dye
+in my hair,
+
+01:31:05.458 --> 01:31:07.250
+[chuckles] you won't be
+taking me to court.
+
+01:31:07.375 --> 01:31:09.500
+I will be taking you.
+
+01:31:11.750 --> 01:31:13.708
+[Tim chuckles]
+
+01:31:13.833 --> 01:31:15.416
+You misunderstand.
+
+01:31:15.541 --> 01:31:18.000
+It's not the dye
+in your hair I want.
+
+01:31:18.125 --> 01:31:19.333
+It's the DNA.
+
+01:31:21.458 --> 01:31:23.916
+If you are George Hardy's son,
+
+01:31:24.041 --> 01:31:26.458
+then you are Peter Van Vuuren,
+
+01:31:26.583 --> 01:31:30.250
+and you are the real killer.
+
+01:31:31.416 --> 01:31:32.375
+Gotcha.
+
+01:31:33.541 --> 01:31:34.458
+Gotcha.
+
+01:31:40.708 --> 01:31:42.125
+Bravo, Tim.
+
+01:31:42.916 --> 01:31:44.083
+[people gasping]
+
+01:31:45.250 --> 01:31:46.958
+-[Elliot panting]
+-[woman] Oh! Ooh.
+
+01:31:47.083 --> 01:31:48.208
+[Elliot grunts, pants]
+
+01:31:48.333 --> 01:31:49.541
+Hey!
+
+01:31:49.666 --> 01:31:50.875
+[indistinct chatter]
+
+01:31:51.000 --> 01:31:52.583
+[Ronnie grunts]
+
+01:31:52.708 --> 01:31:53.708
+-[Reggie grunts]
+-Lily!
+
+01:31:53.833 --> 01:31:55.833
+Ronnie! Reggie! You came!
+
+01:31:55.958 --> 01:31:57.041
+Yes!
+
+01:31:57.625 --> 01:31:58.458
+Why?
+
+01:31:59.458 --> 01:32:00.333
+[engine starts]
+
+01:32:01.083 --> 01:32:02.708
+Hey! Stop! Stop!
+
+01:32:02.833 --> 01:32:06.583
+Because there's a legitimate
+cause for bashing.
+
+01:32:06.708 --> 01:32:07.541
+Thank you.
+
+01:32:07.666 --> 01:32:08.875
+-Finally!
+-Yeah!
+
+01:32:09.000 --> 01:32:10.166
+-[engine revving]
+-[gasps]
+
+01:32:11.250 --> 01:32:12.125
+[tires screeching]
+
+01:32:12.708 --> 01:32:13.916
+-[thuds]
+-[grunts]
+
+01:32:14.791 --> 01:32:15.833
+-[groans]
+-[thudding]
+
+01:32:15.958 --> 01:32:18.000
+[Reggie and Ronnie grunting]
+
+01:32:18.125 --> 01:32:20.083
+-[surprised chatter]
+-[grunts]
+
+01:32:22.416 --> 01:32:23.541
+[whimpers]
+
+01:32:23.666 --> 01:32:24.500
+[Elliot crying]
+
+01:32:25.500 --> 01:32:26.333
+[hooves thudding]
+
+01:32:28.583 --> 01:32:29.750
+Justice?
+
+01:32:29.875 --> 01:32:32.291
+No. Just us.
+
+01:32:32.416 --> 01:32:33.416
+[both] Yeah!
+
+01:32:33.541 --> 01:32:35.625
+[both bleating]
+
+01:32:37.125 --> 01:32:40.666
+He had millions!
+D'ya hear? Millions!
+
+01:32:40.791 --> 01:32:42.041
+I'm his son.
+
+01:32:42.166 --> 01:32:44.041
+Those millions
+should have been mine.
+
+01:32:46.791 --> 01:32:49.500
+[police siren wails]
+
+01:32:49.625 --> 01:32:51.791
+[indistinct chatter]
+
+01:32:51.916 --> 01:32:53.083
+[woman 1] I know
+she's American,
+
+01:32:53.208 --> 01:32:54.166
+but I knew it wasn't her.
+
+01:32:54.291 --> 01:32:55.458
+[woman 2] Oh, well,
+that's not true.
+
+01:32:56.750 --> 01:32:57.625
+Oh.
+
+01:32:58.333 --> 01:32:59.250
+Look.
+
+01:32:59.416 --> 01:33:03.458
+On behalf of the entire
+Denbrook Police Department,
+
+01:33:03.583 --> 01:33:05.625
+our sincerest apologies.
+
+01:33:05.750 --> 01:33:08.666
+Is that, uh,
+anyone besides you?
+
+01:33:09.250 --> 01:33:10.166
+No.
+
+01:33:11.250 --> 01:33:13.000
+I'd like to apologize.
+
+01:33:14.833 --> 01:33:15.666
+Thanks.
+
+01:33:21.250 --> 01:33:22.375
+Aw. [chuckles]
+
+01:33:24.875 --> 01:33:25.916
+Look.
+
+01:33:27.333 --> 01:33:28.291
+Transom lamb?
+
+01:33:29.750 --> 01:33:31.541
+-Transom lamb.
+-[Tim chuckles]
+
+01:33:33.166 --> 01:33:35.375
+Think you'll... you'll stick
+around for a little while?
+
+01:33:35.500 --> 01:33:37.208
+You know,
+I just got out of prison,
+
+01:33:37.333 --> 01:33:40.458
+so I might just...
+kind of just need a moment.
+
+01:33:40.583 --> 01:33:41.875
+[bleating]
+
+01:33:42.000 --> 01:33:44.250
+[laughing]
+
+01:33:45.375 --> 01:33:47.250
+[hesitates] I hope you do.
+
+01:33:47.875 --> 01:33:48.750
+Maybe.
+
+01:33:53.750 --> 01:33:54.875
+-[bleats]
+-[Hillcoate] Rebecca.
+
+01:33:55.583 --> 01:33:58.791
+Rebecca. I just want to say
+I can't apologize enough.
+
+01:33:58.916 --> 01:34:00.916
+[Rebecca and Hillcoate
+conversing indistinctly]
+
+01:34:09.875 --> 01:34:11.833
+[grunts, pants]
+
+01:34:11.958 --> 01:34:14.000
+[Ronnie scatting upbeat tune]
+
+01:34:14.125 --> 01:34:16.125
+[Reggie scatting along]
+
+01:34:18.250 --> 01:34:19.083
+[sighs]
+
+01:34:23.583 --> 01:34:24.583
+[Rebecca exhales]
+
+01:34:26.041 --> 01:34:27.500
+On the house.
+
+01:34:29.375 --> 01:34:30.416
+Thanks.
+
+01:34:33.833 --> 01:34:35.875
+-[luggage handle clicks]
+-Wait.
+
+01:34:40.625 --> 01:34:42.583
+I'm sorry.
+
+01:34:43.958 --> 01:34:44.916
+[inhales]
+
+01:34:45.041 --> 01:34:46.416
+I saw this.
+
+01:34:46.958 --> 01:34:50.208
+It was in the mailbag
+and, I mean,
+
+01:34:50.333 --> 01:34:51.791
+I didn't know
+you were his daughter.
+
+01:34:51.916 --> 01:34:54.958
+And I bought him
+that rose-scented paper, so...
+
+01:34:55.083 --> 01:34:56.916
+[groans] You can imagine.
+
+01:34:57.041 --> 01:34:58.541
+You were in love with him?
+
+01:34:59.458 --> 01:35:01.250
+[chuckles] Well...
+
+01:35:01.708 --> 01:35:04.166
+And was he in love with--
+
+01:35:04.291 --> 01:35:05.541
+[laughs] He tried.
+
+01:35:06.416 --> 01:35:08.958
+But George loved your mother.
+
+01:35:09.083 --> 01:35:11.875
+And there was no place
+in his heart for someone else.
+
+01:35:13.416 --> 01:35:15.833
+I used to wonder
+what she looked like.
+
+01:35:15.958 --> 01:35:17.500
+But now I don't have to.
+
+01:35:19.458 --> 01:35:21.666
+I wish I asked him
+more about her.
+
+01:35:23.750 --> 01:35:25.083
+I don't even know her name.
+
+01:35:25.625 --> 01:35:26.625
+Lily.
+
+01:35:27.458 --> 01:35:28.916
+Her name was Lily.
+
+01:35:31.250 --> 01:35:32.166
+[Rebecca chuckles softly]
+
+01:35:35.125 --> 01:35:38.208
+[Harbottle] <i>Of course</i>
+<i>the forged will is not valid.</i>
+
+01:35:38.333 --> 01:35:41.291
+{\an8}But you will still get, um,
+his sheep and all his land.
+
+01:35:41.416 --> 01:35:42.250
+Miss Hampstead.
+
+01:35:42.375 --> 01:35:43.541
+-So that's nice.
+-Okay.
+
+01:35:43.666 --> 01:35:44.708
+Sorry to bother you.
+
+01:35:45.625 --> 01:35:47.791
+See, Ham and I [sighs]
+
+01:35:47.916 --> 01:35:49.791
+we've been trying to get
+this new business going.
+
+01:35:49.916 --> 01:35:52.250
+-We got a good bank behind us.
+-Yeah.
+
+01:35:52.375 --> 01:35:53.583
+And basically we wanna buy
+
+01:35:53.708 --> 01:35:55.916
+your father's field
+and sheep from you.
+
+01:35:56.625 --> 01:35:57.541
+Two Murderers.
+
+01:35:57.666 --> 01:35:58.958
+-Excuse me?
+-Huh?
+
+01:35:59.083 --> 01:36:00.291
+My father found out
+
+01:36:00.416 --> 01:36:02.166
+you were slaughtering sheep
+on his land.
+
+01:36:02.791 --> 01:36:04.583
+You're the Two Murderers.
+
+01:36:04.708 --> 01:36:06.583
+-[Caleb chuckles]
+-Well, the two businessmen.
+
+01:36:06.708 --> 01:36:08.791
+That are offering
+a good price.
+
+01:36:08.916 --> 01:36:09.916
+-Yeah.
+-[Caleb chuckles]
+
+01:36:10.041 --> 01:36:11.541
+Do you even know their names?
+
+01:36:11.666 --> 01:36:12.708
+Huh?
+
+01:36:12.833 --> 01:36:14.458
+[Rebecca] He told me
+their names.
+
+01:36:14.583 --> 01:36:16.750
+There's Lily.
+
+01:36:18.916 --> 01:36:20.166
+And Mopple.
+
+01:36:20.291 --> 01:36:22.833
+And the big puffy one...
+[chuckles] ...is Cloud.
+
+01:36:22.958 --> 01:36:24.333
+He said she's such a diva.
+
+01:36:24.458 --> 01:36:27.041
+And the one with wool in
+his eyes, he named Wool-Eyes,
+
+01:36:27.166 --> 01:36:29.083
+which I thought was
+a bit obvious, but he said,
+
+01:36:29.208 --> 01:36:30.416
+"Hey, I've never heard
+any complaints."
+
+01:36:30.541 --> 01:36:32.708
+-Yeah, look, Miss Hampstead--
+-[Rebecca] Hardy.
+
+01:36:33.375 --> 01:36:35.625
+Rebecca Hardy.
+I'm changing it.
+
+01:36:35.750 --> 01:36:38.208
+[inhales] I don't do
+name changes.
+
+01:36:38.333 --> 01:36:39.875
+So sorry, Miss Hardy,
+but good luck.
+
+01:36:40.000 --> 01:36:41.333
+-[Rebecca] Oh.
+-Bye.
+
+01:36:42.833 --> 01:36:43.666
+Wait.
+
+01:36:44.375 --> 01:36:46.791
+What if I wanted
+even more sheep?
+
+01:36:47.333 --> 01:36:49.541
+Could I get a good bank
+behind me?
+
+01:36:50.708 --> 01:36:53.666
+[Sir Ritchfield] Lily, how did
+you manage to solve it?
+
+01:36:53.791 --> 01:36:55.708
+Of course she solved it.
+
+01:36:55.833 --> 01:36:57.791
+She's the smartest sheep
+in the world.
+
+01:36:57.916 --> 01:37:01.958
+Oh, well. I used to think
+I was, but I'm not.
+
+01:37:02.083 --> 01:37:03.208
+I made mistakes.
+
+01:37:03.333 --> 01:37:05.208
+I should have listened
+when the Winter Lamb said
+
+01:37:05.333 --> 01:37:07.000
+he saw George's ghost,
+but instead I--
+
+01:37:07.125 --> 01:37:08.666
+-[sheep bleating]
+-[distant bells blanking]
+
+01:37:08.791 --> 01:37:09.958
+[bells clanking]
+
+01:37:14.000 --> 01:37:16.208
+[George's flock exclaiming
+in surprise]
+
+01:37:16.333 --> 01:37:18.291
+Come on, guys. Come on.
+
+01:37:18.416 --> 01:37:20.166
+[chuckles]
+
+01:37:20.291 --> 01:37:22.375
+[Daisy, Oliver
+and Pickles laughing]
+
+01:37:29.250 --> 01:37:30.833
+What's your name?
+Do you have any siblings?
+
+01:37:30.958 --> 01:37:33.791
+How long have you been here?
+I have a thousand questions.
+
+01:37:33.916 --> 01:37:36.000
+-[bells clank]
+-Oh! [chuckles] Excuse me.
+
+01:37:36.125 --> 01:37:37.000
+[female sheep
+replies in French]
+
+01:37:38.750 --> 01:37:40.416
+Where is your face?
+
+01:37:41.291 --> 01:37:42.125
+[grunts]
+
+01:37:42.250 --> 01:37:43.083
+[gasps]
+
+01:37:43.208 --> 01:37:45.208
+You have orf.
+
+01:37:45.333 --> 01:37:47.166
+I have orf!
+
+01:37:47.291 --> 01:37:48.583
+[grunting]
+
+01:37:53.625 --> 01:37:54.666
+Lily.
+
+01:38:01.333 --> 01:38:03.333
+[flock bleating]
+
+01:38:38.750 --> 01:38:40.083
+[muffled sheep bleats]
+
+01:38:47.166 --> 01:38:48.000
+[chuckles]
+
+01:38:54.458 --> 01:38:55.291
+[chuckles softly]
+
+01:38:59.166 --> 01:39:01.166
+[sheep bleating excitedly]
+
+01:39:03.875 --> 01:39:05.416
+-[bleating continues]
+-[chuckles]
+
+01:39:08.166 --> 01:39:09.666
+"Chapter one.
+
+01:39:09.791 --> 01:39:11.916
+[bleating stops]
+
+01:39:12.041 --> 01:39:15.708
+"It's a commonly held belief
+that of all farm animals,
+
+01:39:15.833 --> 01:39:17.458
+sheep are by far
+the stupidest.
+
+01:39:17.583 --> 01:39:21.000
+[flock bleating in protest]
+
+01:39:21.125 --> 01:39:22.875
+[loudly] But, in fact,
+that is not true.
+
+01:39:23.833 --> 01:39:25.625
+Sheep are not
+only intelligent,
+
+01:39:25.750 --> 01:39:27.541
+{\an8}but inspirational.
+
+01:39:27.666 --> 01:39:30.750
+A nursery rhyme
+from centuries ago begins.
+
+01:39:30.875 --> 01:39:32.958
+Little Bo Peep
+has lost her sheep
+
+01:39:33.083 --> 01:39:34.833
+And doesn't know
+where to find them
+
+01:39:34.958 --> 01:39:37.291
+But leave them alone
+And they'll come home
+
+01:39:38.083 --> 01:39:40.208
+<i>Wagging their tails</i>
+<i>behind them"</i>
+
+01:39:40.333 --> 01:39:41.500
+[wind whistling]
+
+01:39:47.291 --> 01:39:49.083
+It's nice up here.
+
+01:39:50.041 --> 01:39:51.583
+But a bit lonely.
+
+01:39:55.250 --> 01:39:56.333
+George.
+
+01:39:57.625 --> 01:39:59.291
+That's your name.
+
+01:40:00.125 --> 01:40:02.375
+Every sheep
+should have a name.
+
+01:40:05.041 --> 01:40:06.208
+George.
+
+01:40:07.250 --> 01:40:08.083
+Hmm?
+
+01:40:10.125 --> 01:40:11.041
+[fusses]
+
+01:40:11.166 --> 01:40:12.291
+[sighs in relief]
+
+01:40:16.333 --> 01:40:19.541
+[Rebecca] "A group
+of sweet, fluffy,
+
+01:40:19.666 --> 01:40:22.208
+adorable, all-white sheep.
+
+01:40:22.333 --> 01:40:24.583
+It is often thought
+that all sheep are alike.
+
+01:40:25.166 --> 01:40:27.875
+But a single flock of sheep
+will, in fact, contain animals
+
+01:40:28.000 --> 01:40:30.625
+with many
+different characteristics
+
+01:40:30.750 --> 01:40:32.166
+and personalities.
+
+01:40:35.541 --> 01:40:37.833
+There will be kind ones,
+friendly ones
+
+01:40:37.958 --> 01:40:39.750
+and standoffish ones.
+
+01:40:39.875 --> 01:40:42.458
+Smart ones and foolish ones.
+Shy ones and show-offs.
+
+01:40:42.583 --> 01:40:45.500
+-Hi, what's your name?
+-My name is George.
+
+01:40:45.625 --> 01:40:46.750
+-[Pickles] Hi, George!
+-[all laughing]
+
+01:40:46.875 --> 01:40:48.375
+[Rebecca] "These gentle
+animals have had a place
+
+01:40:48.500 --> 01:40:50.166
+in virtually
+every human culture,
+
+01:40:50.291 --> 01:40:52.833
+frequently represented
+in both language and imagery
+
+01:40:52.958 --> 01:40:55.291
+as symbols of love,
+innocence and peace.
+
+01:40:55.958 --> 01:40:57.583
+For, like humans,
+
+01:40:57.708 --> 01:41:00.208
+{\an8}they cherish belonging
+above all.
+
+01:41:01.375 --> 01:41:04.125
+{\an8}They allow themselves
+to belong to us.
+
+01:41:04.875 --> 01:41:06.250
+{\an8}And so we find...
+
+01:41:07.416 --> 01:41:09.291
+we belong to them."
+
+01:41:20.791 --> 01:41:21.791
+[wind whooshes]
+
+01:41:33.833 --> 01:41:35.916
+["I'm Gonna Be (500 Miles)"
+playing]
+
+01:41:40.583 --> 01:41:42.083
+<i>♪ When I wake up ♪</i>
+
+01:41:42.208 --> 01:41:43.875
+<i>♪ Well, I know I'm gonna be ♪</i>
+
+01:41:44.000 --> 01:41:47.666
+<i>♪ I'm gonna be the man</i>
+<i>Who wakes up next to you ♪</i>
+
+01:41:47.791 --> 01:41:49.583
+<i>♪ When I go out ♪</i>
+
+01:41:49.708 --> 01:41:51.166
+<i>♪ Yeah, I know I'm gonna be ♪</i>
+
+01:41:51.291 --> 01:41:54.291
+<i>♪ I'm gonna be the man</i>
+<i>Who goes along with you ♪</i>
+
+01:41:55.166 --> 01:41:58.458
+<i>♪ If I get drunk</i>
+<i>Well, I know I'm gonna be ♪</i>
+
+01:41:58.583 --> 01:42:01.916
+<i>♪ I'm gonna be the man</i>
+<i>Who gets drunk next to you ♪</i>
+
+01:42:02.041 --> 01:42:05.750
+{\an8}<i>♪ And if I haver</i>
+<i>Yeah, I know I'm gonna be ♪</i>
+
+01:42:05.875 --> 01:42:09.083
+{\an8}<i>♪ I'm gonna be the man</i>
+<i>Who's haverin' to you ♪</i>
+
+01:42:09.833 --> 01:42:13.291
+{\an8}<i>♪ But I would walk</i>
+<i>Five hundred miles ♪</i>
+
+01:42:13.416 --> 01:42:16.958
+<i>♪ And I would walk</i>
+<i>Five hundred more ♪</i>
+
+01:42:17.083 --> 01:42:21.041
+<i>♪ Just to be the man</i>
+<i>Who walked a thousand ♪</i>
+
+01:42:21.166 --> 01:42:24.250
+<i>♪ Miles to fall down</i>
+<i>At your door ♪</i>
+
+01:42:24.375 --> 01:42:27.583
+<i>♪ When I'm workin'</i>
+<i>Yes, I know I'm gonna be ♪</i>
+
+01:42:27.708 --> 01:42:31.208
+<i>♪ I'm gonna be the man</i>
+<i>Who's workin' hard for you ♪</i>
+
+01:42:31.333 --> 01:42:35.041
+<i>♪ And when the money comes in</i>
+<i>For the work I do ♪</i>
+
+01:42:35.166 --> 01:42:38.291
+<i>♪ I'll pass almost every penny</i>
+<i>On to you ♪</i>
+
+01:42:38.416 --> 01:42:40.708
+<i>-♪ When I come home ♪</i>
+<i>-♪ When I come home ♪</i>
+
+01:42:40.833 --> 01:42:42.208
+<i>♪ Oh, I know I'm gonna be ♪</i>
+
+01:42:42.333 --> 01:42:45.666
+<i>♪ I'm gonna be the man</i>
+<i>Who comes back home to you ♪</i>
+
+01:42:45.791 --> 01:42:49.458
+<i>♪ And if I grow old</i>
+<i>Well, I know I'm gonna be ♪</i>
+
+01:42:49.583 --> 01:42:52.833
+<i>♪ I'm gonna be the man</i>
+<i>Who's growin' old with you ♪</i>
+
+01:42:53.541 --> 01:42:56.958
+<i>♪ But I would walk</i>
+<i>Five hundred miles ♪</i>
+
+01:42:57.083 --> 01:43:00.666
+<i>♪ And I would walk</i>
+<i>Five hundred more ♪</i>
+
+01:43:00.791 --> 01:43:04.750
+<i>♪ Just to be the man</i>
+<i>Who walked a thousand ♪</i>
+
+01:43:04.875 --> 01:43:07.916
+<i>♪ Miles to fall down</i>
+<i>At your door ♪</i>
+
+01:43:08.041 --> 01:43:09.666
+<i>-♪ Da-da da da ♪</i>
+<i>-♪ Da-da da da ♪</i>
+
+01:43:09.791 --> 01:43:11.541
+<i>-♪ Da-da da da ♪</i>
+<i>-♪ Da-da da da ♪</i>
+
+01:43:11.666 --> 01:43:14.875
+<i>♪ Da-da dum diddy dum</i>
+<i>Diddy dum diddy da da da ♪</i>
+
+01:43:15.000 --> 01:43:17.000
+<i>-♪ Da-da da da ♪</i>
+<i>-♪ Da-da da da ♪</i>
+
+01:43:17.125 --> 01:43:18.750
+<i>-♪ Da-da da da ♪</i>
+<i>-♪ Da-da da da ♪</i>
+
+01:43:18.875 --> 01:43:21.458
+<i>♪ Da-da dum diddy dum</i>
+<i>Diddy dum diddy da da da ♪</i>
+
+01:43:26.083 --> 01:43:27.708
+<i>♪ When I'm lonely ♪</i>
+
+01:43:27.833 --> 01:43:29.500
+{\an8}<i>♪ Well, I know I'm gonna be ♪</i>
+
+01:43:29.625 --> 01:43:33.041
+{\an8}<i>♪ I'm gonna be the man</i>
+<i>Who's lonely without you ♪</i>
+
+01:43:33.166 --> 01:43:35.041
+{\an8}<i>♪ And when I'm dreamin' ♪</i>
+
+01:43:35.166 --> 01:43:36.750
+{\an8}<i>♪ Well, I know</i>
+<i>I'm gonna dream ♪</i>
+
+01:43:36.875 --> 01:43:40.333
+{\an8}<i>♪ I'm gonna dream about</i>
+<i>The time when I'm with you ♪</i>
+
+01:43:40.458 --> 01:43:42.583
+{\an8}<i>-♪ When I go out ♪</i>
+<i>-♪ When I go out ♪</i>
+
+01:43:42.708 --> 01:43:44.083
+{\an8}<i>♪ Well, I know I'm gonna be ♪</i>
+
+01:43:44.208 --> 01:43:47.458
+{\an8}<i>♪ I'm gonna be the man</i>
+<i>Who goes along with you ♪</i>
+
+01:43:47.583 --> 01:43:49.708
+{\an8}<i>-♪ And when I come home ♪</i>
+<i>-♪ When I come home ♪</i>
+
+01:43:49.833 --> 01:43:52.708
+{\an8}<i>♪ Yes, I know I'm gonna be</i>
+<i>I'm gonna be the man ♪</i>
+
+01:43:52.833 --> 01:43:54.916
+{\an8}<i>♪ Who comes back home</i>
+<i>With you ♪</i>
+
+01:43:55.041 --> 01:43:59.250
+{\an8}<i>♪ I'm gonna be the man</i>
+<i>Who's comin' home with you ♪</i>
+
+01:44:01.833 --> 01:44:05.250
+{\an8}<i>♪ But I would walk</i>
+<i>Five hundred miles ♪</i>
+
+01:44:05.375 --> 01:44:08.875
+{\an8}<i>♪ And I would walk</i>
+<i>Five hundred more ♪</i>
+
+01:44:09.000 --> 01:44:12.833
+{\an8}<i>♪ Just to be the man</i>
+<i>Who walked a thousand ♪</i>
+
+01:44:12.958 --> 01:44:16.125
+{\an8}<i>♪ Miles to fall down</i>
+<i>At your door ♪</i>
+
+01:44:16.250 --> 01:44:17.958
+{\an8}<i>-♪ Da-da da da ♪</i>
+<i>-♪ Da-da da da ♪</i>
+
+01:44:18.083 --> 01:44:19.708
+{\an8}<i>-♪ Da-da da da ♪</i>
+<i>-♪ Da-da da da ♪</i>
+
+01:44:19.833 --> 01:44:23.125
+{\an8}<i>♪ Da-da dum diddy dum</i>
+<i>Diddy dum diddy da da da ♪</i>
+
+01:44:23.250 --> 01:44:25.333
+{\an8}<i>-♪ Da-da da da ♪</i>
+<i>-♪ Da-da da da ♪</i>
+
+01:44:25.458 --> 01:44:27.041
+{\an8}<i>-♪ Da-da da da ♪</i>
+<i>-♪ Da-da da da ♪</i>
+
+01:44:27.166 --> 01:44:30.416
+{\an8}<i>♪ Da-da dum diddy dum</i>
+<i>Diddy dum diddy da da da ♪</i>
+
+01:44:30.541 --> 01:44:32.583
+{\an8}<i>-♪ Da-da da da ♪</i>
+<i>-♪ Da-da da da ♪</i>
+
+01:44:32.708 --> 01:44:34.416
+{\an8}<i>-♪ Da-da da da ♪</i>
+<i>-♪ Da-da da da ♪</i>
+
+01:44:34.541 --> 01:44:37.666
+{\an8}<i>♪ Da-da dum diddy dum</i>
+<i>Diddy dum diddy da da da ♪</i>
+
+01:44:37.791 --> 01:44:39.750
+{\an8}<i>-♪ Da-da da da ♪</i>
+<i>-♪ Da-da da da ♪</i>
+
+01:44:39.875 --> 01:44:41.625
+{\an8}<i>-♪ Da-da da da ♪</i>
+<i>-♪ Da-da da da ♪</i>
+
+01:44:41.750 --> 01:44:45.333
+{\an8}<i>♪ Da-da dum diddy dum</i>
+<i>Diddy dum diddy da da da ♪</i>
+
+01:44:45.458 --> 01:44:48.833
+{\an8}<i>♪ And I would walk</i>
+<i>Five hundred miles ♪</i>
+
+01:44:48.958 --> 01:44:52.583
+{\an8}<i>♪ And I would walk</i>
+<i>Five hundred more ♪</i>
+
+01:44:52.708 --> 01:44:56.583
+{\an8}<i>♪ Just to be the man</i>
+<i>Who walked a thousand ♪</i>
+
+01:44:56.708 --> 01:45:00.708
+{\an8}<i>♪ Miles to fall down</i>
+<i>At your door ♪</i>
+
+01:48:46.083 --> 01:48:47.791
+[Cloud] <i>I still think</i>
+<i>it's the maid.</i>
