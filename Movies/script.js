@@ -629,7 +629,7 @@ function goBack() {
       justify-content: space-between;
       align-items: center;
       border-bottom: 1px solid var(--rev-border);
-      padding-bottom: 1px;
+      padding-bottom: 100px;
       margin-bottom: 16px;
     }
 
