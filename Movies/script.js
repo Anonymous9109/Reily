@@ -616,7 +616,7 @@ function goBack() {
       border: none;
       border-radius: 12px;
       padding: 10px 0;
-      margin-top: 24px;
+      margin-top: 100px;
       color: var(--rev-text-main);
       box-sizing: border-box;
       text-align: left !important;
