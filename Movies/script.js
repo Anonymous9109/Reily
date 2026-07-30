@@ -630,7 +630,7 @@ function goBack() {
       align-items: center;
       border-bottom: 1px solid var(--rev-border);
       padding-bottom: 12px;
-      margin-bottom: 16px;
+      margin-bottom: 6px;
     }
 
     .reviews-container .header-zone h2 {
