@@ -210,8 +210,8 @@ function initReviewsSystem(seriesId) {
         </div>
       </div>
 
-      <!-- AD SLOT PLACED EXACTLY BELOW HEADER AND ABOVE REVIEWS -->
-      <div id="adSlotZone" style="margin-bottom: 16px;"></div>
+      <!-- AD SLOT PLACED EXACTLY BELOW HEADER AND CENTERED -->
+      <div id="adSlotZone" style="margin-bottom: 16px; display: flex; justify-content: center; align-items: center; width: 100%;"></div>
 
       <div id="statusBanner" class="status-banner"></div>
 
