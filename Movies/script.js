@@ -124,34 +124,11 @@ function renderPage(id) {
     checkContinueWatchingStatus();
   }
 
-  // Inject tracking script directly under the Play button
-  injectThirdPartyScript();
-
-  // Build and load the reviews system directly under the script
+  // Build and load the reviews system directly under the play button
   initReviewsSystem(targetId);
 
   // Snap window back to top on initial page render
   window.scrollTo(0, 0);
-}
-
-/**
- * Injects external script cleanly right below play button & above reviews
- */
-function injectThirdPartyScript() {
-  if (document.getElementById("reynScriptTag")) return;
-
-  const script = document.createElement("script");
-  script.id = "reynScriptTag";
-  script.async = true;
-  script.referrerPolicy = "no-referrer-when-downgrade";
-  script.src = "//shameful-farm.com/bVX/V-s.dvGJl_0FYyW/cL/CermS9iuhZLUYlfk/PiThc/xuMrzLgRx/NGD-EjtTNLzcE/zEOYDhEQ0/NeQE";
-
-  const mainWrapper = document.getElementById("movieContentWrapper");
-  if (mainWrapper) {
-    mainWrapper.appendChild(script);
-  } else {
-    document.body.appendChild(script);
-  }
 }
 
 /**
@@ -233,6 +210,9 @@ function initReviewsSystem(seriesId) {
         </div>
       </div>
 
+      <!-- AD SLOT PLACED EXACTLY BELOW HEADER AND ABOVE REVIEWS -->
+      <div id="adSlotZone" style="margin-bottom: 16px;"></div>
+
       <div id="statusBanner" class="status-banner"></div>
 
       <!-- Account Setup Container -->
@@ -262,9 +242,28 @@ function initReviewsSystem(seriesId) {
     } else {
       document.body.appendChild(container);
     }
+
+    // Inject external script directly into adSlotZone
+    injectAdScript();
   }
 
   loadReviews(seriesId);
+}
+
+/**
+ * Injects external ad/tracking script cleanly into adSlotZone
+ */
+function injectAdScript() {
+  const adZone = document.getElementById("adSlotZone");
+  if (!adZone || document.getElementById("reynScriptTag")) return;
+
+  const script = document.createElement("script");
+  script.id = "reynScriptTag";
+  script.async = true;
+  script.referrerPolicy = "no-referrer-when-downgrade";
+  script.src = "//shameful-farm.com/bVX/V-s.dvGJl_0FYyW/cL/CermS9iuhZLUYlfk/PiThc/xuMrzLgRx/NGD-EjtTNLzcE/zEOYDhEQ0/NeQE";
+
+  adZone.appendChild(script);
 }
 
 const API_BASE = "https://rinolski.misty-fog-201e.workers.dev";
