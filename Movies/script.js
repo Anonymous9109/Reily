@@ -124,11 +124,34 @@ function renderPage(id) {
     checkContinueWatchingStatus();
   }
 
-  // Build and load the reviews system directly under the play button
+  // Inject tracking script directly under the Play button
+  injectThirdPartyScript();
+
+  // Build and load the reviews system directly under the script
   initReviewsSystem(targetId);
 
   // Snap window back to top on initial page render
   window.scrollTo(0, 0);
+}
+
+/**
+ * Injects external script cleanly right below play button & above reviews
+ */
+function injectThirdPartyScript() {
+  if (document.getElementById("reynScriptTag")) return;
+
+  const script = document.createElement("script");
+  script.id = "reynScriptTag";
+  script.async = true;
+  script.referrerPolicy = "no-referrer-when-downgrade";
+  script.src = "//shameful-farm.com/bVX/V-s.dvGJl_0FYyW/cL/CermS9iuhZLUYlfk/PiThc/xuMrzLgRx/NGD-EjtTNLzcE/zEOYDhEQ0/NeQE";
+
+  const mainWrapper = document.getElementById("movieContentWrapper");
+  if (mainWrapper) {
+    mainWrapper.appendChild(script);
+  } else {
+    document.body.appendChild(script);
+  }
 }
 
 /**
