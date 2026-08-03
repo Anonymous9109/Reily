@@ -773,7 +773,7 @@
 <div id="auth-gate">
     <div class="auth-container">
         <h1 class="Rinolski-font" style="font-size: 48px; text-align: center; margin-bottom: 30px;">rinolski</h1>
-        <h2 id="auth-title" style="margin-bottom: 20px; font-size: 24px;">Sign In</h2>
+        <h2 id="auth-title" style="margin-bottom: 20px; font-size: 24px;">Sign In or Sign Up</h2>
         
         <div id="auth-inline-alert" style="display: none; padding: 12px; border-radius: 4px; font-size: 14px; margin-bottom: 16px; line-height: 1.4; text-align: center;"></div>
 
@@ -782,9 +782,9 @@
         
         <div id="forgot-pwd-trigger" class="forgot-password-link" onclick="handleForgotPassword()">Forgot Password?</div>
         
-        <button id="auth-submit" class="auth-btn" onclick="handleAuth()">Sign In</button>
+        <button id="auth-submit" class="auth-btn" onclick="handleAuth()">Continue</button>
         
-        <div id="auth-switch" class="auth-toggle" onclick="toggleAuthMode()">New to Rinolski? Sign up now.</div>
+        <div id="auth-switch" class="auth-toggle" onclick="resetAuthGate()" style="display: none;">Back to Sign In / Sign Up</div>
     </div>
 </div>
 
@@ -877,7 +877,7 @@
     const WORKER_URL = "https://rinolski.misty-fog-201e.workers.dev";
     let currentUser = null; 
     let transientEmail = "";
-    let authState = "signin"; 
+    let authState = "auth"; 
 
     let userWatchHistoryCache = [];
     let userUnwantedCache = []; 
@@ -944,8 +944,9 @@
         emailInput.style.display = 'block';
         passwordInput.style.display = 'block';
         forgotLink.style.display = 'block';
+        switchToggle.style.display = 'none';
 
-        if (authState === "signin" || authState === "signup" || authState === "forgot") {
+        if (authState === "auth" || authState === "forgot") {
             emailInput.value = "";
             passwordInput.value = "";
         } else if (gameStateResetRequired()) {
@@ -953,40 +954,32 @@
             passwordInput.value = "";
         }
 
-        if (authState === "signin") {
-            title.innerText = "Sign In";
+        if (authState === "auth") {
+            title.innerText = "Sign In or Sign Up";
             emailInput.placeholder = "Email Address";
             passwordInput.placeholder = "Password";
-            submitBtn.innerText = "Sign In";
-            switchToggle.innerText = "New to Rinolski? Sign up now.";
-        } else if (authState === "signup") {
-            title.innerText = "Sign Up";
-            emailInput.placeholder = "Email Address";
-            passwordInput.placeholder = "Password";
-            forgotLink.style.display = 'none';
-            submitBtn.innerText = "Create Account";
-            switchToggle.innerText = "Already have an account? Sign In";
+            submitBtn.innerText = "Continue";
         } else if (authState === "verify") {
             title.innerText = "Enter Verification Code";
             emailInput.placeholder = "6-Digit Verification Code";
             passwordInput.style.display = 'none';
             forgotLink.style.display = 'none';
             submitBtn.innerText = "Verify Code";
-            switchToggle.innerText = "Back to Sign In";
+            switchToggle.style.display = 'block';
         } else if (authState === "forgot") {
             title.innerText = "Reset Password";
             emailInput.placeholder = "Email Address";
             passwordInput.style.display = 'none';
             forgotLink.style.display = 'none';
             submitBtn.innerText = "Send Reset Code";
-            switchToggle.innerText = "Back to Sign In";
+            switchToggle.style.display = 'block';
         } else if (authState === "reset") {
             title.innerText = "Create New Password";
             emailInput.placeholder = "6-Digit Reset Code";
             passwordInput.placeholder = "New Password";
             forgotLink.style.display = 'none';
             submitBtn.innerText = "Update Password";
-            switchToggle.innerText = "Back to Sign In";
+            switchToggle.style.display = 'block';
         }
     }
 
@@ -994,12 +987,8 @@
         return authState === "verify" || authState === "reset";
     }
 
-    function toggleAuthMode() {
-        if (authState === "signin") {
-            authState = "signup";
-        } else {
-            authState = "signin";
-        }
+    function resetAuthGate() {
+        authState = "auth";
         renderAuthState();
     }
 
@@ -1013,11 +1002,11 @@
         const passwordFieldVal = document.getElementById('auth-password').value;
         const submitBtn = document.getElementById('auth-submit');
 
-        if ((authState === "signin" || authState === "signup" || authState === "forgot") && !emailFieldVal) {
+        if ((authState === "auth" || authState === "forgot") && !emailFieldVal) {
             showInlineAlert("Please enter your email address.", "error");
             return;
         }
-        if ((authState === "signin" || authState === "signup") && !passwordFieldVal) {
+        if (authState === "auth" && !passwordFieldVal) {
             showInlineAlert("Please enter your password.", "error");
             return;
         }
@@ -1035,21 +1024,39 @@
         submitBtn.innerText = "Processing...";
 
         try {
-            if (authState === "signup") {
-                window.temporarySignupPassword = passwordFieldVal; 
-                transientEmail = emailFieldVal;
-                const res = await fetch(`${WORKER_URL}/api/signup`, {
+            if (authState === "auth") {
+                // First try to sign in existing user
+                const signinRes = await fetch(`${WORKER_URL}/api/signin`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email: emailFieldVal, password: passwordFieldVal })
                 });
-                const data = await res.json();
-                if (res.ok) {
-                    showInlineAlert(data.message || "Account initiated! Verification code sent.", "success");
-                    authState = "verify";
-                    renderAuthState();
+                const signinData = await signinRes.json();
+
+                if (signinRes.ok) {
+                    localStorage.setItem('session_token', signinData.token);
+                    showToast(signinData.message || "Welcome back!");
+                    await fetchAndDisplayUserData(true);
+                } else if (signinRes.status === 404 || (signinData.error && signinData.error.toLowerCase().includes("user not found"))) {
+                    // Email doesn't exist yet, automatically trigger registration
+                    window.temporarySignupPassword = passwordFieldVal; 
+                    transientEmail = emailFieldVal;
+                    const signupRes = await fetch(`${WORKER_URL}/api/signup`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email: emailFieldVal, password: passwordFieldVal })
+                    });
+                    const signupData = await signupRes.json();
+                    
+                    if (signupRes.ok) {
+                        showInlineAlert(signupData.message || "New account created! Verification code sent to your email.", "success");
+                        authState = "verify";
+                        renderAuthState();
+                    } else {
+                        showInlineAlert(signupData.error || "Signup action failed.", "error");
+                    }
                 } else {
-                    showInlineAlert(data.error || "Signup action failed.", "error");
+                    showInlineAlert(signinData.error || "Invalid credentials.", "error");
                 }
             } 
             else if (authState === "verify") {
@@ -1075,27 +1082,12 @@
                         showToast(loginData.message || "Welcome to Rinolski!");
                         await fetchAndDisplayUserData(true);
                     } else {
-                        authState = "signin";
+                        authState = "auth";
                         renderAuthState();
-                        showInlineAlert("Verified successfully. Please log in manually.", "warning");
+                        showInlineAlert("Verified successfully. Please log in.", "warning");
                     }
                 } else {
                     showInlineAlert(data.error || "Verification tracking error.", "error");
-                }
-            }
-            else if (authState === "signin") {
-                const res = await fetch(`${WORKER_URL}/api/signin`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: emailFieldVal, password: passwordFieldVal })
-                });
-                const data = await res.json();
-                if (res.ok) {
-                    localStorage.setItem('session_token', data.token);
-                    showToast(data.message || "Welcome back!");
-                    await fetchAndDisplayUserData(true);
-                } else {
-                    showInlineAlert(data.error || "Invalid login credentials.", "error");
                 }
             }
             else if (authState === "forgot") {
@@ -1136,9 +1128,9 @@
                         showToast(loginData.message || "Password updated successfully!");
                         await fetchAndDisplayUserData(true);
                     } else {
-                        authState = "signin";
+                        authState = "auth";
                         renderAuthState();
-                        showInlineAlert("Password reset complete. Please sign in.", "success");
+                        showInlineAlert("Password reset complete. Please log in.", "success");
                     }
                 } else {
                     showInlineAlert(data.error || "Password modification rejected.", "error");
@@ -1206,7 +1198,7 @@
             } else {
                 localStorage.removeItem('session_token');
                 currentUser = null;
-                authState = "signin";
+                authState = "auth";
                 renderAuthState();
                 document.getElementById('auth-gate').style.display = 'flex';
             }
@@ -1229,7 +1221,7 @@
         resetActiveNavbar();
         document.getElementById('home-trigger').classList.add('active');
         
-        authState = "signin";
+        authState = "auth";
         renderAuthState();
         document.getElementById('auth-gate').style.display = 'flex';
         showToast("Signed out cleanly.");
