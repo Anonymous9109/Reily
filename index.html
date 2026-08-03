@@ -784,7 +784,7 @@
         
         <button id="auth-submit" class="auth-btn" onclick="handleAuth()">Continue</button>
         
-        <div id="auth-switch" class="auth-toggle" onclick="resetAuthGate()" style="display: none;">Back to Sign In / Sign Up</div>
+        <div id="auth-switch" class="auth-toggle" onclick="resetAuthToMain()" style="display:none;">Back to Sign In</div>
     </div>
 </div>
 
@@ -966,6 +966,7 @@
             forgotLink.style.display = 'none';
             submitBtn.innerText = "Verify Code";
             switchToggle.style.display = 'block';
+            switchToggle.innerText = "Back to Sign In";
         } else if (authState === "forgot") {
             title.innerText = "Reset Password";
             emailInput.placeholder = "Email Address";
@@ -973,6 +974,7 @@
             forgotLink.style.display = 'none';
             submitBtn.innerText = "Send Reset Code";
             switchToggle.style.display = 'block';
+            switchToggle.innerText = "Back to Sign In";
         } else if (authState === "reset") {
             title.innerText = "Create New Password";
             emailInput.placeholder = "6-Digit Reset Code";
@@ -980,6 +982,7 @@
             forgotLink.style.display = 'none';
             submitBtn.innerText = "Update Password";
             switchToggle.style.display = 'block';
+            switchToggle.innerText = "Back to Sign In";
         }
     }
 
@@ -987,7 +990,7 @@
         return authState === "verify" || authState === "reset";
     }
 
-    function resetAuthGate() {
+    function resetAuthToMain() {
         authState = "auth";
         renderAuthState();
     }
@@ -1025,7 +1028,7 @@
 
         try {
             if (authState === "auth") {
-                // First try to sign in existing user
+                // 1. First attempt to Sign In
                 const signinRes = await fetch(`${WORKER_URL}/api/signin`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -1037,42 +1040,63 @@
                     localStorage.setItem('session_token', signinData.token);
                     showToast(signinData.message || "Welcome back!");
                     await fetchAndDisplayUserData(true);
-                } else if (signinRes.status === 404 || (signinData.error && signinData.error.toLowerCase().includes("user not found"))) {
-                    // Email doesn't exist yet, automatically trigger registration
-                    window.temporarySignupPassword = passwordFieldVal; 
-                    transientEmail = emailFieldVal;
-                    const signupRes = await fetch(`${WORKER_URL}/api/signup`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ email: emailFieldVal, password: passwordFieldVal })
-                    });
-                    const signupData = await signupRes.json();
-                    
-                    if (signupRes.ok) {
-                        showInlineAlert(signupData.message || "New account created! Verification code sent to your email.", "success");
-                        authState = "verify";
-                        renderAuthState();
-                    } else {
-                        showInlineAlert(signupData.error || "Signup action failed.", "error");
-                    }
                 } else {
-                    showInlineAlert(signinData.error || "Invalid credentials.", "error");
+                    const status = signinRes.status;
+                    const errLower = (signinData.error || "").toLowerCase();
+
+                    // Check if the user was not found or has an account state requiring signup
+                    const isUserNotFound = status === 404 || 
+                                           status === 400 || 
+                                           errLower.includes("not found") || 
+                                           errLower.includes("user") ||
+                                           errLower.includes("register") ||
+                                           errLower.includes("exist");
+
+                    if (isUserNotFound) {
+                        // 2. Automatically attempt Sign Up
+                        transientEmail = emailFieldVal;
+                        window.temporarySignupPassword = passwordFieldVal; 
+
+                        const signupRes = await fetch(`${WORKER_URL}/api/signup`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ email: emailFieldVal, password: passwordFieldVal })
+                        });
+                        const signupData = await signupRes.json();
+
+                        if (signupRes.ok) {
+                            showInlineAlert(signupData.message || "Verification code sent to your email!", "success");
+                            authState = "verify";
+                            renderAuthState();
+                        } else {
+                            showInlineAlert(signupData.error || "Could not register account.", "error");
+                        }
+                    } else {
+                        // Correct email, but wrong password
+                        showInlineAlert(signinData.error || "Incorrect password.", "error");
+                    }
                 }
             } 
             else if (authState === "verify") {
+                // 3. Verify Code
                 const res = await fetch(`${WORKER_URL}/api/verify`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email: transientEmail, code: emailFieldVal })
                 });
                 const data = await res.json();
+                
                 if (res.ok) {
-                    showInlineAlert("Account verified! Logging in automatically...", "success");
+                    showInlineAlert("Account verified! Logging in...", "success");
                     
+                    // Auto sign-in after verification using cached credentials
                     const loginRes = await fetch(`${WORKER_URL}/api/signin`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ email: transientEmail, password: window.temporarySignupPassword || "" })
+                        body: JSON.stringify({ 
+                            email: transientEmail, 
+                            password: window.temporarySignupPassword || "" 
+                        })
                     });
                     const loginData = await loginRes.json();
                     delete window.temporarySignupPassword;
@@ -1084,10 +1108,10 @@
                     } else {
                         authState = "auth";
                         renderAuthState();
-                        showInlineAlert("Verified successfully. Please log in.", "warning");
+                        showInlineAlert("Account verified! Please sign in with your credentials.", "success");
                     }
                 } else {
-                    showInlineAlert(data.error || "Verification tracking error.", "error");
+                    showInlineAlert(data.error || "Invalid or expired verification code.", "error");
                 }
             }
             else if (authState === "forgot") {
@@ -1099,11 +1123,11 @@
                 });
                 const data = await res.json();
                 if (res.ok) {
-                    showInlineAlert(data.message || "A 6-digit password reset key has been sent.", "success");
+                    showInlineAlert(data.message || "Reset token sent to email.", "success");
                     authState = "reset";
                     renderAuthState();
                 } else {
-                    showInlineAlert(data.error || "Failed to issue password recovery request.", "error");
+                    showInlineAlert(data.error || "Failed to process request.", "error");
                 }
             }
             else if (authState === "reset") {
@@ -1114,7 +1138,7 @@
                 });
                 const data = await res.json();
                 if (res.ok) {
-                    showInlineAlert("Password changed! Logging in automatically...", "success");
+                    showInlineAlert("Password changed! Logging in...", "success");
                     
                     const loginRes = await fetch(`${WORKER_URL}/api/signin`, {
                         method: 'POST',
@@ -1125,25 +1149,23 @@
                     
                     if (loginRes.ok) {
                         localStorage.setItem('session_token', loginData.token);
-                        showToast(loginData.message || "Password updated successfully!");
+                        showToast(loginData.message || "Password updated!");
                         await fetchAndDisplayUserData(true);
                     } else {
                         authState = "auth";
                         renderAuthState();
-                        showInlineAlert("Password reset complete. Please log in.", "success");
+                        showInlineAlert("Password reset. Please sign in.", "success");
                     }
                 } else {
-                    showInlineAlert(data.error || "Password modification rejected.", "error");
+                    showInlineAlert(data.error || "Password reset failed.", "error");
                 }
             }
         } catch (err) {
-            console.error("Cloudflare Fetch Engine Fail Error Context:", err);
-            showInlineAlert("Connection error. Check your network.", "error");
+            console.error("Auth Pipeline Error:", err);
+            showInlineAlert("Network error. Please try again.", "error");
         } finally {
             submitBtn.disabled = false;
-            if (submitBtn.innerText === "Processing...") {
-                submitBtn.innerText = originalBtnText;
-            }
+            submitBtn.innerText = originalBtnText;
         }
     }
 
@@ -1829,7 +1851,6 @@
         });
     }
 </script>
-
 </body>
 </html>
 
