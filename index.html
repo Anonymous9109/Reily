@@ -18,7 +18,7 @@
             font-family: Helvetica, Arial, sans-serif;
             background-color: #000000 !important;
             color: #e5e5e5;
-            padding-top: 105px; /* Adjusted to make space for the live status bar */
+            padding-top: 105px;
             padding-bottom: 80px;
             user-select: none;
             -webkit-user-select: none;
@@ -34,13 +34,6 @@
             user-select: none;
             color: inherit;
             text-decoration: none;
-        }
-
-        /* Real-time Status Bar Styling */
-
-        @keyframes pulse-glow {
-            from { opacity: 0.4; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1.1); }
         }
 
         .loading-ring {
@@ -81,6 +74,7 @@
         header {
             position: fixed;
             top: 0;
+            left: 0;
             width: 100%;
             padding: 15px 20px;
             background: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
@@ -212,17 +206,23 @@
             z-index: 1;
         }
 
+        /* Slide panels using hardware-accelerated transform */
         .sliding-panel {
             position: fixed;
             top: 0;
-            right: -100%;
+            right: 0;
             width: 100%;
             height: 100%;
             background: #000000;
-            transition: right 0.3s ease-in-out;
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in-out;
             z-index: 2000;
             overflow-y: auto;
             padding-bottom: 80px;
+        }
+
+        .sliding-panel.open {
+            transform: translateX(0);
         }
 
         .panel-header {
@@ -340,8 +340,100 @@
             border-color: #e50914;
         }
 
-        /* Fixed avatar dimensions and grid sizing strictly for landscape mode */
+        /* Bottom Navigation Bar Base */
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 65px;
+            background-color: #000000;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-top: 1px solid #1a1a1a;
+            z-index: 3000;
+        }
+
+        .nav-item {
+            color: #b3b3b3;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            font-size: 11px;
+            transition: color 0.2s;
+        }
+
+        .nav-item svg {
+            width: 24px;
+            height: 24px;
+            min-width: 24px;
+            min-height: 24px;
+            margin-bottom: 4px;
+            fill: currentColor;
+            display: block;
+        }
+
+        .nav-item:hover, .nav-item.active { 
+            color: white; 
+        }
+
+        .nav-pfp-icon {
+            width: 24px;
+            height: 24px;
+            min-width: 24px;
+            min-height: 24px;
+            border-radius: 4px;
+            object-fit: cover;
+            margin-bottom: 4px;
+            border: 1.5px solid transparent;
+            transition: border-color 0.2s;
+            display: block;
+        }
+
+        .nav-item.active .nav-pfp-icon, .nav-item:hover .nav-pfp-icon {
+            border-color: #ffffff;
+        }
+
+        /* Landscape Mode Override */
         @media screen and (orientation: landscape) {
+            body {
+                padding-left: 75px;
+                padding-bottom: 20px;
+            }
+
+            header {
+                left: 75px;
+                width: calc(100% - 75px);
+            }
+
+            .sliding-panel {
+                left: 75px;
+                width: calc(100% - 75px);
+                padding-bottom: 20px;
+            }
+
+            footer {
+                top: 0;
+                left: 0;
+                width: 75px;
+                height: 100vh;
+                flex-direction: column;
+                justify-content: flex-start;
+                padding-top: 30px;
+                gap: 30px;
+                border-top: none;
+                border-right: 1px solid #1a1a1a;
+            }
+
+            .nav-item {
+                flex: 0 0 auto;
+                width: 100%;
+                height: 50px;
+            }
+
             .avatar {
                 width: 50px;
                 height: 50px;
@@ -643,40 +735,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        footer {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            height: 65px;
-            background-color: #000000;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            border-top: 1px solid #1a1a1a;
-            z-index: 1001;
-        }
-
-        .nav-item {
-            color: #b3b3b3;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            flex: 1;
-            font-size: 11px;
-            transition: color 0.2s;
-        }
-
-        .nav-item svg {
-            width: 24px;
-            height: 24px;
-            margin-bottom: 4px;
-            fill: currentColor;
-        }
-
-        .nav-item:hover, .nav-item.active { 
-            color: white; 
-        }
-
         #action-sheet-backdrop {
             position: fixed;
             top: 0;
@@ -812,7 +870,7 @@
         <span>Search</span>
     </button>
     <button id="profile-trigger" class="nav-item">
-        <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+        <img id="nav-profile-img" class="nav-pfp-icon" src="images/1.jpg" alt="Profile">
         <span>Profile</span>
     </button>
 </footer>
@@ -1028,7 +1086,6 @@
 
         try {
             if (authState === "auth") {
-                // 1. First attempt to Sign In
                 const signinRes = await fetch(`${WORKER_URL}/api/signin`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -1044,7 +1101,6 @@
                     const status = signinRes.status;
                     const errLower = (signinData.error || "").toLowerCase();
 
-                    // Check if the user was not found or has an account state requiring signup
                     const isUserNotFound = status === 404 || 
                                            status === 400 || 
                                            errLower.includes("not found") || 
@@ -1053,7 +1109,6 @@
                                            errLower.includes("exist");
 
                     if (isUserNotFound) {
-                        // 2. Automatically attempt Sign Up
                         transientEmail = emailFieldVal;
                         window.temporarySignupPassword = passwordFieldVal; 
 
@@ -1072,13 +1127,11 @@
                             showInlineAlert(signupData.error || "Could not register account.", "error");
                         }
                     } else {
-                        // Correct email, but wrong password
                         showInlineAlert(signinData.error || "Incorrect password.", "error");
                     }
                 }
             } 
             else if (authState === "verify") {
-                // 3. Verify Code
                 const res = await fetch(`${WORKER_URL}/api/verify`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -1089,7 +1142,6 @@
                 if (res.ok) {
                     showInlineAlert("Account verified! Logging in...", "success");
                     
-                    // Auto sign-in after verification using cached credentials
                     const loginRes = await fetch(`${WORKER_URL}/api/signin`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -1238,8 +1290,8 @@
         currentUser = null;
         lastKnownDataHash = "";
         
-        document.getElementById('sliding-profile').style.right = '-100%';
-        document.getElementById('sliding-search').style.right = '-100%';
+        document.getElementById('sliding-profile').classList.remove('open');
+        document.getElementById('sliding-search').classList.remove('open');
         resetActiveNavbar();
         document.getElementById('home-trigger').classList.add('active');
         
@@ -1294,7 +1346,12 @@
     function applyActiveUserAvatar(id) {
         const container = document.getElementById("profile-avatar-display");
         const initialLabel = document.getElementById("profile-initial");
-        const imgUrl = profileAvatarsCatalog[id];
+        const navPfpImg = document.getElementById("nav-profile-img");
+        const imgUrl = profileAvatarsCatalog[id] || profileAvatarsCatalog[1];
+
+        if (navPfpImg && imgUrl) {
+            navPfpImg.src = imgUrl;
+        }
 
         if (imgUrl && imgUrl.trim() !== "") {
             if (initialLabel) initialLabel.style.display = "none";
@@ -1484,27 +1541,27 @@
     homeTrigger.addEventListener('click', () => {
         resetActiveNavbar();
         homeTrigger.classList.add('active');
-        searchPanel.style.right = '-100%';
-        profilePanel.style.right = '-100%';
+        searchPanel.classList.remove('open');
+        profilePanel.classList.remove('open');
     });
 
     searchTrigger.addEventListener('click', () => {
         resetActiveNavbar();
         searchTrigger.classList.add('active');
-        searchPanel.style.right = '0%';
-        profilePanel.style.right = '-100%';
+        searchPanel.classList.add('open');
+        profilePanel.classList.remove('open');
         searchInput.focus();
     });
 
     profileTrigger.addEventListener('click', () => {
         resetActiveNavbar();
         profileTrigger.classList.add('active');
-        profilePanel.style.right = '0%';
-        searchPanel.style.right = '-100%';
+        profilePanel.classList.add('open');
+        searchPanel.classList.remove('open');
     });
 
     searchBackButton.addEventListener('click', () => {
-        searchPanel.style.right = '-100%';
+        searchPanel.classList.remove('open');
         resetActiveNavbar();
         homeTrigger.classList.add('active');
         searchInput.value = '';
@@ -1512,7 +1569,7 @@
     });
 
     profileBackButton.addEventListener('click', () => {
-        profilePanel.style.right = '-100%';
+        profilePanel.classList.remove('open');
         resetActiveNavbar();
         homeTrigger.classList.add('active');
     });
@@ -1853,4 +1910,3 @@
 </script>
 </body>
 </html>
-
