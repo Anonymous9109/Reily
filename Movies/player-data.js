@@ -150,7 +150,7 @@ window.videoData = {
   "Backrooms": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Movies/18124809918.mp4",
       "Backrooms-subs": [
       {
-        label: "English",
+        label: "Arabic",
         lang: "en",
         src: "../subtitles/Backrooms/Backrooms-en.txt"
       },
@@ -160,7 +160,7 @@ window.videoData = {
         src: "../subtitles/Backrooms/Backrooms-fr.txt"
       },
       {
-        label: "Arabic",
+        label: "English",
         lang: "ar",
         src: "../subtitles/Backrooms/Backrooms-ar.txt"
       }
