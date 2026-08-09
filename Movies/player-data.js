@@ -148,6 +148,23 @@ window.videoData = {
   "SevenPounds": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Movies/1485114524.mp4",
   "TheTerminal": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Movies/61687515.mp4",
   "Backrooms": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Movies/18124809918.mp4",
+      "Backrooms-subs": [
+      {
+        label: "English",
+        lang: "en",
+        src: "../subtitles/Backrooms/Backrooms-en.txt"
+      },
+      {
+        label: "French",
+        lang: "fr",
+        src: "../subtitles/Backrooms/Backrooms-fr.txt"
+      },
+      {
+        label: "Arabic",
+        lang: "ar",
+        src: "../subtitles/Backrooms/Backrooms-ar.txt"
+      }
+    ],
   "AlmostHeroes": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Movies/1835375018.mp4",
   "WhiteChicks": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Movies/2015108820.mp4",
     "WhiteChicks-subs": [
