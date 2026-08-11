@@ -5,6 +5,18 @@ window.videoData = {
   "FerrisBuellersDayOff": "",
   "RushHour": "https://dl.dropboxusercontent.com/scl/fi/0rvblkbuwcb49qqviix4f/Rush.Hour.1998.480p.BluRay.x264.mkv?rlkey=e2sym1havof2wexwq01wkf3kp&st=o3y9n1wm&dl=1",
   "It": "https://dl.dropboxusercontent.com/scl/fi/ytimpst2i40o7whn22rco/It.2017.BluRay.mkv?rlkey=m7sxe4mnlgf1wjqkln2n57iob&st=tn68x7r4&dl=1",
+  "It-subs": [
+    { 
+      label: "French", 
+      lang: "fr", 
+      src: "../subtitles/it/it-fr.txt"
+    },
+    { 
+      label: "Arabic", 
+      lang: "ar", 
+      src: "../subtitles/it/it-ar.txt"
+    }
+  ], 
   "HarryPotter": "",
   "FastFurious2009": "https://dl.dropboxusercontent.com/scl/fi/sd1h5g6elfy9ie5bek8us/Fast.and.Furious.2009.480p.BluRay.mkv?rlkey=jymflciad6ezrenz634rvf547&st=urojpwz0&dl=1",
   "TheConjuring": "https://ucarecdn.com/9996deab-45da-41fd-958b-016ecc6d139a/",
