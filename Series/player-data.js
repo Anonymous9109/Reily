@@ -1,14 +1,29 @@
-window.videoData = {
-  // Steven Universe Season 1
-  "StevenUniverseS01E01": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/SU_S01E01.mp4",
-  "StevenUniverseS01E01-subs": [
-    { label: "English", lang: "en", src: "../subtitles/SU/S01E01-en.vtt" },
-    { label: "Arabic", lang: "ar", src: "../subtitles/SU/S01E01-ar.vtt" }
-  ],
+(function () {
+  const params = new URLSearchParams(window.location.search);
+  const seriesId = params.get("id");
+  const seasonNum = parseInt(params.get("season") || "1");
+  const epNum = parseInt(params.get("ep") || "1");
 
-  "StevenUniverseS01E02": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/SU_S01E02.mp4",
-  "StevenUniverseS01E02-subs": [],
+  if (!seriesId || !window.getEpisodeData) return;
 
-  "StevenUniverseS01E03": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/SU_S01E03.mp4",
-  "StevenUniverseS01E03-subs": []
-};
+  const currentEp = window.getEpisodeData(seriesId, seasonNum, epNum);
+  if (!currentEp) return;
+
+  // Set page title for player.js progress display
+  document.title = `${currentEp.seriesTitle} - S${currentEp.season}E${currentEp.episode}`;
+
+  // Populate global window variables required by player.js
+  window.videoData = {
+    [currentEp.episode]: currentEp.streamUrl,
+    [`${currentEp.episode}-subs`]: currentEp.subtitles
+  };
+
+  // Next / Previous Episode Routing
+  if (currentEp.episode > 1) {
+    window.backEpisodeLink = `player.html?id=${seriesId}&season=${seasonNum}&ep=${currentEp.episode - 1}`;
+  }
+
+  if (currentEp.episode < currentEp.totalEpisodesInSeason) {
+    window.nextEpisodeLink = `player.html?id=${seriesId}&season=${seasonNum}&ep=${currentEp.episode + 1}`;
+  }
+})();
