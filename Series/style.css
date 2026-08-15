@@ -1,112 +1,173 @@
-body {
+* {
+  box-sizing: border-box;
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: black;
-  color: white;
+  padding: 0;
 }
 
-/* Background Video */
-.bg-video {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
+body {
+  background-color: #0d0d0d;
+  color: #ffffff;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  min-height: 100vh;
+}
+
+.hero {
+  position: relative;
+  width: 100%;
+  height: 45vh;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: flex-end;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, #0d0d0d 10%, rgba(13, 13, 13, 0.6) 50%, rgba(0, 0, 0, 0.8) 100%);
+}
+
+.container {
+  position: relative;
+  z-index: 10;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 20px 50px 20px;
+}
+
+.series-header {
+  display: flex;
+  gap: 30px;
+  margin-top: -120px;
+  align-items: flex-end;
+}
+
+.poster {
+  width: 180px;
+  height: 270px;
   object-fit: cover;
-  filter: brightness(1);
-  z-index: -1;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
+  flex-shrink: 0;
 }
 
-/* Back Button */
-.back-btn {
-  position: fixed;
-  top: 20px; left: 20px;
-  width: 45px; height: 45px;
-  background: rgba(0,0,0,0.6);
+.meta {
+  flex-grow: 1;
+}
+
+.series-title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.synopsis {
+  font-size: 0.95rem;
+  color: #b3b3b3;
+  line-height: 1.5;
+  max-width: 750px;
+}
+
+.seasons-bar {
+  margin-top: 40px;
+  border-bottom: 1px solid #262626;
+  display: flex;
+  gap: 15px;
+}
+
+.season-tab {
+  background: none;
   border: none;
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
+  color: #888;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 12px 16px;
   cursor: pointer;
-  box-shadow: 0 0 10px rgba(0,0,0,0.5);
-  transition: 0.3s;
-  z-index: 9999;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s ease;
 }
 
-.back-btn:hover {
-  background: rgba(0,0,0,0.85);
-  transform: scale(1.1);
-  box-shadow: 0 0 20px rgba(0,0,0,0.7);
+.season-tab.active {
+  color: #e50914;
+  border-bottom-color: #e50914;
 }
 
-/* Content */
-.content {
-  height: 100vh;
+.episodes-list {
+  margin-top: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.episode-card {
+  background-color: #161616;
+  border: 1px solid #242424;
+  border-radius: 6px;
+  padding: 16px 20px;
   display: flex;
   align-items: center;
-  padding-left: 80px;
+  justify-content: space-between;
+  text-decoration: none;
+  color: #fff;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
-.text {
-  max-width: 500px;
+.episode-card:hover {
+  background-color: #202020;
+  border-color: #383838;
 }
 
-h1 {
-  font-size: 56px;
-  margin-bottom: 15px;
-}
-
-p {
-  color: #ccc;
-  line-height: 1.6;
-  margin-bottom: 25px;
-}
-
-/* Play Button */
-.play-btn {
+.ep-info {
   display: flex;
-  align-items: left;
-  gap: 10px;
-  padding: 14px 25px;
-  font-size: 18px;
-  border-radius: 5px;
-  background: white;
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  color: black;
-  cursor: pointer;
-  transition: 0.25s;
+  align-items: center;
+  gap: 15px;
 }
 
-.play-btn:hover {
-  /* Add hover styles here if needed */
+.ep-number {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #e50914;
+  min-width: 25px;
 }
 
-/* Mobile & Tablet */
-@media (max-width: 900px) {
-  .content {
-    flex-direction: column;
-    justify-content: center;
-    text-align: center;
-    padding: 20px;
-    height: 100vh;
-  }
+.ep-title {
+  font-size: 1rem;
+  font-weight: 500;
+}
 
-  .text {
-    max-width: 100%;
-  }
+.ep-action {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
 
-  h1 {
-    font-size: 32px;
-  }
+.play-btn-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.9rem;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 6px 12px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
 
-  p {
-    font-size: 14px;
-  }
+.episode-card:hover .play-btn-wrapper {
+  background-color: #e50914;
+  color: #ffffff;
+}
 
-  .play-btn {
-    width: 100%;
-    padding: 16px;
-    justify-content: center;
-  }
+.play-btn-wrapper svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
 
-  .bg-video {
-    height: 60%;
-  }
-    }
+#error-msg {
+  text-align: center;
+  padding: 100px 20px;
+  color: #aaa;
+}
