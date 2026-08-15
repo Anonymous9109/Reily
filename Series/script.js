@@ -1,438 +1,133 @@
-// ==========================================================================
-// 1. DYNAMIC DATA ARCHITECTURE & DEPENDENCY LOADING (SANDBOXED)
-// ==========================================================================
-
-/**
- * Loads text files instead of script tags to bypass global variable conflicts.
- */
-async function loadDataFiles() {
+document.addEventListener("DOMContentLoaded", async () => {
   const params = new URLSearchParams(window.location.search);
-  const id = params.get("movie") || params.get("series");
+  const seriesId = params.get("id") || "steven-universe"; // Default fallback
+  const series = window.seriesData ? window.seriesData[seriesId] : null;
 
-  if (!id) {
-    document.body.innerHTML = "<div style='color:white; text-align:center; margin-top:20%; font-family:sans-serif;'>No video ID provided.</div>";
+  if (!series) {
+    document.body.innerHTML = `<h2 style="color:white;text-align:center;margin-top:20%;">Series not found.</h2>`;
     return;
   }
 
-  try {
-    // 1. Fetch and parse search.js safely
-    const searchResponse = await fetch("/JS/search.js");
-    const searchText = await searchResponse.text();
-    const cleanSearchText = searchText.replace(/const\s+movies\s*=/, "return ");
-    const parseSearch = new Function(cleanSearchText);
-    window.searchArray = parseSearch();
-
-    // 2. Fetch and parse movies.js safely
-    const moviesResponse = await fetch("/Movies/movies.js");
-    const moviesText = await moviesResponse.text();
-    const cleanMoviesText = moviesText.replace(/const\s+movies\s*=/, "return ");
-    const parseMovies = new Function(cleanMoviesText);
-    window.movieDetailsDict = parseMovies();
-
-    // 3. Kickoff layout initialization
-    renderPage(id);
-
-  } catch (error) {
-    console.error("Critical error while reading data engines safely:", error);
-    document.body.innerHTML = "<div style='color:white; text-align:center; margin-top:20%; font-family:sans-serif;'>Failed to load background systems.</div>";
-  }
-}
-
-/**
- * Handles building the UI and background assets now that data maps are secure.
- */
-function renderPage(id) {
-  const exactKey = Object.keys(window.movieDetailsDict).find(key => key.toLowerCase() === id.toLowerCase());
-  const movieData = exactKey ? window.movieDetailsDict[exactKey] : null;
-
-  if (!movieData) {
-    document.body.innerHTML = "<div style='color:white; text-align:center; margin-top:20%; font-family:sans-serif;'>Movie data not found.</div>";
-    return;
-  }
-
-  window.currentMovie = movieData;
-
-  const targetId = id || new URLSearchParams(window.location.search).get("movie") || new URLSearchParams(window.location.search).get("series");
-  const matchedSearchItem = window.searchArray ? window.searchArray.find(m => {
-    if (!m.link) return false;
-    const urlPart = m.link.includes('?') ? m.link.split('?')[1] : m.link;
-    const movieUrlParams = new URLSearchParams(urlPart);
-    const movieId = movieUrlParams.get('movie') || movieUrlParams.get('series');
-    return movieId && movieId.toLowerCase() === targetId.toLowerCase();
-  }) : null;
-
-  let imagePath = "";
-  if (matchedSearchItem && matchedSearchItem.image) {
-    const filename = matchedSearchItem.image.split('/').pop();
-    imagePath = `/images/${filename}`;
-  }
-
-  setupLandscapeDOMArchitecture(imagePath);
-
-  document.getElementById("title").textContent = movieData.title;
-  
-  const descEl = document.getElementById("desc");
-  if (descEl) {
-    descEl.textContent = movieData.desc || "";
-  }
-
-  const video = document.getElementById("bgVideo");
-  if (movieData.video && video) {
-    video.innerHTML = `<source src="${movieData.video}" type="video/mp4">`;
-    video.load();
-
-    video.addEventListener('error', function() {
-      applyFallbackBackground(id);
-    }, true);
-  } else {
-    applyFallbackBackground(id);
-  }
-
-  checkContinueWatchingStatus(targetId);
-}
-
-/**
- * Builds non-intrusive container wrappers needed for the landscape layout modifications
- */
-function setupLandscapeDOMArchitecture(imagePath) {
-  let mainWrapper = document.getElementById("movieContentWrapper");
-  let posterContainer = document.getElementById("moviePosterContainer");
-  let posterImg = document.getElementById("moviePosterImg");
-  let ambientBg = document.getElementById("ambientBg");
-
-  if (!ambientBg) {
-    ambientBg = document.createElement("div");
-    ambientBg.id = "ambientBg";
-    document.body.insertBefore(ambientBg, document.body.firstChild);
-  }
-  if (imagePath) {
-    ambientBg.style.backgroundImage = `url('${imagePath}')`;
-  }
-
-  if (!mainWrapper) {
-    mainWrapper = document.createElement("div");
-    mainWrapper.id = "movieContentWrapper";
+  /********** 1) Inject UI Styles **********/
+  const style = document.createElement("style");
+  style.textContent = `
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background-color: #0f0f0f; color: #fff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    .hero-container { position: relative; width: 100%; height: 55vh; min-height: 350px; background-size: cover; background-position: center; }
+    .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to top, #0f0f0f 0%, rgba(15,15,15,0.4) 60%, rgba(0,0,0,0.8) 100%); display: flex; align-items: flex-end; padding: 2rem 5%; }
+    .series-details { max-width: 700px; }
+    .series-title { font-size: 2.8rem; font-weight: 800; margin-bottom: 0.5rem; text-shadow: 0 2px 8px rgba(0,0,0,0.7); }
+    .series-desc { font-size: 1rem; color: #ccc; line-height: 1.5; margin-bottom: 1.5rem; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
     
-    posterContainer = document.createElement("div");
-    posterContainer.id = "moviePosterContainer";
+    .resume-btn { display: inline-flex; align-items: center; gap: 8px; background: #e50914; color: #fff; border: none; padding: 12px 24px; font-weight: 600; font-size: 1rem; border-radius: 4px; cursor: pointer; text-decoration: none; transition: background 0.2s; }
+    .resume-btn:hover { background: #b80710; }
+
+    .content-container { padding: 2rem 5%; }
+    .controls-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 1px solid #222; padding-bottom: 1rem; }
+    .season-select { background: #1a1a1a; color: #fff; border: 1px solid #333; padding: 10px 16px; font-size: 1rem; border-radius: 4px; cursor: pointer; outline: none; }
     
-    posterImg = document.createElement("img");
-    posterImg.id = "moviePosterImg";
+    .episodes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem; }
+    .ep-card { background: #181818; border-radius: 6px; overflow: hidden; cursor: pointer; text-decoration: none; color: white; border: 1px solid transparent; transition: transform 0.2s, border-color 0.2s; position: relative; }
+    .ep-card:hover { transform: translateY(-4px); border-color: #333; }
+    .ep-thumb { width: 100%; aspect-ratio: 16/9; background: #2a2a2a; display: flex; align-items: center; justify-content: center; color: #666; font-weight: bold; position: relative; }
+    .ep-info { padding: 12px; }
+    .ep-number { font-size: 0.85rem; color: #e50914; font-weight: 700; margin-bottom: 4px; }
+    .ep-title { font-size: 0.95rem; font-weight: 600; }
     
-    posterContainer.appendChild(posterImg);
-    mainWrapper.appendChild(posterContainer);
-    
-    const titleEl = document.getElementById("title");
-    const descEl = document.getElementById("desc");
-    const playBtn = document.querySelector(".play-btn");
-    
-    if (titleEl) mainWrapper.appendChild(titleEl); 
-    if (descEl) mainWrapper.appendChild(descEl);   
-    if (playBtn) mainWrapper.appendChild(playBtn); 
-    
-    document.body.insertBefore(mainWrapper, document.body.firstChild);
-  }
-
-  if (imagePath && posterImg) {
-    posterImg.src = imagePath;
-  }
-}
-
-// Kickoff loading immediately
-loadDataFiles();
-
-// ==========================================================================
-// 2. BACKGROUND FALLBACK (DYNAMIC EXTENSION EXTRACTION VIA MATCHED ID)
-// ==========================================================================
-
-function applyFallbackBackground(id) {
-  const video = document.getElementById("bgVideo");
-  if (video) {
-    video.style.display = "none";
-  }
-
-  const bgContainer = document.body;
-  const targetId = id || new URLSearchParams(window.location.search).get("movie") || new URLSearchParams(window.location.search).get("series");
-
-  const matchedSearchItem = window.searchArray ? window.searchArray.find(m => {
-    if (!m.link) return false;
-    const urlPart = m.link.includes('?') ? m.link.split('?')[1] : m.link;
-    const movieUrlParams = new URLSearchParams(urlPart);
-    const movieId = movieUrlParams.get('movie') || movieUrlParams.get('series');
-    return movieId && movieId.toLowerCase() === targetId.toLowerCase();
-  }) : null;
-
-  if (matchedSearchItem && matchedSearchItem.image) {
-    const filename = matchedSearchItem.image.split('/').pop();
-    const absoluteImagePath = `/images/${filename}`;
-    
-    bgContainer.style.backgroundImage = `url('${absoluteImagePath}')`;
-    bgContainer.style.backgroundSize = "cover";
-    bgContainer.style.backgroundPosition = "center";
-    bgContainer.style.backgroundRepeat = "no-repeat";
-    bgContainer.style.backgroundAttachment = "fixed";
-  } else {
-    bgContainer.style.backgroundColor = "#000000";
-    bgContainer.style.backgroundImage = "none";
-  }
-}
-
-// ==========================================================================
-// 3. CLOUDFLARE D1 TRACKER INTEGRATION (REPLACED FIRESTORE)
-// ==========================================================================
-
-async function checkContinueWatchingStatus(movieId) {
-  const token = localStorage.getItem("token");
-  if (!token || !movieId) return;
-
-  try {
-    const response = await fetch("/api/get-progress", {
-      method: "GET",
-      headers: {
-        "Authorization": `Bearer ${token}`
-      }
-    });
-
-    if (!response.ok) return;
-
-    const result = await response.json();
-    const progressMap = result.progress || {};
-    const mediaProgress = progressMap[movieId];
-
-    if (mediaProgress) {
-      const left = parseFloat(mediaProgress.left) || 0;
-      const duration = parseFloat(mediaProgress.duration) || 0;
-      const watched = duration - left;
-
-      // Only prompt continuation if progress lies within valid middle viewing margins
-      if (watched > 5 && left > 15) {
-        const timeLeftMinutes = Math.ceil(left / 60);
-        const playBtn = document.querySelector(".play-btn");
-        if (playBtn) {
-          playBtn.innerHTML = `
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: middle; margin-right: 5px;">
-              <polygon points="5 3 19 12 5 21 5 3"></polygon>
-            </svg>
-            Continue • ${timeLeftMinutes}m left
-          `;
-        }
-      }
-    }
-  } catch (error) {
-    console.error("Error reading continue watching status from API:", error);
-  }
-}
-
-// ==========================================================================
-// 4. USER INTERACTIVE NAVIGATION CONTROLS
-// ==========================================================================
-
-function play() {
-  const params = new URLSearchParams(window.location.search);
-  const id = params.get("movie") || params.get("series");
-  const movie = window.currentMovie; 
-  
-  if (movie && id) {
-    window.location.href = `videoplayer?ep=${movie.play || ''}&movie=${id}`;
-  }
-}
-
-function goBack() {
-  window.history.back();
-}
-
-// ==========================================================================
-// 5. GLOBAL STYLE DECORATORS & FADING OVERLAYS (UI/UX)
-// ==========================================================================
-
-(function () {
-  const overlay = document.createElement('div');
-  overlay.id = "bottomFadeOverlay";
-  
-  Object.assign(overlay.style, {
-    position: "fixed",
-    bottom: "0",
-    left: "0",
-    width: "100%",
-    height: "55vh",
-    background: "linear-gradient(to top, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0) 100%)",
-    pointerEvents: "none",
-    zIndex: "1"
-  });
-  
-  document.body.appendChild(overlay);
-
-  const style = document.createElement('style');
-  style.innerHTML = `
-    * {
-      -webkit-tap-highlight-color: transparent !important;
-      -webkit-touch-callout: none !important;
-      box-sizing: border-box;
-    }
-    button, a {
-      outline: none !important;
-      border: none;
-    }
-    button:focus, button:focus-visible, a:focus, a:focus-visible {
-      outline: none !important;
-    }
-    button:active, a:active {
-      background-color: transparent !important;
-    }
-    
-    #title, #desc, .play-btn, .back-btn, .text-container-wrapper, .info-container {
-      position: relative;
-      z-index: 2;
-    }
-
-    @media (orientation: landscape) {
-      body {
-        display: block !important;
-        overflow-y: auto !important;
-        min-height: 10vh;
-        margin: 0 !important;
-        padding: 0 !important;
-      }
-
-      .text-container-wrapper, .info-container {
-        display: none !important;
-      }
-
-      #ambientBg {
-        display: block !important;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        filter: blur(65px) brightness(0.35) saturate(1.4);
-        transform: scale(1.2); 
-        z-index: 0;
-        pointer-events: none;
-      }
-
-      #movieContentWrapper {
-        display: grid;
-        grid-template-columns: 240px 1fr;
-        gap: 24px;
-        width: 800px;
-        max-width: 75vw;
-        margin: 0px 0 80px 60px !important;
-        padding-top: 10px !important;
-        position: relative;
-        z-index: 3;
-      }
-
-      #moviePosterContainer {
-        grid-column: 1;
-        grid-row: 1;
-        display: block !important;
-        width: 100%;
-        aspect-ratio: 2 / 3;
-        border-radius: 12px;
-        overflow: hidden;
-        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
-      }
-
-      #moviePosterImg {
-        display: block !important;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-
-      #title {
-        grid-column: 2;
-        grid-row: 1;
-        align-self: center;
-        color: #ffffff;
-        font-size: 2.8rem;
-        font-weight: 800;
-        margin: 0 !important;
-        padding: 0 !important;
-        background: none !important;
-        text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7);
-        position: relative;
-        z-index: 4;
-      }
-
-      #desc {
-        grid-column: 1 / span 2;
-        grid-row: 2;
-        margin: 10px 0 0 0 !important;
-        color: rgba(255, 255, 255, 0.85);
-        font-size: 1.05rem;
-        line-height: 1.6;
-        position: relative;
-        z-index: 4;
-      }
-
-      .play-btn {
-        grid-column: 1 / span 2;
-        grid-row: 3;
-        align-self: flex-start !important;
-        justify-self: start !important;
-        position: relative;
-        z-index: 4;
-      }
-      
-      .back-btn {
-        position: fixed;
-        top: 40px;
-        right: 40px;
-        z-index: 5;
-      }
-    }
-
-    @media (orientation: portrait) {
-      #movieContentWrapper {
-        display: flex !important;
-        flex-direction: column !important;
-        justify-content: center !important;
-        align-items: center !important;
-        text-align: center !important;
-        position: absolute !important;
-        top: 70% !important;
-        left: 50% !important;
-        transform: translate(-50%, -50%) !important;
-        width: 100% !important;
-        max-width: 88vw !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        z-index: 3 !important;
-      }
-
-      #moviePosterContainer, 
-      #moviePosterImg, 
-      #ambientBg {
-        display: none !important;
-      }
-
-      #title, #desc {
-        text-align: center !important;
-        margin-left: auto !important;
-        margin-right: auto !important;
-        width: 100%;
-      }
-
-      #title {
-        margin: 0 0 16px 0 !important;
-      }
-
-      #desc {
-        margin: 0 0 24px 0 !important;
-      }
-
-      .play-btn {
-        margin: 0 auto !important;
-        display: inline-flex !important;
-        justify-content: center !important;
-        align-items: center !important;
-      }
-    }
+    .ep-progress-bar { position: absolute; bottom: 0; left: 0; height: 4px; background: #e50914; width: 0%; }
   `;
   document.head.appendChild(style);
-})();
+
+  /********** 2) Build Base DOM Structure **********/
+  const app = document.createElement("div");
+  app.innerHTML = `
+    <div class="hero-container" style="background-image: url('${series.banner}')">
+      <div class="hero-overlay">
+        <div class="series-details">
+          <h1 class="series-title">${series.title}</h1>
+          <p class="series-desc">${series.description}</p>
+          <div id="heroAction">
+            <a href="player.html?id=${series.id}&season=1&ep=1" class="resume-btn">▶ Play Episode 1</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="content-container">
+      <div class="controls-bar">
+        <h2>Episodes</h2>
+        <select id="seasonSelect" class="season-select"></select>
+      </div>
+      <div id="episodesGrid" class="episodes-grid"></div>
+    </div>
+  `;
+  document.body.appendChild(app);
+
+  /********** 3) Fetch Cloudflare D1 Watch Progress **********/
+  const API_BASE_URL = "https://rinolski.misty-fog-201e.workers.dev";
+  const AUTH_TOKEN = localStorage.getItem("session_token") || "";
+  let watchProgress = {};
+
+  if (AUTH_TOKEN) {
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/get-progress`, {
+        method: "GET",
+        headers: { "Authorization": `Bearer ${AUTH_TOKEN}` }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        watchProgress = data.progress || {};
+      }
+    } catch (e) {
+      console.error("Failed to load progress from D1:", e);
+    }
+  }
+
+  /********** 4) Populate Seasons & Episodes **********/
+  const seasonSelect = document.getElementById("seasonSelect");
+  const episodesGrid = document.getElementById("episodesGrid");
+
+  series.seasons.forEach((season) => {
+    const opt = document.createElement("option");
+    opt.value = season.seasonNumber;
+    opt.textContent = `Season ${season.seasonNumber}`;
+    seasonSelect.appendChild(opt);
+  });
+
+  function renderEpisodes(seasonNumber) {
+    episodesGrid.innerHTML = "";
+    const season = series.seasons.find(s => s.seasonNumber === parseInt(seasonNumber));
+    if (!season) return;
+
+    for (let i = 1; i <= season.totalEpisodes; i++) {
+      const epCard = document.createElement("a");
+      epCard.className = "ep-card";
+      epCard.href = `player.html?id=${series.id}&season=${season.seasonNumber}&ep=${i}`;
+
+      // Check D1 progress for this episode key
+      const progressKey = `${series.id}_s${season.seasonNumber}_e${i}`;
+      const epData = watchProgress[progressKey] || watchProgress[i]; 
+      let pct = 0;
+      if (epData && epData.duration > 0) {
+        pct = Math.min(100, Math.max(0, (epData.left / epData.duration) * 100));
+      }
+
+      epCard.innerHTML = `
+        <div class="ep-thumb">
+          <span>EP ${i}</span>
+          <div class="ep-progress-bar" style="width: ${pct}%"></div>
+        </div>
+        <div class="ep-info">
+          <div class="ep-number">Episode ${i}</div>
+          <div class="ep-title">Episode ${i}</div>
+        </div>
+      `;
+      episodesGrid.appendChild(epCard);
+    }
+  }
+
+  seasonSelect.addEventListener("change", (e) => renderEpisodes(e.target.value));
+  
+  // Render initial season
+  renderEpisodes(series.seasons[0].seasonNumber);
+});
+
