@@ -1,14 +1,13 @@
-const SERIES_DB = {
-    lucifer: {
-        title: "Lucifer",
-        year: "2016–2021",
-        description: "Lucifer Morningstar abandons Hell for Los Angeles where he helps the LAPD solve crimes.",
-        starring: "Tom Ellis, Lauren German",
-        creator: "Tom Kapinos",
-        trailer: "https://res.cloudinary.com/dhqn68dsi/video/upload/v1766533213/YouCut_20251223_153109440_dymkux.mp4",
-        episodes: [
-            { id: "LuciferS1E1", title: "Pilot", time: "42m", desc: "Lucifer meets Chloe." },
-            { id: "LuciferS1E2", title: "Lucifer, Devil of LA", time: "45m", desc: "A new case shakes Lucifer." }
-        ]
-    }
+window.seriesData = {
+  "steven-universe": {
+    title: "Steven Universe",
+    synopsis: "A team of interstellar warriors, the Crystal Gems, protects Earth from their own kind, while teaching young half-human, half-Gem Steven how to use his powers.",
+    poster: "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Posters/steven-universe.jpg",
+    backdrop: "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Backdrops/steven-universe.jpg",
+    epPrefix: "StevenUniverse",
+    seasons: [
+      { seasonNumber: 1, totalEpisodes: 52 },
+      { seasonNumber: 2, totalEpisodes: 26 }
+    ]
+  }
 };
