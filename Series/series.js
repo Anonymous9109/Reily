@@ -13,7 +13,7 @@ window.seriesData = {
         seasonNumber: 1,
         totalEpisodes: 52,
         // Base stream URL template; replaces {ep} dynamically
-        streamUrlTemplate: "https://example.com/cdn/steven-universe/s1/ep_{ep}.m3u8",
+        streamUrlTemplate: "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Movies/73177607.mp4",
         subtitles: [
           { lang: "en", label: "English", src: "/subs/su_s1_en.vtt" }
         ]
