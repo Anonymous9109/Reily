@@ -142,6 +142,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       to{transform:translate(-50%,-50%) rotate(360deg);}  
     }
 
+    /* IMA Ad overlay layer styles */
     #imaAdContainer {
       position: absolute;
       inset: 0;
@@ -171,19 +172,21 @@ document.addEventListener("DOMContentLoaded", async () => {
   controls.className = "controls";
   controls.innerHTML = `
     <button id="rewindBtn"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M2.99805 3.5C2.99805 3.22386 3.2219 3 3.49805 3C3.77419 3 3.99805 3.22386 3.99805 3.5V5.70632C4.91067 4.67184 6.08199 3.88382 7.40447 3.43107C9.2407 2.80243 11.2429 2.86309 13.0377 3.60171C14.8325 4.34033 16.2974 5.7065 17.1593 7.44549C17.2819 7.69291 17.1808 7.9929 16.9333 8.11552C16.6859 8.23815 16.3859 8.13698 16.2633 7.88956C15.5092 6.36804 14.2275 5.17272 12.6571 4.52646C11.0868 3.88021 9.33496 3.82714 7.72837 4.37716C6.31508 4.861 5.09908 5.78248 4.25184 7H7.49805C7.77419 7 7.99805 7.22386 7.99805 7.5C7.99805 7.77614 7.77419 8 7.49805 8H3.49805C3.2219 8 2.99805 7.77614 2.99805 7.5V3.5ZM8.00005 10.5C8.00005 10.3156 7.89856 10.1462 7.73598 10.0592C7.5734 9.97215 7.37613 9.98169 7.2227 10.084L5.7227 11.084C5.49294 11.2372 5.43085 11.5476 5.58403 11.7774C5.7372 12.0071 6.04764 12.0692 6.2774 11.916L7.00005 11.4343V16.5C7.00005 16.7761 7.22391 17 7.50005 17C7.7762 17 8.00005 16.7761 8.00005 16.5V10.5ZM12.5029 10C11.568 10 10.9058 10.4367 10.5071 11.1292C10.1306 11.7833 10.0029 12.6366 10.0029 13.5C10.0029 14.3634 10.1306 15.2167 10.5071 15.8708C10.9058 16.5633 11.568 17 12.5029 17C13.4379 17 14.1001 16.5633 14.4988 15.8708C14.8753 15.2167 15.0029 14.3634 15.0029 13.5C15.0029 12.6366 14.8753 11.7833 14.4988 11.1292C14.1001 10.4367 13.4379 10 12.5029 10ZM11.0029 13.5C11.0029 12.7065 11.1253 12.0598 11.3738 11.6281C11.6001 11.2349 11.9379 11 12.5029 11C13.068 11 13.4058 11.2349 13.6321 11.6281C13.8806 12.0598 14.0029 12.7065 14.0029 13.5C14.0029 14.2935 13.8806 14.9402 13.6321 15.3719C13.4058 15.7651 13.068 16 12.5029 16C11.9379 16 11.6001 15.7651 11.3738 15.3719C11.1253 14.9402 11.0029 14.2935 11.0029 13.5Z" fill="white"/>
-    </svg></button>
-    <button id="playPauseBtn" style="background: none; border: none; cursor: pointer; color: white;">
-      <svg id="playIcon" viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
-        <path d="M6 4.359c0-.938 1.013-1.523 1.825-1.054l13.088 7.556a1.218 1.218 0 0 1 0 2.108l-13.088 7.556c-.812.469-1.825-.116-1.825-1.054V4.359Z" />
-      </svg>
-      <svg id="pauseIcon" viewBox="0 0 24 24" width="32" height="32" fill="currentColor" style="display:none">
-        <path d="M5.25 4.5A1.25 1.25 0 0 0 4 5.75v12.5c0 .69.56 1.25 1.25 1.25h3.5c.69 0 1.25-.56 1.25-1.25V5.75c0-.69-.56-1.25-1.25-1.25h-3.5ZM14.25 4.5a1.25 1.25 0 0 0-1.25 1.25v12.5c0 .69.56 1.25 1.25 1.25h3.5c.69 0 1.25-.56 1.25-1.25V5.75c0-.69-.56-1.25-1.25-1.25h-3.5Z" />
-      </svg>
-    </button>
-    <button id="skipBtn"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M17 3.5C17 3.22386 16.7761 3 16.5 3C16.2239 3 16 3.22386 16 3.5V5.70245C15.0879 4.66988 13.9178 3.88325 12.597 3.43107C10.7608 2.80243 8.75857 2.86309 6.96376 3.60171C5.16895 4.34033 3.70403 5.7065 2.84215 7.44549C2.71953 7.69291 2.82069 7.9929 3.06812 8.11552C3.31554 8.23815 3.61552 8.13698 3.73815 7.88956C4.49224 6.36804 5.77396 5.17272 7.34432 4.52646C8.91469 3.88021 10.6665 3.82714 12.2731 4.37716C13.6864 4.861 14.9024 5.78248 15.7496 7H12.5C12.2239 7 12 7.22386 12 7.5C12 7.77614 12.2239 8 12.5 8H16.5C16.7761 8 17 7.77614 17 7.5V3.5ZM10.5071 11.1292C10.9058 10.4367 11.568 10 12.5029 10C13.4379 10 14.1001 10.4367 14.4988 11.1292C14.8753 11.7833 15.0029 12.6366 15.0029 13.5C15.0029 14.3634 14.8753 15.2167 14.4988 15.8708C14.1001 16.5633 13.4379 17 12.5029 17C11.568 17 10.9058 16.5633 10.5071 15.8708C10.1306 15.2167 10.0029 14.3634 10.0029 13.5C10.0029 12.6366 10.1306 11.7833 10.5071 11.1292ZM11.3738 11.6281C11.1253 12.0598 11.0029 12.7065 11.0029 13.5C11.0029 14.2935 11.1253 14.9402 11.3738 15.3719C11.6001 15.7651 11.9379 16 12.5029 16C13.068 16 13.4058 15.7651 13.6321 15.3719C13.8806 14.9402 14.0029 14.2935 14.0029 13.5C14.0029 12.7065 13.8806 12.0598 13.6321 11.6281C13.4058 11.2349 13.068 11 12.5029 11C11.9379 11 11.6001 11.2349 11.3738 11.6281ZM8.00005 10.5C8.00005 10.3156 7.89856 10.1462 7.73598 10.0592C7.5734 9.97215 7.37613 9.98169 7.2227 10.084L5.7227 11.084C5.49294 11.2372 5.43085 11.5476 5.58403 11.7774C5.7372 12.0071 6.04764 12.0692 6.2774 11.916L7.00005 11.4343V16.5C7.00005 16.7761 7.22391 17 7.50005 17C7.7762 17 8.00005 16.7761 8.00005 16.5V10.5Z" fill="white"/>
-    </svg></button>
+<path d="M2.99805 3.5C2.99805 3.22386 3.2219 3 3.49805 3C3.77419 3 3.99805 3.22386 3.99805 3.5V5.70632C4.91067 4.67184 6.08199 3.88382 7.40447 3.43107C9.2407 2.80243 11.2429 2.86309 13.0377 3.60171C14.8325 4.34033 16.2974 5.7065 17.1593 7.44549C17.2819 7.69291 17.1808 7.9929 16.9333 8.11552C16.6859 8.23815 16.3859 8.13698 16.2633 7.88956C15.5092 6.36804 14.2275 5.17272 12.6571 4.52646C11.0868 3.88021 9.33496 3.82714 7.72837 4.37716C6.31508 4.861 5.09908 5.78248 4.25184 7H7.49805C7.77419 7 7.99805 7.22386 7.99805 7.5C7.99805 7.77614 7.77419 8 7.49805 8H3.49805C3.2219 8 2.99805 7.77614 2.99805 7.5V3.5ZM8.00005 10.5C8.00005 10.3156 7.89856 10.1462 7.73598 10.0592C7.5734 9.97215 7.37613 9.98169 7.2227 10.084L5.7227 11.084C5.49294 11.2372 5.43085 11.5476 5.58403 11.7774C5.7372 12.0071 6.04764 12.0692 6.2774 11.916L7.00005 11.4343V16.5C7.00005 16.7761 7.22391 17 7.50005 17C7.7762 17 8.00005 16.7761 8.00005 16.5V10.5ZM12.5029 10C11.568 10 10.9058 10.4367 10.5071 11.1292C10.1306 11.7833 10.0029 12.6366 10.0029 13.5C10.0029 14.3634 10.1306 15.2167 10.5071 15.8708C10.9058 16.5633 11.568 17 12.5029 17C13.4379 17 14.1001 16.5633 14.4988 15.8708C14.8753 15.2167 15.0029 14.3634 15.0029 13.5C15.0029 12.6366 14.8753 11.7833 14.4988 11.1292C14.1001 10.4367 13.4379 10 12.5029 10ZM11.0029 13.5C11.0029 12.7065 11.1253 12.0598 11.3738 11.6281C11.6001 11.2349 11.9379 11 12.5029 11C13.068 11 13.4058 11.2349 13.6321 11.6281C13.8806 12.0598 14.0029 12.7065 14.0029 13.5C14.0029 14.2935 13.8806 14.9402 13.6321 15.3719C13.4058 15.7651 13.068 16 12.5029 16C11.9379 16 11.6001 15.7651 11.3738 15.3719C11.1253 14.9402 11.0029 14.2935 11.0029 13.5Z" fill="white"/>
+</svg>
+</button>
+<button id="playPauseBtn" style="background: none; border: none; cursor: pointer; color: white;">
+  <svg id="playIcon" viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
+    <path d="M6 4.359c0-.938 1.013-1.523 1.825-1.054l13.088 7.556a1.218 1.218 0 0 1 0 2.108l-13.088 7.556c-.812.469-1.825-.116-1.825-1.054V4.359Z" />
+  </svg>
+  <svg id="pauseIcon" viewBox="0 0 24 24" width="32" height="32" fill="currentColor" style="display:none">
+    <path d="M5.25 4.5A1.25 1.25 0 0 0 4 5.75v12.5c0 .69.56 1.25 1.25 1.25h3.5c.69 0 1.25-.56 1.25-1.25V5.75c0-.69-.56-1.25-1.25-1.25h-3.5ZM14.25 4.5a1.25 1.25 0 0 0-1.25 1.25v12.5c0 .69.56 1.25 1.25 1.25h3.5c.69 0 1.25-.56 1.25-1.25V5.75c0-.69-.56-1.25-1.25-1.25h-3.5Z" />
+  </svg>
+</button>
+<button id="skipBtn"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M17 3.5C17 3.22386 16.7761 3 16.5 3C16.2239 3 16 3.22386 16 3.5V5.70245C15.0879 4.66988 13.9178 3.88325 12.597 3.43107C10.7608 2.80243 8.75857 2.86309 6.96376 3.60171C5.16895 4.34033 3.70403 5.7065 2.84215 7.44549C2.71953 7.69291 2.82069 7.9929 3.06812 8.11552C3.31554 8.23815 3.61552 8.13698 3.73815 7.88956C4.49224 6.36804 5.77396 5.17272 7.34432 4.52646C8.91469 3.88021 10.6665 3.82714 12.2731 4.37716C13.6864 4.861 14.9024 5.78248 15.7496 7H12.5C12.2239 7 12 7.22386 12 7.5C12 7.77614 12.2239 8 12.5 8H16.5C16.7761 8 17 7.77614 17 7.5V3.5ZM10.5071 11.1292C10.9058 10.4367 11.568 10 12.5029 10C13.4379 10 14.1001 10.4367 14.4988 11.1292C14.8753 11.7833 15.0029 12.6366 15.0029 13.5C15.0029 14.3634 14.8753 15.2167 14.4988 15.8708C14.1001 16.5633 13.4379 17 12.5029 17C11.568 17 10.9058 16.5633 10.5071 15.8708C10.1306 15.2167 10.0029 14.3634 10.0029 13.5C10.0029 12.6366 10.1306 11.7833 10.5071 11.1292ZM11.3738 11.6281C11.1253 12.0598 11.0029 12.7065 11.0029 13.5C11.0029 14.2935 11.1253 14.9402 11.3738 15.3719C11.6001 15.7651 11.9379 16 12.5029 16C13.068 16 13.4058 15.7651 13.6321 15.3719C13.8806 14.9402 14.0029 14.2935 14.0029 13.5C14.0029 12.7065 13.8806 12.0598 13.6321 11.6281C13.4058 11.2349 13.068 11 12.5029 11C11.9379 11 11.6001 11.2349 11.3738 11.6281ZM8.00005 10.5C8.00005 10.3156 7.89856 10.1462 7.73598 10.0592C7.5734 9.97215 7.37613 9.98169 7.2227 10.084L5.7227 11.084C5.49294 11.2372 5.43085 11.5476 5.58403 11.7774C5.7372 12.0071 6.04764 12.0692 6.2774 11.916L7.00005 11.4343V16.5C7.00005 16.7761 7.22391 17 7.50005 17C7.7762 17 8.00005 16.7761 8.00005 16.5V10.5Z" fill="white"/>
+</svg>
+</button>
   `;
 
   const ccBtn = document.createElement("button");
@@ -239,47 +242,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
-  /********** D1 CLOUDFLARE TRACKER SYSTEM CONFIG **********/
-  const CONFIG = {
-    API_BASE_URL: "https://rinolski.misty-fog-201e.workers.dev",
-    AUTH_TOKEN: localStorage.getItem("session_token") || ""
-  };
-
-  const movieParamId = params.get("id") || params.get("movie") || ep; 
-  let activeMovieTitle = "Unknown Media";
-  
-  if (window.movies && window.movies[movieParamId]) {
-    activeMovieTitle = window.movies[movieParamId].title;
-  } else if (document.title && document.title !== "Player") {
-    activeMovieTitle = document.title;
-  }
-
-  let isResuming = true; 
-  let lastSavedTime = 0;
-  let serverTimestamp = null; 
-
-  // Pre-fetch watch progress BEFORE loading video sources
-  async function fetchSavedProgress() {
-    if (!CONFIG.AUTH_TOKEN) return;
-    try {
-      const response = await fetch(`${CONFIG.API_BASE_URL}/api/get-progress`, {
-        method: "GET",
-        headers: { "Authorization": `Bearer ${CONFIG.AUTH_TOKEN}` }
-      });
-      if (response.ok) {
-        const data = await response.json();
-        const progressMap = data.progress || {};
-        if (progressMap[movieParamId]) {
-          serverTimestamp = parseFloat(progressMap[movieParamId].left);
-        }
-      }
-    } catch (err) { 
-      console.error("Error pulling history from Cloudflare Worker: ", err); 
-    }
-  }
-
-  await fetchSavedProgress();
-
   /********** 4) Load Source **********/
   async function attachSourceToVideo(url) {
     const isM3u8 = /\.m3u8($|\?)/i.test(url);
@@ -301,24 +263,19 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   /********** GOOGLE IMA VAST IMPLEMENTATION **********/
-  function initIMAAdWorkflow(movieUrl, adTagUrl = "") {
-    if (!adTagUrl) {
-      fallbackDirectToMovie(movieUrl);
-      return;
-    }
-
+  function initIMAAdWorkflow(movieUrl) {
     if (!window.google || !window.google.ima) {
       const imaScript = document.createElement("script");
       imaScript.src = "https://imasdk.googleapis.com/js/sdkloader/ima3.js";
-      imaScript.onload = () => setupIMAManager(movieUrl, adTagUrl);
+      imaScript.onload = () => setupIMAManager(movieUrl);
       imaScript.onerror = () => fallbackDirectToMovie(movieUrl);
       document.head.appendChild(imaScript);
     } else {
-      setupIMAManager(movieUrl, adTagUrl);
+      setupIMAManager(movieUrl);
     }
   }
 
-  function setupIMAManager(movieUrl, adTagUrl) {
+  function setupIMAManager(movieUrl) {
     const adContainer = document.createElement("div");
     adContainer.id = "imaAdContainer";
     root.appendChild(adContainer);
@@ -347,7 +304,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     adsLoader.addEventListener(google.ima.AdErrorEvent.Type.AD_ERROR, () => cleanAdAndStartMovie(adContainer, movieUrl), false);
 
     const adsRequest = new google.ima.AdsRequest();
-    adsRequest.adTagUrl = adTagUrl;
+    adsRequest.adTagUrl = "";
     adsRequest.linearAdSlotWidth = root.clientWidth;
     adsRequest.linearAdSlotHeight = root.clientHeight;
     adsLoader.requestAds(adsRequest);
@@ -364,7 +321,27 @@ document.addEventListener("DOMContentLoaded", async () => {
     await attachSourceToVideo(movieUrl);
   }
 
-  initIMAAdWorkflow(src, window.adTagUrl || "");
+  initIMAAdWorkflow(src);
+
+
+  /********** D1 CLOUDFLARE TRACKER SYSTEM CONFIG **********/
+  const CONFIG = {
+    API_BASE_URL: "https://rinolski.misty-fog-201e.workers.dev",
+    AUTH_TOKEN: localStorage.getItem("session_token") || ""
+  };
+
+  const movieParamId = params.get("id") || params.get("movie") || ep; 
+  let activeMovieTitle = "Unknown Media";
+  
+  if (window.movies && window.movies[movieParamId]) {
+    activeMovieTitle = window.movies[movieParamId].title;
+  } else if (document.title && document.title !== "Player") {
+    activeMovieTitle = document.title;
+  }
+
+  let isResuming = true; 
+  let lastSavedTime = 0;
+  let serverTimestamp = null; 
 
   async function saveWatchProgress() {
     if (!CONFIG.AUTH_TOKEN || !video.duration || isResuming) return;
@@ -575,8 +552,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const scrub = (e) => {
     const rect = progressBg.getBoundingClientRect();
+    const isPortrait = window.innerHeight > window.innerWidth;
     const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-    let pct = (clientX - rect.left) / rect.width;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    
+    let pct = isPortrait ? (clientY - rect.top) / rect.height : (clientX - rect.left) / rect.width;
     pct = Math.max(0, Math.min(1, pct));
     progressBar.style.width = pct * 100 + "%";
     const targetTime = pct * video.duration;
@@ -584,16 +564,20 @@ document.addEventListener("DOMContentLoaded", async () => {
     video.currentTime = targetTime;
   };
 
-  progressContainer.onpointerdown = (e) => { isDragging = true; progressContainer.classList.add("dragging"); scrub(e); };
-  window.onpointermove = (e) => { if (isDragging) scrub(e); };
-  window.onpointerup = () => { if (isDragging) { isDragging = false; progressContainer.classList.remove("dragging"); showControls(); } };
+  progressContainer.onmousedown = (e) => { isDragging = true; progressContainer.classList.add("dragging"); scrub(e); };
+  window.onmousemove = (e) => { if (isDragging) scrub(e); };
+  window.onmouseup = () => { if (isDragging) { isDragging = false; progressContainer.classList.remove("dragging"); showControls(); } };
+
+  progressContainer.ontouchstart = (e) => { isDragging = true; progressContainer.classList.add("dragging"); scrub(e); };
+  window.ontouchmove = (e) => { if (isDragging) scrub(e); };
+  window.ontouchend = () => { if (isDragging) { isDragging = false; progressContainer.classList.remove("dragging"); showControls(); } };
 
   backBtn.onclick = () => { if (window.backEpisodeLink) location.href = window.backEpisodeLink; };
   nextBtn.onclick = () => { if (window.nextEpisodeLink) location.href = window.nextEpisodeLink; };
 
   root.addEventListener("click", () => { if(!isDragging) controlsVisible ? hideControls() : showControls(); });
 
-  /********** LOADEDMETADATA JUMP RESUME **********/
+  /********** THE JUMP FIX: TRACK LOADEDMETADATA **********/
   video.addEventListener("loadedmetadata", async () => {
     if (serverTimestamp && serverTimestamp < video.duration - 15) {
       video.currentTime = serverTimestamp;
@@ -609,6 +593,28 @@ document.addEventListener("DOMContentLoaded", async () => {
       showControls(5000); 
     }
   });
+
+  // REST API fetch sequence directly checking matching dictionary keys
+  (async function fetchSavedProgress() {
+    if (CONFIG.AUTH_TOKEN) {
+      try {
+        const response = await fetch(`${CONFIG.API_BASE_URL}/api/get-progress`, {
+          method: "GET",
+          headers: { "Authorization": `Bearer ${CONFIG.AUTH_TOKEN}` }
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          const progressMap = data.progress || {};
+          if (progressMap[movieParamId]) {
+            serverTimestamp = parseFloat(progressMap[movieParamId].left);
+          }
+        }
+      } catch (err) { 
+        console.error("Error pulling history from Cloudflare Worker: ", err); 
+      }
+    }
+  })();
 
   /********** 7) Portrait rotation **********/
   function rotateIfPortrait() {
@@ -653,3 +659,19 @@ document.addEventListener("dblclick", () => { goFullscreenLandscape(); });
 document.addEventListener("fullscreenchange", () => {
   if (!document.fullscreenElement && screen.orientation && screen.orientation.unlock) { screen.orientation.unlock(); }
 });
+
+(function () {
+  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  if (isTouchDevice) return;
+  function createTouchEvent(type, mouseEvent) {
+    const touchObj = new Touch({
+      identifier: Date.now(), target: mouseEvent.target, clientX: mouseEvent.clientX, clientY: mouseEvent.clientY,
+      radiusX: 2, radiusY: 2, force: 0.5
+    });
+    return new TouchEvent(type, { cancelable: true, bubbles: true, touches: type === "touchend" ? [] : [touchObj], targetTouches: type === "touchend" ? [] : [touchObj], changedTouches: [touchObj] });
+  }
+  document.addEventListener("mousedown", (e) => { e.target.dispatchEvent(createTouchEvent("touchstart", e)); });
+  document.addEventListener("mousemove", (e) => { e.target.dispatchEvent(createTouchEvent("touchmove", e)); });
+  document.addEventListener("mouseup", (e) => { e.target.dispatchEvent(createTouchEvent("touchend", e)); });
+})();
+
