@@ -145,11 +145,13 @@
             display: none;
         }
 
+        /* Fixed Sizing for Home & Search Reels */
         .movie {
-            flex: 0 0 auto;
+            flex: 0 0 110px;
+            width: 110px;
+            height: 165px;
             margin: 0 !important;
             padding: 0 !important;
-            width: 110px;
             position: relative;
             cursor: pointer;
             overflow: hidden;
@@ -159,9 +161,12 @@
 
         .movie img {
             display: block;
-            margin: 0;
-            width: 100%;
-            height: 165px; 
+            width: 110px;
+            height: 165px;
+            min-width: 110px;
+            min-height: 165px;
+            max-width: 110px;
+            max-height: 165px;
             object-fit: cover;
             border-radius: 4px;
             -webkit-user-drag: none;
@@ -562,73 +567,100 @@
             font-weight: bold;
         }
 
+        
+        
+        
+        
+
+        
+        
+            
+            
+        
+                /* Fixed 3-Column Profile Watch History Grid */
         .history-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 0px;
+            width: 100%;
+            box-sizing: border-box;
         }
         
         .history-card-link {
             text-decoration: none;
             color: inherit;
             display: block;
+            width: 100%;
+            min-width: 0;
         }
         
         .history-item {
-            background: #0b0b0b;
-            border: 1px solid #141414;
-            padding: 10px;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            position: relative;
-            overflow: hidden;
-            transition: background 0.2s;
-        }
-        
-        .history-item:hover {
             background: #111111;
+            border-radius: 0px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s, background 0.2s;
+            cursor: pointer;
+            width: 100%;
+            min-width: 0;
         }
         
+        .history-item:active {
+            transform: scale(0.96);
+        }
+        
+        /* Enforced Aspect Ratio for Watch History Poster Frames */
         .history-poster-frame {
-            width: 50px;
-            height: 75px;
-            flex-shrink: 0;
+            width: 100%;
+            aspect-ratio: 2 / 3;
             background: #222222;
-            border-radius: 4px;
+            border-radius: 0px;
             overflow: hidden;
             position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            box-sizing: border-box;
         }
         
         .history-poster-frame img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            display: block;
         }
-        
+
         .history-meta-details {
+            padding: 6px 4px;
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 2px;
             overflow: hidden;
+            background: #000000;
+            width: 100%;
+            box-sizing: border-box;
         }
         
         .history-title-text {
-            font-size: 15px;
+            font-size: 12px;
             font-weight: bold;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            color: #ffffff;
+            width: 100%;
+            display: block;
         }
         
         .history-time {
             color: #808080;
-            font-size: 11px;
+            font-size: 10px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100%;
+            display: block;
         }
+
 
         .profile-section-heading {
             font-size: 16px;
@@ -1458,7 +1490,7 @@
         historyContainer.innerHTML = "";
 
         if(!historyArray || historyArray.length === 0) {
-            historyContainer.innerHTML = `<p style="color: gray; font-size: 14px; padding: 5px;">No movies watched yet.</p>`;
+            historyContainer.innerHTML = `<p style="color: gray; font-size: 14px; padding: 5px; grid-column: span 3;">No movies watched yet.</p>`;
             return;
         }
 
@@ -1476,17 +1508,17 @@
             const sanitizedTitle = titleStr.replace(/'/g, "\\'");
             const sanitizedLink = referenceMovie.link.replace(/'/g, "\\'");
             
-            cardLink.setAttribute('onclick', `MapsToMovie('${sanitizedTitle}', '${sanitizedLink}', this.querySelector('.history-item'))`);
+            cardLink.setAttribute('onclick', `navigateToMovie('${sanitizedTitle}', '${sanitizedLink}', this.querySelector('.history-item'))`);
             cardLink.style.cursor = 'pointer';
             
             cardLink.innerHTML = `
                 <div class="history-item">
                     <div class="history-poster-frame">
-                        ${referenceMovie.image ? `<img src="${referenceMovie.image}" onerror="this.remove();">` : ''}
+                        ${referenceMovie.image ? `<img src="${referenceMovie.image}" onerror="this.insertAdjacentHTML('afterend', '<p class=\\'fallback-label\\'>${sanitizedTitle}</p>'); this.style.opacity='0.25';">` : ''}
                     </div>
                     <div class="history-meta-details">
-                        <span class="history-title-text">${titleStr}</span>
-                        <span class="history-time">Watched: ${watchTimeStr}</span>
+                        <span class="history-title-text" title="${titleStr}">${titleStr}</span>
+                        <span class="history-time">${watchTimeStr}</span>
                     </div>
                 </div>
             `;
@@ -1914,3 +1946,4 @@
 </script>
 </body>
 </html>
+
