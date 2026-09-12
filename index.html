@@ -900,9 +900,9 @@
 
 <!-- Account Setup Container -->
 <div class="modal-box" id="usernameModal" style="display: none;">
-    <p>Please enter a display name to participate in discussions:</p>
+    <p>Please enter a username to be able to access Rinolski</p>
     <div class="modal-input-group">
-        <input type="text" id="usernameInput" placeholder="Enter username (3-20 characters)" />
+        <input type="text" id="usernameInput" placeholder="Enter username" />
         <button class="btn-secondary" id="saveBtn" onclick="saveUsername()">Set Name</button>
     </div>
     <div id="statusBanner" class="status-banner"></div>
@@ -1423,7 +1423,7 @@
             const data = await response.json();
 
             if (response.ok && (data.success || data.status === "ok")) {
-                showStatus("Username set successfully!", "#4caf50");
+                showStatus("Username set successfully!", "green");
                 showToast("Username updated!");
                 
                 if (currentUser) currentUser.username = username;
