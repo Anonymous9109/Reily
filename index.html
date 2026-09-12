@@ -4,18 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Rinolski</title>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
-
+   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
     <style>
         * {
             -webkit-tap-highlight-color: transparent;
             -webkit-touch-callout: none;
             box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
             margin: 0;
-            font-family: Helvetica, Arial, sans-serif;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: #000000 !important;
             color: #e5e5e5;
             padding-top: 105px;
@@ -82,7 +83,7 @@
         }
 
         .Rinolski-font {
-            font-family: 'Bebas Neue', sans-serif;
+            font-family: 'Bebas Neue', Impact, 'Arial Narrow Bold', sans-serif;
             font-size: 34px;
             color: #800000;
             margin: 0;
@@ -145,7 +146,6 @@
             display: none;
         }
 
-        /* Fixed Sizing for Home & Search Reels */
         .movie {
             flex: 0 0 110px;
             width: 110px;
@@ -211,7 +211,6 @@
             z-index: 1;
         }
 
-        /* Slide panels using hardware-accelerated transform */
         .sliding-panel {
             position: fixed;
             top: 0;
@@ -282,22 +281,23 @@
         .profile-avatar-row {
             display: flex;
             align-items: center;
+            justify-content: space-between;
             gap: 15px;
             margin-bottom: 25px;
         }
         
         .avatar {
-            width: 60px;
-            height: 60px;
-            min-width: 60px;
-            min-height: 60px;
+            width: 80px;
+            height: 80px;
+            min-width: 80px;
+            min-height: 80px;
             background: #222;
-            border-radius: 4px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            border: 2px solid transparent;
+            border: 2px solid #333;
             flex-shrink: 0;
         }
         
@@ -305,10 +305,11 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+            border-radius: 50%;
         }
         
         .avatar-fallback {
-            font-size: 24px;
+            font-size: 32px;
             font-weight: bold;
             color: #fff;
         }
@@ -325,7 +326,7 @@
             aspect-ratio: 1/1;
             background: #141414;
             border: 2px solid transparent;
-            border-radius: 6px;
+            border-radius: 0%;
             overflow: hidden;
             position: relative;
             cursor: pointer;
@@ -339,13 +340,13 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+            border-radius: 0%;
         }
         
         .pfp-option.active {
             border-color: #e50914;
         }
 
-        /* Bottom Navigation Bar Base */
         footer {
             position: fixed;
             bottom: 0;
@@ -357,7 +358,7 @@
             justify-content: space-around;
             align-items: center;
             border-top: 1px solid #1a1a1a;
-            z-index: 3000;
+            z-index: 9000;
         }
 
         .nav-item {
@@ -390,7 +391,7 @@
             height: 24px;
             min-width: 24px;
             min-height: 24px;
-            border-radius: 4px;
+            border-radius: 0%;
             object-fit: cover;
             margin-bottom: 4px;
             border: 1.5px solid transparent;
@@ -402,7 +403,6 @@
             border-color: #ffffff;
         }
 
-        /* Landscape Mode Override */
         @media screen and (orientation: landscape) {
             body {
                 padding-left: 75px;
@@ -440,10 +440,10 @@
             }
 
             .avatar {
-                width: 50px;
-                height: 50px;
-                min-width: 50px;
-                min-height: 50px;
+                width: 70px;
+                height: 70px;
+                min-width: 70px;
+                min-height: 70px;
             }
 
             .pfp-selector-grid {
@@ -462,7 +462,8 @@
         .profile-details-container {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 12px;
+            flex-wrap: wrap;
         }
         
         .gear-settings-btn {
@@ -481,8 +482,8 @@
         }
         
         .gear-settings-btn svg {
-            width: 18px;
-            height: 18px;
+            width: 22px;
+            height: 22px;
         }
 
         #settings-popup-backdrop {
@@ -567,17 +568,6 @@
             font-weight: bold;
         }
 
-        
-        
-        
-        
-
-        
-        
-            
-            
-        
-                /* Fixed 3-Column Profile Watch History Grid */
         .history-list {
             display: grid;
             grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -611,7 +601,6 @@
             transform: scale(0.96);
         }
         
-        /* Enforced Aspect Ratio for Watch History Poster Frames */
         .history-poster-frame {
             width: 100%;
             aspect-ratio: 2 / 3;
@@ -660,7 +649,6 @@
             width: 100%;
             display: block;
         }
-
 
         .profile-section-heading {
             font-size: 16px;
@@ -744,7 +732,7 @@
             bottom: 85px;
             left: 50%;
             transform: translateX(-50%);
-            z-index: 6000;
+            z-index: 9500;
             display: flex;
             flex-direction: column;
             gap: 10px;
@@ -827,11 +815,98 @@
             color: #ffffff;
             margin-bottom: 0;
         }
+
+        /* USERNAME MODAL ENGINE STYLING */
+        .modal-box {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 400px;
+            background-color: #1f1f1f;
+            border: 1px solid #333333;
+            border-radius: 8px;
+            padding: 24px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.9);
+            z-index: 8500;
+        }
+
+        .modal-box p {
+            font-size: 1rem;
+            color: #e5e5e5;
+            margin-bottom: 16px;
+            line-height: 1.4;
+        }
+
+        .modal-input-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .modal-input-group input[type="text"] {
+            flex: 1;
+            background-color: #2b2b2b;
+            border: 1px solid #404040;
+            border-radius: 4px;
+            padding: 10px 14px;
+            color: #ffffff;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+
+        .modal-input-group input[type="text"]:focus {
+            border-color: #e50914;
+        }
+
+        .btn-secondary {
+            background-color: #e50914;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            padding: 10px 16px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .btn-secondary:hover {
+            background-color: #f6121d;
+        }
+
+        .btn-secondary:disabled {
+            background-color: #555555;
+            cursor: not-allowed;
+        }
+
+        .status-banner {
+            margin-top: 12px;
+            font-size: 0.85rem;
+            color: #e50914;
+            display: none;
+            word-break: break-word;
+        }
+
+        .profile-locked {
+            pointer-events: none !important;
+        }
     </style>
 </head>
 <body>
 
 <div id="toast-container"></div>
+
+<!-- Account Setup Container -->
+<div class="modal-box" id="usernameModal" style="display: none;">
+    <p>Please enter a display name to participate in discussions:</p>
+    <div class="modal-input-group">
+        <input type="text" id="usernameInput" placeholder="Enter username (3-20 characters)" />
+        <button class="btn-secondary" id="saveBtn" onclick="saveUsername()">Set Name</button>
+    </div>
+    <div id="statusBanner" class="status-banner"></div>
+</div>
 
 <div id="action-sheet-backdrop" onclick="closeActionSheet()"></div>
 <div id="action-sheet">
@@ -942,14 +1017,17 @@
     </div>
     <div class="profile-content">
         <div class="profile-avatar-row">
-            <div class="avatar" id="profile-avatar-display">
-                <span class="avatar-fallback" id="profile-initial">-</span>
-            </div>
             <div class="profile-details-container">
                 <button class="gear-settings-btn" onclick="openSettingsPopup()" aria-label="Settings Menu">
-                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.70 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.70 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
                 </button>
-                <p style="margin:0; color: #ffffff; font-size:16px; font-weight: bold;" id="profile-email">Loading Account...</p>
+                <div id="username-display-group">
+                    <p style="margin:0; color: #ffffff; font-size:22px; font-weight: bold;" id="profile-username">Loading Account...</p>
+                </div>
+            </div>
+            
+            <div class="avatar" id="profile-avatar-display">
+                <span class="avatar-fallback" id="profile-initial">-</span>
             </div>
         </div>
 
@@ -984,7 +1062,7 @@
         8: "images/8.jpg",
         9: "images/9.jpg",
         10: "images/10.jpg"
-            };
+    };
     let currentUserPfpId = null;
 </script>
 
@@ -1257,8 +1335,125 @@
         }
     }
 
+    function showStatus(msg, color = "#e50914") {
+        const status = document.getElementById("statusBanner");
+        if (!status) return;
+        if (!msg) {
+            status.style.display = "none";
+            return;
+        }
+        status.style.color = color;
+        status.textContent = msg;
+        status.style.display = "block";
+    }
+
+    function checkUsernameModalGuard() {
+        const modal = document.getElementById("usernameModal");
+        const modalInput = document.getElementById("usernameInput");
+        const profilePanel = document.getElementById("sliding-profile");
+
+        const hasUsername = currentUser && currentUser.username && currentUser.username.trim() !== "";
+
+        if (!hasUsername) {
+            if (modal) modal.style.display = "block";
+            if (profilePanel) profilePanel.classList.add("profile-locked");
+            if (modalInput) modalInput.focus();
+        } else {
+            if (modal) modal.style.display = "none";
+            if (profilePanel) profilePanel.classList.remove("profile-locked");
+        }
+    }
+
+    function toggleUsernameModal(forceState = null) {
+        const modal = document.getElementById("usernameModal");
+        if (!modal) return;
+
+        showStatus("");
+
+        if (forceState !== null) {
+            modal.style.display = forceState ? "block" : "none";
+        } else {
+            const isHidden = modal.style.display === "none" || modal.style.display === "";
+            modal.style.display = isHidden ? "block" : "none";
+        }
+    }
+
+    async function saveUsername() {
+        const input = document.getElementById("usernameInput");
+        const btn = document.getElementById("saveBtn");
+        const username = input ? input.value.trim() : "";
+        const token = localStorage.getItem("session_token") || localStorage.getItem("token") || "";
+
+        if (!token) {
+            showStatus("Unauthorized: You must be logged in to set a username.");
+            return;
+        }
+
+        const usernameRegex = /^[a-zA-Z0-9_]{3,20}$/;
+
+        if (!username) {
+            showStatus("Username cannot be empty.");
+            return;
+        }
+
+        if (!usernameRegex.test(username)) {
+            showStatus("Username must be 3-20 characters long (letters, numbers, underscores).");
+            return;
+        }
+
+        if (btn) {
+            btn.disabled = true;
+            btn.textContent = "Saving...";
+        }
+        showStatus("");
+
+        try {
+            const response = await fetch(`${WORKER_URL}/api/set-username`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify({ 
+                    action: "set_username",
+                    username: username 
+                })
+            });
+
+            const data = await response.json();
+
+            if (response.ok && (data.success || data.status === "ok")) {
+                showStatus("Username set successfully!", "#4caf50");
+                showToast("Username updated!");
+                
+                if (currentUser) currentUser.username = username;
+
+                const usernameDisplay = document.getElementById("profile-username");
+                const initialDisplay = document.getElementById("profile-initial");
+
+                if (usernameDisplay) usernameDisplay.innerText = username;
+                if (initialDisplay) initialDisplay.innerText = username.charAt(0).toUpperCase();
+
+                setTimeout(() => {
+                    toggleUsernameModal(false);
+                    checkUsernameModalGuard();
+                }, 1000);
+            } else {
+                showStatus(data.error || data.message || "Unauthorized access or invalid token.");
+            }
+        } catch (err) {
+            console.error("Worker Execution Error:", err);
+            showStatus("Connection error with server.");
+        } finally {
+            if (btn) {
+                btn.disabled = false;
+                btn.textContent = "Set Name";
+            }
+        }
+    }
+
     async function fetchAndDisplayUserData(forceRebuild = false) {
-        const sessionToken = localStorage.getItem('session_token');
+        const sessionToken = localStorage.getItem('session_token') || localStorage.getItem('token');
         if (!sessionToken) {
             document.getElementById('auth-gate').style.display = 'flex';
             renderAuthState();
@@ -1274,14 +1469,24 @@
             if (res.ok && result.data) {
                 const dataSnapshotString = JSON.stringify(result.data);
                 if (dataSnapshotString === lastKnownDataHash && !forceRebuild) {
+                    checkUsernameModalGuard();
                     return; 
                 }
                 lastKnownDataHash = dataSnapshotString;
 
-                currentUser = { email: result.data.email };
+                currentUser = { 
+                    email: result.data.email,
+                    username: result.data.username || ""
+                };
                 document.getElementById('auth-gate').style.display = 'none';
-                document.getElementById('profile-email').innerText = currentUser.email;
-                document.getElementById('profile-initial').innerText = currentUser.email.charAt(0).toUpperCase();
+                
+                const hasUsername = currentUser.username && currentUser.username.trim() !== "";
+                const displayName = hasUsername ? currentUser.username : currentUser.email;
+
+                document.getElementById('profile-username').innerText = displayName;
+                document.getElementById('profile-initial').innerText = displayName.charAt(0).toUpperCase();
+
+                checkUsernameModalGuard();
                 
                 currentUserPfpId = result.data.pfp ? parseInt(result.data.pfp) : 1;
                 applyActiveUserAvatar(currentUserPfpId);
@@ -1307,6 +1512,7 @@
                 await fetchUnwantedMoviesCloudflare();
             } else {
                 localStorage.removeItem('session_token');
+                localStorage.removeItem('token');
                 currentUser = null;
                 authState = "auth";
                 renderAuthState();
@@ -1323,11 +1529,13 @@
     function logOut() {
         closeSettingsPopup();
         localStorage.removeItem('session_token');
+        localStorage.removeItem('token');
         currentUser = null;
         lastKnownDataHash = "";
         
         document.getElementById('sliding-profile').classList.remove('open');
         document.getElementById('sliding-search').classList.remove('open');
+        toggleUsernameModal(false);
         resetActiveNavbar();
         document.getElementById('home-trigger').classList.add('active');
         
@@ -1428,7 +1636,7 @@
     }
 
     async function changeUserAvatar(selectedId) {
-        const sessionToken = localStorage.getItem('session_token');
+        const sessionToken = localStorage.getItem('session_token') || localStorage.getItem('token');
         if (!currentUser || selectedId === currentUserPfpId || !sessionToken) return;
 
         const previousPfpId = currentUserPfpId;
@@ -1466,7 +1674,7 @@
 <script>
     async function fetchUnwantedMoviesCloudflare() {
         if (!currentUser) return;
-        const sessionToken = localStorage.getItem('session_token');
+        const sessionToken = localStorage.getItem('session_token') || localStorage.getItem('token');
         if (!sessionToken) return;
 
         try {
@@ -1529,7 +1737,7 @@
     function startCloudflareRealTimeSync() {
         setInterval(fetchRealTimeUpdates, 3000);
         setInterval(() => {
-            if (localStorage.getItem('session_token') && (!document.getElementById('auth-gate') || document.getElementById('auth-gate').style.display !== 'flex')) {
+            if ((localStorage.getItem('session_token') || localStorage.getItem('token')) && (!document.getElementById('auth-gate') || document.getElementById('auth-gate').style.display !== 'flex')) {
                 fetchAndDisplayUserData(false);
             }
         }, 1500);
@@ -1579,6 +1787,7 @@
         homeTrigger.classList.add('active');
         searchPanel.classList.remove('open');
         profilePanel.classList.remove('open');
+        checkUsernameModalGuard();
     });
 
     searchTrigger.addEventListener('click', () => {
@@ -1586,6 +1795,7 @@
         searchTrigger.classList.add('active');
         searchPanel.classList.add('open');
         profilePanel.classList.remove('open');
+        checkUsernameModalGuard();
         searchInput.focus();
     });
 
@@ -1594,6 +1804,7 @@
         profileTrigger.classList.add('active');
         profilePanel.classList.add('open');
         searchPanel.classList.remove('open');
+        checkUsernameModalGuard();
     });
 
     searchBackButton.addEventListener('click', () => {
@@ -1602,12 +1813,14 @@
         homeTrigger.classList.add('active');
         searchInput.value = '';
         searchResults.innerHTML = '';
+        checkUsernameModalGuard();
     });
 
     profileBackButton.addEventListener('click', () => {
         profilePanel.classList.remove('open');
         resetActiveNavbar();
         homeTrigger.classList.add('active');
+        checkUsernameModalGuard();
     });
 
     function goRandom() {
@@ -1755,7 +1968,7 @@
             buildHomeFeed(); 
         }
 
-        const sessionToken = localStorage.getItem('session_token');
+        const sessionToken = localStorage.getItem('session_token') || localStorage.getItem('token');
         try {
             const res = await fetch(`${WORKER_URL}/api/hide-movie`, {
                 method: 'POST',
@@ -1836,7 +2049,7 @@
             return;
         }
 
-        const sessionToken = localStorage.getItem('session_token');
+        const sessionToken = localStorage.getItem('session_token') || localStorage.getItem('token');
         if (!sessionToken) {
             window.location.href = destinationUrl;
             return;
