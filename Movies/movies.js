@@ -676,6 +676,12 @@ const movies = {
     desc: "George Hardy is a shepherd who loves to read murder mysteries to his sheep, never suspecting that they can understand him. When George is found dead under mysterious circumstances, the sheep decide to solve the crime themselves, even if it means leaving their meadow for the first time and facing the fact that the human world isn't as simple as it appears in books.",
     video: "",
     play: "thesheepdetectives"
+  },
+  "spider-manacrossthespider-verse": {
+    title: "Spider-Man.Across.The.Spider-Verse",
+    desc: "In an attempt to curb the Spot, a scientist, from harnessing the power of the multiverse, Miles Morales joins forces with Gwen Stacy.",
+    video: "",
+    play: "Spider-Man.Across.The.Spider-Verse"
   }
 };
 
