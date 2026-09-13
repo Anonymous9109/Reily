@@ -596,6 +596,12 @@ const movies = [
     genres: ["Comedy","Mystery"],
     image: "images/thesheepdetectives.jpg",
     link: "Movies/Movie?movie=the-sheep-detectives"
+  },
+  {
+    title: "Spider-Man.Across.The.Spider-Verse",
+    genres: ["Action","Sci-Fi"],
+    image: "images/Spider-Man.Across.The.Spider-Verse.jpg",
+    link: "Movies/Movie?movie=spider-manacrossthespider-verse"
   }
 ];
 
