@@ -335,6 +335,7 @@ window.videoData = {
         lang: "id",
         src: "../subtitles/thesheepdetectives/thesheepdetectives-indonesian.txt"
       }
-    ]
+    ],
+  "Spider-Man.Across.The.Spider-Verse": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Movies/Spider-Man.Across.The.Spider-Verse.mp4"
 };
 
