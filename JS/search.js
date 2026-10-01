@@ -602,6 +602,12 @@ const movies = [
     genres: ["Action","Sci-Fi"],
     image: "images/Spider-Man.Across.The.Spider-Verse.jpg",
     link: "Movies/Movie?movie=spider-manacrossthespider-verse"
+  },
+  {
+    title: "Obsession",
+    genres: ["Horror"],
+    image: "images/Obsession.jpg",
+    link: "Movies/Movie?movie=obsession"
   }
 ];
 
