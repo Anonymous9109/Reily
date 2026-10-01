@@ -337,6 +337,7 @@ window.videoData = {
       }
     ],
   "Spider-Man.Across.The.Spider-Verse": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Movies/Spider-Man.Across.The.Spider-Verse.mp4",
-  "Obsession": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Movies/Obsession.mp4"
+  "Obsession": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Movies/Obsession.mp4",
+  "MinionsMonsters": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Movies/Minions.Monsters.mp4"
 };
 
