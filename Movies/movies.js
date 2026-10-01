@@ -682,6 +682,12 @@ const movies = {
     desc: "In an attempt to curb the Spot, a scientist, from harnessing the power of the multiverse, Miles Morales joins forces with Gwen Stacy.",
     video: "",
     play: "Spider-Man.Across.The.Spider-Verse"
+  },
+  "obsession": {
+    title: "Obsession",
+    desc: "After breaking the mysterious \"One Wish Willow\" to win his crush's heart, a hopeless romantic gets exactly what he asked for. However, he soon discovers that some desires come at a dark and sinister price.",
+    video: "",
+    play: "Obsession"
   }
 };
 
