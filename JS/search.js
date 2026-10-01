@@ -608,6 +608,12 @@ const movies = [
     genres: ["Horror"],
     image: "images/Obsession.jpg",
     link: "Movies/Movie?movie=obsession"
+  },
+  {
+    title: "Minions & Monsters",
+    genres: ["Comedy","Adventure"],
+    image: "images/MinionsMonsters.jpg",
+    link: "Movies/Movie?movie=minions-monsters"
   }
 ];
 
