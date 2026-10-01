@@ -688,6 +688,12 @@ const movies = {
     desc: "After breaking the mysterious \"One Wish Willow\" to win his crush's heart, a hopeless romantic gets exactly what he asked for. However, he soon discovers that some desires come at a dark and sinister price.",
     video: "",
     play: "Obsession"
+  },
+  "minions-monsters": {
+    title: "Minions & Monsters",
+    desc: "The rambunctious, ridiculous and totally true story of how the Minions conquered Hollywood, became movie stars, lost everything, unleashed monsters upon the world, then banded together to try and save the planet from the mayhem they created.",
+    video: "",
+    play: "MinionsMonsters"
   }
 };
 
