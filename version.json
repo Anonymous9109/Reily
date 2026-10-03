@@ -1,6 +1,6 @@
 {
-  "versionCode": 6,
-  "versionName": "6.0.0",
+  "versionCode": 1,
+  "versionName": "0.0.1",
   "downloadUrl": "https://rinolski.online/app-release.apk",
-  "changelog": "• Fixed streaming bugs\n• Updated user interface\n• General performance fixes"
+  "changelog": "• Fixed auto update"
 }
