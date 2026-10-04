@@ -1,6 +1,6 @@
 {
-  "versionCode": 2,
+  "versionCode": 4,
   "versionName": "1.0.1",
   "downloadUrl": "https://raw.githubusercontent.com/Anonymous9109/Reily/main/app-release.apk",
-  "changelog": "• Fixed streaming bugs\n• Updated user interface\n• General performance fixes"
+  "changelog": "updated notification system"
 }
