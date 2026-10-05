@@ -1,4 +1,4 @@
-/* Cyrene Player (smart source detection + back button + portrait support + subtitles + Timer + Netflix Shadow + Cloudflare D1 Resume Fixed + Google IMA VAST Integration) */
+/* Cyrene Player (smart source detection + back button + portrait support + subtitles + Timer + Netflix Shadow + Cloudflare D1 Resume Fixed + Google IMA VAST Integration + Download Button) */
 document.addEventListener("DOMContentLoaded", async () => {
 
   /********** 1) Inject CSS **********/
@@ -99,6 +99,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     }  
     #backToPrev:hover { background:rgba(255,0,0,0.65); }  
     #backToPrev svg { width:28px; height:28px; fill:#fff; }  
+
+    #downloadBtn {  
+      position:absolute; top:14px; left:70px; width:46px; height:46px;  
+      border:none; border-radius:50%; background:rgba(0,0,0,.55);  
+      display:flex; align-items:center; justify-content:center;  
+      cursor:pointer; transition:background .25s, opacity .2s, visibility .2s;  
+      z-index:40; opacity:0; visibility:hidden;  
+    }  
+    #downloadBtn:hover { background:rgba(255,0,0,0.65); }  
+    #downloadBtn svg { width:24px; height:24px; fill:#fff; }  
 
     .progress-container {  
       position:absolute; bottom:60px; left:5%; right:5%;  
@@ -201,6 +211,22 @@ document.addEventListener("DOMContentLoaded", async () => {
   backToPrev.innerHTML = `<svg viewBox="0 0 24 24"><path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>`;
   backToPrev.onclick = () => history.back();
 
+  const downloadBtn = document.createElement("button");
+  downloadBtn.id = "downloadBtn";
+  downloadBtn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>`;
+  downloadBtn.onclick = (e) => {
+    e.stopPropagation();
+    if (src) {
+      const a = document.createElement("a");
+      a.href = src;
+      a.download = "";
+      a.target = "_blank";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+  };
+
   const progressContainer = document.createElement("div");
   progressContainer.className = "progress-container";
   const progressBg = document.createElement("div");
@@ -226,7 +252,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const loadingRing = document.createElement("div");
   loadingRing.id = "loadingRing";
 
-  root.append(video, subDisplay, controls, progressContainer, timerDisplay, ccBtn, subMenu, backBtn, nextBtn, loadingRing, backToPrev);
+  root.append(video, subDisplay, controls, progressContainer, timerDisplay, ccBtn, subMenu, backBtn, nextBtn, loadingRing, backToPrev, downloadBtn);
   document.body.appendChild(root);
 
   /********** 3) Smart Source Detection **********/
@@ -498,7 +524,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const showControls = (timeout = 3000) => {
     root.classList.add("show-ui");
-    for (const el of [controls, progressContainer, backToPrev, timerDisplay, ccBtn]) {
+    for (const el of [controls, progressContainer, backToPrev, downloadBtn, timerDisplay, ccBtn]) {
       el.style.opacity = "1"; el.style.visibility = "visible";
     }
     backBtn.style.opacity = window.backEpisodeLink ? "1" : "0";
@@ -513,7 +539,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const hideControls = () => {
     if (isDragging) return;
     root.classList.remove("show-ui");
-    for (const el of [controls, progressContainer, backToPrev, backBtn, nextBtn, timerDisplay, ccBtn]) {
+    for (const el of [controls, progressContainer, backToPrev, downloadBtn, backBtn, nextBtn, timerDisplay, ccBtn]) {
       el.style.opacity = "0"; el.style.visibility = "hidden";
     }
     subMenu.style.display = "none";
