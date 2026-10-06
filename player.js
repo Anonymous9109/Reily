@@ -1,4 +1,4 @@
-/* Cyrene Player (smart source detection + back button + portrait support + subtitles + Timer + Netflix Shadow + Cloudflare D1 Resume Fixed + Google IMA VAST Integration + Download Button) */
+/* Cyrene Player (smart source detection + back button + portrait support + subtitles + Timer + Netflix Shadow + Cloudflare D1 Resume Fixed + Google IMA VAST Integration + Download Button Fixed) */
 document.addEventListener("DOMContentLoaded", async () => {
 
   /********** 1) Inject CSS **********/
@@ -220,29 +220,46 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const extMatch = src.match(/\.(mp4|mkv|webm|m3u8)(\?|$)/i);
     const extension = extMatch ? extMatch[1] : "mp4";
-    const customFilename = `${movieParamId}.${extension}`;
+    const customFilename = `${movieParamId || "video"}.${extension}`;
 
     showLoading();
 
     try {
-      // Direct binary blob fetch using cross-origin mode
+      // 1. Fetch file as binary Blob
       const response = await fetch(src, { mode: 'cors' });
-      if (!response.ok) throw new Error("CORS or network error");
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
       const blob = await response.blob();
       const blobUrl = URL.createObjectURL(blob);
 
       const a = document.createElement("a");
+      a.style.display = "none";
       a.href = blobUrl;
       a.download = customFilename;
       document.body.appendChild(a);
       a.click();
-      document.body.removeChild(a);
 
-      URL.revokeObjectURL(blobUrl);
+      setTimeout(() => {
+        document.body.removeChild(a);
+        URL.revokeObjectURL(blobUrl);
+      }, 1000);
+
     } catch (err) {
-      console.error("Direct download blocked by R2 CORS config:", err);
-      alert("Unable to download directly. Ensure Cloudflare R2 bucket CORS policy allows GET/HEAD requests.");
+      console.warn("Direct blob download failed (CORS/Network). Triggering fallback download:", err);
+
+      // 2. Fallback execution if Blob strategy is blocked
+      const fallbackAnchor = document.createElement("a");
+      fallbackAnchor.style.display = "none";
+      fallbackAnchor.target = "_blank";
+      fallbackAnchor.href = src;
+      fallbackAnchor.download = customFilename;
+
+      document.body.appendChild(fallbackAnchor);
+      fallbackAnchor.click();
+
+      setTimeout(() => {
+        document.body.removeChild(fallbackAnchor);
+      }, 500);
     } finally {
       hideLoading();
     }
