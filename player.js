@@ -1,4 +1,4 @@
-/* Cyrene Player (smart source detection + back button + portrait support + subtitles + Timer + Netflix Shadow + Cloudflare D1 Resume Fixed + Google IMA VAST Integration + Download Button Fixed) */
+/* Cyrene Player (smart source detection + back button + portrait support + subtitles + Timer + Netflix Shadow + Cloudflare D1 Resume Fixed + Google IMA VAST Integration + Download Button Fixed + ID Sanitization) */
 document.addEventListener("DOMContentLoaded", async () => {
 
   /********** 1) Inject CSS **********/
@@ -218,14 +218,28 @@ document.addEventListener("DOMContentLoaded", async () => {
     e.stopPropagation();
     if (!src) return;
 
-    if (window.AndroidBridge && typeof window.AndroidBridge.downloadVideo === "function") {
-      window.AndroidBridge.downloadVideo(src, movieParamId, activeMovieTitle);
-      return;
+    // 1. Sanitize movieParamId (strip out "MOVIE ID:", "MOVIE_ID:", and trailing extension)
+    let cleanId = (movieParamId || "")
+      .replace(/^(MOVIE\s*ID|MOVIE_ID)\s*:\s*/i, "")
+      .replace(/\.(mp4|mkv|webm|m3u8)$/i, "")
+      .trim();
+
+    // 2. Fallback to parsing filename from source URL if cleanId is missing/generic
+    if (!cleanId || cleanId === "video" || cleanId === "1") {
+      const urlFilename = src.substring(src.lastIndexOf('/') + 1).split('?')[0];
+      cleanId = urlFilename.replace(/\.(mp4|mkv|webm|m3u8)$/i, "") || "video";
     }
 
+    // 3. Determine file extension
     const extMatch = src.match(/\.(mp4|mkv|webm|m3u8)(\?|$)/i);
     const extension = extMatch ? extMatch[1] : "mp4";
-    const customFilename = `${movieParamId || "video"}.${extension}`;
+    const customFilename = `${cleanId}.${extension}`;
+
+    // Bridge to Android native downloader if available
+    if (window.AndroidBridge && typeof window.AndroidBridge.downloadVideo === "function") {
+      window.AndroidBridge.downloadVideo(src, cleanId, activeMovieTitle);
+      return;
+    }
 
     showLoading();
 
@@ -396,7 +410,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     AUTH_TOKEN: localStorage.getItem("session_token") || ""
   };
 
-  const movieParamId = params.get("id") || params.get("movie") || ep; 
+  // Sanitize movieParamId upon retrieval
+  const rawId = params.get("id") || params.get("movie") || ep; 
+  const movieParamId = rawId ? rawId.replace(/^(MOVIE\s*ID|MOVIE_ID)\s*:\s*/i, "").trim() : "1";
+
   let activeMovieTitle = "Unknown Media";
 
   if (window.movies && window.movies[movieParamId]) {
