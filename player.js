@@ -225,7 +225,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     showLoading();
 
     try {
-      // Explicit CORS fetch to retrieve binary blob
+      // Direct binary blob fetch using cross-origin mode
       const response = await fetch(src, { mode: 'cors' });
       if (!response.ok) throw new Error("CORS or network error");
 
@@ -241,14 +241,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       URL.revokeObjectURL(blobUrl);
     } catch (err) {
-      console.warn("Blob fetch failed (likely cross-origin R2 policy). Triggering direct download fallback:", err);
-
-      const a = document.createElement("a");
-      a.href = src;
-      a.download = customFilename;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
+      console.error("Direct download blocked by R2 CORS config:", err);
+      alert("Unable to download directly. Ensure Cloudflare R2 bucket CORS policy allows GET/HEAD requests.");
     } finally {
       hideLoading();
     }
