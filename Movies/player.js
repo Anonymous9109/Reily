@@ -726,4 +726,3 @@ document.addEventListener("fullscreenchange", () => {
   document.addEventListener("mousemove", (e) => { e.target.dispatchEvent(createTouchEvent("touchmove", e)); });
   document.addEventListener("mouseup", (e) => { e.target.dispatchEvent(createTouchEvent("touchend", e)); });
 })();
-¹¹
