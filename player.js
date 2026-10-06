@@ -152,7 +152,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       to{transform:translate(-50%,-50%) rotate(360deg);}  
     }
 
-    /* IMA Ad overlay layer styles */
     #imaAdContainer {
       position: absolute;
       inset: 0;
@@ -214,20 +213,22 @@ document.addEventListener("DOMContentLoaded", async () => {
   const downloadBtn = document.createElement("button");
   downloadBtn.id = "downloadBtn";
   downloadBtn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>`;
+
   downloadBtn.onclick = async (e) => {
     e.stopPropagation();
     if (!src) return;
 
-    // Extract original extension or fallback to mp4
     const extMatch = src.match(/\.(mp4|mkv|webm|m3u8)(\?|$)/i);
     const extension = extMatch ? extMatch[1] : "mp4";
     const customFilename = `${movieParamId}.${extension}`;
 
-    try {
-      showLoading();
+    showLoading();
 
-      // Fetch video stream as blob to enforce custom filename
-      const response = await fetch(src);
+    try {
+      // Explicit CORS fetch to retrieve binary blob
+      const response = await fetch(src, { mode: 'cors' });
+      if (!response.ok) throw new Error("CORS or network error");
+
       const blob = await response.blob();
       const blobUrl = URL.createObjectURL(blob);
 
@@ -239,19 +240,17 @@ document.addEventListener("DOMContentLoaded", async () => {
       document.body.removeChild(a);
 
       URL.revokeObjectURL(blobUrl);
-      hideLoading();
     } catch (err) {
-      hideLoading();
-      console.warn("Direct blob download failed, fallback to link trigger:", err);
+      console.warn("Blob fetch failed (likely cross-origin R2 policy). Triggering direct download fallback:", err);
 
-      // Fallback for CORS restricted origins
       const a = document.createElement("a");
       a.href = src;
       a.download = customFilename;
-      a.target = "_blank";
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
+    } finally {
+      hideLoading();
     }
   };
 
@@ -341,7 +340,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     adsLoader.addEventListener(google.ima.AdsManagerLoadedEvent.Type.ADS_MANAGER_LOADED, (e) => {
       adsManager = e.getAdsManager(video);
-      
+
       adsManager.addEventListener(google.ima.AdErrorEvent.Type.AD_ERROR, () => cleanAdAndStartMovie(adContainer, movieUrl));
       adsManager.addEventListener(google.ima.AdEvent.Type.ALL_ADS_COMPLETED, () => cleanAdAndStartMovie(adContainer, movieUrl));
       adsManager.addEventListener(google.ima.AdEvent.Type.CONTENT_RESUME_REQUESTED, () => cleanAdAndStartMovie(adContainer, movieUrl));
@@ -377,7 +376,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   initIMAAdWorkflow(src);
 
-
   /********** D1 CLOUDFLARE TRACKER SYSTEM CONFIG **********/
   const CONFIG = {
     API_BASE_URL: "https://rinolski.misty-fog-201e.workers.dev",
@@ -386,7 +384,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const movieParamId = params.get("id") || params.get("movie") || ep; 
   let activeMovieTitle = "Unknown Media";
-  
+
   if (window.movies && window.movies[movieParamId]) {
     activeMovieTitle = window.movies[movieParamId].title;
   } else if (document.title && document.title !== "Player") {
@@ -460,7 +458,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     el.style.backgroundColor = `rgba(0,0,0,${opacity})`;
 
     const shadowAmt = 0.06 * multiplier;
-    
+
     if(edge === 'dropShadow') {
         el.style.textShadow = `${shadowAmt}em ${shadowAmt}em 0.15em rgba(0,0,0,0.9)`;
     } else if(edge === 'outline') {
@@ -476,7 +474,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const tracks = video.textTracks;
     const opts = subMenu.querySelectorAll(".sub-option");
     subDisplay.innerHTML = ""; 
-    
+
     for (let i = 0; i < tracks.length; i++) {
       tracks[i].mode = 'disabled';
       tracks[i].oncuechange = async function() {
@@ -492,7 +490,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
       };
     }
-    
+
     opts.forEach(o => o.classList.remove("active"));
 
     if (idx === -1) {
@@ -597,7 +595,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (isFinite(video.duration) && !isDragging && !isResuming) {
       progressBar.style.width = (video.currentTime / video.duration) * 100 + "%";
       timerDisplay.textContent = `${formatTime(video.currentTime)} / ${formatTime(video.duration)}`;
-      
+
       if (Math.abs(video.currentTime - lastSavedTime) >= 5) {
         saveWatchProgress();
       }
@@ -609,7 +607,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const isPortrait = window.innerHeight > window.innerWidth;
     const clientX = e.touches ? e.touches[0].clientX : e.clientX;
     const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-    
+
     let pct = isPortrait ? (clientY - rect.top) / rect.height : (clientX - rect.left) / rect.width;
     pct = Math.max(0, Math.min(1, pct));
     progressBar.style.width = pct * 100 + "%";
@@ -637,9 +635,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       video.currentTime = serverTimestamp;
       lastSavedTime = serverTimestamp;
     }
-    
+
     isResuming = false;
-    
+
     try { 
       await video.play(); 
     } catch { 
@@ -656,7 +654,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           method: "GET",
           headers: { "Authorization": `Bearer ${CONFIG.AUTH_TOKEN}` }
         });
-        
+
         if (response.ok) {
           const data = await response.json();
           const progressMap = data.progress || {};
