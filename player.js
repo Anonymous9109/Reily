@@ -1,4 +1,4 @@
-/* Cyrene Player (smart source detection + back button + portrait support + subtitles + Timer + Netflix Shadow + Cloudflare D1 Resume Fixed + Google IMA VAST Integration + Download Button Fixed + ID Sanitization) */
+/* Cyrene Player (smart source detection + back button + portrait support + subtitles + Timer + Netflix Shadow + Cloudflare D1 Resume Fixed + Google IMA VAST Integration + Download Button Fixed + Automatic Title/ID Extraction) */
 document.addEventListener("DOMContentLoaded", async () => {
 
   /********** 1) Inject CSS **********/
@@ -214,30 +214,76 @@ document.addEventListener("DOMContentLoaded", async () => {
   downloadBtn.id = "downloadBtn";
   downloadBtn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>`;
 
+  /********** 3) Smart Source & Title Extraction **********/
+  const params = new URLSearchParams(window.location.search);
+  const ep = params.get("ep") || "1";
+  let src = null;
+
+  if (window.videoData && ep && window.videoData[ep]) src = window.videoData[ep];
+  if (!src && params.get("src")) src = decodeURIComponent(params.get("src"));
+
+  if (!src) {
+    document.body.innerHTML = `<p style="color:white;text-align:center;font-family:sans-serif;margin-top:20vh;">No video found.</p>`;
+    return;
+  }
+
+  // Smart Title/ID Extraction Helper
+  function getExtractedTitle() {
+    let candidate = "";
+
+    // 1. Check window object or movieParamId mappings
+    const rawId = params.get("id") || params.get("movie") || params.get("title") || ep;
+    if (window.movies && window.movies[rawId] && window.movies[rawId].title) {
+      candidate = window.movies[rawId].title;
+    }
+    
+    // 2. Fall back to raw URL param
+    if (!candidate && params.get("title")) candidate = params.get("title");
+    if (!candidate && params.get("movie")) candidate = params.get("movie");
+
+    // 3. Fall back to DOM elements (Page H1 or Document Title)
+    if (!candidate) {
+      const h1El = document.querySelector("h1, .movie-title, .video-title");
+      if (h1El && h1El.textContent.trim()) {
+        candidate = h1El.textContent.trim();
+      }
+    }
+
+    if (!candidate && document.title && document.title !== "Player" && document.title !== "Cyrene Player") {
+      candidate = document.title;
+    }
+
+    // 4. Sanitize strings (remove "MOVIE ID:", invalid filename characters, extension prefixes)
+    candidate = (candidate || "")
+      .replace(/^(MOVIE\s*ID|MOVIE_ID)\s*:\s*/i, "")
+      .replace(/[\\/:*?"<>|]/g, " ")
+      .trim();
+
+    // 5. Final fallback: extract clean file name from media source URL
+    if (!candidate || candidate.toLowerCase() === "video") {
+      const urlFilename = src.substring(src.lastIndexOf('/') + 1).split('?')[0];
+      candidate = urlFilename.replace(/\.(mp4|mkv|webm|m3u8)$/i, "") || "video";
+    }
+
+    return candidate;
+  }
+
+  const activeMovieTitle = getExtractedTitle();
+  const movieParamId = params.get("id") || params.get("movie") || ep;
+
+  /********** Download Event Handler **********/
   downloadBtn.onclick = async (e) => {
     e.stopPropagation();
     if (!src) return;
 
-    // 1. Sanitize movieParamId (strip out "MOVIE ID:", "MOVIE_ID:", and trailing extension)
-    let cleanId = (movieParamId || "")
-      .replace(/^(MOVIE\s*ID|MOVIE_ID)\s*:\s*/i, "")
-      .replace(/\.(mp4|mkv|webm|m3u8)$/i, "")
-      .trim();
-
-    // 2. Fallback to parsing filename from source URL if cleanId is missing/generic
-    if (!cleanId || cleanId === "video" || cleanId === "1") {
-      const urlFilename = src.substring(src.lastIndexOf('/') + 1).split('?')[0];
-      cleanId = urlFilename.replace(/\.(mp4|mkv|webm|m3u8)$/i, "") || "video";
-    }
-
-    // 3. Determine file extension
+    // Detect format extension
     const extMatch = src.match(/\.(mp4|mkv|webm|m3u8)(\?|$)/i);
     const extension = extMatch ? extMatch[1] : "mp4";
-    const customFilename = `${cleanId}.${extension}`;
+    const customFilename = `${activeMovieTitle}.${extension}`;
 
-    // Bridge to Android native downloader if available
+    // Pass extracted clean title to Native Android Bridge if present
     if (window.AndroidBridge && typeof window.AndroidBridge.downloadVideo === "function") {
-      window.AndroidBridge.downloadVideo(src, cleanId, activeMovieTitle);
+      window.AndroidBridge.downloadVideo(src, customFilename, activeMovieTitle);
       return;
     }
 
@@ -309,19 +355,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   root.append(video, subDisplay, controls, progressContainer, timerDisplay, ccBtn, subMenu, backBtn, nextBtn, loadingRing, backToPrev, downloadBtn);
   document.body.appendChild(root);
-
-  /********** 3) Smart Source Detection **********/
-  const params = new URLSearchParams(window.location.search);
-  const ep = params.get("ep") || "1";
-  let src = null;
-
-  if (window.videoData && ep && window.videoData[ep]) src = window.videoData[ep];
-  if (!src && params.get("src")) src = decodeURIComponent(params.get("src"));
-
-  if (!src) {
-    document.body.innerHTML = `<p style="color:white;text-align:center;font-family:sans-serif;margin-top:20vh;">No video found.</p>`;
-    return;
-  }
 
   /********** 4) Load Source **********/
   async function attachSourceToVideo(url) {
@@ -409,18 +442,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     API_BASE_URL: "https://rinolski.misty-fog-201e.workers.dev",
     AUTH_TOKEN: localStorage.getItem("session_token") || ""
   };
-
-  // Sanitize movieParamId upon retrieval
-  const rawId = params.get("id") || params.get("movie") || ep; 
-  const movieParamId = rawId ? rawId.replace(/^(MOVIE\s*ID|MOVIE_ID)\s*:\s*/i, "").trim() : "1";
-
-  let activeMovieTitle = "Unknown Media";
-
-  if (window.movies && window.movies[movieParamId]) {
-    activeMovieTitle = window.movies[movieParamId].title;
-  } else if (document.title && document.title !== "Player") {
-    activeMovieTitle = document.title;
-  }
 
   let isResuming = true; 
   let lastSavedTime = 0;
@@ -609,7 +630,19 @@ document.addEventListener("DOMContentLoaded", async () => {
   const setPlayingUI = (p) => { playIcon.style.display = p ? "none" : "block"; pauseIcon.style.display = p ? "block" : "none"; };
 
   video.addEventListener("canplay", () => { hideLoading(); video.style.opacity = "1"; });
-  video.addEventListener("playing", () => { hideLoading(); setPlayingUI(true); });
+  video.addEventListener("playing", () => { 
+    hideLoading(); 
+    setPlayingUI(true);
+
+    // Update media notifications metadata dynamically
+    if ('mediaSession' in navigator) {
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: activeMovieTitle,
+        artist: 'Cyrene Player'
+      });
+    }
+  });
+
   video.addEventListener("pause", () => setPlayingUI(false));
   video.addEventListener("waiting", showLoading);
   video.addEventListener("ended", hideLoading);
