@@ -218,6 +218,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     e.stopPropagation();
     if (!src) return;
 
+    if (window.AndroidBridge && typeof window.AndroidBridge.downloadVideo === "function") {
+      window.AndroidBridge.downloadVideo(src, movieParamId, activeMovieTitle);
+      return;
+    }
+
     const extMatch = src.match(/\.(mp4|mkv|webm|m3u8)(\?|$)/i);
     const extension = extMatch ? extMatch[1] : "mp4";
     const customFilename = `${movieParamId || "video"}.${extension}`;
@@ -225,7 +230,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     showLoading();
 
     try {
-      // 1. Fetch file as binary Blob
       const response = await fetch(src, { mode: 'cors' });
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
@@ -247,7 +251,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     } catch (err) {
       console.warn("Direct blob download failed (CORS/Network). Triggering fallback download:", err);
 
-      // 2. Fallback execution if Blob strategy is blocked
       const fallbackAnchor = document.createElement("a");
       fallbackAnchor.style.display = "none";
       fallbackAnchor.target = "_blank";
@@ -657,7 +660,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 
-  // REST API fetch sequence directly checking matching dictionary keys
   (async function fetchSavedProgress() {
     if (CONFIG.AUTH_TOKEN) {
       try {
