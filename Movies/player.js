@@ -1,4 +1,4 @@
-/* Cyrene Player (smart source detection + back button + portrait support + subtitles + Timer + Netflix Shadow + Cloudflare D1 Resume Fixed + Google IMA VAST Integration + Download Button) */
+/* Cyrene Player (smart source detection + back button + portrait support + subtitles + Timer + Netflix Shadow + Cloudflare D1 Resume Fixed + Google IMA VAST Integration + Native Download Bridge) */
 document.addEventListener("DOMContentLoaded", async () => {
 
   /********** 1) Inject CSS **********/
@@ -152,7 +152,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       to{transform:translate(-50%,-50%) rotate(360deg);}  
     }
 
-    /* IMA Ad overlay layer styles */
     #imaAdContainer {
       position: absolute;
       inset: 0;
@@ -211,19 +210,38 @@ document.addEventListener("DOMContentLoaded", async () => {
   backToPrev.innerHTML = `<svg viewBox="0 0 24 24"><path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>`;
   backToPrev.onclick = () => history.back();
 
+  const params = new URLSearchParams(window.location.search);
+  const ep = params.get("ep") || "1";
+  const movieParamId = params.get("id") || params.get("movie") || ep; 
+
+  // Dynamic movie title resolution
+  let activeMovieTitle = params.get("title") || "Unknown Media";
+  if (window.movies && window.movies[movieParamId]) {
+    activeMovieTitle = window.movies[movieParamId].title;
+  } else if (document.title && document.title !== "Player" && document.title !== "") {
+    activeMovieTitle = document.title;
+  } else if (activeMovieTitle === "Unknown Media" && movieParamId) {
+    activeMovieTitle = movieParamId.replace(/[-_]/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+  }
+
   const downloadBtn = document.createElement("button");
   downloadBtn.id = "downloadBtn";
   downloadBtn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>`;
+  
   downloadBtn.onclick = (e) => {
     e.stopPropagation();
     if (src) {
-      const a = document.createElement("a");
-      a.href = src;
-      a.download = "";
-      a.target = "_blank";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
+      if (window.AndroidBridge && typeof window.AndroidBridge.downloadVideo === "function") {
+        window.AndroidBridge.downloadVideo(src, movieParamId, activeMovieTitle);
+      } else {
+        const a = document.createElement("a");
+        a.href = src;
+        a.download = activeMovieTitle ? `${activeMovieTitle}.mp4` : "video.mp4";
+        a.target = "_blank";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      }
     }
   };
 
@@ -256,10 +274,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   document.body.appendChild(root);
 
   /********** 3) Smart Source Detection **********/
-  const params = new URLSearchParams(window.location.search);
-  const ep = params.get("ep") || "1";
   let src = null;
-
   if (window.videoData && ep && window.videoData[ep]) src = window.videoData[ep];
   if (!src && params.get("src")) src = decodeURIComponent(params.get("src"));
 
@@ -349,21 +364,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   initIMAAdWorkflow(src);
 
-
   /********** D1 CLOUDFLARE TRACKER SYSTEM CONFIG **********/
   const CONFIG = {
     API_BASE_URL: "https://rinolski.misty-fog-201e.workers.dev",
     AUTH_TOKEN: localStorage.getItem("session_token") || ""
   };
-
-  const movieParamId = params.get("id") || params.get("movie") || ep; 
-  let activeMovieTitle = "Unknown Media";
-  
-  if (window.movies && window.movies[movieParamId]) {
-    activeMovieTitle = window.movies[movieParamId].title;
-  } else if (document.title && document.title !== "Player") {
-    activeMovieTitle = document.title;
-  }
 
   let isResuming = true; 
   let lastSavedTime = 0;
@@ -603,7 +608,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   root.addEventListener("click", () => { if(!isDragging) controlsVisible ? hideControls() : showControls(); });
 
-  /********** THE JUMP FIX: TRACK LOADEDMETADATA **********/
   video.addEventListener("loadedmetadata", async () => {
     if (serverTimestamp && serverTimestamp < video.duration - 15) {
       video.currentTime = serverTimestamp;
@@ -620,7 +624,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 
-  // REST API fetch sequence directly checking matching dictionary keys
   (async function fetchSavedProgress() {
     if (CONFIG.AUTH_TOKEN) {
       try {
