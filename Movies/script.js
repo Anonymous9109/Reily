@@ -2,9 +2,6 @@
 // 1. DYNAMIC DATA ARCHITECTURE & DEPENDENCY LOADING (SANDBOXED)
 // ==========================================================================
 
-/**
- * Loads text files instead of script tags to bypass global variable conflicts.
- */
 async function loadDataFiles() {
   const params = new URLSearchParams(window.location.search);
   const id = params.get("movie") || params.get("series");
@@ -15,23 +12,18 @@ async function loadDataFiles() {
   }
 
   try {
-    // 1. Fetch and parse search.js safely
     const searchResponse = await fetch("/JS/search.js");
     const searchText = await searchResponse.text();
-    // Convert the 'const movies =' declaration to a safe localized object evaluation
     const cleanSearchText = searchText.replace(/const\s+movies\s*=/, "return ");
     const parseSearch = new Function(cleanSearchText);
     window.searchArray = parseSearch();
 
-    // 2. Fetch and parse movies.js safely
     const moviesResponse = await fetch("/Movies/movies.js");
     const moviesText = await moviesResponse.text();
-    // Convert the 'const movies =' declaration to a safe localized object evaluation
     const cleanMoviesText = moviesText.replace(/const\s+movies\s*=/, "return ");
     const parseMovies = new Function(cleanMoviesText);
     window.movieDetailsDict = parseMovies();
 
-    // 3. Kickoff layout initialization
     renderPage(id);
 
   } catch (error) {
@@ -40,11 +32,7 @@ async function loadDataFiles() {
   }
 }
 
-/**
- * Handles building the UI and background assets now that data maps are secure.
- */
 function renderPage(id) {
-  // Case-insensitive lookup protects against "SAW" vs "saw" mismatching
   const exactKey = Object.keys(window.movieDetailsDict || {}).find(key => key.toLowerCase() === id.toLowerCase());
   const movieData = exactKey ? window.movieDetailsDict[exactKey] : null;
 
@@ -53,10 +41,8 @@ function renderPage(id) {
     return;
   }
 
-  // Bind to global window scope so play() and fallback handlers can access it cleanly
   window.currentMovie = movieData;
 
-  // Pre-locate structural poster layout images from search array
   const targetId = id || new URLSearchParams(window.location.search).get("movie") || new URLSearchParams(window.location.search).get("series");
   const matchedSearchItem = window.searchArray ? window.searchArray.find(m => {
     if (!m.link) return false;
@@ -72,14 +58,11 @@ function renderPage(id) {
     imagePath = `/images/${filename}`;
   }
 
-  // Safely prepare layout containers for landscape layout requirements
   setupLandscapeDOMArchitecture(imagePath);
 
-  // Populate UI
   const titleEl = document.getElementById("title");
   if (titleEl) titleEl.textContent = movieData.title;
 
-  // Description 3-line truncation and toggle expand logic
   const descEl = document.getElementById("desc");
   if (descEl) {
     const textContent = movieData.desc || "";
@@ -91,7 +74,6 @@ function renderPage(id) {
     if (textContent.trim()) {
       descEl.classList.add("clamped");
 
-      // Check if text exceeds 3 lines
       const isOverflowing = descEl.scrollHeight > descEl.clientHeight;
 
       if (isOverflowing) {
@@ -106,7 +88,6 @@ function renderPage(id) {
     }
   }
 
-  // Handle Video / Background Stream initialization
   const video = document.getElementById("bgVideo");
 
   if (movieData.video && video) {
@@ -124,23 +105,16 @@ function renderPage(id) {
     checkContinueWatchingStatus();
   }
 
-  // Build and load the reviews system directly under the play button
   initReviewsSystem(targetId);
-
-  // Snap window back to top on initial page render
   window.scrollTo(0, 0);
 }
 
-/**
- * Builds non-intrusive container wrappers needed for layout modifications
- */
 function setupLandscapeDOMArchitecture(imagePath) {
   let mainWrapper = document.getElementById("movieContentWrapper");
   let posterContainer = document.getElementById("moviePosterContainer");
   let posterImg = document.getElementById("moviePosterImg");
   let ambientBg = document.getElementById("ambientBg");
 
-  // Create an ambient blur backdrop background element
   if (!ambientBg) {
     ambientBg = document.createElement("div");
     ambientBg.id = "ambientBg";
@@ -150,7 +124,6 @@ function setupLandscapeDOMArchitecture(imagePath) {
     ambientBg.style.backgroundImage = `url('${imagePath}')`;
   }
 
-  // Group text elements into a clean wrapper network
   if (!mainWrapper) {
     mainWrapper = document.createElement("div");
     mainWrapper.id = "movieContentWrapper";
@@ -164,7 +137,6 @@ function setupLandscapeDOMArchitecture(imagePath) {
     posterContainer.appendChild(posterImg);
     mainWrapper.appendChild(posterContainer);
 
-    // Select loose document items and append them to the responsive wrapper pipeline
     const titleEl = document.getElementById("title");
     const descEl = document.getElementById("desc");
     const playBtn = document.querySelector(".play-btn");
@@ -173,7 +145,6 @@ function setupLandscapeDOMArchitecture(imagePath) {
     if (descEl) mainWrapper.appendChild(descEl);
     if (playBtn) mainWrapper.appendChild(playBtn);
 
-    // Insert at top of body
     document.body.insertBefore(mainWrapper, document.body.firstChild);
   }
 
@@ -182,7 +153,6 @@ function setupLandscapeDOMArchitecture(imagePath) {
   }
 }
 
-// Kickoff the sandboxed loading process immediately
 loadDataFiles();
 
 // ==========================================================================
@@ -210,12 +180,10 @@ function initReviewsSystem(seriesId) {
         </div>
       </div>
 
-      <!-- AD SLOT PLACED EXACTLY BELOW HEADER AND CENTERED -->
       <div id="adSlotZone" style="margin-bottom: 16px; display: flex; justify-content: center; align-items: center; width: 100%;"></div>
 
       <div id="statusBanner" class="status-banner"></div>
 
-      <!-- Account Setup Container -->
       <div class="modal-box" id="usernameModal" style="display: none;">
         <p>Please enter a display name to participate in discussions:</p>
         <div class="modal-input-group">
@@ -224,13 +192,11 @@ function initReviewsSystem(seriesId) {
         </div>
       </div>
 
-      <!-- Review Composer Zone -->
       <div class="review-input-zone" id="reviewInputZone" style="display: none;">
         <textarea id="mainReviewText" placeholder="Write your thoughts..."></textarea>
         <button class="btn-primary" onclick="submitReview()">Post Review</button>
       </div>
 
-      <!-- Main Feed Area -->
       <div id="reviewsList">
         <div class="empty-state">Loading reviews...</div>
       </div>
@@ -243,16 +209,12 @@ function initReviewsSystem(seriesId) {
       document.body.appendChild(container);
     }
 
-    // Inject external script directly into adSlotZone
     injectAdScript();
   }
 
   loadReviews(seriesId);
 }
 
-/**
- * Injects external ad/tracking script cleanly into adSlotZone
- */
 function injectAdScript() {
   const adZone = document.getElementById("adSlotZone");
   if (!adZone || document.getElementById("reynScriptTag")) return;
@@ -303,7 +265,6 @@ async function loadReviews(seriesId) {
       return;
     }
 
-    // Sort array so newest reviews appear on top
     const sortedReviews = [...reviewsArr].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
     listEl.innerHTML = sortedReviews.map(r => {
@@ -328,7 +289,7 @@ async function loadReviews(seriesId) {
           <div class="replies-zone">
             ${(r.replies || []).map(rep => `
               <div class="reply-card">
-                <strong>@${escapeHtml(rep.replierUsername || rep.username || 'User')}:</strong> ${escapeHtml(rep.text || rep.replyText || '')}
+                <strong>@${escapeHtml(rep.replierUsername \vert{}\vert{} rep.username \vert{}\vert{} 'User')}:</strong>${escapeHtml(rep.text || rep.replyText || '')}
                 <div class="reply-time">${rep.timestamp ? new Date(rep.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : ''}</div>
               </div>
             `).join('')}
@@ -449,7 +410,7 @@ function escapeHtml(str) {
 }
 
 // ==========================================================================
-// 3. BACKGROUND FALLBACK (DYNAMIC EXTENSION EXTRACTION VIA MATCHED ID)
+// 3. BACKGROUND FALLBACK
 // ==========================================================================
 
 function applyFallbackBackground(id) {
@@ -532,7 +493,7 @@ async function checkContinueWatchingStatus() {
 }
 
 // ==========================================================================
-// 5. USER INTERACTIVE NAVIGATION CONTROLS
+// 5. USER INTERACTIVE NAVIGATION CONTROLS (INCLUDES ENCODED TITLE)
 // ==========================================================================
 
 function play() {
@@ -541,7 +502,8 @@ function play() {
   const movie = window.currentMovie; 
 
   if (movie && id) {
-    window.location.href = `videoplayer?ep=${movie.play || ''}&movie=${id}`;
+    const encodedTitle = encodeURIComponent(movie.title || id);
+    window.location.href = `videoplayer?ep=${movie.play || ''}&movie=${id}&title=${encodedTitle}`;
   }
 }
 
@@ -550,7 +512,7 @@ function goBack() {
 }
 
 // ==========================================================================
-// 6. GLOBAL STYLE DECORATORS & FIXED PORTRAIT POSITIONING
+// 6. GLOBAL STYLES & LAYOUT DECORATORS
 // ==========================================================================
 
 (function () {
@@ -602,9 +564,6 @@ function goBack() {
       z-index: 2;
     }
 
-    /* ==========================================
-     * DESCRIPTION CLAMPING & EXPANSION
-     * ========================================== */
     #desc {
       user-select: none;
       transition: max-height 0.3s ease;
@@ -618,9 +577,6 @@ function goBack() {
       text-overflow: ellipsis;
     }
 
-    /* ==========================================
-     * DEDICATED REVIEWS SYSTEM STYLING
-     * ========================================== */
     :root {
       --rev-bg: transparent;
       --rev-card-bg: #0a0a0a;
@@ -858,9 +814,6 @@ function goBack() {
       border: 1px solid var(--rev-border);
     }
 
-    /* ==========================================
-     * LANDSCAPE ORIENTATION DESIGN
-     * ========================================== */
     @media (orientation: landscape) {
       body {
         display: block !important;
@@ -961,9 +914,6 @@ function goBack() {
       }
     }
 
-    /* ==========================================
-     * PORTRAIT ORIENTATION STABILIZER (FIXED POSITIONING)
-     * ========================================== */
     @media (orientation: portrait) {
       html, body {
         overflow-y: auto !important;
@@ -1022,4 +972,3 @@ function goBack() {
   `;
   document.head.appendChild(style);
 })();
-
