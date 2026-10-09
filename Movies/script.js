@@ -12,44 +12,31 @@ async function loadDataFiles() {
   }
 
   try {
-    // 1. First preference: Check if movies object already exists in memory
-    if (window.movies && typeof window.movies === "object") {
-      window.movieDetailsDict = window.movies;
-    } else {
-      // 2. Fetch movies.js safely with error handling
-      const moviesResponse = await fetch("/Movies/movies.js");
-      if (!moviesResponse.ok) throw new Error("Failed to fetch movies.js");
-      
-      const moviesText = await moviesResponse.text();
-      
-      // Clean up variable declaration and parse safely
-      const cleanMoviesText = moviesText.replace(/const\s+movies\s*=/, "return ");
-      const parseMovies = new Function(cleanMoviesText);
-      window.movieDetailsDict = parseMovies();
-    }
+    const moviesResponse = await fetch("/Movies/movies.js");
+    if (!moviesResponse.ok) throw new Error("Failed to fetch movies.js");
+    const moviesText = await moviesResponse.text();
 
-    // 3. Load searchArray safely without blocking page render if it fails
-    if (!window.searchArray) {
-      try {
-        const searchResponse = await fetch("/JS/search.js");
-        if (searchResponse.ok) {
-          const searchText = await searchResponse.text();
-          const cleanSearchText = searchText.replace(/const\s+movies\s*=/, "return ");
-          const parseSearch = new Function(cleanSearchText);
-          window.searchArray = parseSearch();
-        }
-      } catch (e) {
-        console.warn("search.js fetch skipped or failed.", e);
-        window.searchArray = window.movies || [];
+    const cleanMoviesText = moviesText.replace(/const\s+movies\s*=/, "return ");
+    const parseMovies = new Function(cleanMoviesText);
+    window.movieDetailsDict = parseMovies();
+
+    try {
+      const searchResponse = await fetch("/JS/search.js");
+      if (searchResponse.ok) {
+        const searchText = await searchResponse.text();
+        const cleanSearchText = searchText.replace(/const\s+movies\s*=/, "return ");
+        const parseSearch = new Function(cleanSearchText);
+        window.searchArray = parseSearch();
       }
+    } catch (e) {
+      console.warn("search.js fetch skipped or failed.", e);
+      window.searchArray = [];
     }
 
     renderPage(id);
 
   } catch (error) {
     console.error("Critical error loading data files:", error);
-    
-    // Safety Fallback: Use window.movies array if available
     if (window.movies) {
       window.movieDetailsDict = window.movies;
       renderPage(id);
@@ -62,7 +49,6 @@ async function loadDataFiles() {
 function renderPage(id) {
   const dict = window.movieDetailsDict || window.movies || {};
   
-  // Handle Array vs Object format in movies catalog
   let movieData = null;
   if (Array.isArray(dict)) {
     movieData = dict.find(m => {
@@ -84,7 +70,6 @@ function renderPage(id) {
 
   window.currentMovie = movieData;
 
-  // Resolve movie poster image path
   let imagePath = movieData.image || "";
   if (!imagePath && window.searchArray) {
     const searchList = Array.isArray(window.searchArray) ? window.searchArray : Object.values(window.searchArray);
@@ -184,7 +169,6 @@ function setupLandscapeDOMArchitecture(imagePath) {
   }
 }
 
-// Execute safely on page load
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", loadDataFiles);
 } else {
@@ -445,8 +429,22 @@ function applyFallbackBackground(id) {
 }
 
 // ==========================================================================
-// 4. NAVIGATION CONTROLS
+// 4. NAVIGATION CONTROLS & DOWNLOAD TRIGGER
 // ==========================================================================
+
+function triggerDownload() {
+  const movie = window.currentMovie;
+  const params = new URLSearchParams(window.location.search);
+  const movieId = params.get("movie") || params.get("series");
+
+  if (movie && typeof window.AndroidBridge !== "undefined") {
+    const videoUrl = movie.play || movie.video;
+    const videoTitle = movie.title || movieId;
+    
+    // Calls Android Bridge with clean video parameters
+    window.AndroidBridge.downloadVideo(videoUrl, movieId, videoTitle);
+  }
+}
 
 function play() {
   const params = new URLSearchParams(window.location.search);
