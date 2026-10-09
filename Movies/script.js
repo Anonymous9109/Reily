@@ -1,3 +1,4 @@
+
 // ==========================================================================
 // 1. DYNAMIC DATA ARCHITECTURE & DEPENDENCY LOADING (SANDBOXED)
 // ==========================================================================
@@ -70,7 +71,6 @@ function renderPage(id) {
   if (matchedSearchItem && matchedSearchItem.image) {
     const filename = matchedSearchItem.image.split('/').pop();
     imagePath = `/images/${filename}`;
-    window.currentMoviePoster = imagePath; // Store for download bridge
   }
 
   // Safely prepare layout containers for landscape layout requirements
@@ -125,7 +125,7 @@ function renderPage(id) {
     checkContinueWatchingStatus();
   }
 
-  // Build and load the reviews system directly under the action buttons
+  // Build and load the reviews system directly under the play button
   initReviewsSystem(targetId);
 
   // Snap window back to top on initial page render
@@ -172,28 +172,7 @@ function setupLandscapeDOMArchitecture(imagePath) {
 
     if (titleEl) mainWrapper.appendChild(titleEl);
     if (descEl) mainWrapper.appendChild(descEl);
-
-    // Create Action Buttons Container
-    const actionContainer = document.createElement("div");
-    actionContainer.className = "action-buttons-container";
-
-    if (playBtn) {
-      actionContainer.appendChild(playBtn);
-    }
-
-    // Build Download Button
-    const downloadBtn = document.createElement("button");
-    downloadBtn.className = "download-action-btn";
-    downloadBtn.onclick = triggerMovieDownload;
-    downloadBtn.innerHTML = `
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
-      </svg>
-      Download
-    `;
-
-    actionContainer.appendChild(downloadBtn);
-    mainWrapper.appendChild(actionContainer);
+    if (playBtn) mainWrapper.appendChild(playBtn);
 
     // Insert at top of body
     document.body.insertBefore(mainWrapper, document.body.firstChild);
@@ -350,7 +329,7 @@ async function loadReviews(seriesId) {
           <div class="replies-zone">
             ${(r.replies || []).map(rep => `
               <div class="reply-card">
-                <strong>@${escapeHtml(rep.replierUsername \vert{}\vert{} rep.username \vert{}\vert{} 'User')}:</strong>${escapeHtml(rep.text || rep.replyText || '')}
+                <strong>@${escapeHtml(rep.replierUsername || rep.username || 'User')}:</strong> ${escapeHtml(rep.text || rep.replyText || '')}
                 <div class="reply-time">${rep.timestamp ? new Date(rep.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : ''}</div>
               </div>
             `).join('')}
@@ -567,34 +546,6 @@ function play() {
   }
 }
 
-function triggerMovieDownload() {
-  const params = new URLSearchParams(window.location.search);
-  const id = params.get("movie") || params.get("series");
-  const movie = window.currentMovie;
-
-  if (!movie || !movie.play) return;
-
-  const downloadUrl = movie.play;
-  const movieTitle = movie.title || id;
-  const posterUrl = window.currentMoviePoster || "";
-
-  // 1. Intercept using Android App Bridge
-  if (window.AndroidBridge && typeof window.AndroidBridge.downloadVideo === "function") {
-    window.AndroidBridge.downloadVideo(downloadUrl, id, movieTitle, posterUrl);
-    return;
-  }
-
-  // 2. Browser Anchor Fallback
-  const cleanTitle = movieTitle.replace(/[\\/:*?"<>|]/g, "_").trim();
-  const a = document.createElement("a");
-  a.href = downloadUrl;
-  a.download = `${cleanTitle}.mp4`;
-  a.target = "_blank";
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-}
-
 function goBack() {
   window.history.back();
 }
@@ -647,45 +598,9 @@ function goBack() {
       cursor: pointer;
     }
 
-    #title, #desc, .play-btn, .action-buttons-container, .text-container-wrapper, .info-container {
+    #title, #desc, .play-btn, .text-container-wrapper, .info-container {
       position: relative;
       z-index: 2;
-    }
-
-    /* ==========================================
-     * ACTION BUTTONS LAYOUT & DOWNLOAD BUTTON STYLES
-     * ========================================== */
-    .action-buttons-container {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 24px;
-    }
-
-    .download-action-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      padding: 10px 18px;
-      background-color: rgba(255, 255, 255, 0.15);
-      color: #ffffff;
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      border-radius: 6px;
-      font-size: 0.95rem;
-      font-weight: 600;
-      cursor: pointer;
-      backdrop-filter: blur(8px);
-      transition: background 0.2s, border-color 0.2s, transform 0.1s;
-    }
-
-    .download-action-btn:hover {
-      background-color: rgba(255, 255, 255, 0.25);
-      border-color: rgba(255, 255, 255, 0.4);
-    }
-
-    .download-action-btn:active {
-      transform: scale(0.97);
     }
 
     /* ==========================================
@@ -1032,14 +947,13 @@ function goBack() {
         z-index: 4;
       }
 
-      .action-buttons-container {
+      .play-btn {
         grid-column: 1 / span 2;
         grid-row: 3;
         align-self: flex-start !important;
         justify-self: start !important;
         position: relative;
         z-index: 4;
-        margin-bottom: 0 !important;
       }
 
       .reviews-container {
@@ -1099,10 +1013,11 @@ function goBack() {
         margin: 0 0 24px 0 !important;
       }
 
-      .action-buttons-container {
+      .play-btn {
+        margin: 0 auto 24px auto !important;
+        display: inline-flex !important;
         justify-content: center !important;
-        width: 100%;
-        margin-bottom: 24px !important;
+        align-items: center !important;
       }
     }
   `;
