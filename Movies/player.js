@@ -1,4 +1,4 @@
-/* Cyrene Player (smart source detection + back button + portrait support + subtitles + Timer + Netflix Shadow + Cloudflare D1 Resume Fixed + Google IMA VAST Integration + Download Button) */
+/* Cyrene Player (smart source detection + back button + portrait support + subtitles + Timer + Netflix Shadow + Cloudflare D1 Resume Fixed + Google IMA VAST Integration + Download Button + Poster Extraction) */
 document.addEventListener("DOMContentLoaded", async () => {
 
   /********** 1) Inject CSS **********/
@@ -152,7 +152,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       to{transform:translate(-50%,-50%) rotate(360deg);}  
     }
 
-    /* IMA Ad overlay layer styles */
     #imaAdContainer {
       position: absolute;
       inset: 0;
@@ -211,16 +210,36 @@ document.addEventListener("DOMContentLoaded", async () => {
   backToPrev.innerHTML = `<svg viewBox="0 0 24 24"><path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>`;
   backToPrev.onclick = () => history.back();
 
-  /********** Smart Title Detection for Downloads **********/
+  /********** Smart Title & Poster Detection for Downloads **********/
   const params = new URLSearchParams(window.location.search);
   const ep = params.get("ep") || "1";
   const movieParamId = params.get("id") || params.get("movie") || ep; 
   let activeMovieTitle = "Unknown Media";
+  let activeMoviePoster = "";
   
   if (window.movies && window.movies[movieParamId]) {
-    activeMovieTitle = window.movies[movieParamId].title;
+    activeMovieTitle = window.movies[movieParamId].title || "Unknown Media";
+    if (window.movies[movieParamId].poster) {
+      activeMoviePoster = window.movies[movieParamId].poster;
+    }
   } else if (document.title && document.title !== "Player") {
     activeMovieTitle = document.title;
+  }
+
+  // Fallback poster search in searchArray or standard directory
+  if (!activeMoviePoster && window.searchArray) {
+    const matchedItem = window.searchArray.find(m => {
+      if (!m.link) return false;
+      return m.link.includes(movieParamId);
+    });
+    if (matchedItem && matchedItem.image) {
+      const filename = matchedItem.image.split('/').pop();
+      activeMoviePoster = `https://rinolski.online/images/${filename}`;
+    }
+  }
+  
+  if (!activeMoviePoster && movieParamId) {
+    activeMoviePoster = `https://rinolski.online/images/${movieParamId}.jpg`;
   }
 
   const downloadBtn = document.createElement("button");
@@ -230,7 +249,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   downloadBtn.onclick = (e) => {
     e.stopPropagation();
     if (src) {
-      // Clean and sanitize the active movie title
       let cleanTitle = (activeMovieTitle && activeMovieTitle !== "Unknown Media") 
         ? activeMovieTitle 
         : movieParamId;
@@ -238,9 +256,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       cleanTitle = cleanTitle.replace(/[\\/:*?"<>|]/g, "_").trim();
       const finalFileName = `${cleanTitle}.mp4`;
 
-      // 1. Android App Bridge Interception
+      // 1. Android App Bridge Interception with Poster URL Passed
       if (window.AndroidBridge && typeof window.AndroidBridge.downloadVideo === "function") {
-        window.AndroidBridge.downloadVideo(src, movieParamId, cleanTitle);
+        window.AndroidBridge.downloadVideo(src, movieParamId, cleanTitle, activeMoviePoster);
         return;
       }
 
