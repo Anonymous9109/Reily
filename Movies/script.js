@@ -1,5 +1,5 @@
 // ==========================================================================
-// 1. DYNAMIC DATA ARCHITECTURE & DEPENDENCY LOADING (SANDBOXED)
+// 1. DYNAMIC DATA ARCHITECTURE & DEPENDENCY LOADING (SAFE PARSING)
 // ==========================================================================
 
 async function loadDataFiles() {
@@ -12,29 +12,56 @@ async function loadDataFiles() {
   }
 
   try {
-    const searchResponse = await fetch("/JS/search.js");
-    const searchText = await searchResponse.text();
-    const cleanSearchText = searchText.replace(/const\s+movies\s*=/, "return ");
-    const parseSearch = new Function(cleanSearchText);
-    window.searchArray = parseSearch();
+    // Check if global objects are already loaded via script tags
+    if (window.movies && typeof window.movies === "object") {
+      window.movieDetailsDict = window.movies;
+    } else {
+      const moviesResponse = await fetch("/Movies/movies.js");
+      if (!moviesResponse.ok) throw new Error("Failed to fetch movies.js: " + moviesResponse.statusText);
+      const moviesText = await moviesResponse.text();
+      
+      // Safe parsing: extract object content directly
+      const cleanMoviesText = moviesText.replace(/const\s+movies\s*=/, "return ");
+      const parseMovies = new Function(cleanMoviesText);
+      window.movieDetailsDict = parseMovies();
+    }
 
-    const moviesResponse = await fetch("/Movies/movies.js");
-    const moviesText = await moviesResponse.text();
-    const cleanMoviesText = moviesText.replace(/const\s+movies\s*=/, "return ");
-    const parseMovies = new Function(cleanMoviesText);
-    window.movieDetailsDict = parseMovies();
+    if (window.searchArray && Array.isArray(window.searchArray)) {
+      // Already loaded globally
+    } else {
+      try {
+        const searchResponse = await fetch("/JS/search.js");
+        if (searchResponse.ok) {
+          const searchText = await searchResponse.text();
+          const cleanSearchText = searchText.replace(/const\s+movies\s*=/, "return ");
+          const parseSearch = new Function(cleanSearchText);
+          window.searchArray = parseSearch();
+        }
+      } catch (e) {
+        console.warn("search.js fetch skipped or failed, using fallback images.", e);
+        window.searchArray = [];
+      }
+    }
 
     renderPage(id);
 
   } catch (error) {
-    console.error("Critical error while reading data engines safely:", error);
-    document.body.innerHTML = "<div style='color:white; text-align:center; margin-top:20%; font-family:sans-serif;'>Failed to load background systems.</div>";
+    console.error("Critical error while loading data engines:", error);
+    
+    // Fallback: If global 'movies' object exists, proceed anyway
+    if (window.movies) {
+      window.movieDetailsDict = window.movies;
+      renderPage(id);
+    } else {
+      document.body.innerHTML = "<div style='color:white; text-align:center; margin-top:20%; font-family:sans-serif;'>Failed to load media details. Please refresh.</div>";
+    }
   }
 }
 
 function renderPage(id) {
-  const exactKey = Object.keys(window.movieDetailsDict || {}).find(key => key.toLowerCase() === id.toLowerCase());
-  const movieData = exactKey ? window.movieDetailsDict[exactKey] : null;
+  const dict = window.movieDetailsDict || window.movies || {};
+  const exactKey = Object.keys(dict).find(key => key.toLowerCase() === id.toLowerCase());
+  const movieData = exactKey ? dict[exactKey] : null;
 
   if (!movieData) {
     document.body.innerHTML = "<div style='color:white; text-align:center; margin-top:20%; font-family:sans-serif;'>Movie data not found.</div>";
@@ -153,7 +180,12 @@ function setupLandscapeDOMArchitecture(imagePath) {
   }
 }
 
-loadDataFiles();
+// Execute when DOM is fully loaded
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", loadDataFiles);
+} else {
+  loadDataFiles();
+}
 
 // ==========================================================================
 // 2. REVIEWS SYSTEM ENGINE & DOM INJECTION
@@ -493,7 +525,7 @@ async function checkContinueWatchingStatus() {
 }
 
 // ==========================================================================
-// 5. USER INTERACTIVE NAVIGATION CONTROLS (INCLUDES ENCODED TITLE)
+// 5. USER INTERACTIVE NAVIGATION CONTROLS
 // ==========================================================================
 
 function play() {
