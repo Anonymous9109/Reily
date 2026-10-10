@@ -264,7 +264,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         resolvedPoster = await getAbsolutePosterUrl(movieParamId);
       }
 
-      // Send download payload over Android Bridge
+      // Send download payload over Android Bridge with resolved poster URL
       if (window.AndroidBridge && typeof window.AndroidBridge.downloadVideo === "function") {
         window.AndroidBridge.downloadVideo(src, movieParamId, cleanTitle, resolvedPoster);
         return;
