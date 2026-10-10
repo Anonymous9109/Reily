@@ -1,4 +1,4 @@
-/* Cyrene Player (smart source detection + back button + portrait support + subtitles + Timer + Netflix Shadow + Cloudflare D1 Resume Fixed + Google IMA VAST Integration + Download Button + Local Poster Engine) */
+/* Cyrene Player (smart source detection + back button + portrait support + subtitles + Timer + Netflix Shadow + Cloudflare D1 Resume Fixed + Google IMA VAST Integration + Download Button + Robust Local Poster Engine) */
 document.addEventListener("DOMContentLoaded", async () => {
 
   /********** 1) Inject CSS **********/
@@ -260,11 +260,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       cleanTitle = cleanTitle.replace(/[\\/:*?"<>|]/g, "_").trim();
       const finalFileName = `${cleanTitle}.mp4`;
 
-      if (!resolvedPoster) {
+      if (!resolvedPoster || resolvedPoster.includes("default.jpg")) {
         resolvedPoster = await getAbsolutePosterUrl(movieParamId);
       }
 
-      // Send download payload over Android Bridge with resolved poster URL
       if (window.AndroidBridge && typeof window.AndroidBridge.downloadVideo === "function") {
         window.AndroidBridge.downloadVideo(src, movieParamId, cleanTitle, resolvedPoster);
         return;
