@@ -1,4 +1,4 @@
-/* Cyrene Player (smart source detection + back button + portrait support + subtitles + Timer + Netflix Shadow + Cloudflare D1 Resume Fixed + Google IMA VAST Integration + Download Button + Dynamic Poster Resolution) */
+/* Cyrene Player (smart source detection + back button + portrait support + subtitles + Timer + Netflix Shadow + Cloudflare D1 Resume Fixed + Google IMA VAST Integration + Download Button + Poster Resolution) */
 document.addEventListener("DOMContentLoaded", async () => {
 
   /********** 1) Inject CSS **********/
@@ -210,16 +210,15 @@ document.addEventListener("DOMContentLoaded", async () => {
   backToPrev.innerHTML = `<svg viewBox="0 0 24 24"><path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>`;
   backToPrev.onclick = () => history.back();
 
-  /********** Smart Title & Poster Resolution **********/
+  /********** Smart Title & Direct Poster Resolution **********/
   const params = new URLSearchParams(window.location.search);
   const ep = params.get("ep") || "1";
-  const movieParamId = params.get("id") || params.get("movie") || params.get("series") || ep; 
-  let activeMovieTitle = "Unknown Media";
-  let activeMoviePoster = "";
+  const movieParamId = params.get("movie") || params.get("series") || params.get("id") || ep; 
+  let activeMovieTitle = document.title && document.title !== "Player" ? document.title : movieParamId;
 
-  // Async fetch search.js to obtain poster mapping on videoplayer page
-  async function resolvePosterUrl(targetId) {
-    if (!targetId) return "";
+  // Direct poster resolver reading search.js asynchronously
+  async function getAbsolutePosterUrl(id) {
+    if (!id) return "";
     try {
       const res = await fetch("/JS/search.js");
       const text = await res.text();
@@ -231,7 +230,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const urlPart = m.link.includes('?') ? m.link.split('?')[1] : m.link;
         const p = new URLSearchParams(urlPart);
         const idInLink = p.get('movie') || p.get('series');
-        return idInLink && idInLink.toLowerCase() === targetId.toLowerCase();
+        return idInLink && idInLink.toLowerCase() === id.toLowerCase();
       });
 
       if (matched && matched.image) {
@@ -241,19 +240,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     } catch (e) {
       console.error("Poster resolution failed:", e);
     }
-    return `https://rinolski.online/images/${targetId}.jpg`;
+    // Universal absolute URL fallback
+    return `https://rinolski.online/images/${id}.jpg`;
   }
 
-  // Kickoff poster fetch asynchronously
-  resolvePosterUrl(movieParamId).then(url => {
-    activeMoviePoster = url;
-  });
-
-  if (window.movies && window.movies[movieParamId]) {
-    activeMovieTitle = window.movies[movieParamId].title || "Unknown Media";
-  } else if (document.title && document.title !== "Player") {
-    activeMovieTitle = document.title;
-  }
+  let resolvedPoster = "";
+  getAbsolutePosterUrl(movieParamId).then(url => { resolvedPoster = url; });
 
   const downloadBtn = document.createElement("button");
   downloadBtn.id = "downloadBtn";
@@ -269,17 +261,17 @@ document.addEventListener("DOMContentLoaded", async () => {
       cleanTitle = cleanTitle.replace(/[\\/:*?"<>|]/g, "_").trim();
       const finalFileName = `${cleanTitle}.mp4`;
 
-      if (!activeMoviePoster) {
-        activeMoviePoster = await resolvePosterUrl(movieParamId);
+      if (!resolvedPoster) {
+        resolvedPoster = await getAbsolutePosterUrl(movieParamId);
       }
 
-      // 1. Android Bridge Call with Absolute Poster URL
+      // 1. Android App Bridge Interception
       if (window.AndroidBridge && typeof window.AndroidBridge.downloadVideo === "function") {
-        window.AndroidBridge.downloadVideo(src, movieParamId, cleanTitle, activeMoviePoster);
+        window.AndroidBridge.downloadVideo(src, movieParamId, cleanTitle, resolvedPoster);
         return;
       }
 
-      // 2. Fallback Browser Download
+      // 2. Browser Fallback
       const a = document.createElement("a");
       a.href = src;
       a.download = finalFileName;
