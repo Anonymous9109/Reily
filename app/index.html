@@ -2217,9 +2217,6 @@
                 grid.innerHTML = videos.map(v => {
                     const displayTitle = v.title || v.id || "Downloaded Video";
                     let fileUrl = v.path || "";
-                    if (!fileUrl.startsWith("file://") && !fileUrl.startsWith("content://") && !fileUrl.startsWith("/storage/") && !fileUrl.startsWith("/data/")) {
-                        // Keep as is or handle relative
-                    }
                     
                     let rawPoster = v.poster || "";
                     let posterUrl = "";
@@ -2586,7 +2583,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           const s = document.createElement("script");
           s.src = "https://cdn.jsdelivr.net/npm/hls.js@1.4.0/dist/hls.min.js";
           s.onload = res;
-          s.onerror = res; // Proceed even if CDN script fails offline
+          s.onerror = res;
           document.head.appendChild(s);
         });
       }
@@ -2602,7 +2599,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   /********** GOOGLE IMA VAST IMPLEMENTATION (Safe Offline Check) **********/
   function initIMAAdWorkflow(movieUrl) {
-    // Skip ad loading if device is fully offline or network fails
     if (!navigator.onLine) {
       fallbackDirectToMovie(movieUrl);
       return;
