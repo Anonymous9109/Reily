@@ -1,4 +1,4 @@
-/* Cyrene Player (smart source detection + back button + portrait support + subtitles + Timer + Netflix Shadow + Cloudflare D1 Resume Fixed + Google IMA VAST Integration + Download Button + Poster Extraction) */
+/* Cyrene Player (smart source detection + back button + portrait support + subtitles + Timer + Netflix Shadow + Cloudflare D1 Resume Fixed + Google IMA VAST Integration + Download Button + Dynamic Poster Resolution) */
 document.addEventListener("DOMContentLoaded", async () => {
 
   /********** 1) Inject CSS **********/
@@ -210,43 +210,56 @@ document.addEventListener("DOMContentLoaded", async () => {
   backToPrev.innerHTML = `<svg viewBox="0 0 24 24"><path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>`;
   backToPrev.onclick = () => history.back();
 
-  /********** Smart Title & Poster Detection for Downloads **********/
+  /********** Smart Title & Poster Resolution **********/
   const params = new URLSearchParams(window.location.search);
   const ep = params.get("ep") || "1";
-  const movieParamId = params.get("id") || params.get("movie") || ep; 
+  const movieParamId = params.get("id") || params.get("movie") || params.get("series") || ep; 
   let activeMovieTitle = "Unknown Media";
   let activeMoviePoster = "";
-  
-  if (window.movies && window.movies[movieParamId]) {
-    activeMovieTitle = window.movies[movieParamId].title || "Unknown Media";
-    if (window.movies[movieParamId].poster) {
-      activeMoviePoster = window.movies[movieParamId].poster;
+
+  // Async fetch search.js to obtain poster mapping on videoplayer page
+  async function resolvePosterUrl(targetId) {
+    if (!targetId) return "";
+    try {
+      const res = await fetch("/JS/search.js");
+      const text = await res.text();
+      const cleanText = text.replace(/const\s+movies\s*=/, "return ");
+      const searchItems = new Function(cleanText)();
+
+      const matched = searchItems.find(m => {
+        if (!m.link) return false;
+        const urlPart = m.link.includes('?') ? m.link.split('?')[1] : m.link;
+        const p = new URLSearchParams(urlPart);
+        const idInLink = p.get('movie') || p.get('series');
+        return idInLink && idInLink.toLowerCase() === targetId.toLowerCase();
+      });
+
+      if (matched && matched.image) {
+        const filename = matched.image.split('/').pop();
+        return `https://rinolski.online/images/${filename}`;
+      }
+    } catch (e) {
+      console.error("Poster resolution failed:", e);
     }
-  } else if (document.title && document.title !== "Player") {
-    activeMovieTitle = document.title;
+    return `https://rinolski.online/images/${targetId}.jpg`;
   }
 
-  // Fallback poster search in searchArray or standard directory
-  if (!activeMoviePoster && window.searchArray) {
-    const matchedItem = window.searchArray.find(m => {
-      if (!m.link) return false;
-      return m.link.includes(movieParamId);
-    });
-    if (matchedItem && matchedItem.image) {
-      const filename = matchedItem.image.split('/').pop();
-      activeMoviePoster = `https://rinolski.online/images/${filename}`;
-    }
-  }
-  
-  if (!activeMoviePoster && movieParamId) {
-    activeMoviePoster = `https://rinolski.online/images/${movieParamId}.jpg`;
+  // Kickoff poster fetch asynchronously
+  resolvePosterUrl(movieParamId).then(url => {
+    activeMoviePoster = url;
+  });
+
+  if (window.movies && window.movies[movieParamId]) {
+    activeMovieTitle = window.movies[movieParamId].title || "Unknown Media";
+  } else if (document.title && document.title !== "Player") {
+    activeMovieTitle = document.title;
   }
 
   const downloadBtn = document.createElement("button");
   downloadBtn.id = "downloadBtn";
   downloadBtn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>`;
   
-  downloadBtn.onclick = (e) => {
+  downloadBtn.onclick = async (e) => {
     e.stopPropagation();
     if (src) {
       let cleanTitle = (activeMovieTitle && activeMovieTitle !== "Unknown Media") 
@@ -256,13 +269,17 @@ document.addEventListener("DOMContentLoaded", async () => {
       cleanTitle = cleanTitle.replace(/[\\/:*?"<>|]/g, "_").trim();
       const finalFileName = `${cleanTitle}.mp4`;
 
-      // 1. Android App Bridge Interception with Poster URL Passed
+      if (!activeMoviePoster) {
+        activeMoviePoster = await resolvePosterUrl(movieParamId);
+      }
+
+      // 1. Android Bridge Call with Absolute Poster URL
       if (window.AndroidBridge && typeof window.AndroidBridge.downloadVideo === "function") {
         window.AndroidBridge.downloadVideo(src, movieParamId, cleanTitle, activeMoviePoster);
         return;
       }
 
-      // 2. Fallback Web Browser Anchor Download
+      // 2. Fallback Browser Download
       const a = document.createElement("a");
       a.href = src;
       a.download = finalFileName;
