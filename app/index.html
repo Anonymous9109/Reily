@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Rinolski</title>
-
+   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
     <style>
         * {
             -webkit-tap-highlight-color: transparent;
@@ -96,6 +96,22 @@
             margin-bottom: 15px;
             display: flex;
             gap: 10px;
+        }
+        
+        .random-btn {
+            background: #000000;
+            color: #e5e5e5;
+            border: 1.5px solid rgba(229, 229, 229, 0.4);
+            padding: 12px 22px;
+            border-radius: 999px;
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 0.4px;
+            transition: border-color 0.3s;
+        }
+        
+        .random-btn:hover {
+            border-color: rgba(229, 229, 229, 0.8);
         }
 
         .section {
@@ -249,6 +265,12 @@
             font-size: 16px;
             margin-left: 10px;
             outline: none;
+        }
+
+        .search-ad-wrapper {
+            padding: 10px 15px;
+            text-align: center;
+            background: #000000;
         }
 
         .profile-content {
@@ -794,6 +816,7 @@
             margin-bottom: 0;
         }
 
+        /* USERNAME MODAL ENGINE STYLING */
         .modal-box {
             position: fixed;
             top: 50%;
@@ -869,92 +892,6 @@
         .profile-locked {
             pointer-events: none !important;
         }
-
-        /* OFFLINE LIBRARY STYLING */
-        .offline-content {
-            padding: 16px;
-        }
-        .offline-poster-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-        }
-        .poster-card {
-            position: relative;
-            background: #141414;
-            border-radius: 8px;
-            overflow: hidden;
-            cursor: pointer;
-            aspect-ratio: 2 / 3;
-            border: 1px solid #222;
-            transition: transform 0.2s ease, border-color 0.2s ease;
-        }
-        .poster-card:hover, .poster-card:active {
-            transform: scale(1.03);
-            border-color: #e50914;
-        }
-        .poster-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-            background: #181818;
-        }
-        .poster-fallback {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 12px;
-            text-align: center;
-            background: linear-gradient(135deg, #1f1f1f 0%, #0d0d0d 100%);
-        }
-        .poster-fallback svg { width: 36px; height: 36px; fill: #e50914; margin-bottom: 8px; }
-        .poster-fallback-title { font-size: 0.85rem; font-weight: 600; color: #fff; line-height: 1.2; }
-        .poster-overlay {
-            position: absolute;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.45);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0.9;
-        }
-        .play-icon-circle {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background: rgba(229, 9, 20, 0.9);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-        }
-        .play-icon-circle svg { width: 22px; height: 22px; fill: #ffffff; margin-left: 2px; }
-        .poster-title-bar {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 20px 8px 8px 8px;
-            background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, transparent 100%);
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: #fff;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            text-align: center;
-        }
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: #666;
-            grid-column: 1 / -1;
-        }
-        .empty-state svg { width: 48px; height: 48px; fill: #444; margin-bottom: 12px; }
     </style>
 </head>
 <body>
@@ -1021,7 +958,10 @@
 </header>
 
 <div id="initialSections">
-    <div class="settings-container"></div>
+    <div class="settings-container">
+        
+    </div>
+    
     <div id="watchAgainContainer"></div>
     <div id="genreContainer"></div>
     <div id="randomContainer"></div>
@@ -1036,12 +976,8 @@
         <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
         <span>Search</span>
     </button>
-    <button id="offline-trigger" class="nav-item" onclick="openOfflinePanel()">
-        <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
-        <span>Downloads</span>
-    </button>
     <button id="profile-trigger" class="nav-item">
-        <img id="nav-profile-img" class="nav-pfp-icon" src="https://rinolski.online/images/1.jpg" alt="Profile">
+        <img id="nav-profile-img" class="nav-pfp-icon" src="images/1.jpg" alt="Profile">
         <span>Profile</span>
     </button>
 </footer>
@@ -1072,19 +1008,6 @@
     <div id="searchResults"></div>
 </div>
 
-<!-- Integrated Offline Downloads View -->
-<div id="sliding-offline" class="sliding-panel">
-    <div class="panel-header">
-        <button class="back-button" onclick="closeOfflinePanel()">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
-        </button>
-        <div class="panel-title">Offline Library</div>
-    </div>
-    <div class="offline-content">
-        <div id="offlineVideoGrid" class="offline-poster-grid"></div>
-    </div>
-</div>
-
 <div id="sliding-profile" class="sliding-panel">
     <div class="panel-header">
         <button class="back-button" id="profile-back-button">
@@ -1096,7 +1019,7 @@
         <div class="profile-avatar-row">
             <div class="profile-details-container">
                 <button class="gear-settings-btn" onclick="openSettingsPopup()" aria-label="Settings Menu">
-                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.70 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .43-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.70 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
                 </button>
                 <div id="username-display-group">
                     <p style="margin:0; color: #ffffff; font-size:22px; font-weight: bold;" id="profile-username">Loading Account...</p>
@@ -1129,25 +1052,21 @@
     let lastKnownDataHash = "";
 
     const profileAvatarsCatalog = {
-        1: "https://rinolski.online/images/1.jpg", 
-        2: "https://rinolski.online/images/2.jpg", 
-        3: "https://rinolski.online/images/3.jpg", 
-        4: "https://rinolski.online/images/4.jpg",  
-        5: "https://rinolski.online/images/5.jpg",
-        6: "https://rinolski.online/images/6.jpg",
-        7: "https://rinolski.online/images/7.jpg",
-        8: "https://rinolski.online/images/8.jpg",
-        9: "https://rinolski.online/images/9.jpg",
-        10: "https://rinolski.online/images/10.jpg"
+        1: "images/1.jpg", 
+        2: "images/2.jpg", 
+        3: "images/3.jpg", 
+        4: "images/4.jpg",  
+        5: "images/5.jpg",
+        6: "images/6.jpg",
+        7: "images/7.jpg",
+        8: "images/8.jpg",
+        9: "images/9.jpg",
+        10: "images/10.jpg"
     };
     let currentUserPfpId = null;
-
-    if (typeof movies === 'undefined') {
-        window.movies = [];
-    }
 </script>
 
-<script src="https://rinolski.online/JS/search.js" onerror="console.warn('Network search script unavailable, utilizing internal catalog fallback.');"></script>
+<script src="https://rinolski.online/JS/search.js"></script>
 
 <script>
     function showToast(message) {
@@ -1254,11 +1173,6 @@
     }
 
     async function handleAuth() {
-        if (!navigator.onLine) {
-            showToast("No internet connection available.");
-            return;
-        }
-
         const emailFieldVal = document.getElementById('auth-email').value.trim();
         const passwordFieldVal = document.getElementById('auth-password').value;
         const submitBtn = document.getElementById('auth-submit');
@@ -1269,6 +1183,14 @@
         }
         if (authState === "auth" && !passwordFieldVal) {
             showInlineAlert("Please enter your password.", "error");
+            return;
+        }
+        if (authState === "verify" && !emailFieldVal) {
+            showInlineAlert("Please enter the 6-digit access token code.", "error");
+            return;
+        }
+        if (authState === "reset" && (!emailFieldVal || !passwordFieldVal)) {
+            showInlineAlert("Please fill in both the reset token code and your new password.", "error");
             return;
         }
 
@@ -1323,6 +1245,87 @@
                     }
                 }
             } 
+            else if (authState === "verify") {
+                const res = await fetch(`${WORKER_URL}/api/verify`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: transientEmail, code: emailFieldVal })
+                });
+                const data = await res.json();
+                
+                if (res.ok) {
+                    showInlineAlert("Account verified! Logging in...", "success");
+                    
+                    const loginRes = await fetch(`${WORKER_URL}/api/signin`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ 
+                            email: transientEmail, 
+                            password: window.temporarySignupPassword || "" 
+                        })
+                    });
+                    const loginData = await loginRes.json();
+                    delete window.temporarySignupPassword;
+                    
+                    if (loginRes.ok) {
+                        localStorage.setItem('session_token', loginData.token);
+                        showToast(loginData.message || "Welcome to Rinolski!");
+                        await fetchAndDisplayUserData(true);
+                    } else {
+                        authState = "auth";
+                        renderAuthState();
+                        showInlineAlert("Account verified! Please sign in with your credentials.", "success");
+                    }
+                } else {
+                    showInlineAlert(data.error || "Invalid or expired verification code.", "error");
+                }
+            }
+            else if (authState === "forgot") {
+                transientEmail = emailFieldVal;
+                const res = await fetch(`${WORKER_URL}/api/forgot-password`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: emailFieldVal })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    showInlineAlert(data.message || "Reset token sent to email.", "success");
+                    authState = "reset";
+                    renderAuthState();
+                } else {
+                    showInlineAlert(data.error || "Failed to process request.", "error");
+                }
+            }
+            else if (authState === "reset") {
+                const res = await fetch(`${WORKER_URL}/api/reset-password`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: transientEmail, code: emailFieldVal, newPassword: passwordFieldVal })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    showInlineAlert("Password changed! Logging in...", "success");
+                    
+                    const loginRes = await fetch(`${WORKER_URL}/api/signin`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email: transientEmail, password: passwordFieldVal })
+                    });
+                    const loginData = await loginRes.json();
+                    
+                    if (loginRes.ok) {
+                        localStorage.setItem('session_token', loginData.token);
+                        showToast(loginData.message || "Password updated!");
+                        await fetchAndDisplayUserData(true);
+                    } else {
+                        authState = "auth";
+                        renderAuthState();
+                        showInlineAlert("Password reset. Please sign in.", "success");
+                    }
+                } else {
+                    showInlineAlert(data.error || "Password reset failed.", "error");
+                }
+            }
         } catch (err) {
             console.error("Auth Pipeline Error:", err);
             showInlineAlert("Network error. Please try again.", "error");
@@ -1351,7 +1354,7 @@
 
         const hasUsername = currentUser && currentUser.username && currentUser.username.trim() !== "";
 
-        if (!hasUsername && navigator.onLine) {
+        if (!hasUsername) {
             if (modal) modal.style.display = "block";
             if (profilePanel) profilePanel.classList.add("profile-locked");
             if (modalInput) modalInput.focus();
@@ -1450,13 +1453,6 @@
     }
 
     async function fetchAndDisplayUserData(forceRebuild = false) {
-        buildHomeFeed();
-
-        if (!navigator.onLine) {
-            document.getElementById('auth-gate').style.display = 'none';
-            return;
-        }
-
         const sessionToken = localStorage.getItem('session_token') || localStorage.getItem('token');
         if (!sessionToken) {
             document.getElementById('auth-gate').style.display = 'flex';
@@ -1523,9 +1519,10 @@
                 document.getElementById('auth-gate').style.display = 'flex';
             }
         } catch (err) {
-            console.error("Offline mode active:", err);
-            document.getElementById('auth-gate').style.display = 'none';
-            buildHomeFeed();
+            console.error("Identity collection structural context break:", err);
+            if (forceRebuild) {
+                document.getElementById('auth-gate').style.display = 'flex';
+            }
         }
     }
 
@@ -1538,7 +1535,6 @@
         
         document.getElementById('sliding-profile').classList.remove('open');
         document.getElementById('sliding-search').classList.remove('open');
-        document.getElementById('sliding-offline').classList.remove('open');
         toggleUsernameModal(false);
         resetActiveNavbar();
         document.getElementById('home-trigger').classList.add('active');
@@ -1557,7 +1553,6 @@
         renderAuthState();
         fetchAndDisplayUserData(true);
         startCloudflareRealTimeSync();
-        buildHomeFeed();
     });
 </script>
 
@@ -1599,7 +1594,7 @@
         const imgUrl = profileAvatarsCatalog[id] || profileAvatarsCatalog[1];
 
         if (navPfpImg && imgUrl) {
-            navPfpImg.src = imgUrl.startsWith('https://rinolski.online/') ? imgUrl : 'https://rinolski.online/' + imgUrl.replace(/^\/+/, '');
+            navPfpImg.src = imgUrl;
         }
 
         if (imgUrl && imgUrl.trim() !== "") {
@@ -1609,7 +1604,7 @@
                 avatarImg = document.createElement("img");
                 container.appendChild(avatarImg);
             }
-            avatarImg.src = imgUrl.startsWith('https://rinolski.online/') ? imgUrl : 'https://rinolski.online/' + imgUrl.replace(/^\/+/, '');
+            avatarImg.src = imgUrl;
             avatarImg.style.display = "block";
         } else {
             let avatarImg = container.querySelector("img");
@@ -1625,8 +1620,7 @@
 
         Object.keys(profileAvatarsCatalog).forEach(idKey => {
             const id = parseInt(idKey);
-            const rawImgUrl = profileAvatarsCatalog[id];
-            const imgUrl = rawImgUrl.startsWith('https://rinolski.online/') ? rawImgUrl : 'https://rinolski.online/' + rawImgUrl.replace(/^\/+/, '');
+            const imgUrl = profileAvatarsCatalog[id];
             
             const optionCard = document.createElement("div");
             optionCard.className = `pfp-option ${currentUserPfpId === id ? 'active' : ''}`;
@@ -1679,10 +1673,7 @@
 
 <script>
     async function fetchUnwantedMoviesCloudflare() {
-        if (!navigator.onLine || !currentUser) {
-            buildHomeFeed();
-            return;
-        }
+        if (!currentUser) return;
         const sessionToken = localStorage.getItem('session_token') || localStorage.getItem('token');
         if (!sessionToken) return;
 
@@ -1727,14 +1718,11 @@
             
             cardLink.setAttribute('onclick', `navigateToMovie('${sanitizedTitle}', '${sanitizedLink}', this.querySelector('.history-item'))`);
             cardLink.style.cursor = 'pointer';
-
-            let rawImg = referenceMovie.image || "";
-            const finalImg = rawImg.startsWith('https://rinolski.online/') ? rawImg : 'https://rinolski.online/' + rawImg.replace(/^\/+/, '');
             
             cardLink.innerHTML = `
                 <div class="history-item">
                     <div class="history-poster-frame">
-                        ${finalImg ? `<img src="${finalImg}" onerror="this.insertAdjacentHTML('afterend', '<p class=\\'fallback-label\\'>${sanitizedTitle}</p>'); this.style.opacity='0.25';">` : ''}
+                        ${referenceMovie.image ? `<img src="${referenceMovie.image}" onerror="this.insertAdjacentHTML('afterend', '<p class=\\'fallback-label\\'>${sanitizedTitle}</p>'); this.style.opacity='0.25';">` : ''}
                     </div>
                     <div class="history-meta-details">
                         <span class="history-title-text" title="${titleStr}">${titleStr}</span>
@@ -1749,7 +1737,7 @@
     function startCloudflareRealTimeSync() {
         setInterval(fetchRealTimeUpdates, 3000);
         setInterval(() => {
-            if (navigator.onLine && (localStorage.getItem('session_token') || localStorage.getItem('token')) && (!document.getElementById('auth-gate') || document.getElementById('auth-gate').style.display !== 'flex')) {
+            if ((localStorage.getItem('session_token') || localStorage.getItem('token')) && (!document.getElementById('auth-gate') || document.getElementById('auth-gate').style.display !== 'flex')) {
                 fetchAndDisplayUserData(false);
             }
         }, 1500);
@@ -1757,7 +1745,7 @@
 
     async function fetchRealTimeUpdates() {
         const liveIndicator = document.getElementById('live-data-display');
-        if (!liveIndicator || !navigator.onLine) return;
+        if (!liveIndicator) return;
         try {
             const response = await fetch(`${WORKER_URL}/api/realtime-update`, {
                 method: 'GET',
@@ -1772,7 +1760,7 @@
                 liveIndicator.textContent = "Connected Sync Engine";
             }
         } catch (err) {
-            if (liveIndicator) liveIndicator.textContent = "Local Standby Mode";
+            liveIndicator.textContent = "Local Standby Mode";
         }
     }
 </script>
@@ -1780,9 +1768,7 @@
 <script>
     const searchPanel = document.getElementById('sliding-search');
     const profilePanel = document.getElementById('sliding-profile');
-    const offlinePanel = document.getElementById('sliding-offline');
     const searchTrigger = document.getElementById('search-trigger');
-    const offlineTrigger = document.getElementById('offline-trigger');
     const profileTrigger = document.getElementById('profile-trigger');
     const homeTrigger = document.getElementById('home-trigger');
     const searchBackButton = document.getElementById('search-back-button');
@@ -1793,7 +1779,6 @@
     function resetActiveNavbar() {
         homeTrigger.classList.remove('active');
         searchTrigger.classList.remove('active');
-        offlineTrigger.classList.remove('active');
         profileTrigger.classList.remove('active');
     }
 
@@ -1802,7 +1787,6 @@
         homeTrigger.classList.add('active');
         searchPanel.classList.remove('open');
         profilePanel.classList.remove('open');
-        offlinePanel.classList.remove('open');
         checkUsernameModalGuard();
     });
 
@@ -1811,7 +1795,6 @@
         searchTrigger.classList.add('active');
         searchPanel.classList.add('open');
         profilePanel.classList.remove('open');
-        offlinePanel.classList.remove('open');
         checkUsernameModalGuard();
         searchInput.focus();
     });
@@ -1821,24 +1804,8 @@
         profileTrigger.classList.add('active');
         profilePanel.classList.add('open');
         searchPanel.classList.remove('open');
-        offlinePanel.classList.remove('open');
         checkUsernameModalGuard();
     });
-
-    function openOfflinePanel() {
-        resetActiveNavbar();
-        offlineTrigger.classList.add('active');
-        offlinePanel.classList.add('open');
-        searchPanel.classList.remove('open');
-        profilePanel.classList.remove('open');
-        loadOfflineDownloads();
-    }
-
-    function closeOfflinePanel() {
-        offlinePanel.classList.remove('open');
-        resetActiveNavbar();
-        homeTrigger.classList.add('active');
-    }
 
     searchBackButton.addEventListener('click', () => {
         searchPanel.classList.remove('open');
@@ -1856,6 +1823,17 @@
         checkUsernameModalGuard();
     });
 
+    function goRandom() {
+        if (typeof movies === 'undefined' || !movies.length) return;
+        const availableOptions = movies.filter(m => !userUnwantedCache.includes(m.title.toLowerCase()));
+        if(!availableOptions.length) {
+            showToast("No movies matching filter conditions.");
+            return;
+        }
+        const randomItem = availableOptions[Math.floor(Math.random() * availableOptions.length)];
+        navigateToMovie(randomItem.title, randomItem.link);
+    }
+
     function searchMovies() {
         if (typeof movies === 'undefined' || !movies.length) return;
         const query = searchInput.value.toLowerCase().trim();
@@ -1865,7 +1843,7 @@
 
         const matches = movies.filter(m => 
             !userUnwantedCache.includes(m.title.toLowerCase()) && 
-            (m.title.toLowerCase().includes(query) || (m.genres && m.genres.some(g => g.toLowerCase().includes(query))))
+            (m.title.toLowerCase().includes(query) || m.genres.some(g => g.toLowerCase().includes(query)))
         );
 
         if (matches.length > 0) {
@@ -2038,13 +2016,10 @@
         const div = document.createElement("div");
         div.className = "movie";
         
-        let rawImg = m.image || "";
-        const finalImg = rawImg.startsWith('https://rinolski.online/') ? rawImg : 'https://rinolski.online/' + rawImg.replace(/^\/+/, '');
-
         div.innerHTML = `
             <div style="width: 100%; height: 100%; position: relative; pointer-events: none;">
                 ${topTrendRank ? `<div class="trending-badge">${topTrendRank}</div>` : ''}
-                <img src="${finalImg}" draggable="false" onerror="this.insertAdjacentHTML('afterend', '<p class=\\'fallback-label\\'>${m.title}</p>'); this.style.opacity='0.25';">
+                <img src="${m.image}" draggable="false" onerror="this.insertAdjacentHTML('afterend', '<p class=\\'fallback-label\\'>${m.title}</p>'); this.style.opacity='0.25';">
             </div>
         `;
         
@@ -2053,11 +2028,6 @@
     }
 
     async function navigateToMovie(movieTitle, destinationUrl, elementClicked) {
-        let finalDestination = destinationUrl;
-        if (finalDestination && !finalDestination.startsWith('http://') && !finalDestination.startsWith('https://') && !finalDestination.startsWith('file://') && !finalDestination.startsWith('content://')) {
-            finalDestination = 'https://rinolski.online/' + finalDestination.replace(/^\/+/, '');
-        }
-
         if (elementClicked) {
             if (elementClicked.querySelector('.movie-loading-overlay')) return;
 
@@ -2074,14 +2044,14 @@
 
         userWatchHistoryCache.unshift({ title: movieTitle, watchedAt: exactTimeLabel });
 
-        if (!currentUser || !navigator.onLine) {
-            window.location.href = finalDestination;
+        if (!currentUser) {
+            window.location.href = destinationUrl;
             return;
         }
 
         const sessionToken = localStorage.getItem('session_token') || localStorage.getItem('token');
         if (!sessionToken) {
-            window.location.href = finalDestination;
+            window.location.href = destinationUrl;
             return;
         }
 
@@ -2097,10 +2067,10 @@
                     watchedAt: exactTimeLabel
                 })
             });
-            window.location.href = finalDestination;
+            window.location.href = destinationUrl;
         } catch (err) {
             console.error("History tracking pipeline failure context:", err);
-            window.location.href = finalDestination;
+            window.location.href = destinationUrl;
         }
     }
 
@@ -2186,729 +2156,7 @@
             genreContainer.appendChild(section);
         });
     }
-
-    // OFFLINE DOWNLOADS & PLAYER LOGIC
-    function escapeJs(str) {
-        return str ? String(str).replace(/\\/g, "\\\\").replace(/'/g, "\\'") : "";
-    }
-
-    function escapeHtml(str) {
-        return str ? String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;") : "";
-    }
-
-    function loadOfflineDownloads() {
-        const grid = document.getElementById("offlineVideoGrid");
-        if (!grid) return;
-
-        if (window.AndroidBridge && typeof window.AndroidBridge.getDownloadedVideosJson === "function") {
-            try {
-                const rawJson = window.AndroidBridge.getDownloadedVideosJson();
-                const videos = JSON.parse(rawJson || "[]");
-
-                if (!videos || videos.length === 0) {
-                    grid.innerHTML = `
-                      <div class="empty-state">
-                        <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
-                        <p>No downloaded movies found.</p>
-                      </div>`;
-                    return;
-                }
-
-                grid.innerHTML = videos.map(v => {
-                    const displayTitle = v.title || v.id || "Downloaded Video";
-                    let fileUrl = v.path || "";
-                    
-                    let rawPoster = v.poster || "";
-                    let posterUrl = "";
-                    if (rawPoster) {
-                        if (rawPoster.startsWith("http") || rawPoster.startsWith("file://") || rawPoster.startsWith("content://")) {
-                            posterUrl = rawPoster;
-                        } else {
-                            posterUrl = "https://rinolski.online/" + rawPoster.replace(/^\/+/, '');
-                        }
-                    }
-
-                    return `
-                      <div class="poster-card" onclick="launchCustomPlayer('${escapeJs(fileUrl)}', '${escapeJs(displayTitle)}')">
-                        ${posterUrl ? 
-                          `<img class="poster-img" src="${escapeHtml(posterUrl)}" alt="${escapeHtml(displayTitle)}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
-                           <div class="poster-fallback" style="display:none;">
-                             <svg viewBox="0 0 24 24"><path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/></svg>
-                             <div class="poster-fallback-title">${escapeHtml(displayTitle)}</div>
-                           </div>` 
-                          : 
-                          `<div class="poster-fallback">
-                             <svg viewBox="0 0 24 24"><path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/></svg>
-                             <div class="poster-fallback-title">${escapeHtml(displayTitle)}</div>
-                           </div>`
-                        }
-                        <div class="poster-overlay">
-                          <div class="play-icon-circle">
-                            <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"></polygon></svg>
-                          </div>
-                        </div>
-                        <div class="poster-title-bar">${escapeHtml(displayTitle)}</div>
-                      </div>
-                    `;
-                }).join("");
-
-            } catch (err) {
-                grid.innerHTML = `<div class="empty-state"><p>Failed to load offline media list.</p></div>`;
-            }
-        } else {
-            grid.innerHTML = `<div class="empty-state"><p>Android Bridge interface unavailable.</p></div>`;
-        }
-    }
 </script>
-
-<!-- Cyrene Player Integration (Safely scoped to playback routes) -->
-<script>
-document.addEventListener("DOMContentLoaded", async () => {
-  const params = new URLSearchParams(window.location.search);
-  const ep = params.get("ep") || "1";
-  const movieParamId = params.get("movie") || params.get("series") || params.get("id") || "";
-
-  // ONLY initialize the Cyrene player overlay if explicitly launched via a movie/player route parameter
-  if (!movieParamId && !params.get("src") && !window.location.pathname.includes("player")) {
-    return;
-  }
-
-  /********** 1) Inject CSS **********/
-  const css = `
-    :root { -webkit-tap-highlight-color: transparent; }
-    body { margin:0; background:#000; height:100vh; overflow:hidden; display:flex; align-items:center; justify-content:center; }
-    #videoPlayer{ position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:#000; z-index:9999; }
-    video{ width:100%; height:100%; object-fit:contain; background:#000; opacity:1; transition:opacity .28s ease; }
-
-    video::cue { visibility: hidden !important; opacity: 0 !important; background: transparent !important; }
-
-    #videoPlayer::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 20%, transparent 50%),
-                  linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, transparent 30%);
-      z-index: 20;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity .4s ease;
-    }
-    #videoPlayer.show-ui::after { opacity: 1; }
-
-    #subDisplay {
-      position: absolute;
-      bottom: 8%; 
-      left: 10%;
-      right: 10%;
-      text-align: center;
-      z-index: 25;
-      pointer-events: none;
-      font-family: sans-serif;
-      transition: bottom 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      display: flex;
-      justify-content: center;
-    }
-    #subDisplay span {
-        padding: 0.2em 0.5em;
-        border-radius: 0.2em;
-        line-height: 1.2;
-        color: #ffffff; 
-        font-size: 4.5vmin;
-        text-align: center;
-        transition: all 0.2s ease;
-    }
-    #videoPlayer.show-ui #subDisplay { bottom: 20%; }
-
-    .controls {  
-      position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); 
-      display:flex; gap:0px; align-items:center; z-index:30;  
-      opacity:0; visibility:hidden; transition:opacity .2s, visibility .2s;  
-    }  
-
-    .controls button {  
-      width:100px; height:100px; border-radius:50%; border:none;  
-      background:transparent; display:flex; align-items:center; justify-content:center;  
-      cursor:pointer; transition:background .25s;
-    }
-    .controls svg { height:54px; width:54px; fill:#fff; pointer-events:none; }  
-
-    #ccBtn {
-      position: absolute; bottom: 25px; left: 5%; 
-      background: none; border: none; cursor: pointer; 
-      z-index: 35; opacity: 0; visibility: hidden; 
-      transition: opacity .2s, visibility .2s; display: none; align-items: center;
-    }
-    #ccBtn svg { width:32px; height:32px; fill:#fff; }
-    #ccBtn.active svg { fill: red; }
-
-    #sub-menu {
-      position: absolute; bottom: 65px; left: 5%; 
-      background: rgba(15, 15, 15, 0.95); border: 1px solid #444; 
-      border-radius: 4px; padding: 5px 0; display: none; 
-      flex-direction: column; z-index: 50; min-width: 120px;
-    }
-    .sub-option {
-      color: white; background: none; border: none; 
-      text-align: left; padding: 8px 15px; cursor: pointer; 
-      font-family: sans-serif; font-size: 13px;
-    }
-    .sub-option:hover { background: rgba(255, 255, 255, 0.1); }
-    .sub-option.active { color: red; font-weight: bold; }
-
-    #backToPrev {  
-      position:absolute; top:14px; left:14px; width:46px; height:46px;  
-      border:none; border-radius:50%; background:rgba(0,0,0,.55);  
-      display:flex; align-items:center; justify-content:center;  
-      cursor:pointer; transition:background .25s, opacity .2s, visibility .2s;  
-      z-index:40; opacity:0; visibility:hidden;  
-    }  
-    #backToPrev:hover { background:rgba(255,0,0,0.65); }  
-    #backToPrev svg { width:28px; height:28px; fill:#fff; }  
-
-    #downloadBtn {  
-      position:absolute; top:14px; left:70px; width:46px; height:46px;  
-      border:none; border-radius:50%; background:rgba(0,0,0,.55);  
-      display:flex; align-items:center; justify-content:center;  
-      cursor:pointer; transition:background .25s, opacity .2s, visibility .2s;  
-      z-index:40; opacity:0; visibility:hidden;  
-    }  
-    #downloadBtn:hover { background:rgba(255,0,0,0.65); }  
-    #downloadBtn svg { width:24px; height:24px; fill:#fff; }  
-
-    .progress-container {  
-      position:absolute; bottom:60px; left:5%; right:5%;  
-      height:20px; display:flex; align-items:center; cursor:pointer; 
-      z-index:25; opacity:0; visibility:hidden; transition:opacity .2s, visibility .2s;  
-    }  
-    .progress-bg { width:100%; height:7px; background:rgba(255,255,255,0.2); border-radius:4px; position:relative; }
-    .progress-bar { width:0%; height:100%; background:red; border-radius:4px; position:relative; pointer-events:none; } 
-    
-    .progress-bar::after {
-      content: ""; position: absolute; right: -8px; top: 50%;
-      transform: translateY(-50%) scale(0);
-      width: 16px; height: 16px; background: red; border-radius: 50%;
-      transition: transform 0.1s ease;
-    }
-    .progress-container.dragging .progress-bar::after { transform: translateY(-50%) scale(1); }
-
-    .video-timer {
-      position: absolute; bottom: 85px; left: 5%;
-      color: #fff; font-family: sans-serif; font-size: 14px; font-weight: 600;
-      z-index: 25; opacity: 0; visibility: hidden;
-      transition: opacity .2s, visibility .2s; text-shadow: 0 0 4px rgba(0,0,0,0.7);
-    }
-
-    .nav-btn {  
-      position:absolute; top:16px; background:transparent; color:#fff;  
-      border:none; font-size:22px; padding:8px 12px; cursor:pointer; z-index:30;  
-      opacity:0; visibility:hidden; transition:opacity .2s, visibility .2s;  
-    }  
-    .back-btn { left:12px; }  
-    .next-btn { right:12px; }  
-
-    #loadingRing{  
-      position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);  
-      width:52px; height:52px; border-radius:50%;  
-      border:6px solid rgba(255,0,0,0.25); border-top:6px solid red;  
-      animation:spin 1s linear infinite; display:none; z-index:60;  
-    }  
-    @keyframes spin {  
-      from{transform:translate(-50%,-50%) rotate(0deg);}  
-      to{transform:translate(-50%,-50%) rotate(360deg);}  
-    }
-
-    #imaAdContainer {
-      position: absolute;
-      inset: 0;
-      z-index: 55;
-      pointer-events: auto;
-    }
-  `;
-  const styleTag = document.createElement("style");
-  styleTag.textContent = css;
-  document.head.appendChild(styleTag);
-
-  /********** 2) Build DOM **********/
-  const root = document.createElement("div");
-  root.id = "videoPlayer";
-
-  const video = document.createElement("video");
-  video.id = "videoElement";
-  video.playsInline = true;
-  video.preload = "auto";
-  video.setAttribute("webkit-playsinline", "");
-  video.crossOrigin = "anonymous"; 
-
-  const subDisplay = document.createElement("div");
-  subDisplay.id = "subDisplay";
-
-  const controls = document.createElement("div");
-  controls.className = "controls";
-  controls.innerHTML = `
-    <button id="rewindBtn"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M2.99805 3.5C2.99805 3.22386 3.2219 3 3.49805 3C3.77419 3 3.99805 3.22386 3.99805 3.5V5.70632C4.91067 4.67184 6.08199 3.88382 7.40447 3.43107C9.2407 2.80243 11.2429 2.86309 13.0377 3.60171C14.8325 4.34033 16.2974 5.7065 17.1593 7.44549C17.2819 7.69291 17.1808 7.9929 16.9333 8.11552C16.6859 8.23815 16.3859 8.13698 16.2633 7.88956C15.5092 6.36804 14.2275 5.17272 12.6571 4.52646C11.0868 3.88021 9.33496 3.82714 7.72837 4.37716C6.31508 4.861 5.09908 5.78248 4.25184 7H7.49805C7.77419 7 7.99805 7.22386 7.99805 7.5C7.99805 7.77614 7.77419 8 7.49805 8H3.49805C3.2219 8 2.99805 7.77614 2.99805 7.5V3.5ZM8.00005 10.5C8.00005 10.3156 7.89856 10.1462 7.73598 10.0592C7.5734 9.97215 7.37613 9.98169 7.2227 10.084L5.7227 11.084C5.49294 11.2372 5.43085 11.5476 5.58403 11.7774C5.7372 12.0071 6.04764 12.0692 6.2774 11.916L7.00005 11.4343V16.5C7.00005 16.7761 7.22391 17 7.50005 17C7.7762 17 8.00005 16.7761 8.00005 16.5V10.5ZM12.5029 10C11.568 10 10.9058 10.4367 10.5071 11.1292C10.1306 11.7833 10.0029 12.6366 10.0029 13.5C10.0029 14.3634 10.1306 15.2167 10.5071 15.8708C10.9058 16.5633 11.568 17 12.5029 17C13.4379 17 14.1001 16.5633 14.4988 15.8708C14.8753 15.2167 15.0029 14.3634 15.0029 13.5C15.0029 12.6366 14.8753 11.7833 14.4988 11.1292C14.1001 10.4367 13.4379 10 12.5029 10ZM11.0029 13.5C11.0029 12.7065 11.1253 12.0598 11.3738 11.6281C11.6001 11.2349 11.9379 11 12.5029 11C13.068 11 13.4058 11.2349 13.6321 11.6281C13.8806 12.0598 14.0029 12.7065 14.0029 13.5C14.0029 14.2935 13.8806 14.9402 13.6321 15.3719C13.4058 15.7651 13.068 16 12.5029 16C11.9379 16 11.6001 15.7651 11.3738 15.3719C11.1253 14.9402 11.0029 14.2935 11.0029 13.5Z" fill="white"/>
-</svg>
-</button>
-<button id="playPauseBtn" style="background: none; border: none; cursor: pointer; color: white;">
-  <svg id="playIcon" viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
-    <path d="M6 4.359c0-.938 1.013-1.523 1.825-1.054l13.088 7.556a1.218 1.218 0 0 1 0 2.108l-13.088 7.556c-.812.469-1.825-.116-1.825-1.054V4.359Z" />
-  </svg>
-  <svg id="pauseIcon" viewBox="0 0 24 24" width="32" height="32" fill="currentColor" style="display:none">
-    <path d="M5.25 4.5A1.25 1.25 0 0 0 4 5.75v12.5c0 .69.56 1.25 1.25 1.25h3.5c.69 0 1.25-.56 1.25-1.25V5.75c0-.69-.56-1.25-1.25-1.25h-3.5ZM14.25 4.5a1.25 1.25 0 0 0-1.25 1.25v12.5c0 .69.56 1.25 1.25 1.25h3.5c.69 0 1.25-.56 1.25-1.25V5.75c0-.69-.56-1.25-1.25-1.25h-3.5Z" />
-  </svg>
-</button>
-<button id="skipBtn"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M17 3.5C17 3.22386 16.7761 3 16.5 3C16.2239 3 16 3.22386 16 3.5V5.70245C15.0879 4.66988 13.9178 3.88325 12.597 3.43107C10.7608 2.80243 8.75857 2.86309 6.96376 3.60171C5.16895 4.34033 3.70403 5.7065 2.84215 7.44549C2.71953 7.69291 2.82069 7.9929 3.06812 8.11552C3.31554 8.23815 3.61552 8.13698 3.73815 7.88956C4.49224 6.36804 5.77396 5.17272 7.34432 4.52646C8.91469 3.88021 10.6665 3.82714 12.2731 4.37716C13.6864 4.861 14.9024 5.78248 15.7496 7H12.5C12.2239 7 12 7.22386 12 7.5C12 7.77614 12.2239 8 12.5 8H16.5C16.7761 8 17 7.77614 17 7.5V3.5ZM10.5071 11.1292C10.9058 10.4367 11.568 10 12.5029 10C13.4379 10 14.1001 10.4367 14.4988 11.1292C14.8753 11.7833 15.0029 12.6366 15.0029 13.5C15.0029 14.3634 14.8753 15.2167 14.4988 15.8708C14.1001 16.5633 13.4379 17 12.5029 17C11.568 17 10.9058 16.5633 10.5071 15.8708C10.1306 15.2167 10.0029 14.3634 10.0029 13.5C10.0029 12.6366 10.1306 11.7833 10.5071 11.1292ZM11.3738 11.6281C11.1253 12.0598 11.0029 12.7065 11.0029 13.5C11.0029 14.2935 11.1253 14.9402 11.3738 15.3719C11.6001 15.7651 11.9379 16 12.5029 16C13.068 16 13.4058 15.7651 13.6321 15.3719C13.8806 14.9402 14.0029 14.2349 14.0029 13.5C14.0029 12.7065 13.8806 12.0598 13.6321 11.6281C13.4058 11.2349 13.068 11 12.5029 11C11.9379 11 11.6001 11.2349 11.3738 11.6281ZM8.00005 10.5C8.00005 10.3156 7.89856 10.1462 7.73598 10.0592C7.5734 9.97215 7.37613 9.98169 7.2227 10.084L5.7227 11.084C5.49294 11.2372 5.43085 11.5476 5.58403 11.7774C5.7372 12.0071 6.04764 12.0692 6.2774 11.916L7.00005 11.4343V16.5C7.00005 16.7761 7.22391 17 7.50005 17C7.7762 17 8.00005 16.7761 8.00005 16.5V10.5Z" fill="white"/>
-</svg>
-</button>
-  `;
-
-  const ccBtn = document.createElement("button");
-  ccBtn.id = "ccBtn";
-  ccBtn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M19 4H5c-1.11 0-2 .9-2 2v12c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 7H9.5v-.5h-2v3h2V13H11v1c0 .55-.45 1-1 1H7c-.55 0-1-.45-1-1v-4c0-.55.45-1 1-1h3c.55 0 1 .45 1 1v1zm7 0h-1.5v-.5h-2v3h2V13H18v1c0 .55-.45 1-1 1h-3c-.55 0-1-.45-1-1v-4c0-.55 0-.45 1-1h3c.55 0 1 .45 1 1v1z"/></svg>`;
-
-  const subMenu = document.createElement("div");
-  subMenu.id = "sub-menu";
-
-  const backToPrev = document.createElement("button");
-  backToPrev.id = "backToPrev";
-  backToPrev.innerHTML = `<svg viewBox="0 0 24 24"><path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>`;
-  backToPrev.onclick = () => history.back();
-
-  let activeMovieTitle = document.title && document.title !== "Player" ? document.title : movieParamId;
-
-  async function getAbsolutePosterUrl(id) {
-    if (!id || !navigator.onLine) return `https://rinolski.online/images/default.jpg`;
-    try {
-      const res = await fetch("/JS/search.js");
-      const text = await res.text();
-      const cleanText = text.replace(/const\s+movies\s*=/, "return ");
-      const searchItems = new Function(cleanText)();
-
-      const matched = searchItems.find(m => {
-        if (!m.link) return false;
-        const urlPart = m.link.includes('?') ? m.link.split('?')[1] : m.link;
-        const p = new URLSearchParams(urlPart);
-        const idInLink = p.get('movie') || p.get('series');
-        return idInLink && idInLink.toLowerCase() === id.toLowerCase();
-      });
-
-      if (matched && matched.image) {
-        const filename = matched.image.split('/').pop();
-        return `https://rinolski.online/images/${filename}`;
-      }
-    } catch (e) {
-      console.error("Poster resolution error:", e);
-    }
-    return `https://rinolski.online/images/${id}.jpg`;
-  }
-
-  let resolvedPoster = "";
-  getAbsolutePosterUrl(movieParamId).then(url => { resolvedPoster = url; });
-
-  const downloadBtn = document.createElement("button");
-  downloadBtn.id = "downloadBtn";
-  downloadBtn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>`;
-  
-  downloadBtn.onclick = async (e) => {
-    e.stopPropagation();
-    if (src) {
-      let cleanTitle = (activeMovieTitle && activeMovieTitle !== "Unknown Media") 
-        ? activeMovieTitle 
-        : movieParamId;
-
-      cleanTitle = cleanTitle.replace(/[\\/:*?"<>|]/g, "_").trim();
-      const finalFileName = `${cleanTitle}.mp4`;
-
-      if (!resolvedPoster || resolvedPoster.includes("default.jpg")) {
-        resolvedPoster = await getAbsolutePosterUrl(movieParamId);
-      }
-
-      if (window.AndroidBridge && typeof window.AndroidBridge.downloadVideo === "function") {
-        window.AndroidBridge.downloadVideo(src, movieParamId, cleanTitle, resolvedPoster);
-        return;
-      }
-
-      const a = document.createElement("a");
-      a.href = src;
-      a.download = finalFileName;
-      a.target = "_blank";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    }
-  };
-
-  const progressContainer = document.createElement("div");
-  progressContainer.className = "progress-container";
-  const progressBg = document.createElement("div");
-  progressBg.className = "progress-bg";
-  const progressBar = document.createElement("div");
-  progressBar.id = "pBar";
-  progressBar.className = "progress-bar";
-  progressBg.appendChild(progressBar);
-  progressContainer.appendChild(progressBg);
-
-  const timerDisplay = document.createElement("div");
-  timerDisplay.className = "video-timer";
-  timerDisplay.textContent = "0:00 / 0:00";
-
-  const backBtn = document.createElement("button");
-  backBtn.className = "nav-btn back-btn";
-  backBtn.innerHTML = "◀";
-
-  const nextBtn = document.createElement("button");
-  nextBtn.className = "nav-btn next-btn";
-  nextBtn.innerHTML = "▶";
-
-  const loadingRing = document.createElement("div");
-  loadingRing.id = "loadingRing";
-
-  root.append(video, subDisplay, controls, progressContainer, timerDisplay, ccBtn, subMenu, backBtn, nextBtn, loadingRing, backToPrev, downloadBtn);
-  document.body.appendChild(root);
-
-  /********** 3) Smart Source Detection **********/
-  let src = null;
-
-  if (window.videoData && ep && window.videoData[ep]) src = window.videoData[ep];
-  if (!src && params.get("src")) src = decodeURIComponent(params.get("src"));
-
-  if (!src) {
-    document.body.innerHTML = `<p style="color:white;text-align:center;font-family:sans-serif;margin-top:20vh;">No video found.</p>`;
-    return;
-  }
-
-  /********** 4) Load Source Safely (Offline Resilient) **********/
-  async function attachSourceToVideo(url) {
-    const isM3u8 = /\.m3u8($|\?)/i.test(url);
-    if (isM3u8 && navigator.onLine) {
-      if (!window.Hls) {
-        await new Promise(res => {
-          const s = document.createElement("script");
-          s.src = "https://cdn.jsdelivr.net/npm/hls.js@1.4.0/dist/hls.min.js";
-          s.onload = res;
-          s.onerror = res;
-          document.head.appendChild(s);
-        });
-      }
-      if (window.Hls && window.Hls.isSupported()) {
-        const h = new Hls();
-        h.loadSource(url);
-        h.attachMedia(video);
-        return;
-      }
-    } 
-    video.src = url;
-  }
-
-  /********** GOOGLE IMA VAST IMPLEMENTATION (Safe Offline Check) **********/
-  function initIMAAdWorkflow(movieUrl) {
-    if (!navigator.onLine) {
-      fallbackDirectToMovie(movieUrl);
-      return;
-    }
-
-    if (!window.google || !window.google.ima) {
-      const imaScript = document.createElement("script");
-      imaScript.src = "https://imasdk.googleapis.com/js/sdkloader/ima3.js";
-      imaScript.onload = () => setupIMAManager(movieUrl);
-      imaScript.onerror = () => fallbackDirectToMovie(movieUrl);
-      document.head.appendChild(imaScript);
-    } else {
-      setupIMAManager(movieUrl);
-    }
-  }
-
-  function setupIMAManager(movieUrl) {
-    if (!navigator.onLine) {
-      fallbackDirectToMovie(movieUrl);
-      return;
-    }
-
-    const adContainer = document.createElement("div");
-    adContainer.id = "imaAdContainer";
-    root.appendChild(adContainer);
-
-    try {
-      const adDisplayContainer = new google.ima.AdDisplayContainer(adContainer, video);
-      const adsLoader = new google.ima.AdsLoader(adDisplayContainer);
-
-      let adsManager = null;
-
-      adsLoader.addEventListener(google.ima.AdsManagerLoadedEvent.Type.ADS_MANAGER_LOADED, (e) => {
-        adsManager = e.getAdsManager(video);
-        
-        adsManager.addEventListener(google.ima.AdErrorEvent.Type.AD_ERROR, () => cleanAdAndStartMovie(adContainer, movieUrl));
-        adsManager.addEventListener(google.ima.AdEvent.Type.ALL_ADS_COMPLETED, () => cleanAdAndStartMovie(adContainer, movieUrl));
-        adsManager.addEventListener(google.ima.AdEvent.Type.CONTENT_RESUME_REQUESTED, () => cleanAdAndStartMovie(adContainer, movieUrl));
-
-        try {
-          adDisplayContainer.initialize();
-          adsManager.init(root.clientWidth, root.clientHeight, google.ima.ViewMode.NORMAL);
-          adsManager.start();
-        } catch (err) {
-          cleanAdAndStartMovie(adContainer, movieUrl);
-        }
-      }, false);
-
-      adsLoader.addEventListener(google.ima.AdErrorEvent.Type.AD_ERROR, () => cleanAdAndStartMovie(adContainer, movieUrl), false);
-
-      const adsRequest = new google.ima.AdsRequest();
-      adsRequest.adTagUrl = "";
-      adsRequest.linearAdSlotWidth = root.clientWidth;
-      adsRequest.linearAdSlotHeight = root.clientHeight;
-      adsLoader.requestAds(adsRequest);
-    } catch(err) {
-      cleanAdAndStartMovie(adContainer, movieUrl);
-    }
-  }
-
-  function cleanAdAndStartMovie(containerDom, movieUrl) {
-    if (containerDom && containerDom.parentNode) {
-      containerDom.remove();
-    }
-    fallbackDirectToMovie(movieUrl);
-  }
-
-  async function fallbackDirectToMovie(movieUrl) {
-    await attachSourceToVideo(movieUrl);
-  }
-
-  initIMAAdWorkflow(src);
-
-  /********** D1 CLOUDFLARE TRACKER SYSTEM CONFIG (Offline Safe) **********/
-  const CONFIG = {
-    API_BASE_URL: "https://rinolski.misty-fog-201e.workers.dev",
-    AUTH_TOKEN: localStorage.getItem("session_token") || ""
-  };
-
-  let isResuming = true; 
-  let lastSavedTime = 0;
-  let serverTimestamp = null; 
-
-  async function saveWatchProgress() {
-    if (!navigator.onLine || !CONFIG.AUTH_TOKEN || !video.duration || isResuming) return;
-    if (video.currentTime < 5 || video.currentTime > video.duration - 10) return;
-
-    try {
-      await fetch(`${CONFIG.API_BASE_URL}/api/save-progress`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${CONFIG.AUTH_TOKEN}`
-        },
-        body: JSON.stringify({
-          movieId: movieParamId,
-          movieTitle: activeMovieTitle,
-          left: video.currentTime,
-          duration: video.duration
-        })
-      });
-      lastSavedTime = video.currentTime;
-    } catch (error) {
-      console.error("Failed to save progress to Cloudflare D1:", error);
-    }
-  }
-
-  window.addEventListener("beforeunload", saveWatchProgress);
-  document.addEventListener("visibilitychange", () => {
-    if (document.visibilityState === "hidden") saveWatchProgress();
-  });
-
-  /********** 5) Events & Controls **********/
-  const rewindBtn = document.getElementById("rewindBtn");
-  const playPauseBtn = document.getElementById("playPauseBtn");
-  const skipBtn = document.getElementById("skipBtn");
-  const playIcon = document.getElementById("playIcon");
-  const pauseIcon = document.getElementById("pauseIcon");
-  let controlsVisible = false, hideTimer, isDragging = false;
-
-  const formatTime = (seconds) => {
-    if (!isFinite(seconds) || isNaN(seconds)) return "0:00";
-    const h = Math.floor(seconds / 3600);
-    const m = Math.floor((seconds % 3600) / 60);
-    const s = Math.floor(seconds % 60);
-    return h > 0 ? `${h}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}` : `${m}:${s.toString().padStart(2,'0')}`;
-  };
-
-  const showControls = (timeout = 3000) => {
-    root.classList.add("show-ui");
-    for (const el of [controls, progressContainer, backToPrev, downloadBtn, timerDisplay, ccBtn]) {
-      el.style.opacity = "1"; el.style.visibility = "visible";
-    }
-    backBtn.style.opacity = window.backEpisodeLink ? "1" : "0";
-    nextBtn.style.opacity = window.nextEpisodeLink ? "1" : "0";
-    backBtn.style.visibility = window.backEpisodeLink ? "visible" : "hidden";
-    nextBtn.style.visibility = window.nextEpisodeLink ? "visible" : "hidden";
-    controlsVisible = true;
-    clearTimeout(hideTimer);
-    if (timeout > 0 && !isDragging) hideTimer = setTimeout(hideControls, timeout);
-  };
-
-  const hideControls = () => {
-    if (isDragging) return;
-    root.classList.remove("show-ui");
-    for (const el of [controls, progressContainer, backToPrev, downloadBtn, backBtn, nextBtn, timerDisplay, ccBtn]) {
-      el.style.opacity = "0"; el.style.visibility = "hidden";
-    }
-    subMenu.style.display = "none";
-    controlsVisible = false;
-    clearTimeout(hideTimer);
-  };
-
-  const showLoading = () => loadingRing.style.display = "block";
-  const hideLoading = () => loadingRing.style.display = "none";
-  const setPlayingUI = (p) => { playIcon.style.display = p ? "none" : "block"; pauseIcon.style.display = p ? "block" : "none"; };
-
-  video.addEventListener("canplay", () => { hideLoading(); video.style.opacity = "1"; });
-  video.addEventListener("playing", () => { hideLoading(); setPlayingUI(true); });
-  video.addEventListener("pause", () => setPlayingUI(false));
-  video.addEventListener("waiting", showLoading);
-  video.addEventListener("ended", hideLoading);
-
-  playPauseBtn.onclick = (e) => {
-    e.stopPropagation();
-    if (video.paused) video.play().catch(() => { video.muted = true; video.play(); });
-    else video.pause();
-  };
-  rewindBtn.onclick = (e) => { e.stopPropagation(); video.currentTime = Math.max(0, video.currentTime - 10); };
-  skipBtn.onclick = (e) => { e.stopPropagation(); video.currentTime = Math.min(video.duration, video.currentTime + 10); };
-
-  video.addEventListener("timeupdate", () => {
-    if (isFinite(video.duration) && !isDragging && !isResuming) {
-      progressBar.style.width = (video.currentTime / video.duration) * 100 + "%";
-      timerDisplay.textContent = `${formatTime(video.currentTime)} / ${formatTime(video.duration)}`;
-      
-      if (Math.abs(video.currentTime - lastSavedTime) >= 5) {
-        saveWatchProgress();
-      }
-    }
-  });
-
-  const scrub = (e) => {
-    const rect = progressBg.getBoundingClientRect();
-    const isPortrait = window.innerHeight > window.innerWidth;
-    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-    
-    let pct = isPortrait ? (clientY - rect.top) / rect.height : (clientX - rect.left) / rect.width;
-    pct = Math.max(0, Math.min(1, pct));
-    progressBar.style.width = pct * 100 + "%";
-    const targetTime = pct * video.duration;
-    timerDisplay.textContent = `${formatTime(targetTime)} / ${formatTime(video.duration)}`;
-    video.currentTime = targetTime;
-  };
-
-  progressContainer.onmousedown = (e) => { isDragging = true; progressContainer.classList.add("dragging"); scrub(e); };
-  window.onmousemove = (e) => { if (isDragging) scrub(e); };
-  window.onmouseup = () => { if (isDragging) { isDragging = false; progressContainer.classList.remove("dragging"); showControls(); } };
-
-  progressContainer.ontouchstart = (e) => { isDragging = true; progressContainer.classList.add("dragging"); scrub(e); };
-  window.ontouchmove = (e) => { if (isDragging) scrub(e); };
-  window.ontouchend = () => { if (isDragging) { isDragging = false; progressContainer.classList.remove("dragging"); showControls(); } };
-
-  backBtn.onclick = () => { if (window.backEpisodeLink) location.href = window.backEpisodeLink; };
-  nextBtn.onclick = () => { if (window.nextEpisodeLink) location.href = window.nextEpisodeLink; };
-
-  root.addEventListener("click", () => { if(!isDragging) controlsVisible ? hideControls() : showControls(); });
-
-  /********** THE JUMP FIX: TRACK LOADEDMETADATA **********/
-  video.addEventListener("loadedmetadata", async () => {
-    if (serverTimestamp && serverTimestamp < video.duration - 15) {
-      video.currentTime = serverTimestamp;
-      lastSavedTime = serverTimestamp;
-    }
-    
-    isResuming = false;
-    
-    try { 
-      await video.play(); 
-    } catch { 
-      video.pause(); 
-      showControls(5000); 
-    }
-  });
-
-  (async function fetchSavedProgress() {
-    if (navigator.onLine && CONFIG.AUTH_TOKEN) {
-      try {
-        const response = await fetch(`${CONFIG.API_BASE_URL}/api/get-progress`, {
-          method: "GET",
-          headers: { "Authorization": `Bearer ${CONFIG.AUTH_TOKEN}` }
-        });
-        
-        if (response.ok) {
-          const data = await response.json();
-          const progressMap = data.progress || {};
-          if (progressMap[movieParamId]) {
-            serverTimestamp = parseFloat(progressMap[movieParamId].left);
-          }
-        }
-      } catch (err) { 
-        console.error("Error pulling history from Cloudflare Worker: ", err); 
-      }
-    }
-  })();
-
-  /********** 6) Portrait rotation **********/
-  function rotateIfPortrait() {
-    const isPortrait = window.innerHeight > window.innerWidth;
-    const vw = window.innerWidth, vh = window.innerHeight;
-    if (isPortrait) {
-      root.style.position = "fixed";
-      root.style.top = "50%";
-      root.style.left = "50%";
-      root.style.transform = `translate(-50%, -50%) rotate(90deg)`;
-      root.style.transformOrigin = "center center";
-      root.style.width = `${vh}px`;
-      root.style.height = `${vw}px`;
-    } else {
-      root.style.position = "fixed";
-      root.style.top = "0";
-      root.style.left = "0";
-      root.style.transform = "none";
-      root.style.width = "100%";
-      root.style.height = "100%";
-    }
-  }
-  rotateIfPortrait();
-  window.addEventListener("resize", rotateIfPortrait);
-});
-
-// Fullscreen & Touch Emulation
-let lastTap = 0;
-function goFullscreenLandscape() {
-  const elem = document.documentElement;
-  if (elem.requestFullscreen) { elem.requestFullscreen(); } 
-  else if (elem.webkitRequestFullscreen) { elem.webkitRequestFullscreen(); }
-  if (screen.orientation && screen.orientation.lock) { screen.orientation.lock("landscape").catch(() => {}); }
-}
-
-document.addEventListener("touchend", () => {
-  const now = Date.now();
-  if (now - lastTap < 300) { goFullscreenLandscape(); }
-  lastTap = now;
-});
-document.addEventListener("dblclick", () => { goFullscreenLandscape(); });
-document.addEventListener("fullscreenchange", () => {
-  if (!document.fullscreenElement && screen.orientation && screen.orientation.unlock) { screen.orientation.unlock(); }
-});
-
-(function () {
-  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-  if (isTouchDevice) return;
-  function createTouchEvent(type, mouseEvent) {
-    const touchObj = new Touch({
-      identifier: Date.now(), target: mouseEvent.target, clientX: mouseEvent.clientX, clientY: mouseEvent.clientY,
-      radiusX: 2, radiusY: 2, force: 0.5
-    });
-    return new TouchEvent(type, { cancelable: true, bubbles: true, touches: type === "touchend" ? [] : [touchObj], targetTouches: type === "touchend" ? [] : [touchObj], changedTouches: [touchObj] });
-  }
-  document.addEventListener("mousedown", (e) => { e.target.dispatchEvent(createTouchEvent("touchstart", e)); });
-  document.addEventListener("mousemove", (e) => { e.target.dispatchEvent(createTouchEvent("touchmove", e)); });
-  document.addEventListener("mouseup", (e) => { e.target.dispatchEvent(createTouchEvent("touchend", e)); });
-})();
-</script>
-
 </body>
 </html>
+
