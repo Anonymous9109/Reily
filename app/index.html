@@ -1141,9 +1141,14 @@
         10: "https://rinolski.online/images/10.jpg"
     };
     let currentUserPfpId = null;
+
+    // Fallback movies catalog in case network fails
+    if (typeof movies === 'undefined') {
+        window.movies = [];
+    }
 </script>
 
-<script src="https://rinolski.online/JS/search.js"></script>
+<script src="https://rinolski.online/JS/search.js" onerror="console.warn('Network search script unavailable, utilizing internal catalog fallback.');"></script>
 
 <script>
     function showToast(message) {
@@ -1446,9 +1451,10 @@
     }
 
     async function fetchAndDisplayUserData(forceRebuild = false) {
+        buildHomeFeed();
+
         if (!navigator.onLine) {
             document.getElementById('auth-gate').style.display = 'none';
-            buildHomeFeed();
             return;
         }
 
@@ -1518,7 +1524,7 @@
                 document.getElementById('auth-gate').style.display = 'flex';
             }
         } catch (err) {
-            console.error("Identity collection structural context break:", err);
+            console.error("Offline mode active:", err);
             document.getElementById('auth-gate').style.display = 'none';
             buildHomeFeed();
         }
@@ -1767,7 +1773,7 @@
                 liveIndicator.textContent = "Connected Sync Engine";
             }
         } catch (err) {
-            liveIndicator.textContent = "Local Standby Mode";
+            if (liveIndicator) liveIndicator.textContent = "Local Standby Mode";
         }
     }
 </script>
@@ -1860,7 +1866,7 @@
 
         const matches = movies.filter(m => 
             !userUnwantedCache.includes(m.title.toLowerCase()) && 
-            (m.title.toLowerCase().includes(query) || m.genres.some(g => g.toLowerCase().includes(query)))
+            (m.title.toLowerCase().includes(query) || (m.genres && m.genres.some(g => g.toLowerCase().includes(query))))
         );
 
         if (matches.length > 0) {
@@ -2211,7 +2217,10 @@
 
                 grid.innerHTML = videos.map(v => {
                     const displayTitle = v.title || v.id || "Downloaded Video";
-                    const fileUrl = v.path.startsWith("file://") || v.path.startsWith("content://") ? v.path : "file://" + v.path;
+                    let fileUrl = v.path || "";
+                    if (!fileUrl.startsWith("file://") && !fileUrl.startsWith("content://")) {
+                        fileUrl = "file://" + fileUrl;
+                    }
                     
                     let rawPoster = v.poster || "";
                     let posterUrl = "";
@@ -2335,6 +2344,7 @@
         video.id = "videoElement";
         video.playsInline = true;
         video.preload = "auto";
+        video.crossOrigin = "anonymous";
         video.src = localVideoUrl;
 
         const controls = document.createElement("div");
