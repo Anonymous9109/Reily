@@ -1,4 +1,4 @@
-/* Cyrene Player (smart source detection + back button + portrait support + subtitles + Timer + Netflix Shadow + Cloudflare D1 Resume Fixed + Google IMA VAST Integration + Download Button + Robust Local Poster Engine) */
+/* Cyrene Player (smart source detection + back button + portrait support + subtitles + Timer + Netflix Shadow + Cloudflare D1 Resume Fixed + Google IMA VAST Integration + Download Button + Aligned Absolute Poster Engine) */
 document.addEventListener("DOMContentLoaded", async () => {
 
   /********** 1) Inject CSS **********/
@@ -210,7 +210,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   backToPrev.innerHTML = `<svg viewBox="0 0 24 24"><path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>`;
   backToPrev.onclick = () => history.back();
 
-  /********** Smart Title & Absolute Poster Resolution **********/
+  /********** Smart Title & Absolute Poster Resolution Aligned with script.js **********/
   const params = new URLSearchParams(window.location.search);
   const ep = params.get("ep") || "1";
   const movieParamId = params.get("movie") || params.get("series") || params.get("id") || ep; 
@@ -233,9 +233,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
 
       if (matched && matched.image) {
-        if (matched.image.startsWith("http")) return matched.image;
-        const cleanImg = matched.image.startsWith('/') ? matched.image : '/' + matched.image;
-        return `https://rinolski.online${cleanImg}`;
+        const filename = matched.image.split('/').pop();
+        return `https://rinolski.online/images/${filename}`;
       }
     } catch (e) {
       console.error("Poster resolution error:", e);
