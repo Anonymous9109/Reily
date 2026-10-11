@@ -976,8 +976,13 @@
         <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
         <span>Search</span>
     </button>
+    <!-- New Custom Button Added Here -->
+    <button id="custom-trigger" class="nav-item">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+        <span>Custom</span>
+    </button>
     <button id="profile-trigger" class="nav-item">
-        <img id="nav-profile-img" class="nav-pfp-icon" src="images/1.jpg" alt="Profile">
+        <img id="nav-profile-img" class="nav-pfp-icon" src="https://rinolski.online/images/1.jpg" alt="Profile">
         <span>Profile</span>
     </button>
 </footer>
@@ -1006,6 +1011,493 @@
     </div>
     
     <div id="searchResults"></div>
+</div>
+
+<!-- New Empty Sliding Panel for Your Custom HTML Content -->
+<div id="sliding-custom" class="sliding-panel">
+    <div class="panel-header">
+        <button class="back-button" id="custom-back-button">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        </button>
+        <div class="panel-title">Custom Slide</div>
+    </div>
+    <div style="padding: 20px;" id="customSlideContent">
+        <!-- Add your custom HTML content here --><!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Offline Downloads - Rinolski</title>
+  <style>
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    body {
+      margin: 0;
+      padding: 16px;
+      background-color: #0a0a0a;
+      color: #ffffff;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      min-height: 100vh;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #222;
+    }
+    h1 { font-size: 1.4rem; margin: 0; font-weight: 700; color: #e50914; }
+    .status-badge {
+      font-size: 0.75rem;
+      background: #1f1f1f;
+      padding: 4px 10px;
+      border-radius: 12px;
+      color: #888;
+    }
+
+    .poster-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .poster-card {
+      position: relative;
+      background: #141414;
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+      aspect-ratio: 2 / 3;
+      border: 1px solid #222;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .poster-card:hover, .poster-card:active {
+      transform: scale(1.03);
+      border-color: #e50914;
+    }
+
+    .poster-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      background: #181818;
+    }
+
+    .poster-fallback {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+      text-align: center;
+      background: linear-gradient(135deg, #1f1f1f 0%, #0d0d0d 100%);
+    }
+    .poster-fallback svg { width: 36px; height: 36px; fill: #e50914; margin-bottom: 8px; }
+    .poster-fallback-title { font-size: 0.85rem; font-weight: 600; color: #fff; line-height: 1.2; }
+
+    .poster-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0.9;
+      transition: opacity 0.2s ease, background 0.2s ease;
+    }
+
+    .play-icon-circle {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(229, 9, 20, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    }
+    .play-icon-circle svg { width: 22px; height: 22px; fill: #ffffff; margin-left: 2px; }
+
+    .poster-title-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 20px 8px 8px 8px;
+      background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, transparent 100%);
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-align: center;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: #666;
+      grid-column: 1 / -1;
+    }
+    .empty-state svg { width: 48px; height: 48px; fill: #444; margin-bottom: 12px; }
+  </style>
+</head>
+<body>
+
+  <div id="mainContainer">
+    <div class="header">
+      <h1>Rinolski Offline</h1>
+      <span class="status-badge">Offline Library</span>
+    </div>
+    <div id="videoGrid" class="poster-grid"></div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const grid = document.getElementById("videoGrid");
+
+      if (window.AndroidBridge && typeof window.AndroidBridge.getDownloadedVideosJson === "function") {
+        try {
+          const rawJson = window.AndroidBridge.getDownloadedVideosJson();
+          const videos = JSON.parse(rawJson || "[]");
+
+          if (!videos || videos.length === 0) {
+            grid.innerHTML = `
+              <div class="empty-state">
+                <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                <p>No downloaded movies found.</p>
+              </div>`;
+            return;
+          }
+
+          grid.innerHTML = videos.map(v => {
+            const displayTitle = v.title || v.id || "Downloaded Video";
+            const fileUrl = v.path.startsWith("file://") || v.path.startsWith("content://") ? v.path : "file://" + v.path;
+            
+            let posterUrl = v.poster || "";
+            if (posterUrl && !posterUrl.startsWith("http") && !posterUrl.startsWith("file://") && !posterUrl.startsWith("content://")) {
+              posterUrl = "file://" + posterUrl;
+            }
+
+            return `
+              <div class="poster-card" onclick="launchCustomPlayer('${escapeJs(fileUrl)}', '${escapeJs(displayTitle)}')">
+                ${posterUrl ? 
+                  `<img class="poster-img" src="${escapeHtml(posterUrl)}" alt="${escapeHtml(displayTitle)}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                   <div class="poster-fallback" style="display:none;">
+                     <svg viewBox="0 0 24 24"><path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/></svg>
+                     <div class="poster-fallback-title">${escapeHtml(displayTitle)}</div>
+                   </div>` 
+                  : 
+                  `<div class="poster-fallback">
+                     <svg viewBox="0 0 24 24"><path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/></svg>
+                     <div class="poster-fallback-title">${escapeHtml(displayTitle)}</div>
+                   </div>`
+                }
+                <div class="poster-overlay">
+                  <div class="play-icon-circle">
+                    <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"></polygon></svg>
+                  </div>
+                </div>
+                <div class="poster-title-bar">${escapeHtml(displayTitle)}</div>
+              </div>
+            `;
+          }).join("");
+
+        } catch (err) {
+          grid.innerHTML = `<div class="empty-state"><p>Failed to load offline media list.</p></div>`;
+        }
+      } else {
+        grid.innerHTML = `<div class="empty-state"><p>Android Bridge interface unavailable.</p></div>`;
+      }
+    });
+
+    function escapeHtml(str) {
+      return str ? String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;") : "";
+    }
+
+    function escapeJs(str) {
+      return str ? String(str).replace(/\\/g, "\\\\").replace(/'/g, "\\'") : "";
+    }
+
+    function launchCustomPlayer(localVideoUrl, title) {
+      document.getElementById("mainContainer").style.display = "none";
+      document.body.style.padding = "0";
+      document.body.style.overflow = "hidden";
+
+      const css = `
+        :root { -webkit-tap-highlight-color: transparent; }
+        #videoPlayer{ position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:#000; z-index:9999; }
+        video{ width:100%; height:100%; object-fit:contain; background:#000; opacity:1; transition:opacity .28s ease; }
+
+        #videoPlayer::after {
+          content: ""; position: absolute; inset: 0;
+          background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 20%, transparent 50%),
+                      linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, transparent 30%);
+          z-index: 20; pointer-events: none; opacity: 0; transition: opacity .4s ease;
+        }
+        #videoPlayer.show-ui::after { opacity: 1; }
+
+        .controls {  
+          position:absolute; top:50%; left:50%; transform:translate(-50%, -50%);  
+          display:flex; gap:0px; align-items:center; z-index:30;  
+          opacity:0; visibility:hidden; transition:opacity .2s, visibility .2s;  
+        }  
+        .controls button {  
+          width:100px; height:100px; border-radius:50%; border:none;  
+          background:transparent; display:flex; align-items:center; justify-content:center;  
+          cursor:pointer; transition:background .25s;
+        }
+        .controls svg { height:54px; width:54px; fill:#fff; pointer-events:none; }  
+
+        #backToPrev {  
+          position:absolute; top:14px; left:14px; width:46px; height:46px;  
+          border:none; border-radius:50%; background:rgba(0,0,0,.55);  
+          display:flex; align-items:center; justify-content:center;  
+          cursor:pointer; transition:background .25s, opacity .2s, visibility .2s;  
+          z-index:40; opacity:0; visibility:hidden;  
+        }  
+        #backToPrev:hover { background:rgba(255,0,0,0.65); }  
+        #backToPrev svg { width:28px; height:28px; fill:#fff; }  
+
+        .progress-container {  
+          position:absolute; bottom:60px; left:5%; right:5%;  
+          height:20px; display:flex; align-items:center; cursor:pointer; 
+          z-index:25; opacity:0; visibility:hidden; transition:opacity .2s, visibility .2s;  
+        }  
+        .progress-bg { width:100%; height:7px; background:rgba(255,255,255,0.2); border-radius:4px; position:relative; }
+        .progress-bar { width:0%; height:100%; background:red; border-radius:4px; position:relative; pointer-events:none; } 
+        
+        .progress-bar::after {
+          content: ""; position: absolute; right: -8px; top: 50%;
+          transform: translateY(-50%) scale(0);
+          width: 16px; height: 16px; background: red; border-radius: 50%;
+          transition: transform 0.1s ease;
+        }
+        .progress-container.dragging .progress-bar::after { transform: translateY(-50%) scale(1); }
+
+        .video-timer {
+          position: absolute; bottom: 85px; left: 5%;
+          color: #fff; font-family: sans-serif; font-size: 14px; font-weight: 600;
+          z-index: 25; opacity: 0; visibility: hidden;
+          transition: opacity .2s, visibility .2s; text-shadow: 0 0 4px rgba(0,0,0,0.7);
+        }
+
+        #loadingRing{  
+          position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);  
+          width:52px; height:52px; border-radius:50%;  
+          border:6px solid rgba(255,0,0,0.25); border-top:6px solid red;  
+          animation:spin 1s linear infinite; display:none; z-index:60;  
+        }  
+        @keyframes spin {  
+          from{transform:translate(-50%,-50%) rotate(0deg);}  
+          to{transform:translate(-50%,-50%) rotate(360deg);}  
+        }
+      `;
+      const styleTag = document.createElement("style");
+      styleTag.textContent = css;
+      document.head.appendChild(styleTag);
+
+      const root = document.createElement("div");
+      root.id = "videoPlayer";
+
+      const video = document.createElement("video");
+      video.id = "videoElement";
+      video.playsInline = true;
+      video.preload = "auto";
+      video.src = localVideoUrl;
+
+      const controls = document.createElement("div");
+      controls.className = "controls";
+      controls.innerHTML = `
+        <button id="rewindBtn"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M2.99805 3.5C2.99805 3.22386 3.2219 3 3.49805 3C3.77419 3 3.99805 3.22386 3.99805 3.5V5.70632C4.91067 4.67184 6.08199 3.88382 7.40447 3.43107C9.2407 2.80243 11.2429 2.86309 13.0377 3.60171C14.8325 4.34033 16.2974 5.7065 17.1593 7.44549C17.2819 7.69291 17.1808 7.9929 16.9333 8.11552C16.6859 8.23815 16.3859 8.13698 16.2633 7.88956C15.5092 6.36804 14.2275 5.17272 12.6571 4.52646C11.0868 3.88021 9.33496 3.82714 7.72837 4.37716C6.31508 4.861 5.09908 5.78248 4.25184 7H7.49805C7.77419 7 7.99805 7.22386 7.99805 7.5C7.99805 7.77614 7.77419 8 7.49805 8H3.49805C3.2219 8 2.99805 7.77614 2.99805 7.5V3.5ZM8.00005 10.5C8.00005 10.3156 7.89856 10.1462 7.73598 10.0592C7.5734 9.97215 7.37613 9.98169 7.2227 10.084L5.7227 11.084C5.49294 11.2372 5.43085 11.5476 5.58403 11.7774C5.7372 12.0071 6.04764 12.0692 6.2774 11.916L7.00005 11.4343V16.5C7.00005 16.7761 7.22391 17 7.50005 17C7.7762 17 8.00005 16.7761 8.00005 16.5V10.5ZM12.5029 10C11.568 10 10.9058 10.4367 10.5071 11.1292C10.1306 11.7833 10.0029 12.6366 10.0029 13.5C10.0029 14.3634 10.1306 15.2167 10.5071 15.8708C10.9058 16.5633 11.568 17 12.5029 17C13.4379 17 14.1001 16.5633 14.4988 15.8708C14.8753 15.2167 15.0029 14.3634 15.0029 13.5C15.0029 12.6366 14.8753 11.7833 14.4988 11.1292C14.1001 10.4367 13.4379 10 12.5029 10ZM11.0029 13.5C11.0029 12.7065 11.1253 12.0598 11.3738 11.6281C11.6001 11.2349 11.9379 11 12.5029 11C13.068 11 13.4058 11.2349 13.6321 11.6281C13.8806 14.9402 14.0029 12.7065 14.0029 13.5C14.0029 14.2935 13.8806 14.9402 13.6321 15.3719C13.4058 15.7651 13.068 16 12.5029 16C11.9379 16 11.6001 15.7651 11.3738 15.3719C11.1253 14.9402 11.0029 14.2935 11.0029 13.5Z" fill="white"/>
+        </svg></button>
+        <button id="playPauseBtn" style="background: none; border: none; cursor: pointer; color: white;">
+          <svg id="playIcon" viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
+            <path d="M6 4.359c0-.938 1.013-1.523 1.825-1.054l13.088 7.556a1.218 1.218 0 0 1 0 2.108l-13.088 7.556c-.812.469-1.825-.116-1.825-1.054V4.359Z" />
+          </svg>
+          <svg id="pauseIcon" viewBox="0 0 24 24" width="32" height="32" fill="currentColor" style="display:none">
+            <path d="M5.25 4.5A1.25 1.25 0 0 0 4 5.75v12.5c0 .69.56 1.25 1.25 1.25h3.5c.69 0 1.25-.56 1.25-1.25V5.75c0-.69-.56-1.25-1.25-1.25h-3.5ZM14.25 4.5a1.25 1.25 0 0 0-1.25 1.25v12.5c0 .69.56 1.25 1.25 1.25h3.5c.69 0 1.25-.56 1.25-1.25V5.75c0-.69-.56-1.25-1.25-1.25h-3.5Z" />
+          </svg>
+        </button>
+        <button id="skipBtn"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M17 3.5C17 3.22386 16.7761 3 16.5 3C16.2239 3 16 3.22386 16 3.5V5.70245C15.0879 4.66988 13.9178 3.88325 12.597 3.43107C10.7608 2.80243 8.75857 2.86309 6.96376 3.60171C5.16895 4.34033 3.70403 5.7065 2.84215 7.44549C2.71953 7.69291 2.82069 7.9929 3.06812 8.11552C3.31554 8.23815 3.61552 8.13698 3.73815 7.88956C4.49224 6.36804 5.77396 5.17272 7.34432 4.52646C8.91469 3.88021 10.6665 3.82714 12.2731 4.37716C13.6864 4.861 14.9024 5.78248 15.7496 7H12.5C12.2239 7 12 7.22386 12 7.5C12 7.77614 12 8 12.5 8H16.5C16.7761 8 17 7.77614 17 7.5V3.5ZM10.5071 11.1292C10.9058 10.4367 11.568 10 12.5029 10C13.4379 10 14.1001 10.4367 14.4988 11.1292C14.8753 11.7833 15.0029 12.6366 15.0029 13.5C15.0029 14.3634 14.8753 15.2167 14.4988 15.8708C14.1001 16.5633 13.4379 17 12.5029 17C11.568 17 10.9058 16.5633 10.5071 15.8708C10.1306 15.2167 10.0029 14.3634 10.0029 13.5C10.0029 12.6366 10.1306 11.7833 10.5071 11.1292ZM11.3738 11.6281C11.1253 12.0598 11.0029 12.7065 11.0029 13.5C11.0029 14.2935 11.1253 14.9402 11.3738 15.3719C11.6001 15.7651 11.9379 16 12.5029 16C13.068 16 13.4058 15.7651 13.6321 15.3719C13.8806 14.9402 14.0029 14.2349 14.0029 13.5C14.0029 12.7065 13.8806 12.0598 13.6321 11.6281C13.4058 11.2349 13.068 11 12.5029 11C11.9379 11 11.6001 11.2349 11.3738 11.6281ZM8.00005 10.5C8.00005 10.3156 7.89856 10.1462 7.73598 10.0592C7.5734 9.97215 7.37613 9.98169 7.2227 10.084L5.7227 11.084C5.49294 11.2372 5.43085 11.5476 5.58403 11.7774C5.7372 12.0071 6.04764 12.0692 6.2774 11.916L7.00005 11.4343V16.5C7.00005 16.7761 7.22391 17 7.50005 17C7.7762 17 8.00005 16.7761 8.00005 16.5V10.5Z" fill="white"/>
+        </svg></button>
+      `;
+
+      const backToPrev = document.createElement("button");
+      backToPrev.id = "backToPrev";
+      backToPrev.innerHTML = `<svg viewBox="0 0 24 24"><path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>`;
+      
+      backToPrev.onclick = () => {
+        video.pause();
+        root.remove();
+        
+        if (document.exitFullscreen) { document.exitFullscreen().catch(() => {}); }
+        else if (document.webkitExitFullscreen) { document.webkitExitFullscreen(); }
+        
+        if (screen.orientation && screen.orientation.unlock) {
+          screen.orientation.unlock();
+        }
+
+        document.body.style.padding = "16px";
+        document.body.style.overflow = "auto";
+        document.getElementById("mainContainer").style.display = "block";
+      };
+
+      const progressContainer = document.createElement("div");
+      progressContainer.className = "progress-container";
+      const progressBg = document.createElement("div");
+      progressBg.className = "progress-bg";
+      const progressBar = document.createElement("div");
+      progressBar.id = "pBar";
+      progressBar.className = "progress-bar";
+      progressBg.appendChild(progressBar);
+      progressContainer.appendChild(progressBg);
+
+      const timerDisplay = document.createElement("div");
+      timerDisplay.className = "video-timer";
+      timerDisplay.textContent = "0:00 / 0:00";
+
+      const loadingRing = document.createElement("div");
+      loadingRing.id = "loadingRing";
+
+      root.append(video, controls, progressContainer, timerDisplay, loadingRing, backToPrev);
+      document.body.appendChild(root);
+
+      function enterFullscreenLandscape() {
+        const elem = document.documentElement;
+        if (elem.requestFullscreen) { elem.requestFullscreen().catch(() => {}); } 
+        else if (elem.webkitRequestFullscreen) { elem.webkitRequestFullscreen(); }
+        
+        if (screen.orientation && screen.orientation.lock) { 
+          screen.orientation.lock("landscape").catch(() => {}); 
+        }
+      }
+
+      video.addEventListener("playing", () => {
+        hideLoading();
+        setPlayingUI(true);
+        enterFullscreenLandscape();
+      });
+
+      let controlsVisible = false, hideTimer, isDragging = false;
+
+      const formatTime = (seconds) => {
+        if (!isFinite(seconds) || isNaN(seconds)) return "0:00";
+        const h = Math.floor(seconds / 3600);
+        const m = Math.floor((seconds % 3600) / 60);
+        const s = Math.floor(seconds % 60);
+        return h > 0 ? `${h}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}` : `${m}:${s.toString().padStart(2,'0')}`;
+      };
+
+      const showControls = (timeout = 3000) => {
+        root.classList.add("show-ui");
+        for (const el of [controls, progressContainer, backToPrev, timerDisplay]) {
+          el.style.opacity = "1"; el.style.visibility = "visible";
+        }
+        controlsVisible = true;
+        clearTimeout(hideTimer);
+        if (timeout > 0 && !isDragging) hideTimer = setTimeout(hideControls, timeout);
+      };
+
+      const hideControls = () => {
+        if (isDragging) return;
+        root.classList.remove("show-ui");
+        for (const el of [controls, progressContainer, backToPrev, timerDisplay]) {
+          el.style.opacity = "0"; el.style.visibility = "hidden";
+        }
+        controlsVisible = false;
+        clearTimeout(hideTimer);
+      };
+
+      const showLoading = () => loadingRing.style.display = "block";
+      const hideLoading = () => loadingRing.style.display = "none";
+      const setPlayingUI = (p) => { 
+        document.getElementById("playIcon").style.display = p ? "none" : "block"; 
+        document.getElementById("pauseIcon").style.display = p ? "block" : "none"; 
+      };
+
+      video.addEventListener("canplay", () => { hideLoading(); video.style.opacity = "1"; });
+      video.addEventListener("pause", () => setPlayingUI(false));
+      video.addEventListener("waiting", showLoading);
+      video.addEventListener("ended", hideLoading);
+
+      document.getElementById("playPauseBtn").onclick = (e) => {
+        e.stopPropagation();
+        if (video.paused) video.play().catch(() => { video.muted = true; video.play(); });
+        else video.pause();
+      };
+      document.getElementById("rewindBtn").onclick = (e) => { e.stopPropagation(); video.currentTime = Math.max(0, video.currentTime - 10); };
+      document.getElementById("skipBtn").onclick = (e) => { e.stopPropagation(); video.currentTime = Math.min(video.duration, video.currentTime + 10); };
+
+      video.addEventListener("timeupdate", () => {
+        if (isFinite(video.duration) && !isDragging) {
+          progressBar.style.width = (video.currentTime / video.duration) * 100 + "%";
+          timerDisplay.textContent = `${formatTime(video.currentTime)} / ${formatTime(video.duration)}`;
+        }
+      });
+
+      const scrub = (e) => {
+        const rect = progressBg.getBoundingClientRect();
+        const isPortrait = window.innerHeight > window.innerWidth;
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        
+        let pct = isPortrait ? (clientY - rect.top) / rect.height : (clientX - rect.left) / rect.width;
+        pct = Math.max(0, Math.min(1, pct));
+        progressBar.style.width = pct * 100 + "%";
+        const targetTime = pct * video.duration;
+        timerDisplay.textContent = `${formatTime(targetTime)} / ${formatTime(video.duration)}`;
+        video.currentTime = targetTime;
+      };
+
+      progressContainer.onmousedown = (e) => { isDragging = true; progressContainer.classList.add("dragging"); scrub(e); };
+      window.onmousemove = (e) => { if (isDragging) scrub(e); };
+      window.onmouseup = () => { if (isDragging) { isDragging = false; progressContainer.classList.remove("dragging"); showControls(); } };
+
+      progressContainer.ontouchstart = (e) => { isDragging = true; progressContainer.classList.add("dragging"); scrub(e); };
+      window.ontouchmove = (e) => { if (isDragging) scrub(e); };
+      window.ontouchend = () => { if (isDragging) { isDragging = false; progressContainer.classList.remove("dragging"); showControls(); } };
+
+      root.addEventListener("click", () => { if(!isDragging) controlsVisible ? hideControls() : showControls(); });
+
+      video.play().catch(() => showControls(5000));
+
+      function rotateIfPortrait() {
+        const isPortrait = window.innerHeight > window.innerWidth;
+        const vw = window.innerWidth, vh = window.innerHeight;
+        if (isPortrait) {
+          root.style.position = "fixed";
+          root.style.top = "50%";
+          root.style.left = "50%";
+          root.style.transform = `translate(-50%, -50%) rotate(90deg)`;
+          root.style.transformOrigin = "center center";
+          root.style.width = `${vh}px`;
+          root.style.height = `${vw}px`;
+        } else {
+          root.style.position = "fixed";
+          root.style.top = "0";
+          root.style.left = "0";
+          root.style.transform = "none";
+          root.style.width = "100%";
+          root.style.height = "100%";
+        }
+      }
+      rotateIfPortrait();
+      window.addEventListener("resize", rotateIfPortrait);
+    }
+  </script>
+
+</body>
+</html>
+
+    </div>
 </div>
 
 <div id="sliding-profile" class="sliding-panel">
@@ -1041,6 +1533,18 @@
     </div>
 </div>
 
+<!-- Helper utility to sanitize and enforce the prefix across links and image sources -->
+<script>
+    function formatRinolskiUrl(path) {
+        if (!path) return '';
+        if (path.startsWith('http://') || path.startsWith('https://') || path.startsWith('//')) {
+            return path;
+        }
+        const cleanPath = path.startsWith('/') ? path.slice(1) : path;
+        return `https://rinolski.online/${cleanPath}`;
+    }
+</script>
+
 <script>
     const WORKER_URL = "https://rinolski.misty-fog-201e.workers.dev";
     let currentUser = null; 
@@ -1052,16 +1556,16 @@
     let lastKnownDataHash = "";
 
     const profileAvatarsCatalog = {
-        1: "images/1.jpg", 
-        2: "images/2.jpg", 
-        3: "images/3.jpg", 
-        4: "images/4.jpg",  
-        5: "images/5.jpg",
-        6: "images/6.jpg",
-        7: "images/7.jpg",
-        8: "images/8.jpg",
-        9: "images/9.jpg",
-        10: "images/10.jpg"
+        1: formatRinolskiUrl("images/1.jpg"), 
+        2: formatRinolskiUrl("images/2.jpg"), 
+        3: formatRinolskiUrl("images/3.jpg"), 
+        4: formatRinolskiUrl("images/4.jpg"),  
+        5: formatRinolskiUrl("images/5.jpg"),
+        6: formatRinolskiUrl("images/6.jpg"),
+        7: formatRinolskiUrl("images/7.jpg"),
+        8: formatRinolskiUrl("images/8.jpg"),
+        9: formatRinolskiUrl("images/9.jpg"),
+        10: formatRinolskiUrl("images/10.jpg")
     };
     let currentUserPfpId = null;
 </script>
@@ -1535,6 +2039,7 @@
         
         document.getElementById('sliding-profile').classList.remove('open');
         document.getElementById('sliding-search').classList.remove('open');
+        document.getElementById('sliding-custom').classList.remove('open');
         toggleUsernameModal(false);
         resetActiveNavbar();
         document.getElementById('home-trigger').classList.add('active');
@@ -1591,7 +2096,7 @@
         const container = document.getElementById("profile-avatar-display");
         const initialLabel = document.getElementById("profile-initial");
         const navPfpImg = document.getElementById("nav-profile-img");
-        const imgUrl = profileAvatarsCatalog[id] || profileAvatarsCatalog[1];
+        const imgUrl = formatRinolskiUrl(profileAvatarsCatalog[id] || profileAvatarsCatalog[1]);
 
         if (navPfpImg && imgUrl) {
             navPfpImg.src = imgUrl;
@@ -1620,7 +2125,7 @@
 
         Object.keys(profileAvatarsCatalog).forEach(idKey => {
             const id = parseInt(idKey);
-            const imgUrl = profileAvatarsCatalog[id];
+            const imgUrl = formatRinolskiUrl(profileAvatarsCatalog[id]);
             
             const optionCard = document.createElement("div");
             optionCard.className = `pfp-option ${currentUserPfpId === id ? 'active' : ''}`;
@@ -1715,6 +2220,7 @@
             
             const sanitizedTitle = titleStr.replace(/'/g, "\\'");
             const sanitizedLink = referenceMovie.link.replace(/'/g, "\\'");
+            const posterSrc = formatRinolskiUrl(referenceMovie.image);
             
             cardLink.setAttribute('onclick', `navigateToMovie('${sanitizedTitle}', '${sanitizedLink}', this.querySelector('.history-item'))`);
             cardLink.style.cursor = 'pointer';
@@ -1722,7 +2228,7 @@
             cardLink.innerHTML = `
                 <div class="history-item">
                     <div class="history-poster-frame">
-                        ${referenceMovie.image ? `<img src="${referenceMovie.image}" onerror="this.insertAdjacentHTML('afterend', '<p class=\\'fallback-label\\'>${sanitizedTitle}</p>'); this.style.opacity='0.25';">` : ''}
+                        ${referenceMovie.image ? `<img src="${posterSrc}" onerror="this.insertAdjacentHTML('afterend', '<p class=\\'fallback-label\\'>${sanitizedTitle}</p>'); this.style.opacity='0.25';">` : ''}
                     </div>
                     <div class="history-meta-details">
                         <span class="history-title-text" title="${titleStr}">${titleStr}</span>
@@ -1768,17 +2274,21 @@
 <script>
     const searchPanel = document.getElementById('sliding-search');
     const profilePanel = document.getElementById('sliding-profile');
+    const customPanel = document.getElementById('sliding-custom');
     const searchTrigger = document.getElementById('search-trigger');
     const profileTrigger = document.getElementById('profile-trigger');
+    const customTrigger = document.getElementById('custom-trigger');
     const homeTrigger = document.getElementById('home-trigger');
     const searchBackButton = document.getElementById('search-back-button');
     const profileBackButton = document.getElementById('profile-back-button');
+    const customBackButton = document.getElementById('custom-back-button');
     const searchInput = document.getElementById('searchInput');
     const searchResults = document.getElementById('searchResults');
 
     function resetActiveNavbar() {
         homeTrigger.classList.remove('active');
         searchTrigger.classList.remove('active');
+        customTrigger.classList.remove('active');
         profileTrigger.classList.remove('active');
     }
 
@@ -1786,6 +2296,7 @@
         resetActiveNavbar();
         homeTrigger.classList.add('active');
         searchPanel.classList.remove('open');
+        customPanel.classList.remove('open');
         profilePanel.classList.remove('open');
         checkUsernameModalGuard();
     });
@@ -1794,9 +2305,19 @@
         resetActiveNavbar();
         searchTrigger.classList.add('active');
         searchPanel.classList.add('open');
+        customPanel.classList.remove('open');
         profilePanel.classList.remove('open');
         checkUsernameModalGuard();
         searchInput.focus();
+    });
+
+    customTrigger.addEventListener('click', () => {
+        resetActiveNavbar();
+        customTrigger.classList.add('active');
+        customPanel.classList.add('open');
+        searchPanel.classList.remove('open');
+        profilePanel.classList.remove('open');
+        checkUsernameModalGuard();
     });
 
     profileTrigger.addEventListener('click', () => {
@@ -1804,6 +2325,7 @@
         profileTrigger.classList.add('active');
         profilePanel.classList.add('open');
         searchPanel.classList.remove('open');
+        customPanel.classList.remove('open');
         checkUsernameModalGuard();
     });
 
@@ -1813,6 +2335,13 @@
         homeTrigger.classList.add('active');
         searchInput.value = '';
         searchResults.innerHTML = '';
+        checkUsernameModalGuard();
+    });
+
+    customBackButton.addEventListener('click', () => {
+        customPanel.classList.remove('open');
+        resetActiveNavbar();
+        homeTrigger.classList.add('active');
         checkUsernameModalGuard();
     });
 
@@ -2016,10 +2545,12 @@
         const div = document.createElement("div");
         div.className = "movie";
         
+        const imgSrc = formatRinolskiUrl(m.image);
+        
         div.innerHTML = `
             <div style="width: 100%; height: 100%; position: relative; pointer-events: none;">
                 ${topTrendRank ? `<div class="trending-badge">${topTrendRank}</div>` : ''}
-                <img src="${m.image}" draggable="false" onerror="this.insertAdjacentHTML('afterend', '<p class=\\'fallback-label\\'>${m.title}</p>'); this.style.opacity='0.25';">
+                <img src="${imgSrc}" draggable="false" onerror="this.insertAdjacentHTML('afterend', '<p class=\\'fallback-label\\'>${m.title}</p>'); this.style.opacity='0.25';">
             </div>
         `;
         
@@ -2028,6 +2559,8 @@
     }
 
     async function navigateToMovie(movieTitle, destinationUrl, elementClicked) {
+        const targetDestination = formatRinolskiUrl(destinationUrl);
+
         if (elementClicked) {
             if (elementClicked.querySelector('.movie-loading-overlay')) return;
 
@@ -2045,13 +2578,13 @@
         userWatchHistoryCache.unshift({ title: movieTitle, watchedAt: exactTimeLabel });
 
         if (!currentUser) {
-            window.location.href = destinationUrl;
+            window.location.href = targetDestination;
             return;
         }
 
         const sessionToken = localStorage.getItem('session_token') || localStorage.getItem('token');
         if (!sessionToken) {
-            window.location.href = destinationUrl;
+            window.location.href = targetDestination;
             return;
         }
 
@@ -2067,10 +2600,10 @@
                     watchedAt: exactTimeLabel
                 })
             });
-            window.location.href = destinationUrl;
+            window.location.href = targetDestination;
         } catch (err) {
             console.error("History tracking pipeline failure context:", err);
-            window.location.href = destinationUrl;
+            window.location.href = targetDestination;
         }
     }
 
@@ -2157,6 +2690,40 @@
         });
     }
 </script>
+
+<!-- Global DOM observer to automatically prepend domain to dynamic images & clicks, ignoring sliding-custom -->
+<script>
+    document.addEventListener('click', function(e) {
+        const link = e.target.closest('a');
+        if (!link) return;
+        if (link.closest('#sliding-custom')) return; // Ignore custom slide contents
+        
+        const href = link.getAttribute('href');
+        if (href && !href.startsWith('http://') && !href.startsWith('https://') && !href.startsWith('//') && !href.startsWith('#') && !href.startsWith('javascript:')) {
+            link.href = formatRinolskiUrl(href);
+        }
+    }, true);
+
+    const customSlideElement = document.getElementById('sliding-custom');
+    const imgObserver = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            mutation.addedNodes.forEach((node) => {
+                if (node.nodeType === 1) {
+                    if (customSlideElement && customSlideElement.contains(node)) return; // Ignore custom slide node mutations
+                    
+                    const imgs = node.tagName === 'IMG' ? [node] : node.querySelectorAll('img');
+                    imgs.forEach(img => {
+                        const src = img.getAttribute('src');
+                        if (src && !src.startsWith('http://') && !src.startsWith('https://') && !src.startsWith('//')) {
+                            img.src = formatRinolskiUrl(src);
+                        }
+                    });
+                }
+            });
+        });
+    });
+
+    imgObserver.observe(document.body, { childList: true, subtree: true });
+</script>
 </body>
 </html>
-
