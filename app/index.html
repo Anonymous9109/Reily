@@ -1115,15 +1115,15 @@
 
     function updateOfflineUIState() {
         const offlineBanner = document.getElementById('offline-notice-banner');
-        if (!offlineBanner) return;
+        const authGate = document.getElementById('auth-gate');
+        
         if (isAppOffline()) {
-            offlineBanner.style.display = 'block';
-            // Force close auth gate / username modal if offline
-            const authGate = document.getElementById('auth-gate');
+            if (offlineBanner) offlineBanner.style.display = 'block';
+            // Forcefully hide both auth gate and username modal when offline
             if (authGate) authGate.style.display = 'none';
             toggleUsernameModal(false);
         } else {
-            offlineBanner.style.display = 'none';
+            if (offlineBanner) offlineBanner.style.display = 'none';
         }
     }
 
@@ -1212,7 +1212,7 @@
 
     async function handleAuth() {
         if (isAppOffline()) {
-            showToast("You are offline. Cannot sign in.");
+            showToast("You are offline.");
             return;
         }
 
@@ -1396,7 +1396,12 @@
     }
 
     function toggleUsernameModal(forceState = null) {
-        if (isAppOffline() && forceState === true) return; // Block opening when offline
+        if (isAppOffline()) {
+            const modal = document.getElementById("usernameModal");
+            if (modal) modal.style.display = "none";
+            return;
+        }
+
         const modal = document.getElementById("usernameModal");
         if (!modal) return;
         showStatus("");
@@ -1460,7 +1465,9 @@
     async function fetchAndDisplayUserData(forceRebuild = false) {
         updateOfflineUIState();
         if (isAppOffline()) {
-            document.getElementById('auth-gate').style.display = 'none';
+            const authGate = document.getElementById('auth-gate');
+            if (authGate) authGate.style.display = 'none';
+            toggleUsernameModal(false);
             return;
         }
 
