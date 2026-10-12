@@ -876,6 +876,37 @@
             display: none;
             word-break: break-word;
         }
+
+        /* Offline Notice Banner */
+        #offline-notice-banner {
+            display: none;
+            background: #1c1c1e;
+            border: 1px solid #2c2c2e;
+            border-radius: 8px;
+            margin: 15px 14px;
+            padding: 16px;
+            text-align: center;
+        }
+        #offline-notice-banner h3 {
+            color: #ffffff;
+            font-size: 16px;
+            margin-bottom: 6px;
+        }
+        #offline-notice-banner p {
+            color: #8e8e93;
+            font-size: 13px;
+            margin-bottom: 12px;
+        }
+        #offline-notice-banner button {
+            background: #e50914;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 13px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -942,6 +973,13 @@
 </header>
 
 <div id="initialSections">
+    <!-- Offline Notice Banner -->
+    <div id="offline-notice-banner">
+        <h3>You're currently offline</h3>
+        <p>Watch downloaded content.</p>
+        <button onclick="openOfflinePanelFromBanner()">View Downloads</button>
+    </div>
+
     <div class="settings-container"></div>
     <div id="watchAgainContainer"></div>
     <div id="genreContainer"></div>
@@ -1069,6 +1107,37 @@
         10: "https://rinolski.online/images/10.jpg"
     };
     let currentUserPfpId = null;
+
+    // Helper to check offline status
+    function isAppOffline() {
+        return !navigator.onLine;
+    }
+
+    function updateOfflineUIState() {
+        const offlineBanner = document.getElementById('offline-notice-banner');
+        if (!offlineBanner) return;
+        if (isAppOffline()) {
+            offlineBanner.style.display = 'block';
+            // Force close auth gate / username modal if offline
+            const authGate = document.getElementById('auth-gate');
+            if (authGate) authGate.style.display = 'none';
+            toggleUsernameModal(false);
+        } else {
+            offlineBanner.style.display = 'none';
+        }
+    }
+
+    window.addEventListener('online', updateOfflineUIState);
+    window.addEventListener('offline', updateOfflineUIState);
+
+    function openOfflinePanelFromBanner() {
+        resetActiveNavbar();
+        document.getElementById('offline-trigger').classList.add('active');
+        document.getElementById('sliding-offline').classList.add('open');
+        document.getElementById('sliding-search').classList.remove('open');
+        document.getElementById('sliding-profile').classList.remove('open');
+        loadOfflineMoviesIntoPanel();
+    }
 </script>
 
 <script src="https://rinolski.online/JS/search.js"></script>
@@ -1142,6 +1211,11 @@
     function handleForgotPassword() { authState = "forgot"; renderAuthState(); }
 
     async function handleAuth() {
+        if (isAppOffline()) {
+            showToast("You are offline. Cannot sign in.");
+            return;
+        }
+
         const emailFieldVal = document.getElementById('auth-email').value.trim();
         const passwordFieldVal = document.getElementById('auth-password').value;
         const submitBtn = document.getElementById('auth-submit');
@@ -1300,6 +1374,12 @@
     }
 
     function checkUsernameModalGuard() {
+        // Prevent username modal from appearing if offline
+        if (isAppOffline()) {
+            toggleUsernameModal(false);
+            return;
+        }
+
         const modal = document.getElementById("usernameModal");
         const modalInput = document.getElementById("usernameInput");
         const profileContent = document.querySelector("#sliding-profile .profile-content");
@@ -1316,6 +1396,7 @@
     }
 
     function toggleUsernameModal(forceState = null) {
+        if (isAppOffline() && forceState === true) return; // Block opening when offline
         const modal = document.getElementById("usernameModal");
         if (!modal) return;
         showStatus("");
@@ -1328,6 +1409,11 @@
     }
 
     async function saveUsername() {
+        if (isAppOffline()) {
+            showStatus("You are offline.");
+            return;
+        }
+
         const input = document.getElementById("usernameInput");
         const btn = document.getElementById("saveBtn");
         const username = input ? input.value.trim() : "";
@@ -1372,6 +1458,12 @@
     }
 
     async function fetchAndDisplayUserData(forceRebuild = false) {
+        updateOfflineUIState();
+        if (isAppOffline()) {
+            document.getElementById('auth-gate').style.display = 'none';
+            return;
+        }
+
         const sessionToken = localStorage.getItem('session_token') || localStorage.getItem('token');
         if (!sessionToken) {
             document.getElementById('auth-gate').style.display = 'flex';
@@ -1435,7 +1527,7 @@
                 await fetchUnwantedMoviesCloudflare();
             }
         } catch (err) {
-            if (forceRebuild) { 
+            if (forceRebuild && !isAppOffline()) { 
                 const tokenCheck = localStorage.getItem('session_token') || localStorage.getItem('token');
                 if (!tokenCheck) {
                     document.getElementById('auth-gate').style.display = 'flex';
@@ -1460,12 +1552,19 @@
         
         authState = "auth";
         renderAuthState();
-        document.getElementById('auth-gate').style.display = 'flex';
+        if (!isAppOffline()) {
+            document.getElementById('auth-gate').style.display = 'flex';
+        }
         showToast("Signed out cleanly.");
     }
 
     window.addEventListener('pageshow', () => { fetchAndDisplayUserData(true); });
-    window.addEventListener('DOMContentLoaded', () => { renderAuthState(); fetchAndDisplayUserData(true); startCloudflareRealTimeSync(); });
+    window.addEventListener('DOMContentLoaded', () => { 
+        updateOfflineUIState();
+        renderAuthState(); 
+        fetchAndDisplayUserData(true); 
+        startCloudflareRealTimeSync(); 
+    });
 </script>
 
 <script>
@@ -1533,6 +1632,11 @@
     }
 
     async function changeUserAvatar(selectedId) {
+        if (isAppOffline()) {
+            showToast("You are offline.");
+            return;
+        }
+
         const sessionToken = localStorage.getItem('session_token') || localStorage.getItem('token');
         if (!currentUser || selectedId === currentUserPfpId || !sessionToken) return;
 
@@ -1565,7 +1669,10 @@
 
 <script>
     async function fetchUnwantedMoviesCloudflare() {
-        if (!currentUser) return;
+        if (isAppOffline() || !currentUser) {
+            buildHomeFeed();
+            return;
+        }
         const sessionToken = localStorage.getItem('session_token') || localStorage.getItem('token');
         if (!sessionToken) return;
 
@@ -1633,13 +1740,13 @@
 
     function startCloudflareRealTimeSync() {
         setInterval(() => {
+            if (isAppOffline()) return;
             const currentToken = localStorage.getItem('session_token') || localStorage.getItem('token');
             const authGateVisible = document.getElementById('auth-gate').style.display === 'flex';
             
             if (currentToken && !authGateVisible) {
                 fetchAndDisplayUserData(false);
             }
-            // Also refresh active offline panel downloads if visible
             const offlinePanelElem = document.getElementById('sliding-offline');
             if (offlinePanelElem && offlinePanelElem.classList.contains('open')) {
                 loadOfflineMoviesIntoPanel();
@@ -1714,7 +1821,6 @@
         const activeDownloadsContainer = document.getElementById('active-downloads-container');
         if (!container || !activeDownloadsContainer) return;
         
-        // 1. Load Downloaded Movies
         if (typeof AndroidBridge !== 'undefined' && typeof AndroidBridge.getDownloadedVideosJson === 'function') {
             try {
                 const rawJson = AndroidBridge.getDownloadedVideosJson();
@@ -1755,7 +1861,6 @@
             container.innerHTML = `<p style="color: gray; font-size: 14px; padding: 5px; grid-column: span 3;">Offline mode requires the app environment.</p>`;
         }
 
-        // 2. Load Active Downloads (Checking both possible bridge method names for compatibility)
         let activeJson = "[]";
         try {
             if (typeof AndroidBridge !== 'undefined') {
@@ -1871,6 +1976,11 @@
     }
 
     async function confirmHideMovie() {
+        if (isAppOffline()) {
+            showToast("You are offline.");
+            closeActionSheet();
+            return;
+        }
         if (!currentUser) { showToast("Please sign in first."); closeActionSheet(); return; }
         if (!selectedSheetMovieTitle) { showToast("Error: No movie targeted."); closeActionSheet(); return; }
 
@@ -1941,7 +2051,10 @@
         const exactTimeLabel = new Date().toLocaleString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true });
         userWatchHistoryCache.unshift({ title: movieTitle, watchedAt: exactTimeLabel });
 
-        if (!currentUser) { window.location.href = targetUrl; return; }
+        if (isAppOffline() || !currentUser) { 
+            window.location.href = targetUrl; 
+            return; 
+        }
         const sessionToken = localStorage.getItem('session_token') || localStorage.getItem('token');
         if (!sessionToken) { window.location.href = targetUrl; return; }
 
