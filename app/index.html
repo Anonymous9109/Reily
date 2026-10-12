@@ -998,9 +998,14 @@
         <button class="back-button" id="offline-back-button">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
         </button>
-        <div class="panel-title">Offline Movies</div>
+        <div class="panel-title">Offline & Downloads</div>
     </div>
     <div class="profile-content">
+        <div class="profile-section-heading">Active Downloads</div>
+        <div id="active-downloads-container" style="margin-bottom: 20px;">
+            <p style="color: gray; font-size: 14px;">No active downloads.</p>
+        </div>
+
         <div class="profile-section-heading">Downloaded Movies</div>
         <div id="offline-movies-container" class="history-list">
             <div class="loading-ring"></div>
@@ -1619,7 +1624,7 @@
 
     function startCloudflareRealTimeSync() {
         setInterval(() => {
-            if ((localStorage.getItem('session_token') || localStorage.getItem('token')) && (!document.getElementById('auth-gate') || document.getElementById('auth-gate').style.display !== 'flex')) {
+            if ((localStorage.getItem('session_token') || localStorage.getItem('token')) && (!document.getElementById('auth-gate') || document.getElementById('auth-gate'].style.display !== 'flex')) {
                 fetchAndDisplayUserData(false);
             }
         }, 1500);
@@ -1689,6 +1694,7 @@
 
     function loadOfflineMoviesIntoPanel() {
         const container = document.getElementById('offline-movies-container');
+        const activeDownloadsContainer = document.getElementById('active-downloads-container');
         if (!container) return;
         
         if (typeof AndroidBridge !== 'undefined' && typeof AndroidBridge.getDownloadedVideosJson === 'function') {
@@ -1699,45 +1705,69 @@
                 container.innerHTML = "";
                 if (!downloadedMovies || downloadedMovies.length === 0) {
                     container.innerHTML = `<p style="color: gray; font-size: 14px; padding: 5px; grid-column: span 3;">No downloaded movies available offline.</p>`;
-                    return;
+                } else {
+                    downloadedMovies.forEach(movie => {
+                        const cardLink = document.createElement('div');
+                        cardLink.className = 'history-card-link';
+                        cardLink.style.cursor = 'pointer';
+                        
+                        const safePath = (movie.path || "").replace(/'/g, "\\'");
+                        const posterImg = (movie.poster && movie.poster.trim() !== "") ? movie.poster : "";
+
+                        cardLink.setAttribute('onclick', `playOfflineVideo('${safePath}')`);
+
+                        cardLink.innerHTML = `
+                            <div class="history-item">
+                                <div class="history-poster-frame">
+                                    ${posterImg ? `<img src="${posterImg}" onerror="this.style.display='none';">` : ''}
+                                </div>
+                                <div class="history-meta-details">
+                                    <span class="history-title-text" title="${movie.title}">${movie.title}</span>
+                                    <span class="history-time">Tap to Play</span>
+                                </div>
+                            </div>
+                        `;
+                        container.appendChild(cardLink);
+                    });
                 }
-
-                downloadedMovies.forEach(movie => {
-                    const cardLink = document.createElement('div');
-                    cardLink.className = 'history-card-link';
-                    cardLink.style.cursor = 'pointer';
-                    
-                    const safePath = (movie.path || "").replace(/'/g, "\\'");
-                    const posterImg = (movie.poster && movie.poster.trim() !== "") ? movie.poster : "";
-
-                    cardLink.setAttribute('onclick', `playOfflineVideo('${safePath}')`);
-
-                    cardLink.innerHTML = `
-                        <div class="history-item">
-                            <div class="history-poster-frame">
-                                ${posterImg ? `<img src="${posterImg}" onerror="this.style.display='none';">` : ''}
-                            </div>
-                            <div class="history-meta-details">
-                                <span class="history-title-text" title="${movie.title}">${movie.title}</span>
-                                <span class="history-time">Downloaded</span>
-                            </div>
-                        </div>
-                    `;
-                    container.appendChild(cardLink);
-                });
             } catch (e) {
                 container.innerHTML = `<p style="color: gray; font-size: 14px; padding: 5px; grid-column: span 3;">Error loading offline content.</p>`;
             }
         } else {
             container.innerHTML = `<p style="color: gray; font-size: 14px; padding: 5px; grid-column: span 3;">Offline mode requires the app environment.</p>`;
         }
+
+        if (typeof AndroidBridge !== 'undefined' && typeof AndroidBridge.getActiveDownloadsJson === 'function') {
+            try {
+                const activeJson = AndroidBridge.getActiveDownloadsJson();
+                const activeDownloads = JSON.parse(activeJson);
+                if (activeDownloads && activeDownloads.length > 0) {
+                    activeDownloadsContainer.innerHTML = "";
+                    activeDownloads.forEach(dl => {
+                        activeDownloadsContainer.innerHTML += `
+                            <div style="background:#141414; padding: 12px; border-radius: 6px; margin-bottom: 8px;">
+                                <div style="display:flex; justify-content:space-between; font-size: 13px; margin-bottom: 6px;">
+                                    <span>${dl.title}</span>
+                                    <span>${dl.progress}%</span>
+                                </div>
+                                <div style="width:100%; background:#333; height:6px; border-radius:3px; overflow:hidden;">
+                                    <div style="width:${dl.progress}%; background:#e50914; height:100%;"></div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                } else {
+                    activeDownloadsContainer.innerHTML = `<p style="color: gray; font-size: 14px;">No active downloads.</p>`;
+                }
+            } catch(err) {}
+        }
     }
 
     function playOfflineVideo(filePath) {
-        if (typeof AndroidBridge !== 'undefined' && typeof AndroidBridge.playOfflineVideo === 'function') {
-            AndroidBridge.playOfflineVideo(filePath);
+        if (typeof AndroidBridge !== 'undefined' && typeof AndroidBridge.playCustomVideo === 'function') {
+            AndroidBridge.playCustomVideo(filePath);
         } else {
-            showToast("Playback bridge unavailable.");
+            showToast("Custom Player bridge unavailable.");
         }
     }
 
