@@ -1269,7 +1269,6 @@
                 }
             }
         } catch (err) {
-            console.error("Auth Pipeline Error:", err);
             showInlineAlert("Network error. Please try again.", "error");
         } finally {
             submitBtn.disabled = false;
@@ -1352,7 +1351,6 @@
                 showStatus(data.error || data.message || "Unauthorized access or invalid token.");
             }
         } catch (err) {
-            console.error("Worker Execution Error:", err);
             showStatus("Connection error with server.");
         } finally {
             if (btn) { btn.disabled = false; btn.textContent = "Set Name"; }
@@ -1694,7 +1692,6 @@
                     const safePath = (movie.path || "").replace(/'/g, "\\'");
                     const posterImg = (movie.poster && movie.poster.trim() !== "") ? movie.poster : "";
 
-                    // FIXED: Invokes playOfflineVideo cleanly matching the bridge function definition
                     cardLink.setAttribute('onclick', `playOfflineVideo('${safePath}')`);
 
                     cardLink.innerHTML = `
