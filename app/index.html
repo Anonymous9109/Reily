@@ -1482,7 +1482,7 @@
             });
 
             if (res.status === 401 || res.status === 403) {
-                if (isAppOffline()) return; // Prevent triggering if offline during failure
+                if (isAppOffline()) return;
                 localStorage.removeItem('session_token');
                 localStorage.removeItem('token');
                 currentUser = null;
