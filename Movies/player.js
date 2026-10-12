@@ -1,5 +1,23 @@
-/* Cyrene Player (smart source detection + back button + portrait support + subtitles + Timer + Netflix Shadow + Cloudflare D1 Resume Fixed + Google IMA VAST Integration + Download Button + Aligned Absolute Poster Engine) */
+/* Cyrene Player (smart source detection + back button + portrait support + subtitles + Timer + Netflix Shadow + Cloudflare D1 Resume Fixed + Google IMA VAST Integration + Download Button + Aligned Absolute Poster Engine + Auto Fullscreen Landscape) */
 document.addEventListener("DOMContentLoaded", async () => {
+
+  /********** Auto Fullscreen & Landscape Trigger **********/
+  function triggerFullscreenLandscape() {
+    try {
+      const docElem = document.documentElement;
+      if (docElem.requestFullscreen) {
+        docElem.requestFullscreen().catch(() => {});
+      } else if (docElem.webkitRequestFullscreen) {
+        docElem.webkitRequestFullscreen();
+      }
+      if (screen.orientation && screen.orientation.lock) {
+        screen.orientation.lock("landscape").catch(() => {});
+      }
+    } catch (e) {}
+  }
+
+  // Trigger automatically upon player load
+  triggerFullscreenLandscape();
 
   /********** 1) Inject CSS **********/
   const css = `
@@ -268,7 +286,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         return;
       }
 
-      // Browser Fallback
       const a = document.createElement("a");
       a.href = src;
       a.download = finalFileName;
