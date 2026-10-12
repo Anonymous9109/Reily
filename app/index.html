@@ -98,22 +98,6 @@
             gap: 10px;
         }
         
-        .random-btn {
-            background: #000000;
-            color: #e5e5e5;
-            border: 1.5px solid rgba(229, 229, 229, 0.4);
-            padding: 12px 22px;
-            border-radius: 999px;
-            font-size: 15px;
-            font-weight: 700;
-            letter-spacing: 0.4px;
-            transition: border-color 0.3s;
-        }
-        
-        .random-btn:hover {
-            border-color: rgba(229, 229, 229, 0.8);
-        }
-
         .section {
             margin: 0 !important;
             padding: 0 !important;
@@ -957,10 +941,7 @@
 </header>
 
 <div id="initialSections">
-    <div class="settings-container">
-        
-    </div>
-    
+    <div class="settings-container"></div>
     <div id="watchAgainContainer"></div>
     <div id="genreContainer"></div>
     <div id="randomContainer"></div>
@@ -1070,16 +1051,8 @@
     let lastKnownDataHash = "";
 
     const profileAvatarsCatalog = {
-        1: "images/1.jpg", 
-        2: "images/2.jpg", 
-        3: "images/3.jpg", 
-        4: "images/4.jpg",  
-        5: "images/5.jpg",
-        6: "images/6.jpg",
-        7: "images/7.jpg",
-        8: "images/8.jpg",
-        9: "images/9.jpg",
-        10: "images/10.jpg"
+        1: "images/1.jpg", 2: "images/2.jpg", 3: "images/3.jpg", 4: "images/4.jpg", 5: "images/5.jpg",
+        6: "images/6.jpg", 7: "images/7.jpg", 8: "images/8.jpg", 9: "images/9.jpg", 10: "images/10.jpg"
     };
     let currentUserPfpId = null;
 </script>
@@ -1102,17 +1075,11 @@
         alertDiv.style.display = 'block';
         
         if (type === 'success') {
-            alertDiv.style.background = '#12261E';
-            alertDiv.style.color = '#10b981';
-            alertDiv.style.border = '1px solid #064e3b';
+            alertDiv.style.background = '#12261E'; alertDiv.style.color = '#10b981'; alertDiv.style.border = '1px solid #064e3b';
         } else if (type === 'warning') {
-            alertDiv.style.background = '#2a1e0b';
-            alertDiv.style.color = '#fbbf24';
-            alertDiv.style.border = '1px solid #78350f';
+            alertDiv.style.background = '#2a1e0b'; alertDiv.style.color = '#fbbf24'; alertDiv.style.border = '1px solid #78350f';
         } else {
-            alertDiv.style.background = '#281515';
-            alertDiv.style.color = '#ef4444';
-            alertDiv.style.border = '1px solid #7f1d1d';
+            alertDiv.style.background = '#281515'; alertDiv.style.color = '#ef4444'; alertDiv.style.border = '1px solid #7f1d1d';
         }
     }
 
@@ -1137,42 +1104,19 @@
         switchToggle.style.display = 'none';
 
         if (authState === "auth" || authState === "forgot") {
-            emailInput.value = "";
-            passwordInput.value = "";
+            emailInput.value = ""; passwordInput.value = "";
         } else if (gameStateResetRequired()) {
-            emailInput.value = "";
-            passwordInput.value = "";
+            emailInput.value = ""; passwordInput.value = "";
         }
 
         if (authState === "auth") {
-            title.innerText = "Sign In or Sign Up";
-            emailInput.placeholder = "Email Address";
-            passwordInput.placeholder = "Password";
-            submitBtn.innerText = "Continue";
+            title.innerText = "Sign In or Sign Up"; emailInput.placeholder = "Email Address"; passwordInput.placeholder = "Password"; submitBtn.innerText = "Continue";
         } else if (authState === "verify") {
-            title.innerText = "Enter Verification Code";
-            emailInput.placeholder = "6-Digit Verification Code";
-            passwordInput.style.display = 'none';
-            forgotLink.style.display = 'none';
-            submitBtn.innerText = "Verify Code";
-            switchToggle.style.display = 'block';
-            switchToggle.innerText = "Back to Sign In";
+            title.innerText = "Enter Verification Code"; emailInput.placeholder = "6-Digit Verification Code"; passwordInput.style.display = 'none'; forgotLink.style.display = 'none'; submitBtn.innerText = "Verify Code"; switchToggle.style.display = 'block'; switchToggle.innerText = "Back to Sign In";
         } else if (authState === "forgot") {
-            title.innerText = "Reset Password";
-            emailInput.placeholder = "Email Address";
-            passwordInput.style.display = 'none';
-            forgotLink.style.display = 'none';
-            submitBtn.innerText = "Send Reset Code";
-            switchToggle.style.display = 'block';
-            switchToggle.innerText = "Back to Sign In";
+            title.innerText = "Reset Password"; emailInput.placeholder = "Email Address"; passwordInput.style.display = 'none'; forgotLink.style.display = 'none'; submitBtn.innerText = "Send Reset Code"; switchToggle.style.display = 'block'; switchToggle.innerText = "Back to Sign In";
         } else if (authState === "reset") {
-            title.innerText = "Create New Password";
-            emailInput.placeholder = "6-Digit Reset Code";
-            passwordInput.placeholder = "New Password";
-            forgotLink.style.display = 'none';
-            submitBtn.innerText = "Update Password";
-            switchToggle.style.display = 'block';
-            switchToggle.innerText = "Back to Sign In";
+            title.innerText = "Create New Password"; emailInput.placeholder = "6-Digit Reset Code"; passwordInput.placeholder = "New Password"; forgotLink.style.display = 'none'; submitBtn.innerText = "Update Password"; switchToggle.style.display = 'block'; switchToggle.innerText = "Back to Sign In";
         }
     }
 
@@ -1180,15 +1124,8 @@
         return authState === "verify" || authState === "reset";
     }
 
-    function resetAuthToMain() {
-        authState = "auth";
-        renderAuthState();
-    }
-
-    function handleForgotPassword() {
-        authState = "forgot";
-        renderAuthState();
-    }
+    function resetAuthToMain() { authState = "auth"; renderAuthState(); }
+    function handleForgotPassword() { authState = "forgot"; renderAuthState(); }
 
     async function handleAuth() {
         const emailFieldVal = document.getElementById('auth-email').value.trim();
@@ -1196,20 +1133,16 @@
         const submitBtn = document.getElementById('auth-submit');
 
         if ((authState === "auth" || authState === "forgot") && !emailFieldVal) {
-            showInlineAlert("Please enter your email address.", "error");
-            return;
+            showInlineAlert("Please enter your email address.", "error"); return;
         }
         if (authState === "auth" && !passwordFieldVal) {
-            showInlineAlert("Please enter your password.", "error");
-            return;
+            showInlineAlert("Please enter your password.", "error"); return;
         }
         if (authState === "verify" && !emailFieldVal) {
-            showInlineAlert("Please enter the 6-digit access token code.", "error");
-            return;
+            showInlineAlert("Please enter the 6-digit access token code.", "error"); return;
         }
         if (authState === "reset" && (!emailFieldVal || !passwordFieldVal)) {
-            showInlineAlert("Please fill in both the reset token code and your new password.", "error");
-            return;
+            showInlineAlert("Please fill in both the reset token code and your new password.", "error"); return;
         }
 
         submitBtn.disabled = true;
@@ -1232,13 +1165,7 @@
                 } else {
                     const status = signinRes.status;
                     const errLower = (signinData.error || "").toLowerCase();
-
-                    const isUserNotFound = status === 404 || 
-                                           status === 400 || 
-                                           errLower.includes("not found") || 
-                                           errLower.includes("user") ||
-                                           errLower.includes("register") ||
-                                           errLower.includes("exist");
+                    const isUserNotFound = status === 404 || status === 400 || errLower.includes("not found") || errLower.includes("user") || errLower.includes("register") || errLower.includes("exist");
 
                     if (isUserNotFound) {
                         transientEmail = emailFieldVal;
@@ -1277,10 +1204,7 @@
                     const loginRes = await fetch(`${WORKER_URL}/api/signin`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ 
-                            email: transientEmail, 
-                            password: window.temporarySignupPassword || "" 
-                        })
+                        body: JSON.stringify({ email: transientEmail, password: window.temporarySignupPassword || "" })
                     });
                     const loginData = await loginRes.json();
                     delete window.temporarySignupPassword;
@@ -1356,10 +1280,7 @@
     function showStatus(msg, color = "#e50914") {
         const status = document.getElementById("statusBanner");
         if (!status) return;
-        if (!msg) {
-            status.style.display = "none";
-            return;
-        }
+        if (!msg) { status.style.display = "none"; return; }
         status.style.color = color;
         status.textContent = msg;
         status.style.display = "block";
@@ -1369,7 +1290,6 @@
         const modal = document.getElementById("usernameModal");
         const modalInput = document.getElementById("usernameInput");
         const profilePanel = document.getElementById("sliding-profile");
-
         const hasUsername = currentUser && currentUser.username && currentUser.username.trim() !== "";
 
         if (!hasUsername) {
@@ -1385,9 +1305,7 @@
     function toggleUsernameModal(forceState = null) {
         const modal = document.getElementById("usernameModal");
         if (!modal) return;
-
         showStatus("");
-
         if (forceState !== null) {
             modal.style.display = forceState ? "block" : "none";
         } else {
@@ -1402,60 +1320,34 @@
         const username = input ? input.value.trim() : "";
         const token = localStorage.getItem("session_token") || localStorage.getItem("token") || "";
 
-        if (!token) {
-            showStatus("Unauthorized: You must be logged in to set a username.");
-            return;
-        }
+        if (!token) { showStatus("Unauthorized: You must be logged in to set a username."); return; }
 
         const usernameRegex = /^[a-zA-Z0-9_]{3,20}$/;
+        if (!username) { showStatus("Username cannot be empty."); return; }
+        if (!usernameRegex.test(username)) { showStatus("Username must be 3-20 characters long (letters, numbers, underscores)."); return; }
 
-        if (!username) {
-            showStatus("Username cannot be empty.");
-            return;
-        }
-
-        if (!usernameRegex.test(username)) {
-            showStatus("Username must be 3-20 characters long (letters, numbers, underscores).");
-            return;
-        }
-
-        if (btn) {
-            btn.disabled = true;
-            btn.textContent = "Saving...";
-        }
+        if (btn) { btn.disabled = true; btn.textContent = "Saving..."; }
         showStatus("");
 
         try {
             const response = await fetch(`${WORKER_URL}/api/set-username`, {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                },
-                body: JSON.stringify({ 
-                    action: "set_username",
-                    username: username 
-                })
+                headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+                body: JSON.stringify({ action: "set_username", username: username })
             });
-
             const data = await response.json();
 
             if (response.ok && (data.success || data.status === "ok")) {
                 showStatus("Username set successfully!", "green");
                 showToast("Username updated!");
-                
                 if (currentUser) currentUser.username = username;
 
                 const usernameDisplay = document.getElementById("profile-username");
                 const initialDisplay = document.getElementById("profile-initial");
-
                 if (usernameDisplay) usernameDisplay.innerText = username;
                 if (initialDisplay) initialDisplay.innerText = username.charAt(0).toUpperCase();
 
-                setTimeout(() => {
-                    toggleUsernameModal(false);
-                    checkUsernameModalGuard();
-                }, 1000);
+                setTimeout(() => { toggleUsernameModal(false); checkUsernameModalGuard(); }, 1000);
             } else {
                 showStatus(data.error || data.message || "Unauthorized access or invalid token.");
             }
@@ -1463,10 +1355,7 @@
             console.error("Worker Execution Error:", err);
             showStatus("Connection error with server.");
         } finally {
-            if (btn) {
-                btn.disabled = false;
-                btn.textContent = "Set Name";
-            }
+            if (btn) { btn.disabled = false; btn.textContent = "Set Name"; }
         }
     }
 
@@ -1492,10 +1381,7 @@
                 }
                 lastKnownDataHash = dataSnapshotString;
 
-                currentUser = { 
-                    email: result.data.email,
-                    username: result.data.username || ""
-                };
+                currentUser = { email: result.data.email, username: result.data.username || "" };
                 document.getElementById('auth-gate').style.display = 'none';
                 
                 const hasUsername = currentUser.username && currentUser.username.trim() !== "";
@@ -1505,7 +1391,6 @@
                 document.getElementById('profile-initial').innerText = displayName.charAt(0).toUpperCase();
 
                 checkUsernameModalGuard();
-                
                 currentUserPfpId = result.data.pfp ? parseInt(result.data.pfp) : 1;
                 applyActiveUserAvatar(currentUserPfpId);
                 renderPfpSelectionGrid();
@@ -1516,10 +1401,7 @@
                 }
                 
                 userWatchHistoryCache = rawHistory.map((item) => {
-                    const exactDate = new Date().toLocaleString('en-US', {
-                        year: 'numeric', month: 'short', day: 'numeric',
-                        hour: '2-digit', minute: '2-digit', hour12: true
-                    });
+                    const exactDate = new Date().toLocaleString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true });
                     if (typeof item === 'object' && item !== null) {
                         return { title: item.title, watchedAt: item.watchedAt || exactDate };
                     }
@@ -1537,10 +1419,7 @@
                 document.getElementById('auth-gate').style.display = 'flex';
             }
         } catch (err) {
-            console.error("Identity collection structural context break:", err);
-            if (forceRebuild) {
-                document.getElementById('auth-gate').style.display = 'flex';
-            }
+            if (forceRebuild) { document.getElementById('auth-gate').style.display = 'flex'; }
         }
     }
 
@@ -1564,15 +1443,8 @@
         showToast("Signed out cleanly.");
     }
 
-    window.addEventListener('pageshow', (event) => {
-        fetchAndDisplayUserData(true);
-    });
-
-    window.addEventListener('DOMContentLoaded', () => {
-        renderAuthState();
-        fetchAndDisplayUserData(true);
-        startCloudflareRealTimeSync();
-    });
+    window.addEventListener('pageshow', () => { fetchAndDisplayUserData(true); });
+    window.addEventListener('DOMContentLoaded', () => { renderAuthState(); fetchAndDisplayUserData(true); startCloudflareRealTimeSync(); });
 </script>
 
 <script>
@@ -1581,11 +1453,7 @@
         const popup = document.getElementById('settings-popup');
         backdrop.style.display = 'block';
         popup.style.display = 'block';
-        setTimeout(() => {
-            backdrop.style.opacity = '1';
-            popup.style.opacity = '1';
-            popup.style.transform = 'translate(-50%, -50%) scale(1)';
-        }, 10);
+        setTimeout(() => { backdrop.style.opacity = '1'; popup.style.opacity = '1'; popup.style.transform = 'translate(-50%, -50%) scale(1)'; }, 10);
     }
 
     function closeSettingsPopup() {
@@ -1594,15 +1462,10 @@
         popup.style.transform = 'translate(-50%, -50%) scale(0.9)';
         popup.style.opacity = '0';
         backdrop.style.opacity = '0';
-        setTimeout(() => {
-            backdrop.style.display = 'none';
-            popup.style.display = 'none';
-        }, 250);
+        setTimeout(() => { backdrop.style.display = 'none'; popup.style.display = 'none'; }, 250);
     }
 
-    function handleSubtitlesSettings() {
-        showToast("Subtitles setup window active.");
-    }
+    function handleSubtitlesSettings() { showToast("Subtitles setup window active."); }
 </script>
 
 <script>
@@ -1612,17 +1475,12 @@
         const navPfpImg = document.getElementById("nav-profile-img");
         const imgUrl = profileAvatarsCatalog[id] || profileAvatarsCatalog[1];
 
-        if (navPfpImg && imgUrl) {
-            navPfpImg.src = imgUrl;
-        }
+        if (navPfpImg && imgUrl) navPfpImg.src = imgUrl;
 
         if (imgUrl && imgUrl.trim() !== "") {
             if (initialLabel) initialLabel.style.display = "none";
             let avatarImg = container.querySelector("img");
-            if (!avatarImg) {
-                avatarImg = document.createElement("img");
-                container.appendChild(avatarImg);
-            }
+            if (!avatarImg) { avatarImg = document.createElement("img"); container.appendChild(avatarImg); }
             avatarImg.src = imgUrl;
             avatarImg.style.display = "block";
         } else {
@@ -1640,7 +1498,6 @@
         Object.keys(profileAvatarsCatalog).forEach(idKey => {
             const id = parseInt(idKey);
             const imgUrl = profileAvatarsCatalog[id];
-            
             const optionCard = document.createElement("div");
             optionCard.className = `pfp-option ${currentUserPfpId === id ? 'active' : ''}`;
             optionCard.setAttribute("onclick", `changeUserAvatar(${id})`);
@@ -1659,7 +1516,6 @@
         if (!currentUser || selectedId === currentUserPfpId || !sessionToken) return;
 
         const previousPfpId = currentUserPfpId;
-
         currentUserPfpId = selectedId;
         applyActiveUserAvatar(currentUserPfpId);
         renderPfpSelectionGrid();
@@ -1668,10 +1524,7 @@
         try {
             const res = await fetch(`${WORKER_URL}/api/update-pfp`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + sessionToken
-                },
+                headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + sessionToken },
                 body: JSON.stringify({ pfp: selectedId.toString() })
             });
             const data = await res.json();
@@ -1682,7 +1535,6 @@
                 renderPfpSelectionGrid();
             }
         } catch (err) {
-            console.error("Avatar update execution failed:", err);
             currentUserPfpId = previousPfpId;
             applyActiveUserAvatar(currentUserPfpId);
             renderPfpSelectionGrid();
@@ -1705,10 +1557,7 @@
                 userUnwantedCache = (result.items || []).map(title => title.toLowerCase());
             }
             buildHomeFeed();
-        } catch(err) {
-            console.error("Failed fetching recommendation filter configurations:", err);
-            buildHomeFeed();
-        }
+        } catch(err) { buildHomeFeed(); }
     }
 
     function renderWorkerWatchHistory(historyArray) {
@@ -1731,7 +1580,6 @@
 
             const cardLink = document.createElement('div');
             cardLink.className = 'history-card-link';
-            
             const sanitizedTitle = titleStr.replace(/'/g, "\\'");
             const sanitizedLink = referenceMovie.link.replace(/'/g, "\\'");
             
@@ -1754,33 +1602,11 @@
     }
 
     function startCloudflareRealTimeSync() {
-        setInterval(fetchRealTimeUpdates, 3000);
         setInterval(() => {
             if ((localStorage.getItem('session_token') || localStorage.getItem('token')) && (!document.getElementById('auth-gate') || document.getElementById('auth-gate').style.display !== 'flex')) {
                 fetchAndDisplayUserData(false);
             }
         }, 1500);
-    }
-
-    async function fetchRealTimeUpdates() {
-        const liveIndicator = document.getElementById('live-data-display');
-        if (!liveIndicator) return;
-        try {
-            const response = await fetch(`${WORKER_URL}/api/realtime-update`, {
-                method: 'GET',
-                headers: { 'Cache-Control': 'no-cache' }
-            });
-            if (!response.ok) throw new Error('Stale frame stream link');
-            
-            const liveUpdate = await response.json();
-            if (liveUpdate && liveUpdate.statusText) {
-                liveIndicator.textContent = liveUpdate.statusText;
-            } else {
-                liveIndicator.textContent = "Connected Sync Engine";
-            }
-        } catch (err) {
-            liveIndicator.textContent = "Local Standby Mode";
-        }
     }
 </script>
 
@@ -1809,64 +1635,40 @@
     }
 
     homeTrigger.addEventListener('click', () => {
-        resetActiveNavbar();
-        homeTrigger.classList.add('active');
-        searchPanel.classList.remove('open');
-        profilePanel.classList.remove('open');
-        offlinePanel.classList.remove('open');
+        resetActiveNavbar(); homeTrigger.classList.add('active');
+        searchPanel.classList.remove('open'); profilePanel.classList.remove('open'); offlinePanel.classList.remove('open');
         checkUsernameModalGuard();
     });
 
     searchTrigger.addEventListener('click', () => {
-        resetActiveNavbar();
-        searchTrigger.classList.add('active');
-        searchPanel.classList.add('open');
-        profilePanel.classList.remove('open');
-        offlinePanel.classList.remove('open');
-        checkUsernameModalGuard();
-        searchInput.focus();
+        resetActiveNavbar(); searchTrigger.classList.add('active');
+        searchPanel.classList.add('open'); profilePanel.classList.remove('open'); offlinePanel.classList.remove('open');
+        checkUsernameModalGuard(); searchInput.focus();
     });
 
     offlineTrigger.addEventListener('click', () => {
-        resetActiveNavbar();
-        offlineTrigger.classList.add('active');
-        offlinePanel.classList.add('open');
-        searchPanel.classList.remove('open');
-        profilePanel.classList.remove('open');
-        checkUsernameModalGuard();
-        loadOfflineMoviesIntoPanel();
+        resetActiveNavbar(); offlineTrigger.classList.add('active');
+        offlinePanel.classList.add('open'); searchPanel.classList.remove('open'); profilePanel.classList.remove('open');
+        checkUsernameModalGuard(); loadOfflineMoviesIntoPanel();
     });
 
     profileTrigger.addEventListener('click', () => {
-        resetActiveNavbar();
-        profileTrigger.classList.add('active');
-        profilePanel.classList.add('open');
-        searchPanel.classList.remove('open');
-        offlinePanel.classList.remove('open');
+        resetActiveNavbar(); profileTrigger.classList.add('active');
+        profilePanel.classList.add('open'); searchPanel.classList.remove('open'); offlinePanel.classList.remove('open');
         checkUsernameModalGuard();
     });
 
     searchBackButton.addEventListener('click', () => {
-        searchPanel.classList.remove('open');
-        resetActiveNavbar();
-        homeTrigger.classList.add('active');
-        searchInput.value = '';
-        searchResults.innerHTML = '';
-        checkUsernameModalGuard();
+        searchPanel.classList.remove('open'); resetActiveNavbar(); homeTrigger.classList.add('active');
+        searchInput.value = ''; searchResults.innerHTML = ''; checkUsernameModalGuard();
     });
 
     offlineBackButton.addEventListener('click', () => {
-        offlinePanel.classList.remove('open');
-        resetActiveNavbar();
-        homeTrigger.classList.add('active');
-        checkUsernameModalGuard();
+        offlinePanel.classList.remove('open'); resetActiveNavbar(); homeTrigger.classList.add('active'); checkUsernameModalGuard();
     });
 
     profileBackButton.addEventListener('click', () => {
-        profilePanel.classList.remove('open');
-        resetActiveNavbar();
-        homeTrigger.classList.add('active');
-        checkUsernameModalGuard();
+        profilePanel.classList.remove('open'); resetActiveNavbar(); homeTrigger.classList.add('active'); checkUsernameModalGuard();
     });
 
     function loadOfflineMoviesIntoPanel() {
@@ -1889,11 +1691,11 @@
                     cardLink.className = 'history-card-link';
                     cardLink.style.cursor = 'pointer';
                     
-                    const safeTitle = (movie.title || "Offline Movie").replace(/'/g, "\\'");
                     const safePath = (movie.path || "").replace(/'/g, "\\'");
                     const posterImg = (movie.poster && movie.poster.trim() !== "") ? movie.poster : "";
 
-                    cardLink.setAttribute('onclick', `playOfflineMovie('${safePath}')`);
+                    // FIXED: Invokes playOfflineVideo cleanly matching the bridge function definition
+                    cardLink.setAttribute('onclick', `playOfflineVideo('${safePath}')`);
 
                     cardLink.innerHTML = `
                         <div class="history-item">
@@ -1916,7 +1718,7 @@
         }
     }
 
-    function playOfflineMovie(filePath) {
+    function playOfflineVideo(filePath) {
         if (typeof AndroidBridge !== 'undefined' && typeof AndroidBridge.playOfflineVideo === 'function') {
             AndroidBridge.playOfflineVideo(filePath);
         } else {
@@ -1924,22 +1726,10 @@
         }
     }
 
-    function goRandom() {
-        if (typeof movies === 'undefined' || !movies.length) return;
-        const availableOptions = movies.filter(m => !userUnwantedCache.includes(m.title.toLowerCase()));
-        if(!availableOptions.length) {
-            showToast("No movies matching filter conditions.");
-            return;
-        }
-        const randomItem = availableOptions[Math.floor(Math.random() * availableOptions.length)];
-        navigateToMovie(randomItem.title, randomItem.link);
-    }
-
     function searchMovies() {
         if (typeof movies === 'undefined' || !movies.length) return;
         const query = searchInput.value.toLowerCase().trim();
         searchResults.innerHTML = "";
-
         if (query === "") return;
 
         const matches = movies.filter(m => 
@@ -1967,55 +1757,27 @@
     let activeLongPressTimer = null;
     let longPressTriggeredFlag = false;
     let selectedSheetMovieTitle = "";
-    
-    let touchStartX = 0;
-    let touchStartY = 0;
+    let touchStartX = 0, touchStartY = 0;
     let isScrollingMove = false;
 
     function setupLongPressGesture(cardElement, movieTitle, movieLink) {
-        cardElement.addEventListener('contextmenu', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            return false;
-        });
-
+        cardElement.addEventListener('contextmenu', (e) => { e.preventDefault(); e.stopPropagation(); return false; });
         cardElement.addEventListener('touchstart', (e) => {
-            longPressTriggeredFlag = false;
-            isScrollingMove = false;
-            selectedSheetMovieTitle = movieTitle;
-            
-            touchStartX = e.touches[0].clientX;
-            touchStartY = e.touches[0].clientY;
-            
-            activeLongPressTimer = setTimeout(() => {
-                longPressTriggeredFlag = true;
-                openActionSheet(movieTitle);
-            }, 700); 
+            longPressTriggeredFlag = false; isScrollingMove = false; selectedSheetMovieTitle = movieTitle;
+            touchStartX = e.touches[0].clientX; touchStartY = e.touches[0].clientY;
+            activeLongPressTimer = setTimeout(() => { longPressTriggeredFlag = true; openActionSheet(movieTitle); }, 700); 
         });
-
         cardElement.addEventListener('touchmove', (e) => {
-            const currentX = e.touches[0].clientX;
-            const currentY = e.touches[0].clientY;
-            
-            const moveDeltaX = Math.abs(currentX - touchStartX);
-            const moveDeltaY = Math.abs(currentY - touchStartY);
-
-            if (moveDeltaX > 10 || moveDeltaY > 10) {
+            if (Math.abs(e.touches[0].clientX - touchStartX) > 10 || Math.abs(e.touches[0].clientY - touchStartY) > 10) {
                 isScrollingMove = true;
                 if (activeLongPressTimer) clearTimeout(activeLongPressTimer);
             }
         });
-
         cardElement.addEventListener('touchend', (e) => {
             if (activeLongPressTimer) clearTimeout(activeLongPressTimer);
-            
-            if (longPressTriggeredFlag) {
-                e.preventDefault(); 
-                e.stopPropagation();
-            } else if (!isScrollingMove) {
-                const sanitizedTitle = movieTitle.replace(/'/g, "\\'");
-                const sanitizedLink = movieLink.replace(/'/g, "\\'");
-                navigateToMovie(sanitizedTitle, sanitizedLink, cardElement);
+            if (longPressTriggeredFlag) { e.preventDefault(); e.stopPropagation(); } 
+            else if (!isScrollingMove) {
+                navigateToMovie(movieTitle.replace(/'/g, "\\'"), movieLink.replace(/'/g, "\\'"), cardElement);
             }
         });
     }
@@ -2024,38 +1786,20 @@
         document.getElementById('action-sheet-target-title').innerText = title;
         const backdrop = document.getElementById('action-sheet-backdrop');
         const sheet = document.getElementById('action-sheet');
-        
         backdrop.style.display = 'block';
-        setTimeout(() => {
-            backdrop.style.opacity = '1';
-            sheet.style.bottom = '0px';
-        }, 10);
+        setTimeout(() => { backdrop.style.opacity = '1'; sheet.style.bottom = '0px'; }, 10);
     }
 
     function closeActionSheet() {
         const backdrop = document.getElementById('action-sheet-backdrop');
         const sheet = document.getElementById('action-sheet');
-        
-        sheet.style.bottom = '-100%';
-        backdrop.style.opacity = '0';
-        setTimeout(() => {
-            backdrop.style.display = 'none';
-            selectedSheetMovieTitle = ""; 
-        }, 300);
+        sheet.style.bottom = '-100%'; backdrop.style.opacity = '0';
+        setTimeout(() => { backdrop.style.display = 'none'; selectedSheetMovieTitle = ""; }, 300);
     }
 
     async function confirmHideMovie() {
-        if (!currentUser) {
-            showToast("Please sign in first.");
-            closeActionSheet();
-            return;
-        }
-
-        if (!selectedSheetMovieTitle) {
-            showToast("Error: No movie targeted.");
-            closeActionSheet();
-            return;
-        }
+        if (!currentUser) { showToast("Please sign in first."); closeActionSheet(); return; }
+        if (!selectedSheetMovieTitle) { showToast("Error: No movie targeted."); closeActionSheet(); return; }
 
         const movieToHide = selectedSheetMovieTitle; 
         closeActionSheet();
@@ -2063,27 +1807,18 @@
 
         const lowerCaseTitle = movieToHide.toLowerCase();
         const alreadyUnwanted = userUnwantedCache.includes(lowerCaseTitle);
-        
-        if (!alreadyUnwanted) {
-            userUnwantedCache.push(lowerCaseTitle);
-            buildHomeFeed(); 
-        }
+        if (!alreadyUnwanted) { userUnwantedCache.push(lowerCaseTitle); buildHomeFeed(); }
 
         const sessionToken = localStorage.getItem('session_token') || localStorage.getItem('token');
         try {
             const res = await fetch(`${WORKER_URL}/api/hide-movie`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + sessionToken
-                },
+                headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + sessionToken },
                 body: JSON.stringify({ movie: movieToHide })
             });
             if (res.ok) {
                 showToast("Recommendations list updated.");
-                const freshRes = await fetch(`${WORKER_URL}/api/unwanted`, {
-                    headers: { 'Authorization': 'Bearer ' + sessionToken }
-                });
+                const freshRes = await fetch(`${WORKER_URL}/api/unwanted`, { headers: { 'Authorization': 'Bearer ' + sessionToken } });
                 if (freshRes.ok) {
                     const result = await freshRes.json();
                     userUnwantedCache = (result.items || []).map(title => title.toLowerCase());
@@ -2091,39 +1826,27 @@
                 }
             } else {
                 showToast("Failed to hide selection.");
-                if (!alreadyUnwanted) {
-                    userUnwantedCache = userUnwantedCache.filter(t => t !== lowerCaseTitle);
-                    buildHomeFeed();
-                }
+                if (!alreadyUnwanted) { userUnwantedCache = userUnwantedCache.filter(t => t !== lowerCaseTitle); buildHomeFeed(); }
             }
         } catch(err) {
-            console.error(err);
             showToast("Network connection failure.");
-            if (!alreadyUnwanted) {
-                userUnwantedCache = userUnwantedCache.filter(t => t !== lowerCaseTitle);
-                buildHomeFeed();
-            }
+            if (!alreadyUnwanted) { userUnwantedCache = userUnwantedCache.filter(t => t !== lowerCaseTitle); buildHomeFeed(); }
         }
     }
 </script>
 
 <script>
-    function parseGenres(genres) {
-        if (Array.isArray(genres)) return genres.map(g => g.trim());
-        return [];
-    }
+    function parseGenres(genres) { return Array.isArray(genres) ? genres.map(g => g.trim()) : []; }
 
     function createMovieCard(m, topTrendRank = null) {
         const div = document.createElement("div");
         div.className = "movie";
-        
         div.innerHTML = `
             <div style="width: 100%; height: 100%; position: relative; pointer-events: none;">
                 ${topTrendRank ? `<div class="trending-badge">${topTrendRank}</div>` : ''}
                 <img src="${m.image}" draggable="false" onerror="this.insertAdjacentHTML('afterend', '<p class=\\'fallback-label\\'>${m.title}</p>'); this.style.opacity='0.25';">
             </div>
         `;
-        
         setupLongPressGesture(div, m.title, m.link);
         return div;
     }
@@ -2131,48 +1854,27 @@
     async function navigateToMovie(movieTitle, destinationUrl, elementClicked) {
         if (elementClicked) {
             if (elementClicked.querySelector('.movie-loading-overlay')) return;
-
             const localizedSpinner = document.createElement('div');
             localizedSpinner.className = 'movie-loading-overlay';
             localizedSpinner.innerHTML = '<div class="loading-ring" style="margin:0;"></div>';
             elementClicked.appendChild(localizedSpinner);
         }
 
-        const exactTimeLabel = new Date().toLocaleString('en-US', {
-            year: 'numeric', month: 'short', day: 'numeric',
-            hour: '2-digit', minute: '2-digit', hour12: true
-        });
-
+        const exactTimeLabel = new Date().toLocaleString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true });
         userWatchHistoryCache.unshift({ title: movieTitle, watchedAt: exactTimeLabel });
 
-        if (!currentUser) {
-            window.location.href = destinationUrl;
-            return;
-        }
-
+        if (!currentUser) { window.location.href = destinationUrl; return; }
         const sessionToken = localStorage.getItem('session_token') || localStorage.getItem('token');
-        if (!sessionToken) {
-            window.location.href = destinationUrl;
-            return;
-        }
+        if (!sessionToken) { window.location.href = destinationUrl; return; }
 
         try {
             await fetch(`${WORKER_URL}/api/add-history`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + sessionToken
-                },
-                body: JSON.stringify({ 
-                    movie: movieTitle,
-                    watchedAt: exactTimeLabel
-                })
+                headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + sessionToken },
+                body: JSON.stringify({ movie: movieTitle, watchedAt: exactTimeLabel })
             });
             window.location.href = destinationUrl;
-        } catch (err) {
-            console.error("History tracking pipeline failure context:", err);
-            window.location.href = destinationUrl;
-        }
+        } catch (err) { window.location.href = destinationUrl; }
     }
 
     function shuffleArray(arr) {
@@ -2186,11 +1888,9 @@
 
     function buildHomeFeed() {
         if (typeof movies === 'undefined' || !movies.length) return;
-        
         const watchAgainContainer = document.getElementById("watchAgainContainer");
         const randomContainer = document.getElementById("randomContainer");
         const genreContainer = document.getElementById("genreContainer");
-        
         if(!randomContainer || !genreContainer || !watchAgainContainer) return;
 
         const filteredGlobalCatalog = movies.filter(m => !userUnwantedCache.includes(m.title.toLowerCase()));
@@ -2198,7 +1898,6 @@
         if (userWatchHistoryCache.length > 0) {
             const uniqueTitles = [];
             const watchAgainMovies = [];
-            
             userWatchHistoryCache.forEach(item => {
                 if (!uniqueTitles.includes(item.title.toLowerCase()) && !userUnwantedCache.includes(item.title.toLowerCase())) {
                     uniqueTitles.push(item.title.toLowerCase());
@@ -2216,12 +1915,8 @@
                 `;
                 const watchAgainRow = watchAgainContainer.querySelector(".movies");
                 shuffleArray(watchAgainMovies).forEach(m => watchAgainRow.appendChild(createMovieCard(m)));
-            } else {
-                watchAgainContainer.innerHTML = "";
-            }
-        } else {
-            watchAgainContainer.innerHTML = "";
-        }
+            } else { watchAgainContainer.innerHTML = ""; }
+        } else { watchAgainContainer.innerHTML = ""; }
 
         randomContainer.innerHTML = `
             <div class="section">
@@ -2242,9 +1937,7 @@
         });
 
         genreContainer.innerHTML = "";
-        
-        const randomizedGenreNames = shuffleArray(Object.keys(genreMap));
-        randomizedGenreNames.forEach(genre => {
+        shuffleArray(Object.keys(genreMap)).forEach(genre => {
             const section = document.createElement("div");
             section.className = "section";
             section.innerHTML = `
@@ -2252,7 +1945,6 @@
                 <div class="movies"></div>
             `;
             const row = section.querySelector(".movies");
-            
             shuffleArray(genreMap[genre]).forEach(m => row.appendChild(createMovieCard(m)));
             genreContainer.appendChild(section);
         });
