@@ -816,7 +816,6 @@
             margin-bottom: 0;
         }
 
-        /* USERNAME MODAL ENGINE STYLING */
         .modal-box {
             position: fixed;
             top: 50%;
@@ -898,6 +897,9 @@
 
 <div id="toast-container"></div>
 
+<!-- Cyrene Player Fullscreen Overlay Container -->
+<div id="cyrenePlayerOverlay" style="display:none; position:fixed; inset:0; z-index:9999; background:#000;"></div>
+
 <!-- Account Setup Container -->
 <div class="modal-box" id="usernameModal" style="display: none;">
     <p>Please enter a username to be able to access Rinolski</p>
@@ -958,10 +960,7 @@
 </header>
 
 <div id="initialSections">
-    <div class="settings-container">
-        
-    </div>
-    
+    <div class="settings-container"></div>
     <div id="watchAgainContainer"></div>
     <div id="genreContainer"></div>
     <div id="randomContainer"></div>
@@ -1038,7 +1037,7 @@
         <div class="profile-avatar-row">
             <div class="profile-details-container">
                 <button class="gear-settings-btn" onclick="openSettingsPopup()" aria-label="Settings Menu">
-                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.70 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.70 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .43-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
                 </button>
                 <div id="username-display-group">
                     <p style="margin:0; color: #ffffff; font-size:22px; font-weight: bold;" id="profile-username">Loading Account...</p>
@@ -1081,18 +1080,41 @@
     let lastKnownDataHash = "";
 
     const profileAvatarsCatalog = {
-        1: "images/1.jpg", 
-        2: "images/2.jpg", 
-        3: "images/3.jpg", 
-        4: "images/4.jpg",  
-        5: "images/5.jpg",
-        6: "images/6.jpg",
-        7: "images/7.jpg",
-        8: "images/8.jpg",
-        9: "images/9.jpg",
-        10: "images/10.jpg"
+        1: "images/1.jpg", 2: "images/2.jpg", 3: "images/3.jpg", 4: "images/4.jpg",  5: "images/5.jpg",
+        6: "images/6.jpg", 7: "images/7.jpg", 8: "images/8.jpg", 9: "images/9.jpg", 10: "images/10.jpg"
     };
     let currentUserPfpId = null;
+
+    // INLINE CYRENE PLAYER OVERLAY LAUNCHER
+    function launchCyreneOfflinePlayer(filePath, videoTitle) {
+        const overlay = document.getElementById('cyrenePlayerOverlay');
+        if (!overlay) return;
+
+        if (videoTitle) {
+            document.title = videoTitle;
+        }
+
+        overlay.innerHTML = "";
+        overlay.style.display = "block";
+
+        // Push temporary state so Android hardware back button closes overlay instead of exiting app
+        history.pushState({ cyrenePlayerOpen: true }, "");
+
+        // Inject the Cyrene player script (reads query parameter src)
+        const scriptTag = document.createElement('script');
+        scriptTag.src = `https://rinolski.online/player.js?src=${encodeURIComponent(filePath)}`;
+        overlay.appendChild(scriptTag);
+    }
+
+    // Close overlay on history pop (back button)
+    window.addEventListener('popstate', (e) => {
+        const overlay = document.getElementById('cyrenePlayerOverlay');
+        if (overlay && overlay.style.display === "block") {
+            overlay.style.display = "none";
+            overlay.innerHTML = "";
+            document.title = "Rinolski";
+        }
+    });
 </script>
 
 <script src="https://rinolski.online/JS/search.js"></script>
@@ -1113,17 +1135,11 @@
         alertDiv.style.display = 'block';
         
         if (type === 'success') {
-            alertDiv.style.background = '#12261E';
-            alertDiv.style.color = '#10b981';
-            alertDiv.style.border = '1px solid #064e3b';
+            alertDiv.style.background = '#12261E'; alertDiv.style.color = '#10b981'; alertDiv.style.border = '1px solid #064e3b';
         } else if (type === 'warning') {
-            alertDiv.style.background = '#2a1e0b';
-            alertDiv.style.color = '#fbbf24';
-            alertDiv.style.border = '1px solid #78350f';
+            alertDiv.style.background = '#2a1e0b'; alertDiv.style.color = '#fbbf24'; alertDiv.style.border = '1px solid #78350f';
         } else {
-            alertDiv.style.background = '#281515';
-            alertDiv.style.color = '#ef4444';
-            alertDiv.style.border = '1px solid #7f1d1d';
+            alertDiv.style.background = '#281515'; alertDiv.style.color = '#ef4444'; alertDiv.style.border = '1px solid #7f1d1d';
         }
     }
 
@@ -1148,58 +1164,22 @@
         switchToggle.style.display = 'none';
 
         if (authState === "auth" || authState === "forgot") {
-            emailInput.value = "";
-            passwordInput.value = "";
-        } else if (gameStateResetRequired()) {
-            emailInput.value = "";
-            passwordInput.value = "";
+            emailInput.value = ""; passwordInput.value = "";
         }
 
         if (authState === "auth") {
-            title.innerText = "Sign In or Sign Up";
-            emailInput.placeholder = "Email Address";
-            passwordInput.placeholder = "Password";
-            submitBtn.innerText = "Continue";
+            title.innerText = "Sign In or Sign Up"; emailInput.placeholder = "Email Address"; passwordInput.placeholder = "Password"; submitBtn.innerText = "Continue";
         } else if (authState === "verify") {
-            title.innerText = "Enter Verification Code";
-            emailInput.placeholder = "6-Digit Verification Code";
-            passwordInput.style.display = 'none';
-            forgotLink.style.display = 'none';
-            submitBtn.innerText = "Verify Code";
-            switchToggle.style.display = 'block';
-            switchToggle.innerText = "Back to Sign In";
+            title.innerText = "Enter Verification Code"; emailInput.placeholder = "6-Digit Verification Code"; passwordInput.style.display = 'none'; forgotLink.style.display = 'none'; submitBtn.innerText = "Verify Code"; switchToggle.style.display = 'block'; switchToggle.innerText = "Back to Sign In";
         } else if (authState === "forgot") {
-            title.innerText = "Reset Password";
-            emailInput.placeholder = "Email Address";
-            passwordInput.style.display = 'none';
-            forgotLink.style.display = 'none';
-            submitBtn.innerText = "Send Reset Code";
-            switchToggle.style.display = 'block';
-            switchToggle.innerText = "Back to Sign In";
+            title.innerText = "Reset Password"; emailInput.placeholder = "Email Address"; passwordInput.style.display = 'none'; forgotLink.style.display = 'none'; submitBtn.innerText = "Send Reset Code"; switchToggle.style.display = 'block'; switchToggle.innerText = "Back to Sign In";
         } else if (authState === "reset") {
-            title.innerText = "Create New Password";
-            emailInput.placeholder = "6-Digit Reset Code";
-            passwordInput.placeholder = "New Password";
-            forgotLink.style.display = 'none';
-            submitBtn.innerText = "Update Password";
-            switchToggle.style.display = 'block';
-            switchToggle.innerText = "Back to Sign In";
+            title.innerText = "Create New Password"; emailInput.placeholder = "6-Digit Reset Code"; passwordInput.placeholder = "New Password"; forgotLink.style.display = 'none'; submitBtn.innerText = "Update Password"; switchToggle.style.display = 'block'; switchToggle.innerText = "Back to Sign In";
         }
     }
 
-    function gameStateResetRequired() {
-        return authState === "verify" || authState === "reset";
-    }
-
-    function resetAuthToMain() {
-        authState = "auth";
-        renderAuthState();
-    }
-
-    function handleForgotPassword() {
-        authState = "forgot";
-        renderAuthState();
-    }
+    function resetAuthToMain() { authState = "auth"; renderAuthState(); }
+    function handleForgotPassword() { authState = "forgot"; renderAuthState(); }
 
     async function handleAuth() {
         const emailFieldVal = document.getElementById('auth-email').value.trim();
@@ -1207,20 +1187,10 @@
         const submitBtn = document.getElementById('auth-submit');
 
         if ((authState === "auth" || authState === "forgot") && !emailFieldVal) {
-            showInlineAlert("Please enter your email address.", "error");
-            return;
+            showInlineAlert("Please enter your email address.", "error"); return;
         }
         if (authState === "auth" && !passwordFieldVal) {
-            showInlineAlert("Please enter your password.", "error");
-            return;
-        }
-        if (authState === "verify" && !emailFieldVal) {
-            showInlineAlert("Please enter the 6-digit access token code.", "error");
-            return;
-        }
-        if (authState === "reset" && (!emailFieldVal || !passwordFieldVal)) {
-            showInlineAlert("Please fill in both the reset token code and your new password.", "error");
-            return;
+            showInlineAlert("Please enter your password.", "error"); return;
         }
 
         submitBtn.disabled = true;
@@ -1241,31 +1211,19 @@
                     showToast(signinData.message || "Welcome back!");
                     await fetchAndDisplayUserData(true);
                 } else {
-                    const status = signinRes.status;
-                    const errLower = (signinData.error || "").toLowerCase();
-
-                    const isUserNotFound = status === 404 || 
-                                           status === 400 || 
-                                           errLower.includes("not found") || 
-                                           errLower.includes("user") ||
-                                           errLower.includes("register") ||
-                                           errLower.includes("exist");
-
+                    const isUserNotFound = signinRes.status === 404 || signinRes.status === 400 || (signinData.error || "").toLowerCase().includes("not found");
                     if (isUserNotFound) {
                         transientEmail = emailFieldVal;
                         window.temporarySignupPassword = passwordFieldVal; 
-
                         const signupRes = await fetch(`${WORKER_URL}/api/signup`, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({ email: emailFieldVal, password: passwordFieldVal })
                         });
                         const signupData = await signupRes.json();
-
                         if (signupRes.ok) {
                             showInlineAlert(signupData.message || "Verification code sent to your email!", "success");
-                            authState = "verify";
-                            renderAuthState();
+                            authState = "verify"; renderAuthState();
                         } else {
                             showInlineAlert(signupData.error || "Could not register account.", "error");
                         }
@@ -1273,90 +1231,30 @@
                         showInlineAlert(signinData.error || "Incorrect password.", "error");
                     }
                 }
-            } 
-            else if (authState === "verify") {
+            } else if (authState === "verify") {
                 const res = await fetch(`${WORKER_URL}/api/verify`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email: transientEmail, code: emailFieldVal })
                 });
-                const data = await res.json();
-                
                 if (res.ok) {
                     showInlineAlert("Account verified! Logging in...", "success");
-                    
                     const loginRes = await fetch(`${WORKER_URL}/api/signin`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ 
-                            email: transientEmail, 
-                            password: window.temporarySignupPassword || "" 
-                        })
+                        body: JSON.stringify({ email: transientEmail, password: window.temporarySignupPassword || "" })
                     });
                     const loginData = await loginRes.json();
                     delete window.temporarySignupPassword;
-                    
                     if (loginRes.ok) {
                         localStorage.setItem('session_token', loginData.token);
-                        showToast(loginData.message || "Welcome to Rinolski!");
                         await fetchAndDisplayUserData(true);
-                    } else {
-                        authState = "auth";
-                        renderAuthState();
-                        showInlineAlert("Account verified! Please sign in with your credentials.", "success");
                     }
                 } else {
-                    showInlineAlert(data.error || "Invalid or expired verification code.", "error");
-                }
-            }
-            else if (authState === "forgot") {
-                transientEmail = emailFieldVal;
-                const res = await fetch(`${WORKER_URL}/api/forgot-password`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: emailFieldVal })
-                });
-                const data = await res.json();
-                if (res.ok) {
-                    showInlineAlert(data.message || "Reset token sent to email.", "success");
-                    authState = "reset";
-                    renderAuthState();
-                } else {
-                    showInlineAlert(data.error || "Failed to process request.", "error");
-                }
-            }
-            else if (authState === "reset") {
-                const res = await fetch(`${WORKER_URL}/api/reset-password`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: transientEmail, code: emailFieldVal, newPassword: passwordFieldVal })
-                });
-                const data = await res.json();
-                if (res.ok) {
-                    showInlineAlert("Password changed! Logging in...", "success");
-                    
-                    const loginRes = await fetch(`${WORKER_URL}/api/signin`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ email: transientEmail, password: passwordFieldVal })
-                    });
-                    const loginData = await loginRes.json();
-                    
-                    if (loginRes.ok) {
-                        localStorage.setItem('session_token', loginData.token);
-                        showToast(loginData.message || "Password updated!");
-                        await fetchAndDisplayUserData(true);
-                    } else {
-                        authState = "auth";
-                        renderAuthState();
-                        showInlineAlert("Password reset. Please sign in.", "success");
-                    }
-                } else {
-                    showInlineAlert(data.error || "Password reset failed.", "error");
+                    showInlineAlert("Invalid or expired verification code.", "error");
                 }
             }
         } catch (err) {
-            console.error("Auth Pipeline Error:", err);
             showInlineAlert("Network error. Please try again.", "error");
         } finally {
             submitBtn.disabled = false;
@@ -1367,20 +1265,14 @@
     function showStatus(msg, color = "#e50914") {
         const status = document.getElementById("statusBanner");
         if (!status) return;
-        if (!msg) {
-            status.style.display = "none";
-            return;
-        }
-        status.style.color = color;
-        status.textContent = msg;
-        status.style.display = "block";
+        if (!msg) { status.style.display = "none"; return; }
+        status.style.color = color; status.textContent = msg; status.style.display = "block";
     }
 
     function checkUsernameModalGuard() {
         const modal = document.getElementById("usernameModal");
         const modalInput = document.getElementById("usernameInput");
         const profilePanel = document.getElementById("sliding-profile");
-
         const hasUsername = currentUser && currentUser.username && currentUser.username.trim() !== "";
 
         if (!hasUsername) {
@@ -1396,15 +1288,8 @@
     function toggleUsernameModal(forceState = null) {
         const modal = document.getElementById("usernameModal");
         if (!modal) return;
-
         showStatus("");
-
-        if (forceState !== null) {
-            modal.style.display = forceState ? "block" : "none";
-        } else {
-            const isHidden = modal.style.display === "none" || modal.style.display === "";
-            modal.style.display = isHidden ? "block" : "none";
-        }
+        modal.style.display = forceState !== null ? (forceState ? "block" : "none") : (modal.style.display === "none" ? "block" : "none");
     }
 
     async function saveUsername() {
@@ -1413,71 +1298,32 @@
         const username = input ? input.value.trim() : "";
         const token = localStorage.getItem("session_token") || localStorage.getItem("token") || "";
 
-        if (!token) {
-            showStatus("Unauthorized: You must be logged in to set a username.");
-            return;
+        if (!token) { showStatus("Unauthorized: You must be logged in."); return; }
+        if (!/^[a-zA-Z0-9_]{3,20}$/.test(username)) {
+            showStatus("Username must be 3-20 characters long (letters, numbers, underscores)."); return;
         }
 
-        const usernameRegex = /^[a-zA-Z0-9_]{3,20}$/;
-
-        if (!username) {
-            showStatus("Username cannot be empty.");
-            return;
-        }
-
-        if (!usernameRegex.test(username)) {
-            showStatus("Username must be 3-20 characters long (letters, numbers, underscores).");
-            return;
-        }
-
-        if (btn) {
-            btn.disabled = true;
-            btn.textContent = "Saving...";
-        }
-        showStatus("");
-
+        btn.disabled = true; btn.textContent = "Saving...";
         try {
             const response = await fetch(`${WORKER_URL}/api/set-username`, {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                },
-                body: JSON.stringify({ 
-                    action: "set_username",
-                    username: username 
-                })
+                headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+                body: JSON.stringify({ action: "set_username", username: username })
             });
-
             const data = await response.json();
-
             if (response.ok && (data.success || data.status === "ok")) {
                 showStatus("Username set successfully!", "green");
-                showToast("Username updated!");
-                
-                if (currentUser) currentUser.username = username;
-
-                const usernameDisplay = document.getElementById("profile-username");
-                const initialDisplay = document.getElementById("profile-initial");
-
-                if (usernameDisplay) usernameDisplay.innerText = username;
-                if (initialDisplay) initialDisplay.innerText = username.charAt(0).toUpperCase();
-
-                setTimeout(() => {
-                    toggleUsernameModal(false);
-                    checkUsernameModalGuard();
-                }, 1000);
+                currentUser.username = username;
+                document.getElementById("profile-username").innerText = username;
+                document.getElementById("profile-initial").innerText = username.charAt(0).toUpperCase();
+                setTimeout(() => { toggleUsernameModal(false); checkUsernameModalGuard(); }, 1000);
             } else {
-                showStatus(data.error || data.message || "Unauthorized access or invalid token.");
+                showStatus(data.error || "Failed to set username.");
             }
         } catch (err) {
-            console.error("Worker Execution Error:", err);
             showStatus("Connection error with server.");
         } finally {
-            if (btn) {
-                btn.disabled = false;
-                btn.textContent = "Set Name";
-            }
+            btn.disabled = false; btn.textContent = "Set Name";
         }
     }
 
@@ -1488,132 +1334,78 @@
             renderAuthState();
             return;
         }
-
         try {
             const res = await fetch(`${WORKER_URL}/api/userdata`, {
                 headers: { 'Authorization': 'Bearer ' + sessionToken }
             });
             const result = await res.json();
-
             if (res.ok && result.data) {
-                const dataSnapshotString = JSON.stringify(result.data);
-                if (dataSnapshotString === lastKnownDataHash && !forceRebuild) {
-                    checkUsernameModalGuard();
-                    return; 
-                }
-                lastKnownDataHash = dataSnapshotString;
-
-                currentUser = { 
-                    email: result.data.email,
-                    username: result.data.username || ""
-                };
+                currentUser = { email: result.data.email, username: result.data.username || "" };
                 document.getElementById('auth-gate').style.display = 'none';
                 
-                const hasUsername = currentUser.username && currentUser.username.trim() !== "";
-                const displayName = hasUsername ? currentUser.username : currentUser.email;
-
+                const displayName = currentUser.username || currentUser.email;
                 document.getElementById('profile-username').innerText = displayName;
                 document.getElementById('profile-initial').innerText = displayName.charAt(0).toUpperCase();
 
                 checkUsernameModalGuard();
-                
                 currentUserPfpId = result.data.pfp ? parseInt(result.data.pfp) : 1;
                 applyActiveUserAvatar(currentUserPfpId);
                 renderPfpSelectionGrid();
 
                 let rawHistory = result.data.watch_history || [];
-                if (typeof rawHistory === 'string') {
-                    try { rawHistory = JSON.parse(rawHistory); } catch(e) { rawHistory = []; }
-                }
+                if (typeof rawHistory === 'string') { try { rawHistory = JSON.parse(rawHistory); } catch(e) { rawHistory = []; } }
                 
-                userWatchHistoryCache = rawHistory.map((item) => {
-                    const exactDate = new Date().toLocaleString('en-US', {
-                        year: 'numeric', month: 'short', day: 'numeric',
-                        hour: '2-digit', minute: '2-digit', hour12: true
-                    });
-                    if (typeof item === 'object' && item !== null) {
-                        return { title: item.title, watchedAt: item.watchedAt || exactDate };
-                    }
-                    return { title: item, watchedAt: exactDate };
-                });
-
+                userWatchHistoryCache = rawHistory.map(item => ({
+                    title: typeof item === 'object' ? item.title : item,
+                    watchedAt: typeof item === 'object' ? item.watchedAt : "Just Now"
+                }));
                 renderWorkerWatchHistory(userWatchHistoryCache);
                 await fetchUnwantedMoviesCloudflare();
             } else {
                 localStorage.removeItem('session_token');
-                localStorage.removeItem('token');
                 currentUser = null;
-                authState = "auth";
-                renderAuthState();
                 document.getElementById('auth-gate').style.display = 'flex';
             }
         } catch (err) {
-            console.error("Identity collection structural context break:", err);
-            if (forceRebuild) {
-                document.getElementById('auth-gate').style.display = 'flex';
-            }
+            if (forceRebuild) document.getElementById('auth-gate').style.display = 'flex';
         }
     }
 
     function logOut() {
         closeSettingsPopup();
         localStorage.removeItem('session_token');
-        localStorage.removeItem('token');
         currentUser = null;
-        lastKnownDataHash = "";
-        
         document.getElementById('sliding-profile').classList.remove('open');
         document.getElementById('sliding-search').classList.remove('open');
         document.getElementById('sliding-offline').classList.remove('open');
         toggleUsernameModal(false);
         resetActiveNavbar();
         document.getElementById('home-trigger').classList.add('active');
-        
-        authState = "auth";
-        renderAuthState();
         document.getElementById('auth-gate').style.display = 'flex';
+        renderAuthState();
         showToast("Signed out cleanly.");
     }
-
-    window.addEventListener('pageshow', (event) => {
-        fetchAndDisplayUserData(true);
-    });
 
     window.addEventListener('DOMContentLoaded', () => {
         renderAuthState();
         fetchAndDisplayUserData(true);
-        startCloudflareRealTimeSync();
     });
 </script>
 
 <script>
     function openSettingsPopup() {
-        const backdrop = document.getElementById('settings-popup-backdrop');
+        document.getElementById('settings-popup-backdrop').style.display = 'block';
         const popup = document.getElementById('settings-popup');
-        backdrop.style.display = 'block';
         popup.style.display = 'block';
-        setTimeout(() => {
-            backdrop.style.opacity = '1';
-            popup.style.opacity = '1';
-            popup.style.transform = 'translate(-50%, -50%) scale(1)';
-        }, 10);
+        setTimeout(() => { document.getElementById('settings-popup-backdrop').style.opacity = '1'; popup.style.opacity = '1'; popup.style.transform = 'translate(-50%, -50%) scale(1)'; }, 10);
     }
-
     function closeSettingsPopup() {
-        const backdrop = document.getElementById('settings-popup-backdrop');
         const popup = document.getElementById('settings-popup');
-        popup.style.transform = 'translate(-50%, -50%) scale(0.9)';
-        popup.style.opacity = '0';
-        backdrop.style.opacity = '0';
-        setTimeout(() => {
-            backdrop.style.display = 'none';
-            popup.style.display = 'none';
-        }, 250);
+        popup.style.transform = 'translate(-50%, -50%) scale(0.9)'; popup.style.opacity = '0';
+        document.getElementById('settings-popup-backdrop').style.opacity = '0';
+        setTimeout(() => { document.getElementById('settings-popup-backdrop').style.display = 'none'; popup.style.display = 'none'; }, 250);
     }
-
-    function handleSubtitlesSettings() {
-        showToast("Subtitles setup window active.");
-    }
+    function handleSubtitlesSettings() { showToast("Subtitles setup window active."); }
 </script>
 
 <script>
@@ -1622,24 +1414,12 @@
         const initialLabel = document.getElementById("profile-initial");
         const navPfpImg = document.getElementById("nav-profile-img");
         const imgUrl = profileAvatarsCatalog[id] || profileAvatarsCatalog[1];
-
-        if (navPfpImg && imgUrl) {
-            navPfpImg.src = imgUrl;
-        }
-
-        if (imgUrl && imgUrl.trim() !== "") {
+        if (navPfpImg) navPfpImg.src = imgUrl;
+        if (imgUrl) {
             if (initialLabel) initialLabel.style.display = "none";
             let avatarImg = container.querySelector("img");
-            if (!avatarImg) {
-                avatarImg = document.createElement("img");
-                container.appendChild(avatarImg);
-            }
-            avatarImg.src = imgUrl;
-            avatarImg.style.display = "block";
-        } else {
-            let avatarImg = container.querySelector("img");
-            if (avatarImg) avatarImg.style.display = "none";
-            if (initialLabel) initialLabel.style.display = "block";
+            if (!avatarImg) { avatarImg = document.createElement("img"); container.appendChild(avatarImg); }
+            avatarImg.src = imgUrl; avatarImg.style.display = "block";
         }
     }
 
@@ -1647,151 +1427,78 @@
         const targetGrid = document.getElementById("pfpSelectorOptions");
         if (!targetGrid) return;
         targetGrid.innerHTML = "";
-
         Object.keys(profileAvatarsCatalog).forEach(idKey => {
             const id = parseInt(idKey);
-            const imgUrl = profileAvatarsCatalog[id];
-            
-            const optionCard = document.createElement("div");
-            optionCard.className = `pfp-option ${currentUserPfpId === id ? 'active' : ''}`;
-            optionCard.setAttribute("onclick", `changeUserAvatar(${id})`);
-
-            if (imgUrl && imgUrl.trim() !== "") {
-                optionCard.innerHTML = `<img src="${imgUrl}"><span class="pfp-label-id">${id}</span>`;
-            } else {
-                optionCard.innerHTML = `<span style="font-size:12px; color:#555;">PFP ${id}</span><span class="pfp-label-id">${id}</span>`;
-            }
-            targetGrid.appendChild(optionCard);
+            const card = document.createElement("div");
+            card.className = `pfp-option ${currentUserPfpId === id ? 'active' : ''}`;
+            card.setAttribute("onclick", `changeUserAvatar(${id})`);
+            card.innerHTML = `<img src="${profileAvatarsCatalog[id]}"><span class="pfp-label-id">${id}</span>`;
+            targetGrid.appendChild(card);
         });
     }
 
     async function changeUserAvatar(selectedId) {
-        const sessionToken = localStorage.getItem('session_token') || localStorage.getItem('token');
+        const sessionToken = localStorage.getItem('session_token');
         if (!currentUser || selectedId === currentUserPfpId || !sessionToken) return;
-
-        const previousPfpId = currentUserPfpId;
-
+        const prevId = currentUserPfpId;
         currentUserPfpId = selectedId;
         applyActiveUserAvatar(currentUserPfpId);
         renderPfpSelectionGrid();
-        showToast("Profile avatar updated successfully!");
-
-        try {
-            const res = await fetch(`${WORKER_URL}/api/update-pfp`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + sessionToken
-                },
-                body: JSON.stringify({ pfp: selectedId.toString() })
-            });
-            const data = await res.json();
-            if (!res.ok) {
-                showToast(data.error || "Failed to save avatar change.");
-                currentUserPfpId = previousPfpId;
-                applyActiveUserAvatar(currentUserPfpId);
-                renderPfpSelectionGrid();
-            }
-        } catch (err) {
-            console.error("Avatar update execution failed:", err);
-            currentUserPfpId = previousPfpId;
-            applyActiveUserAvatar(currentUserPfpId);
-            renderPfpSelectionGrid();
-        }
+        showToast("Profile avatar updated!");
+        await fetch(`${WORKER_URL}/api/update-pfp`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + sessionToken },
+            body: JSON.stringify({ pfp: selectedId.toString() })
+        }).catch(() => { currentUserPfpId = prevId; applyActiveUserAvatar(prevId); renderPfpSelectionGrid(); });
     }
 </script>
 
 <script>
     async function fetchUnwantedMoviesCloudflare() {
         if (!currentUser) return;
-        const sessionToken = localStorage.getItem('session_token') || localStorage.getItem('token');
+        const sessionToken = localStorage.getItem('session_token');
         if (!sessionToken) return;
-
         try {
-            const res = await fetch(`${WORKER_URL}/api/unwanted`, {
-                headers: { 'Authorization': 'Bearer ' + sessionToken }
-            });
+            const res = await fetch(`${WORKER_URL}/api/unwanted`, { headers: { 'Authorization': 'Bearer ' + sessionToken } });
             if (res.ok) {
                 const result = await res.json();
-                userUnwantedCache = (result.items || []).map(title => title.toLowerCase());
+                userUnwantedCache = (result.items || []).map(t => t.toLowerCase());
             }
             buildHomeFeed();
-        } catch(err) {
-            console.error("Failed fetching recommendation filter configurations:", err);
-            buildHomeFeed();
-        }
+        } catch(e) { buildHomeFeed(); }
     }
 
     function renderWorkerWatchHistory(historyArray) {
-        const historyContainer = document.getElementById('history-container');
-        if (!historyContainer) return;
-        historyContainer.innerHTML = "";
-
-        if(!historyArray || historyArray.length === 0) {
-            historyContainer.innerHTML = `<p style="color: gray; font-size: 14px; padding: 5px; grid-column: span 3;">No movies watched yet.</p>`;
+        const container = document.getElementById('history-container');
+        if (!container) return;
+        container.innerHTML = "";
+        if (!historyArray || historyArray.length === 0) {
+            container.innerHTML = `<p style="color: gray; font-size: 14px; padding: 5px; grid-column: span 3;">No movies watched yet.</p>`;
             return;
         }
-
         historyArray.forEach(item => {
             const titleStr = typeof item === 'object' ? item.title : item;
             const watchTimeStr = typeof item === 'object' ? item.watchedAt : "Just Now";
-
             if (typeof movies === 'undefined') return;
-            const referenceMovie = movies.find(m => m.title.toLowerCase() === titleStr.toLowerCase());
-            if (!referenceMovie) return;
+            const refMovie = movies.find(m => m.title.toLowerCase() === titleStr.toLowerCase());
+            if (!refMovie) return;
 
-            const cardLink = document.createElement('div');
-            cardLink.className = 'history-card-link';
-            
-            const sanitizedTitle = titleStr.replace(/'/g, "\\'");
-            const sanitizedLink = referenceMovie.link.replace(/'/g, "\\'");
-            
-            cardLink.setAttribute('onclick', `navigateToMovie('${sanitizedTitle}', '${sanitizedLink}', this.querySelector('.history-item'))`);
-            cardLink.style.cursor = 'pointer';
-            
-            cardLink.innerHTML = `
+            const card = document.createElement('div');
+            card.className = 'history-card-link';
+            card.style.cursor = 'pointer';
+            card.setAttribute('onclick', `navigateToMovie('${titleStr.replace(/'/g, "\\'")}', '${refMovie.link.replace(/'/g, "\\'")}', this.querySelector('.history-item'))`);
+            card.innerHTML = `
                 <div class="history-item">
                     <div class="history-poster-frame">
-                        ${referenceMovie.image ? `<img src="${formatUrl(referenceMovie.image)}" onerror="this.insertAdjacentHTML('afterend', '<p class=\\'fallback-label\\'>${sanitizedTitle}</p>'); this.style.opacity='0.25';">` : ''}
+                        <img src="${formatUrl(refMovie.image)}" onerror="this.style.display='none';">
                     </div>
                     <div class="history-meta-details">
-                        <span class="history-title-text" title="${titleStr}">${titleStr}</span>
+                        <span class="history-title-text">${titleStr}</span>
                         <span class="history-time">${watchTimeStr}</span>
                     </div>
-                </div>
-            `;
-            historyContainer.appendChild(cardLink);
+                </div>`;
+            container.appendChild(card);
         });
-    }
-
-    function startCloudflareRealTimeSync() {
-        setInterval(fetchRealTimeUpdates, 3000);
-        setInterval(() => {
-            if ((localStorage.getItem('session_token') || localStorage.getItem('token')) && (!document.getElementById('auth-gate') || document.getElementById('auth-gate').style.display !== 'flex')) {
-                fetchAndDisplayUserData(false);
-            }
-        }, 1500);
-    }
-
-    async function fetchRealTimeUpdates() {
-        const liveIndicator = document.getElementById('live-data-display');
-        if (!liveIndicator) return;
-        try {
-            const response = await fetch(`${WORKER_URL}/api/realtime-update`, {
-                method: 'GET',
-                headers: { 'Cache-Control': 'no-cache' }
-            });
-            if (!response.ok) throw new Error('Stale frame stream link');
-            
-            const liveUpdate = await response.json();
-            if (liveUpdate && liveUpdate.statusText) {
-                liveIndicator.textContent = liveUpdate.statusText;
-            } else {
-                liveIndicator.textContent = "Connected Sync Engine";
-            }
-        } catch (err) {
-            liveIndicator.textContent = "Local Standby Mode";
-        }
     }
 </script>
 
@@ -1805,13 +1512,6 @@
     const offlineTrigger = document.getElementById('offline-trigger');
     const homeTrigger = document.getElementById('home-trigger');
 
-    const searchBackButton = document.getElementById('search-back-button');
-    const profileBackButton = document.getElementById('profile-back-button');
-    const offlineBackButton = document.getElementById('offline-back-button');
-
-    const searchInput = document.getElementById('searchInput');
-    const searchResults = document.getElementById('searchResults');
-
     function resetActiveNavbar() {
         homeTrigger.classList.remove('active');
         searchTrigger.classList.remove('active');
@@ -1819,71 +1519,18 @@
         profileTrigger.classList.remove('active');
     }
 
-    homeTrigger.addEventListener('click', () => {
-        resetActiveNavbar();
-        homeTrigger.classList.add('active');
-        searchPanel.classList.remove('open');
-        profilePanel.classList.remove('open');
-        offlinePanel.classList.remove('open');
-        checkUsernameModalGuard();
-    });
+    homeTrigger.addEventListener('click', () => { resetActiveNavbar(); homeTrigger.classList.add('active'); searchPanel.classList.remove('open'); profilePanel.classList.remove('open'); offlinePanel.classList.remove('open'); checkUsernameModalGuard(); });
+    searchTrigger.addEventListener('click', () => { resetActiveNavbar(); searchTrigger.classList.add('active'); searchPanel.classList.add('open'); profilePanel.classList.remove('open'); offlinePanel.classList.remove('open'); checkUsernameModalGuard(); document.getElementById('searchInput').focus(); });
+    offlineTrigger.addEventListener('click', () => { resetActiveNavbar(); offlineTrigger.classList.add('active'); offlinePanel.classList.add('open'); searchPanel.classList.remove('open'); profilePanel.classList.remove('open'); checkUsernameModalGuard(); loadOfflineVideosList(); });
+    profileTrigger.addEventListener('click', () => { resetActiveNavbar(); profileTrigger.classList.add('active'); profilePanel.classList.add('open'); searchPanel.classList.remove('open'); offlinePanel.classList.remove('open'); checkUsernameModalGuard(); });
 
-    searchTrigger.addEventListener('click', () => {
-        resetActiveNavbar();
-        searchTrigger.classList.add('active');
-        searchPanel.classList.add('open');
-        profilePanel.classList.remove('open');
-        offlinePanel.classList.remove('open');
-        checkUsernameModalGuard();
-        searchInput.focus();
-    });
-
-    offlineTrigger.addEventListener('click', () => {
-        resetActiveNavbar();
-        offlineTrigger.classList.add('active');
-        offlinePanel.classList.add('open');
-        searchPanel.classList.remove('open');
-        profilePanel.classList.remove('open');
-        checkUsernameModalGuard();
-        loadOfflineVideosList();
-    });
-
-    profileTrigger.addEventListener('click', () => {
-        resetActiveNavbar();
-        profileTrigger.classList.add('active');
-        profilePanel.classList.add('open');
-        searchPanel.classList.remove('open');
-        offlinePanel.classList.remove('open');
-        checkUsernameModalGuard();
-    });
-
-    searchBackButton.addEventListener('click', () => {
-        searchPanel.classList.remove('open');
-        resetActiveNavbar();
-        homeTrigger.classList.add('active');
-        searchInput.value = '';
-        searchResults.innerHTML = '';
-        checkUsernameModalGuard();
-    });
-
-    offlineBackButton.addEventListener('click', () => {
-        offlinePanel.classList.remove('open');
-        resetActiveNavbar();
-        homeTrigger.classList.add('active');
-        checkUsernameModalGuard();
-    });
-
-    profileBackButton.addEventListener('click', () => {
-        profilePanel.classList.remove('open');
-        resetActiveNavbar();
-        homeTrigger.classList.add('active');
-        checkUsernameModalGuard();
-    });
+    document.getElementById('search-back-button').addEventListener('click', () => { searchPanel.classList.remove('open'); resetActiveNavbar(); homeTrigger.classList.add('active'); checkUsernameModalGuard(); });
+    document.getElementById('offline-back-button').addEventListener('click', () => { offlinePanel.classList.remove('open'); resetActiveNavbar(); homeTrigger.classList.add('active'); checkUsernameModalGuard(); });
+    document.getElementById('profile-back-button').addEventListener('click', () => { profilePanel.classList.remove('open'); resetActiveNavbar(); homeTrigger.classList.add('active'); checkUsernameModalGuard(); });
 
     function loadOfflineVideosList() {
         const container = document.getElementById('offline-videos-container');
         if (!container) return;
-
         try {
             const jsonString = window.AndroidBridge ? window.AndroidBridge.getDownloadedVideosJson() : "[]";
             const videos = JSON.parse(jsonString);
@@ -1898,7 +1545,6 @@
                 const card = document.createElement('div');
                 card.className = 'history-card-link';
                 card.style.cursor = 'pointer';
-
                 const posterSrc = (vid.poster && vid.poster.trim() !== "") ? vid.poster : "";
 
                 card.innerHTML = `
@@ -1915,11 +1561,8 @@
 
                 card.addEventListener('click', () => {
                     if (vid.path) {
-                        if (window.AndroidBridge && window.AndroidBridge.playOfflineVideo) {
-                            window.AndroidBridge.playOfflineVideo(vid.path);
-                        } else {
-                            window.location.href = vid.path;
-                        }
+                        // Launch the Cyrene custom player inline inside index.html overlay
+                        launchCyreneOfflinePlayer(vid.path, vid.title);
                     } else {
                         showToast("Invalid video path.");
                     }
@@ -1928,262 +1571,22 @@
                 container.appendChild(card);
             });
         } catch (e) {
-            console.error("Failed to parse offline video payload:", e);
             container.innerHTML = `<p style="color: #ef4444; font-size: 14px; padding: 5px; grid-column: span 3;">Error loading offline library.</p>`;
         }
     }
-
-    function goRandom() {
-        if (typeof movies === 'undefined' || !movies.length) return;
-        const availableOptions = movies.filter(m => !userUnwantedCache.includes(m.title.toLowerCase()));
-        if(!availableOptions.length) {
-            showToast("No movies matching filter conditions.");
-            return;
-        }
-        const randomItem = availableOptions[Math.floor(Math.random() * availableOptions.length)];
-        navigateToMovie(randomItem.title, randomItem.link);
-    }
-
-    function searchMovies() {
-        if (typeof movies === 'undefined' || !movies.length) return;
-        const query = searchInput.value.toLowerCase().trim();
-        searchResults.innerHTML = "";
-
-        if (query === "") return;
-
-        const matches = movies.filter(m => 
-            !userUnwantedCache.includes(m.title.toLowerCase()) && 
-            (m.title.toLowerCase().includes(query) || m.genres.some(g => g.toLowerCase().includes(query)))
-        );
-
-        if (matches.length > 0) {
-            const section = document.createElement("div");
-            section.className = "section";
-            section.innerHTML = `
-                <h2 class="section-title">Matches for "${searchInput.value}"</h2>
-                <div class="movies"></div>
-            `;
-            const row = section.querySelector(".movies");
-            matches.forEach(m => row.appendChild(createMovieCard(m)));
-            searchResults.appendChild(section);
-        } else {
-            searchResults.innerHTML = `<p style="padding:20px; color:gray;">No matching titles found.</p>`;
-        }
-    }
 </script>
 
 <script>
-    let activeLongPressTimer = null;
-    let longPressTriggeredFlag = false;
-    let selectedSheetMovieTitle = "";
-    
-    let touchStartX = 0;
-    let touchStartY = 0;
-    let isScrollingMove = false;
-
-    function setupLongPressGesture(cardElement, movieTitle, movieLink) {
-        cardElement.addEventListener('contextmenu', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            return false;
-        });
-
-        cardElement.addEventListener('touchstart', (e) => {
-            longPressTriggeredFlag = false;
-            isScrollingMove = false;
-            selectedSheetMovieTitle = movieTitle;
-            
-            touchStartX = e.touches[0].clientX;
-            touchStartY = e.touches[0].clientY;
-            
-            activeLongPressTimer = setTimeout(() => {
-                longPressTriggeredFlag = true;
-                openActionSheet(movieTitle);
-            }, 700); 
-        });
-
-        cardElement.addEventListener('touchmove', (e) => {
-            const currentX = e.touches[0].clientX;
-            const currentY = e.touches[0].clientY;
-            
-            const moveDeltaX = Math.abs(currentX - touchStartX);
-            const moveDeltaY = Math.abs(currentY - touchStartY);
-
-            if (moveDeltaX > 10 || moveDeltaY > 10) {
-                isScrollingMove = true;
-                if (activeLongPressTimer) clearTimeout(activeLongPressTimer);
-            }
-        });
-
-        cardElement.addEventListener('touchend', (e) => {
-            if (activeLongPressTimer) clearTimeout(activeLongPressTimer);
-            
-            if (longPressTriggeredFlag) {
-                e.preventDefault(); 
-                e.stopPropagation();
-            } else if (!isScrollingMove) {
-                const sanitizedTitle = movieTitle.replace(/'/g, "\\'");
-                const sanitizedLink = movieLink.replace(/'/g, "\\'");
-                navigateToMovie(sanitizedTitle, sanitizedLink, cardElement);
-            }
-        });
-    }
-
-    function openActionSheet(title) {
-        document.getElementById('action-sheet-target-title').innerText = title;
-        const backdrop = document.getElementById('action-sheet-backdrop');
-        const sheet = document.getElementById('action-sheet');
-        
-        backdrop.style.display = 'block';
-        setTimeout(() => {
-            backdrop.style.opacity = '1';
-            sheet.style.bottom = '0px';
-        }, 10);
-    }
-
-    function closeActionSheet() {
-        const backdrop = document.getElementById('action-sheet-backdrop');
-        const sheet = document.getElementById('action-sheet');
-        
-        sheet.style.bottom = '-100%';
-        backdrop.style.opacity = '0';
-        setTimeout(() => {
-            backdrop.style.display = 'none';
-            selectedSheetMovieTitle = ""; 
-        }, 300);
-    }
-
-    async function confirmHideMovie() {
-        if (!currentUser) {
-            showToast("Please sign in first.");
-            closeActionSheet();
-            return;
-        }
-
-        if (!selectedSheetMovieTitle) {
-            showToast("Error: No movie targeted.");
-            closeActionSheet();
-            return;
-        }
-
-        const movieToHide = selectedSheetMovieTitle; 
-        closeActionSheet();
-        showToast(`Hiding "${movieToHide}"...`);
-
-        const lowerCaseTitle = movieToHide.toLowerCase();
-        const alreadyUnwanted = userUnwantedCache.includes(lowerCaseTitle);
-        
-        if (!alreadyUnwanted) {
-            userUnwantedCache.push(lowerCaseTitle);
-            buildHomeFeed(); 
-        }
-
-        const sessionToken = localStorage.getItem('session_token') || localStorage.getItem('token');
-        try {
-            const res = await fetch(`${WORKER_URL}/api/hide-movie`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + sessionToken
-                },
-                body: JSON.stringify({ movie: movieToHide })
-            });
-            if (res.ok) {
-                showToast("Recommendations list updated.");
-                const freshRes = await fetch(`${WORKER_URL}/api/unwanted`, {
-                    headers: { 'Authorization': 'Bearer ' + sessionToken }
-                });
-                if (freshRes.ok) {
-                    const result = await freshRes.json();
-                    userUnwantedCache = (result.items || []).map(title => title.toLowerCase());
-                    buildHomeFeed();
-                }
-            } else {
-                showToast("Failed to hide selection.");
-                if (!alreadyUnwanted) {
-                    userUnwantedCache = userUnwantedCache.filter(t => t !== lowerCaseTitle);
-                    buildHomeFeed();
-                }
-            }
-        } catch(err) {
-            console.error(err);
-            showToast("Network connection failure.");
-            if (!alreadyUnwanted) {
-                userUnwantedCache = userUnwantedCache.filter(t => t !== lowerCaseTitle);
-                buildHomeFeed();
-            }
-        }
-    }
-</script>
-
-<script>
-    function parseGenres(genres) {
-        if (Array.isArray(genres)) return genres.map(g => g.trim());
-        return [];
-    }
-
-    function createMovieCard(m, topTrendRank = null) {
+    function createMovieCard(m) {
         const div = document.createElement("div");
         div.className = "movie";
-        
-        div.innerHTML = `
-            <div style="width: 100%; height: 100%; position: relative; pointer-events: none;">
-                ${topTrendRank ? `<div class="trending-badge">${topTrendRank}</div>` : ''}
-                <img src="${formatUrl(m.image)}" draggable="false" onerror="this.insertAdjacentHTML('afterend', '<p class=\\'fallback-label\\'>${m.title}</p>'); this.style.opacity='0.25';">
-            </div>
-        `;
-        
-        setupLongPressGesture(div, m.title, m.link);
+        div.innerHTML = `<div style="width: 100%; height: 100%; position: relative;"><img src="${formatUrl(m.image)}" draggable="false" onerror="this.style.opacity='0.25';"></div>`;
+        div.addEventListener('click', () => navigateToMovie(m.title, m.link, div));
         return div;
     }
 
     async function navigateToMovie(movieTitle, destinationUrl, elementClicked) {
-        const fullTargetUrl = formatUrl(destinationUrl);
-
-        if (elementClicked) {
-            if (elementClicked.querySelector('.movie-loading-overlay')) return;
-
-            const localizedSpinner = document.createElement('div');
-            localizedSpinner.className = 'movie-loading-overlay';
-            localizedSpinner.innerHTML = '<div class="loading-ring" style="margin:0;"></div>';
-            elementClicked.appendChild(localizedSpinner);
-        }
-
-        const exactTimeLabel = new Date().toLocaleString('en-US', {
-            year: 'numeric', month: 'short', day: 'numeric',
-            hour: '2-digit', minute: '2-digit', hour12: true
-        });
-
-        userWatchHistoryCache.unshift({ title: movieTitle, watchedAt: exactTimeLabel });
-
-        if (!currentUser) {
-            window.location.href = fullTargetUrl;
-            return;
-        }
-
-        const sessionToken = localStorage.getItem('session_token') || localStorage.getItem('token');
-        if (!sessionToken) {
-            window.location.href = fullTargetUrl;
-            return;
-        }
-
-        try {
-            await fetch(`${WORKER_URL}/api/add-history`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + sessionToken
-                },
-                body: JSON.stringify({ 
-                    movie: movieTitle,
-                    watchedAt: exactTimeLabel
-                })
-            });
-            window.location.href = fullTargetUrl;
-        } catch (err) {
-            console.error("History tracking pipeline failure context:", err);
-            window.location.href = fullTargetUrl;
-        }
+        window.location.href = formatUrl(destinationUrl);
     }
 
     function shuffleArray(arr) {
@@ -2197,76 +1600,12 @@
 
     function buildHomeFeed() {
         if (typeof movies === 'undefined' || !movies.length) return;
-        
-        const watchAgainContainer = document.getElementById("watchAgainContainer");
         const randomContainer = document.getElementById("randomContainer");
-        const genreContainer = document.getElementById("genreContainer");
-        
-        if(!randomContainer || !genreContainer || !watchAgainContainer) return;
-
         const filteredGlobalCatalog = movies.filter(m => !userUnwantedCache.includes(m.title.toLowerCase()));
 
-        if (userWatchHistoryCache.length > 0) {
-            const uniqueTitles = [];
-            const watchAgainMovies = [];
-            
-            userWatchHistoryCache.forEach(item => {
-                if (!uniqueTitles.includes(item.title.toLowerCase()) && !userUnwantedCache.includes(item.title.toLowerCase())) {
-                    uniqueTitles.push(item.title.toLowerCase());
-                    const matchedMovie = filteredGlobalCatalog.find(m => m.title.toLowerCase() === item.title.toLowerCase());
-                    if (matchedMovie) watchAgainMovies.push(matchedMovie);
-                }
-            });
-
-            if(watchAgainMovies.length > 0) {
-                watchAgainContainer.innerHTML = `
-                    <div class="section">
-                        <h2 class="section-title">Watch Again</h2>
-                        <div class="movies"></div>
-                    </div>
-                `;
-                const watchAgainRow = watchAgainContainer.querySelector(".movies");
-                shuffleArray(watchAgainMovies).forEach(m => watchAgainRow.appendChild(createMovieCard(m)));
-            } else {
-                watchAgainContainer.innerHTML = "";
-            }
-        } else {
-            watchAgainContainer.innerHTML = "";
-        }
-
-        randomContainer.innerHTML = `
-            <div class="section">
-                <h2 class="section-title">Random Picks</h2>
-                <div class="movies"></div>
-            </div>
-        `;
-        const randomRow = randomContainer.querySelector(".movies");
-        shuffleArray(filteredGlobalCatalog).slice(0, 12).forEach(m => randomRow.appendChild(createMovieCard(m)));
-
-        const genreMap = {};
-        filteredGlobalCatalog.forEach(m => {
-            parseGenres(m.genres).forEach(g => {
-                const formattedGenre = g.charAt(0).toUpperCase() + g.slice(1).toLowerCase();
-                if (!genreMap[formattedGenre]) genreMap[formattedGenre] = [];
-                genreMap[formattedGenre].push(m);
-            });
-        });
-
-        genreContainer.innerHTML = "";
-        
-        const randomizedGenreNames = shuffleArray(Object.keys(genreMap));
-        randomizedGenreNames.forEach(genre => {
-            const section = document.createElement("div");
-            section.className = "section";
-            section.innerHTML = `
-                <h2 class="section-title">${genre}</h2>
-                <div class="movies"></div>
-            `;
-            const row = section.querySelector(".movies");
-            
-            shuffleArray(genreMap[genre]).forEach(m => row.appendChild(createMovieCard(m)));
-            genreContainer.appendChild(section);
-        });
+        randomContainer.innerHTML = `<div class="section"><h2 class="section-title">Random Picks</h2><div class="movies"></div></div>`;
+        const row = randomContainer.querySelector(".movies");
+        shuffleArray(filteredGlobalCatalog).slice(0, 12).forEach(m => row.appendChild(createMovieCard(m)));
     }
 </script>
 </body>
