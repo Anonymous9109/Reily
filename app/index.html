@@ -1062,6 +1062,16 @@
 
 <script>
     const WORKER_URL = "https://rinolski.misty-fog-201e.workers.dev";
+    const BASE_DOMAIN = "https://rinolski.online/";
+
+    function formatUrl(url) {
+        if (!url) return "";
+        if (url.startsWith("http://") || url.startsWith("https://") || url.startsWith("file://") || url.startsWith("content://")) {
+            return url;
+        }
+        return BASE_DOMAIN + (url.startsWith("/") ? url.substring(1) : url);
+    }
+
     let currentUser = null; 
     let transientEmail = "";
     let authState = "auth"; 
@@ -2117,7 +2127,7 @@
         div.innerHTML = `
             <div style="width: 100%; height: 100%; position: relative; pointer-events: none;">
                 ${topTrendRank ? `<div class="trending-badge">${topTrendRank}</div>` : ''}
-                <img src="${m.image}" draggable="false" onerror="this.insertAdjacentHTML('afterend', '<p class=\\'fallback-label\\'>${m.title}</p>'); this.style.opacity='0.25';">
+                <img src="${formatUrl(m.image)}" draggable="false" onerror="this.insertAdjacentHTML('afterend', '<p class=\\'fallback-label\\'>${m.title}</p>'); this.style.opacity='0.25';">
             </div>
         `;
         
@@ -2126,6 +2136,8 @@
     }
 
     async function navigateToMovie(movieTitle, destinationUrl, elementClicked) {
+        const fullTargetUrl = formatUrl(destinationUrl);
+
         if (elementClicked) {
             if (elementClicked.querySelector('.movie-loading-overlay')) return;
 
@@ -2143,13 +2155,13 @@
         userWatchHistoryCache.unshift({ title: movieTitle, watchedAt: exactTimeLabel });
 
         if (!currentUser) {
-            window.location.href = destinationUrl;
+            window.location.href = fullTargetUrl;
             return;
         }
 
         const sessionToken = localStorage.getItem('session_token') || localStorage.getItem('token');
         if (!sessionToken) {
-            window.location.href = destinationUrl;
+            window.location.href = fullTargetUrl;
             return;
         }
 
@@ -2165,10 +2177,10 @@
                     watchedAt: exactTimeLabel
                 })
             });
-            window.location.href = destinationUrl;
+            window.location.href = fullTargetUrl;
         } catch (err) {
             console.error("History tracking pipeline failure context:", err);
-            window.location.href = destinationUrl;
+            window.location.href = fullTargetUrl;
         }
     }
 
