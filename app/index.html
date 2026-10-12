@@ -1108,7 +1108,6 @@
     };
     let currentUserPfpId = null;
 
-    // Helper to check offline status
     function isAppOffline() {
         return !navigator.onLine;
     }
@@ -1119,7 +1118,6 @@
         
         if (isAppOffline()) {
             if (offlineBanner) offlineBanner.style.display = 'block';
-            // Forcefully hide both auth gate and username modal when offline
             if (authGate) authGate.style.display = 'none';
             toggleUsernameModal(false);
         } else {
@@ -1374,7 +1372,6 @@
     }
 
     function checkUsernameModalGuard() {
-        // Prevent username modal from appearing if offline
         if (isAppOffline()) {
             toggleUsernameModal(false);
             return;
@@ -1468,6 +1465,7 @@
             const authGate = document.getElementById('auth-gate');
             if (authGate) authGate.style.display = 'none';
             toggleUsernameModal(false);
+            buildHomeFeed();
             return;
         }
 
@@ -1484,6 +1482,7 @@
             });
 
             if (res.status === 401 || res.status === 403) {
+                if (isAppOffline()) return; // Prevent triggering if offline during failure
                 localStorage.removeItem('session_token');
                 localStorage.removeItem('token');
                 currentUser = null;
@@ -1534,7 +1533,14 @@
                 await fetchUnwantedMoviesCloudflare();
             }
         } catch (err) {
-            if (forceRebuild && !isAppOffline()) { 
+            if (isAppOffline()) {
+                const authGate = document.getElementById('auth-gate');
+                if (authGate) authGate.style.display = 'none';
+                toggleUsernameModal(false);
+                buildHomeFeed();
+                return;
+            }
+            if (forceRebuild) { 
                 const tokenCheck = localStorage.getItem('session_token') || localStorage.getItem('token');
                 if (!tokenCheck) {
                     document.getElementById('auth-gate').style.display = 'flex';
