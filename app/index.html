@@ -816,7 +816,6 @@
             margin-bottom: 0;
         }
 
-        /* USERNAME MODAL ENGINE STYLING */
         .modal-box {
             position: fixed;
             top: 50%;
@@ -892,11 +891,59 @@
         .profile-locked {
             pointer-events: none !important;
         }
+
+        /* CUSTOM PLAYER STYLING */
+        #custom-video-player {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #000;
+            z-index: 10000;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .player-header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
+            z-index: 10010;
+        }
+
+        .player-title-text {
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+            margin-left: 15px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
     </style>
 </head>
 <body>
 
 <div id="toast-container"></div>
+
+<!-- Custom Video Player Overlay -->
+<div id="custom-video-player">
+    <div class="player-header">
+        <button class="back-button" onclick="closeCustomPlayer()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        </button>
+        <div class="player-title-text" id="player-movie-title">Offline Movie</div>
+    </div>
+    <video id="offlineVideoElement" controls autoplay style="width: 100%; max-height: 100vh; object-fit: contain;"></video>
+</div>
 
 <!-- Account Setup Container -->
 <div class="modal-box" id="usernameModal" style="display: none;">
@@ -976,8 +1023,7 @@
         <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
         <span>Search</span>
     </button>
-    <!-- Offline Mode Button Placed Besides Profile Trigger -->
-    <button id="offline-trigger" class="nav-item" onclick="openOfflineMode()">
+    <button id="offline-trigger" class="nav-item">
         <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
         <span>Offline</span>
     </button>
@@ -1011,6 +1057,21 @@
     </div>
     
     <div id="searchResults"></div>
+</div>
+
+<div id="sliding-offline" class="sliding-panel">
+    <div class="panel-header">
+        <button class="back-button" id="offline-back-button">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        </button>
+        <div class="panel-title">Offline Movies</div>
+    </div>
+    <div class="profile-content">
+        <div class="profile-section-heading">Downloaded Movies</div>
+        <div id="offline-movies-container" class="history-list">
+            <div class="loading-ring"></div>
+        </div>
+    </div>
 </div>
 
 <div id="sliding-profile" class="sliding-panel">
@@ -1069,28 +1130,6 @@
         10: "images/10.jpg"
     };
     let currentUserPfpId = null;
-
-    // Offline Mode Handler to invoke Android bridge & default player
-    function openOfflineMode() {
-        if (typeof AndroidBridge !== 'undefined' && typeof AndroidBridge.getDownloadedVideosJson === 'function') {
-            const rawJson = AndroidBridge.getDownloadedVideosJson();
-            try {
-                const downloadedMovies = JSON.parse(rawJson);
-                if (downloadedMovies && downloadedMovies.length > 0) {
-                    const targetMovie = downloadedMovies[0]; 
-                    showToast(`Opening offline movie: ${targetMovie.title}`);
-                    AndroidBridge.playOfflineVideo(targetMovie.path);
-                } else {
-                    showToast("No downloaded offline movies found.");
-                }
-            } catch (e) {
-                console.error("Failed to parse offline movies list", e);
-                showToast("Error loading offline content.");
-            }
-        } else {
-            showToast("Offline mode is only available inside the Android app.");
-        }
-    }
 </script>
 
 <script src="https://rinolski.online/JS/search.js"></script>
@@ -1562,6 +1601,7 @@
         
         document.getElementById('sliding-profile').classList.remove('open');
         document.getElementById('sliding-search').classList.remove('open');
+        document.getElementById('sliding-offline').classList.remove('open');
         toggleUsernameModal(false);
         resetActiveNavbar();
         document.getElementById('home-trigger').classList.add('active');
@@ -1795,17 +1835,24 @@
 <script>
     const searchPanel = document.getElementById('sliding-search');
     const profilePanel = document.getElementById('sliding-profile');
+    const offlinePanel = document.getElementById('sliding-offline');
+    
     const searchTrigger = document.getElementById('search-trigger');
     const profileTrigger = document.getElementById('profile-trigger');
+    const offlineTrigger = document.getElementById('offline-trigger');
     const homeTrigger = document.getElementById('home-trigger');
+    
     const searchBackButton = document.getElementById('search-back-button');
     const profileBackButton = document.getElementById('profile-back-button');
+    const offlineBackButton = document.getElementById('offline-back-button');
+    
     const searchInput = document.getElementById('searchInput');
     const searchResults = document.getElementById('searchResults');
 
     function resetActiveNavbar() {
         homeTrigger.classList.remove('active');
         searchTrigger.classList.remove('active');
+        offlineTrigger.classList.remove('active');
         profileTrigger.classList.remove('active');
     }
 
@@ -1814,6 +1861,7 @@
         homeTrigger.classList.add('active');
         searchPanel.classList.remove('open');
         profilePanel.classList.remove('open');
+        offlinePanel.classList.remove('open');
         checkUsernameModalGuard();
     });
 
@@ -1822,8 +1870,19 @@
         searchTrigger.classList.add('active');
         searchPanel.classList.add('open');
         profilePanel.classList.remove('open');
+        offlinePanel.classList.remove('open');
         checkUsernameModalGuard();
         searchInput.focus();
+    });
+
+    offlineTrigger.addEventListener('click', () => {
+        resetActiveNavbar();
+        offlineTrigger.classList.add('active');
+        offlinePanel.classList.add('open');
+        searchPanel.classList.remove('open');
+        profilePanel.classList.remove('open');
+        checkUsernameModalGuard();
+        loadOfflineMoviesIntoPanel();
     });
 
     profileTrigger.addEventListener('click', () => {
@@ -1831,6 +1890,7 @@
         profileTrigger.classList.add('active');
         profilePanel.classList.add('open');
         searchPanel.classList.remove('open');
+        offlinePanel.classList.remove('open');
         checkUsernameModalGuard();
     });
 
@@ -1843,12 +1903,91 @@
         checkUsernameModalGuard();
     });
 
+    offlineBackButton.addEventListener('click', () => {
+        offlinePanel.classList.remove('open');
+        resetActiveNavbar();
+        homeTrigger.classList.add('active');
+        checkUsernameModalGuard();
+    });
+
     profileBackButton.addEventListener('click', () => {
         profilePanel.classList.remove('open');
         resetActiveNavbar();
         homeTrigger.classList.add('active');
         checkUsernameModalGuard();
     });
+
+    function loadOfflineMoviesIntoPanel() {
+        const container = document.getElementById('offline-movies-container');
+        if (!container) return;
+        
+        if (typeof AndroidBridge !== 'undefined' && typeof AndroidBridge.getDownloadedVideosJson === 'function') {
+            try {
+                const rawJson = AndroidBridge.getDownloadedVideosJson();
+                const downloadedMovies = JSON.parse(rawJson);
+                
+                container.innerHTML = "";
+                if (!downloadedMovies || downloadedMovies.length === 0) {
+                    container.innerHTML = `<p style="color: gray; font-size: 14px; padding: 5px; grid-column: span 3;">No downloaded movies available offline.</p>`;
+                    return;
+                }
+
+                downloadedMovies.forEach(movie => {
+                    const cardLink = document.createElement('div');
+                    cardLink.className = 'history-card-link';
+                    cardLink.style.cursor = 'pointer';
+                    
+                    const safeTitle = (movie.title || "Offline Movie").replace(/'/g, "\\'");
+                    const safePath = (movie.path || "").replace(/'/g, "\\'");
+                    const posterImg = (movie.poster && movie.poster.trim() !== "") ? movie.poster : "";
+
+                    cardLink.setAttribute('onclick', `playOfflineInCustomPlayer('${safePath}', '${safeTitle}')`);
+
+                    cardLink.innerHTML = `
+                        <div class="history-item">
+                            <div class="history-poster-frame">
+                                ${posterImg ? `<img src="${posterImg}" onerror="this.style.display='none';">` : ''}
+                            </div>
+                            <div class="history-meta-details">
+                                <span class="history-title-text" title="${movie.title}">${movie.title}</span>
+                                <span class="history-time">Downloaded</span>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(cardLink);
+                });
+            } catch (e) {
+                container.innerHTML = `<p style="color: gray; font-size: 14px; padding: 5px; grid-column: span 3;">Error loading offline content.</p>`;
+            }
+        } else {
+            container.innerHTML = `<p style="color: gray; font-size: 14px; padding: 5px; grid-column: span 3;">Offline mode is only available inside the app.</p>`;
+        }
+    }
+
+    function playOfflineInCustomPlayer(filePath, title) {
+        const playerOverlay = document.getElementById('custom-video-player');
+        const videoElem = document.getElementById('offlineVideoElement');
+        const titleElem = document.getElementById('player-movie-title');
+        
+        if (titleElem) titleElem.innerText = title;
+
+        if (typeof AndroidBridge !== 'undefined' && typeof AndroidBridge.getAndroidFileUrl === 'function') {
+            videoElem.src = AndroidBridge.getAndroidFileUrl(filePath);
+        } else {
+            videoElem.src = filePath;
+        }
+        
+        playerOverlay.style.display = 'flex';
+        videoElem.play().catch(err => console.log("Autoplay context note:", err));
+    }
+
+    function closeCustomPlayer() {
+        const playerOverlay = document.getElementById('custom-video-player');
+        const videoElem = document.getElementById('offlineVideoElement');
+        videoElem.pause();
+        videoElem.src = "";
+        playerOverlay.style.display = 'none';
+    }
 
     function goRandom() {
         if (typeof movies === 'undefined' || !movies.length) return;
