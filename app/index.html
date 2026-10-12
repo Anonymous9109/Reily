@@ -981,7 +981,7 @@
         <span>Downloads</span>
     </button>
     <button id="profile-trigger" class="nav-item">
-        <img id="nav-profile-img" class="nav-pfp-icon" src="https://rinolski.online/images/1.jpg" alt="Profile">
+        <img id="nav-profile-img" class="nav-pfp-icon" src="images/1.jpg" alt="Profile">
         <span>Profile</span>
     </button>
 </footer>
@@ -1081,16 +1081,16 @@
     let lastKnownDataHash = "";
 
     const profileAvatarsCatalog = {
-        1: "https://rinolski.online/images/1.jpg", 
-        2: "https://rinolski.online/images/2.jpg", 
-        3: "https://rinolski.online/images/3.jpg", 
-        4: "https://rinolski.online/images/4.jpg",  
-        5: "https://rinolski.online/images/5.jpg",
-        6: "https://rinolski.online/images/6.jpg",
-        7: "https://rinolski.online/images/7.jpg",
-        8: "https://rinolski.online/images/8.jpg",
-        9: "https://rinolski.online/images/9.jpg",
-        10: "https://rinolski.online/images/10.jpg"
+        1: "images/1.jpg", 
+        2: "images/2.jpg", 
+        3: "images/3.jpg", 
+        4: "images/4.jpg",  
+        5: "images/5.jpg",
+        6: "images/6.jpg",
+        7: "images/7.jpg",
+        8: "images/8.jpg",
+        9: "images/9.jpg",
+        10: "images/10.jpg"
     };
     let currentUserPfpId = null;
 </script>
@@ -1752,7 +1752,7 @@
             cardLink.innerHTML = `
                 <div class="history-item">
                     <div class="history-poster-frame">
-                        ${referenceMovie.image ? `<img src="${referenceMovie.image}" onerror="this.insertAdjacentHTML('afterend', '<p class=\\'fallback-label\\'>${sanitizedTitle}</p>'); this.style.opacity='0.25';">` : ''}
+                        ${referenceMovie.image ? `<img src="${formatUrl(referenceMovie.image)}" onerror="this.insertAdjacentHTML('afterend', '<p class=\\'fallback-label\\'>${sanitizedTitle}</p>'); this.style.opacity='0.25';">` : ''}
                     </div>
                     <div class="history-meta-details">
                         <span class="history-title-text" title="${titleStr}">${titleStr}</span>
@@ -1915,11 +1915,13 @@
 
                 card.addEventListener('click', () => {
                     if (vid.path) {
-                        try {
+                        if (window.AndroidBridge && window.AndroidBridge.playOfflineVideo) {
+                            window.AndroidBridge.playOfflineVideo(vid.path);
+                        } else {
                             window.location.href = vid.path;
-                        } catch (e) {
-                            showToast("Could not play offline file.");
                         }
+                    } else {
+                        showToast("Invalid video path.");
                     }
                 });
 
