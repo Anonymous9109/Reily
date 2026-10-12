@@ -1112,14 +1112,25 @@
         return !navigator.onLine;
     }
 
+    function isUserAuthenticatedOffline() {
+        const sessionToken = localStorage.getItem('session_token') || localStorage.getItem('token');
+        return (sessionToken && sessionToken.trim() !== "") || (currentUser !== null);
+    }
+
     function updateOfflineUIState() {
         const offlineBanner = document.getElementById('offline-notice-banner');
         const authGate = document.getElementById('auth-gate');
         
         if (isAppOffline()) {
             if (offlineBanner) offlineBanner.style.display = 'block';
-            if (authGate) authGate.style.display = 'none';
-            toggleUsernameModal(false);
+            
+            if (isUserAuthenticatedOffline()) {
+                if (authGate) authGate.style.display = 'none';
+                toggleUsernameModal(false);
+            } else {
+                if (authGate) authGate.style.display = 'flex';
+                renderAuthState();
+            }
         } else {
             if (offlineBanner) offlineBanner.style.display = 'none';
         }
@@ -1372,6 +1383,13 @@
     }
 
     function checkUsernameModalGuard() {
+        if (isAppOffline() && isUserAuthenticatedOffline()) {
+            toggleUsernameModal(false);
+            const profileContent = document.querySelector("#sliding-profile .profile-content");
+            if (profileContent) profileContent.classList.remove("locked-content");
+            return;
+        }
+
         if (isAppOffline()) {
             toggleUsernameModal(false);
             return;
@@ -1393,7 +1411,7 @@
     }
 
     function toggleUsernameModal(forceState = null) {
-        if (isAppOffline()) {
+        if (isAppOffline() && isUserAuthenticatedOffline()) {
             const modal = document.getElementById("usernameModal");
             if (modal) modal.style.display = "none";
             return;
@@ -1442,6 +1460,7 @@
                 showStatus("Username set successfully!", "green");
                 showToast("Username updated!");
                 if (currentUser) currentUser.username = username;
+                localStorage.setItem('cached_username', username);
 
                 const usernameDisplay = document.getElementById("profile-username");
                 const initialDisplay = document.getElementById("profile-initial");
@@ -1461,10 +1480,19 @@
 
     async function fetchAndDisplayUserData(forceRebuild = false) {
         updateOfflineUIState();
+        
         if (isAppOffline()) {
             const authGate = document.getElementById('auth-gate');
             if (authGate) authGate.style.display = 'none';
             toggleUsernameModal(false);
+            
+            const cachedName = localStorage.getItem('cached_username') || "User";
+            if (!currentUser) {
+                currentUser = { email: "offline@rinolski.online", username: cachedName };
+            }
+            document.getElementById('profile-username').innerText = currentUser.username;
+            document.getElementById('profile-initial').innerText = currentUser.username.charAt(0).toUpperCase();
+
             buildHomeFeed();
             return;
         }
@@ -1503,6 +1531,11 @@
                 lastKnownDataHash = dataSnapshotString;
 
                 currentUser = { email: result.data.email, username: result.data.username || "" };
+                
+                if (currentUser.username) {
+                    localStorage.setItem('cached_username', currentUser.username);
+                }
+
                 document.getElementById('auth-gate').style.display = 'none';
                 
                 const hasUsername = currentUser.username && currentUser.username.trim() !== "";
@@ -1553,6 +1586,7 @@
         closeSettingsPopup();
         localStorage.removeItem('session_token');
         localStorage.removeItem('token');
+        localStorage.removeItem('cached_username');
         currentUser = null;
         lastKnownDataHash = "";
         
