@@ -1,23 +1,29 @@
-/* Cyrene Player (smart source detection + back button + portrait support + subtitles + Timer + Netflix Shadow + Cloudflare D1 Resume Fixed + Google IMA VAST Integration + Download Button + Aligned Absolute Poster Engine + Auto Fullscreen Landscape) */
+/* Cyrene Player (Auto Fullscreen Landscape on Load) */
 document.addEventListener("DOMContentLoaded", async () => {
 
-  /********** Auto Fullscreen & Landscape Trigger **********/
-  function triggerFullscreenLandscape() {
+  /********** Immediate Auto Fullscreen & Landscape Trigger **********/
+  function forceFullscreenLandscape() {
     try {
-      const docElem = document.documentElement;
-      if (docElem.requestFullscreen) {
-        docElem.requestFullscreen().catch(() => {});
-      } else if (docElem.webkitRequestFullscreen) {
-        docElem.webkitRequestFullscreen();
+      // 1. Request Browser Fullscreen API
+      const elem = document.documentElement;
+      if (elem.requestFullscreen) {
+        elem.requestFullscreen().catch(() => {});
+      } else if (elem.webkitRequestFullscreen) {
+        elem.webkitRequestFullscreen();
       }
+
+      // 2. Lock Screen Orientation to Landscape
       if (screen.orientation && screen.orientation.lock) {
         screen.orientation.lock("landscape").catch(() => {});
       }
-    } catch (e) {}
+    } catch (e) {
+      console.error("Fullscreen/Orientation lock error:", e);
+    }
   }
 
-  // Trigger automatically upon player load
-  triggerFullscreenLandscape();
+  // Trigger instantly upon player load
+  forceFullscreenLandscape();
+  window.addEventListener("load", forceFullscreenLandscape);
 
   /********** 1) Inject CSS **********/
   const css = `
@@ -228,7 +234,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   backToPrev.innerHTML = `<svg viewBox="0 0 24 24"><path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>`;
   backToPrev.onclick = () => history.back();
 
-  /********** Smart Title & Absolute Poster Resolution Aligned with script.js **********/
   const params = new URLSearchParams(window.location.search);
   const ep = params.get("ep") || "1";
   const movieParamId = params.get("movie") || params.get("series") || params.get("id") || ep; 
@@ -723,25 +728,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   window.addEventListener("resize", rotateIfPortrait);
 });
 
-// Fullscreen & Touch Emulation
-let lastTap = 0;
-function goFullscreenLandscape() {
-  const elem = document.documentElement;
-  if (elem.requestFullscreen) { elem.requestFullscreen(); } 
-  else if (elem.webkitRequestFullscreen) { elem.webkitRequestFullscreen(); }
-  if (screen.orientation && screen.orientation.lock) { screen.orientation.lock("landscape").catch(() => {}); }
-}
-
-document.addEventListener("touchend", () => {
-  const now = Date.now();
-  if (now - lastTap < 300) { goFullscreenLandscape(); }
-  lastTap = now;
-});
-document.addEventListener("dblclick", () => { goFullscreenLandscape(); });
-document.addEventListener("fullscreenchange", () => {
-  if (!document.fullscreenElement && screen.orientation && screen.orientation.unlock) { screen.orientation.unlock(); }
-});
-
+// Touch event mapping compatibility for non-touch triggers
 (function () {
   const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
   if (isTouchDevice) return;
