@@ -891,59 +891,11 @@
         .profile-locked {
             pointer-events: none !important;
         }
-
-        /* CUSTOM PLAYER STYLING */
-        #custom-video-player {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: #000;
-            z-index: 10000;
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .player-header {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            padding: 15px 20px;
-            display: flex;
-            align-items: center;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
-            z-index: 10010;
-        }
-
-        .player-title-text {
-            color: #fff;
-            font-size: 16px;
-            font-weight: bold;
-            margin-left: 15px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
     </style>
 </head>
 <body>
 
 <div id="toast-container"></div>
-
-<!-- Custom Video Player Overlay -->
-<div id="custom-video-player">
-    <div class="player-header">
-        <button class="back-button" onclick="closeCustomPlayer()">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
-        </button>
-        <div class="player-title-text" id="player-movie-title">Offline Movie</div>
-    </div>
-    <video id="offlineVideoElement" controls autoplay style="width: 100%; max-height: 100vh; object-fit: contain;"></video>
-</div>
 
 <!-- Account Setup Container -->
 <div class="modal-box" id="usernameModal" style="display: none;">
@@ -1941,7 +1893,7 @@
                     const safePath = (movie.path || "").replace(/'/g, "\\'");
                     const posterImg = (movie.poster && movie.poster.trim() !== "") ? movie.poster : "";
 
-                    cardLink.setAttribute('onclick', `playOfflineInCustomPlayer('${safePath}', '${safeTitle}')`);
+                    cardLink.setAttribute('onclick', `playOfflineMovie('${safePath}')`);
 
                     cardLink.innerHTML = `
                         <div class="history-item">
@@ -1960,33 +1912,16 @@
                 container.innerHTML = `<p style="color: gray; font-size: 14px; padding: 5px; grid-column: span 3;">Error loading offline content.</p>`;
             }
         } else {
-            container.innerHTML = `<p style="color: gray; font-size: 14px; padding: 5px; grid-column: span 3;">Offline mode is only available inside the app.</p>`;
+            container.innerHTML = `<p style="color: gray; font-size: 14px; padding: 5px; grid-column: span 3;">Offline mode requires the app environment.</p>`;
         }
     }
 
-    function playOfflineInCustomPlayer(filePath, title) {
-        const playerOverlay = document.getElementById('custom-video-player');
-        const videoElem = document.getElementById('offlineVideoElement');
-        const titleElem = document.getElementById('player-movie-title');
-        
-        if (titleElem) titleElem.innerText = title;
-
-        if (typeof AndroidBridge !== 'undefined' && typeof AndroidBridge.getAndroidFileUrl === 'function') {
-            videoElem.src = AndroidBridge.getAndroidFileUrl(filePath);
+    function playOfflineMovie(filePath) {
+        if (typeof AndroidBridge !== 'undefined' && typeof AndroidBridge.playOfflineVideo === 'function') {
+            AndroidBridge.playOfflineVideo(filePath);
         } else {
-            videoElem.src = filePath;
+            showToast("Playback bridge unavailable.");
         }
-        
-        playerOverlay.style.display = 'flex';
-        videoElem.play().catch(err => console.log("Autoplay context note:", err));
-    }
-
-    function closeCustomPlayer() {
-        const playerOverlay = document.getElementById('custom-video-player');
-        const videoElem = document.getElementById('offlineVideoElement');
-        videoElem.pause();
-        videoElem.src = "";
-        playerOverlay.style.display = 'none';
     }
 
     function goRandom() {
