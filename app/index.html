@@ -239,75 +239,6 @@
             padding: 20px;
             background-color: #000000;
         }
-        
-        .profile-avatar-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-        
-        .avatar {
-            width: 80px;
-            height: 80px;
-            min-width: 80px;
-            min-height: 80px;
-            background: #222;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            border: 2px solid #333;
-            flex-shrink: 0;
-        }
-        
-        .avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 50%;
-        }
-        
-        .avatar-fallback {
-            font-size: 32px;
-            font-weight: bold;
-            color: #fff;
-        }
-
-        .pfp-selector-grid {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 10px;
-            margin-top: 12px;
-            margin-bottom: 20px;
-        }
-        
-        .pfp-option {
-            aspect-ratio: 1/1;
-            background: #141414;
-            border: 2px solid transparent;
-            border-radius: 0%;
-            overflow: hidden;
-            position: relative;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-        }
-        
-        .pfp-option img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 0%;
-        }
-        
-        .pfp-option.active {
-            border-color: #e50914;
-        }
 
         footer {
             position: fixed;
@@ -357,12 +288,7 @@
             object-fit: cover;
             margin-bottom: 4px;
             border: 1.5px solid transparent;
-            transition: border-color 0.2s;
             display: block;
-        }
-
-        .nav-item.active .nav-pfp-icon, .nav-item:hover .nav-pfp-icon {
-            border-color: #ffffff;
         }
 
         .history-list {
@@ -388,7 +314,6 @@
             flex-direction: column;
             position: relative;
             overflow: hidden;
-            transition: transform 0.2s, background 0.2s;
             cursor: pointer;
             width: 100%;
             min-width: 0;
@@ -398,10 +323,8 @@
             width: 100%;
             aspect-ratio: 2 / 3;
             background: #222222;
-            border-radius: 0px;
             overflow: hidden;
             position: relative;
-            box-sizing: border-box;
         }
         
         .history-poster-frame img {
@@ -416,10 +339,8 @@
             display: flex;
             flex-direction: column;
             gap: 2px;
-            overflow: hidden;
             background: #000000;
             width: 100%;
-            box-sizing: border-box;
         }
         
         .history-title-text {
@@ -454,49 +375,6 @@
             padding-bottom: 5px;
         }
 
-        #auth-gate {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #000000;
-            z-index: 5000;
-            display: none; 
-            flex-direction: column;
-            justify-content: center;
-            padding: 30px;
-        }
-        
-        .auth-container {
-            max-width: 400px;
-            width: 100%;
-            margin: 0 auto;
-        }
-        
-        .auth-input {
-            width: 100%;
-            background: #333;
-            border: none;
-            border-radius: 4px;
-            padding: 14px;
-            color: white;
-            font-size: 16px;
-            margin-bottom: 16px;
-            outline: none;
-        }
-
-        .auth-btn {
-            width: 100%;
-            background: #e50914;
-            color: white;
-            padding: 14px;
-            font-size: 16px;
-            font-weight: bold;
-            border-radius: 4px;
-            margin-top: 10px;
-        }
-
         #toast-container {
             position: fixed;
             bottom: 85px;
@@ -518,37 +396,11 @@
             border-left: 4px solid #e50914;
             box-shadow: 0 4px 12px rgba(0,0,0,0.5);
         }
-
-        .modal-box {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 90%;
-            max-width: 400px;
-            background-color: #1f1f1f;
-            border: 1px solid #333333;
-            border-radius: 8px;
-            padding: 24px;
-            z-index: 8500;
-        }
     </style>
 </head>
 <body>
 
 <div id="toast-container"></div>
-
-<!-- Cyrene Custom Player Fullscreen Overlay Container -->
-<div id="cyrenePlayerOverlay" style="display:none; position:fixed; inset:0; z-index:9999; background:#000;"></div>
-
-<!-- Account Setup Container -->
-<div class="modal-box" id="usernameModal" style="display: none;">
-    <p style="color:#fff; margin-bottom:15px;">Please enter a username to access Rinolski</p>
-    <div style="display:flex; gap:10px;">
-        <input type="text" id="usernameInput" placeholder="Enter username" style="flex:1; background:#2b2b2b; border:1px solid #404040; border-radius:4px; padding:10px; color:#fff;" />
-        <button onclick="saveUsername()" style="background:#e50914; color:#fff; border:none; padding:10px 16px; border-radius:4px; font-weight:bold;">Set Name</button>
-    </div>
-</div>
 
 <header>
     <h2 class="Rinolski-font">rinolski</h2>
@@ -610,35 +462,30 @@
     let userWatchHistoryCache = [];
     let userUnwantedCache = []; 
 
-    // INLINE CYRENE PLAYER OVERLAY LAUNCHER
+    // FIXED CYRENE PLAYER DYNAMIC LAUNCHER (Prevents Black Screen)
     function launchCyreneOfflinePlayer(filePath, videoTitle) {
-        const overlay = document.getElementById('cyrenePlayerOverlay');
-        if (!overlay) return;
-
         if (videoTitle) {
             document.title = videoTitle;
         }
 
-        overlay.innerHTML = "";
-        overlay.style.display = "block";
-
-        // Push state so Android back button closes the overlay instead of exiting
+        // Push history state so the Android / browser back button closes the player cleanly
         history.pushState({ cyrenePlayerOpen: true }, "");
 
-        // Inject the Cyrene player script dynamically with ?src=filePath
+        // Dynamically inject player.js (lets player.js build its own container and root safely)
         const scriptTag = document.createElement('script');
+        scriptTag.id = "cyrenePlayerScript";
         scriptTag.src = `https://rinolski.online/player.js?src=${encodeURIComponent(filePath)}`;
-        overlay.appendChild(scriptTag);
+        document.body.appendChild(scriptTag);
     }
 
-    // Close overlay on browser back button / history pop
+    // Clean up player elements and restore page title when back button is pressed
     window.addEventListener('popstate', (e) => {
-        const overlay = document.getElementById('cyrenePlayerOverlay');
-        if (overlay && overlay.style.display === "block") {
-            overlay.style.display = "none";
-            overlay.innerHTML = "";
-            document.title = "Rinolski";
-        }
+        const playerRoot = document.getElementById('videoPlayer');
+        const playerScript = document.getElementById('cyrenePlayerScript');
+        
+        if (playerRoot) playerRoot.remove();
+        if (playerScript) playerScript.remove();
+        document.title = "Rinolski";
     });
 
     function showToast(message) {
@@ -700,7 +547,7 @@
                     </div>
                 `;
 
-                // LAUNCHES CYRENE PLAYER INLINE ON CLICK
+                // LAUNCHES CYRENE PLAYER DYNAMICALLY ON CLICK
                 card.addEventListener('click', () => {
                     if (vid.path) {
                         if (window.AndroidBridge && window.AndroidBridge.playOfflineVideo) {
