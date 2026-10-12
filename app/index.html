@@ -1383,6 +1383,17 @@
             const res = await fetch(`${WORKER_URL}/api/userdata`, {
                 headers: { 'Authorization': 'Bearer ' + sessionToken }
             });
+
+            if (res.status === 401 || res.status === 403) {
+                localStorage.removeItem('session_token');
+                localStorage.removeItem('token');
+                currentUser = null;
+                authState = "auth";
+                renderAuthState();
+                document.getElementById('auth-gate').style.display = 'flex';
+                return;
+            }
+
             const result = await res.json();
 
             if (res.ok && result.data) {
@@ -1422,16 +1433,14 @@
 
                 renderWorkerWatchHistory(userWatchHistoryCache);
                 await fetchUnwantedMoviesCloudflare();
-            } else {
-                localStorage.removeItem('session_token');
-                localStorage.removeItem('token');
-                currentUser = null;
-                authState = "auth";
-                renderAuthState();
-                document.getElementById('auth-gate').style.display = 'flex';
             }
         } catch (err) {
-            if (forceRebuild) { document.getElementById('auth-gate').style.display = 'flex'; }
+            if (forceRebuild) { 
+                const tokenCheck = localStorage.getItem('session_token') || localStorage.getItem('token');
+                if (!tokenCheck) {
+                    document.getElementById('auth-gate').style.display = 'flex';
+                }
+            }
         }
     }
 
@@ -1624,10 +1633,13 @@
 
     function startCloudflareRealTimeSync() {
         setInterval(() => {
-            if ((localStorage.getItem('session_token') || localStorage.getItem('token')) && (!document.getElementById('auth-gate') || document.getElementById('auth-gate'].style.display !== 'flex')) {
+            const currentToken = localStorage.getItem('session_token') || localStorage.getItem('token');
+            const authGateVisible = document.getElementById('auth-gate').style.display === 'flex';
+            
+            if (currentToken && !authGateVisible) {
                 fetchAndDisplayUserData(false);
             }
-        }, 1500);
+        }, 5000);
     }
 </script>
 
