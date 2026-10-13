@@ -1,9 +1,10 @@
-<!DOCTYPE html>
+
+        <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rinolski</title>
+    <title>Slide Down App Banner Notification</title>
     <!-- Tailwind CSS for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Inter Font -->
@@ -15,7 +16,7 @@
             background: transparent; /* Completely clean/transparent page background */
             margin: 0;
             padding: 0;
-            overflow: hidden;
+            /* overflow: hidden; removed so the main page can scroll normally */
         }
 
         /* Smooth slide-down animation on initial load */
@@ -51,9 +52,10 @@
 </head>
 <body class="p-0 m-0">
 
-    <!-- Slide-Down Banner Container -->
-    <div id="appBanner" class="fixed top-0 left-0 right-0 z-50 p-3 sm:p-4">
-        <div class="max-w-2xl mx-auto bg-black backdrop-blur-xl border border-zinc-800 shadow-2xl rounded-2xl p-4 sm:p-5 relative overflow-hidden animate-slide-down text-zinc-100">
+    <!-- Slide-Down Banner Container (pointer-events-none lets clicks/scrolls pass through the empty overlay areas) -->
+    <div id="appBanner" class="fixed top-0 left-0 right-0 z-50 p-3 sm:p-4 pointer-events-none">
+        <!-- pointer-events-auto ensures the actual notification card remains interactable -->
+        <div class="max-w-2xl mx-auto bg-black backdrop-blur-xl border border-zinc-800 shadow-2xl rounded-2xl p-4 sm:p-5 relative overflow-hidden animate-slide-down text-zinc-100 pointer-events-auto">
             
             <!-- 1. DISMISS 'X' BUTTON (Top-Left) -->
             <button onclick="dismissBanner()" aria-label="Dismiss banner" class="absolute top-3 left-3 text-zinc-400 hover:text-zinc-100 bg-zinc-900/80 hover:bg-zinc-800 p-1.5 rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-zinc-400">
