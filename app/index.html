@@ -1124,13 +1124,9 @@
         if (isAppOffline()) {
             if (offlineBanner) offlineBanner.style.display = 'block';
             
-            if (isUserAuthenticatedOffline()) {
-                if (authGate) authGate.style.display = 'none';
-                toggleUsernameModal(false);
-            } else {
-                if (authGate) authGate.style.display = 'flex';
-                renderAuthState();
-            }
+            // Force hide the login/signup auth gate when offline regardless of authentication state
+            if (authGate) authGate.style.display = 'none';
+            toggleUsernameModal(false);
         } else {
             if (offlineBanner) offlineBanner.style.display = 'none';
         }
@@ -1383,15 +1379,11 @@
     }
 
     function checkUsernameModalGuard() {
-        if (isAppOffline() && isUserAuthenticatedOffline()) {
+        // Always dismiss username modal and unlock profile controls when offline
+        if (isAppOffline()) {
             toggleUsernameModal(false);
             const profileContent = document.querySelector("#sliding-profile .profile-content");
             if (profileContent) profileContent.classList.remove("locked-content");
-            return;
-        }
-
-        if (isAppOffline()) {
-            toggleUsernameModal(false);
             return;
         }
 
@@ -1411,7 +1403,7 @@
     }
 
     function toggleUsernameModal(forceState = null) {
-        if (isAppOffline() && isUserAuthenticatedOffline()) {
+        if (isAppOffline()) {
             const modal = document.getElementById("usernameModal");
             if (modal) modal.style.display = "none";
             return;
