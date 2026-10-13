@@ -1485,9 +1485,15 @@
     async function fetchAndDisplayUserData(forceRebuild = false) {
         updateOfflineUIState();
         
+        const sessionToken = localStorage.getItem('session_token') || localStorage.getItem('token');
+        
+        // Immediately suppress auth gate if a token exists in storage
+        if (sessionToken) {
+            document.getElementById('auth-gate').style.display = 'none';
+        }
+
         if (isAppOffline()) {
-            const authGate = document.getElementById('auth-gate');
-            if (authGate) authGate.style.display = 'none';
+            document.getElementById('auth-gate').style.display = 'none';
             toggleUsernameModal(false);
             
             const cachedName = localStorage.getItem('cached_username') || "User";
@@ -1501,7 +1507,6 @@
             return;
         }
 
-        const sessionToken = localStorage.getItem('session_token') || localStorage.getItem('token');
         if (!sessionToken) {
             document.getElementById('auth-gate').style.display = 'flex';
             renderAuthState();
@@ -1572,9 +1577,11 @@
                 await fetchUnwantedMoviesCloudflare();
             }
         } catch (err) {
+            // Keep user logged in using cached token if connection fails mid-request
+            if (sessionToken) {
+                document.getElementById('auth-gate').style.display = 'none';
+            }
             if (isAppOffline()) {
-                const authGate = document.getElementById('auth-gate');
-                if (authGate) authGate.style.display = 'none';
                 toggleUsernameModal(false);
                 buildHomeFeed();
                 return;
