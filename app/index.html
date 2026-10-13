@@ -1123,8 +1123,6 @@
         
         if (isAppOffline()) {
             if (offlineBanner) offlineBanner.style.display = 'block';
-            
-            // Force hide the login/signup auth gate when offline regardless of authentication state
             if (authGate) authGate.style.display = 'none';
             toggleUsernameModal(false);
         } else {
@@ -1132,8 +1130,18 @@
         }
     }
 
-    window.addEventListener('online', updateOfflineUIState);
-    window.addEventListener('offline', updateOfflineUIState);
+    // Smooth Connection State Listeners
+    window.addEventListener('online', () => {
+        showToast("Connection restored. Syncing session...");
+        setTimeout(() => {
+            fetchAndDisplayUserData(true);
+        }, 1000);
+    });
+
+    window.addEventListener('offline', () => {
+        updateOfflineUIState();
+        showToast("You are offline. Running in offline mode.");
+    });
 
     function openOfflinePanelFromBanner() {
         resetActiveNavbar();
@@ -1379,7 +1387,6 @@
     }
 
     function checkUsernameModalGuard() {
-        // Always dismiss username modal and unlock profile controls when offline
         if (isAppOffline()) {
             toggleUsernameModal(false);
             const profileContent = document.querySelector("#sliding-profile .profile-content");
@@ -1528,7 +1535,10 @@
                     localStorage.setItem('cached_username', currentUser.username);
                 }
 
+                // Explicit UI cleanup on successful sync
                 document.getElementById('auth-gate').style.display = 'none';
+                const offlineBanner = document.getElementById('offline-notice-banner');
+                if (offlineBanner) offlineBanner.style.display = 'none';
                 
                 const hasUsername = currentUser.username && currentUser.username.trim() !== "";
                 const displayName = hasUsername ? currentUser.username : currentUser.email;
@@ -1564,12 +1574,6 @@
                 toggleUsernameModal(false);
                 buildHomeFeed();
                 return;
-            }
-            if (forceRebuild) { 
-                const tokenCheck = localStorage.getItem('session_token') || localStorage.getItem('token');
-                if (!tokenCheck) {
-                    document.getElementById('auth-gate').style.display = 'flex';
-                }
             }
         }
     }
