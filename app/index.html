@@ -1130,12 +1130,17 @@
         }
     }
 
-    // Smooth Connection State Listeners
+    // Automatic clean full reload on reconnect (with loop protection)
     window.addEventListener('online', () => {
-        showToast("Connection restored. Syncing session...");
-        setTimeout(() => {
-            fetchAndDisplayUserData(true);
-        }, 1000);
+        const lastReload = sessionStorage.getItem('last_online_reload') || 0;
+        const now = Date.now();
+        if (now - lastReload > 5000) {
+            sessionStorage.setItem('last_online_reload', now);
+            showToast("Connection restored. Reloading app...");
+            setTimeout(() => {
+                location.reload(true);
+            }, 800);
+        }
     });
 
     window.addEventListener('offline', () => {
@@ -1535,7 +1540,6 @@
                     localStorage.setItem('cached_username', currentUser.username);
                 }
 
-                // Explicit UI cleanup on successful sync
                 document.getElementById('auth-gate').style.display = 'none';
                 const offlineBanner = document.getElementById('offline-notice-banner');
                 if (offlineBanner) offlineBanner.style.display = 'none';
