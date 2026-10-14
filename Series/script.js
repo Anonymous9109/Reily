@@ -35,9 +35,25 @@ const saveProgress = async (key, value) => {
 };
 // --- End Helper Logic ---
 
-// --- Inject Dynamic CSS for 3-Column Grid & White Buttons ---
+// --- Inject Dynamic CSS for 3-Column Grid & Centered Layout ---
 const styleTag = document.createElement("style");
 styleTag.textContent = `
+    /* Center title and description information */
+    #title, #desc {
+        text-align: center;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    #title {
+        margin-bottom: 10px;
+    }
+
+    #desc {
+        margin-bottom: 20px;
+        max-width: 800px;
+    }
+
     #episodeList {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
@@ -49,12 +65,13 @@ styleTag.textContent = `
         color: #000000;
         border: none;
         padding: 12px 16px;
-        border-ko: 8px;
         border-radius: 8px;
         cursor: pointer;
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        /* Center the episode text and icon with exact spacing/centering if needed */
+        justify-content: center;
+        gap: 12px;
         font-weight: 600;
         font-size: 14px;
         box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -102,7 +119,7 @@ async function init() {
                 const btn = document.createElement("button");
                 btn.className = "ep-btn";
                 
-                // Episode text + SVG Play icon
+                // Episode text + SVG Play icon (centered inside button)
                 btn.innerHTML = `
                     <span>Episode ${i}</span>
                     <svg class="play-icon" viewBox="0 0 24 24">
