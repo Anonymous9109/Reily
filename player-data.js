@@ -18,7 +18,8 @@ window.videoData = {
 
   "BetterCallSaul-S1E2": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Better.Call.Saul.S01E01.mkv",
     "BetterCallSaul-S1E3": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Better.Call.Saul.S01E02.mkv",
-  "BetterCallSaul2-S1E1": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Cage The Elephant - Ain_t No Rest For The Wicked (Official Video).mp4"
+  "BetterCallSaul2-S1E1": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Cage The Elephant - Ain_t No Rest For The Wicked (Official Video).mp4",
+  "yes-S1E1": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/8334919742ea2f3e716099f939b778d1.mp4"
 };
 
 
