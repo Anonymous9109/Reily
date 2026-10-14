@@ -35,9 +35,14 @@ const saveProgress = async (key, value) => {
 };
 // --- End Helper Logic ---
 
-// --- Inject Dynamic CSS for 3-Column Grid & White Buttons ---
+// --- Inject Dynamic CSS for 3-Column Grid, White Buttons & 50px Offset ---
 const styleTag = document.createElement("style");
 styleTag.textContent = `
+    /* Pushes everything below the back button down by 50px */
+    .content-wrapper, #title, .main-container {
+        margin-top: 50px;
+    }
+
     #episodeList {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
@@ -49,7 +54,6 @@ styleTag.textContent = `
         color: #000000;
         border: none;
         padding: 12px 16px;
-        border-ko: 8px;
         border-radius: 8px;
         cursor: pointer;
         display: flex;
