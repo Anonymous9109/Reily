@@ -638,6 +638,12 @@ const movies = [
     genres: ["Drama"],
     image: "images/BetterCallSaul.jpg",
     link: "Series/Series?series=HELLO"
+  },
+  {
+    title: "YESHELLO",
+    genres: ["Drama"],
+    image: "images/BetterCallSaul.jpg",
+    link: "Series/Series?series=YESHELLO"
   }
 ];
 
