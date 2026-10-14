@@ -35,42 +35,51 @@ const saveProgress = async (key, value) => {
 };
 // --- End Helper Logic ---
 
+// --- Inject Dynamic CSS for 3-Column Grid & White Buttons ---
+const styleTag = document.createElement("style");
+styleTag.textContent = `
+    #episodeList {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        width: 100%;
+    }
+    .ep-btn {
+        background-color: #ffffff;
+        color: #000000;
+        border: none;
+        padding: 12px 16px;
+        border-ko: 8px;
+        border-radius: 8px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-weight: 600;
+        font-size: 14px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        transition: background-color 0.2s, transform 0.1s;
+    }
+    .ep-btn:hover {
+        background-color: #f0f0f0;
+        transform: translateY(-2px);
+    }
+    .ep-btn .play-icon {
+        width: 16px;
+        height: 16px;
+        fill: currentColor;
+    }
+`;
+document.head.appendChild(styleTag);
+
 async function init() {
     if (!series) return;
 
     // Fill Basic Info
     document.getElementById("title").textContent = series.title;
     document.getElementById("desc").textContent = series.desc;
-    
-    const video = document.getElementById("bgVideo");
 
-    if (series.video) {
-        // Clear any old sources and inject the new one
-        video.innerHTML = `<source src="${series.video}" type="video/mp4">`;
-        video.load();
-
-        /** * FIX: REVEAL LOGIC
-         * We keep the video at opacity 0 (defined in your CSS) 
-         * and only switch to 1 once the data is actually playing.
-         */
-        const revealVideo = () => {
-            video.style.opacity = "1";
-        };
-
-        // If the video is already buffered/playing
-        if (video.readyState >= 3) {
-            revealVideo();
-        } else {
-            // Listen for the first frame being drawn
-            video.addEventListener('loadeddata', revealVideo);
-        }
-
-        // Catch errors to ensure it stays black if link is broken
-        video.addEventListener('error', () => {
-            video.style.opacity = "0";
-            console.log("Video source not found - keeping background black.");
-        });
-    }
+    // Background video removed per your request.
 
     const seasonNav = document.getElementById("seasonNav");
     const episodeContainer = document.getElementById("episodeList");
@@ -92,7 +101,15 @@ async function init() {
             for (let i = 1; i <= season.totalEpisodes; i++) {
                 const btn = document.createElement("button");
                 btn.className = "ep-btn";
-                btn.textContent = `Episode ${i}`;
+                
+                // Episode text + SVG Play icon
+                btn.innerHTML = `
+                    <span>Episode ${i}</span>
+                    <svg class="play-icon" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z"/>
+                    </svg>
+                `;
+
                 const episodeKey = `${season.prefix}${i}`;
                 btn.onclick = () => window.location.href = `videoplayer.html?ep=${episodeKey}`;
                 episodeContainer.appendChild(btn);
