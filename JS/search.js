@@ -614,37 +614,9 @@ const movies = [
     genres: ["Comedy","Adventure"],
     image: "images/MinionsMonsters.jpg",
     link: "Movies/Movie?movie=minions-monsters"
-  },
-  {
-    title: "BetterCallSaul",
-    genres: ["Drama"],
-    image: "images/BetterCallSaul.jpg",
-    link: "Series/Series?series=BetterCallSaul2"
-  },
-  {
-    title: "yes",
-    genres: ["Drama"],
-    image: "images/BetterCallSaul.jpg",
-    link: "Series/Series?series=yes"
-  },
-  {
-    title: "OK",
-    genres: ["Drama"],
-    image: "images/BetterCallSaul.jpg",
-    link: "Series/Series?series=OK"
-  },
-  {
-    title: "HELLO",
-    genres: ["Drama"],
-    image: "images/BetterCallSaul.jpg",
-    link: "Series/Series?series=HELLO"
-  },
-  {
-    title: "YESHELLO",
-    genres: ["Drama"],
-    image: "images/BetterCallSaul.jpg",
-    link: "Series/Series?series=YESHELLO"
   }
+  
+  
 ];
 
 // Shuffle function (Fisher-Yates) - returns a shuffled copy or shuffles in place safely
