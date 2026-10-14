@@ -614,9 +614,15 @@ const movies = [
     genres: ["Comedy","Adventure"],
     image: "images/MinionsMonsters.jpg",
     link: "Movies/Movie?movie=minions-monsters"
+  },
+  
+  
+  {
+    title: "Better Call Saul",
+    genres: ["Drama"],
+    image: "images/BetterCallSaul.jpg",
+    link: "Series/Series?series=BetterCallSaul"
   }
-  
-  
 ];
 
 // Shuffle function (Fisher-Yates) - returns a shuffled copy or shuffles in place safely
