@@ -35,31 +35,48 @@ const saveProgress = async (key, value) => {
 };
 // --- End Helper Logic ---
 
-// --- Inject Dynamic CSS for 3-Column Grid & Centered Layout ---
+// --- Inject Dynamic CSS for Centered Layout Positions using px ---
 const styleTag = document.createElement("style");
 styleTag.textContent = `
-    /* Center title and description information */
-    #title, #desc {
-        text-align: center;
+    /* Center the title position on the page using a fixed px width and auto margins */
+    #title {
+        width: 800px;
         margin-left: auto;
         margin-right: auto;
-    }
-
-    #title {
         margin-bottom: 10px;
+        text-align: center;
     }
 
+    /* Center the description position on the page using a fixed px width and auto margins */
     #desc {
-        margin-bottom: 20px;
-        max-width: 800px;
+        width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 25px;
+        text-align: center;
     }
 
+    /* Center the season navigation position */
+    #seasonNav {
+        width: 900px;
+        margin-left: auto;
+        margin-right: auto;
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    /* Center the episode list grid position on the page using px width */
     #episodeList {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         gap: 12px;
-        width: 100%;
+        width: 900px;
+        margin-left: auto;
+        margin-right: auto;
     }
+
     .ep-btn {
         background-color: #ffffff;
         color: #000000;
@@ -69,7 +86,6 @@ styleTag.textContent = `
         cursor: pointer;
         display: flex;
         align-items: center;
-        /* Center the episode text and icon with exact spacing/centering if needed */
         justify-content: center;
         gap: 12px;
         font-weight: 600;
@@ -119,7 +135,7 @@ async function init() {
                 const btn = document.createElement("button");
                 btn.className = "ep-btn";
                 
-                // Episode text + SVG Play icon (centered inside button)
+                // Episode text + SVG Play icon
                 btn.innerHTML = `
                     <span>Episode ${i}</span>
                     <svg class="play-icon" viewBox="0 0 24 24">
