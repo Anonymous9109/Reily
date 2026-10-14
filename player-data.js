@@ -21,7 +21,8 @@ window.videoData = {
   "BetterCallSaul2-S1E1": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Cage The Elephant - Ain_t No Rest For The Wicked (Official Video).mp4",
   "yes-S1E1": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/8334919742ea2f3e716099f939b778d1.mp4"
 ,
-  "OK-S1E1": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/8334919742ea2f3e716099f939b778d1.mp4"
+  "OK-S1E1": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/8334919742ea2f3e716099f939b778d1.mp4",
+  "HELLO-S1E1": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/57a86b9738461754e88fbf8781607f88.mp4"
 };
 
 
