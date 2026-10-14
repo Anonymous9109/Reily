@@ -907,5 +907,15 @@ window.videoData = {
 
   // Tulsa King
   "TulsaKing-S3E1": "https://res.cloudinary.com/dhqn68dsi/video/upload/v1762640368/Tulsa.King.S03E01._NKIRI.COM_qs3uxt.mkv",
-  "YESHELLO-S1E1": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/57a86b9738461754e88fbf8781607f88.mp4"
+  "YESHELLO-S1E1": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/57a86b9738461754e88fbf8781607f88.mp4",
+  "BetterCallSaul-S1E1": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Better.Call.Saul.S01E01.mkv",
+  "BetterCallSaul-S1E2": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Better.Call.Saul.S01E02.mkv",
+  "BetterCallSaul-S1E3": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Better.Call.Saul.S01E03.mkv",
+  "BetterCallSaul-S1E4": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Better.Call.Saul.S01E04.mkv",
+  "BetterCallSaul-S1E5": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Better.Call.Saul.S01E05.mkv",
+  "BetterCallSaul-S1E6": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Better.Call.Saul.S01E06.mkv",
+  "BetterCallSaul-S1E7": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Better.Call.Saul.S01E07.mkv",
+  "BetterCallSaul-S1E8": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Better.Call.Saul.S01E08.mkv",
+  "BetterCallSaul-S1E9": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Better.Call.Saul.S01E09.mkv",
+  "BetterCallSaul-S1E10": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Better.Call.Saul.S01E10.mkv"
 };
