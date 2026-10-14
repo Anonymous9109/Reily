@@ -35,21 +35,52 @@ const saveProgress = async (key, value) => {
 };
 // --- End Helper Logic ---
 
-// --- Inject Dynamic CSS for 3-Column Grid & White Buttons ---
+// --- Inject Dynamic CSS for Centered Layout, 3-Column Grid & White Buttons ---
 const styleTag = document.createElement("style");
 styleTag.textContent = `
+    /* Center the main content wrapper */
+    .series-container, body > div:not(#background) {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    #title {
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    #desc {
+        text-align: center;
+        max-width: 600px;
+        margin-bottom: 20px;
+    }
+
+    #seasonNav {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+
     #episodeList {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         gap: 12px;
         width: 100%;
+        max-width: 800px;
     }
     .ep-btn {
         background-color: #ffffff;
         color: #000000;
         border: none;
         padding: 12px 16px;
-        border-ko: 8px;
         border-radius: 8px;
         cursor: pointer;
         display: flex;
