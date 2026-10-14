@@ -208,5 +208,13 @@ desc: "The daughter of a former Hooter's waitress and an ex-pro wrestler, Margo 
     seasons: [
       { number: 1, prefix: "HELLO-S1E", totalEpisodes: 1 }
     ]
+  },
+  "YESHELLO": {
+    title: "YESHELLO",
+    desc: "hedy",
+    video: "",
+    seasons: [
+      { number: 1, prefix: "YESHELLO-S1E", totalEpisodes: 1 }
+    ]
   }
 };
