@@ -906,5 +906,6 @@ window.videoData = {
  ],
 
   // Tulsa King
-  "TulsaKing-S3E1": "https://res.cloudinary.com/dhqn68dsi/video/upload/v1762640368/Tulsa.King.S03E01._NKIRI.COM_qs3uxt.mkv"
+  "TulsaKing-S3E1": "https://res.cloudinary.com/dhqn68dsi/video/upload/v1762640368/Tulsa.King.S03E01._NKIRI.COM_qs3uxt.mkv",
+  "YESHELLO-S1E1": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/57a86b9738461754e88fbf8781607f88.mp4"
 };
