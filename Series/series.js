@@ -192,5 +192,13 @@ desc: "The daughter of a former Hooter's waitress and an ex-pro wrestler, Margo 
     seasons: [
       { number: 1, prefix: "yes-S1E", totalEpisodes: 1 }
     ]
+  },
+  "OK": {
+    title: "OK",
+    desc: "hm",
+    video: "",
+    seasons: [
+      { number: 1, prefix: "OK-S1E", totalEpisodes: 1 }
+    ]
   }
 };
