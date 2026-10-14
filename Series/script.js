@@ -40,7 +40,7 @@ const styleTag = document.createElement("style");
 styleTag.textContent = `
     /* Pushes everything below the back button down by 50px */
     .content-wrapper, #title, .main-container {
-        margin-top: 50px;
+        margin-top: 100px;
     }
 
     #episodeList {
