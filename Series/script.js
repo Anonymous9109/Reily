@@ -45,7 +45,7 @@ styleTag.textContent = `
         align-items: left;
         justify-content: left;
         text-align: left;
-        max-width: 50%;
+        max-width: 500px;
         margin: 0 auto;
         padding: 20px;
     }
@@ -64,7 +64,7 @@ styleTag.textContent = `
     #seasonNav {
         display: flex;
         gap: 10px;
-        justify-content: center;
+        justify-content: left;
         margin-bottom: 20px;
         flex-wrap: wrap;
     }
