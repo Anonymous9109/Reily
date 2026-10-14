@@ -14,8 +14,10 @@ window.videoData = {
           ,
           "Shoujo-tachinoSadism-ep1": "https://archive.org/download/shoujo-tachi-no-sadism-the-animation-episode-2/shoujo-tachi-no-sadism-the-animation-episode-1.mp4"
           ,
-          "Shoujo-tachinoSadism-ep2": "https://archive.org/download/shoujo-tachi-no-sadism-the-animation-episode-2/shoujo-tachi-no-sadism-the-animation-episode-2.mp4"
+          "Shoujo-tachinoSadism-ep2": "https://archive.org/download/shoujo-tachi-no-sadism-the-animation-episode-2/shoujo-tachi-no-sadism-the-animation-episode-2.mp4",
 
+  "BetterCallSaul-S1E2": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Better.Call.Saul.S01E01.mkv",
+    "BetterCallSaul-S1E3": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Better.Call.Saul.S01E02.mkv"
 };
 
 
