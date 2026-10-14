@@ -35,59 +35,26 @@ const saveProgress = async (key, value) => {
 };
 // --- End Helper Logic ---
 
-// --- Inject Dynamic CSS for Centered Layout Positions using px ---
+// --- Inject Dynamic CSS for 3-Column Grid & White Buttons ---
 const styleTag = document.createElement("style");
 styleTag.textContent = `
-    /* Center the title position on the page using a fixed px width and auto margins */
-    #title {
-        width: 800px;
-        margin-left: auto;
-        margin-right: auto;
-        margin-bottom: 10px;
-        text-align: center;
-    }
-
-    /* Center the description position on the page using a fixed px width and auto margins */
-    #desc {
-        width: 800px;
-        margin-left: auto;
-        margin-right: auto;
-        margin-bottom: 25px;
-        text-align: center;
-    }
-
-    /* Center the season navigation position */
-    #seasonNav {
-        width: 900px;
-        margin-left: auto;
-        margin-right: auto;
-        display: flex;
-        justify-content: center;
-        gap: 10px;
-        margin-bottom: 20px;
-    }
-
-    /* Center the episode list grid position on the page using px width */
     #episodeList {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         gap: 12px;
-        width: 900px;
-        margin-left: auto;
-        margin-right: auto;
+        width: 100%;
     }
-
     .ep-btn {
         background-color: #ffffff;
         color: #000000;
         border: none;
         padding: 12px 16px;
+        border-ko: 8px;
         border-radius: 8px;
         cursor: pointer;
         display: flex;
         align-items: center;
-        justify-content: center;
-        gap: 12px;
+        justify-content: space-between;
         font-weight: 600;
         font-size: 14px;
         box-shadow: 0 2px 4px rgba(0,0,0,0.1);
