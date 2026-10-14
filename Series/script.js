@@ -44,19 +44,19 @@ styleTag.textContent = `
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        text-align: center;
-        max-width: 900px;
+        text-align: left;
+        max-width: 50%;
         margin: 0 auto;
         padding: 20px;
     }
 
     #title {
-        text-align: center;
+        text-align: left;
         margin-bottom: 10px;
     }
 
     #desc {
-        text-align: center;
+        text-align: left;
         max-width: 600px;
         margin-bottom: 20px;
     }
