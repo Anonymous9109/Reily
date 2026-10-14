@@ -621,7 +621,7 @@ const movies = [
     title: "Better Call Saul",
     genres: ["Drama"],
     image: "images/BetterCallSaul.jpg",
-    link: "Series/Series?series=BetterCallSaul"
+    link: "Series/series?series=BetterCallSaul"
   }
 ];
 
