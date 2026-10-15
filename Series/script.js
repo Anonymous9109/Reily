@@ -53,7 +53,7 @@ styleTag.textContent = `
         min-height: 100vh;
     }
 
-    /* Dynamic background poster overlay */
+    /* Fixed backdrop using the poster image */
     body::before {
         content: "";
         position: fixed;
@@ -61,15 +61,16 @@ styleTag.textContent = `
         left: 0;
         width: 100%;
         height: 100vh;
-        background-image: var(--series-bg);
+        background-image: var(--series-bg, none);
         background-size: cover;
         background-position: center;
-        filter: brightness(0.3) blur(8px);
-        transform: scale(1.1);
+        background-repeat: no-repeat;
+        filter: brightness(0.35) blur(6px);
+        transform: scale(1.05);
         z-index: -1;
     }
 
-    /* Pushes everything below the back button down by 100px */
+    /* Pushes content down by 100px */
     .content-wrapper, #title, .main-container {
         margin-top: 100px;
     }
@@ -110,18 +111,25 @@ document.head.appendChild(styleTag);
 async function init() {
     if (!series) return;
 
-    // Fill Basic Info
+    // 1. Set text info
     document.getElementById("title").textContent = series.title;
     document.getElementById("desc").textContent = series.desc;
 
-    // Check if a poster image exists in your search/movie catalog data structures 
-    // or if you want to look it up using the series ID.
-    // Assuming your series object or a global mapping links the ID to the poster image:
-    const matchedMovie = movies.find(m => m.link.includes(id));
-    const posterUrl = series.image || (matchedMovie ? matchedMovie.image : "");
+    // 2. Lookup poster image from JS/search.js (movies array) or direct series property
+    let posterPath = series.image || "";
+    
+    if (!posterPath && typeof movies !== "undefined") {
+        const matched = movies.find(m => m.link && m.link.toLowerCase().includes(id.toLowerCase()));
+        if (matched) {
+            posterPath = matched.image;
+        }
+    }
 
-    if (posterUrl) {
-        document.body.style.setProperty("--series-bg", `url('${posterUrl}')`);
+    // Apply the poster to the CSS variable
+    if (posterPath) {
+        // Adjust path depth if script runs from within a subfolder
+        const finalUrl = posterPath.startsWith("images/") ? `../${posterPath}` : posterPath;
+        document.body.style.setProperty("--series-bg", `url('${finalUrl}')`);
     }
 
     const seasonNav = document.getElementById("seasonNav");
@@ -130,10 +138,10 @@ async function init() {
     if (series.seasons && series.seasons.length > 0) {
         const storageKey = `lastSeason_${id}`;
         
-        // 1. Fetch last watched season from IndexedDB
+        // Fetch last watched season from IndexedDB
         const lastSeasonNum = await getProgress(storageKey);
 
-        // 2. Sort: Last watched season comes first
+        // Sort: Last watched season comes first
         let displayOrder = [...series.seasons];
         if (lastSeasonNum) {
             displayOrder.sort((a, b) => (a.number == lastSeasonNum ? -1 : 1));
@@ -145,7 +153,6 @@ async function init() {
                 const btn = document.createElement("button");
                 btn.className = "ep-btn";
                 
-                // Episode text + SVG Play icon
                 btn.innerHTML = `
                     <span>Episode ${i}</span>
                     <svg class="play-icon" viewBox="0 0 24 24">
@@ -159,7 +166,7 @@ async function init() {
             }
         };
 
-        // 3. Build Season Buttons
+        // Build Season Buttons
         displayOrder.forEach((season, index) => {
             const seasonBtn = document.createElement("button");
             seasonBtn.className = "season-btn";
@@ -171,7 +178,6 @@ async function init() {
             }
 
             seasonBtn.onclick = async () => {
-                // Save to IndexedDB and reload
                 await saveProgress(storageKey, season.number);
                 location.reload();
             };
