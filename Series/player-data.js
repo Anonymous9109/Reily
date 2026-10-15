@@ -927,6 +927,8 @@ window.videoData = {
   "BetterCallSaul-S2E7": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Better.Call.Saul.S02E07.mkv",
   "BetterCallSaul-S2E8": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Better.Call.Saul.S02E08.mkv",
   "BetterCallSaul-S2E9": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Better.Call.Saul.S02E09.mkv",
-  "BetterCallSaul-S2E10": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Better.Call.Saul.S02E10.mkv"
+  "BetterCallSaul-S2E10": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Better.Call.Saul.S02E10.mkv",
   
+  "VisionQuest-S1E1": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/VisionQuest.S01E01.mkv",
+  "VisionQuest-S1E2": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/VisionQuest.S01E02.mkv"
 };
