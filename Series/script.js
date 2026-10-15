@@ -35,7 +35,7 @@ const saveProgress = async (key, value) => {
 };
 // --- End Helper Logic ---
 
-// --- Inject Dynamic CSS for Clean Sharp Background Poster & Padding ---
+// --- Inject Dynamic CSS with Fixed Z-Index Layering for Content Over Background ---
 const styleTag = document.createElement("style");
 styleTag.textContent = `
     html, body {
@@ -54,7 +54,7 @@ styleTag.textContent = `
         overflow-y: auto;
     }
 
-    /* Clean background image with zero blur, zero overlay filters, and fixed scrolling */
+    /* Sharp background image kept strictly in the background */
     #ambientBg {
         position: fixed;
         top: 0;
@@ -70,10 +70,18 @@ styleTag.textContent = `
         pointer-events: none;
     }
 
-    /* Pushes content down */
-    .content-wrapper, #title, .main-container, #movieContentWrapper {
+    /* Force all content containers to stay visible on top of the background */
+    .content-wrapper, 
+    #title, 
+    #desc, 
+    #seasonNav, 
+    #episodeList, 
+    .main-container, 
+    #movieContentWrapper {
         position: relative;
         z-index: 2;
+        opacity: 1 !important;
+        visibility: visible !important;
     }
 
     .content-wrapper, #title, .main-container {
@@ -85,7 +93,9 @@ styleTag.textContent = `
         grid-template-columns: repeat(3, 1fr);
         gap: 12px;
         width: 100%;
+        margin-top: 20px;
     }
+
     .ep-btn {
         background-color: #ffffff;
         color: #000000;
@@ -98,7 +108,7 @@ styleTag.textContent = `
         justify-content: space-between;
         font-weight: 600;
         font-size: 14px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.3);
         transition: background-color 0.2s, transform 0.1s;
     }
     .ep-btn:hover {
@@ -137,8 +147,11 @@ async function init() {
     if (!series) return;
 
     // Fill Basic Info
-    document.getElementById("title").textContent = series.title;
-    document.getElementById("desc").textContent = series.desc;
+    const titleEl = document.getElementById("title");
+    const descEl = document.getElementById("desc");
+    
+    if (titleEl) titleEl.textContent = series.title;
+    if (descEl) descEl.textContent = series.desc;
 
     // Locate poster image from searchArray securely
     let imagePath = "";
@@ -189,6 +202,7 @@ async function init() {
         }
 
         const showEpisodes = (season) => {
+            if (!episodeContainer) return;
             episodeContainer.innerHTML = "";
             for (let i = 1; i <= season.totalEpisodes; i++) {
                 const btn = document.createElement("button");
@@ -209,24 +223,27 @@ async function init() {
         };
 
         // 3. Build Season Buttons
-        displayOrder.forEach((season, index) => {
-            const seasonBtn = document.createElement("button");
-            seasonBtn.className = "season-btn";
-            seasonBtn.textContent = `Season ${season.number}`;
+        if (seasonNav) {
+            seasonNav.innerHTML = "";
+            displayOrder.forEach((season, index) => {
+                const seasonBtn = document.createElement("button");
+                seasonBtn.className = "season-btn";
+                seasonBtn.textContent = `Season ${season.number}`;
 
-            if (index === 0) {
-                seasonBtn.classList.add("active");
-                showEpisodes(season);
-            }
+                if (index === 0) {
+                    seasonBtn.classList.add("active");
+                    showEpisodes(season);
+                }
 
-            seasonBtn.onclick = async () => {
-                // Save to IndexedDB and reload
-                await saveProgress(storageKey, season.number);
-                location.reload();
-            };
+                seasonBtn.onclick = async () => {
+                    // Save to IndexedDB and reload
+                    await saveProgress(storageKey, season.number);
+                    location.reload();
+                };
 
-            seasonNav.appendChild(seasonBtn);
-        });
+                seasonNav.appendChild(seasonBtn);
+            });
+        }
     }
 }
 
