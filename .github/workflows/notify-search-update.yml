@@ -28,7 +28,7 @@ jobs:
 
       - name: Push Broadcast to ntfy.sh
         run: |
-          curl -H "Title: New Movie Added! 🎬" \
+          curl -H "Title: Rinolski" \
                -H "Tags: movie,clapper,tada" \
                -d "\"${{ env.TITLE }}\" is now available on Rinolski! Check it out." \
                https://ntfy.sh/rinolski
