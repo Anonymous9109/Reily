@@ -927,18 +927,6 @@ window.videoData = {
   "BetterCallSaul-S2E7": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Better.Call.Saul.S02E07.mkv",
   "BetterCallSaul-S2E8": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Better.Call.Saul.S02E08.mkv",
   "BetterCallSaul-S2E9": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Better.Call.Saul.S02E09.mkv",
-  "BetterCallSaul-S2E10": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Better.Call.Saul.S02E10.mkv",
-  "Lucifer-S1E1": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Lucifer S01E01 HDTV XviD-AFG.avi",
-  "Lucifer-S1E2": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Lucifer S01E02 HDTV XviD-AFG.avi",
-  "Lucifer-S1E3": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Lucifer S01E03 HDTV XviD-AFG.avi",
-  "Lucifer-S1E4": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Lucifer S01E04 HDTV XviD-AFG.avi",
-  "Lucifer-S1E5": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Lucifer S01E05 HDTV XviD-AFG.avi",
-  "Lucifer-S1E6": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Lucifer S01E06 HDTV XviD-AFG.avi",
-  "Lucifer-S1E7": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Lucifer S01E07 HDTV XviD-AFG.avi",
-  "Lucifer-S1E8": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Lucifer S01E08 HDTV XviD-AFG.avi",
-  "Lucifer-S1E9": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Lucifer S01E09 HDTV XviD-AFG.avi",
-  "Lucifer-S1E10": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Lucifer S01E10 HDTV XviD-AFG.avi",
-  "Lucifer-S1E11": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Lucifer S01E11 HDTV XviD-AFG.avi",
-  "Lucifer-S1E12": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Lucifer S01E12 HDTV XviD-AFG.avi",
-  "Lucifer-S1E13": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Lucifer S01E13 HDTV XviD-AFG.avi"
+  "BetterCallSaul-S2E10": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Better.Call.Saul.S02E10.mkv"
+  
 };
