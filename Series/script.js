@@ -85,7 +85,7 @@ styleTag.textContent = `
     }
 
     .content-wrapper, #title, .main-container {
-        margin-top: 300px;
+        margin-top: 400px;
     }
 
     /* Big Main Play Button for Episode 1 */
