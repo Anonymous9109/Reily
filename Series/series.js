@@ -225,7 +225,5 @@ desc: "The daughter of a former Hooter's waitress and an ex-pro wrestler, Margo 
     { number: 1, prefix: "BetterCallSaul-S1E", totalEpisodes: 10 },
     { number: 2, prefix: "BetterCallSaul-S2E", totalEpisodes: 10 }
   ]
-  }
-    ]
-  }
+  }      
 };
