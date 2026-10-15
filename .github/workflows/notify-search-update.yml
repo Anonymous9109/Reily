@@ -1,0 +1,34 @@
+name: Notify Rinolski Search Update
+
+on:
+  push:
+    paths:
+      - 'JS/search.js'
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Extract Added Movie Title
+        id: extract
+        run: |
+          # Parse the latest added title line from JS/search.js
+          ADDED_TITLE=$(git diff HEAD^ HEAD -- JS/search.js | grep '^\+.*title:' | tail -n 1 | sed -E 's/.*title:[[:space:]]*"([^"]+)".*/\1/' || true)
+          
+          if [ -z "$ADDED_TITLE" ]; then
+            echo "TITLE=New Title Added" >> $GITHUB_ENV
+          else
+            echo "TITLE=$ADDED_TITLE" >> $GITHUB_ENV
+          fi
+
+      - name: Push Broadcast to ntfy.sh
+        run: |
+          curl -H "Title: New Movie Added! 🎬" \
+               -H "Tags: movie,clapper,tada" \
+               -d "\"${{ env.TITLE }}\" is now available on Rinolski! Check it out." \
+               https://ntfy.sh/rinolski
