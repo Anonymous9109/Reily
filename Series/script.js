@@ -35,7 +35,7 @@ const saveProgress = async (key, value) => {
 };
 // --- End Helper Logic ---
 
-// --- Inject Dynamic CSS with Bright Ambient Backdrop & Padding ---
+// --- Inject Dynamic CSS for Clean Sharp Background Poster & Padding ---
 const styleTag = document.createElement("style");
 styleTag.textContent = `
     html, body {
@@ -54,7 +54,7 @@ styleTag.textContent = `
         overflow-y: auto;
     }
 
-    /* Ambient backdrop with overlay darkened / removed */
+    /* Clean background image with zero blur, zero overlay filters, and fixed scrolling */
     #ambientBg {
         position: fixed;
         top: 0;
@@ -64,9 +64,8 @@ styleTag.textContent = `
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
-        /* Increased brightness from 0.35 to 0.75 to remove the heavy dark overlay */
-        filter: blur(50px) brightness(0.75) saturate(1.2);
-        transform: scale(1.2);
+        filter: none;
+        transform: none;
         z-index: 0;
         pointer-events: none;
     }
@@ -163,7 +162,7 @@ async function init() {
       imagePath = series.image.startsWith('/') ? series.image : `/${series.image}`;
     }
 
-    // Setup Ambient Blur Background Container
+    // Setup Sharp Background Poster Container
     let ambientBg = document.getElementById("ambientBg");
     if (!ambientBg) {
       ambientBg = document.createElement("div");
