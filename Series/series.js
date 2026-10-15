@@ -225,5 +225,13 @@ desc: "The daughter of a former Hooter's waitress and an ex-pro wrestler, Margo 
     { number: 1, prefix: "BetterCallSaul-S1E", totalEpisodes: 10 },
     { number: 2, prefix: "BetterCallSaul-S2E", totalEpisodes: 10 }
   ]
-  }      
+  }      ,
+  "VisionQuest": {
+    title: "VisionQuest",
+    desc: "A rebooted Vision has been hiding from those who seek to weaponize him. While laying low he consults the AI personas embedded in his programming to find his true meaning. This quiet life ends when a bounty placed on his head thrusts him on the run.",
+    video: "",
+    seasons: [
+      { number: 1, prefix: "VisionQuest-S1E", totalEpisodes: 2 }
+    ]
+  }
 };
