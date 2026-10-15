@@ -35,10 +35,24 @@ const saveProgress = async (key, value) => {
 };
 // --- End Helper Logic ---
 
-// --- Inject Dynamic CSS for 3-Column Grid, White Buttons & 50px Offset ---
+// --- Inject Dynamic CSS for Pitch Black Background, Padding & Grid ---
 const styleTag = document.createElement("style");
 styleTag.textContent = `
-    /* Pushes everything below the back button down by 50px */
+    /* Pitch black background and left/right padding */
+    html, body {
+        background-color: #000000 !important;
+        color: #ffffff;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        padding-left: 24px;
+        padding-right: 24px;
+    }
+
+    /* Pushes everything below the back button down by 100px */
     .content-wrapper, #title, .main-container {
         margin-top: 100px;
     }
