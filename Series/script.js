@@ -35,12 +35,11 @@ const saveProgress = async (key, value) => {
 };
 // --- End Helper Logic ---
 
-// --- Inject Dynamic CSS for Pitch Black Background, Padding & Grid ---
+// --- Inject Dynamic CSS for Series Poster Background & Padding ---
 const styleTag = document.createElement("style");
 styleTag.textContent = `
-    /* Pitch black background and left/right padding */
     html, body {
-        background-color: #000000 !important;
+        background-color: #000000;
         color: #ffffff;
         margin: 0;
         padding: 0;
@@ -50,6 +49,24 @@ styleTag.textContent = `
     body {
         padding-left: 24px;
         padding-right: 24px;
+        position: relative;
+        min-height: 100vh;
+    }
+
+    /* Dynamic background poster overlay */
+    body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background-image: var(--series-bg);
+        background-size: cover;
+        background-position: center;
+        filter: brightness(0.3) blur(8px);
+        transform: scale(1.1);
+        z-index: -1;
     }
 
     /* Pushes everything below the back button down by 100px */
@@ -97,7 +114,15 @@ async function init() {
     document.getElementById("title").textContent = series.title;
     document.getElementById("desc").textContent = series.desc;
 
-    // Background video removed per your request.
+    // Check if a poster image exists in your search/movie catalog data structures 
+    // or if you want to look it up using the series ID.
+    // Assuming your series object or a global mapping links the ID to the poster image:
+    const matchedMovie = movies.find(m => m.link.includes(id));
+    const posterUrl = series.image || (matchedMovie ? matchedMovie.image : "");
+
+    if (posterUrl) {
+        document.body.style.setProperty("--series-bg", `url('${posterUrl}')`);
+    }
 
     const seasonNav = document.getElementById("seasonNav");
     const episodeContainer = document.getElementById("episodeList");
