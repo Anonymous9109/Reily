@@ -35,7 +35,7 @@ const saveProgress = async (key, value) => {
 };
 // --- End Helper Logic ---
 
-// --- Inject Dynamic CSS for Ambient Blur Backdrop, Layout Architecture & Padding ---
+// --- Inject Dynamic CSS with Bright Ambient Backdrop & Padding ---
 const styleTag = document.createElement("style");
 styleTag.textContent = `
     html, body {
@@ -54,7 +54,7 @@ styleTag.textContent = `
         overflow-y: auto;
     }
 
-    /* Ambient blur backdrop layer matching your robust movie page architecture */
+    /* Ambient backdrop with overlay darkened / removed */
     #ambientBg {
         position: fixed;
         top: 0;
@@ -64,7 +64,8 @@ styleTag.textContent = `
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
-        filter: blur(65px) brightness(0.35) saturate(1.4);
+        /* Increased brightness from 0.35 to 0.75 to remove the heavy dark overlay */
+        filter: blur(50px) brightness(0.75) saturate(1.2);
         transform: scale(1.2);
         z-index: 0;
         pointer-events: none;
@@ -129,7 +130,7 @@ async function loadDataFiles() {
 
   } catch (error) {
     console.error("Critical error while reading data engines safely:", error);
-    init(); // Proceed with series data even if search.js fetch fails
+    init(); 
   }
 }
 
@@ -139,8 +140,6 @@ async function init() {
     // Fill Basic Info
     document.getElementById("title").textContent = series.title;
     document.getElementById("desc").textContent = series.desc;
-
-    // Background video removed per your request.
 
     // Locate poster image from searchArray securely
     let imagePath = "";
