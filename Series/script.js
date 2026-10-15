@@ -78,7 +78,7 @@ styleTag.textContent = `
     #episodeList, 
     .main-container, 
     #movieContentWrapper {
-        position: center;
+        position: relative;
         z-index: 2;
         opacity: 1 !important;
         visibility: visible !important;
