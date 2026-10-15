@@ -225,5 +225,13 @@ desc: "The daughter of a former Hooter's waitress and an ex-pro wrestler, Margo 
     { number: 1, prefix: "BetterCallSaul-S1E", totalEpisodes: 10 },
     { number: 2, prefix: "BetterCallSaul-S2E", totalEpisodes: 10 }
   ]
+  },
+  "Lucifer": {
+    title: "Lucifer",
+    desc: "Bored with being the Lord of Hell, the devil relocates to Los Angeles, where he opens a nightclub and forms a connection with a homicide detective.",
+    video: "",
+    seasons: [
+      { number: 1, prefix: "Lucifer-S1E", totalEpisodes: 13 }
+    ]
   }
 };
