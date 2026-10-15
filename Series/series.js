@@ -222,7 +222,8 @@ desc: "The daughter of a former Hooter's waitress and an ex-pro wrestler, Margo 
     desc: "Ex-con artist Jimmy McGill turns into a small-time attorney and goes through a series of trials and tragedies, as he transforms into his alter ego Saul Goodman, a morally challenged criminal lawyer.",
     video: "",
     seasons: [
-      { number: 1, prefix: "BetterCallSaul-S1E", totalEpisodes: 10 }
-    ]
+    { number: 1, prefix: "BetterCallSaul-S1E", totalEpisodes: 10 },
+    { number: 2, prefix: "BetterCallSaul-S2E", totalEpisodes: 10 }
+  ]
   }
 };
