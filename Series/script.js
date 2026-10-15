@@ -115,7 +115,7 @@ async function init() {
     document.getElementById("title").textContent = series.title;
     document.getElementById("desc").textContent = series.desc;
 
-    // 2. Lookup poster image from JS/search.js (movies array) or direct series property
+    // 2. Locate poster image safely using absolute root-relative paths
     let posterPath = series.image || "";
     
     if (!posterPath && typeof movies !== "undefined") {
@@ -125,12 +125,19 @@ async function init() {
         }
     }
 
-    // Apply the poster to the CSS variable
-    if (posterPath) {
-        // Adjust path depth if script runs from within a subfolder
-        const finalUrl = posterPath.startsWith("images/") ? `../${posterPath}` : posterPath;
-        document.body.style.setProperty("--series-bg", `url('${finalUrl}')`);
+    // Fallback if not found in movies array: construct directly from ID
+    if (!posterPath) {
+        posterPath = `images/${id}.jpg`;
     }
+
+    // Ensure path starts from root or has correct relative jump if in a subfolder
+    let finalUrl = posterPath;
+    if (!finalUrl.startsWith("http") && !finalUrl.startsWith("/")) {
+        // If script is in /Series/, jump back one level to access /images/
+        finalUrl = `../${finalUrl.replace(/^\.\//, '')}`;
+    }
+
+    document.body.style.setProperty("--series-bg", `url('${finalUrl}')`);
 
     const seasonNav = document.getElementById("seasonNav");
     const episodeContainer = document.getElementById("episodeList");
