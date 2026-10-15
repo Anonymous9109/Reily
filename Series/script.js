@@ -35,7 +35,7 @@ const saveProgress = async (key, value) => {
 };
 // --- End Helper Logic ---
 
-// --- Inject Dynamic CSS for Series Poster Background & Padding ---
+// --- Inject Dynamic CSS for Ambient Blur Backdrop, Layout Architecture & Padding ---
 const styleTag = document.createElement("style");
 styleTag.textContent = `
     html, body {
@@ -51,26 +51,31 @@ styleTag.textContent = `
         padding-right: 24px;
         position: relative;
         min-height: 100vh;
+        overflow-y: auto;
     }
 
-    /* Fixed backdrop using the poster image */
-    body::before {
-        content: "";
+    /* Ambient blur backdrop layer matching your robust movie page architecture */
+    #ambientBg {
         position: fixed;
         top: 0;
         left: 0;
-        width: 100%;
+        width: 100vw;
         height: 100vh;
-        background-image: var(--series-bg, none);
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
-        filter: brightness(0.35) blur(6px);
-        transform: scale(1.05);
-        z-index: -1;
+        filter: blur(65px) brightness(0.35) saturate(1.4);
+        transform: scale(1.2);
+        z-index: 0;
+        pointer-events: none;
     }
 
-    /* Pushes content down by 100px */
+    /* Pushes content down */
+    .content-wrapper, #title, .main-container, #movieContentWrapper {
+        position: relative;
+        z-index: 2;
+    }
+
     .content-wrapper, #title, .main-container {
         margin-top: 100px;
     }
@@ -108,36 +113,67 @@ styleTag.textContent = `
 `;
 document.head.appendChild(styleTag);
 
+async function loadDataFiles() {
+  if (!id) return;
+
+  try {
+    // 1. Fetch and parse search.js safely to load the movies array
+    const searchResponse = await fetch("/JS/search.js");
+    const searchText = await searchResponse.text();
+    const cleanSearchText = searchText.replace(/const\s+movies\s*=/, "return ");
+    const parseSearch = new Function(cleanSearchText);
+    window.searchArray = parseSearch();
+
+    // 2. Initialize Series Layout & Background
+    init();
+
+  } catch (error) {
+    console.error("Critical error while reading data engines safely:", error);
+    init(); // Proceed with series data even if search.js fetch fails
+  }
+}
+
 async function init() {
     if (!series) return;
 
-    // 1. Set text info
+    // Fill Basic Info
     document.getElementById("title").textContent = series.title;
     document.getElementById("desc").textContent = series.desc;
 
-    // 2. Locate poster image safely using absolute root-relative paths
-    let posterPath = series.image || "";
-    
-    if (!posterPath && typeof movies !== "undefined") {
-        const matched = movies.find(m => m.link && m.link.toLowerCase().includes(id.toLowerCase()));
-        if (matched) {
-            posterPath = matched.image;
-        }
+    // Background video removed per your request.
+
+    // Locate poster image from searchArray securely
+    let imagePath = "";
+    if (window.searchArray) {
+      const matchedSearchItem = window.searchArray.find(m => {
+        if (!m.link) return false;
+        const urlPart = m.link.includes('?') ? m.link.split('?')[1] : m.link;
+        const movieUrlParams = new URLSearchParams(urlPart);
+        const movieId = movieUrlParams.get('movie') || movieUrlParams.get('series');
+        return movieId && movieId.toLowerCase() === id.toLowerCase();
+      });
+
+      if (matchedSearchItem && matchedSearchItem.image) {
+        const filename = matchedSearchItem.image.split('/').pop();
+        imagePath = `/images/${filename}`;
+      }
     }
 
-    // Fallback if not found in movies array: construct directly from ID
-    if (!posterPath) {
-        posterPath = `images/${id}.jpg`;
+    // Fallback if not matched in searchArray
+    if (!imagePath && series.image) {
+      imagePath = series.image.startsWith('/') ? series.image : `/${series.image}`;
     }
 
-    // Ensure path starts from root or has correct relative jump if in a subfolder
-    let finalUrl = posterPath;
-    if (!finalUrl.startsWith("http") && !finalUrl.startsWith("/")) {
-        // If script is in /Series/, jump back one level to access /images/
-        finalUrl = `../${finalUrl.replace(/^\.\//, '')}`;
+    // Setup Ambient Blur Background Container
+    let ambientBg = document.getElementById("ambientBg");
+    if (!ambientBg) {
+      ambientBg = document.createElement("div");
+      ambientBg.id = "ambientBg";
+      document.body.insertBefore(ambientBg, document.body.firstChild);
     }
-
-    document.body.style.setProperty("--series-bg", `url('${finalUrl}')`);
+    if (imagePath) {
+      ambientBg.style.backgroundImage = `url('${imagePath}')`;
+    }
 
     const seasonNav = document.getElementById("seasonNav");
     const episodeContainer = document.getElementById("episodeList");
@@ -145,10 +181,10 @@ async function init() {
     if (series.seasons && series.seasons.length > 0) {
         const storageKey = `lastSeason_${id}`;
         
-        // Fetch last watched season from IndexedDB
+        // 1. Fetch last watched season from IndexedDB
         const lastSeasonNum = await getProgress(storageKey);
 
-        // Sort: Last watched season comes first
+        // 2. Sort: Last watched season comes first
         let displayOrder = [...series.seasons];
         if (lastSeasonNum) {
             displayOrder.sort((a, b) => (a.number == lastSeasonNum ? -1 : 1));
@@ -160,6 +196,7 @@ async function init() {
                 const btn = document.createElement("button");
                 btn.className = "ep-btn";
                 
+                // Episode text + SVG Play icon
                 btn.innerHTML = `
                     <span>Episode ${i}</span>
                     <svg class="play-icon" viewBox="0 0 24 24">
@@ -173,7 +210,7 @@ async function init() {
             }
         };
 
-        // Build Season Buttons
+        // 3. Build Season Buttons
         displayOrder.forEach((season, index) => {
             const seasonBtn = document.createElement("button");
             seasonBtn.className = "season-btn";
@@ -185,6 +222,7 @@ async function init() {
             }
 
             seasonBtn.onclick = async () => {
+                // Save to IndexedDB and reload
                 await saveProgress(storageKey, season.number);
                 location.reload();
             };
@@ -194,5 +232,5 @@ async function init() {
     }
 }
 
-// Run the async function
-init();
+// Run the safe loader
+loadDataFiles();
