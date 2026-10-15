@@ -622,12 +622,6 @@ const movies = [
     genres: ["Drama"],
     image: "images/BetterCallSaul.jpg",
     link: "Series/series?series=BetterCallSaul"
-  },
-  {
-    title: "Lucifer",
-    genres: ["Drama"],
-    image: "images/Lucifer.jpg",
-    link: "Series/series?series=Lucifer"
   }
 ];
 
