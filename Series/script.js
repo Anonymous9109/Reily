@@ -35,7 +35,7 @@ const saveProgress = async (key, value) => {
 };
 // --- End Helper Logic ---
 
-// --- Inject Dynamic CSS with Fixed Z-Index Layering for Content Over Background ---
+// --- Inject Dynamic CSS for Big Play Button & Episode Dropdown Layout ---
 const styleTag = document.createElement("style");
 styleTag.textContent = `
     html, body {
@@ -88,37 +88,104 @@ styleTag.textContent = `
         margin-top: 100px;
     }
 
-    #episodeList {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 12px;
-        width: 100%;
-        margin-top: 20px;
-    }
-
-    .ep-btn {
+    /* Big Main Play Button for Episode 1 */
+    .big-play-btn {
         background-color: #ffffff;
         color: #000000;
         border: none;
-        padding: 12px 16px;
-        border-radius: 8px;
+        padding: 16px 24px;
+        border-radius: 10px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        font-weight: 700;
+        font-size: 16px;
+        width: 100%;
+        max-width: 320px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        transition: background-color 0.2s, transform 0.1s;
+        margin-bottom: 24px;
+    }
+    .big-play-btn:hover {
+        background-color: #f0f0f0;
+        transform: translateY(-2px);
+    }
+    .big-play-btn .play-icon {
+        width: 20px;
+        height: 20px;
+        fill: currentColor;
+    }
+
+    /* Episode Dropdown Accordion Container */
+    .episodes-dropdown-container {
+        width: 100%;
+        max-width: 450px;
+        background: rgba(20, 20, 20, 0.85);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 10px;
+        overflow: hidden;
+        backdrop-filter: blur(10px);
+        margin-top: 16px;
+    }
+
+    .episodes-dropdown-toggle {
+        width: 100%;
+        background: transparent;
+        color: #ffffff;
+        border: none;
+        padding: 14px 18px;
+        text-align: left;
+        font-weight: 600;
+        font-size: 15px;
         cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        font-weight: 600;
+    }
+
+    .episodes-dropdown-toggle:hover {
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    .episodes-list-inner {
+        max-height: 250px;
+        overflow-y: auto;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        display: none; /* hidden by default */
+        flex-direction: column;
+    }
+
+    .episodes-list-inner.open {
+        display: flex;
+    }
+
+    .ep-dropdown-item {
+        background: transparent;
+        color: #ffffff;
+        border: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        padding: 12px 18px;
+        text-align: left;
+        cursor: pointer;
         font-size: 14px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-        transition: background-color 0.2s, transform 0.1s;
+        font-weight: 500;
+        transition: background 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
     }
-    .ep-btn:hover {
-        background-color: #f0f0f0;
-        transform: translateY(-2px);
+
+    .ep-dropdown-item:hover {
+        background: rgba(255, 255, 255, 0.1);
     }
-    .ep-btn .play-icon {
-        width: 16px;
-        height: 16px;
+
+    .ep-dropdown-item .play-icon {
+        width: 14px;
+        height: 14px;
         fill: currentColor;
+        opacity: 0.7;
     }
 `;
 document.head.appendChild(styleTag);
@@ -127,16 +194,13 @@ async function loadDataFiles() {
   if (!id) return;
 
   try {
-    // 1. Fetch and parse search.js safely to load the movies array
     const searchResponse = await fetch("/JS/search.js");
     const searchText = await searchResponse.text();
     const cleanSearchText = searchText.replace(/const\s+movies\s*=/, "return ");
     const parseSearch = new Function(cleanSearchText);
     window.searchArray = parseSearch();
 
-    // 2. Initialize Series Layout & Background
     init();
-
   } catch (error) {
     console.error("Critical error while reading data engines safely:", error);
     init(); 
@@ -146,14 +210,12 @@ async function loadDataFiles() {
 async function init() {
     if (!series) return;
 
-    // Fill Basic Info
     const titleEl = document.getElementById("title");
     const descEl = document.getElementById("desc");
     
     if (titleEl) titleEl.textContent = series.title;
     if (descEl) descEl.textContent = series.desc;
 
-    // Locate poster image from searchArray securely
     let imagePath = "";
     if (window.searchArray) {
       const matchedSearchItem = window.searchArray.find(m => {
@@ -170,12 +232,10 @@ async function init() {
       }
     }
 
-    // Fallback if not matched in searchArray
     if (!imagePath && series.image) {
       imagePath = series.image.startsWith('/') ? series.image : `/${series.image}`;
     }
 
-    // Setup Sharp Background Poster Container
     let ambientBg = document.getElementById("ambientBg");
     if (!ambientBg) {
       ambientBg = document.createElement("div");
@@ -191,38 +251,69 @@ async function init() {
 
     if (series.seasons && series.seasons.length > 0) {
         const storageKey = `lastSeason_${id}`;
-        
-        // 1. Fetch last watched season from IndexedDB
         const lastSeasonNum = await getProgress(storageKey);
 
-        // 2. Sort: Last watched season comes first
         let displayOrder = [...series.seasons];
         if (lastSeasonNum) {
             displayOrder.sort((a, b) => (a.number == lastSeasonNum ? -1 : 1));
         }
 
-        const showEpisodes = (season) => {
+        const renderActiveSeasonContent = (season) => {
             if (!episodeContainer) return;
             episodeContainer.innerHTML = "";
-            for (let i = 1; i <= season.totalEpisodes; i++) {
-                const btn = document.createElement("button");
-                btn.className = "ep-btn";
-                
-                // Episode text + SVG Play icon
-                btn.innerHTML = `
-                    <span>Episode ${i}</span>
-                    <svg class="play-icon" viewBox="0 0 24 24">
-                        <path d="M8 5v14l11-7z"/>
-                    </svg>
-                `;
 
-                const episodeKey = `${season.prefix}${i}`;
-                btn.onclick = () => window.location.href = `videoplayer.html?ep=${episodeKey}`;
-                episodeContainer.appendChild(btn);
+            // 1. Create Big Play Button for Episode 1
+            const firstEpKey = `${season.prefix}1`;
+            const bigPlayBtn = document.createElement("button");
+            bigPlayBtn.className = "big-play-btn";
+            bigPlayBtn.innerHTML = `
+                <svg class="play-icon" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z"/>
+                </svg>
+                <span>Play Episode 1</span>
+            `;
+            bigPlayBtn.onclick = () => window.location.href = `videoplayer.html?ep=${firstEpKey}`;
+            episodeContainer.appendChild(bigPlayBtn);
+
+            // 2. Create Dropdown Accordion for all episodes if totalEpisodes > 1
+            if (season.totalEpisodes > 1) {
+                const dropdownWrapper = document.createElement("div");
+                dropdownWrapper.className = "episodes-dropdown-container";
+
+                const dropdownToggle = document.createElement("button");
+                dropdownToggle.className = "episodes-dropdown-toggle";
+                dropdownToggle.innerHTML = `<span>More Episodes (${season.totalEpisodes})</span> <span>▼</span>`;
+
+                const listInner = document.createElement("div");
+                listInner.className = "episodes-list-inner";
+
+                // Populate remaining episodes starting from episode 2 onwards
+                for (let i = 2; i <= season.totalEpisodes; i++) {
+                    const epBtn = document.createElement("button");
+                    epBtn.className = "ep-dropdown-item";
+                    epBtn.innerHTML = `
+                        <span>Episode ${i}</span>
+                        <svg class="play-icon" viewBox="0 0 24 24">
+                            <path d="M8 5v14l11-7z"/>
+                        </svg>
+                    `;
+
+                    const episodeKey = `${season.prefix}${i}`;
+                    epBtn.onclick = () => window.location.href = `videoplayer.html?ep=${episodeKey}`;
+                    listInner.appendChild(epBtn);
+                }
+
+                dropdownToggle.onclick = () => {
+                    listInner.classList.toggle("open");
+                    dropdownToggle.querySelector("span:last-child").textContent = listInner.classList.contains("open") ? "▲" : "▼";
+                };
+
+                dropdownWrapper.appendChild(dropdownToggle);
+                dropdownWrapper.appendChild(listInner);
+                episodeContainer.appendChild(dropdownWrapper);
             }
         };
 
-        // 3. Build Season Buttons
         if (seasonNav) {
             seasonNav.innerHTML = "";
             displayOrder.forEach((season, index) => {
@@ -232,11 +323,10 @@ async function init() {
 
                 if (index === 0) {
                     seasonBtn.classList.add("active");
-                    showEpisodes(season);
+                    renderActiveSeasonContent(season);
                 }
 
                 seasonBtn.onclick = async () => {
-                    // Save to IndexedDB and reload
                     await saveProgress(storageKey, season.number);
                     location.reload();
                 };
@@ -247,5 +337,4 @@ async function init() {
     }
 }
 
-// Run the safe loader
 loadDataFiles();
