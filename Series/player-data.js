@@ -953,5 +953,14 @@ window.videoData = {
   "2BrokeGirls-S1E20": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/2.Broke.Girls.S01E20.mkv",
   "2BrokeGirls-S1E21": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/2.Broke.Girls.S01E21.mkv",
   "2BrokeGirls-S1E22": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/2.Broke.Girls.S01E22.mkv",
-  "2BrokeGirls-S1E23": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/2.Broke.Girls.S01E23.mkv"
+  "2BrokeGirls-S1E23": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/2.Broke.Girls.S01E23.mkv",
+  "TulsaKing-S1E1": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Tulsa.King.S01E01.mkv",
+  "TulsaKing-S1E2": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Tulsa.King.S01E02.mkv",
+  "TulsaKing-S1E3": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Tulsa.King.S01E03.mkv",
+  "TulsaKing-S1E4": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Tulsa.King.S01E04.mkv",
+  "TulsaKing-S1E5": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Tulsa.King.S01E05.mkv",
+  "TulsaKing-S1E6": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Tulsa.King.S01E06.mkv",
+  "TulsaKing-S1E7": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Tulsa.King.S01E07.mkv",
+  "TulsaKing-S1E8": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Tulsa.King.S01E08.mkv",
+  "TulsaKing-S1E9": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Tulsa.King.S01E09.mkv"
 };
