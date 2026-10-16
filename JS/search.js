@@ -628,6 +628,12 @@ const movies = [
     genres: ["Drama"],
     image: "images/VisionQuest.jpg",
     link: "Series/series?series=VisionQuest"
+  },
+  {
+    title: "2 Broke Girls",
+    genres: ["Sitcom"],
+    image: "images/2BrokeGirls.jpg",
+    link: "Series/series?series=2BrokeGirls"
   }
 ];
 
