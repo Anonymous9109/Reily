@@ -241,5 +241,13 @@ desc: "The daughter of a former Hooter's waitress and an ex-pro wrestler, Margo 
     seasons: [
       { number: 1, prefix: "2BrokeGirls-S1E", totalEpisodes: 23 }
     ]
+  },
+  "TulsaKing": {
+    title: "Tulsa King",
+    desc: "New York mafia capo Dwight \"The General\" Manfredi is released from prison after 25 years and exiled by his boss to set up shop in Tulsa, Okla.; realizing that his mob family may not have his best interests in mind, Dwight slowly builds a crew.",
+    video: "",
+    seasons: [
+      { number: 1, prefix: "TulsaKing-S1E", totalEpisodes: 9 }
+    ]
   }
 };
