@@ -233,5 +233,13 @@ desc: "The daughter of a former Hooter's waitress and an ex-pro wrestler, Margo 
     seasons: [
       { number: 1, prefix: "VisionQuest-S1E", totalEpisodes: 2 }
     ]
+  },
+  "2BrokeGirls": {
+    title: "2 Broke Girls",
+    desc: "Max and Caroline, two girls in their mid-twenties, work at a Brooklyn restaurant as waitresses. Together, they dream of starting up their cupcake business, but always find themselves without money.",
+    video: "",
+    seasons: [
+      { number: 1, prefix: "2BrokeGirls-S1E", totalEpisodes: 23 }
+    ]
   }
 };
