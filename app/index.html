@@ -986,7 +986,7 @@
     <div id="randomContainer"></div>
 </div>
 
-<footer>
+<footer id="app-footer">
     <button id="home-trigger" class="nav-item active">
         <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
         <span>Home</span>
@@ -1117,6 +1117,23 @@
         return (sessionToken && sessionToken.trim() !== "") || (currentUser !== null);
     }
 
+    function updateFooterVisibility() {
+        const footer = document.getElementById('app-footer');
+        const authGate = document.getElementById('auth-gate');
+        const usernameModal = document.getElementById('usernameModal');
+        
+        const isAuthVisible = authGate && authGate.style.display === 'flex';
+        const isModalVisible = usernameModal && usernameModal.style.display === 'block';
+
+        if (footer) {
+            if (isAuthVisible || isModalVisible) {
+                footer.style.display = 'none';
+            } else {
+                footer.style.display = 'flex';
+            }
+        }
+    }
+
     function updateOfflineUIState() {
         const offlineBanner = document.getElementById('offline-notice-banner');
         const authGate = document.getElementById('auth-gate');
@@ -1133,6 +1150,7 @@
         } else {
             if (offlineBanner) offlineBanner.style.display = 'none';
         }
+        updateFooterVisibility();
     }
 
     // AUTOMATIC RE-HYDRATION ON BACK-FORWARD CACHE OR VISIBILITY RESTORE
@@ -1145,6 +1163,7 @@
                 fetchAndDisplayUserData(true);
             }
         }
+        updateFooterVisibility();
     }
 
     window.addEventListener('pageshow', function(event) {
@@ -1253,6 +1272,7 @@
         } else if (authState === "reset") {
             title.innerText = "Create New Password"; emailInput.placeholder = "6-Digit Reset Code"; passwordInput.placeholder = "New Password"; forgotLink.style.display = 'none'; submitBtn.innerText = "Update Password"; switchToggle.style.display = 'block'; switchToggle.innerText = "Back to Sign In";
         }
+        updateFooterVisibility();
     }
 
     function gameStateResetRequired() {
@@ -1430,6 +1450,7 @@
             toggleUsernameModal(false);
             const profileContent = document.querySelector("#sliding-profile .profile-content");
             if (profileContent) profileContent.classList.remove("locked-content");
+            updateFooterVisibility();
             return;
         }
 
@@ -1446,12 +1467,14 @@
             if (modal) modal.style.display = "none";
             if (profileContent) profileContent.classList.remove("locked-content");
         }
+        updateFooterVisibility();
     }
 
     function toggleUsernameModal(forceState = null) {
         if (isAppOffline()) {
             const modal = document.getElementById("usernameModal");
             if (modal) modal.style.display = "none";
+            updateFooterVisibility();
             return;
         }
 
@@ -1464,6 +1487,7 @@
             const isHidden = modal.style.display === "none" || modal.style.display === "";
             modal.style.display = isHidden ? "block" : "none";
         }
+        updateFooterVisibility();
     }
 
     async function saveUsername() {
@@ -1537,12 +1561,14 @@
             document.getElementById('profile-initial').innerText = currentUser.username.charAt(0).toUpperCase();
 
             buildHomeFeed();
+            updateFooterVisibility();
             return;
         }
 
         if (!sessionToken) {
             document.getElementById('auth-gate').style.display = 'flex';
             renderAuthState();
+            updateFooterVisibility();
             return;
         }
 
@@ -1559,6 +1585,7 @@
                 authState = "auth";
                 renderAuthState();
                 document.getElementById('auth-gate').style.display = 'flex';
+                updateFooterVisibility();
                 return;
             }
 
@@ -1568,6 +1595,7 @@
                 const dataSnapshotString = JSON.stringify(result.data);
                 if (dataSnapshotString === lastKnownDataHash && !forceRebuild) {
                     checkUsernameModalGuard();
+                    updateFooterVisibility();
                     return; 
                 }
                 lastKnownDataHash = dataSnapshotString;
@@ -1616,9 +1644,11 @@
             if (isAppOffline()) {
                 toggleUsernameModal(false);
                 buildHomeFeed();
+                updateFooterVisibility();
                 return;
             }
         }
+        updateFooterVisibility();
     }
 
     function logOut() {
@@ -1642,6 +1672,7 @@
             document.getElementById('auth-gate').style.display = 'flex';
         }
         showToast("Signed out cleanly.");
+        updateFooterVisibility();
     }
 
     window.addEventListener('DOMContentLoaded', () => { 
@@ -1649,6 +1680,7 @@
         renderAuthState(); 
         fetchAndDisplayUserData(true); 
         startCloudflareRealTimeSync(); 
+        updateFooterVisibility();
     });
 </script>
 
@@ -2181,14 +2213,9 @@
         const genreContainer = document.getElementById("genreContainer");
         if(!randomContainer || !genreContainer || !watchAgainContainer) return;
 
-        // Prevent rebuilds if already built for the current 20-minute block (unless DOM elements are empty)
-        if (lastHomeFeedBuildTimeBlock === currentBlock && randomContainer.children.length > 0) {
-            return;
-        }
-        lastHomeFeedBuildTimeBlock = currentBlock;
-
         const filteredGlobalCatalog = movies.filter(m => !userUnwantedCache.includes(m.title.toLowerCase()));
 
+        // Always update and render the Watch Again (Watch History) row dynamically in exact recent order
         if (userWatchHistoryCache.length > 0) {
             const uniqueTitles = [];
             const watchAgainMovies = [];
@@ -2211,6 +2238,12 @@
                 watchAgainMovies.forEach(m => watchAgainRow.appendChild(createMovieCard(m)));
             } else { watchAgainContainer.innerHTML = ""; }
         } else { watchAgainContainer.innerHTML = ""; }
+
+        // Skip re-rendering Random Picks and Genres if within the same 20-minute block and already built
+        if (lastHomeFeedBuildTimeBlock === currentBlock && randomContainer.children.length > 0) {
+            return;
+        }
+        lastHomeFeedBuildTimeBlock = currentBlock;
 
         randomContainer.innerHTML = `
             <div class="section">
