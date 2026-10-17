@@ -2153,21 +2153,39 @@
         } catch (err) { window.location.href = targetUrl; }
     }
 
-    function shuffleArray(arr) {
+    // Seeded Random generator based on 20-minute time blocks
+    function getSeededRandom(seedOffset = 0) {
+        const timeBlock = Math.floor(Date.now() / (20 * 60 * 1000));
+        let x = Math.sin(timeBlock + seedOffset) * 10000;
+        return x - Math.floor(x);
+    }
+
+    // Deterministic shuffle using a 20-minute seed
+    function shuffleArraySeeded(arr, seedOffset = 0) {
         const target = [...arr];
         for (let i = target.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
+            const j = Math.floor(getSeededRandom(seedOffset + i) * (i + 1));
             [target[i], target[j]] = [target[j], target[i]];
         }
         return target;
     }
 
+    let lastHomeFeedBuildTimeBlock = -1;
+
     function buildHomeFeed() {
         if (typeof movies === 'undefined' || !movies.length) return;
+
+        const currentBlock = Math.floor(Date.now() / (20 * 60 * 1000));
         const watchAgainContainer = document.getElementById("watchAgainContainer");
         const randomContainer = document.getElementById("randomContainer");
         const genreContainer = document.getElementById("genreContainer");
         if(!randomContainer || !genreContainer || !watchAgainContainer) return;
+
+        // Prevent rebuilds if already built for the current 20-minute block (unless DOM elements are empty)
+        if (lastHomeFeedBuildTimeBlock === currentBlock && randomContainer.children.length > 0) {
+            return;
+        }
+        lastHomeFeedBuildTimeBlock = currentBlock;
 
         const filteredGlobalCatalog = movies.filter(m => !userUnwantedCache.includes(m.title.toLowerCase()));
 
@@ -2190,7 +2208,7 @@
                     </div>
                 `;
                 const watchAgainRow = watchAgainContainer.querySelector(".movies");
-                shuffleArray(watchAgainMovies).forEach(m => watchAgainRow.appendChild(createMovieCard(m)));
+                watchAgainMovies.forEach(m => watchAgainRow.appendChild(createMovieCard(m)));
             } else { watchAgainContainer.innerHTML = ""; }
         } else { watchAgainContainer.innerHTML = ""; }
 
@@ -2201,7 +2219,7 @@
             </div>
         `;
         const randomRow = randomContainer.querySelector(".movies");
-        shuffleArray(filteredGlobalCatalog).slice(0, 12).forEach(m => randomRow.appendChild(createMovieCard(m)));
+        shuffleArraySeeded(filteredGlobalCatalog, 1).slice(0, 12).forEach(m => randomRow.appendChild(createMovieCard(m)));
 
         const genreMap = {};
         filteredGlobalCatalog.forEach(m => {
@@ -2213,7 +2231,8 @@
         });
 
         genreContainer.innerHTML = "";
-        shuffleArray(Object.keys(genreMap)).forEach(genre => {
+        const genreKeys = shuffleArraySeeded(Object.keys(genreMap), 2);
+        genreKeys.forEach((genre, idx) => {
             const section = document.createElement("div");
             section.className = "section";
             section.innerHTML = `
@@ -2221,7 +2240,7 @@
                 <div class="movies"></div>
             `;
             const row = section.querySelector(".movies");
-            shuffleArray(genreMap[genre]).forEach(m => row.appendChild(createMovieCard(m)));
+            shuffleArraySeeded(genreMap[genre], idx + 10).forEach(m => row.appendChild(createMovieCard(m)));
             genreContainer.appendChild(section);
         });
     }
