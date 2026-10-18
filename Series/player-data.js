@@ -981,5 +981,19 @@ window.videoData = {
       lang: "en",
       src: "../subtitles/2BrokeGirls/2BrokeGirls-S1E1-English.txt"
     }
+  ],
+  "2BrokeGirls-S1E2-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/2BrokeGirls/2BrokeGirls-S1E2-English.txt"
+    }
+  ],
+  "2BrokeGirls-S1E3-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/2BrokeGirls/2BrokeGirls-S1E3-English.txt"
+    }
   ]
 };
