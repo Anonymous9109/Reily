@@ -1,6 +1,6 @@
 {
   "versionCode": 1,
-  "versionName": "1.27",
+  "versionName": "1.28",
   "downloadUrl": "https://raw.githubusercontent.com/Anonymous9109/Reily/main/app-release.apk",
-  "changelog": "new update system, new offline app support , new download manager , advanced movie player for offline , full offline mode"
+  "changelog": "improved offline video player, app crashes fixed , full support for series and TV shows"
 }
