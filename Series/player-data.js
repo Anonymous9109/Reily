@@ -962,5 +962,17 @@ window.videoData = {
   "TulsaKing-S1E6": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Tulsa.King.S01E06.mkv",
   "TulsaKing-S1E7": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Tulsa.King.S01E07.mkv",
   "TulsaKing-S1E8": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Tulsa.King.S01E08.mkv",
-  "TulsaKing-S1E9": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Tulsa.King.S01E09.mkv"
+  "TulsaKing-S1E9": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Tulsa.King.S01E09.mkv",
+  "Suits-S1E1": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/SuitsS01E01.mkv",
+  "Suits-S1E2": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/SuitsS01E02.mkv",
+  "Suits-S1E3": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/SuitsS01E03.mkv",
+  "Suits-S1E4": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/SuitsS01E04.mkv",
+  "Suits-S1E5": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/SuitsS01E05.mkv",
+  "Suits-S1E6": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/SuitsS01E06.mkv",
+  "Suits-S1E7": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/SuitsS01E07.mkv",
+  "Suits-S1E8": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/SuitsS01E08.mkv",
+  "Suits-S1E9": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/SuitsS01E09.mkv",
+  "Suits-S1E10": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/SuitsS01E10.mkv",
+  "Suits-S1E11": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/SuitsS01E11.mkv",
+  "Suits-S1E12": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/SuitsS01E12.mkv"
 };
