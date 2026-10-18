@@ -995,5 +995,103 @@ window.videoData = {
       lang: "en",
       src: "../subtitles/2BrokeGirls/2BrokeGirls-S1E3-English.txt"
     }
+  ],
+  "2BrokeGirls-S1E4-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/2BrokeGirls/2BrokeGirls-S1E4-English.txt"
+    }
+  ],
+  "2BrokeGirls-S1E5-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/2BrokeGirls/2BrokeGirls-S1E5-English.txt"
+    }
+  ],
+  "2BrokeGirls-S1E6-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/2BrokeGirls/2BrokeGirls-S1E6-English.txt"
+    }
+  ],
+  "2BrokeGirls-S1E7-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/2BrokeGirls/2BrokeGirls-S1E7-English.txt"
+    }
+  ],
+  "2BrokeGirls-S1E8-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/2BrokeGirls/2BrokeGirls-S1E8-English.txt"
+    }
+  ],
+  "2BrokeGirls-S1E9-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/2BrokeGirls/2BrokeGirls-S1E9-English.txt"
+    }
+  ],
+  "2BrokeGirls-S1E10-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/2BrokeGirls/2BrokeGirls-S1E10-English.txt"
+    }
+  ],
+  "2BrokeGirls-S1E11-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/2BrokeGirls/2BrokeGirls-S1E11-English.txt"
+    }
+  ],
+  "2BrokeGirls-S1E12-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/2BrokeGirls/2BrokeGirls-S1E12-English.txt"
+    }
+  ],
+  "2BrokeGirls-S1E13-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/2BrokeGirls/2BrokeGirls-S1E13-English.txt"
+    }
+  ],
+  "2BrokeGirls-S1E14-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/2BrokeGirls/2BrokeGirls-S1E14-English.txt"
+    }
+  ],
+  "2BrokeGirls-S1E15-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/2BrokeGirls/2BrokeGirls-S1E15-English.txt"
+    }
+  ],
+  "2BrokeGirls-S1E16-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/2BrokeGirls/2BrokeGirls-S1E16-English.txt"
+    }
+  ],
+  "2BrokeGirls-S1E17-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/2BrokeGirls/2BrokeGirls-S1E17-English.txt"
+    }
   ]
 };
