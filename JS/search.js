@@ -640,6 +640,12 @@ const movies = [
     genres: ["Drama"],
     image: "images/TulsaKing.jpg",
     link: "Series/series?series=TulsaKing"
+  },
+  {
+    title: "Suits",
+    genres: ["Drama"],
+    image: "images/Suits.jpg",
+    link: "Series/series?series=Suits"
   }
 ];
 
