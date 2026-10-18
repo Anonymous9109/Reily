@@ -249,5 +249,13 @@ desc: "The daughter of a former Hooter's waitress and an ex-pro wrestler, Margo 
     seasons: [
       { number: 1, prefix: "TulsaKing-S1E", totalEpisodes: 9 }
     ]
+  },
+  "Suits": {
+    title: "Suits",
+    desc: "A college dropout, Mike Ross, possesses immense competence. A set of circumstances leads to him effectively working as a law associate for Harvey Specter despite not having gone to law school.",
+    video: "",
+    seasons: [
+      { number: 1, prefix: "Suits-S1E", totalEpisodes: 12 }
+    ]
   }
 };
