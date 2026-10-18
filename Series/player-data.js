@@ -974,5 +974,12 @@ window.videoData = {
   "Suits-S1E9": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/SuitsS01E09.mkv",
   "Suits-S1E10": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/SuitsS01E10.mkv",
   "Suits-S1E11": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/SuitsS01E11.mkv",
-  "Suits-S1E12": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/SuitsS01E12.mkv"
+  "Suits-S1E12": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/SuitsS01E12.mkv",
+  "2BrokeGirls-S1E1-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/2BrokeGirls/2BrokeGirls-S1E1-English.txt"
+    }
+  ]
 };
