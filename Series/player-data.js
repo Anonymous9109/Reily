@@ -1093,5 +1093,54 @@ window.videoData = {
       lang: "en",
       src: "../subtitles/2BrokeGirls/2BrokeGirls-S1E17-English.txt"
     }
+  ],
+  "2BrokeGirls-S1E18-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/2BrokeGirls/2BrokeGirls-S1E18-English.txt"
+    }
+  ],
+  "2BrokeGirls-S1E19-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/2BrokeGirls/2BrokeGirls-S1E19-English.txt"
+    }
+  ],
+  "2BrokeGirls-S1E20-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/2BrokeGirls/2BrokeGirls-S1E20-English.txt"
+    }
+  ],
+  "2BrokeGirls-S1E21-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/2BrokeGirls/2BrokeGirls-S1E21-English.txt"
+    }
+  ],
+  "2BrokeGirls-S1E22-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/2BrokeGirls/2BrokeGirls-S1E22-English.txt"
+    }
+  ],
+  "2BrokeGirls-S1E23-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/2BrokeGirls/2BrokeGirls-S1E23-English.txt"
+    }
+  ],
+  "2BrokeGirls-S1E24-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/2BrokeGirls/2BrokeGirls-S1E24-English.txt"
+    }
   ]
 };
