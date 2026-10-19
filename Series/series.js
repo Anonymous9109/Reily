@@ -257,5 +257,13 @@ desc: "The daughter of a former Hooter's waitress and an ex-pro wrestler, Margo 
     seasons: [
       { number: 1, prefix: "Suits-S1E", totalEpisodes: 12 }
     ]
+  },
+  "HouseofCards": {
+    title: "House of Cards",
+    desc: "After Frank gets appointed as the Secretary of the State, he and his wife embark on a mission to take revenge against all the people who betrayed him.",
+    video: "",
+    seasons: [
+      { number: 1, prefix: "HouseofCards-S1E", totalEpisodes: 13 }
+    ]
   }
 };
