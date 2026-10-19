@@ -646,6 +646,12 @@ const movies = [
     genres: ["Drama"],
     image: "images/Suits.jpg",
     link: "Series/series?series=Suits"
+  },
+  {
+    title: "House of Cards",
+    genres: ["Thriller"],
+    image: "images/HouseofCards.jpg",
+    link: "Series/series?series=HouseofCards"
   }
 ];
 
