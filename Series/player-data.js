@@ -1142,5 +1142,18 @@ window.videoData = {
       lang: "en",
       src: "../subtitles/2BrokeGirls/2BrokeGirls-S1E24-English.txt"
     }
-  ]
+  ],
+  "HouseofCards-S1E1": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/HouseofCards-S01E01.mkv",
+  "HouseofCards-S1E2": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/HouseofCards-S01E02.mkv",
+  "HouseofCards-S1E3": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/HouseofCards-S01E03.mkv",
+  "HouseofCards-S1E4": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/HouseofCards-S01E04.mkv",
+  "HouseofCards-S1E5": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/HouseofCards-S01E05.mkv",
+  "HouseofCards-S1E6": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/HouseofCards-S01E06.mkv",
+  "HouseofCards-S1E7": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/HouseofCards-S01E07.mkv",
+  "HouseofCards-S1E8": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/HouseofCards-S01E08.mkv",
+  "HouseofCards-S1E9": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/HouseofCards-S01E09.mkv",
+  "HouseofCards-S1E10": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/HouseofCards-S01E10.mkv",
+  "HouseofCards-S1E11": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/HouseofCards-S01E11.mkv",
+  "HouseofCards-S1E12": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/HouseofCards-S01E12.mkv",
+  "HouseofCards-S1E13": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/HouseofCards-S01E13.mkv"
 };
