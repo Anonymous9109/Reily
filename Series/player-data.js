@@ -1155,5 +1155,13 @@ window.videoData = {
   "HouseofCards-S1E10": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/HouseofCards-S01E10.mkv",
   "HouseofCards-S1E11": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/HouseofCards-S01E11.mkv",
   "HouseofCards-S1E12": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/HouseofCards-S01E12.mkv",
-  "HouseofCards-S1E13": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/HouseofCards-S01E13.mkv"
+  "HouseofCards-S1E13": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/HouseofCards-S01E13.mkv",
+  "MargosGotMoneyTroubles-S1E1": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Margos.Got.Money.Troubles.S01E01.mkv",
+  "MargosGotMoneyTroubles-S1E2": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Margos.Got.Money.Troubles.S01E02.mkv",
+  "MargosGotMoneyTroubles-S1E3": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Margos.Got.Money.Troubles.S01E03.mkv",
+  "MargosGotMoneyTroubles-S1E4": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Margos.Got.Money.Troubles.S01E04.mkv",
+  "MargosGotMoneyTroubles-S1E5": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Margos.Got.Money.Troubles.S01E05.mkv",
+  "MargosGotMoneyTroubles-S1E6": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Margos.Got.Money.Troubles.S01E06.mkv",
+  "MargosGotMoneyTroubles-S1E7": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Margos.Got.Money.Troubles.S01E07.mkv",
+  "MargosGotMoneyTroubles-S1E8": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Margos.Got.Money.Troubles.S01E08.mkv"
 };
