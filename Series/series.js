@@ -265,5 +265,13 @@ desc: "The daughter of a former Hooter's waitress and an ex-pro wrestler, Margo 
     seasons: [
       { number: 1, prefix: "HouseofCards-S1E", totalEpisodes: 13 }
     ]
+  },
+  "MargosGotMoneyTroubles": {
+    title: "Margos Got Money Troubles",
+    desc: "The daughter of a former Hooter's waitress and an ex-pro wrestler, Margo is a recent college dropout and aspiring writer. Faced with a new baby, mounting pile of bills, and dwindling number of ways to pay them, Margo must find a way forward.",
+    video: "",
+    seasons: [
+      { number: 1, prefix: "MargosGotMoneyTroubles-S1E", totalEpisodes: 8 }
+    ]
   }
 };
