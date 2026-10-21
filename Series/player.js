@@ -165,6 +165,70 @@ document.addEventListener("DOMContentLoaded", async () => {
     .back-btn { left:12px; }  
     .next-btn { right:12px; }  
 
+    /* --- Next Episode & Credits Prompt Styling --- */
+    #nextEpOverlay {
+      position: absolute;
+      bottom: -100px;
+      right: 5%;
+      display: flex;
+      gap: 12px;
+      z-index: 45;
+      opacity: 0;
+      visibility: hidden;
+      transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.2s, visibility 0.2s;
+    }
+    #nextEpOverlay.show-controls {
+      bottom: 95px;
+    }
+    #nextEpOverlay.near-end {
+      bottom: 95px !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+    }
+    .action-prompt-btn {
+      position: relative;
+      border: none;
+      padding: 12px 22px;
+      border-radius: 8px;
+      font-family: sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      transition: transform 0.15s ease;
+    }
+    .action-prompt-btn:hover {
+      transform: scale(1.05);
+    }
+    #watchCreditsBtn {
+      background: rgba(30, 30, 30, 0.85);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(8px);
+    }
+    #nextEpTimerBtn {
+      background: #444444;
+      color: #000000;
+    }
+    #nextEpTimerBtn .timer-fill {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 0%;
+      background: #ffffff;
+      z-index: 1;
+      transition: width 0.1s linear;
+    }
+    #nextEpTimerBtn span {
+      position: relative;
+      z-index: 2;
+    }
+
     #loadingRing{  
       position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);  
       width:52px; height:52px; border-radius:50%;  
@@ -217,7 +281,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   </svg>
 </button>
 <button id="skipBtn"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M17 3.5C17 3.22386 16.7761 3 16.5 3C16.2239 3 16 3.22386 16 3.5V5.70245C15.0879 4.66988 13.9178 3.88325 12.597 3.43107C10.7608 2.80243 8.75857 2.86309 6.96376 3.60171C5.16895 4.34033 3.70403 5.7065 2.84215 7.44549C2.71953 7.69291 2.82069 7.9929 3.06812 8.11552C3.31554 8.23815 3.61552 8.13698 3.73815 7.88956C4.49224 6.36804 5.77396 5.17272 7.34432 4.52646C8.91469 3.88021 10.6665 3.82714 12.2731 4.37716C13.6864 4.861 14.9024 5.78248 15.7496 7H12.5C12.2239 7 12 7.22386 12 7.5C12 7.77614 12.2239 8 12.5 8H16.5C16.7761 8 17 7.77614 17 7.5V3.5ZM10.5071 11.1292C10.9058 10.4367 11.568 10 12.5029 10C13.4379 10 14.1001 10.4367 14.4988 11.1292C14.8753 11.7833 15.0029 12.6366 15.0029 13.5C15.0029 14.3634 14.8753 15.2167 14.4988 15.8708C14.1001 16.5633 13.4379 17 12.5029 17C11.568 17 10.9058 16.5633 10.5071 15.8708C10.1306 15.2167 10.0029 14.3634 10.0029 13.5C10.0029 12.6366 10.1306 11.7833 10.5071 11.1292ZM11.3738 11.6281C11.1253 12.0598 11.0029 12.7065 11.0029 13.5C11.0029 14.2935 11.1253 14.9402 11.3738 15.3719C11.6001 15.7651 11.9379 16 12.5029 16C13.068 16 13.4058 15.7651 13.6321 15.3719C13.8806 14.9402 14.0029 14.2349 14.0029 13.5C14.0029 12.7065 13.8806 12.0598 13.6321 11.6281C13.4058 11.2349 13.068 11 12.5029 11C11.9379 11 11.6001 11.2349 11.3738 11.6281ZM8.00005 10.5C8.00005 10.3156 7.89856 10.1462 7.73598 10.0592C7.5734 9.97215 7.37613 9.98169 7.2227 10.084L5.7227 11.084C5.49294 11.2372 5.43085 11.5476 5.58403 11.7774C5.7372 12.0071 6.04764 12.0692 6.2774 11.916L7.00005 11.4343V16.5C7.00005 16.7761 7.22391 17 7.50005 17C7.7762 17 8.00005 16.7761 8.00005 16.5V10.5Z" fill="white"/>
+<path d="M17 3.5C17 3.22386 16.7761 3 16.5 3C16.2239 3 16 3.22386 16 3.5V5.70245C15.0879 4.66988 13.9178 3.88325 12.597 3.43107C10.7608 2.80243 8.75857 2.86309 6.96376 3.60171C5.16895 4.34033 3.70403 5.7065 2.84215 7.44549C2.71953 7.69291 2.82069 7.9929 3.06812 8.11552C3.31554 8.23815 3.61552 8.13698 3.73815 7.88956C4.49224 6.36804 5.77396 5.17272 7.34432 4.52646C8.91469 3.88021 10.6665 3.82714 12.2731 4.37716C13.6864 4.861 14.9024 5.78248 15.7496 7H12.5C12.2239 7 12 7.22386 12 7.5C12 7.77614 12 8 12.5 8H16.5C16.7761 8 17 7.77614 17 7.5V3.5ZM10.5071 11.1292C10.9058 10.4367 11.568 10 12.5029 10C13.4379 10 14.1001 10.4367 14.4988 11.1292C14.8753 11.7833 15.0029 12.6366 15.0029 13.5C15.0029 14.3634 14.8753 15.2167 14.4988 15.8708C14.1001 16.5633 13.4379 17 12.5029 17C11.568 17 10.9058 16.5633 10.5071 15.8708C10.1306 15.2167 10.0029 14.3634 10.0029 13.5C10.0029 12.6366 10.1306 11.7833 10.5071 11.1292ZM11.3738 11.6281C11.1253 12.0598 11.0029 12.7065 11.0029 13.5C11.0029 14.2935 11.1253 14.9402 11.3738 15.3719C11.6001 15.7651 11.9379 16 12.5029 16C13.068 16 13.4058 15.7651 13.6321 15.3719C13.8806 14.9402 14.0029 14.2349 14.0029 13.5C14.0029 12.7065 13.8806 12.0598 13.6321 11.6281C13.4058 11.2349 13.068 11 12.5029 11C11.9379 11 11.6001 11.2349 11.3738 11.6281ZM8.00005 10.5C8.00005 10.3156 7.89856 10.1462 7.73598 10.0592C7.5734 9.97215 7.37613 9.98169 7.2227 10.084L5.7227 11.084C5.49294 11.2372 5.43085 11.5476 5.58403 11.7774C5.7372 12.0071 6.04764 12.0692 6.2774 11.916L7.00005 11.4343V16.5C7.00005 16.7761 7.22391 17 7.50005 17C7.7762 17 8.00005 16.7761 8.00005 16.5V10.5Z" fill="white"/>
 </svg>
 </button>
   `;
@@ -326,7 +390,26 @@ document.addEventListener("DOMContentLoaded", async () => {
   const loadingRing = document.createElement("div");
   loadingRing.id = "loadingRing";
 
-  root.append(video, subDisplay, controls, progressContainer, timerDisplay, ccBtn, subMenu, backBtn, nextBtn, loadingRing, backToPrev, downloadBtn);
+  // --- Create Next Episode & Watch Credits Overlay ---
+  const nextEpOverlay = document.createElement("div");
+  nextEpOverlay.id = "nextEpOverlay";
+
+  const watchCreditsBtn = document.createElement("button");
+  watchCreditsBtn.id = "watchCreditsBtn";
+  watchCreditsBtn.className = "action-prompt-btn";
+  watchCreditsBtn.textContent = "Watch Credits";
+
+  const nextEpTimerBtn = document.createElement("button");
+  nextEpTimerBtn.id = "nextEpTimerBtn";
+  nextEpTimerBtn.className = "action-prompt-btn";
+  nextEpTimerBtn.innerHTML = `
+    <div class="timer-fill" id="timerFill"></div>
+    <span>Next Episode</span>
+  `;
+
+  nextEpOverlay.append(watchCreditsBtn, nextEpTimerBtn);
+
+  root.append(video, subDisplay, controls, progressContainer, timerDisplay, ccBtn, subMenu, backBtn, nextBtn, loadingRing, backToPrev, downloadBtn, nextEpOverlay);
   document.body.appendChild(root);
 
   /********** 3) Smart Source Detection **********/
@@ -589,6 +672,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     for (const el of [controls, progressContainer, backToPrev, downloadBtn, timerDisplay, ccBtn]) {
       el.style.opacity = "1"; el.style.visibility = "visible";
     }
+    nextEpOverlay.style.opacity = "1";
+    nextEpOverlay.style.visibility = "visible";
+    nextEpOverlay.classList.add("show-controls");
+
     backBtn.style.opacity = window.backEpisodeLink ? "1" : "0";
     nextBtn.style.opacity = window.nextEpisodeLink ? "1" : "0";
     backBtn.style.visibility = window.backEpisodeLink ? "visible" : "hidden";
@@ -604,6 +691,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     for (const el of [controls, progressContainer, backToPrev, downloadBtn, backBtn, nextBtn, timerDisplay, ccBtn]) {
       el.style.opacity = "0"; el.style.visibility = "hidden";
     }
+    nextEpOverlay.style.opacity = "0";
+    nextEpOverlay.style.visibility = "hidden";
+    nextEpOverlay.classList.remove("show-controls");
+
     subMenu.style.display = "none";
     controlsVisible = false;
     clearTimeout(hideTimer);
@@ -627,11 +718,75 @@ document.addEventListener("DOMContentLoaded", async () => {
   rewindBtn.onclick = (e) => { e.stopPropagation(); video.currentTime = Math.max(0, video.currentTime - 10); };
   skipBtn.onclick = (e) => { e.stopPropagation(); video.currentTime = Math.min(video.duration, video.currentTime + 10); };
 
+  // --- Next Episode & Credits Logic ---
+  let autoNextTriggered = false;
+  let countdownInterval = null;
+  const timerFill = document.getElementById("timerFill");
+
+  function triggerNextEpisodeAction() {
+    if (window.nextEpisodeLink) {
+      location.href = window.nextEpisodeLink;
+    }
+  }
+
+  function startTenSecAutoNextTimer() {
+    if (autoNextTriggered) return;
+    autoNextTriggered = true;
+
+    let timeLeft = 10;
+    const intervalMs = 100;
+    const totalSteps = (timeLeft * 1000) / intervalMs;
+    let currentStep = 0;
+
+    countdownInterval = setInterval(() => {
+      currentStep++;
+      const percentage = (currentStep / totalSteps) * 100;
+      timerFill.style.width = `${Math.min(percentage, 100)}%`;
+
+      if (currentStep >= totalSteps) {
+        clearInterval(countdownInterval);
+        triggerNextEpisodeAction();
+      }
+    }, intervalMs);
+  }
+
+  function cancelNextEpisodeTimer() {
+    if (countdownInterval) clearInterval(countdownInterval);
+    autoNextTriggered = false; // Reset so it can trigger again if needed
+    timerFill.style.width = "0%";
+    nextEpOverlay.classList.remove("near-end");
+  }
+
+  watchCreditsBtn.onclick = (e) => {
+    e.stopPropagation();
+    cancelNextEpisodeTimer();
+  };
+
+  nextEpTimerBtn.onclick = (e) => {
+    e.stopPropagation();
+    // Clicking Next Episode manually starts the 10-second fill timer instantly from anywhere in the video!
+    startTenSecAutoNextTimer();
+  };
+
   video.addEventListener("timeupdate", () => {
     if (isFinite(video.duration) && !isDragging && !isResuming) {
       progressBar.style.width = (video.currentTime / video.duration) * 100 + "%";
       timerDisplay.textContent = `${formatTime(video.currentTime)} / ${formatTime(video.duration)}`;
       
+      const timeRemaining = video.duration - video.currentTime;
+
+      // 1. Force buttons to permanently stay visible 2 minutes before video ends
+      if (timeRemaining <= 120 && timeRemaining > 0) {
+        nextEpOverlay.classList.add("near-end");
+      } else {
+        nextEpOverlay.classList.remove("near-end");
+      }
+
+      // 2. Automatically start 10-second fill timer when regular end is reached (if not already running)
+      if (timeRemaining <= 10 && !autoNextTriggered) {
+        startTenSecAutoNextTimer();
+      }
+
       if (Math.abs(video.currentTime - lastSavedTime) >= 5) {
         saveWatchProgress();
       }
