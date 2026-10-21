@@ -165,7 +165,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     .back-btn { left:12px; }  
     .next-btn { right:12px; }  
 
-    /* --- Next Episode & Credits Prompt Styling --- */
+    /* --- Next Episode & Watch Credits Overlay Styling --- */
     #nextEpOverlay {
       position: absolute;
       bottom: -100px;
@@ -179,6 +179,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
     #nextEpOverlay.show-controls {
       bottom: 95px;
+      opacity: 1;
+      visibility: visible;
     }
     #nextEpOverlay.near-end {
       bottom: 95px !important;
@@ -209,6 +211,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       color: #ffffff;
       border: 1px solid rgba(255, 255, 255, 0.2);
       backdrop-filter: blur(8px);
+      display: none; /* Hidden until 2 min remaining */
     }
     #nextEpTimerBtn {
       background: #444444;
@@ -718,9 +721,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   rewindBtn.onclick = (e) => { e.stopPropagation(); video.currentTime = Math.max(0, video.currentTime - 10); };
   skipBtn.onclick = (e) => { e.stopPropagation(); video.currentTime = Math.min(video.duration, video.currentTime + 10); };
 
-  // --- Next Episode & Credits Logic ---
-  let autoNextTriggered = false;
+  // --- Next Episode & Watch Credits Logic ---
   let countdownInterval = null;
+  let isTimerRunning = false;
+  let creditsCancelled = false;
   const timerFill = document.getElementById("timerFill");
 
   function triggerNextEpisodeAction() {
@@ -730,8 +734,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   function startTenSecAutoNextTimer() {
-    if (autoNextTriggered) return;
-    autoNextTriggered = true;
+    if (isTimerRunning || creditsCancelled) return;
+    isTimerRunning = true;
 
     let timeLeft = 10;
     const intervalMs = 100;
@@ -752,10 +756,21 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   function cancelNextEpisodeTimer() {
     if (countdownInterval) clearInterval(countdownInterval);
-    autoNextTriggered = false; // Reset so it can trigger again if needed
+    isTimerRunning = false;
+    creditsCancelled = true;
     timerFill.style.width = "0%";
+    
+    // Hide watch credits button and unlock permanent bottom positioning
+    watchCreditsBtn.style.display = "none";
     nextEpOverlay.classList.remove("near-end");
   }
+
+  // Automatic Start of Countdown Timer as soon as playback starts
+  video.addEventListener("play", () => {
+    if (!isTimerRunning && !creditsCancelled) {
+      startTenSecAutoNextTimer();
+    }
+  });
 
   watchCreditsBtn.onclick = (e) => {
     e.stopPropagation();
@@ -764,8 +779,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   nextEpTimerBtn.onclick = (e) => {
     e.stopPropagation();
-    // Clicking Next Episode manually starts the 10-second fill timer instantly from anywhere in the video!
-    startTenSecAutoNextTimer();
+    triggerNextEpisodeAction();
   };
 
   video.addEventListener("timeupdate", () => {
@@ -775,16 +789,13 @@ document.addEventListener("DOMContentLoaded", async () => {
       
       const timeRemaining = video.duration - video.currentTime;
 
-      // 1. Force buttons to permanently stay visible 2 minutes before video ends
-      if (timeRemaining <= 120 && timeRemaining > 0) {
+      // When the 2-minute (120 sec) remaining mark is reached (and user hasn't clicked Watch Credits)
+      if (timeRemaining <= 120 && timeRemaining > 0 && !creditsCancelled) {
+        watchCreditsBtn.style.display = "block";
         nextEpOverlay.classList.add("near-end");
-      } else {
+      } else if (!creditsCancelled) {
+        watchCreditsBtn.style.display = "none";
         nextEpOverlay.classList.remove("near-end");
-      }
-
-      // 2. Automatically start 10-second fill timer when regular end is reached (if not already running)
-      if (timeRemaining <= 10 && !autoNextTriggered) {
-        startTenSecAutoNextTimer();
       }
 
       if (Math.abs(video.currentTime - lastSavedTime) >= 5) {
