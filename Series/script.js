@@ -2,7 +2,7 @@ const params = new URLSearchParams(window.location.search);
 const id = params.get("series");
 const series = seriesData[id];
 
-// --- IndexedDB Helper Logic ---
+// --- IndexedDB Helper Logic (Fallback / Season memory) ---
 const dbName = "StreamingDB";
 const storeName = "progress";
 
@@ -35,7 +35,7 @@ const saveProgress = async (key, value) => {
 };
 // --- End Helper Logic ---
 
-// --- Inject Dynamic CSS for Big Play Button & Episode Dropdown Layout ---
+// --- Inject Dynamic CSS ---
 const styleTag = document.createElement("style");
 styleTag.textContent = `
     html, body {
@@ -54,7 +54,6 @@ styleTag.textContent = `
         overflow-y: auto;
     }
 
-    /* Sharp background image kept strictly in the background */
     #ambientBg {
         position: fixed;
         top: 0;
@@ -70,7 +69,6 @@ styleTag.textContent = `
         pointer-events: none;
     }
 
-    /* Force all content containers to stay visible on top of the background */
     .content-wrapper, 
     #title, 
     #desc, 
@@ -88,7 +86,6 @@ styleTag.textContent = `
         margin-top: 400px;
     }
 
-    /* Big Main Play Button for Episode 1 */
     .big-play-btn {
         background-color: #ffffff;
         color: #000000;
@@ -118,7 +115,6 @@ styleTag.textContent = `
         fill: currentColor;
     }
 
-    /* Episode Dropdown Accordion Container */
     .episodes-dropdown-container {
         width: 100%;
         max-width: 450px;
@@ -153,7 +149,7 @@ styleTag.textContent = `
         max-height: 250px;
         overflow-y: auto;
         border-top: 1px solid rgba(255, 255, 255, 0.1);
-        display: none; /* hidden by default */
+        display: none;
         flex-direction: column;
     }
 
@@ -207,6 +203,25 @@ async function loadDataFiles() {
   }
 }
 
+// Fetch user's watch history directly from Cloudflare D1 Worker
+async function fetchCloudflareProgressMap() {
+  const token = localStorage.getItem("session_token");
+  if (!token) return {};
+
+  try {
+    const res = await fetch("https://rinolski.misty-fog-201e.workers.dev/api/get-progress", {
+      method: "GET",
+      headers: { "Authorization": `Bearer ${token}` }
+    });
+    if (!res.ok) return {};
+    const data = await res.json();
+    return data.progress || {};
+  } catch (err) {
+    console.error("Error fetching Cloudflare progress:", err);
+    return {};
+  }
+}
+
 async function init() {
     if (!series) return;
 
@@ -246,6 +261,9 @@ async function init() {
       ambientBg.style.backgroundImage = `url('${imagePath}')`;
     }
 
+    // Pull progress records from Cloudflare D1
+    const cloudflareProgress = await fetchCloudflareProgressMap();
+
     const seasonNav = document.getElementById("seasonNav");
     const episodeContainer = document.getElementById("episodeList");
 
@@ -262,33 +280,58 @@ async function init() {
             if (!episodeContainer) return;
             episodeContainer.innerHTML = "";
 
-            // 1. Create Big Play Button for Episode 1
-            const firstEpKey = `${season.prefix}1`;
+            // Find the most recent episode watched for this series inside Cloudflare's data map
+            let targetEpKey = `${season.prefix}1`;
+            let buttonText = "Play Episode 1";
+            let latestTimestamp = -1;
+
+            for (const movieIdKey in cloudflareProgress) {
+                // Check if the saved ID matches current series prefix pattern (e.g. "Beef-S1E...")
+                if (movieIdKey.toLowerCase().startsWith(season.prefix.toLowerCase())) {
+                    const record = cloudflareProgress[movieIdKey];
+                    // Track by highest left time or latest modified entry if available
+                    if (record && typeof record.left === 'number' && record.left > latestTimestamp) {
+                        latestTimestamp = record.left;
+                        targetEpKey = movieIdKey;
+                    }
+                }
+            }
+
+            // If a valid watched episode is found on Cloudflare, format it to "Continue Watching (S{X} E{Y})"
+            if (latestTimestamp !== -1) {
+                const match = targetEpKey.match(/-S(\d+)E(\d+)/i);
+                if (match) {
+                    buttonText = `Continue Watching (S${match[1]} E${match[2]})`;
+                } else {
+                    buttonText = `Continue Watching`;
+                }
+            }
+
+            // 1. Big Main Action Button
             const bigPlayBtn = document.createElement("button");
             bigPlayBtn.className = "big-play-btn";
             bigPlayBtn.innerHTML = `
                 <svg class="play-icon" viewBox="0 0 24 24">
                     <path d="M8 5v14l11-7z"/>
                 </svg>
-                <span>Play Episode 1</span>
+                <span>${buttonText}</span>
             `;
-            bigPlayBtn.onclick = () => window.location.href = `videoplayer.html?ep=${firstEpKey}`;
+            bigPlayBtn.onclick = () => window.location.href = `videoplayer.html?ep=${targetEpKey}`;
             episodeContainer.appendChild(bigPlayBtn);
 
-            // 2. Create Dropdown Accordion for all episodes if totalEpisodes > 1
-            if (season.totalEpisodes > 1) {
+            // 2. Dropdown Accordion for all episodes
+            if (season.totalEpisodes >= 1) {
                 const dropdownWrapper = document.createElement("div");
                 dropdownWrapper.className = "episodes-dropdown-container";
 
                 const dropdownToggle = document.createElement("button");
                 dropdownToggle.className = "episodes-dropdown-toggle";
-                dropdownToggle.innerHTML = `<span>More Episodes (${season.totalEpisodes})</span> <span>▼</span>`;
+                dropdownToggle.innerHTML = `<span>All Episodes (${season.totalEpisodes})</span> <span>▼</span>`;
 
                 const listInner = document.createElement("div");
                 listInner.className = "episodes-list-inner";
 
-                // Populate remaining episodes starting from episode 2 onwards
-                for (let i = 2; i <= season.totalEpisodes; i++) {
+                for (let i = 1; i <= season.totalEpisodes; i++) {
                     const epBtn = document.createElement("button");
                     epBtn.className = "ep-dropdown-item";
                     epBtn.innerHTML = `
