@@ -214,7 +214,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
     #nextEpTimerBtn {
       background: #444444;
-      color: #000000;
+      color: #ffffff;
     }
     #nextEpTimerBtn .timer-fill {
       position: absolute;
@@ -230,7 +230,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     #nextEpTimerBtn span {
       position: relative;
       z-index: 2;
-      color: #000000;
+      color: #ffffff;
     }
 
     #loadingRing{  
@@ -755,6 +755,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (isTimerRunning || creditsCancelled) return;
     isTimerRunning = true;
 
+    // Use a 10-second countdown duration that maps linearly
     let timeLeft = 10;
     const intervalMs = 100;
     const totalSteps = (timeLeft * 1000) / intervalMs;
@@ -801,13 +802,12 @@ document.addEventListener("DOMContentLoaded", async () => {
       const timeRemaining = video.duration - video.currentTime;
 
       // When the final 2 minutes (120 seconds) are reached:
-      // 1. Reveal Watch Credits & slide both buttons up
-      // 2. Automatically trigger the 10-second countdown fill timer
       if (timeRemaining <= 120 && timeRemaining > 0 && !creditsCancelled) {
         watchCreditsBtn.style.display = "block";
         nextEpOverlay.classList.add("near-end");
 
-        if (timeRemaining <= 10 && !isTimerRunning) {
+        // Trigger the 10-second auto-fill countdown timer right as the 2-minute mark hits
+        if (!isTimerRunning) {
           startTenSecAutoNextTimer();
         }
       } else if (!creditsCancelled) {
