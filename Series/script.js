@@ -2,7 +2,7 @@ const params = new URLSearchParams(window.location.search);
 const id = params.get("series");
 const series = seriesData[id];
 
-// --- IndexedDB Helper Logic (Fallback / Season memory) ---
+// --- IndexedDB Helper Logic ---
 const dbName = "StreamingDB";
 const storeName = "progress";
 
@@ -184,7 +184,7 @@ styleTag.textContent = `
         opacity: 0.7;
     }
 `;
-document.head.appendChild(styleTag);
+document head.appendChild(styleTag);
 
 async function loadDataFiles() {
   if (!id) return;
@@ -203,22 +203,31 @@ async function loadDataFiles() {
   }
 }
 
-// Fetch user's watch history directly from Cloudflare D1 Worker
-async function fetchCloudflareProgressMap() {
+// Background sync from Cloudflare Worker to local storage
+async function syncCloudflareProgress() {
   const token = localStorage.getItem("session_token");
-  if (!token) return {};
+  if (!token) return;
 
   try {
     const res = await fetch("https://rinolski.misty-fog-201e.workers.dev/api/get-progress", {
       method: "GET",
       headers: { "Authorization": `Bearer ${token}` }
     });
-    if (!res.ok) return {};
+    if (!res.ok) return;
     const data = await res.json();
-    return data.progress || {};
+    const progressMap = data.progress || {};
+
+    // Check if Cloudflare has newer data for this series
+    for (const epKey in progressMap) {
+      if (epKey.toLowerCase().startsWith(id.toLowerCase())) {
+        const localCurrent = localStorage.getItem(`lastEp_${id}`);
+        if (!localCurrent) {
+          localStorage.setItem(`lastEp_${id}`, epKey);
+        }
+      }
+    }
   } catch (err) {
-    console.error("Error fetching Cloudflare progress:", err);
-    return {};
+    console.error("Error syncing Cloudflare progress:", err);
   }
 }
 
@@ -261,8 +270,8 @@ async function init() {
       ambientBg.style.backgroundImage = `url('${imagePath}')`;
     }
 
-    // Pull progress records from Cloudflare D1
-    const cloudflareProgress = await fetchCloudflareProgressMap();
+    // Trigger Cloudflare sync in background
+    syncCloudflareProgress();
 
     const seasonNav = document.getElementById("seasonNav");
     const episodeContainer = document.getElementById("episodeList");
@@ -270,6 +279,9 @@ async function init() {
     if (series.seasons && series.seasons.length > 0) {
         const storageKey = `lastSeason_${id}`;
         const lastSeasonNum = await getProgress(storageKey);
+
+        // 1. INSTANT LOCAL READ (Immediate UI response)
+        let lastEpKey = localStorage.getItem(`lastEp_${id}`);
 
         let displayOrder = [...series.seasons];
         if (lastSeasonNum) {
@@ -280,26 +292,12 @@ async function init() {
             if (!episodeContainer) return;
             episodeContainer.innerHTML = "";
 
-            // Find the most recent episode watched for this series inside Cloudflare's data map
             let targetEpKey = `${season.prefix}1`;
             let buttonText = "Play Episode 1";
-            let latestTimestamp = -1;
 
-            for (const movieIdKey in cloudflareProgress) {
-                // Check if the saved ID matches current series prefix pattern (e.g. "Beef-S1E...")
-                if (movieIdKey.toLowerCase().startsWith(season.prefix.toLowerCase())) {
-                    const record = cloudflareProgress[movieIdKey];
-                    // Track by highest left time or latest modified entry if available
-                    if (record && typeof record.left === 'number' && record.left > latestTimestamp) {
-                        latestTimestamp = record.left;
-                        targetEpKey = movieIdKey;
-                    }
-                }
-            }
-
-            // If a valid watched episode is found on Cloudflare, format it to "Continue Watching (S{X} E{Y})"
-            if (latestTimestamp !== -1) {
-                const match = targetEpKey.match(/-S(\d+)E(\d+)/i);
+            if (lastEpKey) {
+                targetEpKey = lastEpKey;
+                const match = lastEpKey.match(/-S(\d+)E(\d+)/i);
                 if (match) {
                     buttonText = `Continue Watching (S${match[1]} E${match[2]})`;
                 } else {
@@ -316,7 +314,11 @@ async function init() {
                 </svg>
                 <span>${buttonText}</span>
             `;
-            bigPlayBtn.onclick = () => window.location.href = `videoplayer.html?ep=${targetEpKey}`;
+            bigPlayBtn.onclick = () => {
+                // INSTANT WRITE before navigating
+                localStorage.setItem(`lastEp_${id}`, targetEpKey);
+                window.location.href = `videoplayer.html?ep=${targetEpKey}`;
+            };
             episodeContainer.appendChild(bigPlayBtn);
 
             // 2. Dropdown Accordion for all episodes
@@ -342,7 +344,11 @@ async function init() {
                     `;
 
                     const episodeKey = `${season.prefix}${i}`;
-                    epBtn.onclick = () => window.location.href = `videoplayer.html?ep=${episodeKey}`;
+                    epBtn.onclick = () => {
+                        // INSTANT WRITE when clicking any episode
+                        localStorage.setItem(`lastEp_${id}`, episodeKey);
+                        window.location.href = `videoplayer.html?ep=${episodeKey}`;
+                    };
                     listInner.appendChild(epBtn);
                 }
 
