@@ -230,7 +230,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     #nextEpTimerBtn span {
       position: relative;
       z-index: 2;
-      color: #000000; /* Dark text contrast on white fill */
+      color: #000000;
     }
 
     #loadingRing{  
@@ -783,13 +783,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     nextEpOverlay.classList.remove("near-end");
   }
 
-  // Automatic start of the 10-second fill countdown as soon as video plays
-  video.addEventListener("play", () => {
-    if (!isTimerRunning && !creditsCancelled) {
-      startTenSecAutoNextTimer();
-    }
-  });
-
   watchCreditsBtn.onclick = (e) => {
     e.stopPropagation();
     cancelNextEpisodeTimer();
@@ -807,10 +800,16 @@ document.addEventListener("DOMContentLoaded", async () => {
       
       const timeRemaining = video.duration - video.currentTime;
 
-      // When the final 2 minutes (120 seconds) are reached, reveal Watch Credits and slide both buttons up
+      // When the final 2 minutes (120 seconds) are reached:
+      // 1. Reveal Watch Credits & slide both buttons up
+      // 2. Automatically trigger the 10-second countdown fill timer
       if (timeRemaining <= 120 && timeRemaining > 0 && !creditsCancelled) {
         watchCreditsBtn.style.display = "block";
         nextEpOverlay.classList.add("near-end");
+
+        if (timeRemaining <= 10 && !isTimerRunning) {
+          startTenSecAutoNextTimer();
+        }
       } else if (!creditsCancelled) {
         watchCreditsBtn.style.display = "none";
         nextEpOverlay.classList.remove("near-end");
