@@ -220,49 +220,28 @@ async function loadDataFiles() {
     const parseSearch = new Function(cleanSearchText);
     window.searchArray = parseSearch();
 
-    init();
+    await init();
   } catch (error) {
     console.error("Critical error while reading data engines safely:", error);
-    init(); 
+    await init(); 
   }
 }
 
-// Fetch user's watch history directly from Cloudflare D1 Worker with full diagnostics
+// Fetch user's watch history directly from Cloudflare D1 Worker
 async function fetchCloudflareProgressMap() {
   const token = localStorage.getItem("session_token");
-  console.log("🔑 Current session_token in localStorage:", token);
-
-  if (!token) {
-    console.warn("⚠️ No session_token found in localStorage! Cloudflare progress cannot be fetched.");
-    return {};
-  }
+  if (!token) return {};
 
   try {
-    const url = `https://rinolski.misty-fog-201e.workers.dev/api/get-progress?forced_ts=${Date.now()}`;
-    console.log("🌐 Fetching from Worker URL:", url);
-
-    const res = await fetch(url, {
+    const res = await fetch("https://rinolski.misty-fog-201e.workers.dev/api/get-progress", {
       method: "GET",
-      headers: { 
-        "Authorization": `Bearer ${token}`,
-        "Cache-Control": "no-cache, no-store, must-revalidate"
-      },
-      cache: "no-store"
+      headers: { "Authorization": `Bearer ${token}` }
     });
-
-    console.log("📡 Worker Response Status:", res.status);
-    
-    if (!res.ok) {
-      const errText = await res.text();
-      console.error("❌ Worker returned error body:", errText);
-      return {};
-    }
-
+    if (!res.ok) return {};
     const data = await res.json();
-    console.log("🔥 SUCCESS - Cloudflare Progress Payload:", data);
-    return data.progress || data || {};
+    return data.progress || {};
   } catch (err) {
-    console.error("💥 Network or CORS error fetching Cloudflare progress:", err);
+    console.error("Error fetching Cloudflare progress:", err);
     return {};
   }
 }
@@ -306,7 +285,7 @@ async function init() {
       ambientBg.style.backgroundImage = `url('${imagePath}')`;
     }
 
-    // Pull fresh progress records from Cloudflare D1
+    // Pull progress records from Cloudflare D1 asynchronously
     const cloudflareProgress = await fetchCloudflareProgressMap();
 
     const seasonNav = document.getElementById("seasonNav");
@@ -321,49 +300,34 @@ async function init() {
             displayOrder.sort((a, b) => (a.number == lastSeasonNum ? -1 : 1));
         }
 
-        // --- BULLETPROOF FUZZY MATCHING PROGRESS CHECK ---
-        let watchedEpisodesList = [];
-
-        for (const movieIdKey in cloudflareProgress) {
-            const matchesId = movieIdKey.toLowerCase().includes(id.toLowerCase());
-            const matchesPrefix = series.seasons.some(s => movieIdKey.toLowerCase().startsWith(s.prefix.toLowerCase()));
-
-            if (matchesId || matchesPrefix) {
-                const record = cloudflareProgress[movieIdKey];
-                const timeVal = record.updated_at || record.timestamp || record.left || record.time || Date.now();
-                watchedEpisodesList.push({ key: movieIdKey, time: timeVal });
-            }
-        }
-
-        watchedEpisodesList.sort((a, b) => b.time - a.time);
-        console.log("🎯 MATCHED WATCHED EPISODES FOR THIS SERIES:", watchedEpisodesList);
-
-        let globalTargetEpKey = watchedEpisodesList.length > 0 ? watchedEpisodesList[0].key : null;
-
         const renderActiveSeasonContent = (season) => {
             if (!episodeContainer) return;
             episodeContainer.innerHTML = "";
 
-            let targetEpKey = globalTargetEpKey ? globalTargetEpKey : `${season.prefix}1`;
+            // Find the most recent episode watched for this series inside Cloudflare's data map
+            let targetEpKey = `${season.prefix}1`;
             let buttonText = "Play Episode 1";
+            let latestTimestamp = -1;
 
-            if (globalTargetEpKey) {
-                const match = globalTargetEpKey.match(/-S(\d+)E(\d+)/i) || globalTargetEpKey.match(/S(\d+)E(\d+)/i);
+            for (const movieIdKey in cloudflareProgress) {
+                // Check if the saved ID matches current series prefix pattern (e.g. "Beef-S1E...")
+                if (movieIdKey.toLowerCase().startsWith(season.prefix.toLowerCase())) {
+                    const record = cloudflareProgress[movieIdKey];
+                    // Track by highest left time or latest modified entry if available
+                    if (record && typeof record.left === 'number' && record.left > latestTimestamp) {
+                        latestTimestamp = record.left;
+                        targetEpKey = movieIdKey;
+                    }
+                }
+            }
+
+            // If a valid watched episode is found on Cloudflare, format it to "Continue Watching (S{X} E{Y})"
+            if (latestTimestamp !== -1) {
+                const match = targetEpKey.match(/-S(\d+)E(\d+)/i);
                 if (match) {
                     buttonText = `Continue Watching (S${match[1]} E${match[2]})`;
                 } else {
-                    buttonText = `Continue Watching (${globalTargetEpKey})`;
-                }
-            } else {
-                let seasonList = watchedEpisodesList.filter(item => item.key.toLowerCase().startsWith(season.prefix.toLowerCase()));
-                if (seasonList.length > 0) {
-                    targetEpKey = seasonList[0].key;
-                    const match = targetEpKey.match(/-S(\d+)E(\d+)/i) || targetEpKey.match(/S(\d+)E(\d+)/i);
-                    if (match) {
-                        buttonText = `Continue Watching (S${match[1]} E${match[2]})`;
-                    } else {
-                        buttonText = `Continue Watching`;
-                    }
+                    buttonText = `Continue Watching`;
                 }
             }
 
@@ -440,12 +404,4 @@ async function init() {
     }
 }
 
-// Run loading on startup
 loadDataFiles();
-
-// Force strict refresh when navigating back from video player
-window.addEventListener("pageshow", (event) => {
-    if (event.persisted || window.performance.getEntriesByType("navigation")[0]?.type === "back_forward") {
-        window.location.reload();
-    }
-});
