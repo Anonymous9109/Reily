@@ -168,7 +168,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     /* --- Next Episode & Watch Credits Overlay Styling --- */
     #nextEpOverlay {
       position: absolute;
-      bottom: 60px; /* Stationary bottom right under the progress bar */
+      bottom: 8%;
       right: 5%;
       display: flex;
       gap: 12px;
