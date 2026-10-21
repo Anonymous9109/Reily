@@ -2,6 +2,14 @@ const params = new URLSearchParams(window.location.search);
 const id = params.get("series");
 const series = seriesData[id];
 
+// --- Save Incoming Page Reference (Avoiding Video Player) ---
+document.addEventListener("DOMContentLoaded", () => {
+    const referrer = document.referrer;
+    if (referrer && !referrer.includes("videoplayer") && !referrer.includes("player")) {
+        sessionStorage.setItem("safeBackUrl", referrer);
+    }
+});
+
 // --- IndexedDB Helper Logic (Fallback / Season memory) ---
 const dbName = "StreamingDB";
 const storeName = "progress";
@@ -186,15 +194,15 @@ styleTag.textContent = `
 `;
 document.head.appendChild(styleTag);
 
-// --- Configure Existing Back Button (Dynamic History Jump) ---
+// --- Configure Existing Back Button Using Stored Safe URL ---
 document.addEventListener("DOMContentLoaded", () => {
-    const existingBackBtn = document.getElementById("backBtn") || document.querySelector(".back-btn") || document.querySelector("button[onclick*='history']");
+    const existingBackBtn = document.getElementById("backBtn") || document.querySelector(".back-btn") || document.querySelector("button[onclick*='history']") || document.querySelector("a[href*='back']");
     if (existingBackBtn) {
         existingBackBtn.onclick = (e) => {
             e.preventDefault();
-            // Dynamically jump back past the video player in history without hardcoding filenames
-            if (window.history.length > 2) {
-                history.go(-2);
+            const safeUrl = sessionStorage.getItem("safeBackUrl");
+            if (safeUrl) {
+                window.location.href = safeUrl;
             } else {
                 history.back();
             }
