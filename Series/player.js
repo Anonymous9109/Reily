@@ -427,7 +427,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
-  /********** 4) Load Source **********/
+  async function fallbackDirectToMovie(movieUrl) {
+    await attachSourceToVideo(movieUrl);
+  }
+  
   async function attachSourceToVideo(url) {
     const isM3u8 = /\.m3u8($|\?)/i.test(url);
     if (isM3u8) {
@@ -446,10 +449,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       } else video.src = url;
     } else video.src = url;
   }
-
-  async function fallbackDirectToMovie(movieUrl) {
-    await attachSourceToVideo(movieUrl);
-  }
+  
   fallbackDirectToMovie(src);
 
   /********** D1 CLOUDFLARE TRACKER SYSTEM CONFIG **********/
@@ -462,21 +462,21 @@ document.addEventListener("DOMContentLoaded", async () => {
   let lastSavedTime = 0;
   let serverTimestamp = null; 
 
-  function getSavePayload() {
-    const targetKey = params.get("ep") || movieParamId;
+  function getSavePayload(overrideKey = null, overrideLeft = null) {
+    const targetKey = overrideKey || params.get("ep") || movieParamId;
     return {
       movieId: targetKey,
       movieTitle: activeMovieTitle,
-      left: video.currentTime,
-      duration: video.duration
+      left: overrideLeft !== null ? overrideLeft : video.currentTime,
+      duration: video.duration || 100
     };
   }
 
-  function saveWatchProgress(isBeacon = false) {
-    if (!CONFIG.AUTH_TOKEN || !video.duration || isResuming) return;
-    if (video.currentTime < 3) return;
+  function saveWatchProgress(isBeacon = false, overrideKey = null, overrideLeft = null) {
+    if (!CONFIG.AUTH_TOKEN || !video.duration && overrideLeft === null) return;
+    if (overrideLeft === null && (video.currentTime < 3)) return;
 
-    const payload = JSON.stringify(getSavePayload());
+    const payload = JSON.stringify(getSavePayload(overrideKey, overrideLeft));
 
     if (isBeacon && navigator.sendBeacon) {
       const blob = new Blob([payload], { type: 'application/json' });
@@ -484,7 +484,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       return;
     }
 
-    fetch(`${CONFIG.API_BASE_URL}/api/save-progress`, {
+    return fetch(`${CONFIG.API_BASE_URL}/api/save-progress`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -493,8 +493,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       body: payload,
       keepalive: true
     }).catch(err => console.error("Failed to save progress:", err));
-
-    lastSavedTime = video.currentTime;
   }
 
   window.addEventListener("pagehide", () => saveWatchProgress(true));
@@ -502,47 +500,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   document.addEventListener("visibilitychange", () => {
     if (document.visibilityState === "hidden") saveWatchProgress(false);
   });
-
-  /********** Subtitles & Appearance **********/
-  async function getSubSettings() {
-    return new Promise((resolve) => {
-      const request = indexedDB.open('SubtitleDB', 1);
-      request.onupgradeneeded = (e) => {
-          const db = e.target.result;
-          if (!db.objectStoreNames.contains('Settings')) db.createObjectStore('Settings');
-      };
-      request.onsuccess = (e) => {
-        const db = e.target.result;
-        try {
-          const tx = db.transaction('Settings', 'readonly');
-          const store = tx.objectStore('Settings');
-          const getReq = store.get('prefs');
-          getReq.onsuccess = () => resolve(getReq.result || null);
-          getReq.onerror = () => resolve(null);
-        } catch(err) { resolve(null); }
-      };
-      request.onerror = () => resolve(null);
-    });
-  }
-
-  async function applySubAppearance(el) {
-    const s = await getSubSettings();
-    const multiplier = s ? s.fontMultiplier : 1;
-    const color = s ? s.textColor : "#ffffff";
-    const opacity = s ? s.bgOpacity : 0;
-    const edge = s ? s.edgeStyle : "dropShadow"; 
-
-    el.style.fontSize = `calc(${multiplier} * 4.5vmin)`;
-    el.style.color = color;
-    el.style.backgroundColor = `rgba(0,0,0,${opacity})`;
-    const shadowAmt = 0.06 * multiplier;
-    
-    if(edge === 'dropShadow') {
-        el.style.textShadow = `${shadowAmt}em ${shadowAmt}em 0.15em rgba(0,0,0,0.9)`;
-    } else {
-        el.style.textShadow = "none";
-    }
-  }
 
   const rewindBtn = document.getElementById("rewindBtn");
   const playPauseBtn = document.getElementById("playPauseBtn");
@@ -583,7 +540,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     controlsVisible = false;
   };
 
-  // --- Next Episode & Watch Credits Logic (FIXED) ---
+  // --- Next Episode & Watch Credits Logic (Cloudflare Sync Only) ---
   let countdownInterval = null;
   let isTimerRunning = false;
   let creditsCancelled = false;
@@ -605,28 +562,17 @@ document.addEventListener("DOMContentLoaded", async () => {
     return null;
   }
 
-  function triggerNextEpisodeAction() {
+  async function triggerNextEpisodeAction() {
     const nextKey = getNextEpisodeTargetKey();
     if (nextKey) {
-      // 1. Immediately store in localStorage so series.html detects it instantly
-      const baseSeriesId = nextKey.replace(/-S\d+E\d+$/i, "");
-      localStorage.setItem(`lastEp_${baseSeriesId}`, nextKey);
-
-      // 2. Beacon save progress to cloudflare immediately
+      // Forcefully send progress update to Cloudflare for the next episode before navigating
       if (CONFIG.AUTH_TOKEN) {
-        const payload = JSON.stringify({
-          movieId: nextKey,
-          movieTitle: activeMovieTitle,
-          left: 1, // Mark start of next episode
-          duration: video.duration || 100
-        });
-        if (navigator.sendBeacon) {
-          const blob = new Blob([payload], { type: 'application/json' });
-          navigator.sendBeacon(`${CONFIG.API_BASE_URL}/api/save-progress?token=${encodeURIComponent(CONFIG.AUTH_TOKEN)}`, blob);
+        try {
+          await saveWatchProgress(false, nextKey, 1); // Save start position of next episode to Cloudflare D1
+        } catch (e) {
+          console.error("Cloudflare sync failed on auto-next:", e);
         }
       }
-
-      // 3. Navigate
       location.replace(`videoplayer.html?ep=${nextKey}`);
     }
   }
