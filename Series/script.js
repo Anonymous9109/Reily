@@ -227,15 +227,16 @@ async function loadDataFiles() {
   }
 }
 
-// Fetch user's watch history directly from Cloudflare D1 Worker
+// Fetch user's watch history directly from Cloudflare D1 Worker (with cache-busting)
 async function fetchCloudflareProgressMap() {
   const token = localStorage.getItem("session_token");
   if (!token) return {};
 
   try {
-    const res = await fetch("https://rinolski.misty-fog-201e.workers.dev/api/get-progress", {
+    const res = await fetch(`https://rinolski.misty-fog-201e.workers.dev/api/get-progress?_=${Date.now()}`, {
       method: "GET",
-      headers: { "Authorization": `Bearer ${token}` }
+      headers: { "Authorization": `Bearer ${token}` },
+      cache: "no-store"
     });
     if (!res.ok) return {};
     const data = await res.json();
@@ -285,7 +286,7 @@ async function init() {
       ambientBg.style.backgroundImage = `url('${imagePath}')`;
     }
 
-    // Pull progress records from Cloudflare D1
+    // Pull fresh progress records from Cloudflare D1
     const cloudflareProgress = await fetchCloudflareProgressMap();
 
     const seasonNav = document.getElementById("seasonNav");
@@ -301,7 +302,6 @@ async function init() {
         }
 
         // --- GLOBAL SERIES PROGRESS CHECK ---
-        // Find the absolute latest watched episode across ALL seasons for this series
         let globalTargetEpKey = null;
         let globalLatestTimestamp = -1;
 
@@ -428,4 +428,12 @@ async function init() {
     }
 }
 
+// Initial load
 loadDataFiles();
+
+// Force fresh re-fetch and re-render if user hits back from the video player (handling bfcache)
+window.addEventListener("pageshow", (event) => {
+    if (event.persisted) {
+        loadDataFiles();
+    }
+});
