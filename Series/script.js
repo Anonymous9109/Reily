@@ -304,7 +304,7 @@ async function init() {
             displayOrder.sort((a, b) => (a.number == lastSeasonNum ? -1 : 1));
         }
 
-        // --- BULLETPROOF FUZZY MATCHING PROGRESS CHECK ---
+        // --- ROBUST MATCHING & SORTING CHECK ---
         let watchedEpisodesList = [];
 
         for (const movieIdKey in cloudflareProgress) {
@@ -315,12 +315,13 @@ async function init() {
 
             if (matchesId || matchesPrefix) {
                 const record = cloudflareProgress[movieIdKey];
-                const timeVal = record.updated_at || record.timestamp || record.left || record.time || 0;
+                // Fallback to current timestamp if record exists so it doesn't get filtered out as 0
+                const timeVal = record.updated_at || record.timestamp || record.left || record.time || record.last_watched || record.date || Date.now();
                 watchedEpisodesList.push({ key: movieIdKey, time: timeVal });
             }
         }
 
-        // Sort descending so the most recently watched episode is ALWAYS index [0]
+        // Sort descending so the most recent entry is always first [0]
         watchedEpisodesList.sort((a, b) => b.time - a.time);
         console.log("🎯 SORTED WATCHED EPISODES:", watchedEpisodesList);
 
