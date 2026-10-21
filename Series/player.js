@@ -168,7 +168,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     /* --- Next Episode & Watch Credits Overlay Styling --- */
     #nextEpOverlay {
       position: absolute;
-      bottom: -100px;
+      bottom: 60px; /* Stationary bottom right under the progress bar */
       right: 5%;
       display: flex;
       gap: 12px;
@@ -178,12 +178,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.2s, visibility 0.2s;
     }
     #nextEpOverlay.show-controls {
-      bottom: 95px;
       opacity: 1;
       visibility: visible;
     }
     #nextEpOverlay.near-end {
-      bottom: 95px !important;
+      bottom: 95px !important; /* Slides up when 2 minutes hit */
       opacity: 1 !important;
       visibility: visible !important;
     }
@@ -760,12 +759,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     creditsCancelled = true;
     timerFill.style.width = "0%";
     
-    // Hide watch credits button and unlock permanent bottom positioning
+    // Hide watch credits button and send Next Episode button back down stationary
     watchCreditsBtn.style.display = "none";
     nextEpOverlay.classList.remove("near-end");
   }
 
-  // Automatic Start of Countdown Timer as soon as playback starts
+  // Automatic start of the 10-second fill countdown as soon as video plays
   video.addEventListener("play", () => {
     if (!isTimerRunning && !creditsCancelled) {
       startTenSecAutoNextTimer();
@@ -789,7 +788,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       
       const timeRemaining = video.duration - video.currentTime;
 
-      // When the 2-minute (120 sec) remaining mark is reached (and user hasn't clicked Watch Credits)
+      // When the final 2 minutes (120 seconds) are reached, reveal Watch Credits and slide both buttons up
       if (timeRemaining <= 120 && timeRemaining > 0 && !creditsCancelled) {
         watchCreditsBtn.style.display = "block";
         nextEpOverlay.classList.add("near-end");
