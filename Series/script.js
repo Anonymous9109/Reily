@@ -243,7 +243,7 @@ async function fetchCloudflareProgressMap() {
     });
     if (!res.ok) return {};
     const data = await res.json();
-    console.log("Fetched Cloudflare Progress Data:", data.progress); // Check your F12 Console to see what keys exist!
+    console.log("🔥 FULL CLOUDFLARE PROGRESS MAP:", data.progress); 
     return data.progress || {};
   } catch (err) {
     console.error("Error fetching Cloudflare progress:", err);
@@ -305,23 +305,25 @@ async function init() {
             displayOrder.sort((a, b) => (a.number == lastSeasonNum ? -1 : 1));
         }
 
-        // --- BULLETPROOF GLOBAL SERIES PROGRESS CHECK ---
+        // --- BULLETPROOF FUZZY MATCHING PROGRESS CHECK ---
         let watchedEpisodesList = [];
 
-        series.seasons.forEach(season => {
-            for (const movieIdKey in cloudflareProgress) {
-                // Match keys that belong to this series prefix
-                if (movieIdKey.toLowerCase().startsWith(season.prefix.toLowerCase())) {
-                    const record = cloudflareProgress[movieIdKey];
-                    // Pull whatever property your backend uses to track timestamp/progress update order
-                    const timeVal = record.updated_at || record.timestamp || record.left || record.time || 0;
-                    watchedEpisodesList.push({ key: movieIdKey, time: timeVal });
-                }
-            }
-        });
+        for (const movieIdKey in cloudflareProgress) {
+            // Match ANY key that contains the current series ID or matches any season prefix
+            const matchesId = movieIdKey.toLowerCase().includes(id.toLowerCase());
+            const matchesPrefix = series.seasons.some(s => movieIdKey.toLowerCase().startsWith(s.prefix.toLowerCase()));
 
-        // Sort descending so the most recently modified/watched episode is always first [0]
+            if (matchesId || matchesPrefix) {
+                const record = cloudflareProgress[movieIdKey];
+                // Fallback to current time if no timestamp property exists, ensuring it ranks newest
+                const timeVal = record.updated_at || record.timestamp || record.left || record.time || Date.now();
+                watchedEpisodesList.push({ key: movieIdKey, time: timeVal });
+            }
+        }
+
+        // Sort descending so the most recent entry is always first [0]
         watchedEpisodesList.sort((a, b) => b.time - a.time);
+        console.log("🎯 MATCHED WATCHED EPISODES FOR THIS SERIES:", watchedEpisodesList);
 
         let globalTargetEpKey = watchedEpisodesList.length > 0 ? watchedEpisodesList[0].key : null;
 
@@ -333,17 +335,17 @@ async function init() {
             let buttonText = "Play Episode 1";
 
             if (globalTargetEpKey) {
-                const match = globalTargetEpKey.match(/-S(\d+)E(\d+)/i);
+                const match = globalTargetEpKey.match(/-S(\d+)E(\d+)/i) || globalTargetEpKey.match(/S(\d+)E(\d+)/i);
                 if (match) {
                     buttonText = `Continue Watching (S${match[1]} E${match[2]})`;
                 } else {
-                    buttonText = `Continue Watching`;
+                    buttonText = `Continue Watching (${globalTargetEpKey})`;
                 }
             } else {
                 let seasonList = watchedEpisodesList.filter(item => item.key.toLowerCase().startsWith(season.prefix.toLowerCase()));
                 if (seasonList.length > 0) {
                     targetEpKey = seasonList[0].key;
-                    const match = targetEpKey.match(/-S(\d+)E(\d+)/i);
+                    const match = targetEpKey.match(/-S(\d+)E(\d+)/i) || targetEpKey.match(/S(\d+)E(\d+)/i);
                     if (match) {
                         buttonText = `Continue Watching (S${match[1]} E${match[2]})`;
                     } else {
