@@ -300,34 +300,58 @@ async function init() {
             displayOrder.sort((a, b) => (a.number == lastSeasonNum ? -1 : 1));
         }
 
+        // --- GLOBAL SERIES PROGRESS CHECK ---
+        // Find the absolute latest watched episode across ALL seasons for this series
+        let globalTargetEpKey = null;
+        let globalLatestTimestamp = -1;
+
+        series.seasons.forEach(season => {
+            for (const movieIdKey in cloudflareProgress) {
+                if (movieIdKey.toLowerCase().startsWith(season.prefix.toLowerCase())) {
+                    const record = cloudflareProgress[movieIdKey];
+                    const timestamp = record.updated_at || record.timestamp || record.left || 0;
+                    
+                    if (record && timestamp > globalLatestTimestamp) {
+                        globalLatestTimestamp = timestamp;
+                        globalTargetEpKey = movieIdKey;
+                    }
+                }
+            }
+        });
+
         const renderActiveSeasonContent = (season) => {
             if (!episodeContainer) return;
             episodeContainer.innerHTML = "";
 
-            // Find the most recent episode watched for this series inside Cloudflare's data map
-            let targetEpKey = `${season.prefix}1`;
+            let targetEpKey = globalTargetEpKey ? globalTargetEpKey : `${season.prefix}1`;
             let buttonText = "Play Episode 1";
-            let latestTimestamp = -1;
 
-            for (const movieIdKey in cloudflareProgress) {
-                // Check if the saved ID matches current series prefix pattern (e.g. "Beef-S1E...")
-                if (movieIdKey.toLowerCase().startsWith(season.prefix.toLowerCase())) {
-                    const record = cloudflareProgress[movieIdKey];
-                    // Track by highest left time or latest modified entry if available
-                    if (record && typeof record.left === 'number' && record.left > latestTimestamp) {
-                        latestTimestamp = record.left;
-                        targetEpKey = movieIdKey;
-                    }
-                }
-            }
-
-            // If a valid watched episode is found on Cloudflare, format it to "Continue Watching (S{X} E{Y})"
-            if (latestTimestamp !== -1) {
-                const match = targetEpKey.match(/-S(\d+)E(\d+)/i);
+            if (globalTargetEpKey) {
+                const match = globalTargetEpKey.match(/-S(\d+)E(\d+)/i);
                 if (match) {
                     buttonText = `Continue Watching (S${match[1]} E${match[2]})`;
                 } else {
                     buttonText = `Continue Watching`;
+                }
+            } else {
+                let seasonLatestTimestamp = -1;
+                for (const movieIdKey in cloudflareProgress) {
+                    if (movieIdKey.toLowerCase().startsWith(season.prefix.toLowerCase())) {
+                        const record = cloudflareProgress[movieIdKey];
+                        const timestamp = record.updated_at || record.timestamp || record.left || 0;
+                        if (record && timestamp > seasonLatestTimestamp) {
+                            seasonLatestTimestamp = timestamp;
+                            targetEpKey = movieIdKey;
+                        }
+                    }
+                }
+                if (seasonLatestTimestamp !== -1) {
+                    const match = targetEpKey.match(/-S(\d+)E(\d+)/i);
+                    if (match) {
+                        buttonText = `Continue Watching (S${match[1]} E${match[2]})`;
+                    } else {
+                        buttonText = `Continue Watching`;
+                    }
                 }
             }
 
