@@ -227,13 +227,21 @@ async function loadDataFiles() {
   }
 }
 
-// Fetch user's watch history directly from Cloudflare D1 Worker with strict cache-busting
+// Fetch user's watch history directly from Cloudflare D1 Worker with full diagnostics
 async function fetchCloudflareProgressMap() {
   const token = localStorage.getItem("session_token");
-  if (!token) return {};
+  console.log("🔑 Current session_token in localStorage:", token);
+
+  if (!token) {
+    console.warn("⚠️ No session_token found in localStorage! Cloudflare progress cannot be fetched.");
+    return {};
+  }
 
   try {
-    const res = await fetch(`https://rinolski.misty-fog-201e.workers.dev/api/get-progress?forced_ts=${Date.now()}`, {
+    const url = `https://rinolski.misty-fog-201e.workers.dev/api/get-progress?forced_ts=${Date.now()}`;
+    console.log("🌐 Fetching from Worker URL:", url);
+
+    const res = await fetch(url, {
       method: "GET",
       headers: { 
         "Authorization": `Bearer ${token}`,
@@ -241,12 +249,20 @@ async function fetchCloudflareProgressMap() {
       },
       cache: "no-store"
     });
-    if (!res.ok) return {};
+
+    console.log("📡 Worker Response Status:", res.status);
+    
+    if (!res.ok) {
+      const errText = await res.text();
+      console.error("❌ Worker returned error body:", errText);
+      return {};
+    }
+
     const data = await res.json();
-    console.log("🔥 FULL CLOUDFLARE PROGRESS MAP:", data.progress); 
-    return data.progress || {};
+    console.log("🔥 SUCCESS - Cloudflare Progress Payload:", data);
+    return data.progress || data || {};
   } catch (err) {
-    console.error("Error fetching Cloudflare progress:", err);
+    console.error("💥 Network or CORS error fetching Cloudflare progress:", err);
     return {};
   }
 }
@@ -309,19 +325,16 @@ async function init() {
         let watchedEpisodesList = [];
 
         for (const movieIdKey in cloudflareProgress) {
-            // Match ANY key that contains the current series ID or matches any season prefix
             const matchesId = movieIdKey.toLowerCase().includes(id.toLowerCase());
             const matchesPrefix = series.seasons.some(s => movieIdKey.toLowerCase().startsWith(s.prefix.toLowerCase()));
 
             if (matchesId || matchesPrefix) {
                 const record = cloudflareProgress[movieIdKey];
-                // Fallback to current time if no timestamp property exists, ensuring it ranks newest
                 const timeVal = record.updated_at || record.timestamp || record.left || record.time || Date.now();
                 watchedEpisodesList.push({ key: movieIdKey, time: timeVal });
             }
         }
 
-        // Sort descending so the most recent entry is always first [0]
         watchedEpisodesList.sort((a, b) => b.time - a.time);
         console.log("🎯 MATCHED WATCHED EPISODES FOR THIS SERIES:", watchedEpisodesList);
 
