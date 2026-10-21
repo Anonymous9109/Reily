@@ -4,15 +4,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   /********** Immediate Auto Fullscreen & Landscape Trigger **********/
   function forceFullscreenLandscape() {
     try {
-      // 1. Request Browser Fullscreen API
       const elem = document.documentElement;
       if (elem.requestFullscreen) {
         elem.requestFullscreen().catch(() => {});
       } else if (elem.webkitRequestFullscreen) {
         elem.webkitRequestFullscreen();
       }
-
-      // 2. Lock Screen Orientation to Landscape
       if (screen.orientation && screen.orientation.lock) {
         screen.orientation.lock("landscape").catch(() => {});
       }
@@ -21,7 +18,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
-  // Trigger instantly upon player load
   forceFullscreenLandscape();
   window.addEventListener("load", forceFullscreenLandscape);
 
@@ -165,10 +161,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     .back-btn { left:12px; }  
     .next-btn { right:12px; }  
 
-    /* --- Next Episode & Watch Credits Overlay Styling --- */
     #nextEpOverlay {
       position: absolute;
-      bottom: 30px; /* Stationary bottom right under the progress bar */
+      bottom: 30px;
       right: 5%;
       display: flex;
       gap: 12px;
@@ -182,7 +177,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       visibility: visible;
     }
     #nextEpOverlay.near-end {
-      bottom: 95px !important; /* Slides up when 2 minutes hit */
+      bottom: 95px !important;
       opacity: 1 !important;
       visibility: visible !important;
     }
@@ -210,7 +205,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       color: #ffffff;
       border: 1px solid rgba(255, 255, 255, 0.2);
       backdrop-filter: blur(8px);
-      display: none; /* Hidden until 2 min remaining */
+      display: none;
     }
     #nextEpTimerBtn {
       background: #444444;
@@ -354,10 +349,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   downloadBtn.onclick = async (e) => {
     e.stopPropagation();
     if (src) {
-      let cleanTitle = (activeMovieTitle && activeMovieTitle !== "Unknown Media") 
-        ? activeMovieTitle 
-        : movieParamId;
-
+      let cleanTitle = (activeMovieTitle && activeMovieTitle !== "Unknown Media") ? activeMovieTitle : movieParamId;
       cleanTitle = cleanTitle.replace(/[\\/:*?"<>|]/g, "_").trim();
       const finalFileName = `${cleanTitle}.mp4`;
 
@@ -405,7 +397,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   const loadingRing = document.createElement("div");
   loadingRing.id = "loadingRing";
 
-  // --- Create Next Episode & Watch Credits Overlay ---
   const nextEpOverlay = document.createElement("div");
   nextEpOverlay.id = "nextEpOverlay";
 
@@ -423,13 +414,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   `;
 
   nextEpOverlay.append(watchCreditsBtn, nextEpTimerBtn);
-
   root.append(video, subDisplay, controls, progressContainer, timerDisplay, ccBtn, subMenu, backBtn, nextBtn, loadingRing, backToPrev, downloadBtn, nextEpOverlay);
   document.body.appendChild(root);
 
   /********** 3) Smart Source Detection **********/
   let src = null;
-
   if (window.videoData && ep && window.videoData[ep]) src = window.videoData[ep];
   if (!src && params.get("src")) src = decodeURIComponent(params.get("src"));
 
@@ -458,66 +447,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     } else video.src = url;
   }
 
-  /********** GOOGLE IMA VAST IMPLEMENTATION **********/
-  function initIMAAdWorkflow(movieUrl) {
-    if (!window.google || !window.google.ima) {
-      const imaScript = document.createElement("script");
-      imaScript.src = "https://imasdk.googleapis.com/js/sdkloader/ima3.js";
-      imaScript.onload = () => setupIMAManager(movieUrl);
-      imaScript.onerror = () => fallbackDirectToMovie(movieUrl);
-      document.head.appendChild(imaScript);
-    } else {
-      setupIMAManager(movieUrl);
-    }
-  }
-
-  function setupIMAManager(movieUrl) {
-    const adContainer = document.createElement("div");
-    adContainer.id = "imaAdContainer";
-    root.appendChild(adContainer);
-
-    const adDisplayContainer = new google.ima.AdDisplayContainer(adContainer, video);
-    const adsLoader = new google.ima.AdsLoader(adDisplayContainer);
-
-    let adsManager = null;
-
-    adsLoader.addEventListener(google.ima.AdsManagerLoadedEvent.Type.ADS_MANAGER_LOADED, (e) => {
-      adsManager = e.getAdsManager(video);
-      
-      adsManager.addEventListener(google.ima.AdErrorEvent.Type.AD_ERROR, () => cleanAdAndStartMovie(adContainer, movieUrl));
-      adsManager.addEventListener(google.ima.AdEvent.Type.ALL_ADS_COMPLETED, () => cleanAdAndStartMovie(adContainer, movieUrl));
-      adsManager.addEventListener(google.ima.AdEvent.Type.CONTENT_RESUME_REQUESTED, () => cleanAdAndStartMovie(adContainer, movieUrl));
-
-      try {
-        adDisplayContainer.initialize();
-        adsManager.init(root.clientWidth, root.clientHeight, google.ima.ViewMode.NORMAL);
-        adsManager.start();
-      } catch (err) {
-        cleanAdAndStartMovie(adContainer, movieUrl);
-      }
-    }, false);
-
-    adsLoader.addEventListener(google.ima.AdErrorEvent.Type.AD_ERROR, () => cleanAdAndStartMovie(adContainer, movieUrl), false);
-
-    const adsRequest = new google.ima.AdsRequest();
-    adsRequest.adTagUrl = "";
-    adsRequest.linearAdSlotWidth = root.clientWidth;
-    adsRequest.linearAdSlotHeight = root.clientHeight;
-    adsLoader.requestAds(adsRequest);
-  }
-
-  function cleanAdAndStartMovie(containerDom, movieUrl) {
-    if (containerDom && containerDom.parentNode) {
-      containerDom.remove();
-    }
-    fallbackDirectToMovie(movieUrl);
-  }
-
   async function fallbackDirectToMovie(movieUrl) {
     await attachSourceToVideo(movieUrl);
   }
-
-  initIMAAdWorkflow(src);
+  fallbackDirectToMovie(src);
 
   /********** D1 CLOUDFLARE TRACKER SYSTEM CONFIG **********/
   const CONFIG = {
@@ -541,7 +474,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   function saveWatchProgress(isBeacon = false) {
     if (!CONFIG.AUTH_TOKEN || !video.duration || isResuming) return;
-    if (video.currentTime < 3 || video.currentTime > video.duration - 5) return;
+    if (video.currentTime < 3) return;
 
     const payload = JSON.stringify(getSavePayload());
 
@@ -570,7 +503,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (document.visibilityState === "hidden") saveWatchProgress(false);
   });
 
-  /********** 5) IndexedDB Subtitles & Appearance Logic **********/
+  /********** Subtitles & Appearance **********/
   async function getSubSettings() {
     return new Promise((resolve) => {
       const request = indexedDB.open('SubtitleDB', 1);
@@ -602,83 +535,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     el.style.fontSize = `calc(${multiplier} * 4.5vmin)`;
     el.style.color = color;
     el.style.backgroundColor = `rgba(0,0,0,${opacity})`;
-
     const shadowAmt = 0.06 * multiplier;
     
     if(edge === 'dropShadow') {
         el.style.textShadow = `${shadowAmt}em ${shadowAmt}em 0.15em rgba(0,0,0,0.9)`;
-    } else if(edge === 'outline') {
-        el.style.textShadow = `-${shadowAmt/2}em -${shadowAmt/2}em 0 #000, ${shadowAmt/2}em -${shadowAmt/2}em 0 #000, -${shadowAmt/2}em ${shadowAmt/2}em 0 #000, ${shadowAmt/2}em ${shadowAmt/2}em 0 #000`;
-    } else if(edge === 'raised') {
-        el.style.textShadow = `0 -0.03em 0 #000, 0 0.03em 0 #fff`;
     } else {
         el.style.textShadow = "none";
     }
   }
 
-  function selectSub(idx) {
-    const tracks = video.textTracks;
-    const opts = subMenu.querySelectorAll(".sub-option");
-    subDisplay.innerHTML = ""; 
-    
-    for (let i = 0; i < tracks.length; i++) {
-      tracks[i].mode = 'disabled';
-      tracks[i].oncuechange = async function() {
-        if (this.mode === 'hidden') {
-          const cue = this.activeCues[0];
-          if (cue) {
-            subDisplay.innerHTML = `<span>${cue.text}</span>`;
-            const span = subDisplay.querySelector('span');
-            if(span) await applySubAppearance(span);
-          } else {
-            subDisplay.innerHTML = "";
-          }
-        }
-      };
-    }
-    
-    opts.forEach(o => o.classList.remove("active"));
-
-    if (idx === -1) {
-      ccBtn.classList.remove("active");
-      opts[0].classList.add("active");
-    } else {
-      tracks[idx].mode = 'hidden'; 
-      ccBtn.classList.add("active");
-      opts[idx + 1].classList.add("active");
-    }
-    subMenu.style.display = "none";
-  }
-
-  const subtitleKey = ep + "-subs";
-  const subData = window.videoData ? window.videoData[subtitleKey] : null;
-
-  if (subData && Array.isArray(subData)) {
-    ccBtn.style.display = "flex";
-    const offBtn = document.createElement("button");
-    offBtn.className = "sub-option active";
-    offBtn.innerText = "Off";
-    offBtn.onclick = () => selectSub(-1);
-    subMenu.appendChild(offBtn);
-
-    subData.forEach((sub, index) => {
-      const track = document.createElement("track");
-      track.kind = "subtitles"; track.label = sub.label; track.srclang = sub.lang; track.src = sub.src;
-      video.appendChild(track);
-
-      const opt = document.createElement("button");
-      opt.className = "sub-option"; opt.innerText = sub.label;
-      opt.onclick = (e) => { e.stopPropagation(); selectSub(index); };
-      subMenu.appendChild(opt);
-    });
-  }
-
-  ccBtn.onclick = (e) => {
-    e.stopPropagation();
-    subMenu.style.display = subMenu.style.display === "flex" ? "none" : "flex";
-  };
-
-  /********** 6) Events & Controls **********/
   const rewindBtn = document.getElementById("rewindBtn");
   const playPauseBtn = document.getElementById("playPauseBtn");
   const skipBtn = document.getElementById("skipBtn");
@@ -688,10 +553,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const formatTime = (seconds) => {
     if (!isFinite(seconds) || isNaN(seconds)) return "0:00";
-    const h = Math.floor(seconds / 3600);
     const m = Math.floor((seconds % 3600) / 60);
     const s = Math.floor(seconds % 60);
-    return h > 0 ? `${h}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}` : `${m}:${s.toString().padStart(2,'0')}`;
+    return `${m}:${s.toString().padStart(2,'0')}`;
   };
 
   const showControls = (timeout = 3000) => {
@@ -702,11 +566,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     nextEpOverlay.style.opacity = "1";
     nextEpOverlay.style.visibility = "visible";
     nextEpOverlay.classList.add("show-controls");
-
-    backBtn.style.opacity = window.backEpisodeLink ? "1" : "0";
-    nextBtn.style.opacity = window.nextEpisodeLink ? "1" : "0";
-    backBtn.style.visibility = window.backEpisodeLink ? "visible" : "hidden";
-    nextBtn.style.visibility = window.nextEpisodeLink ? "visible" : "hidden";
     controlsVisible = true;
     clearTimeout(hideTimer);
     if (timeout > 0 && !isDragging) hideTimer = setTimeout(hideControls, timeout);
@@ -721,56 +580,54 @@ document.addEventListener("DOMContentLoaded", async () => {
     nextEpOverlay.style.opacity = "0";
     nextEpOverlay.style.visibility = "hidden";
     nextEpOverlay.classList.remove("show-controls");
-
-    subMenu.style.display = "none";
     controlsVisible = false;
-    clearTimeout(hideTimer);
   };
 
-  const showLoading = () => loadingRing.style.display = "block";
-  const hideLoading = () => loadingRing.style.display = "none";
-  const setPlayingUI = (p) => { playIcon.style.display = p ? "none" : "block"; pauseIcon.style.display = p ? "block" : "none"; };
-
-  video.addEventListener("canplay", () => { hideLoading(); video.style.opacity = "1"; });
-  video.addEventListener("playing", () => { hideLoading(); setPlayingUI(true); });
-  video.addEventListener("pause", () => setPlayingUI(false));
-  video.addEventListener("waiting", showLoading);
-  video.addEventListener("ended", hideLoading);
-
-  playPauseBtn.onclick = (e) => {
-    e.stopPropagation();
-    if (video.paused) video.play().catch(() => { video.muted = true; video.play(); });
-    else video.pause();
-  };
-  rewindBtn.onclick = (e) => { e.stopPropagation(); video.currentTime = Math.max(0, video.currentTime - 10); };
-  skipBtn.onclick = (e) => { e.stopPropagation(); video.currentTime = Math.min(video.duration, video.currentTime + 10); };
-
-  // --- Next Episode & Watch Credits Logic ---
+  // --- Next Episode & Watch Credits Logic (FIXED) ---
   let countdownInterval = null;
   let isTimerRunning = false;
   let creditsCancelled = false;
   const timerFill = document.getElementById("timerFill");
 
-  function triggerNextEpisodeAction() {
-    if (window.nextEpisodeLink) {
-      location.replace(window.nextEpisodeLink);
+  function getNextEpisodeTargetKey() {
+    const currentEpParam = params.get("ep") || "1";
+    const match = currentEpParam.match(/^(.*-S\d+E)(\d+)$/i);
+    if (match) {
+      const prefix = match[1];
+      const nextEpNum = parseInt(match[2], 10) + 1;
+      return `${prefix}${nextEpNum}`;
     } else {
-      try {
-        const currentEpParam = params.get("ep") || "1";
-        const match = currentEpParam.match(/^(.*-S\d+E)(\d+)$/i);
-        if (match) {
-          const prefix = match[1];
-          const nextEpNum = parseInt(match[2], 10) + 1;
-          location.replace(`videoplayer.html?ep=${prefix}${nextEpNum}`);
-        } else {
-          const numericEp = parseInt(currentEpParam, 10);
-          if (!isNaN(numericEp)) {
-            location.replace(`videoplayer.html?ep=${numericEp + 1}`);
-          }
-        }
-      } catch (err) {
-        console.error("Auto next episode navigation error:", err);
+      const numericEp = parseInt(currentEpParam, 10);
+      if (!isNaN(numericEp)) {
+        return String(numericEp + 1);
       }
+    }
+    return null;
+  }
+
+  function triggerNextEpisodeAction() {
+    const nextKey = getNextEpisodeTargetKey();
+    if (nextKey) {
+      // 1. Immediately store in localStorage so series.html detects it instantly
+      const baseSeriesId = nextKey.replace(/-S\d+E\d+$/i, "");
+      localStorage.setItem(`lastEp_${baseSeriesId}`, nextKey);
+
+      // 2. Beacon save progress to cloudflare immediately
+      if (CONFIG.AUTH_TOKEN) {
+        const payload = JSON.stringify({
+          movieId: nextKey,
+          movieTitle: activeMovieTitle,
+          left: 1, // Mark start of next episode
+          duration: video.duration || 100
+        });
+        if (navigator.sendBeacon) {
+          const blob = new Blob([payload], { type: 'application/json' });
+          navigator.sendBeacon(`${CONFIG.API_BASE_URL}/api/save-progress?token=${encodeURIComponent(CONFIG.AUTH_TOKEN)}`, blob);
+        }
+      }
+
+      // 3. Navigate
+      location.replace(`videoplayer.html?ep=${nextKey}`);
     }
   }
 
@@ -795,19 +652,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     }, intervalMs);
   }
 
-  function cancelNextEpisodeTimer() {
+  watchCreditsBtn.onclick = (e) => {
+    e.stopPropagation();
     if (countdownInterval) clearInterval(countdownInterval);
     isTimerRunning = false;
     creditsCancelled = true;
     timerFill.style.width = "0%";
-    
     watchCreditsBtn.style.display = "none";
     nextEpOverlay.classList.remove("near-end");
-  }
-
-  watchCreditsBtn.onclick = (e) => {
-    e.stopPropagation();
-    cancelNextEpisodeTimer();
   };
 
   nextEpTimerBtn.onclick = (e) => {
@@ -821,17 +673,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       timerDisplay.textContent = `${formatTime(video.currentTime)} / ${formatTime(video.duration)}`;
       
       const timeRemaining = video.duration - video.currentTime;
-
       if (timeRemaining <= 120 && timeRemaining > 0 && !creditsCancelled) {
         watchCreditsBtn.style.display = "block";
         nextEpOverlay.classList.add("near-end");
-
-        if (!isTimerRunning) {
-          startTenSecAutoNextTimer();
-        }
-      } else if (!creditsCancelled) {
-        watchCreditsBtn.style.display = "none";
-        nextEpOverlay.classList.remove("near-end");
+        if (!isTimerRunning) startTenSecAutoNextTimer();
       }
 
       if (Math.abs(video.currentTime - lastSavedTime) >= 5) {
@@ -840,51 +685,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 
-  const scrub = (e) => {
-    const rect = progressBg.getBoundingClientRect();
-    const isPortrait = window.innerHeight > window.innerWidth;
-    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-    
-    let pct = isPortrait ? (clientY - rect.top) / rect.height : (clientX - rect.left) / rect.width;
-    pct = Math.max(0, Math.min(1, pct));
-    progressBar.style.width = pct * 100 + "%";
-    const targetTime = pct * video.duration;
-    timerDisplay.textContent = `${formatTime(targetTime)} / ${formatTime(video.duration)}`;
-    video.currentTime = targetTime;
-  };
-
-  progressContainer.onmousedown = (e) => { isDragging = true; progressContainer.classList.add("dragging"); scrub(e); };
-  window.onmousemove = (e) => { if (isDragging) scrub(e); };
-  window.onmouseup = () => { if (isDragging) { isDragging = false; progressContainer.classList.remove("dragging"); showControls(); } };
-
-  progressContainer.ontouchstart = (e) => { isDragging = true; progressContainer.classList.add("dragging"); scrub(e); };
-  window.ontouchmove = (e) => { if (isDragging) scrub(e); };
-  window.ontouchend = () => { if (isDragging) { isDragging = false; progressContainer.classList.remove("dragging"); showControls(); } };
-
-  nextBtn.onclick = () => { if (window.nextEpisodeLink) location.replace(window.nextEpisodeLink); };
-
-  root.addEventListener("click", () => { if(!isDragging) controlsVisible ? hideControls() : showControls(); });
-
-  /********** THE JUMP FIX: TRACK LOADEDMETADATA **********/
   video.addEventListener("loadedmetadata", async () => {
     if (serverTimestamp && serverTimestamp < video.duration - 15) {
       video.currentTime = serverTimestamp;
       lastSavedTime = serverTimestamp;
     }
-    
     isResuming = false;
-    
-    try { 
-      await video.play(); 
-    } catch { 
-      video.pause(); 
-      showControls(5000); 
-    }
+    try { await video.play(); } catch { video.pause(); showControls(5000); }
   });
 
   const targetMovieParamId = params.get("ep") || movieParamId;
-
   (async function fetchSavedProgress() {
     if (CONFIG.AUTH_TOKEN) {
       try {
@@ -892,7 +702,6 @@ document.addEventListener("DOMContentLoaded", async () => {
           method: "GET",
           headers: { "Authorization": `Bearer ${CONFIG.AUTH_TOKEN}` }
         });
-        
         if (response.ok) {
           const data = await response.json();
           const progressMap = data.progress || {};
@@ -900,49 +709,27 @@ document.addEventListener("DOMContentLoaded", async () => {
             serverTimestamp = parseFloat(progressMap[targetMovieParamId].left);
           }
         }
-      } catch (err) { 
-        console.error("Error pulling history from Cloudflare Worker: ", err); 
-      }
+      } catch (err) { console.error(err); }
     }
   })();
 
-  /********** 7) Portrait rotation **********/
   function rotateIfPortrait() {
     const isPortrait = window.innerHeight > window.innerWidth;
     const vw = window.innerWidth, vh = window.innerHeight;
     if (isPortrait) {
       root.style.position = "fixed";
-      root.style.top = "50%";
-      root.style.left = "50%";
+      root.style.top = "50%"; root.style.left = "50%";
       root.style.transform = `translate(-50%, -50%) rotate(90deg)`;
       root.style.transformOrigin = "center center";
-      root.style.width = `${vh}px`;
-      root.style.height = `${vw}px`;
+      root.style.width = `${vh}px`; root.style.height = `${vw}px`;
     } else {
       root.style.position = "fixed";
-      root.style.top = "0";
-      root.style.left = "0";
+      root.style.top = "0"; root.style.left = "0";
       root.style.transform = "none";
-      root.style.width = "100%";
-      root.style.height = "100%";
+      root.style.width = "100%"; root.style.height = "100%";
     }
   }
   rotateIfPortrait();
   window.addEventListener("resize", rotateIfPortrait);
+  root.addEventListener("click", () => { if(!isDragging) controlsVisible ? hideControls() : showControls(); });
 });
-
-// Touch event mapping compatibility for non-touch triggers
-(function () {
-  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-  if (isTouchDevice) return;
-  function createTouchEvent(type, mouseEvent) {
-    const touchObj = new Touch({
-      identifier: Date.now(), target: mouseEvent.target, clientX: mouseEvent.clientX, clientY: mouseEvent.clientY,
-      radiusX: 2, radiusY: 2, force: 0.5
-    });
-    return new TouchEvent(type, { cancelable: true, bubbles: true, touches: type === "touchend" ? [] : [touchObj], targetTouches: type === "touchend" ? [] : [touchObj], changedTouches: [touchObj] });
-  }
-  document.addEventListener("mousedown", (e) => { e.target.dispatchEvent(createTouchEvent("touchstart", e)); });
-  document.addEventListener("mousemove", (e) => { e.target.dispatchEvent(createTouchEvent("touchmove", e)); });
-  document.addEventListener("mouseup", (e) => { e.target.dispatchEvent(createTouchEvent("touchend", e)); });
-})();
