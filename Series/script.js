@@ -186,19 +186,6 @@ styleTag.textContent = `
 `;
 document.head.appendChild(styleTag);
 
-// --- Configure Existing Back Button ---
-document.addEventListener("DOMContentLoaded", () => {
-    // Looks for common ID or class selectors for your back button (adjust selector if yours uses a specific ID like #backBtn)
-    const existingBackBtn = document.getElementById("backBtn") || document.querySelector(".back-btn") || document.querySelector("button[onclick*='history']");
-    if (existingBackBtn) {
-        // Clear any old inline onclick behavior and set it to go back to the home/series overview
-        existingBackBtn.onclick = (e) => {
-            e.preventDefault();
-            window.location.href = "../app/index.html";
-        };
-    }
-});
-
 async function loadDataFiles() {
   if (!id) return;
 
