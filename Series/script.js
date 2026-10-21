@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-// --- IndexedDB & LocalStorage Helper Logic ---
+// --- IndexedDB Helper Logic (Season memory) ---
 const dbName = "StreamingDB";
 const storeName = "progress";
 
@@ -227,13 +227,12 @@ async function loadDataFiles() {
   }
 }
 
-// Fetch user's watch history from Cloudflare D1 Worker
+// Fetch user's watch history directly from Cloudflare D1 Worker
 async function fetchCloudflareProgressMap() {
   const token = localStorage.getItem("session_token");
   if (!token) return {};
 
   try {
-    const res = formatResponseAndFetch(token);
     const response = await fetch(`https://rinolski.misty-fog-201e.workers.dev/api/get-progress?forced_ts=${Date.now()}`, {
       method: "GET",
       headers: { 
@@ -242,7 +241,7 @@ async function fetchCloudflareProgressMap() {
       },
       cache: "no-store"
     });
-    if (!resokCheck(response)) return {};
+    if (!response.ok) return {};
     const data = await response.json();
     console.log("☁️ RAW CLOUDFLARE PROGRESS RESPONSE:", data);
     return data.progress || data.data || data || {};
@@ -251,9 +250,6 @@ async function fetchCloudflareProgressMap() {
     return {};
   }
 }
-
-function formatResponseAndFetch(t) { return t; }
-function resokCheck(r) { return r.ok; }
 
 async function init() {
     if (!series) return;
@@ -294,11 +290,8 @@ async function init() {
       ambientBg.style.backgroundImage = `url('${imagePath}')`;
     }
 
-    // Pull progress records from Cloudflare D1 AND fallback to localStorage/sessionStorage
+    // Pull progress records strictly from Cloudflare D1
     const cloudflareProgress = await fetchCloudflareProgressMap();
-    
-    // Also grab last played episode from local fallback storage if available
-    const localLastEp = localStorage.getItem(`lastEp_${id}`);
 
     const seasonNav = document.getElementById("seasonNav");
     const episodeContainer = document.getElementById("episodeList");
@@ -312,10 +305,9 @@ async function init() {
             displayOrder.sort((a, b) => (a.number == lastSeasonNum ? -1 : 1));
         }
 
-        // --- UNIVERSAL KEY EXTRACTOR & LOCAL FALLBACK ---
+        // --- CLOUDFLARE-DRIVEN UNIVERSAL KEY EXTRACTOR ---
         let watchedEpisodesList = [];
 
-        // 1. Process Cloudflare D1 results
         const progressEntries = Array.isArray(cloudflareProgress) 
             ? cloudflareProgress 
             : Object.entries(cloudflareProgress);
@@ -354,14 +346,9 @@ async function init() {
             }
         });
 
-        // 2. If Cloudflare didn't return anything for this series, check local fallback
-        if (watchedEpisodesList.length === 0 && localLastEp) {
-            watchedEpisodesList.push({ key: localLastEp, time: Date.now() });
-        }
-
-        // Sort descending so the most recent watch is always [0]
+        // Sort descending so the highest timestamp / most recent watch from Cloudflare is always [0]
         watchedEpisodesList.sort((a, b) => b.time - a.time);
-        console.log("🎯 FINAL MATCHED & SORTED EPISODES:", watchedEpisodesList);
+        console.log("🎯 CLOUDFLARE MATCHED & SORTED EPISODES:", watchedEpisodesList);
 
         let globalTargetEpKey = watchedEpisodesList.length > 0 ? watchedEpisodesList[0].key : null;
 
@@ -402,7 +389,6 @@ async function init() {
                 <span>${buttonText}</span>
             `;
             bigPlayBtn.onclick = () => {
-                localStorage.setItem(`lastEp_${id}`, targetEpKey);
                 window.location.href = `videoplayer.html?ep=${targetEpKey}`;
             };
             episodeContainer.appendChild(bigPlayBtn);
@@ -431,7 +417,6 @@ async function init() {
 
                     const episodeKey = `${season.prefix}${i}`;
                     epBtn.onclick = () => {
-                        localStorage.setItem(`lastEp_${id}`, episodeKey);
                         window.location.href = `videoplayer.html?ep=${episodeKey}`;
                     };
                     listInner.appendChild(epBtn);
