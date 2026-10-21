@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-// --- IndexedDB Helper Logic (Fallback / Season memory) ---
+// --- IndexedDB & LocalStorage Helper Logic ---
 const dbName = "StreamingDB";
 const storeName = "progress";
 
@@ -214,7 +214,6 @@ async function loadDataFiles() {
   if (!id) return;
 
   try {
-    const searchResponse = absolutePathCheck("/JS/search.js");
     const searchResObj = await fetch("/JS/search.js");
     const searchText = await searchResObj.text();
     const cleanSearchText = searchText.replace(/const\s+movies\s*=/, "return ");
@@ -228,15 +227,14 @@ async function loadDataFiles() {
   }
 }
 
-function absolutePathCheck(p) { return p; }
-
-// Fetch user's watch history directly from Cloudflare D1 Worker
+// Fetch user's watch history from Cloudflare D1 Worker
 async function fetchCloudflareProgressMap() {
   const token = localStorage.getItem("session_token");
   if (!token) return {};
 
   try {
-    const res = await fetch(`https://rinolski.misty-fog-201e.workers.dev/api/get-progress?forced_ts=${Date.now()}`, {
+    const res = formatResponseAndFetch(token);
+    const response = await fetch(`https://rinolski.misty-fog-201e.workers.dev/api/get-progress?forced_ts=${Date.now()}`, {
       method: "GET",
       headers: { 
         "Authorization": `Bearer ${token}`,
@@ -244,8 +242,8 @@ async function fetchCloudflareProgressMap() {
       },
       cache: "no-store"
     });
-    if (!res.ok) return {};
-    const data = await res.json();
+    if (!resokCheck(response)) return {};
+    const data = await response.json();
     console.log("☁️ RAW CLOUDFLARE PROGRESS RESPONSE:", data);
     return data.progress || data.data || data || {};
   } catch (err) {
@@ -253,6 +251,9 @@ async function fetchCloudflareProgressMap() {
     return {};
   }
 }
+
+function formatResponseAndFetch(t) { return t; }
+function resokCheck(r) { return r.ok; }
 
 async function init() {
     if (!series) return;
@@ -293,8 +294,11 @@ async function init() {
       ambientBg.style.backgroundImage = `url('${imagePath}')`;
     }
 
-    // Pull progress records from Cloudflare D1 asynchronously
+    // Pull progress records from Cloudflare D1 AND fallback to localStorage/sessionStorage
     const cloudflareProgress = await fetchCloudflareProgressMap();
+    
+    // Also grab last played episode from local fallback storage if available
+    const localLastEp = localStorage.getItem(`lastEp_${id}`);
 
     const seasonNav = document.getElementById("seasonNav");
     const episodeContainer = document.getElementById("episodeList");
@@ -308,10 +312,10 @@ async function init() {
             displayOrder.sort((a, b) => (a.number == lastSeasonNum ? -1 : 1));
         }
 
-        // --- BULLETPROOF UNIVERSAL KEY EXTRACTOR ---
+        // --- UNIVERSAL KEY EXTRACTOR & LOCAL FALLBACK ---
         let watchedEpisodesList = [];
 
-        // Check if cloudflareProgress is nested or an array/object
+        // 1. Process Cloudflare D1 results
         const progressEntries = Array.isArray(cloudflareProgress) 
             ? cloudflareProgress 
             : Object.entries(cloudflareProgress);
@@ -333,13 +337,10 @@ async function init() {
             const lowerKey = movieIdKey.toLowerCase();
             const lowerSeriesId = id.toLowerCase();
             
-            // Match if the key starts with any season prefix or contains the series id
             const matchesId = lowerKey.includes(lowerSeriesId);
             const matchesPrefix = series.seasons.some(s => lowerKey.startsWith(s.prefix.toLowerCase()));
 
             if (matchesId || matchesPrefix) {
-                // Extract ANY number found in the record object as a timestamp/sort weight, 
-                // or fallback to index/recency weight
                 let timeVal = 0;
                 for (let prop in record) {
                     const val = Number(record[prop]);
@@ -347,15 +348,20 @@ async function init() {
                         timeVal = val;
                     }
                 }
-                if (timeVal === 0) timeVal = Date.now(); // Fallback if no numeric field found
+                if (timeVal === 0) timeVal = Date.now();
 
                 watchedEpisodesList.push({ key: movieIdKey, time: timeVal });
             }
         });
 
-        // Sort descending so the highest timestamp / most recent watch is always [0]
+        // 2. If Cloudflare didn't return anything for this series, check local fallback
+        if (watchedEpisodesList.length === 0 && localLastEp) {
+            watchedEpisodesList.push({ key: localLastEp, time: Date.now() });
+        }
+
+        // Sort descending so the most recent watch is always [0]
         watchedEpisodesList.sort((a, b) => b.time - a.time);
-        console.log("🎯 UNIVERSAL MATCHED & SORTED EPISODES:", watchedEpisodesList);
+        console.log("🎯 FINAL MATCHED & SORTED EPISODES:", watchedEpisodesList);
 
         let globalTargetEpKey = watchedEpisodesList.length > 0 ? watchedEpisodesList[0].key : null;
 
@@ -395,7 +401,10 @@ async function init() {
                 </svg>
                 <span>${buttonText}</span>
             `;
-            bigPlayBtn.onclick = () => window.location.href = `videoplayer.html?ep=${targetEpKey}`;
+            bigPlayBtn.onclick = () => {
+                localStorage.setItem(`lastEp_${id}`, targetEpKey);
+                window.location.href = `videoplayer.html?ep=${targetEpKey}`;
+            };
             episodeContainer.appendChild(bigPlayBtn);
 
             // 2. Dropdown Accordion for all episodes
@@ -421,7 +430,10 @@ async function init() {
                     `;
 
                     const episodeKey = `${season.prefix}${i}`;
-                    epBtn.onclick = () => window.location.href = `videoplayer.html?ep=${episodeKey}`;
+                    epBtn.onclick = () => {
+                        localStorage.setItem(`lastEp_${id}`, episodeKey);
+                        window.location.href = `videoplayer.html?ep=${episodeKey}`;
+                    };
                     listInner.appendChild(epBtn);
                 }
 
