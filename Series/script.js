@@ -233,9 +233,13 @@ async function fetchCloudflareProgressMap() {
   if (!token) return {};
 
   try {
-    const res = await fetch("https://rinolski.misty-fog-201e.workers.dev/api/get-progress", {
+    const res = await fetch(`https://rinolski.misty-fog-201e.workers.dev/api/get-progress?forced_ts=${Date.now()}`, {
       method: "GET",
-      headers: { "Authorization": `Bearer ${token}` }
+      headers: { 
+        "Authorization": `Bearer ${token}`,
+        "Cache-Control": "no-cache, no-store, must-revalidate"
+      },
+      cache: "no-store"
     });
     if (!res.ok) return {};
     const data = await res.json();
@@ -300,34 +304,52 @@ async function init() {
             displayOrder.sort((a, b) => (a.number == lastSeasonNum ? -1 : 1));
         }
 
+        // --- BULLETPROOF FUZZY MATCHING PROGRESS CHECK ---
+        let watchedEpisodesList = [];
+
+        for (const movieIdKey in cloudflareProgress) {
+            const lowerKey = movieIdKey.toLowerCase();
+            const lowerId = id.toLowerCase();
+            const matchesId = lowerKey.includes(lowerId);
+            const matchesPrefix = series.seasons.some(s => lowerKey.startsWith(s.prefix.toLowerCase()));
+
+            if (matchesId || matchesPrefix) {
+                const record = cloudflareProgress[movieIdKey];
+                const timeVal = record.updated_at || record.timestamp || record.left || record.time || 0;
+                watchedEpisodesList.push({ key: movieIdKey, time: timeVal });
+            }
+        }
+
+        // Sort descending so the most recently watched episode is ALWAYS index [0]
+        watchedEpisodesList.sort((a, b) => b.time - a.time);
+        console.log("🎯 SORTED WATCHED EPISODES:", watchedEpisodesList);
+
+        let globalTargetEpKey = watchedEpisodesList.length > 0 ? watchedEpisodesList[0].key : null;
+
         const renderActiveSeasonContent = (season) => {
             if (!episodeContainer) return;
             episodeContainer.innerHTML = "";
 
-            // Find the most recent episode watched for this series inside Cloudflare's data map
-            let targetEpKey = `${season.prefix}1`;
+            let targetEpKey = globalTargetEpKey ? globalTargetEpKey : `${season.prefix}1`;
             let buttonText = "Play Episode 1";
-            let latestTimestamp = -1;
 
-            for (const movieIdKey in cloudflareProgress) {
-                // Check if the saved ID matches current series prefix pattern (e.g. "Beef-S1E...")
-                if (movieIdKey.toLowerCase().startsWith(season.prefix.toLowerCase())) {
-                    const record = cloudflareProgress[movieIdKey];
-                    // Track by highest left time or latest modified entry if available
-                    if (record && typeof record.left === 'number' && record.left > latestTimestamp) {
-                        latestTimestamp = record.left;
-                        targetEpKey = movieIdKey;
-                    }
-                }
-            }
-
-            // If a valid watched episode is found on Cloudflare, format it to "Continue Watching (S{X} E{Y})"
-            if (latestTimestamp !== -1) {
-                const match = targetEpKey.match(/-S(\d+)E(\d+)/i);
+            if (globalTargetEpKey) {
+                const match = globalTargetEpKey.match(/-S(\d+)E(\d+)/i) || globalTargetEpKey.match(/S(\d+)E(\d+)/i);
                 if (match) {
                     buttonText = `Continue Watching (S${match[1]} E${match[2]})`;
                 } else {
                     buttonText = `Continue Watching`;
+                }
+            } else {
+                let seasonList = watchedEpisodesList.filter(item => item.key.toLowerCase().startsWith(season.prefix.toLowerCase()));
+                if (seasonList.length > 0) {
+                    targetEpKey = seasonList[0].key;
+                    const match = targetEpKey.match(/-S(\d+)E(\d+)/i) || targetEpKey.match(/S(\d+)E(\d+)/i);
+                    if (match) {
+                        buttonText = `Continue Watching (S${match[1]} E${match[2]})`;
+                    } else {
+                        buttonText = `Continue Watching`;
+                    }
                 }
             }
 
@@ -405,3 +427,10 @@ async function init() {
 }
 
 loadDataFiles();
+
+// Force strict refresh when navigating back from video player
+window.addEventListener("pageshow", (event) => {
+    if (event.persisted || window.performance.getEntriesByType("navigation")[0]?.type === "back_forward") {
+        window.location.reload();
+    }
+});
