@@ -214,8 +214,9 @@ async function loadDataFiles() {
   if (!id) return;
 
   try {
-    const searchResponse = await fetch("/JS/search.js");
-    const searchText = await searchResponse.text();
+    const searchResponse = absolutePathCheck("/JS/search.js");
+    const searchResObj = await fetch("/JS/search.js");
+    const searchText = await searchResObj.text();
     const cleanSearchText = searchText.replace(/const\s+movies\s*=/, "return ");
     const parseSearch = new Function(cleanSearchText);
     window.searchArray = parseSearch();
@@ -226,6 +227,8 @@ async function loadDataFiles() {
     await init(); 
   }
 }
+
+function absolutePathCheck(p) { return p; }
 
 // Fetch user's watch history directly from Cloudflare D1 Worker
 async function fetchCloudflareProgressMap() {
@@ -243,7 +246,8 @@ async function fetchCloudflareProgressMap() {
     });
     if (!res.ok) return {};
     const data = await res.json();
-    return data.progress || {};
+    console.log("☁️ RAW CLOUDFLARE PROGRESS RESPONSE:", data);
+    return data.progress || data.data || data || {};
   } catch (err) {
     console.error("Error fetching Cloudflare progress:", err);
     return {};
@@ -304,26 +308,54 @@ async function init() {
             displayOrder.sort((a, b) => (a.number == lastSeasonNum ? -1 : 1));
         }
 
-        // --- ROBUST MATCHING & SORTING CHECK ---
+        // --- BULLETPROOF UNIVERSAL KEY EXTRACTOR ---
         let watchedEpisodesList = [];
 
-        for (const movieIdKey in cloudflareProgress) {
+        // Check if cloudflareProgress is nested or an array/object
+        const progressEntries = Array.isArray(cloudflareProgress) 
+            ? cloudflareProgress 
+            : Object.entries(cloudflareProgress);
+
+        progressEntries.forEach(entry => {
+            let movieIdKey = "";
+            let record = {};
+
+            if (Array.isArray(entry)) {
+                movieIdKey = entry[0];
+                record = entry[1] || {};
+            } else {
+                movieIdKey = entry.movieId || entry.id || entry.key || "";
+                record = entry;
+            }
+
+            if (!movieIdKey) return;
+
             const lowerKey = movieIdKey.toLowerCase();
-            const lowerId = id.toLowerCase();
-            const matchesId = lowerKey.includes(lowerId);
+            const lowerSeriesId = id.toLowerCase();
+            
+            // Match if the key starts with any season prefix or contains the series id
+            const matchesId = lowerKey.includes(lowerSeriesId);
             const matchesPrefix = series.seasons.some(s => lowerKey.startsWith(s.prefix.toLowerCase()));
 
             if (matchesId || matchesPrefix) {
-                const record = cloudflareProgress[movieIdKey];
-                // Fallback to current timestamp if record exists so it doesn't get filtered out as 0
-                const timeVal = record.updated_at || record.timestamp || record.left || record.time || record.last_watched || record.date || Date.now();
+                // Extract ANY number found in the record object as a timestamp/sort weight, 
+                // or fallback to index/recency weight
+                let timeVal = 0;
+                for (let prop in record) {
+                    const val = Number(record[prop]);
+                    if (!isNaN(val) && val > timeVal) {
+                        timeVal = val;
+                    }
+                }
+                if (timeVal === 0) timeVal = Date.now(); // Fallback if no numeric field found
+
                 watchedEpisodesList.push({ key: movieIdKey, time: timeVal });
             }
-        }
+        });
 
-        // Sort descending so the most recent entry is always first [0]
+        // Sort descending so the highest timestamp / most recent watch is always [0]
         watchedEpisodesList.sort((a, b) => b.time - a.time);
-        console.log("🎯 SORTED WATCHED EPISODES:", watchedEpisodesList);
+        console.log("🎯 UNIVERSAL MATCHED & SORTED EPISODES:", watchedEpisodesList);
 
         let globalTargetEpKey = watchedEpisodesList.length > 0 ? watchedEpisodesList[0].key : null;
 
@@ -339,7 +371,7 @@ async function init() {
                 if (match) {
                     buttonText = `Continue Watching (S${match[1]} E${match[2]})`;
                 } else {
-                    buttonText = `Continue Watching`;
+                    buttonText = `Continue Watching (${globalTargetEpKey})`;
                 }
             } else {
                 let seasonList = watchedEpisodesList.filter(item => item.key.toLowerCase().startsWith(season.prefix.toLowerCase()));
