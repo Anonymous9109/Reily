@@ -168,7 +168,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     /* --- Next Episode & Watch Credits Overlay Styling --- */
     #nextEpOverlay {
       position: absolute;
-      bottom: 8%;
+      bottom: 60px; /* Stationary bottom right under the progress bar */
       right: 5%;
       display: flex;
       gap: 12px;
@@ -729,6 +729,27 @@ document.addEventListener("DOMContentLoaded", async () => {
   function triggerNextEpisodeAction() {
     if (window.nextEpisodeLink) {
       location.href = window.nextEpisodeLink;
+    } else {
+      // Fallback mechanism if window.nextEpisodeLink isn't globally mapped yet:
+      // Automatically calculates and parses the next episode string format (e.g., S1E1 -> S1E2)
+      try {
+        const currentEpParam = params.get("ep") || "1";
+        // Matches standard naming like "Beef-S1E1" or generic numbers
+        const match = currentEpParam.match(/^(.*-S\d+E)(\d+)$/i);
+        if (match) {
+          const prefix = match.1;
+          const nextEpNum = parseInt(match.2, 10) + 1;
+          location.href = `videoplayer.html?ep=${prefix}${nextEpNum}`;
+        } else {
+          // Fallback increment logic if it's purely numeric
+          const numericEp = parseInt(currentEpParam, 10);
+          if (!isNaN(numericEp)) {
+            location.href = `videoplayer.html?ep=${numericEp + 1}`;
+          }
+        }
+      } catch (err) {
+        console.error("Auto next episode navigation error:", err);
+      }
     }
   }
 
