@@ -300,7 +300,20 @@ document.addEventListener("DOMContentLoaded", async () => {
   const backToPrev = document.createElement("button");
   backToPrev.id = "backToPrev";
   backToPrev.innerHTML = `<svg viewBox="0 0 24 24"><path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>`;
-  backToPrev.onclick = () => history.back();
+  backToPrev.onclick = () => {
+    if (window.seriesPageLink) {
+      location.href = window.seriesPageLink;
+    } else {
+      try {
+        const currentEpParam = params.get("ep") || "";
+        // Strip out episode indicators (like -S1E1 or similar) to point back to the main series/movie view
+        const baseSeriesId = movieParamId.replace(/-S\d+E\d+$/i, "");
+        location.href = `series.html?series=${baseSeriesId}`;
+      } catch (err) {
+        history.back();
+      }
+    }
+  };
 
   const params = new URLSearchParams(window.location.search);
   const ep = params.get("ep") || "1";
@@ -755,7 +768,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (isTimerRunning || creditsCancelled) return;
     isTimerRunning = true;
 
-    // Use a 10-second countdown duration that maps linearly
     let timeLeft = 10;
     const intervalMs = 100;
     const totalSteps = (timeLeft * 1000) / intervalMs;
@@ -779,7 +791,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     creditsCancelled = true;
     timerFill.style.width = "0%";
     
-    // Hide watch credits button and send Next Episode button back down stationary
     watchCreditsBtn.style.display = "none";
     nextEpOverlay.classList.remove("near-end");
   }
@@ -801,12 +812,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       
       const timeRemaining = video.duration - video.currentTime;
 
-      // When the final 2 minutes (120 seconds) are reached:
       if (timeRemaining <= 120 && timeRemaining > 0 && !creditsCancelled) {
         watchCreditsBtn.style.display = "block";
         nextEpOverlay.classList.add("near-end");
 
-        // Trigger the 10-second auto-fill countdown timer right as the 2-minute mark hits
         if (!isTimerRunning) {
           startTenSecAutoNextTimer();
         }
@@ -843,7 +852,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   window.ontouchmove = (e) => { if (isDragging) scrub(e); };
   window.ontouchend = () => { if (isDragging) { isDragging = false; progressContainer.classList.remove("dragging"); showControls(); } };
 
-  backBtn.onclick = () => { if (window.backEpisodeLink) location.href = window.backEpisodeLink; };
   nextBtn.onclick = () => { if (window.nextEpisodeLink) location.href = window.nextEpisodeLink; };
 
   root.addEventListener("click", () => { if(!isDragging) controlsVisible ? hideControls() : showControls(); });
