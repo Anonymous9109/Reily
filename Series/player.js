@@ -168,7 +168,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     /* --- Next Episode & Watch Credits Overlay Styling --- */
     #nextEpOverlay {
       position: absolute;
-      bottom: 6%; /* Stationary bottom right under the progress bar */
+      bottom: 30px; /* Stationary bottom right under the progress bar */
       right: 5%;
       display: flex;
       gap: 12px;
@@ -305,8 +305,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       location.href = window.seriesPageLink;
     } else {
       try {
-        const currentEpParam = params.get("ep") || "";
-        // Strip out episode indicators (like -S1E1 or similar) to point back to the main series/movie view
         const baseSeriesId = movieParamId.replace(/-S\d+E\d+$/i, "");
         location.href = `series.html?series=${baseSeriesId}`;
       } catch (err) {
@@ -743,7 +741,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   function triggerNextEpisodeAction() {
     if (window.nextEpisodeLink) {
-      location.href = window.nextEpisodeLink;
+      location.replace(window.nextEpisodeLink);
     } else {
       try {
         const currentEpParam = params.get("ep") || "1";
@@ -751,11 +749,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (match) {
           const prefix = match[1];
           const nextEpNum = parseInt(match[2], 10) + 1;
-          location.href = `videoplayer.html?ep=${prefix}${nextEpNum}`;
+          location.replace(`videoplayer.html?ep=${prefix}${nextEpNum}`);
         } else {
           const numericEp = parseInt(currentEpParam, 10);
           if (!isNaN(numericEp)) {
-            location.href = `videoplayer.html?ep=${numericEp + 1}`;
+            location.replace(`videoplayer.html?ep=${numericEp + 1}`);
           }
         }
       } catch (err) {
@@ -852,7 +850,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   window.ontouchmove = (e) => { if (isDragging) scrub(e); };
   window.ontouchend = () => { if (isDragging) { isDragging = false; progressContainer.classList.remove("dragging"); showControls(); } };
 
-  nextBtn.onclick = () => { if (window.nextEpisodeLink) location.href = window.nextEpisodeLink; };
+  nextBtn.onclick = () => { if (window.nextEpisodeLink) location.replace(window.nextEpisodeLink); };
 
   root.addEventListener("click", () => { if(!isDragging) controlsVisible ? hideControls() : showControls(); });
 
