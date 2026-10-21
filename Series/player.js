@@ -529,33 +529,45 @@ document.addEventListener("DOMContentLoaded", async () => {
   let lastSavedTime = 0;
   let serverTimestamp = null; 
 
-  async function saveWatchProgress() {
-    if (!CONFIG.AUTH_TOKEN || !video.duration || isResuming) return;
-    if (video.currentTime < 5 || video.currentTime > video.duration - 10) return;
-
-    try {
-      await fetch(`${CONFIG.API_BASE_URL}/api/save-progress`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${CONFIG.AUTH_TOKEN}`
-        },
-        body: JSON.stringify({
-          movieId: movieParamId,
-          movieTitle: activeMovieTitle,
-          left: video.currentTime,
-          duration: video.duration
-        })
-      });
-      lastSavedTime = video.currentTime;
-    } catch (error) {
-      console.error("Failed to save progress to Cloudflare D1:", error);
-    }
+  function getSavePayload() {
+    const targetKey = params.get("ep") || movieParamId;
+    return {
+      movieId: targetKey,
+      movieTitle: activeMovieTitle,
+      left: video.currentTime,
+      duration: video.duration
+    };
   }
 
-  window.addEventListener("beforeunload", saveWatchProgress);
+  function saveWatchProgress(isBeacon = false) {
+    if (!CONFIG.AUTH_TOKEN || !video.duration || isResuming) return;
+    if (video.currentTime < 3 || video.currentTime > video.duration - 5) return;
+
+    const payload = JSON.stringify(getSavePayload());
+
+    if (isBeacon && navigator.sendBeacon) {
+      const blob = new Blob([payload], { type: 'application/json' });
+      navigator.sendBeacon(`${CONFIG.API_BASE_URL}/api/save-progress?token=${encodeURIComponent(CONFIG.AUTH_TOKEN)}`, blob);
+      return;
+    }
+
+    fetch(`${CONFIG.API_BASE_URL}/api/save-progress`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${CONFIG.AUTH_TOKEN}`
+      },
+      body: payload,
+      keepalive: true
+    }).catch(err => console.error("Failed to save progress:", err));
+
+    lastSavedTime = video.currentTime;
+  }
+
+  window.addEventListener("pagehide", () => saveWatchProgress(true));
+  window.addEventListener("beforeunload", () => saveWatchProgress(true));
   document.addEventListener("visibilitychange", () => {
-    if (document.visibilityState === "hidden") saveWatchProgress();
+    if (document.visibilityState === "hidden") saveWatchProgress(false);
   });
 
   /********** 5) IndexedDB Subtitles & Appearance Logic **********/
@@ -823,7 +835,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
 
       if (Math.abs(video.currentTime - lastSavedTime) >= 5) {
-        saveWatchProgress();
+        saveWatchProgress(false);
       }
     }
   });
@@ -871,6 +883,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 
+  const targetMovieParamId = params.get("ep") || movieParamId;
+
   (async function fetchSavedProgress() {
     if (CONFIG.AUTH_TOKEN) {
       try {
@@ -882,8 +896,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (response.ok) {
           const data = await response.json();
           const progressMap = data.progress || {};
-          if (progressMap[movieParamId]) {
-            serverTimestamp = parseFloat(progressMap[movieParamId].left);
+          if (progressMap[targetMovieParamId]) {
+            serverTimestamp = parseFloat(progressMap[targetMovieParamId].left);
           }
         }
       } catch (err) { 
