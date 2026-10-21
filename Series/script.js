@@ -194,7 +194,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // Clear any old inline onclick behavior and set it to go back to the home/series overview
         existingBackBtn.onclick = (e) => {
             e.preventDefault();
-            window.location.href = "../index.html";
+            window.location.href = "../app/index.html";
         };
     }
 });
