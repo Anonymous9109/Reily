@@ -182,7 +182,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       visibility: visible;
     }
     #nextEpOverlay.near-end {
-      bottom: 95px !important; /* Slides up when 2 minutes hit */
+      bottom: 8% !important; /* Slides up when 2 minutes hit */
       opacity: 1 !important;
       visibility: visible !important;
     }
