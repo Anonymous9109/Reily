@@ -168,7 +168,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     /* --- Next Episode & Watch Credits Overlay Styling --- */
     #nextEpOverlay {
       position: absolute;
-      bottom: 8%; /* Stationary bottom right under the progress bar */
+      bottom: 65px; /* Stationary bottom right under the progress bar */
       right: 5%;
       display: flex;
       gap: 12px;
@@ -182,7 +182,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       visibility: visible;
     }
     #nextEpOverlay.near-end {
-      bottom: 8% !important; /* Slides up when 2 minutes hit */
+      bottom: 95px !important; /* Slides up when 2 minutes hit */
       opacity: 1 !important;
       visibility: visible !important;
     }
