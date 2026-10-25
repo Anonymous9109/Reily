@@ -658,6 +658,12 @@ const movies = [
     genres: ["Comedy","Drama"],
     image: "images/Margo_s_Got_Money_Troubles.jpg",
     link: "Series/series?series=MargosGotMoneyTroubles"
+  },
+  {
+    title: "Adventure Time Fionna and Cake",
+    genres: ["Action","Cartoon","Animation"],
+    image: "images/AdventureTimeFionnaCake.jpg",
+    link: "Series/series?series=AdventureTimeFionnaCake"
   }
 ];
 
