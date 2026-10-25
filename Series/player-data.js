@@ -1163,5 +1163,15 @@ window.videoData = {
   "MargosGotMoneyTroubles-S1E5": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Margos.Got.Money.Troubles.S01E05.mkv",
   "MargosGotMoneyTroubles-S1E6": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Margos.Got.Money.Troubles.S01E06.mkv",
   "MargosGotMoneyTroubles-S1E7": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Margos.Got.Money.Troubles.S01E07.mkv",
-  "MargosGotMoneyTroubles-S1E8": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Margos.Got.Money.Troubles.S01E08.mkv"
+  "MargosGotMoneyTroubles-S1E8": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Margos.Got.Money.Troubles.S01E08.mkv",
+  "AdventureTimeFionnaCake-S1E1": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Adventure.Time.Fionna.and.Cake.S01E01..mkv",
+  "AdventureTimeFionnaCake-S1E2": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Adventure.Time.Fionna.and.Cake.S01E02.mkv",
+  "AdventureTimeFionnaCake-S1E3": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Adventure.Time.Fionna.and.Cake.S01E03 .mkv",
+  "AdventureTimeFionnaCake-S1E4": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Adventure.Time.Fionna.and.Cake.S01E04.mkv",
+  "AdventureTimeFionnaCake-S1E5": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Adventure.Time.Fionna.and.Cake.S01E05.mkv",
+  "AdventureTimeFionnaCake-S1E6": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Adventure.Time.Fionna.and.Cake.S01E06.mkv",
+  "AdventureTimeFionnaCake-S1E7": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Adventure.Time.Fionna.and.Cake.S01E07.mkv",
+  "AdventureTimeFionnaCake-S1E8": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Adventure.Time.Fionna.and.Cake.S01E08..mkv",
+  "AdventureTimeFionnaCake-S1E9": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Adventure.Time.Fionna.and.Cake.S01E09.mkv",
+  "AdventureTimeFionnaCake-S1E10": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Adventure.Time.Fionna.and.Cake.S01E10.mkv"
 };
