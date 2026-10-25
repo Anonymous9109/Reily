@@ -273,5 +273,13 @@ desc: "The daughter of a former Hooter's waitress and an ex-pro wrestler, Margo 
     seasons: [
       { number: 1, prefix: "MargosGotMoneyTroubles-S1E", totalEpisodes: 8 }
     ]
+  },
+  "AdventureTimeFionnaCake": {
+    title: "Adventure Time Fionna and Cake",
+    desc: "The adventures of Fionna and Cake from the land of Ooo.",
+    video: "",
+    seasons: [
+      { number: 1, prefix: "AdventureTimeFionnaCake-S1E", totalEpisodes: 10 }
+    ]
   }
 };
