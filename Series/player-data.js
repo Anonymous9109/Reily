@@ -1189,7 +1189,7 @@ window.videoData = {
   "AdventureTimeFionnaCake-S1E1-subs": [
     {
       label: "French",
-      lang: "fr",
+      lang: "en",
       src: "../subtitles/AdventureTimeFionnaCake/AdventureTimeFionnaCake-S1E1-French.txt"
     }
   ],
