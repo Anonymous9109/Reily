@@ -634,23 +634,35 @@ window.videoData = {
   
   "AdventureTimeFionnaandCake-S1E1": "https://dl.dropboxusercontent.com/scl/fi/l8q45n55esdx76hnamb8i/Adventure-Time_-Fionna-and-Cake-_-S1E1-2023.mp4?rlkey=kfhlkxjfihvcei2lxbj3bjnkc&st=vuq8tfk3&dl=1",
   "AdventureTimeFionnaandCake-S1E1-subs": [
-    { label: "English", lang: "en", src: "../subtitles/AdventureTime/AdventureTimeFionnaandCake-S1E1-English.txt" },
-    { label: "Arabic", lang: "ar", src: "../subtitles/AdventureTime/AdventureTimeFionnaandCake-S1E1-Arabic.txt" }
+    {
+      label: "French",
+      lang: "fr",
+      src: "../subtitles/AdventureTimeFionnaandCake/AdventureTimeFionnaandCake-S1E1-French.txt"
+    }
   ],
     "AdventureTimeFionnaandCake-S1E2": "https://dl.dropboxusercontent.com/scl/fi/potcsaq0emv6do1esn8x1/Adventure-Time_-Fionna-and-Cake-_-S1E2-2023.mp4?rlkey=7fsx1nyatudyikm94lpha9lyh&st=k0qbn66p&dl=1",
   "AdventureTimeFionnaandCake-S1E2-subs": [
-    { label: "English", lang: "en", src: "../subtitles/AdventureTime/AdventureTimeFionnaandCake-S1E2-English.txt" },
-    { label: "Arabic", lang: "ar", src: "../subtitles/AdventureTime/AdventureTimeFionnaandCake-S1E2-Arabic.txt" }
+    {
+      label: "French",
+      lang: "fr",
+      src: "../subtitles/AdventureTimeFionnaandCake/AdventureTimeFionnaandCake-S1E2-French.txt"
+    }
   ],
     "AdventureTimeFionnaandCake-S1E3": "https://dl.dropboxusercontent.com/scl/fi/8hxeis58fheedpnj9u4ct/Adventure-Time_-Fionna-and-Cake-_-S1E3-2023.mp4?rlkey=1io3qxz0hryo1u3c8zeukt1hw&st=4k2itkgl&dl=1",
   "AdventureTimeFionnaandCake-S1E3-subs": [
-    { label: "English", lang: "en", src: "../subtitles/AdventureTime/AdventureTimeFionnaandCake-S1E3-English.txt" },
-    { label: "Arabic", lang: "ar", src: "../subtitles/AdventureTime/AdventureTimeFionnaandCake-S1E3-Arabic.txt" }
+    {
+      label: "French",
+      lang: "fr",
+      src: "../subtitles/AdventureTimeFionnaandCake/AdventureTimeFionnaandCake-S1E3-French.txt"
+    }
   ],
     "AdventureTimeFionnaandCake-S1E4": "https://dl.dropboxusercontent.com/scl/fi/o2x9uzz9k8n2e9lvausxz/Adventure-Time_-Fionna-and-Cake-_-S1E4-2023.mp4?rlkey=ebg9wle7xkbutevg21cdae53v&st=yzsln2lv&dl=1",
   "AdventureTimeFionnaandCake-S1E4-subs": [
-    { label: "English", lang: "en", src: "../subtitles/AdventureTime/AdventureTimeFionnaandCake-S1E4-English.txt" },
-    { label: "Arabic", lang: "ar", src: "../subtitles/AdventureTime/AdventureTimeFionnaandCake-S1E4-Arabic.txt" }
+    {
+      label: "French",
+      lang: "fr",
+      src: "../subtitles/AdventureTimeFionnaandCake/AdventureTimeFionnaandCake-S1E4-French.txt"
+    }
   ],
     "AdventureTimeFionnaandCake-S1E5": "https://dl.dropboxusercontent.com/scl/fi/ay5s8t8f4wsuuxiqn6g82/Adventure-Time_-Fionna-and-Cake-_-S1E5-2023.mp4?rlkey=214gnqkmmvi5y5ciomdyrtmwr&st=6o8j7pza&dl=1",
   "AdventureTimeFionnaandCake-S1E5-subs": [
