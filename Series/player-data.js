@@ -1185,5 +1185,33 @@ window.videoData = {
   "AdventureTimeFionnaCake-S1E7": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Adventure.Time.Fionna.and.Cake.S01E07.mkv",
   "AdventureTimeFionnaCake-S1E8": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Adventure.Time.Fionna.and.Cake.S01E08..mkv",
   "AdventureTimeFionnaCake-S1E9": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Adventure.Time.Fionna.and.Cake.S01E09.mkv",
-  "AdventureTimeFionnaCake-S1E10": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Adventure.Time.Fionna.and.Cake.S01E10.mkv"
+  "AdventureTimeFionnaCake-S1E10": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Adventure.Time.Fionna.and.Cake.S01E10.mkv",
+  "AdventureTimeFionnaCake-S1E1-subs": [
+    {
+      label: "French",
+      lang: "fr",
+      src: "../subtitles/AdventureTimeFionnaCake/AdventureTimeFionnaCake-S1E1-French.txt"
+    }
+  ],
+  "AdventureTimeFionnaCake-S1E2-subs": [
+    {
+      label: "French",
+      lang: "fr",
+      src: "../subtitles/AdventureTimeFionnaCake/AdventureTimeFionnaCake-S1E2-French.txt"
+    }
+  ],
+  "AdventureTimeFionnaCake-S1E3-subs": [
+    {
+      label: "French",
+      lang: "fr",
+      src: "../subtitles/AdventureTimeFionnaCake/AdventureTimeFionnaCake-S1E3-French.txt"
+    }
+  ],
+  "AdventureTimeFionnaCake-S1E4-subs": [
+    {
+      label: "French",
+      lang: "fr",
+      src: "../subtitles/AdventureTimeFionnaCake/AdventureTimeFionnaCake-S1E4-French.txt"
+    }
+  ]
 };
