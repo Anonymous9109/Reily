@@ -143,13 +143,14 @@ const seriesData = {
     desc: "Walter White, a chemistry teacher, discovers that he has cancer and decides to get into the meth-making business to repay his medical debts. His priorities begin to change when he partners with Jesse.",
     video: "https://dl.dropboxusercontent.com/scl/fi/e74dtj384d4l5jcltsa7h/BrBa.S01E01.mkv?rlkey=8e14v9bssahi36jwo1rf3ix85&st=87lcszv7&dl=1",
     seasons: [
-      { number: 1, prefix: "BreakingBad-S1E", totalEpisodes: 7 }, 
+    { number: 1, prefix: "BreakingBad-S1E", totalEpisodes: 7 }, 
       
       { number: 2, prefix: "BreakingBad-S2E", totalEpisodes: 13 },
       { number: 3, prefix: "BreakingBad-S3E", totalEpisodes: 13 }, 
       { number: 4, prefix: "BreakingBad-S4E", totalEpisodes: 13 }, 
-      { number: 5, prefix: "BreakingBad-S5E", totalEpisodes: 16 }, 
-    ]
+      { number: 5, prefix: "BreakingBad-S5E", totalEpisodes: 16 },,
+    { number: 2, prefix: "BreakingBad-S2E", totalEpisodes: 13 }
+  ]
   },
   "MOBPSYCHO100": {
 title: "モブサイコ100",
