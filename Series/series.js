@@ -289,5 +289,13 @@ desc: "The daughter of a former Hooter's waitress and an ex-pro wrestler, Margo 
     seasons: [
       { number: 1, prefix: "BreakingBad-S1E", totalEpisodes: 7 }
     ]
+  },
+  "RegularShow": {
+    title: "Regular Show",
+    desc: "A blue jay named Mordecai and a raccoon named Rigby work as groundskeepers at a local park and get into surreal misadventures whenever they attempt to slack off.",
+    video: "",
+    seasons: [
+      { number: 1, prefix: "RegularShow-S1E", totalEpisodes: 12 }
+    ]
   }
 };
