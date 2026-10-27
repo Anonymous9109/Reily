@@ -664,6 +664,12 @@ const movies = [
     genres: ["Action","Cartoon","Animation"],
     image: "images/AdventureTimeFionnaCake.jpg",
     link: "Series/series?series=AdventureTimeFionnaCake"
+  },
+  {
+    title: "Breaking Bad",
+    genres: ["Drama"],
+    image: "images/BreakingBad.jpg",
+    link: "Series/series?series=BreakingBad"
   }
 ];
 
