@@ -1213,5 +1213,12 @@ window.videoData = {
       lang: "fr",
       src: "../subtitles/AdventureTimeFionnaCake/AdventureTimeFionnaCake-S1E4-French.txt"
     }
-  ]
+  ],
+  "BreakingBad-S1E1": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Breaking.Bads.S1E1.mkv",
+  "BreakingBad-S1E2": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Breaking.Bads.S1E2.mkv",
+  "BreakingBad-S1E3": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Breaking.Bads.S1E3.mkv",
+  "BreakingBad-S1E4": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Breaking.Bads.S1E4.mkv",
+  "BreakingBad-S1E5": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Breaking.Bads.S1E5.mkv",
+  "BreakingBad-S1E6": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Breaking.Bads.S1E6.mkv",
+  "BreakingBad-S1E7": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Breaking.Bads.S1E7.mkv"
 };
