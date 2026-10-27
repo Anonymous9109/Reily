@@ -670,6 +670,12 @@ const movies = [
     genres: ["Drama"],
     image: "images/BreakingBad.jpg",
     link: "Series/series?series=BreakingBad"
+  },
+  {
+    title: "Regular Show",
+    genres: ["Sitcom","Cartoon","Animation"],
+    image: "images/RegularShow.jpg",
+    link: "Series/series?series=RegularShow"
   }
 ];
 
