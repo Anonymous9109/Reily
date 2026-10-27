@@ -1232,5 +1232,18 @@ window.videoData = {
   "RegularShow-S1E9": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Regular.Show.S01E09.mkv",
   "RegularShow-S1E10": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Regular.Show.S01E10.mkv",
   "RegularShow-S1E11": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Regular.Show.S01E11.mkv",
-  "RegularShow-S1E12": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Regular.Show.S01E12.mkv"
+  "RegularShow-S1E12": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Regular.Show.S01E12.mkv",
+  "BreakingBad-S2E1": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Breaking.Bad.S2E01.mkv",
+  "BreakingBad-S2E2": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Breaking.Bad.S2E02.mkv",
+  "BreakingBad-S2E3": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Breaking.Bad.S2E03.mkv",
+  "BreakingBad-S2E4": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Breaking.Bad.S2E04.mkv",
+  "BreakingBad-S2E5": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Breaking.Bad.S2E05.mkv",
+  "BreakingBad-S2E6": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Breaking.Bad.S2E06.mkv",
+  "BreakingBad-S2E7": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Breaking.Bad.S2E07.mkv",
+  "BreakingBad-S2E8": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Breaking.Bad.S2E08.mkv",
+  "BreakingBad-S2E9": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Breaking.Bad.S2E09.mkv",
+  "BreakingBad-S2E10": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Breaking.Bad.S2E10.mkv",
+  "BreakingBad-S2E11": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Breaking.Bad.S2E11.mkv",
+  "BreakingBad-S2E12": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Breaking.Bad.S2E12.mkv",
+  "BreakingBad-S2E13": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Breaking.Bad.S2E13.mkv"
 };
