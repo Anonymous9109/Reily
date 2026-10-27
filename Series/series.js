@@ -281,5 +281,13 @@ desc: "The daughter of a former Hooter's waitress and an ex-pro wrestler, Margo 
     seasons: [
       { number: 1, prefix: "AdventureTimeFionnaCake-S1E", totalEpisodes: 10 }
     ]
+  },
+  "BreakingBad": {
+    title: "Breaking Bad",
+    desc: "Walter White, a chemistry teacher, discovers that he has cancer and decides to get into the meth-making business to repay his medical debts. His priorities begin to change when he partners with Jesse.",
+    video: "",
+    seasons: [
+      { number: 1, prefix: "BreakingBad-S1E", totalEpisodes: 7 }
+    ]
   }
 };
