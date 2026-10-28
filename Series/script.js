@@ -340,7 +340,7 @@ async function init() {
                         timeVal = val;
                     }
                 }
-                if (timeVal === 0) timeVal = Date.now();
+                if (timeVal === 0) timeVal = 1;
 
                 watchedEpisodesList.push({ key: movieIdKey, time: timeVal });
             }
@@ -350,33 +350,35 @@ async function init() {
         watchedEpisodesList.sort((a, b) => b.time - a.time);
         console.log("🎯 CLOUDFLARE MATCHED & SORTED EPISODES:", watchedEpisodesList);
 
-        let globalTargetEpKey = watchedEpisodesList.length > 0 ? watchedEpisodesList[0].key : null;
-
         const renderActiveSeasonContent = (season) => {
             if (!episodeContainer) return;
             episodeContainer.innerHTML = "";
 
-            let targetEpKey = globalTargetEpKey ? globalTargetEpKey : `${season.prefix}1`;
+            // Filter history strictly belonging to the active season prefix
+            let seasonWatchedList = watchedEpisodesList.filter(item => 
+                item.key.toLowerCase().startsWith(season.prefix.toLowerCase())
+            );
+
+            let targetEpKey = `${season.prefix}1`;
             let buttonText = "Play Episode 1";
 
-            if (globalTargetEpKey) {
-                const match = globalTargetEpKey.match(/-S(\d+)E(\d+)/i) || globalTargetEpKey.match(/S(\d+)E(\d+)/i);
+            if (seasonWatchedList.length > 0) {
+                const latestWatched = seasonWatchedList[0].key;
+                const match = latestWatched.match(/-S(\d+)E(\d+)/i) || latestWatched.match(/S(\d+)E(\d+)/i);
+                
                 if (match) {
-                    buttonText = `Continue Watching (S${match[1]} E${match[2]})`;
+                    const currentEpNum = parseInt(match[2], 10);
+                    const seasonNum = match[1];
+                    
+                    targetEpKey = latestWatched;
+                    buttonText = `Continue Watching (S${seasonNum} E${currentEpNum})`;
                 } else {
-                    buttonText = `Continue Watching (${globalTargetEpKey})`;
+                    targetEpKey = latestWatched;
+                    buttonText = `Continue Watching (${latestWatched})`;
                 }
             } else {
-                let seasonList = watchedEpisodesList.filter(item => item.key.toLowerCase().startsWith(season.prefix.toLowerCase()));
-                if (seasonList.length > 0) {
-                    targetEpKey = seasonList[0].key;
-                    const match = targetEpKey.match(/-S(\d+)E(\d+)/i) || targetEpKey.match(/S(\d+)E(\d+)/i);
-                    if (match) {
-                        buttonText = `Continue Watching (S${match[1]} E${match[2]})`;
-                    } else {
-                        buttonText = `Continue Watching`;
-                    }
-                }
+                targetEpKey = `${season.prefix}1`;
+                buttonText = "Play Episode 1";
             }
 
             // 1. Big Main Action Button
