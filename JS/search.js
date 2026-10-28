@@ -676,6 +676,12 @@ const movies = [
     genres: ["Sitcom","Cartoon","Animation"],
     image: "images/RegularShow.jpg",
     link: "Series/series?series=RegularShow"
+  },
+  {
+    title: "The Detour",
+    genres: ["Sitcom","Comedy"],
+    image: "images/TheDetour.jpg",
+    link: "Series/series?series=TheDetour"
   }
 ];
 
