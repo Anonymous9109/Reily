@@ -298,5 +298,13 @@ desc: "The daughter of a former Hooter's waitress and an ex-pro wrestler, Margo 
     seasons: [
       { number: 1, prefix: "RegularShow-S1E", totalEpisodes: 12 }
     ]
+  },
+  "TheDetour": {
+    title: "The Detour",
+    desc: "Nate and his family go on a road trip from Syracuse to Florida for a vacation. They experience a lot of troubles and intervention during the trip, while also making startling discoveries.",
+    video: "",
+    seasons: [
+      { number: 1, prefix: "TheDetour-S1E", totalEpisodes: 10 }
+    ]
   }
 };
