@@ -244,7 +244,9 @@ async function fetchCloudflareProgressMap() {
     if (!response.ok) return {};
     const data = await response.json();
     console.log("☁️ RAW CLOUDFLARE PROGRESS RESPONSE:", data);
-    return data.progress || data.data || data || {};
+    
+    // Universally extract progress regardless of key wrapper name
+    return data.progress || data.data || data.history || (typeof data === 'object' ? data : {});
   } catch (err) {
     console.error("Error fetching Cloudflare progress:", err);
     return {};
@@ -290,9 +292,6 @@ async function init() {
       ambientBg.style.backgroundImage = `url('${imagePath}')`;
     }
 
-    // Pull progress records strictly from Cloudflare D1
-    const cloudflareProgress = await fetchCloudflareProgressMap();
-
     const seasonNav = document.getElementById("seasonNav");
     const episodeContainer = document.getElementById("episodeList");
 
@@ -305,52 +304,62 @@ async function init() {
             displayOrder.sort((a, b) => (a.number == lastSeasonNum ? -1 : 1));
         }
 
-        // --- CLOUDFLARE-DRIVEN UNIVERSAL KEY EXTRACTOR ---
-        let watchedEpisodesList = [];
+        // Render skeleton / default state immediately before network returns
+        let activeSeasonReference = displayOrder[0];
+        renderActiveSeasonContent(activeSeasonReference, []);
 
-        const progressEntries = Array.isArray(cloudflareProgress) 
-            ? cloudflareProgress 
-            : Object.entries(cloudflareProgress);
+        // Fetch Cloudflare progress asynchronously and update in real-time
+        fetchCloudflareProgressMap().then(cloudflareProgress => {
+            let watchedEpisodesList = [];
 
-        progressEntries.forEach(entry => {
-            let movieIdKey = "";
-            let record = {};
+            const progressEntries = Array.isArray(cloudflareProgress) 
+                ? cloudflareProgress 
+                : Object.entries(cloudflareProgress);
 
-            if (Array.isArray(entry)) {
-                movieIdKey = entry[0];
-                record = entry[1] || {};
-            } else {
-                movieIdKey = entry.movieId || entry.id || entry.key || "";
-                record = entry;
-            }
+            progressEntries.forEach(entry => {
+                let movieIdKey = "";
+                let record = {};
 
-            if (!movieIdKey) return;
-
-            const lowerKey = movieIdKey.toLowerCase();
-            const lowerSeriesId = id.toLowerCase();
-            
-            const matchesId = lowerKey.includes(lowerSeriesId);
-            const matchesPrefix = series.seasons.some(s => lowerKey.startsWith(s.prefix.toLowerCase()));
-
-            if (matchesId || matchesPrefix) {
-                let timeVal = 0;
-                for (let prop in record) {
-                    const val = Number(record[prop]);
-                    if (!isNaN(val) && val > timeVal) {
-                        timeVal = val;
-                    }
+                if (Array.isArray(entry)) {
+                    movieIdKey = entry[0];
+                    record = entry[1] || {};
+                } else {
+                    movieIdKey = entry.movieId || entry.id || entry.key || "";
+                    record = entry;
                 }
-                if (timeVal === 0) timeVal = 1;
 
-                watchedEpisodesList.push({ key: movieIdKey, time: timeVal });
-            }
+                if (!movieIdKey) return;
+
+                const lowerKey = movieIdKey.toLowerCase();
+                const lowerSeriesId = id.toLowerCase();
+                
+                const matchesId = lowerKey.includes(lowerSeriesId);
+                const matchesPrefix = series.seasons.some(s => lowerKey.startsWith(s.prefix.toLowerCase()));
+
+                if (matchesId || matchesPrefix) {
+                    let timeVal = 0;
+                    for (let prop in record) {
+                        const val = Number(record[prop]);
+                        if (!isNaN(val) && val > timeVal) {
+                            timeVal = val;
+                        }
+                    }
+                    if (timeVal === 0) timeVal = Date.now();
+
+                    watchedEpisodesList.push({ key: movieIdKey, time: timeVal });
+                }
+            });
+
+            // Sort descending so the most recent watch is at [0]
+            watchedEpisodesList.sort((a, b) => b.time - a.time);
+            console.log("🎯 REAL-TIME CLOUDFLARE MATCHED & SORTED EPISODES:", watchedEpisodesList);
+
+            // Re-render instantly with real-time data loaded from Cloudflare
+            renderActiveSeasonContent(activeSeasonReference, watchedEpisodesList);
         });
 
-        // Sort descending so the highest timestamp / most recent watch from Cloudflare is always [0]
-        watchedEpisodesList.sort((a, b) => b.time - a.time);
-        console.log("🎯 CLOUDFLARE MATCHED & SORTED EPISODES:", watchedEpisodesList);
-
-        const renderActiveSeasonContent = (season) => {
+        function renderActiveSeasonContent(season, watchedEpisodesList) {
+            activeSeasonReference = season;
             if (!episodeContainer) return;
             episodeContainer.innerHTML = "";
 
@@ -433,7 +442,7 @@ async function init() {
                 dropdownWrapper.appendChild(listInner);
                 episodeContainer.appendChild(dropdownWrapper);
             }
-        };
+        }
 
         if (seasonNav) {
             seasonNav.innerHTML = "";
@@ -444,12 +453,25 @@ async function init() {
 
                 if (index === 0) {
                     seasonBtn.classList.add("active");
-                    renderActiveSeasonContent(season);
                 }
 
                 seasonBtn.onclick = async () => {
                     await saveProgress(storageKey, season.number);
-                    location.reload();
+                    // Re-render with current cached data instantly on season switch
+                    document.querySelectorAll(".season-btn").forEach(b => b.classList.remove("active"));
+                    seasonBtn.classList.add("active");
+                    fetchCloudflareProgressMap().then(progress => {
+                        // Re-run matching logic for new season
+                        let list = [];
+                        const entries = Array.isArray(progress) ? progress : Object.entries(progress);
+                        entries.forEach(entry => {
+                            let k = Array.isArray(entry) ? entry[0] : (entry.movieId || entry.id || entry.key || "");
+                            if (k && k.toLowerCase().includes(id.toLowerCase())) {
+                                list.push({ key: k, time: Date.now() });
+                            }
+                        });
+                        renderActiveSeasonContent(season, list);
+                    });
                 };
 
                 seasonNav.appendChild(seasonBtn);
