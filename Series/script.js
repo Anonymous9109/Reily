@@ -170,6 +170,28 @@ styleTag.textContent = `
         visibility: visible;
     }
 
+    /* Dedicated Sub-Window for Replies Thread */
+    #repliesDrawerModal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: #080808;
+        z-index: 100000;
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+        transform: translateY(100%);
+        transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        visibility: hidden;
+    }
+
+    #repliesDrawerModal.active {
+        transform: translateY(0);
+        visibility: visible;
+    }
+
     .comments-modal-header {
         display: flex;
         align-items: center;
@@ -196,7 +218,7 @@ styleTag.textContent = `
         background: #333333;
     }
 
-    /* Fixed Bottom Comment Bar inside Modal */
+    /* Fixed Bottom Comment Bar inside Modals */
     .comments-bottom-bar {
         position: sticky;
         bottom: 0;
@@ -311,7 +333,7 @@ styleTag.textContent = `
     }
 
     /* ==========================================
-     * REVIEWS SYSTEM STYLING
+     * REVIEWS & COMMENTS SYSTEM STYLING
      * ========================================== */
     :root {
       --rev-bg: transparent;
@@ -358,7 +380,6 @@ styleTag.textContent = `
       margin: 0;
     }
 
-    /* Hidden or removed series badge styling */
     .reviews-container .series-badge {
       display: none !important;
     }
@@ -427,6 +448,21 @@ styleTag.textContent = `
       width: 100%;
     }
 
+    .user-profile-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .user-pfp {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+      background-color: #262626;
+      border: 1px solid var(--rev-border-accent);
+    }
+
     .reviews-container .review-author {
       color: #ffffff !important;
       font-weight: 700;
@@ -445,6 +481,7 @@ styleTag.textContent = `
       color: #eeeeee;
       white-space: pre-line;
       word-break: break-word;
+      padding-left: 42px;
     }
 
     .reviews-container .review-actions {
@@ -454,58 +491,56 @@ styleTag.textContent = `
       margin-top: 2px;
     }
 
-    .reviews-container .replies-zone {
-      margin-left: 8px;
-      border-left: 2px solid var(--rev-border-accent);
-      padding-left: 10px;
-      margin-top: 6px;
+    .reply-thread-btn {
+      background-color: #1a1a1a;
+      color: #cccccc;
+      border: 1px solid var(--rev-border-accent);
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .reply-thread-btn:hover {
+      background-color: #262626;
+      color: #ffffff;
+    }
+
+    .replies-list-container {
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px 16px;
+      box-sizing: border-box;
+      flex: 1;
+      overflow-y: auto;
     }
 
     .reviews-container .reply-card {
       background-color: #141414;
-      padding: 8px 10px;
-      border-radius: 6px;
-      margin-bottom: 6px;
-      font-size: 0.8rem;
+      padding: 10px 12px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      font-size: 0.85rem;
       border: 1px solid var(--rev-border);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
     }
 
-    .reviews-container .reply-card strong {
-      color: #ffffff;
+    .reply-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
     .reviews-container .reply-time {
       font-size: 0.7rem;
       color: var(--rev-text-muted);
-      text-align: right;
-      margin-top: 2px;
-    }
-
-    .reviews-container .reply-input-group {
-      display: flex;
-      gap: 6px;
-      margin-top: 8px;
-    }
-
-    .reviews-container .reply-input-group input {
-      flex: 1;
-      padding: 6px 10px;
-      border-radius: 4px;
-      border: 1px solid var(--rev-border-accent);
-      background-color: var(--rev-input-bg);
-      color: #fff;
-      font-size: 0.8rem;
-    }
-
-    .reviews-container .btn-secondary {
-      padding: 6px 12px;
-      background-color: #262626;
-      color: #ffffff;
-      border: 1px solid var(--rev-border-accent);
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 0.8rem;
-      font-weight: 600;
     }
 
     .reviews-container .empty-state {
@@ -810,7 +845,7 @@ async function init() {
 }
 
 // ==========================================================================
-// SMOOTH SLIDING FULL-PAGE COMMENTS / REVIEWS SYSTEM
+// FULL-PAGE COMMENTS & REPLIES THREAD SYSTEM
 // ==========================================================================
 
 function openCommentsModal(seriesId) {
@@ -835,7 +870,6 @@ function openCommentsModal(seriesId) {
 
     initReviewsSystem(seriesId);
     
-    // Trigger smooth slide up
     requestAnimationFrame(() => {
         overlay.classList.add("active");
         document.body.style.overflow = "hidden";
@@ -848,6 +882,47 @@ function closeCommentsModal() {
         overlay.classList.remove("active");
         document.body.style.overflow = "auto";
     }
+}
+
+let activeReplyTargetEmail = null;
+
+function openRepliesDrawer(targetEmail, authorUsername) {
+    activeReplyTargetEmail = targetEmail;
+    let drawer = document.getElementById("repliesDrawerModal");
+    if (!drawer) {
+        drawer = document.createElement("div");
+        drawer.id = "repliesDrawerModal";
+        drawer.innerHTML = `
+            <div class="comments-modal-header">
+                <button class="comments-back-btn" onclick="closeRepliesDrawer()">← Back</button>
+                <h3 id="repliesDrawerTitle" style="margin:0; font-size: 1.1rem; color: #fff;">Replies</h3>
+                <div style="width: 60px;"></div>
+            </div>
+            <div id="repliesDrawerBodyContainer" class="replies-list-container"></div>
+            <div class="comments-bottom-bar">
+                <input type="text" id="drawerReplyInput" placeholder="Write a reply..." />
+                <button onclick="submitDrawerReply()">Send</button>
+            </div>
+        `;
+        document.body.appendChild(drawer);
+    }
+
+    const titleEl = document.getElementById("repliesDrawerTitle");
+    if (titleEl) titleEl.textContent = `Replies to @${authorUsername || 'User'}`;
+
+    renderRepliesInDrawer(targetEmail);
+
+    requestAnimationFrame(() => {
+        drawer.classList.add("active");
+    });
+}
+
+function closeRepliesDrawer() {
+    const drawer = document.getElementById("repliesDrawerModal");
+    if (drawer) {
+        drawer.classList.remove("active");
+    }
+    activeReplyTargetEmail = null;
 }
 
 function initReviewsSystem(seriesId) {
@@ -919,13 +994,6 @@ function showStatus(message, isError = false) {
   setTimeout(() => { banner.style.display = "none"; }, 4000);
 }
 
-function toggleReplyInput(id) {
-  const el = document.getElementById(`reply-box-${id}`);
-  if (el) {
-    el.style.display = el.style.display === "none" ? "flex" : "none";
-  }
-}
-
 async function loadReviews(seriesId) {
   const currentSeries = seriesId || id;
   const listEl = document.getElementById("reviewsList");
@@ -951,39 +1019,82 @@ async function loadReviews(seriesId) {
       const safeEmailId = authorEmail.replace(/[^a-zA-Z0-9]/g, '_');
       const reviewContent = r.reviewText || r.text || r.content || "";
       const username = r.authorUsername || r.username || "Anonymous";
+      const pfpUrl = r.pfp || r.avatar || r.userPfp || `https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(authorEmail)}`;
+      const repliesCount = (r.replies || []).length;
 
       return `
-        <div class="review-card">
+        <div class="review-card" id="review-card-${safeEmailId}">
           <div class="review-header">
-            <span class="review-author">@${escapeHtml(username)}</span>
+            <div class="user-profile-info">
+              <img src="${escapeHtml(pfpUrl)}" class="user-pfp" alt="PFP" onerror="this.src='https://api.dicebear.com/7.x/identicon/svg?seed=fallback'" />
+              <span class="review-author">@${escapeHtml(username)}</span>
+            </div>
             <span class="review-date">${r.timestamp ? new Date(r.timestamp).toLocaleDateString() : ''}</span>
           </div>
 
           <div class="review-body">${escapeHtml(reviewContent)}</div>
 
           <div class="review-actions">
-            <button class="btn-secondary" onclick="toggleReplyInput('${safeEmailId}')">Reply</button>
-          </div>
-
-          <div class="replies-zone">
-            ${(r.replies || []).map(rep => `
-              <div class="reply-card">
-                <strong>@${escapeHtml(rep.replierUsername || rep.username || 'User')}:</strong> ${escapeHtml(rep.text || rep.replyText || '')}
-                <div class="reply-time">${rep.timestamp ? new Date(rep.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : ''}</div>
-              </div>
-            `).join('')}
-
-            <div class="reply-input-group" id="reply-box-${safeEmailId}" style="display: none;">
-              <input type="text" id="reply-input-${safeEmailId}" placeholder="Reply..." />
-              <button class="btn-secondary" onclick="submitReply('${authorEmail}')">Send</button>
-            </div>
+            <button class="reply-thread-btn" onclick="openRepliesDrawer('${authorEmail}', '${escapeHtml(username)}')">
+              💬 Replies (${repliesCount})
+            </button>
           </div>
         </div>
       `;
     }).join('');
 
+    // If replies drawer is currently open, update its contents live too
+    if (activeReplyTargetEmail) {
+        renderRepliesInDrawer(activeReplyTargetEmail);
+    }
+
   } catch(err) {
     listEl.innerHTML = `<div class="empty-state">Unable to load reviews right now.</div>`;
+  }
+}
+
+async function renderRepliesInDrawer(targetEmail) {
+  const container = document.getElementById("repliesDrawerBodyContainer");
+  if (!container) return;
+
+  try {
+    const res = await fetch(`${API_BASE}/api/get-reviews?movie=${encodeURIComponent(id)}&series=${encodeURIComponent(id)}`, {
+      headers: { "Authorization": `Bearer ${token}` }
+    });
+    const data = await res.json();
+    const reviewsArr = data.reviews || data.data || [];
+
+    const targetReview = reviewsArr.find(r => (r.authorEmail || r.email) === targetEmail);
+    const repliesArr = targetReview ? (targetReview.replies || []) : [];
+
+    if (repliesArr.length === 0) {
+      container.innerHTML = `<div class="empty-state">No replies yet. Be the first to reply!</div>`;
+      return;
+    }
+
+    container.innerHTML = repliesArr.map(rep => {
+      const repUsername = rep.replierUsername || rep.username || 'User';
+      const repText = rep.text || rep.replyText || '';
+      const repEmail = rep.replierEmail || rep.email || 'user';
+      const repPfp = rep.pfp || rep.avatar || `https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(repEmail)}`;
+      const repTime = rep.timestamp ? new Date(rep.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '';
+
+      return `
+        <div class="reply-card">
+          <div class="reply-card-header">
+            <div class="user-profile-info">
+              <img src="${escapeHtml(repPfp)}" class="user-pfp" style="width:24px; height:24px;" alt="PFP" onerror="this.src='https://api.dicebear.com/7.x/identicon/svg?seed=fallback'" />
+              <strong style="color: #fff; font-size: 0.85rem;">@${escapeHtml(repUsername)}</strong>
+            </div>
+            <span class="reply-time">${repTime}</span>
+          </div>
+          <div style="color: #ddd; font-size: 0.85rem; padding-left: 34px; white-space: pre-line; word-break: break-word;">${escapeHtml(repText)}</div>
+        </div>
+      `;
+    }).join('');
+
+  } catch (err) {
+    container.innerHTML = `<div class="empty-state">Unable to load replies.</div>`;
   }
 }
 
@@ -1046,10 +1157,10 @@ async function submitBottomComment() {
   }
 }
 
-async function submitReply(targetEmail) {
+async function submitDrawerReply() {
+  if (!activeReplyTargetEmail) return;
   const currentSeries = id;
-  const safeEmailId = targetEmail.replace(/[^a-zA-Z0-9]/g, '_');
-  const inputEl = document.getElementById(`reply-input-${safeEmailId}`);
+  const inputEl = document.getElementById("drawerReplyInput");
   const replyText = inputEl ? inputEl.value.trim() : "";
 
   if (!replyText) return showStatus("Reply cannot be empty.", true);
@@ -1064,7 +1175,7 @@ async function submitReply(targetEmail) {
       body: JSON.stringify({ 
         movie: currentSeries, 
         series: currentSeries, 
-        targetEmail: targetEmail, 
+        targetEmail: activeReplyTargetEmail, 
         replyText: replyText,
         text: replyText
       })
@@ -1074,6 +1185,8 @@ async function submitReply(targetEmail) {
     if (data.requireUsername) {
       document.getElementById("usernameModal").style.display = "block";
     } else if (res.ok) {
+      inputEl.value = "";
+      renderRepliesInDrawer(activeReplyTargetEmail);
       loadReviews(currentSeries);
     } else {
       showStatus(data.error || "Could not post reply.", true);
