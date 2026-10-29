@@ -1255,5 +1255,17 @@ window.videoData = {
   "TheDetour-S1E7": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/The.Detour.S01E07.mkv",
   "TheDetour-S1E8": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/The.Detour.S01E08.mkv",
   "TheDetour-S1E9": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/The.Detour.S01E09.mkv",
-  "TheDetour-S1E10": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/The.Detour.S01E10.mkv"
+  "TheDetour-S1E10": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/The.Detour.S01E10.mkv",
+  "TheDetour-S2E1": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/The.Detour.S02E01.mkv",
+  "TheDetour-S2E2": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/The.Detour.S02E02.mkv",
+  "TheDetour-S2E3": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/The.Detour.S02E03.mkv",
+  "TheDetour-S2E4": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/The.Detour.S02E04.mkv",
+  "TheDetour-S2E5": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/The.Detour.S02E05.mkv",
+  "TheDetour-S2E6": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/The.Detour.S02E06.mkv",
+  "TheDetour-S2E7": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/The.Detour.S02E07.mkv",
+  "TheDetour-S2E8": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/The.Detour.S02E08.mkv",
+  "TheDetour-S2E9": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/The.Detour.S02E09.mkv",
+  "TheDetour-S2E10": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/The.Detour.S02E10.mkv",
+  "TheDetour-S2E11": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/The.Detour.S02E11.mkv",
+  "TheDetour-S2E12": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/The.Detour.S02E12.mkv"
 };
