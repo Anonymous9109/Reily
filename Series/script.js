@@ -148,7 +148,7 @@ styleTag.textContent = `
         border-color: rgba(255, 255, 255, 0.4);
     }
 
-    /* Full-Page Comments Modal Window */
+    /* Smooth Sliding Full-Page Comments Modal Window */
     #commentsOverlayModal {
         position: fixed;
         top: 0;
@@ -157,23 +157,28 @@ styleTag.textContent = `
         height: 100vh;
         background-color: #050505;
         z-index: 99999;
-        overflow-y: auto;
-        display: none;
+        display: flex;
         flex-direction: column;
-        padding: 20px;
         box-sizing: border-box;
+        transform: translateY(100%);
+        transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        visibility: hidden;
+    }
+
+    #commentsOverlayModal.active {
+        transform: translateY(0);
+        visibility: visible;
     }
 
     .comments-modal-header {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding-bottom: 15px;
+        padding: 16px 20px;
         border-bottom: 1px solid #262626;
-        margin-bottom: 20px;
+        background-color: #050505;
         position: sticky;
         top: 0;
-        background-color: #050505;
         z-index: 10;
     }
 
@@ -189,6 +194,51 @@ styleTag.textContent = `
     }
     .comments-back-btn:hover {
         background: #333333;
+    }
+
+    /* Fixed Bottom Comment Bar inside Modal */
+    .comments-bottom-bar {
+        position: sticky;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: #0a0a0a;
+        border-top: 1px solid #262626;
+        padding: 12px 20px;
+        box-sizing: border-box;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        z-index: 20;
+    }
+
+    .comments-bottom-bar input {
+        flex: 1;
+        background-color: #141414;
+        border: 1px solid #333333;
+        border-radius: 8px;
+        padding: 12px 14px;
+        color: #ffffff;
+        font-size: 0.95rem;
+        outline: none;
+    }
+    .comments-bottom-bar input:focus {
+        border-color: #555555;
+    }
+
+    .comments-bottom-bar button {
+        background-color: #ffffff;
+        color: #000000;
+        border: none;
+        border-radius: 8px;
+        padding: 12px 20px;
+        font-weight: 700;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+    .comments-bottom-bar button:hover {
+        background-color: #e0e0e0;
     }
 
     .episodes-dropdown-container {
@@ -281,12 +331,14 @@ styleTag.textContent = `
       background-color: var(--rev-bg) !important;
       border: none;
       border-radius: 12px;
-      padding: 10px 0;
+      padding: 20px 16px;
       color: var(--rev-text-main);
       box-sizing: border-box;
       text-align: left !important;
       position: relative;
       z-index: 4;
+      flex: 1;
+      overflow-y: auto;
     }
 
     .reviews-container .header-zone {
@@ -306,15 +358,9 @@ styleTag.textContent = `
       margin: 0;
     }
 
+    /* Hidden or removed series badge styling */
     .reviews-container .series-badge {
-      background-color: #0a0a0a;
-      color: var(--rev-text-main);
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-      border: 1px solid var(--rev-border-accent);
+      display: none !important;
     }
 
     .reviews-container .status-banner {
@@ -359,36 +405,7 @@ styleTag.textContent = `
     }
 
     .reviews-container .review-input-zone {
-      background-color: #0a0a0a;
-      border: 1px solid var(--rev-border);
-      padding: 14px;
-      border-radius: 8px;
-      margin-bottom: 20px;
-    }
-
-    .reviews-container .review-input-zone textarea {
-      width: 100%;
-      height: 90px;
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid var(--rev-border-accent);
-      background-color: var(--rev-input-bg);
-      color: var(--rev-text-main);
-      font-family: inherit;
-      resize: vertical;
-      margin-bottom: 10px;
-    }
-
-    .reviews-container .btn-primary {
-      padding: 8px 16px;
-      background-color: #ffffff;
-      color: #000000;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: 700;
-      font-size: 0.85rem;
-      transition: background 0.2s;
+      display: none !important;
     }
 
     .reviews-container .review-card {
@@ -793,7 +810,7 @@ async function init() {
 }
 
 // ==========================================================================
-// FULL-PAGE COMMENTS / REVIEWS SYSTEM ENGINE
+// SMOOTH SLIDING FULL-PAGE COMMENTS / REVIEWS SYSTEM
 // ==========================================================================
 
 function openCommentsModal(seriesId) {
@@ -807,29 +824,30 @@ function openCommentsModal(seriesId) {
                 <h3 style="margin:0; font-size: 1.1rem; color: #fff;">Discussion Board</h3>
                 <div style="width: 60px;"></div>
             </div>
-            <div id="commentsModalBodyContainer" style="flex: 1; width: 100%; display: flex; justify-content: center;"></div>
+            <div id="commentsModalBodyContainer" style="flex: 1; width: 100%; display: flex; flex-direction: column; overflow: hidden;"></div>
+            <div class="comments-bottom-bar">
+                <input type="text" id="modalBottomCommentInput" placeholder="Write a comment..." />
+                <button onclick="submitBottomComment()">Send</button>
+            </div>
         `;
         document.body.appendChild(overlay);
     }
 
     initReviewsSystem(seriesId);
-    overlay.style.display = "flex";
-    document.body.style.overflow = "hidden";
+    
+    // Trigger smooth slide up
+    requestAnimationFrame(() => {
+        overlay.classList.add("active");
+        document.body.style.overflow = "hidden";
+    });
 }
 
 function closeCommentsModal() {
     const overlay = document.getElementById("commentsOverlayModal");
     if (overlay) {
-        overlay.style.display = "none";
+        overlay.classList.remove("active");
         document.body.style.overflow = "auto";
     }
-}
-
-function toggleReviewComposer() {
-  const zone = document.getElementById("reviewInputZone");
-  if (!zone) return;
-  const isHidden = zone.style.display === "none" || zone.style.display === "";
-  zone.style.display = isHidden ? "block" : "none";
 }
 
 function initReviewsSystem(seriesId) {
@@ -840,10 +858,7 @@ function initReviewsSystem(seriesId) {
     container.innerHTML = `
       <div class="header-zone">
         <h2>Reviews</h2>
-        <div style="display: flex; align-items: center; gap: 10px;">
-          <button class="btn-primary toggle-add-btn" onclick="toggleReviewComposer()">+ Add a Review</button>
-          <span class="series-badge" id="displaySeriesName">${escapeHtml(seriesId.replace(/-/g, ' ').toUpperCase())}</span>
-        </div>
+        <span class="series-badge" id="displaySeriesName"></span>
       </div>
 
       <!-- AD SLOT PLACED EXACTLY BELOW HEADER AND CENTERED -->
@@ -860,12 +875,6 @@ function initReviewsSystem(seriesId) {
         </div>
       </div>
 
-      <!-- Review Composer Zone -->
-      <div class="review-input-zone" id="reviewInputZone" style="display: none;">
-        <textarea id="mainReviewText" placeholder="Write your thoughts..."></textarea>
-        <button class="btn-primary" onclick="submitReview()">Post Review</button>
-      </div>
-
       <!-- Main Feed Area -->
       <div id="reviewsList">
         <div class="empty-state">Loading reviews...</div>
@@ -874,7 +883,7 @@ function initReviewsSystem(seriesId) {
 
     const modalBodyContainer = document.getElementById("commentsModalBodyContainer");
     if (modalBodyContainer) {
-        modalBodyContainer.appendChild(container);
+        modalBodyContainer.insertBefore(container, modalBodyContainer.firstChild);
     } else {
         document.body.appendChild(container);
     }
@@ -1001,10 +1010,10 @@ async function saveUsername() {
   }
 }
 
-async function submitReview() {
+async function submitBottomComment() {
   const currentSeries = id;
-  const textareaEl = document.getElementById("mainReviewText");
-  const text = textareaEl ? textareaEl.value.trim() : "";
+  const inputEl = document.getElementById("modalBottomCommentInput");
+  const text = inputEl ? inputEl.value.trim() : "";
 
   if (!text) return showStatus("Please write something before publishing.", true);
 
@@ -1027,8 +1036,7 @@ async function submitReview() {
     if (data.requireUsername) {
       document.getElementById("usernameModal").style.display = "block";
     } else if (res.ok) {
-      textareaEl.value = "";
-      toggleReviewComposer();
+      inputEl.value = "";
       loadReviews(currentSeries);
     } else {
       showStatus(data.error || "Could not publish review.", true);
