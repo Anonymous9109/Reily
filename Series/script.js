@@ -111,7 +111,7 @@ styleTag.textContent = `
         max-width: 320px;
         box-shadow: 0 4px 12px rgba(0,0,0,0.4);
         transition: background-color 0.2s, transform 0.1s;
-        margin-bottom: 24px;
+        margin-bottom: 12px;
     }
     .big-play-btn:hover {
         background-color: #f0f0f0;
@@ -121,6 +121,74 @@ styleTag.textContent = `
         width: 20px;
         height: 20px;
         fill: currentColor;
+    }
+
+    /* Comments Trigger Button */
+    .comments-trigger-btn {
+        background-color: #1a1a1a;
+        color: #ffffff;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 14px 24px;
+        border-radius: 10px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        font-weight: 600;
+        font-size: 15px;
+        width: 100%;
+        max-width: 320px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        transition: background-color 0.2s, border-color 0.2s;
+        margin-bottom: 24px;
+    }
+    .comments-trigger-btn:hover {
+        background-color: #262626;
+        border-color: rgba(255, 255, 255, 0.4);
+    }
+
+    /* Full-Page Comments Modal Window */
+    #commentsOverlayModal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: #050505;
+        z-index: 99999;
+        overflow-y: auto;
+        display: none;
+        flex-direction: column;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    .comments-modal-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #262626;
+        margin-bottom: 20px;
+        position: sticky;
+        top: 0;
+        background-color: #050505;
+        z-index: 10;
+    }
+
+    .comments-back-btn {
+        background: #262626;
+        color: #ffffff;
+        border: 1px solid #404040;
+        padding: 8px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+    .comments-back-btn:hover {
+        background: #333333;
     }
 
     .episodes-dropdown-container {
@@ -191,6 +259,247 @@ styleTag.textContent = `
         fill: currentColor;
         opacity: 0.7;
     }
+
+    /* ==========================================
+     * REVIEWS SYSTEM STYLING
+     * ========================================== */
+    :root {
+      --rev-bg: transparent;
+      --rev-card-bg: #0a0a0a;
+      --rev-panel-bg: #141414;
+      --rev-input-bg: #0f0f0f;
+      --rev-border: #262626;
+      --rev-border-accent: #404040;
+      --rev-text-main: #ffffff;
+      --rev-text-muted: #888888;
+    }
+
+    .reviews-container {
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: var(--rev-bg) !important;
+      border: none;
+      border-radius: 12px;
+      padding: 10px 0;
+      color: var(--rev-text-main);
+      box-sizing: border-box;
+      text-align: left !important;
+      position: relative;
+      z-index: 4;
+    }
+
+    .reviews-container .header-zone {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--rev-border);
+      padding-bottom: 10px;
+      margin-bottom: 16px;
+    }
+
+    .reviews-container .header-zone h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--rev-text-main);
+      letter-spacing: -0.5px;
+      margin: 0;
+    }
+
+    .reviews-container .series-badge {
+      background-color: #0a0a0a;
+      color: var(--rev-text-main);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      border: 1px solid var(--rev-border-accent);
+    }
+
+    .reviews-container .status-banner {
+      display: none;
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-size: 0.875rem;
+      margin-bottom: 16px;
+      font-weight: 500;
+      background-color: #0a0a0a;
+      border: 1px solid #888888;
+      color: #ffffff;
+    }
+
+    .reviews-container .modal-box {
+      background-color: #0a0a0a;
+      border: 1px solid var(--rev-border-accent);
+      padding: 14px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+    }
+
+    .reviews-container .modal-box p {
+      color: var(--rev-text-main);
+      margin-bottom: 10px;
+      font-size: 0.9rem;
+    }
+
+    .reviews-container .modal-input-group {
+      display: flex;
+      gap: 8px;
+    }
+
+    .reviews-container .modal-input-group input {
+      flex: 1;
+      padding: 8px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--rev-border-accent);
+      background-color: var(--rev-input-bg);
+      color: #fff;
+      font-size: 0.85rem;
+    }
+
+    .reviews-container .review-input-zone {
+      background-color: #0a0a0a;
+      border: 1px solid var(--rev-border);
+      padding: 14px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+
+    .reviews-container .review-input-zone textarea {
+      width: 100%;
+      height: 90px;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid var(--rev-border-accent);
+      background-color: var(--rev-input-bg);
+      color: var(--rev-text-main);
+      font-family: inherit;
+      resize: vertical;
+      margin-bottom: 10px;
+    }
+
+    .reviews-container .btn-primary {
+      padding: 8px 16px;
+      background-color: #ffffff;
+      color: #000000;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.85rem;
+      transition: background 0.2s;
+    }
+
+    .reviews-container .review-card {
+      background-color: #0a0a0a !important;
+      border: 1px solid var(--rev-border);
+      padding: 14px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    }
+
+    .reviews-container .review-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+    }
+
+    .reviews-container .review-author {
+      color: #ffffff !important;
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+
+    .reviews-container .review-date {
+      color: var(--rev-text-muted);
+      font-size: 0.75rem;
+    }
+
+    .reviews-container .review-body {
+      width: 100%;
+      font-size: 0.9rem;
+      line-height: 1.4;
+      color: #eeeeee;
+      white-space: pre-line;
+      word-break: break-word;
+    }
+
+    .reviews-container .review-actions {
+      display: flex;
+      justify-content: flex-end;
+      width: 100%;
+      margin-top: 2px;
+    }
+
+    .reviews-container .replies-zone {
+      margin-left: 8px;
+      border-left: 2px solid var(--rev-border-accent);
+      padding-left: 10px;
+      margin-top: 6px;
+    }
+
+    .reviews-container .reply-card {
+      background-color: #141414;
+      padding: 8px 10px;
+      border-radius: 6px;
+      margin-bottom: 6px;
+      font-size: 0.8rem;
+      border: 1px solid var(--rev-border);
+    }
+
+    .reviews-container .reply-card strong {
+      color: #ffffff;
+    }
+
+    .reviews-container .reply-time {
+      font-size: 0.7rem;
+      color: var(--rev-text-muted);
+      text-align: right;
+      margin-top: 2px;
+    }
+
+    .reviews-container .reply-input-group {
+      display: flex;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .reviews-container .reply-input-group input {
+      flex: 1;
+      padding: 6px 10px;
+      border-radius: 4px;
+      border: 1px solid var(--rev-border-accent);
+      background-color: var(--rev-input-bg);
+      color: #fff;
+      font-size: 0.8rem;
+    }
+
+    .reviews-container .btn-secondary {
+      padding: 6px 12px;
+      background-color: #262626;
+      color: #ffffff;
+      border: 1px solid var(--rev-border-accent);
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .reviews-container .empty-state {
+      text-align: center;
+      color: var(--rev-text-muted);
+      padding: 20px 0;
+      font-size: 0.85rem;
+      background-color: #0a0a0a;
+      border-radius: 8px;
+      border: 1px solid var(--rev-border);
+    }
 `;
 document.head.appendChild(styleTag);
 
@@ -243,9 +552,7 @@ async function fetchCloudflareProgressMap() {
     });
     if (!response.ok) return {};
     const data = await response.json();
-    console.log("☁️ RAW CLOUDFLARE PROGRESS RESPONSE:", data);
     
-    // Universally extract progress regardless of key wrapper name
     return data.progress || data.data || data.history || (typeof data === 'object' ? data : {});
   } catch (err) {
     console.error("Error fetching Cloudflare progress:", err);
@@ -304,11 +611,9 @@ async function init() {
             displayOrder.sort((a, b) => (a.number == lastSeasonNum ? -1 : 1));
         }
 
-        // Render skeleton / default state immediately before network returns
         let activeSeasonReference = displayOrder[0];
         renderActiveSeasonContent(activeSeasonReference, []);
 
-        // Fetch Cloudflare progress asynchronously and update in real-time
         fetchCloudflareProgressMap().then(cloudflareProgress => {
             let watchedEpisodesList = [];
 
@@ -350,11 +655,7 @@ async function init() {
                 }
             });
 
-            // Sort descending so the most recent watch is at [0]
             watchedEpisodesList.sort((a, b) => b.time - a.time);
-            console.log("🎯 REAL-TIME CLOUDFLARE MATCHED & SORTED EPISODES:", watchedEpisodesList);
-
-            // Re-render instantly with real-time data loaded from Cloudflare
             renderActiveSeasonContent(activeSeasonReference, watchedEpisodesList);
         });
 
@@ -363,7 +664,6 @@ async function init() {
             if (!episodeContainer) return;
             episodeContainer.innerHTML = "";
 
-            // Filter history strictly belonging to the active season prefix
             let seasonWatchedList = watchedEpisodesList.filter(item => 
                 item.key.toLowerCase().startsWith(season.prefix.toLowerCase())
             );
@@ -404,7 +704,21 @@ async function init() {
             };
             episodeContainer.appendChild(bigPlayBtn);
 
-            // 2. Dropdown Accordion for all episodes
+            // 2. Comments Trigger Button
+            const commentsBtn = document.createElement("button");
+            commentsBtn.className = "comments-trigger-btn";
+            commentsBtn.innerHTML = `
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
+                </svg>
+                <span>Comments & Reviews</span>
+            `;
+            commentsBtn.onclick = () => {
+                openCommentsModal(id);
+            };
+            episodeContainer.appendChild(commentsBtn);
+
+            // 3. Dropdown Accordion for all episodes
             if (season.totalEpisodes >= 1) {
                 const dropdownWrapper = document.createElement("div");
                 dropdownWrapper.className = "episodes-dropdown-container";
@@ -457,11 +771,9 @@ async function init() {
 
                 seasonBtn.onclick = async () => {
                     await saveProgress(storageKey, season.number);
-                    // Re-render with current cached data instantly on season switch
                     document.querySelectorAll(".season-btn").forEach(b => b.classList.remove("active"));
                     seasonBtn.classList.add("active");
                     fetchCloudflareProgressMap().then(progress => {
-                        // Re-run matching logic for new season
                         let list = [];
                         const entries = Array.isArray(progress) ? progress : Object.entries(progress);
                         entries.forEach(entry => {
@@ -478,6 +790,293 @@ async function init() {
             });
         }
     }
+}
+
+// ==========================================================================
+// FULL-PAGE COMMENTS / REVIEWS SYSTEM ENGINE
+// ==========================================================================
+
+function openCommentsModal(seriesId) {
+    let overlay = document.getElementById("commentsOverlayModal");
+    if (!overlay) {
+        overlay = document.createElement("div");
+        overlay.id = "commentsOverlayModal";
+        overlay.innerHTML = `
+            <div class="comments-modal-header">
+                <button class="comments-back-btn" onclick="closeCommentsModal()">← Back</button>
+                <h3 style="margin:0; font-size: 1.1rem; color: #fff;">Discussion Board</h3>
+                <div style="width: 60px;"></div>
+            </div>
+            <div id="commentsModalBodyContainer" style="flex: 1; width: 100%; display: flex; justify-content: center;"></div>
+        `;
+        document.body.appendChild(overlay);
+    }
+
+    initReviewsSystem(seriesId);
+    overlay.style.display = "flex";
+    document.body.style.overflow = "hidden";
+}
+
+function closeCommentsModal() {
+    const overlay = document.getElementById("commentsOverlayModal");
+    if (overlay) {
+        overlay.style.display = "none";
+        document.body.style.overflow = "auto";
+    }
+}
+
+function toggleReviewComposer() {
+  const zone = document.getElementById("reviewInputZone");
+  if (!zone) return;
+  const isHidden = zone.style.display === "none" || zone.style.display === "";
+  zone.style.display = isHidden ? "block" : "none";
+}
+
+function initReviewsSystem(seriesId) {
+  let container = document.querySelector(".reviews-container");
+  if (!container) {
+    container = document.createElement("div");
+    container.className = "reviews-container";
+    container.innerHTML = `
+      <div class="header-zone">
+        <h2>Reviews</h2>
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <button class="btn-primary toggle-add-btn" onclick="toggleReviewComposer()">+ Add a Review</button>
+          <span class="series-badge" id="displaySeriesName">${escapeHtml(seriesId.replace(/-/g, ' ').toUpperCase())}</span>
+        </div>
+      </div>
+
+      <!-- AD SLOT PLACED EXACTLY BELOW HEADER AND CENTERED -->
+      <div id="adSlotZone" style="margin-bottom: 16px; display: flex; justify-content: center; align-items: center; width: 100%;"></div>
+
+      <div id="statusBanner" class="status-banner"></div>
+
+      <!-- Account Setup Container -->
+      <div class="modal-box" id="usernameModal" style="display: none;">
+        <p>Please enter a display name to participate in discussions:</p>
+        <div class="modal-input-group">
+          <input type="text" id="usernameInput" placeholder="Enter username" />
+          <button class="btn-secondary" onclick="saveUsername()">Set Name</button>
+        </div>
+      </div>
+
+      <!-- Review Composer Zone -->
+      <div class="review-input-zone" id="reviewInputZone" style="display: none;">
+        <textarea id="mainReviewText" placeholder="Write your thoughts..."></textarea>
+        <button class="btn-primary" onclick="submitReview()">Post Review</button>
+      </div>
+
+      <!-- Main Feed Area -->
+      <div id="reviewsList">
+        <div class="empty-state">Loading reviews...</div>
+      </div>
+    `;
+
+    const modalBodyContainer = document.getElementById("commentsModalBodyContainer");
+    if (modalBodyContainer) {
+        modalBodyContainer.appendChild(container);
+    } else {
+        document.body.appendChild(container);
+    }
+
+    injectAdScript();
+  }
+
+  loadReviews(seriesId);
+}
+
+function injectAdScript() {
+  const adZone = document.getElementById("adSlotZone");
+  if (!adZone || document.getElementById("reynScriptTag")) return;
+
+  const script = document.createElement("script");
+  script.id = "reynScriptTag";
+  script.async = true;
+  script.referrerPolicy = "no-referrer-when-downgrade";
+  script.src = "//shameful-farm.com/bVX/V-s.dvGJl_0FYyW/cL/CermS9iuhZLUYlfk/PiThc/xuMrzLgRx/NGD-EjtTNLzcE/zEOYDhEQ0/NeQE";
+
+  adZone.appendChild(script);
+}
+
+const API_BASE = "https://rinolski.misty-fog-201e.workers.dev";
+const token = localStorage.getItem("session_token") || "";
+
+function showStatus(message, isError = false) {
+  const banner = document.getElementById("statusBanner");
+  if (!banner) return;
+  banner.className = `status-banner ${isError ? 'error' : ''}`;
+  banner.innerText = message;
+  banner.style.display = "block";
+  setTimeout(() => { banner.style.display = "none"; }, 4000);
+}
+
+function toggleReplyInput(id) {
+  const el = document.getElementById(`reply-box-${id}`);
+  if (el) {
+    el.style.display = el.style.display === "none" ? "flex" : "none";
+  }
+}
+
+async function loadReviews(seriesId) {
+  const currentSeries = seriesId || id;
+  const listEl = document.getElementById("reviewsList");
+  if (!listEl) return;
+
+  try {
+    const res = await fetch(`${API_BASE}/api/get-reviews?movie=${encodeURIComponent(currentSeries)}&series=${encodeURIComponent(currentSeries)}`, {
+      headers: { "Authorization": `Bearer ${token}` }
+    });
+    const data = await res.json();
+
+    const reviewsArr = data.reviews || data.data || [];
+
+    if (!reviewsArr || reviewsArr.length === 0) {
+      listEl.innerHTML = `<div class="empty-state">No reviews yet. Be the first to publish one!</div>`;
+      return;
+    }
+
+    const sortedReviews = [...reviewsArr].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+    listEl.innerHTML = sortedReviews.map(r => {
+      const authorEmail = r.authorEmail || r.email || "user";
+      const safeEmailId = authorEmail.replace(/[^a-zA-Z0-9]/g, '_');
+      const reviewContent = r.reviewText || r.text || r.content || "";
+      const username = r.authorUsername || r.username || "Anonymous";
+
+      return `
+        <div class="review-card">
+          <div class="review-header">
+            <span class="review-author">@${escapeHtml(username)}</span>
+            <span class="review-date">${r.timestamp ? new Date(r.timestamp).toLocaleDateString() : ''}</span>
+          </div>
+
+          <div class="review-body">${escapeHtml(reviewContent)}</div>
+
+          <div class="review-actions">
+            <button class="btn-secondary" onclick="toggleReplyInput('${safeEmailId}')">Reply</button>
+          </div>
+
+          <div class="replies-zone">
+            ${(r.replies || []).map(rep => `
+              <div class="reply-card">
+                <strong>@${escapeHtml(rep.replierUsername || rep.username || 'User')}:</strong> ${escapeHtml(rep.text || rep.replyText || '')}
+                <div class="reply-time">${rep.timestamp ? new Date(rep.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : ''}</div>
+              </div>
+            `).join('')}
+
+            <div class="reply-input-group" id="reply-box-${safeEmailId}" style="display: none;">
+              <input type="text" id="reply-input-${safeEmailId}" placeholder="Reply..." />
+              <button class="btn-secondary" onclick="submitReply('${authorEmail}')">Send</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+  } catch(err) {
+    listEl.innerHTML = `<div class="empty-state">Unable to load reviews right now.</div>`;
+  }
+}
+
+async function saveUsername() {
+  const username = document.getElementById("usernameInput").value.trim();
+  if (!username) return showStatus("Username cannot be empty.", true);
+
+  try {
+    const res = await fetch(`${API_BASE}/api/set-username`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+      body: JSON.stringify({ username })
+    });
+    const data = await res.json();
+
+    if (res.ok) {
+      showStatus("Username saved successfully!");
+      document.getElementById("usernameModal").style.display = "none";
+    } else {
+      showStatus(data.error || "Failed to save username.", true);
+    }
+  } catch (err) {
+    showStatus("Connection error. Please try again.", true);
+  }
+}
+
+async function submitReview() {
+  const currentSeries = id;
+  const textareaEl = document.getElementById("mainReviewText");
+  const text = textareaEl ? textareaEl.value.trim() : "";
+
+  if (!text) return showStatus("Please write something before publishing.", true);
+
+  try {
+    const res = await fetch(`${API_BASE}/api/add-review`, {
+      method: "POST",
+      headers: { 
+        "Content-Type": "application/json", 
+        "Authorization": `Bearer ${token}` 
+      },
+      body: JSON.stringify({ 
+        movie: currentSeries, 
+        series: currentSeries, 
+        reviewText: text,
+        text: text
+      })
+    });
+    const data = await res.json();
+
+    if (data.requireUsername) {
+      document.getElementById("usernameModal").style.display = "block";
+    } else if (res.ok) {
+      textareaEl.value = "";
+      toggleReviewComposer();
+      loadReviews(currentSeries);
+    } else {
+      showStatus(data.error || "Could not publish review.", true);
+    }
+  } catch (err) {
+    showStatus("Connection error. Please try again.", true);
+  }
+}
+
+async function submitReply(targetEmail) {
+  const currentSeries = id;
+  const safeEmailId = targetEmail.replace(/[^a-zA-Z0-9]/g, '_');
+  const inputEl = document.getElementById(`reply-input-${safeEmailId}`);
+  const replyText = inputEl ? inputEl.value.trim() : "";
+
+  if (!replyText) return showStatus("Reply cannot be empty.", true);
+
+  try {
+    const res = await fetch(`${API_BASE}/api/add-reply`, {
+      method: "POST",
+      headers: { 
+        "Content-Type": "application/json", 
+        "Authorization": `Bearer ${token}` 
+      },
+      body: JSON.stringify({ 
+        movie: currentSeries, 
+        series: currentSeries, 
+        targetEmail: targetEmail, 
+        replyText: replyText,
+        text: replyText
+      })
+    });
+    const data = await res.json();
+
+    if (data.requireUsername) {
+      document.getElementById("usernameModal").style.display = "block";
+    } else if (res.ok) {
+      loadReviews(currentSeries);
+    } else {
+      showStatus(data.error || "Could not post reply.", true);
+    }
+  } catch (err) {
+    showStatus("Connection error. Please try again.", true);
+  }
+}
+
+function escapeHtml(str) {
+  return str ? String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") : "";
 }
 
 loadDataFiles();
