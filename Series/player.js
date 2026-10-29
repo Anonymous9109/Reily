@@ -168,7 +168,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     /* --- Next Episode & Watch Credits Overlay Styling --- */
     #nextEpOverlay {
       position: absolute;
-      bottom: 3%; /* Stationary bottom right under the progress bar */
+      bottom: 3%; 
       right: 5%;
       display: flex;
       gap: 12px;
@@ -182,7 +182,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       visibility: visible;
     }
     #nextEpOverlay.near-end {
-      bottom: 95px !important; /* Slides up when 2 minutes hit */
+      bottom: 95px !important; 
       opacity: 1 !important;
       visibility: visible !important;
     }
@@ -210,7 +210,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       color: #ffffff;
       border: 1px solid rgba(255, 255, 255, 0.2);
       backdrop-filter: blur(8px);
-      display: none; /* Hidden until 2 min remaining */
+      display: none; 
     }
     #nextEpTimerBtn {
       background: #444444;
@@ -687,9 +687,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     for (const el of [controls, progressContainer, backToPrev, downloadBtn, timerDisplay, ccBtn]) {
       el.style.opacity = "1"; el.style.visibility = "visible";
     }
-    nextEpOverlay.style.opacity = "1";
-    nextEpOverlay.style.visibility = "visible";
-    nextEpOverlay.classList.add("show-controls");
+    
+    // Only show next episode overlay if a next episode actually exists in the series structure
+    if (hasNextEpisodeAvailable()) {
+      nextEpOverlay.style.opacity = "1";
+      nextEpOverlay.style.visibility = "visible";
+      nextEpOverlay.classList.add("show-controls");
+    }
 
     backBtn.style.opacity = window.backEpisodeLink ? "1" : "0";
     nextBtn.style.opacity = window.nextEpisodeLink ? "1" : "0";
@@ -733,11 +737,56 @@ document.addEventListener("DOMContentLoaded", async () => {
   rewindBtn.onclick = (e) => { e.stopPropagation(); video.currentTime = Math.max(0, video.currentTime - 10); };
   skipBtn.onclick = (e) => { e.stopPropagation(); video.currentTime = Math.min(video.duration, video.currentTime + 10); };
 
-  // --- Next Episode & Watch Credits Logic ---
+  // --- Series-Aware Next Episode & Watch Credits Logic ---
   let countdownInterval = null;
   let isTimerRunning = false;
   let creditsCancelled = false;
   const timerFill = document.getElementById("timerFill");
+
+  function getSeriesCustomOffset() {
+    try {
+      const currentEpParam = params.get("ep") || "1";
+      const match = currentEpParam.match(/^(.*-S(\d+)E)(\d+)$/i);
+      if (match && window.seriesData) {
+        const seriesKey = match[1].replace(/-S\d+E$/i, "");
+        const foundKey = Object.keys(window.seriesData).find(k => k.toLowerCase() === seriesKey.toLowerCase());
+        if (foundKey && window.seriesData[foundKey].nextEpOffset !== undefined) {
+          return window.seriesData[foundKey].nextEpOffset;
+        }
+      }
+    } catch (err) {
+      console.error("Error reading custom series offset:", err);
+    }
+    return 120; // Default fallback: 2 minutes
+  }
+
+  function hasNextEpisodeAvailable() {
+    if (window.nextEpisodeLink) return true;
+    try {
+      const currentEpParam = params.get("ep") || "1";
+      const match = currentEpParam.match(/^(.*-S(\d+)E)(\d+)$/i);
+      if (match && window.seriesData) {
+        const seriesKey = match[1].replace(/-S\d+E$/i, "");
+        const seasonNum = parseInt(match[2], 10);
+        const epNum = parseInt(match[3], 10);
+
+        const foundKey = Object.keys(window.seriesData).find(k => k.toLowerCase() === seriesKey.toLowerCase());
+        if (foundKey) {
+          const seriesObj = window.seriesData[foundKey];
+          const seasonObj = seriesObj.seasons.find(s => s.number === seasonNum);
+          if (seasonObj && epNum < seasonObj.totalEpisodes) {
+            return true;
+          }
+        }
+      } else {
+        const numericEp = parseInt(currentEpParam, 10);
+        if (!isNaN(numericEp)) return true;
+      }
+    } catch (err) {
+      console.error("Error validating next episode availability:", err);
+    }
+    return false;
+  }
 
   function triggerNextEpisodeAction() {
     if (window.nextEpisodeLink) {
@@ -745,10 +794,22 @@ document.addEventListener("DOMContentLoaded", async () => {
     } else {
       try {
         const currentEpParam = params.get("ep") || "1";
-        const match = currentEpParam.match(/^(.*-S\d+E)(\d+)$/i);
+        const match = currentEpParam.match(/^(.*-S(\d+)E)(\d+)$/i);
         if (match) {
           const prefix = match[1];
-          const nextEpNum = parseInt(match[2], 10) + 1;
+          const seasonNum = parseInt(match[2], 10);
+          const nextEpNum = parseInt(match[3], 10) + 1;
+          const seriesKey = prefix.replace(/-S\d+E$/i, "");
+
+          if (window.seriesData) {
+            const foundKey = Object.keys(window.seriesData).find(k => k.toLowerCase() === seriesKey.toLowerCase());
+            if (foundKey) {
+              const seasonObj = window.seriesData[foundKey].seasons.find(s => s.number === seasonNum);
+              if (seasonObj && nextEpNum > seasonObj.totalEpisodes) {
+                return;
+              }
+            }
+          }
           location.replace(`videoplayer.html?ep=${prefix}${nextEpNum}`);
         } else {
           const numericEp = parseInt(currentEpParam, 10);
@@ -809,8 +870,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       timerDisplay.textContent = `${formatTime(video.currentTime)} / ${formatTime(video.duration)}`;
       
       const timeRemaining = video.duration - video.currentTime;
+      const customOffset = getSeriesCustomOffset();
 
-      if (timeRemaining <= 120 && timeRemaining > 0 && !creditsCancelled) {
+      if (timeRemaining <= customOffset && timeRemaining > 0 && !creditsCancelled && hasNextEpisodeAvailable()) {
         watchCreditsBtn.style.display = "block";
         nextEpOverlay.classList.add("near-end");
 
