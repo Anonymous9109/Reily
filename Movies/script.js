@@ -723,24 +723,23 @@ function goBack() {
      * COMMENTS TRIGGER & MODALS STYLING
      * ========================================== */
     .comments-trigger-btn {
-      background-color: #1a1a1a;
-      color: #ffffff;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      padding: 12px 24px;
-      border-radius: 8px;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      font-weight: 600;
-      font-size: 0.9rem;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-      transition: background-color 0.2s, border-color 0.2s;
-      margin-top: 10px;
-      margin-bottom: 16px;
-      position: relative;
-      z-index: 4;
+        background-color: #1a1a1a;
+        color: #ffffff;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 14px 24px;
+        border-radius: 10px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        font-weight: 600;
+        font-size: 15px;
+        width: 100%;
+        max-width: 320px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        transition: background-color 0.2s, border-color 0.2s;
+        margin-bottom: 24px;
     }
     .comments-trigger-btn:hover {
       background-color: #262626;
