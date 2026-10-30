@@ -17,8 +17,8 @@ const profileAvatarsCatalog = {
 };
 
 /**
- * Robustly resolves the user avatar URL matching profileAvatarsCatalog
- * @param {Object|string|number} item - The review/reply item object OR direct pfp ID
+ * Resolves the correct avatar URL using review object properties,
+ * global window state, or defaulting to avatar 1.
  */
 function getPfpUrl(item) {
     let rawVal = null;
@@ -29,7 +29,7 @@ function getPfpUrl(item) {
         rawVal = item;
     }
     
-    if (rawVal !== undefined && rawVal !== null && rawVal !== "") {
+    if (rawVal !== undefined && rawVal !== null && rawVal !== "" && rawVal !== 0) {
         const numericId = parseInt(rawVal, 10);
         if (!isNaN(numericId) && profileAvatarsCatalog[numericId]) {
             return profileAvatarsCatalog[numericId];
@@ -37,6 +37,11 @@ function getPfpUrl(item) {
         if (typeof rawVal === 'string' && (rawVal.startsWith('http://') || rawVal.startsWith('https://'))) {
             return rawVal;
         }
+    }
+
+    // Fallback to active global currentUserPfpId if available on the page
+    if (typeof currentUserPfpId !== 'undefined' && profileAvatarsCatalog[currentUserPfpId]) {
+        return profileAvatarsCatalog[currentUserPfpId];
     }
     
     // Default fallback avatar 1
@@ -1192,7 +1197,8 @@ async function submitBottomComment() {
         movie: currentSeries, 
         series: currentSeries, 
         reviewText: text,
-        text: text
+        text: text,
+        pfp: typeof currentUserPfpId !== 'undefined' ? String(currentUserPfpId) : "1"
       })
     });
     const data = await res.json();
@@ -1230,7 +1236,8 @@ async function submitDrawerReply() {
         series: currentSeries, 
         targetEmail: activeReplyTargetEmail, 
         replyText: replyText,
-        text: replyText
+        text: replyText,
+        pfp: typeof currentUserPfpId !== 'undefined' ? String(currentUserPfpId) : "1"
       })
     });
     const data = await res.json();
