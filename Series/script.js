@@ -2,6 +2,33 @@ const params = new URLSearchParams(window.location.search);
 const id = params.get("series");
 const series = seriesData[id];
 
+// --- Profile Avatars Catalog Lookup ---
+const profileAvatarsCatalog = {
+    1: "https://rinolski.online/images/1.jpg", 
+    2: "https://rinolski.online/images/2.jpg", 
+    3: "https://rinolski.online/images/3.jpg", 
+    4: "https://rinolski.online/images/4.jpg", 
+    5: "https://rinolski.online/images/5.jpg",
+    6: "https://rinolski.online/images/6.jpg", 
+    7: "https://rinolski.online/images/7.jpg", 
+    8: "https://rinolski.online/images/8.jpg", 
+    9: "https://rinolski.online/images/9.jpg", 
+    10: "https://rinolski.online/images/10.jpg"
+};
+
+function getPfpUrl(pfpVal, authorEmail) {
+    if (pfpVal) {
+        const numericId = parseInt(pfpVal, 10);
+        if (profileAvatarsCatalog[numericId]) {
+            return profileAvatarsCatalog[numericId];
+        }
+        if (typeof pfpVal === 'string' && (pfpVal.startsWith('http://') || pfpVal.startsWith('https://'))) {
+            return pfpVal;
+        }
+    }
+    return `https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(authorEmail || 'user')}`;
+}
+
 // --- Save Incoming Page Reference (Avoiding Video Player) ---
 document.addEventListener("DOMContentLoaded", () => {
     const referrer = document.referrer;
@@ -1019,14 +1046,18 @@ async function loadReviews(seriesId) {
       const safeEmailId = authorEmail.replace(/[^a-zA-Z0-9]/g, '_');
       const reviewContent = r.reviewText || r.text || r.content || "";
       const username = r.authorUsername || r.username || "Anonymous";
-      const pfpUrl = r.pfp || r.avatar || r.userPfp || `https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(authorEmail)}`;
+      
+      // Calculate dynamic pfp image url matching profileAvatarsCatalog
+      const rawPfp = r.pfp || r.avatar || r.userPfp || r.profilePic;
+      const pfpUrl = getPfpUrl(rawPfp, authorEmail);
+      
       const repliesCount = (r.replies || []).length;
 
       return `
         <div class="review-card" id="review-card-${safeEmailId}">
           <div class="review-header">
             <div class="user-profile-info">
-              <img src="${escapeHtml(pfpUrl)}" class="user-pfp" alt="PFP" onerror="this.src='https://api.dicebear.com/7.x/identicon/svg?seed=fallback'" />
+              <img src="${escapeHtml(pfpUrl)}" class="user-pfp" alt="PFP" onerror="this.src='https://rinolski.online/images/1.jpg'" />
               <span class="review-author">@${escapeHtml(username)}</span>
             </div>
             <span class="review-date">${r.timestamp ? new Date(r.timestamp).toLocaleDateString() : ''}</span>
@@ -1043,7 +1074,6 @@ async function loadReviews(seriesId) {
       `;
     }).join('');
 
-    // If replies drawer is currently open, update its contents live too
     if (activeReplyTargetEmail) {
         renderRepliesInDrawer(activeReplyTargetEmail);
     }
@@ -1076,14 +1106,15 @@ async function renderRepliesInDrawer(targetEmail) {
       const repUsername = rep.replierUsername || rep.username || 'User';
       const repText = rep.text || rep.replyText || '';
       const repEmail = rep.replierEmail || rep.email || 'user';
-      const repPfp = rep.pfp || rep.avatar || `https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(repEmail)}`;
+      const rawRepPfp = rep.pfp || rep.avatar || rep.userPfp || rep.profilePic;
+      const repPfp = getPfpUrl(rawRepPfp, repEmail);
       const repTime = rep.timestamp ? new Date(rep.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '';
 
       return `
         <div class="reply-card">
           <div class="reply-card-header">
             <div class="user-profile-info">
-              <img src="${escapeHtml(repPfp)}" class="user-pfp" style="width:24px; height:24px;" alt="PFP" onerror="this.src='https://api.dicebear.com/7.x/identicon/svg?seed=fallback'" />
+              <img src="${escapeHtml(repPfp)}" class="user-pfp" style="width:24px; height:24px;" alt="PFP" onerror="this.src='https://rinolski.online/images/1.jpg'" />
               <strong style="color: #fff; font-size: 0.85rem;">@${escapeHtml(repUsername)}</strong>
             </div>
             <span class="reply-time">${repTime}</span>
