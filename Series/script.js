@@ -2,52 +2,6 @@ const params = new URLSearchParams(window.location.search);
 const id = params.get("series") || params.get("movie");
 const series = seriesData[id];
 
-// --- Profile Avatars Catalog Lookup ---
-const profileAvatarsCatalog = {
-    1: "https://rinolski.online/images/1.jpg", 
-    2: "https://rinolski.online/images/2.jpg", 
-    3: "https://rinolski.online/images/3.jpg", 
-    4: "https://rinolski.online/images/4.jpg", 
-    5: "https://rinolski.online/images/5.jpg",
-    6: "https://rinolski.online/images/6.jpg", 
-    7: "https://rinolski.online/images/7.jpg", 
-    8: "https://rinolski.online/images/8.jpg", 
-    9: "https://rinolski.online/images/9.jpg", 
-    10: "https://rinolski.online/images/10.jpg"
-};
-
-/**
- * Resolves the correct avatar URL using review object properties,
- * global window state, or defaulting to avatar 1.
- */
-function getPfpUrl(item) {
-    let rawVal = null;
-    
-    if (item && typeof item === 'object') {
-        rawVal = item.pfp ?? item.avatar ?? item.userPfp ?? item.profilePic ?? item.profile_pic ?? item.pfpId;
-    } else {
-        rawVal = item;
-    }
-    
-    if (rawVal !== undefined && rawVal !== null && rawVal !== "" && rawVal !== 0) {
-        const numericId = parseInt(rawVal, 10);
-        if (!isNaN(numericId) && profileAvatarsCatalog[numericId]) {
-            return profileAvatarsCatalog[numericId];
-        }
-        if (typeof rawVal === 'string' && (rawVal.startsWith('http://') || rawVal.startsWith('https://'))) {
-            return rawVal;
-        }
-    }
-
-    // Fallback to active global currentUserPfpId if available on the page
-    if (typeof currentUserPfpId !== 'undefined' && profileAvatarsCatalog[currentUserPfpId]) {
-        return profileAvatarsCatalog[currentUserPfpId];
-    }
-    
-    // Default fallback avatar 1
-    return profileAvatarsCatalog[1];
-}
-
 // --- Save Incoming Page Reference (Avoiding Video Player) ---
 document.addEventListener("DOMContentLoaded", () => {
     const referrer = document.referrer;
@@ -426,10 +380,6 @@ styleTag.textContent = `
       margin: 0;
     }
 
-    .reviews-container .series-badge {
-      display: none !important;
-    }
-
     .reviews-container .status-banner {
       display: none;
       padding: 10px 14px;
@@ -471,10 +421,6 @@ styleTag.textContent = `
       font-size: 0.85rem;
     }
 
-    .reviews-container .review-input-zone {
-      display: none !important;
-    }
-
     .reviews-container .review-card {
       background-color: #0a0a0a !important;
       border: 1px solid var(--rev-border);
@@ -492,23 +438,6 @@ styleTag.textContent = `
       justify-content: space-between;
       align-items: center;
       width: 100%;
-    }
-
-    .user-profile-info {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .user-pfp {
-      width: 32px;
-      height: 32px;
-      min-width: 32px;
-      min-height: 32px;
-      border-radius: 50%;
-      object-fit: cover;
-      background-color: #262626;
-      border: 1px solid var(--rev-border-accent);
     }
 
     .reviews-container .review-author {
@@ -529,7 +458,6 @@ styleTag.textContent = `
       color: #eeeeee;
       white-space: pre-line;
       word-break: break-word;
-      padding-left: 42px;
     }
 
     .reviews-container .review-actions {
@@ -599,7 +527,6 @@ styleTag.textContent = `
       color: #dddddd;
       white-space: pre-line;
       word-break: break-word;
-      padding-left: 40px;
     }
 
     .reviews-container .empty-state {
@@ -992,7 +919,6 @@ function initReviewsSystem(seriesId) {
     container.innerHTML = `
       <div class="header-zone">
         <h2>Reviews</h2>
-        <span class="series-badge" id="displaySeriesName"></span>
       </div>
 
       <!-- AD SLOT PLACED EXACTLY BELOW HEADER AND CENTERED -->
@@ -1078,17 +1004,12 @@ async function loadReviews(seriesId) {
       const safeEmailId = authorEmail.replace(/[^a-zA-Z0-9]/g, '_');
       const reviewContent = r.reviewText || r.text || r.content || "";
       const username = r.authorUsername || r.username || "Anonymous";
-      
-      const pfpUrl = getPfpUrl(r);
       const repliesCount = (r.replies || []).length;
 
       return `
         <div class="review-card" id="review-card-${safeEmailId}">
           <div class="review-header">
-            <div class="user-profile-info">
-              <img src="${escapeHtml(pfpUrl)}" class="user-pfp" alt="PFP" onerror="this.src='https://rinolski.online/images/1.jpg'" />
-              <span class="review-author">@${escapeHtml(username)}</span>
-            </div>
+            <span class="review-author">@${escapeHtml(username)}</span>
             <span class="review-date">${r.timestamp ? new Date(r.timestamp).toLocaleDateString() : ''}</span>
           </div>
 
@@ -1134,16 +1055,12 @@ async function renderRepliesInDrawer(targetEmail) {
     container.innerHTML = repliesArr.map(rep => {
       const repUsername = rep.replierUsername || rep.username || 'User';
       const repText = rep.text || rep.replyText || '';
-      const repPfp = getPfpUrl(rep);
       const repTime = rep.timestamp ? new Date(rep.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '';
 
       return `
         <div class="standalone-reply-card">
           <div class="standalone-reply-header">
-            <div class="user-profile-info">
-              <img src="${escapeHtml(repPfp)}" class="user-pfp" style="width:28px; height:28px;" alt="PFP" onerror="this.src='https://rinolski.online/images/1.jpg'" />
-              <strong style="color: #fff; font-size: 0.9rem;">@${escapeHtml(repUsername)}</strong>
-            </div>
+            <strong style="color: #fff; font-size: 0.9rem;">@${escapeHtml(repUsername)}</strong>
             <span style="font-size: 0.75rem; color: #888;">${repTime}</span>
           </div>
           <div class="standalone-reply-body">${escapeHtml(repText)}</div>
@@ -1197,8 +1114,7 @@ async function submitBottomComment() {
         movie: currentSeries, 
         series: currentSeries, 
         reviewText: text,
-        text: text,
-        pfp: typeof currentUserPfpId !== 'undefined' ? String(currentUserPfpId) : "1"
+        text: text
       })
     });
     const data = await res.json();
@@ -1236,8 +1152,7 @@ async function submitDrawerReply() {
         series: currentSeries, 
         targetEmail: activeReplyTargetEmail, 
         replyText: replyText,
-        text: replyText,
-        pfp: typeof currentUserPfpId !== 'undefined' ? String(currentUserPfpId) : "1"
+        text: replyText
       })
     });
     const data = await res.json();
