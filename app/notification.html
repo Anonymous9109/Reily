@@ -1,344 +1,1049 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Comment Notifications</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background-color: #000000;
-      color: #ffffff;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Streaming with Notifications</title>
+    <style>
+        /* --- Base & Dynamic Styles --- */
+        html, body {
+            background-color: #000000;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
 
-    /* Floating Notification Container */
-    .notification-wrapper {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      z-index: 100000;
-    }
+        body {
+            padding-left: 24px;
+            padding-right: 24px;
+            position: relative;
+            min-height: 100vh;
+            overflow-y: auto;
+        }
 
-    /* Notification Bell Button */
-    .notification-btn {
-      position: relative;
-      background-color: #1a1a1a;
-      border: 1px solid #333333;
-      color: #ffffff;
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-      transition: background-color 0.2s, border-color 0.2s;
-    }
+        #ambientBg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: 0;
+            pointer-events: none;
+        }
 
-    .notification-btn:hover {
-      background-color: #262626;
-      border-color: #555555;
-    }
+        .content-wrapper, 
+        #title, 
+        #desc, 
+        #seasonNav, 
+        #episodeList, 
+        .main-container, 
+        #movieContentWrapper {
+            position: relative;
+            z-index: 2;
+        }
 
-    /* Badge Counter */
-    .notification-badge {
-      position: absolute;
-      top: -2px;
-      right: -2px;
-      background-color: #e50914;
-      color: #ffffff;
-      font-size: 0.75rem;
-      font-weight: 700;
-      min-width: 18px;
-      height: 18px;
-      border-radius: 9px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0 4px;
-      border: 2px solid #000000;
-      box-sizing: border-box;
-    }
+        .content-wrapper, #title, .main-container {
+            margin-top: 400px;
+        }
 
-    /* Dropdown Modal Container */
-    .notification-dropdown {
-      position: absolute;
-      top: 58px;
-      right: 0;
-      width: 340px;
-      max-height: 480px;
-      background-color: #0d0d0d;
-      border: 1px solid #262626;
-      border-radius: 12px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
-      display: none;
-      flex-direction: column;
-      overflow: hidden;
-    }
+        .big-play-btn {
+            background-color: #ffffff;
+            color: #000000;
+            border: none;
+            padding: 16px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 16px;
+            width: 100%;
+            max-width: 320px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            transition: background-color 0.2s, transform 0.1s;
+            margin-bottom: 12px;
+        }
+        .big-play-btn:hover {
+            background-color: #f0f0f0;
+            transform: translateY(-2px);
+        }
+        .big-play-btn .play-icon {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
 
-    .notification-dropdown.active {
-      display: flex;
-    }
+        .comments-trigger-btn {
+            background-color: #1a1a1a;
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 14px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-weight: 600;
+            font-size: 15px;
+            width: 100%;
+            max-width: 320px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transition: background-color 0.2s, border-color 0.2s;
+            margin-bottom: 24px;
+        }
+        .comments-trigger-btn:hover {
+            background-color: #262626;
+            border-color: rgba(255, 255, 255, 0.4);
+        }
 
-    .dropdown-header {
-      padding: 14px 16px;
-      border-bottom: 1px solid #262626;
-      font-weight: 700;
-      font-size: 0.95rem;
-      background-color: #121212;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+        /* --- Modals --- */
+        #commentsOverlayModal, #repliesDrawerModal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #050505;
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+            transform: translateY(100%);
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            visibility: hidden;
+        }
+        #commentsOverlayModal.active, #repliesDrawerModal.active {
+            transform: translateY(0);
+            visibility: visible;
+        }
 
-    .dropdown-list {
-      flex: 1;
-      overflow-y: auto;
-      padding: 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
+        .comments-modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            border-bottom: 1px solid #262626;
+            background-color: #050505;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
 
-    .notification-card {
-      background-color: #161616;
-      border: 1px solid #262626;
-      border-radius: 8px;
-      padding: 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
+        .comments-back-btn {
+            background: #262626;
+            color: #ffffff;
+            border: 1px solid #404040;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        .comments-back-btn:hover {
+            background: #333333;
+        }
 
-    .notification-series {
-      font-size: 0.75rem;
-      color: #e50914;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
+        .comments-bottom-bar {
+            position: sticky;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #0a0a0a;
+            border-top: 1px solid #262626;
+            padding: 12px 20px;
+            box-sizing: border-box;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            z-index: 20;
+        }
 
-    .notification-user {
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: #ffffff;
-    }
+        .comments-bottom-bar input {
+            flex: 1;
+            background-color: #141414;
+            border: 1px solid #333333;
+            border-radius: 8px;
+            padding: 12px 14px;
+            color: #ffffff;
+            font-size: 0.95rem;
+            outline: none;
+        }
 
-    .notification-text {
-      font-size: 0.85rem;
-      color: #cccccc;
-      line-height: 1.3;
-      word-break: break-word;
-    }
+        .comments-bottom-bar button {
+            background-color: #ffffff;
+            color: #000000;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 20px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+        }
 
-    .reply-form {
-      margin-top: 6px;
-      display: flex;
-      gap: 6px;
-    }
+        /* --- Floating Notification Bell Styles --- */
+        .notification-wrapper {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100000;
+        }
+        .notification-btn {
+            position: relative;
+            background-color: #1a1a1a;
+            border: 1px solid #333333;
+            color: #ffffff;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        }
+        .notification-btn:hover {
+            background-color: #262626;
+        }
+        .notification-badge {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            background-color: #e50914;
+            color: #ffffff;
+            font-size: 0.75rem;
+            font-weight: 700;
+            min-width: 18px;
+            height: 18px;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 4px;
+            border: 2px solid #000000;
+        }
+        .notification-dropdown {
+            position: absolute;
+            top: 58px;
+            right: 0;
+            width: 350px;
+            max-height: 500px;
+            background-color: #0d0d0d;
+            border: 1px solid #262626;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.8);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .notification-dropdown.active {
+            display: flex;
+        }
+        .dropdown-header {
+            padding: 14px 16px;
+            border-bottom: 1px solid #262626;
+            font-weight: 700;
+            font-size: 0.95rem;
+            background-color: #121212;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #fff;
+        }
+        .dropdown-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .notification-card {
+            background-color: #161616;
+            border: 1px solid #262626;
+            border-radius: 8px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .notification-series {
+            font-size: 0.75rem;
+            color: #e50914;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .notification-user {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #ffffff;
+        }
+        .notification-text {
+            font-size: 0.85rem;
+            color: #cccccc;
+            line-height: 1.3;
+            word-break: break-word;
+        }
+        .reply-form {
+            margin-top: 6px;
+            display: flex;
+            gap: 6px;
+        }
+        .reply-form input {
+            flex: 1;
+            background-color: #090909;
+            border: 1px solid #333333;
+            border-radius: 6px;
+            padding: 8px 10px;
+            color: #ffffff;
+            font-size: 0.8rem;
+            outline: none;
+        }
+        .reply-form button {
+            background-color: #ffffff;
+            color: #000000;
+            border: none;
+            border-radius: 6px;
+            padding: 8px 12px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
+        .empty-notifications {
+            text-align: center;
+            padding: 24px 12px;
+            color: #777777;
+            font-size: 0.85rem;
+        }
 
-    .reply-form input {
-      flex: 1;
-      background-color: #090909;
-      border: 1px solid #333333;
-      border-radius: 6px;
-      padding: 8px 10px;
-      color: #ffffff;
-      font-size: 0.8rem;
-      outline: none;
-    }
-
-    .reply-form input:focus {
-      border-color: #666666;
-    }
-
-    .reply-form button {
-      background-color: #ffffff;
-      color: #000000;
-      border: none;
-      border-radius: 6px;
-      padding: 8px 12px;
-      font-weight: 700;
-      font-size: 0.8rem;
-      cursor: pointer;
-    }
-
-    .empty-notifications {
-      text-align: center;
-      padding: 24px 12px;
-      color: #777777;
-      font-size: 0.85rem;
-    }
-  </style>
+        /* --- Reviews Feed UI --- */
+        .reviews-container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: transparent !important;
+            border-radius: 12px;
+            padding: 20px 16px;
+            color: #ffffff;
+            box-sizing: border-box;
+            text-align: left !important;
+            position: relative;
+            z-index: 4;
+            flex: 1;
+            overflow-y: auto;
+        }
+        .reviews-container .header-zone {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #262626;
+            padding-bottom: 10px;
+            margin-bottom: 16px;
+        }
+        .reviews-container .header-zone h2 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin: 0;
+        }
+        .status-banner {
+            display: none;
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            margin-bottom: 16px;
+            font-weight: 500;
+            background-color: #0a0a0a;
+            border: 1px solid #888888;
+            color: #ffffff;
+        }
+        .modal-box {
+            background-color: #0a0a0a;
+            border: 1px solid #404040;
+            padding: 14px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+        .modal-input-group {
+            display: flex;
+            gap: 8px;
+        }
+        .modal-input-group input {
+            flex: 1;
+            padding: 8px 10px;
+            border-radius: 6px;
+            border: 1px solid #404040;
+            background-color: #0f0f0f;
+            color: #fff;
+            font-size: 0.85rem;
+        }
+        .review-card {
+            background-color: #0a0a0a !important;
+            border: 1px solid #262626;
+            padding: 14px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        }
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .review-author {
+            color: #ffffff !important;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+        .review-date {
+            color: #888888;
+            font-size: 0.75rem;
+        }
+        .review-body {
+            font-size: 0.9rem;
+            line-height: 1.4;
+            color: #eeeeee;
+            white-space: pre-line;
+            word-break: break-word;
+        }
+        .review-actions {
+            display: flex;
+            justify-content: flex-end;
+        }
+        .reply-thread-btn {
+            background-color: #1a1a1a;
+            color: #cccccc;
+            border: 1px solid #404040;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .replies-list-container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px 16px;
+            box-sizing: border-box;
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .standalone-reply-card {
+            background-color: #121212 !important;
+            border: 1px solid #262626;
+            border-radius: 10px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .standalone-reply-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .standalone-reply-body {
+            font-size: 0.9rem;
+            line-height: 1.4;
+            color: #dddddd;
+            white-space: pre-line;
+            word-break: break-word;
+        }
+        .empty-state {
+            text-align: center;
+            color: #888888;
+            padding: 20px 0;
+            font-size: 0.85rem;
+            background-color: #0a0a0a;
+            border-radius: 8px;
+            border: 1px solid #262626;
+        }
+    </style>
 </head>
 <body>
 
-  <!-- Floating Notification UI -->
-  <div class="notification-wrapper">
-    <button class="notification-btn" id="notifBellBtn" onclick="toggleNotifDropdown()">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-2 1H8v-6c0-2.48 1.51-4.5 4-4.5s4 2.02 4 4.5v6z"/>
-      </svg>
-      <div class="notification-badge" id="notifBadge" style="display: none;">0</div>
-    </button>
+    <!-- Floating Notification Bell Component -->
+    <div class="notification-wrapper">
+        <button class="notification-btn" id="notifBellBtn" onclick="toggleNotifDropdown()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-2 1H8v-6c0-2.48 1.51-4.5 4-4.5s4 2.02 4 4.5v6z"/>
+            </svg>
+            <div class="notification-badge" id="notifBadge" style="display: none;">0</div>
+        </button>
 
-    <div class="notification-dropdown" id="notifDropdown">
-      <div class="dropdown-header">
-        <span>Replies</span>
-        <span id="notifCountText" style="font-size: 0.75rem; color: #888;">0 new</span>
-      </div>
-      <div class="dropdown-list" id="notifList">
-        <div class="empty-notifications">No new replies</div>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    const API_BASE = "https://rinolski.misty-fog-201e.workers.dev";
-    const token = localStorage.getItem("session_token") || "";
-
-    // Track state locally
-    let userEmail = "";
-    let notificationsList = [];
-
-    function toggleNotifDropdown() {
-      const dropdown = document.getElementById("notifDropdown");
-      dropdown.classList.toggle("active");
-    }
-
-    async function fetchUserIdentity() {
-      if (!token) return;
-      try {
-        const res = await fetch(`${API_BASE}/api/get-username`, {
-          headers: { "Authorization": `Bearer ${token}` }
-        });
-        if (res.ok) {
-          const data = await res.json();
-          userEmail = data.email || data.user?.email || "";
-        }
-      } catch (e) {
-        console.error("Failed to fetch user email:", e);
-      }
-    }
-
-    async function checkForNewReplies() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const currentId = urlParams.get("series") || urlParams.get("movie") || "";
-
-      if (!currentId) return;
-
-      try {
-        const res = await fetch(`${API_BASE}/api/get-reviews?movie=${encodeURIComponent(currentId)}&series=${encodeURIComponent(currentId)}`, {
-          headers: { "Authorization": `Bearer ${token}` }
-        });
-        if (!res.ok) return;
-
-        const data = await res.json();
-        const reviewsArr = data.reviews || data.data || [];
-
-        // Find reviews authored by the current logged-in user
-        const myReviews = reviewsArr.filter(r => (r.authorEmail || r.email) === userEmail);
-
-        notificationsList = [];
-
-        myReviews.forEach(review => {
-          const replies = review.replies || [];
-          replies.forEach(rep => {
-            notificationsList.push({
-              seriesId: currentId,
-              targetEmail: review.authorEmail || review.email,
-              replierUsername: rep.replierUsername || rep.username || "User",
-              text: rep.text || rep.replyText || "",
-              timestamp: rep.timestamp || Date.now()
-            });
-          });
-        });
-
-        // Sort replies newest first
-        notificationsList.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-        renderNotifications(currentId);
-
-      } catch (err) {
-        console.error("Error fetching notifications:", err);
-      }
-    }
-
-    function renderNotifications(seriesId) {
-      const badge = document.getElementById("notifBadge");
-      const listEl = document.getElementById("notifList");
-      const countText = document.getElementById("notifCountText");
-
-      if (notificationsList.length > 0) {
-        badge.textContent = notificationsList.length;
-        badge.style.display = "flex";
-        countText.textContent = `${notificationsList.length} new`;
-
-        listEl.innerHTML = notificationsList.map((item, idx) => `
-          <div class="notification-card">
-            <span class="notification-series">Series / Movie: ${escapeHtml(item.seriesId)}</span>
-            <span class="notification-user">@${escapeHtml(item.replierUsername)} replied:</span>
-            <div class="notification-text">${escapeHtml(item.text)}</div>
-            <div class="reply-form">
-              <input type="text" id="notifReplyInput_${idx}" placeholder="Reply..." />
-              <button onclick="sendNotificationReply('${escapeHtml(item.seriesId)}', '${escapeHtml(item.targetEmail)}', ${idx})">Send</button>
+        <div class="notification-dropdown" id="notifDropdown">
+            <div class="dropdown-header">
+                <span>Comment Replies</span>
+                <span id="notifCountText" style="font-size: 0.75rem; color: #888;">0 items</span>
             </div>
-          </div>
-        `).join('');
-      } else {
-        badge.style.display = "none";
-        countText.textContent = "0 new";
-        listEl.innerHTML = `<div class="empty-notifications">No new replies</div>`;
-      }
-    }
+            <div class="dropdown-list" id="notifList">
+                <div class="empty-notifications">Loading replies...</div>
+            </div>
+        </div>
+    </div>
 
-    async function sendNotificationReply(seriesId, targetEmail, idx) {
-      const inputEl = document.getElementById(`notifReplyInput_${idx}`);
-      const replyText = inputEl ? inputEl.value.trim() : "";
+    <div id="ambientBg"></div>
 
-      if (!replyText) return;
+    <div class="content-wrapper">
+        <h1 id="title">Loading...</h1>
+        <p id="desc"></p>
+        <div id="seasonNav"></div>
+        <div id="episodeList"></div>
+    </div>
 
-      try {
-        const res = await fetch(`${API_BASE}/api/add-reply`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
-          },
-          body: JSON.stringify({
-            movie: seriesId,
-            series: seriesId,
-            targetEmail: targetEmail,
-            replyText: replyText,
-            text: replyText
-          })
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get("series") || params.get("movie");
+        const series = typeof seriesData !== 'undefined' ? seriesData[id] : {};
+
+        // --- Save Incoming Page Reference ---
+        document.addEventListener("DOMContentLoaded", () => {
+            const referrer = document.referrer;
+            if (referrer && !referrer.includes("videoplayer") && !referrer.includes("player")) {
+                sessionStorage.setItem("safeBackUrl", referrer);
+            }
         });
 
-        if (res.ok) {
-          inputEl.value = "";
-          alert("Reply sent successfully!");
-          checkForNewReplies();
-        } else {
-          alert("Could not send reply.");
+        // --- IndexedDB Helper Logic ---
+        const dbName = "StreamingDB";
+        const storeName = "progress";
+
+        const openDB = () => {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(dbName, 1);
+                request.onupgradeneeded = (e) => {
+                    e.target.result.createObjectStore(storeName);
+                };
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject(request.error);
+            });
+        };
+
+        const getProgress = async (key) => {
+            const db = await openDB();
+            return new Promise((resolve) => {
+                const transaction = db.transaction(storeName, "readonly");
+                const store = transaction.objectStore(storeName);
+                const request = store.get(key);
+                request.onsuccess = () => resolve(request.result);
+            });
+        };
+
+        const saveProgress = async (key, value) => {
+            const db = await openDB();
+            const transaction = db.transaction(storeName, "readwrite");
+            const store = transaction.objectStore(storeName);
+            store.put(value, key);
+        };
+
+        // --- Configure Back Button ---
+        document.addEventListener("DOMContentLoaded", () => {
+            const existingBackBtn = document.getElementById("backBtn") || document.querySelector(".back-btn");
+            if (existingBackBtn) {
+                existingBackBtn.onclick = (e) => {
+                    e.preventDefault();
+                    const safeUrl = sessionStorage.getItem("safeBackUrl");
+                    if (safeUrl) {
+                        window.location.href = safeUrl;
+                    } else {
+                        history.back();
+                    }
+                };
+            }
+        });
+
+        async function loadDataFiles() {
+            if (!id) return;
+            try {
+                const searchResObj = await fetch("/JS/search.js");
+                const searchText = await searchResObj.text();
+                const cleanSearchText = searchText.replace(/const\s+movies\s*=/, "return ");
+                const parseSearch = new Function(cleanSearchText);
+                window.searchArray = parseSearch();
+                await init();
+            } catch (error) {
+                console.error("Critical error reading data engines:", error);
+                await init(); 
+            }
         }
-      } catch (err) {
-        console.error("Error posting reply:", err);
-      }
-    }
 
-    function escapeHtml(str) {
-      return str ? String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") : "";
-    }
+        async function fetchCloudflareProgressMap() {
+            const token = localStorage.getItem("session_token");
+            if (!token) return {};
+            try {
+                const response = await fetch(`https://rinolski.misty-fog-201e.workers.dev/api/get-progress?forced_ts=${Date.now()}`, {
+                    method: "GET",
+                    headers: { 
+                        "Authorization": `Bearer ${token}`,
+                        "Cache-Control": "no-cache, no-store, must-revalidate"
+                    },
+                    cache: "no-store"
+                });
+                if (!response.ok) return {};
+                const data = await response.json();
+                return data.progress || data.data || data.history || (typeof data === 'object' ? data : {});
+            } catch (err) {
+                return {};
+            }
+        }
 
-    // Initialize Identity and Polling
-    document.addEventListener("DOMContentLoaded", async () => {
-      await fetchUserIdentity();
-      checkForNewReplies();
-      // Poll every 15 seconds for incoming replies
-      setInterval(checkForNewReplies, 15000);
-    });
-  </script>
+        async function init() {
+            if (!series) return;
+            const titleEl = document.getElementById("title");
+            const descEl = document.getElementById("desc");
+            
+            if (titleEl) titleEl.textContent = series.title || id;
+            if (descEl) descEl.textContent = series.desc || "";
+
+            let imagePath = "";
+            if (window.searchArray) {
+                const matchedSearchItem = window.searchArray.find(m => {
+                    if (!m.link) return false;
+                    const urlPart = m.link.includes('?') ? m.link.split('?')[1] : m.link;
+                    const movieUrlParams = new URLSearchParams(urlPart);
+                    const movieId = movieUrlParams.get('movie') || movieUrlParams.get('series');
+                    return movieId && movieId.toLowerCase() === id.toLowerCase();
+                });
+                if (matchedSearchItem && matchedSearchItem.image) {
+                    const filename = matchedSearchItem.image.split('/').pop();
+                    imagePath = `/images/${filename}`;
+                }
+            }
+
+            if (!imagePath && series.image) {
+                imagePath = series.image.startsWith('/') ? series.image : `/${series.image}`;
+            }
+
+            let ambientBg = document.getElementById("ambientBg");
+            if (imagePath && ambientBg) {
+                ambientBg.style.backgroundImage = `url('${imagePath}')`;
+            }
+
+            const seasonNav = document.getElementById("seasonNav");
+            const episodeContainer = document.getElementById("episodeList");
+
+            if (series.seasons && series.seasons.length > 0) {
+                const storageKey = `lastSeason_${id}`;
+                const lastSeasonNum = await getProgress(storageKey);
+
+                let displayOrder = [...series.seasons];
+                if (lastSeasonNum) {
+                    displayOrder.sort((a, b) => (a.number == lastSeasonNum ? -1 : 1));
+                }
+
+                let activeSeasonReference = displayOrder[0];
+                renderActiveSeasonContent(activeSeasonReference, []);
+
+                fetchCloudflareProgressMap().then(cloudflareProgress => {
+                    let watchedEpisodesList = [];
+                    const progressEntries = Array.isArray(cloudflareProgress) ? cloudflareProgress : Object.entries(cloudflareProgress);
+                    progressEntries.forEach(entry => {
+                        let movieIdKey = Array.isArray(entry) ? entry[0] : (entry.movieId || entry.id || entry.key || "");
+                        if (!movieIdKey) return;
+                        watchedEpisodesList.push({ key: movieIdKey, time: Date.now() });
+                    });
+                    renderActiveSeasonContent(activeSeasonReference, watchedEpisodesList);
+                });
+
+                function renderActiveSeasonContent(season, watchedEpisodesList) {
+                    activeSeasonReference = season;
+                    if (!episodeContainer) return;
+                    episodeContainer.innerHTML = "";
+
+                    let targetEpKey = `${season.prefix}1`;
+                    let buttonText = "Play Episode 1";
+
+                    const bigPlayBtn = document.createElement("button");
+                    bigPlayBtn.className = "big-play-btn";
+                    bigPlayBtn.innerHTML = `
+                        <svg class="play-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                        <span>${buttonText}</span>
+                    `;
+                    bigPlayBtn.onclick = () => {
+                        window.location.href = `videoplayer.html?ep=${targetEpKey}`;
+                    };
+                    episodeContainer.appendChild(bigPlayBtn);
+
+                    const commentsBtn = document.createElement("button");
+                    commentsBtn.className = "comments-trigger-btn";
+                    commentsBtn.innerHTML = `
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+                        <span>Comments & Reviews</span>
+                    `;
+                    commentsBtn.onclick = () => openCommentsModal(id);
+                    episodeContainer.appendChild(commentsBtn);
+                }
+            }
+        }
+
+        // ==========================================================================
+        // NOTIFICATION BELL & REPLIES POLLING SYSTEM
+        // ==========================================================================
+        const NOTIF_API_BASE = "https://rinolski.misty-fog-201e.workers.dev";
+        const notifToken = localStorage.getItem("session_token") || "";
+        let myUserIdentifier = "";
+        let myUsername = "";
+
+        function toggleNotifDropdown() {
+            const dropdown = document.getElementById("notifDropdown");
+            dropdown.classList.toggle("active");
+        }
+
+        async function fetchMyIdentity() {
+            if (!notifToken) return;
+            try {
+                const res = await fetch(`${NOTIF_API_BASE}/api/get-username`, {
+                    headers: { "Authorization": `Bearer ${notifToken}` }
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    myUserIdentifier = data.email || data.user?.email || "";
+                    myUsername = data.username || data.user?.username || "";
+                }
+            } catch (e) {
+                console.error("Identity fetch error:", e);
+            }
+        }
+
+        async function loadAllMyReplies() {
+            const currentId = id || "";
+            if (!currentId) return;
+
+            try {
+                const res = await fetch(`${NOTIF_API_BASE}/api/get-reviews?movie=${encodeURIComponent(currentId)}&series=${encodeURIComponent(currentId)}`, {
+                    headers: { "Authorization": `Bearer ${notifToken}` }
+                });
+                if (!res.ok) return;
+
+                const data = await res.json();
+                const reviewsArr = data.reviews || data.data || [];
+
+                const myReviews = reviewsArr.filter(r => {
+                    const authorEmail = r.authorEmail || r.email || "";
+                    const authorName = r.authorUsername || r.username || "";
+                    return (myUserIdentifier && authorEmail === myUserIdentifier) || 
+                           (myUsername && authorName.toLowerCase() === myUsername.toLowerCase());
+                });
+
+                let allReplies = [];
+                myReviews.forEach(review => {
+                    const replies = review.replies || [];
+                    replies.forEach(rep => {
+                        allReplies.push({
+                            seriesId: currentId,
+                            targetEmail: review.authorEmail || review.email,
+                            replierUsername: rep.replierUsername || rep.username || "User",
+                            text: rep.text || rep.replyText || "",
+                            timestamp: rep.timestamp || Date.now()
+                        });
+                    });
+                });
+
+                allReplies.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                renderNotificationList(allReplies);
+
+            } catch (err) {
+                console.error("Error loading notification replies:", err);
+            }
+        }
+
+        function renderNotificationList(replies) {
+            const badge = document.getElementById("notifBadge");
+            const listEl = document.getElementById("notifList");
+            const countText = document.getElementById("notifCountText");
+
+            if (replies.length > 0) {
+                badge.textContent = replies.length;
+                badge.style.display = "flex";
+                countText.textContent = `${replies.length} replies`;
+
+                listEl.innerHTML = replies.map((item, idx) => `
+                    <div class="notification-card">
+                        <span class="notification-series">${escapeHtml(item.seriesId)}</span>
+                        <span class="notification-user">@${escapeHtml(item.replierUsername)} replied:</span>
+                        <div class="notification-text">${escapeHtml(item.text)}</div>
+                        <div class="reply-form">
+                            <input type="text" id="notifInput_${idx}" placeholder="Write a reply..." />
+                            <button onclick="sendQuickReply('${escapeHtml(item.seriesId)}', '${escapeHtml(item.targetEmail)}', ${idx})">Send</button>
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                badge.style.display = "none";
+                countText.textContent = "0 items";
+                listEl.innerHTML = `<div class="empty-notifications">No replies found yet</div>`;
+            }
+        }
+
+        async function sendQuickReply(seriesId, targetEmail, idx) {
+            const inputEl = document.getElementById(`notifInput_${idx}`);
+            const text = inputEl ? inputEl.value.trim() : "";
+            if (!text) return;
+
+            try {
+                const res = await fetch(`${NOTIF_API_BASE}/api/add-reply`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${notifToken}`
+                    },
+                    body: JSON.stringify({
+                        movie: seriesId,
+                        series: seriesId,
+                        targetEmail: targetEmail,
+                        replyText: text,
+                        text: text
+                    })
+                });
+
+                if (res.ok) {
+                    inputEl.value = "";
+                    alert("Reply sent successfully!");
+                    loadAllMyReplies();
+                } else {
+                    alert("Failed to send reply.");
+                }
+            } catch (err) {
+                console.error("Error posting quick reply:", err);
+            }
+        }
+
+        // ==========================================================================
+        // COMMENTS & REVIEWS MODAL SYSTEM
+        // ==========================================================================
+        function openCommentsModal(seriesId) {
+            let overlay = document.getElementById("commentsOverlayModal");
+            if (!overlay) {
+                overlay = document.createElement("div");
+                overlay.id = "commentsOverlayModal";
+                overlay.innerHTML = `
+                    <div class="comments-modal-header">
+                        <button class="comments-back-btn" onclick="closeCommentsModal()">←</button>
+                        <h3 style="margin:0; font-size: 1.1rem; color: #fff;">Comments</h3>
+                        <div style="width: 60px;"></div>
+                    </div>
+                    <div id="commentsModalBodyContainer" style="flex: 1; width: 100%; display: flex; flex-direction: column; overflow: hidden;"></div>
+                    <div class="comments-bottom-bar">
+                        <input type="text" id="modalBottomCommentInput" placeholder="Write a comment..." />
+                        <button onclick="submitBottomComment()">Send</button>
+                    </div>
+                `;
+                document.body.appendChild(overlay);
+            }
+            initReviewsSystem(seriesId);
+            requestAnimationFrame(() => {
+                overlay.classList.add("active");
+                document.body.style.overflow = "hidden";
+            });
+        }
+
+        function closeCommentsModal() {
+            const overlay = document.getElementById("commentsOverlayModal");
+            if (overlay) {
+                overlay.classList.remove("active");
+                document.body.style.overflow = "auto";
+            }
+        }
+
+        let activeReplyTargetEmail = null;
+
+        function openRepliesDrawer(targetEmail, authorUsername) {
+            activeReplyTargetEmail = targetEmail;
+            let drawer = document.getElementById("repliesDrawerModal");
+            if (!drawer) {
+                drawer = document.createElement("div");
+                drawer.id = "repliesDrawerModal";
+                drawer.innerHTML = `
+                    <div class="comments-modal-header">
+                        <button class="comments-back-btn" onclick="closeRepliesDrawer()">←</button>
+                        <h3 id="repliesDrawerTitle" style="margin:0; font-size: 1.1rem; color: #fff;">Replies</h3>
+                        <div style="width: 60px;"></div>
+                    </div>
+                    <div id="repliesDrawerBodyContainer" class="replies-list-container"></div>
+                    <div class="comments-bottom-bar">
+                        <input type="text" id="drawerReplyInput" placeholder="Write a reply..." />
+                        <button onclick="submitDrawerReply()">Send</button>
+                    </div>
+                `;
+                document.body.appendChild(drawer);
+            }
+            document.getElementById("repliesDrawerTitle").textContent = `Replies to @${authorUsername || 'User'}`;
+            renderRepliesInDrawer(targetEmail);
+            requestAnimationFrame(() => drawer.classList.add("active"));
+        }
+
+        function closeRepliesDrawer() {
+            const drawer = document.getElementById("repliesDrawerModal");
+            if (drawer) drawer.classList.remove("active");
+            activeReplyTargetEmail = null;
+        }
+
+        function initReviewsSystem(seriesId) {
+            let container = document.querySelector(".reviews-container");
+            if (!container) {
+                container = document.createElement("div");
+                container.className = "reviews-container";
+                container.innerHTML = `
+                    <div class="header-zone"><h2>Comments</h2></div>
+                    <div id="statusBanner" class="status-banner"></div>
+                    <div class="modal-box" id="usernameModal" style="display: none;">
+                        <p>Please enter a display name to participate:</p>
+                        <div class="modal-input-group">
+                            <input type="text" id="usernameInput" placeholder="Enter username" />
+                            <button class="btn-secondary" onclick="saveUsername()">Set Name</button>
+                        </div>
+                    </div>
+                    <div id="reviewsList"><div class="empty-state">Loading reviews...</div></div>
+                `;
+                document.getElementById("commentsModalBodyContainer").appendChild(container);
+            }
+            loadReviews(seriesId);
+        }
+
+        async function loadReviews(seriesId) {
+            const currentSeries = seriesId || id;
+            const listEl = document.getElementById("reviewsList");
+            if (!listEl) return;
+            try {
+                const res = await fetch(`${NOTIF_API_BASE}/api/get-reviews?movie=${encodeURIComponent(currentSeries)}&series=${encodeURIComponent(currentSeries)}`, {
+                    headers: { "Authorization": `Bearer ${notifToken}` }
+                });
+                const data = await res.json();
+                const reviewsArr = data.reviews || data.data || [];
+                if (!reviewsArr.length) {
+                    listEl.innerHTML = `<div class="empty-state">No reviews yet. Be the first!</div>`;
+                    return;
+                }
+                const sortedReviews = [...reviewsArr].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                listEl.innerHTML = sortedReviews.map(r => {
+                    const authorEmail = r.authorEmail || r.email || "user";
+                    const safeEmailId = authorEmail.replace(/[^a-zA-Z0-9]/g, '_');
+                    const reviewContent = r.reviewText || r.text || "";
+                    const username = r.authorUsername || r.username || "Anonymous";
+                    const repliesCount = (r.replies || []).length;
+                    return `
+                        <div class="review-card" id="review-card-${safeEmailId}">
+                            <div class="review-header">
+                                <span class="review-author">@${escapeHtml(username)}</span>
+                                <span class="review-date">${r.timestamp ? new Date(r.timestamp).toLocaleDateString() : ''}</span>
+                            </div>
+                            <div class="review-body">${escapeHtml(reviewContent)}</div>
+                            <div class="review-actions">
+                                <button class="reply-thread-btn" onclick="openRepliesDrawer('${authorEmail}', '${escapeHtml(username)}')">
+                                    💬 Replies (${repliesCount})
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            } catch(err) {
+                listEl.innerHTML = `<div class="empty-state">Unable to load reviews right now.</div>`;
+            }
+        }
+
+        async function renderRepliesInDrawer(targetEmail) {
+            const container = document.getElementById("repliesDrawerBodyContainer");
+            if (!container) return;
+            try {
+                const res = await fetch(`${NOTIF_API_BASE}/api/get-reviews?movie=${encodeURIComponent(id)}&series=${encodeURIComponent(id)}`, {
+                    headers: { "Authorization": `Bearer ${notifToken}` }
+                });
+                const data = await res.json();
+                const reviewsArr = data.reviews || data.data || [];
+                const targetReview = reviewsArr.find(r => (r.authorEmail || r.email) === targetEmail);
+                const repliesArr = targetReview ? (targetReview.replies || []) : [];
+                if (!repliesArr.length) {
+                    container.innerHTML = `<div class="empty-state">No replies yet.</div>`;
+                    return;
+                }
+                container.innerHTML = repliesArr.map(rep => {
+                    const repUsername = rep.replierUsername || rep.username || 'User';
+                    const repText = rep.text || rep.replyText || '';
+                    const repTime = rep.timestamp ? new Date(rep.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '';
+                    return `
+                        <div class="standalone-reply-card">
+                            <div class="standalone-reply-header">
+                                <strong style="color: #fff; font-size: 0.9rem;">@${escapeHtml(repUsername)}</strong>
+                                <span style="font-size: 0.75rem; color: #888;">${repTime}</span>
+                            </div>
+                            <div class="standalone-reply-body">${escapeHtml(repText)}</div>
+                        </div>
+                    `;
+                }).join('');
+            } catch (err) {
+                container.innerHTML = `<div class="empty-state">Unable to load replies.</div>`;
+            }
+        }
+
+        async function submitBottomComment() {
+            const inputEl = document.getElementById("modalBottomCommentInput");
+            const text = inputEl ? inputEl.value.trim() : "";
+            if (!text) return;
+            try {
+                const res = await fetch(`${NOTIF_API_BASE}/api/add-review`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json", "Authorization": `Bearer ${notifToken}` },
+                    body: JSON.stringify({ movie: id, series: id, reviewText: text, text: text })
+                });
+                const data = await res.json();
+                if (data.requireUsername) {
+                    document.getElementById("usernameModal").style.display = "block";
+                } else if (res.ok) {
+                    inputEl.value = "";
+                    loadReviews(id);
+                }
+            } catch (err) {}
+        }
+
+        async function submitDrawerReply() {
+            if (!activeReplyTargetEmail) return;
+            const inputEl = document.getElementById("drawerReplyInput");
+            const replyText = inputEl ? inputEl.value.trim() : "";
+            if (!replyText) return;
+            try {
+                const res = await fetch(`${NOTIF_API_BASE}/api/add-reply`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json", "Authorization": `Bearer ${notifToken}` },
+                    body: JSON.stringify({ movie: id, series: id, targetEmail: activeReplyTargetEmail, replyText: replyText, text: replyText })
+                });
+                if (res.ok) {
+                    inputEl.value = "";
+                    renderRepliesInDrawer(activeReplyTargetEmail);
+                    loadReviews(id);
+                }
+            } catch (err) {}
+        }
+
+        function escapeHtml(str) {
+            return str ? String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") : "";
+        }
+
+        // Initialize Everything on Load
+        document.addEventListener("DOMContentLoaded", async () => {
+            loadDataFiles();
+            await fetchMyIdentity();
+            loadAllMyReplies();
+            setInterval(loadAllMyReplies, 15000); // Polling for new incoming replies every 15s
+        });
+
+        window.addEventListener("pageshow", (event) => {
+            if (event.persisted || window.performance.getEntriesByType("navigation")[0]?.type === "back_forward") {
+                window.location.reload();
+            }
+        });
+    </script>
 </body>
 </html>
