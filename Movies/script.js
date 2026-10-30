@@ -124,7 +124,7 @@ function renderPage(id) {
     checkContinueWatchingStatus();
   }
 
-  // Build and load the comments system directly under the play button
+  // Initialize the full-page comments and reviews modal system under the play button
   initReviewsSystem(targetId);
 
   // Snap window back to top on initial page render
@@ -186,7 +186,7 @@ function setupLandscapeDOMArchitecture(imagePath) {
 loadDataFiles();
 
 // ==========================================================================
-// 2. FULL-PAGE COMMENTS & REPLIES THREAD SYSTEM (REPLACES REVIEWS)
+// 2. FULL-PAGE COMMENTS & REPLIES THREAD SYSTEM (NEW REVIEW SYSTEM)
 // ==========================================================================
 
 function openCommentsModal(seriesId) {
