@@ -80,6 +80,42 @@
             padding: 15px 20px;
             background: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
             z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .notification-btn {
+            position: relative;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            transition: color 0.2s;
+        }
+
+        .notification-btn:hover {
+            color: #e50914;
+        }
+
+        .notification-badge {
+            display: none;
+            position: absolute;
+            top: -2px;
+            right: -4px;
+            min-width: 16px;
+            height: 16px;
+            background-color: #e50914;
+            color: #ffffff;
+            font-size: 10px;
+            font-weight: bold;
+            border-radius: 8px;
+            padding: 0 4px;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+            box-shadow: 0 0 4px rgba(0,0,0,0.5);
         }
 
         .Rinolski-font {
@@ -877,7 +913,6 @@
             word-break: break-word;
         }
 
-        /* Offline Notice Banner */
         #offline-notice-banner {
             display: none;
             background: #1c1c1e;
@@ -970,6 +1005,12 @@
 
 <header>
     <h2 class="Rinolski-font"><a href="https://rinolski.online/">rinolski</a></h2>
+    <button id="notification-bell-btn" class="notification-btn" onclick="openNotificationsModal()" aria-label="Notifications">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
+        </svg>
+        <span id="notification-badge" class="notification-badge"></span>
+    </button>
 </header>
 
 <div id="initialSections">
@@ -1004,6 +1045,52 @@
         <span>Profile</span>
     </button>
 </footer>
+
+<!-- Full-Page Notifications Modal -->
+<div id="notificationsModal" class="sliding-panel">
+    <div class="panel-header">
+        <button class="back-button" onclick="closeNotificationsModal()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        </button>
+        <div class="panel-title">Notifications</div>
+    </div>
+    <div class="profile-content">
+        <div id="notifications-list-container" style="display: flex; flex-direction: column; gap: 12px;">
+            <div class="loading-ring"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Notification Thread View Drawer -->
+<div id="notificationThreadDrawer" class="sliding-panel" style="z-index: 2500;">
+    <div class="panel-header">
+        <button class="back-button" onclick="closeNotificationThreadDrawer()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        </button>
+        <div class="panel-title" id="thread-title-header">Thread</div>
+    </div>
+    <div class="profile-content" style="display: flex; flex-direction: column; min-height: calc(100vh - 145px);">
+        <!-- Parent Reply Card -->
+        <div id="thread-parent-card" style="background: #141414; border: 1px solid #262626; border-radius: 8px; padding: 14px; margin-bottom: 16px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                <span id="thread-author-name" style="font-weight: bold; color: #ffffff; font-size: 14px;">@User</span>
+                <span id="thread-timestamp" style="color: #808080; font-size: 11px;">Recently</span>
+            </div>
+            <div id="thread-body-text" style="color: #e5e5e5; font-size: 14px; line-height: 1.4; word-break: break-word;"></div>
+        </div>
+
+        <div class="profile-section-heading">Replies</div>
+        <div id="thread-replies-list" style="flex: 1; display: flex; flex-direction: column; gap: 10px; margin-bottom: 70px;">
+            <div class="loading-ring"></div>
+        </div>
+    </div>
+
+    <!-- Sticky Reply Input Bar -->
+    <div style="position: fixed; bottom: 0; left: 0; width: 100%; background: #0a0a0a; border-top: 1px solid #262626; padding: 12px 16px; display: flex; gap: 10px; z-index: 10;">
+        <input type="text" id="notificationReplyInput" placeholder="Write a response..." style="flex: 1; background: #1a1a1a; border: 1px solid #333; border-radius: 8px; padding: 12px; color: #fff; font-size: 14px; outline: none;" />
+        <button onclick="submitNotificationThreadReply()" style="background: #ffffff; color: #000000; border: none; border-radius: 8px; padding: 12px 18px; font-weight: bold; font-size: 14px; cursor: pointer;">Send</button>
+    </div>
+</div>
 
 <div id="sliding-search" class="sliding-panel">
     <div class="panel-header">
@@ -1093,6 +1180,8 @@
     let userWatchHistoryCache = [];
     let userUnwantedCache = []; 
     let lastKnownDataHash = "";
+    let activeThreadData = null;
+    let unreadReplyCount = 0;
 
     const profileAvatarsCatalog = {
         1: "https://rinolski.online/images/1.jpg", 
@@ -1153,7 +1242,6 @@
         updateFooterVisibility();
     }
 
-    // AUTOMATIC RE-HYDRATION ON BACK-FORWARD CACHE OR VISIBILITY RESTORE
     function enforceSessionRehydration() {
         const token = localStorage.getItem('session_token') || localStorage.getItem('token');
         if (token) {
@@ -1207,6 +1295,7 @@
         document.getElementById('sliding-offline').classList.add('open');
         document.getElementById('sliding-search').classList.remove('open');
         document.getElementById('sliding-profile').classList.remove('open');
+        closeNotificationsModal();
         loadOfflineMoviesIntoPanel();
     }
 </script>
@@ -1636,6 +1725,7 @@
 
                 renderWorkerWatchHistory(userWatchHistoryCache);
                 await fetchUnwantedMoviesCloudflare();
+                checkUnreadNotificationsCount();
             }
         } catch (err) {
             if (sessionToken) {
@@ -1662,6 +1752,7 @@
         document.getElementById('sliding-profile').classList.remove('open');
         document.getElementById('sliding-search').classList.remove('open');
         document.getElementById('sliding-offline').classList.remove('open');
+        closeNotificationsModal();
         toggleUsernameModal(false);
         resetActiveNavbar();
         document.getElementById('home-trigger').classList.add('active');
@@ -1873,6 +1964,215 @@
 </script>
 
 <script>
+    function updateNotificationBadge(count) {
+        const badge = document.getElementById('notification-badge');
+        if (!badge) return;
+        unreadReplyCount = count;
+        if (count > 0) {
+            badge.innerText = count > 99 ? '99+' : count;
+            badge.style.display = 'flex';
+        } else {
+            badge.style.display = 'none';
+            badge.innerText = '';
+        }
+    }
+
+    async function checkUnreadNotificationsCount() {
+        if (isAppOffline()) return;
+        const token = localStorage.getItem('session_token') || localStorage.getItem('token');
+        if (!token) return;
+
+        try {
+            const res = await fetch(`${WORKER_URL}/api/get-notifications`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (res.ok) {
+                const data = await res.json();
+                const unread = data.unreadCount || (data.notifications ? data.notifications.length : 0);
+                updateNotificationBadge(unread);
+            }
+        } catch (e) {}
+    }
+
+    function openNotificationsModal() {
+        resetActiveNavbar();
+        const modal = document.getElementById('notificationsModal');
+        if (modal) modal.classList.add('open');
+        
+        // Hide badge and reset unread count when opened
+        updateNotificationBadge(0);
+        
+        fetchUserNotifications();
+    }
+
+    function closeNotificationsModal() {
+        const modal = document.getElementById('notificationsModal');
+        if (modal) modal.classList.remove('open');
+    }
+
+    async function fetchUserNotifications() {
+        const container = document.getElementById('notifications-list-container');
+        if (!container) return;
+
+        if (isAppOffline()) {
+            container.innerHTML = `<p style="color: gray; font-size: 14px;">Notifications are unavailable offline.</p>`;
+            return;
+        }
+
+        const token = localStorage.getItem('session_token') || localStorage.getItem('token');
+        if (!token) {
+            container.innerHTML = `<p style="color: gray; font-size: 14px;">Please sign in to view your notifications.</p>`;
+            return;
+        }
+
+        try {
+            const res = await fetch(`${WORKER_URL}/api/get-notifications`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            const data = await res.json();
+            const notifications = data.notifications || data.data || [];
+
+            if (!res.ok || notifications.length === 0) {
+                container.innerHTML = `<p style="color: gray; font-size: 14px;">No new replies or notifications yet.</p>`;
+                return;
+            }
+
+            container.innerHTML = "";
+            notifications.forEach(notif => {
+                const card = document.createElement('div');
+                card.style.cssText = "background: #111111; border: 1px solid #222; border-radius: 8px; padding: 12px; cursor: pointer; transition: background 0.2s;";
+                card.onmouseover = () => card.style.background = "#1a1a1a";
+                card.onmouseout = () => card.style.background = "#111111";
+
+                const mediaTitle = notif.series || notif.movie || "Title";
+                const replier = notif.replierUsername || "User";
+                const replyText = notif.text || notif.replyText || "";
+                const timeStr = notif.timestamp ? new Date(notif.timestamp).toLocaleDateString() : "Recently";
+
+                card.onclick = () => openNotificationThreadDrawer(notif);
+
+                card.innerHTML = `
+                    <div style="font-size: 12px; color: #e50914; font-weight: bold; margin-bottom: 4px; text-transform: uppercase;">
+                        ${escapeHtml(mediaTitle)}
+                    </div>
+                    <div style="font-size: 13px; color: #ffffff; margin-bottom: 4px;">
+                        <strong>@${escapeHtml(replier)}</strong> replied to your comment
+                    </div>
+                    <div style="font-size: 12px; color: #b3b3b3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                        "${escapeHtml(replyText)}"
+                    </div>
+                    <div style="font-size: 10px; color: #666; margin-top: 6px; text-align: right;">
+                        ${timeStr}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        } catch (err) {
+            container.innerHTML = `<p style="color: gray; font-size: 14px;">Unable to fetch notifications.</p>`;
+        }
+    }
+
+    function openNotificationThreadDrawer(notification) {
+        activeThreadData = notification;
+        const drawer = document.getElementById('notificationThreadDrawer');
+        const mediaTitle = notification.series || notification.movie || "Thread";
+        
+        document.getElementById('thread-title-header').innerText = mediaTitle;
+        document.getElementById('thread-author-name').innerText = `@${notification.replierUsername || 'User'}`;
+        document.getElementById('thread-timestamp').innerText = notification.timestamp ? new Date(notification.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 'Recently';
+        document.getElementById('thread-body-text').innerText = notification.text || notification.replyText || '';
+
+        if (drawer) drawer.classList.add('open');
+        loadThreadReplies(mediaTitle, notification.targetEmail || notification.authorEmail);
+    }
+
+    function closeNotificationThreadDrawer() {
+        const drawer = document.getElementById('notificationThreadDrawer');
+        if (drawer) drawer.classList.remove('open');
+        activeThreadData = null;
+    }
+
+    async function loadThreadReplies(mediaId, targetEmail) {
+        const listContainer = document.getElementById('thread-replies-list');
+        if (!listContainer) return;
+        listContainer.innerHTML = '<div class="loading-ring"></div>';
+
+        const token = localStorage.getItem('session_token') || localStorage.getItem('token');
+
+        try {
+            const res = await fetch(`${WORKER_URL}/api/get-reviews?movie=${encodeURIComponent(mediaId)}&series=${encodeURIComponent(mediaId)}`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            const data = await res.json();
+            const reviews = data.reviews || data.data || [];
+            
+            const parentReview = reviews.find(r => (r.authorEmail || r.email) === targetEmail);
+            const replies = parentReview ? (parentReview.replies || []) : [];
+
+            if (replies.length === 0) {
+                listContainer.innerHTML = `<p style="color: gray; font-size: 13px;">No secondary responses yet.</p>`;
+                return;
+            }
+
+            listContainer.innerHTML = "";
+            replies.forEach(rep => {
+                const item = document.createElement('div');
+                item.style.cssText = "background: #181818; border: 1px solid #282828; border-radius: 6px; padding: 10px;";
+                item.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;">
+                        <strong style="color: #fff;">@${escapeHtml(rep.replierUsername || rep.username || 'User')}</strong>
+                        <span style="color: #666;">${rep.timestamp ? new Date(rep.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : ''}</span>
+                    </div>
+                    <div style="font-size: 13px; color: #ccc;">${escapeHtml(rep.text || rep.replyText || '')}</div>
+                `;
+                listContainer.appendChild(item);
+            });
+        } catch(e) {
+            listContainer.innerHTML = `<p style="color: gray; font-size: 13px;">Failed to load responses.</p>`;
+        }
+    }
+
+    async function submitNotificationThreadReply() {
+        if (!activeThreadData) return;
+        const input = document.getElementById('notificationReplyInput');
+        const text = input ? input.value.trim() : '';
+        if (!text) return;
+
+        const mediaId = activeThreadData.series || activeThreadData.movie;
+        const targetEmail = activeThreadData.targetEmail || activeThreadData.authorEmail || activeThreadData.replierEmail;
+        const token = localStorage.getItem('session_token') || localStorage.getItem('token');
+
+        try {
+            const res = await fetch(`${WORKER_URL}/api/add-reply`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                body: JSON.stringify({
+                    movie: mediaId,
+                    series: mediaId,
+                    targetEmail: targetEmail,
+                    replyText: text,
+                    text: text
+                })
+            });
+
+            if (res.ok) {
+                input.value = '';
+                showToast("Reply submitted!");
+                loadThreadReplies(mediaId, targetEmail);
+            } else {
+                showToast("Could not send reply.");
+            }
+        } catch (err) {
+            showToast("Connection error.");
+        }
+    }
+
+    function escapeHtml(str) {
+        return str ? String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") : "";
+    }
+</script>
+
+<script>
     const searchPanel = document.getElementById('sliding-search');
     const profilePanel = document.getElementById('sliding-profile');
     const offlinePanel = document.getElementById('sliding-offline');
@@ -1899,24 +2199,28 @@
     homeTrigger.addEventListener('click', () => {
         resetActiveNavbar(); homeTrigger.classList.add('active');
         searchPanel.classList.remove('open'); profilePanel.classList.remove('open'); offlinePanel.classList.remove('open');
+        closeNotificationsModal();
         checkUsernameModalGuard();
     });
 
     searchTrigger.addEventListener('click', () => {
         resetActiveNavbar(); searchTrigger.classList.add('active');
         searchPanel.classList.add('open'); profilePanel.classList.remove('open'); offlinePanel.classList.remove('open');
+        closeNotificationsModal();
         checkUsernameModalGuard(); searchInput.focus();
     });
 
     offlineTrigger.addEventListener('click', () => {
         resetActiveNavbar(); offlineTrigger.classList.add('active');
         offlinePanel.classList.add('open'); searchPanel.classList.remove('open'); profilePanel.classList.remove('open');
+        closeNotificationsModal();
         checkUsernameModalGuard(); loadOfflineMoviesIntoPanel();
     });
 
     profileTrigger.addEventListener('click', () => {
         resetActiveNavbar(); profileTrigger.classList.add('active');
         profilePanel.classList.add('open'); searchPanel.classList.remove('open'); offlinePanel.classList.remove('open');
+        closeNotificationsModal();
         checkUsernameModalGuard();
     });
 
@@ -2185,14 +2489,12 @@
         } catch (err) { window.location.href = targetUrl; }
     }
 
-    // Seeded Random generator based on 20-minute time blocks
     function getSeededRandom(seedOffset = 0) {
         const timeBlock = Math.floor(Date.now() / (20 * 60 * 1000));
         let x = Math.sin(timeBlock + seedOffset) * 10000;
         return x - Math.floor(x);
     }
 
-    // Deterministic shuffle using a 20-minute seed
     function shuffleArraySeeded(arr, seedOffset = 0) {
         const target = [...arr];
         for (let i = target.length - 1; i > 0; i--) {
@@ -2215,7 +2517,6 @@
 
         const filteredGlobalCatalog = movies.filter(m => !userUnwantedCache.includes(m.title.toLowerCase()));
 
-        // Always update and render the Watch Again (Watch History) row dynamically in exact recent order
         if (userWatchHistoryCache.length > 0) {
             const uniqueTitles = [];
             const watchAgainMovies = [];
@@ -2239,7 +2540,6 @@
             } else { watchAgainContainer.innerHTML = ""; }
         } else { watchAgainContainer.innerHTML = ""; }
 
-        // Skip re-rendering Random Picks and Genres if within the same 20-minute block and already built
         if (lastHomeFeedBuildTimeBlock === currentBlock && randomContainer.children.length > 0) {
             return;
         }
