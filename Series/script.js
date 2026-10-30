@@ -1,5 +1,5 @@
 const params = new URLSearchParams(window.location.search);
-const id = params.get("series");
+const id = params.get("series") || params.get("movie");
 const series = seriesData[id];
 
 // --- Profile Avatars Catalog Lookup ---
@@ -16,9 +16,18 @@ const profileAvatarsCatalog = {
     10: "https://rinolski.online/images/10.jpg"
 };
 
-function getPfpUrl(itemObj) {
-    // Check all potential keys where the backend might store the avatar/pfp reference
-    const rawVal = itemObj?.pfp ?? itemObj?.avatar ?? itemObj?.userPfp ?? itemObj?.profilePic ?? itemObj?.profile_pic ?? itemObj?.avatarId ?? itemObj?.pfpId;
+/**
+ * Robustly resolves the user avatar URL matching profileAvatarsCatalog
+ * @param {Object|string|number} item - The review/reply item object OR direct pfp ID
+ */
+function getPfpUrl(item) {
+    let rawVal = null;
+    
+    if (item && typeof item === 'object') {
+        rawVal = item.pfp ?? item.avatar ?? item.userPfp ?? item.profilePic ?? item.profile_pic ?? item.pfpId;
+    } else {
+        rawVal = item;
+    }
     
     if (rawVal !== undefined && rawVal !== null && rawVal !== "") {
         const numericId = parseInt(rawVal, 10);
@@ -29,6 +38,8 @@ function getPfpUrl(itemObj) {
             return rawVal;
         }
     }
+    
+    // Default fallback avatar 1
     return profileAvatarsCatalog[1];
 }
 
@@ -178,7 +189,7 @@ styleTag.textContent = `
         border-color: rgba(255, 255, 255, 0.4);
     }
 
-    /* Smooth Sliding Full-Page Comments Modal Window */
+    /* Full-Page Comments Modal Window */
     #commentsOverlayModal {
         position: fixed;
         top: 0;
@@ -200,7 +211,7 @@ styleTag.textContent = `
         visibility: visible;
     }
 
-    /* Dedicated Sub-Window for Replies Thread */
+    /* Full-Page Replies Modal Drawer */
     #repliesDrawerModal {
         position: fixed;
         top: 0;
@@ -555,7 +566,7 @@ styleTag.textContent = `
       gap: 12px;
     }
 
-    /* Uncramped, individual standalone reply card layout */
+    /* Standalone individual reply card layout */
     .standalone-reply-card {
       background-color: #121212 !important;
       border: 1px solid #262626;
