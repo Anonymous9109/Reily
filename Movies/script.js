@@ -2,342 +2,868 @@
 // 1. DYNAMIC DATA ARCHITECTURE & DEPENDENCY LOADING (SANDBOXED)
 // ==========================================================================
 
-const params = new URLSearchParams(window.location.search);
-const id = params.get("series") || params.get("movie");
-const series = typeof seriesData !== 'undefined' ? seriesData[id] : null;
+/**
+ * Loads text files instead of script tags to bypass global variable conflicts.
+ */
+async function loadDataFiles() {
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get("movie") || params.get("series");
 
-// --- Save Incoming Page Reference (Avoiding Video Player) ---
-document.addEventListener("DOMContentLoaded", () => {
-    const referrer = document.referrer;
-    if (referrer && !referrer.includes("videoplayer") && !referrer.includes("player")) {
-        sessionStorage.setItem("safeBackUrl", referrer);
-    }
-});
+  if (!id) {
+    document.body.innerHTML = "<div style='color:white; text-align:center; margin-top:20%; font-family:sans-serif;'>No video ID provided.</div>";
+    return;
+  }
 
-// --- IndexedDB Helper Logic (Season memory) ---
-const dbName = "StreamingDB";
-const storeName = "progress";
+  try {
+    // 1. Fetch and parse search.js safely
+    const searchResponse = await fetch("/JS/search.js");
+    const searchText = await searchResponse.text();
+    // Convert the 'const movies =' declaration to a safe localized object evaluation
+    const cleanSearchText = searchText.replace(/const\s+movies\s*=/, "return ");
+    const parseSearch = new Function(cleanSearchText);
+    window.searchArray = parseSearch();
 
-const openDB = () => {
-    return new Promise((resolve, reject) => {
-        const request = indexedDB.open(dbName, 1);
-        request.onupgradeneeded = (e) => {
-            e.target.result.createObjectStore(storeName);
+    // 2. Fetch and parse movies.js safely
+    const moviesResponse = await fetch("/Movies/movies.js");
+    const moviesText = await moviesResponse.text();
+    // Convert the 'const movies =' declaration to a safe localized object evaluation
+    const cleanMoviesText = moviesText.replace(/const\s+movies\s*=/, "return ");
+    const parseMovies = new Function(cleanMoviesText);
+    window.movieDetailsDict = parseMovies();
+
+    // 3. Kickoff layout initialization
+    renderPage(id);
+
+  } catch (error) {
+    console.error("Critical error while reading data engines safely:", error);
+    document.body.innerHTML = "<div style='color:white; text-align:center; margin-top:20%; font-family:sans-serif;'>Failed to load background systems.</div>";
+  }
+}
+
+/**
+ * Handles building the UI and background assets now that data maps are secure.
+ */
+function renderPage(id) {
+  // Case-insensitive lookup protects against "SAW" vs "saw" mismatching
+  const exactKey = Object.keys(window.movieDetailsDict || {}).find(key => key.toLowerCase() === id.toLowerCase());
+  const movieData = exactKey ? window.movieDetailsDict[exactKey] : null;
+
+  if (!movieData) {
+    document.body.innerHTML = "<div style='color:white; text-align:center; margin-top:20%; font-family:sans-serif;'>Movie data not found.</div>";
+    return;
+  }
+
+  // Bind to global window scope so play() and fallback handlers can access it cleanly
+  window.currentMovie = movieData;
+
+  // Pre-locate structural poster layout images from search array
+  const targetId = id || new URLSearchParams(window.location.search).get("movie") || new URLSearchParams(window.location.search).get("series");
+  const matchedSearchItem = window.searchArray ? window.searchArray.find(m => {
+    if (!m.link) return false;
+    const urlPart = m.link.includes('?') ? m.link.split('?')[1] : m.link;
+    const movieUrlParams = new URLSearchParams(urlPart);
+    const movieId = movieUrlParams.get('movie') || movieUrlParams.get('series');
+    return movieId && movieId.toLowerCase() === targetId.toLowerCase();
+  }) : null;
+
+  let imagePath = "";
+  if (matchedSearchItem && matchedSearchItem.image) {
+    const filename = matchedSearchItem.image.split('/').pop();
+    imagePath = `/images/${filename}`;
+  }
+
+  // Safely prepare layout containers for landscape layout requirements
+  setupLandscapeDOMArchitecture(imagePath);
+
+  // Populate UI
+  const titleEl = document.getElementById("title");
+  if (titleEl) titleEl.textContent = movieData.title;
+
+  // Description 3-line truncation and toggle expand logic
+  const descEl = document.getElementById("desc");
+  if (descEl) {
+    const textContent = movieData.desc || "";
+    descEl.textContent = textContent;
+
+    descEl.classList.remove("clamped");
+    descEl.onclick = null;
+
+    if (textContent.trim()) {
+      descEl.classList.add("clamped");
+
+      // Check if text exceeds 3 lines
+      const isOverflowing = descEl.scrollHeight > descEl.clientHeight;
+
+      if (isOverflowing) {
+        descEl.style.cursor = "pointer";
+        descEl.onclick = function () {
+          descEl.classList.toggle("clamped");
         };
-        request.onsuccess = () => resolve(request.result);
-        request.onerror = () => reject(request.error);
+      } else {
+        descEl.classList.remove("clamped");
+        descEl.style.cursor = "default";
+      }
+    }
+  }
+
+  // Handle Video / Background Stream initialization
+  const video = document.getElementById("bgVideo");
+
+  if (movieData.video && video) {
+    video.innerHTML = `<source src="${movieData.video}" type="video/mp4">`;
+    video.load();
+
+    video.addEventListener('error', function() {
+      applyFallbackBackground(id);
+    }, true);
+  } else {
+    applyFallbackBackground(id);
+  }
+
+  if (typeof checkContinueWatchingStatus === "function") {
+    checkContinueWatchingStatus();
+  }
+
+  // Build and load the reviews system directly under the play button
+  initReviewsSystem(targetId);
+
+  // Snap window back to top on initial page render
+  window.scrollTo(0, 0);
+}
+
+/**
+ * Builds non-intrusive container wrappers needed for layout modifications
+ */
+function setupLandscapeDOMArchitecture(imagePath) {
+  let mainWrapper = document.getElementById("movieContentWrapper");
+  let posterContainer = document.getElementById("moviePosterContainer");
+  let posterImg = document.getElementById("moviePosterImg");
+  let ambientBg = document.getElementById("ambientBg");
+
+  // Create an ambient blur backdrop background element
+  if (!ambientBg) {
+    ambientBg = document.createElement("div");
+    ambientBg.id = "ambientBg";
+    document.body.insertBefore(ambientBg, document.body.firstChild);
+  }
+  if (imagePath) {
+    ambientBg.style.backgroundImage = `url('${imagePath}')`;
+  }
+
+  // Group text elements into a clean wrapper network
+  if (!mainWrapper) {
+    mainWrapper = document.createElement("div");
+    mainWrapper.id = "movieContentWrapper";
+
+    posterContainer = document.createElement("div");
+    posterContainer.id = "moviePosterContainer";
+
+    posterImg = document.createElement("img");
+    posterImg.id = "moviePosterImg";
+
+    posterContainer.appendChild(posterImg);
+    mainWrapper.appendChild(posterContainer);
+
+    // Select loose document items and append them to the responsive wrapper pipeline
+    const titleEl = document.getElementById("title");
+    const descEl = document.getElementById("desc");
+    const playBtn = document.querySelector(".play-btn");
+
+    if (titleEl) mainWrapper.appendChild(titleEl);
+    if (descEl) mainWrapper.appendChild(descEl);
+    if (playBtn) mainWrapper.appendChild(playBtn);
+
+    // Insert at top of body
+    document.body.insertBefore(mainWrapper, document.body.firstChild);
+  }
+
+  if (imagePath && posterImg) {
+    posterImg.src = imagePath;
+  }
+}
+
+// Kickoff the sandboxed loading process immediately
+loadDataFiles();
+
+// ==========================================================================
+// 2. FULL-PAGE COMMENTS & REPLIES THREAD SYSTEM (REPLACES REVIEWS)
+// ==========================================================================
+
+function openCommentsModal(seriesId) {
+    let overlay = document.getElementById("commentsOverlayModal");
+    if (!overlay) {
+        overlay = document.createElement("div");
+        overlay.id = "commentsOverlayModal";
+        overlay.innerHTML = `
+            <div class="comments-modal-header">
+                <button class="comments-back-btn" onclick="closeCommentsModal()">←</button>
+                <h3 style="margin:0; font-size: 1.1rem; color: #fff;">Comments</h3>
+                <div style="width: 60px;"></div>
+            </div>
+            <div id="commentsModalBodyContainer" style="flex: 1; width: 100%; display: flex; flex-direction: column; overflow: hidden;"></div>
+            <div class="comments-bottom-bar">
+                <input type="text" id="modalBottomCommentInput" placeholder="Write a comment..." />
+                <button onclick="submitBottomComment()">Send</button>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+    }
+
+    initReviewsSystem(seriesId);
+    
+    requestAnimationFrame(() => {
+        overlay.classList.add("active");
+        document.body.style.overflow = "hidden";
     });
-};
+}
 
-const getProgress = async (key) => {
-    const db = await openDB();
-    return new Promise((resolve) => {
-        const transaction = db.transaction(storeName, "readonly");
-        const store = transaction.objectStore(storeName);
-        const request = store.get(key);
-        request.onsuccess = () => resolve(request.result);
+function closeCommentsModal() {
+    const overlay = document.getElementById("commentsOverlayModal");
+    if (overlay) {
+        overlay.classList.remove("active");
+        document.body.style.overflow = "auto";
+    }
+}
+
+let activeReplyTargetEmail = null;
+
+function openRepliesDrawer(targetEmail, authorUsername) {
+    activeReplyTargetEmail = targetEmail;
+    let drawer = document.getElementById("repliesDrawerModal");
+    if (!drawer) {
+        drawer = document.createElement("div");
+        drawer.id = "repliesDrawerModal";
+        drawer.innerHTML = `
+            <div class="comments-modal-header">
+                <button class="comments-back-btn" onclick="closeRepliesDrawer()">←</button>
+                <h3 id="repliesDrawerTitle" style="margin:0; font-size: 1.1rem; color: #fff;">Replies</h3>
+                <div style="width: 60px;"></div>
+            </div>
+            <div id="repliesDrawerBodyContainer" class="replies-list-container"></div>
+            <div class="comments-bottom-bar">
+                <input type="text" id="drawerReplyInput" placeholder="Write a reply..." />
+                <button onclick="submitDrawerReply()">Send</button>
+            </div>
+        `;
+        document.body.appendChild(drawer);
+    }
+
+    const titleEl = document.getElementById("repliesDrawerTitle");
+    if (titleEl) titleEl.textContent = `Replies to @${authorUsername || 'User'}`;
+
+    renderRepliesInDrawer(targetEmail);
+
+    requestAnimationFrame(() => {
+        drawer.classList.add("active");
     });
-};
+}
 
-const saveProgress = async (key, value) => {
-    const db = await openDB();
-    const transaction = db.transaction(storeName, "readwrite");
-    const store = transaction.objectStore(storeName);
-    store.put(value, key);
-};
-// --- End Helper Logic ---
-
-// --- Inject Dynamic CSS ---
-const styleTag = document.createElement("style");
-styleTag.textContent = `
-    html, body {
-        background-color: #000000;
-        color: #ffffff;
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
+function closeRepliesDrawer() {
+    const drawer = document.getElementById("repliesDrawerModal");
+    if (drawer) {
+        drawer.classList.remove("active");
     }
+    activeReplyTargetEmail = null;
+}
 
-    body {
-        padding-left: 24px;
-        padding-right: 24px;
-        position: relative;
-        min-height: 100vh;
-        overflow-y: auto;
-    }
+function initReviewsSystem(seriesId) {
+  let container = document.querySelector(".reviews-container");
+  if (!container) {
+    container = document.createElement("div");
+    container.className = "reviews-container";
+    container.innerHTML = `
+      <div class="header-zone">
+        <h2>Comments</h2>
+      </div>
 
-    #ambientBg {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        filter: none;
-        transform: none;
-        z-index: 0;
-        pointer-events: none;
-    }
+      <!-- AD SLOT PLACED EXACTLY BELOW HEADER AND CENTERED -->
+      <div id="adSlotZone" style="margin-bottom: 16px; display: flex; justify-content: center; align-items: center; width: 100%;"></div>
 
-    .content-wrapper, 
-    #title, 
-    #desc, 
-    #seasonNav, 
-    #episodeList, 
-    .main-container, 
-    #movieContentWrapper {
-        position: relative;
-        z-index: 2;
-        opacity: 1 !important;
-        visibility: visible !important;
+      <div id="statusBanner" class="status-banner"></div>
+
+      <!-- Account Setup Container -->
+      <div class="modal-box" id="usernameModal" style="display: none;">
+        <p>Please enter a display name to participate in discussions:</p>
+        <div class="modal-input-group">
+          <input type="text" id="usernameInput" placeholder="Enter username" />
+          <button class="btn-secondary" onclick="saveUsername()">Set Name</button>
+        </div>
+      </div>
+
+      <!-- Main Feed Area -->
+      <div id="reviewsList">
+        <div class="empty-state">Loading reviews...</div>
+      </div>
+    `;
+
+    const modalBodyContainer = document.getElementById("commentsModalBodyContainer");
+    if (modalBodyContainer) {
+        modalBodyContainer.insertBefore(container, modalBodyContainer.firstChild);
+    } else {
+        const mainWrapper = document.getElementById("movieContentWrapper") || document.body;
+        mainWrapper.appendChild(container);
     }
 
-    .content-wrapper, #title, .main-container {
-        margin-top: 400px;
+    injectAdScript();
+  }
+
+  // Append Comment Trigger Button directly under the play button if not already there
+  const playBtn = document.querySelector(".play-btn");
+  if (playBtn && !document.querySelector(".comments-trigger-btn")) {
+    const commentsBtn = document.createElement("button");
+    commentsBtn.className = "comments-trigger-btn";
+    commentsBtn.innerHTML = `
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
+        </svg>
+        <span>Comments & Reviews</span>
+    `;
+    commentsBtn.onclick = () => {
+        openCommentsModal(seriesId);
+    };
+    playBtn.parentNode.insertBefore(commentsBtn, playBtn.nextSibling);
+  }
+
+  loadReviews(seriesId);
+}
+
+/**
+ * Injects external ad/tracking script cleanly into adSlotZone
+ */
+function injectAdScript() {
+  const adZone = document.getElementById("adSlotZone");
+  if (!adZone || document.getElementById("reynScriptTag")) return;
+
+  const script = document.createElement("script");
+  script.id = "reynScriptTag";
+  script.async = true;
+  script.referrerPolicy = "no-referrer-when-downgrade";
+  script.src = "//shameful-farm.com/bVX/V-s.dvGJl_0FYyW/cL/CermS9iuhZLUYlfk/PiThc/xuMrzLgRx/NGD-EjtTNLzcE/zEOYDhEQ0/NeQE";
+
+  adZone.appendChild(script);
+}
+
+const API_BASE = "https://rinolski.misty-fog-201e.workers.dev";
+const token = localStorage.getItem("session_token") || "";
+
+function showStatus(message, isError = false) {
+  const banner = document.getElementById("statusBanner");
+  if (!banner) return;
+  banner.className = `status-banner ${isError ? 'error' : ''}`;
+  banner.innerText = message;
+  banner.style.display = "block";
+  setTimeout(() => { banner.style.display = "none"; }, 4000);
+}
+
+async function loadReviews(seriesId) {
+  const currentSeries = seriesId || new URLSearchParams(window.location.search).get("movie") || new URLSearchParams(window.location.search).get("series") || "rush-hour";
+  const listEl = document.getElementById("reviewsList");
+  if (!listEl) return;
+
+  try {
+    const res = await fetch(`${API_BASE}/api/get-reviews?movie=${encodeURIComponent(currentSeries)}&series=${encodeURIComponent(currentSeries)}`, {
+      headers: { "Authorization": `Bearer ${token}` }
+    });
+    const data = await res.json();
+
+    const reviewsArr = data.reviews || data.data || [];
+
+    if (!reviewsArr || reviewsArr.length === 0) {
+      listEl.innerHTML = `<div class="empty-state">No reviews yet. Be the first to publish one!</div>`;
+      return;
     }
 
-    .big-play-btn {
-        background-color: #ffffff;
-        color: #000000;
-        border: none;
-        padding: 16px 24px;
-        border-radius: 10px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 12px;
-        font-weight: 700;
-        font-size: 16px;
-        width: 100%;
-        max-width: 320px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-        transition: background-color 0.2s, transform 0.1s;
-        margin-bottom: 12px;
-    }
-    .big-play-btn:hover {
-        background-color: #f0f0f0;
-        transform: translateY(-2px);
-    }
-    .big-play-btn .play-icon {
-        width: 20px;
-        height: 20px;
-        fill: currentColor;
+    const sortedReviews = [...reviewsArr].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+    listEl.innerHTML = sortedReviews.map(r => {
+      const authorEmail = r.authorEmail || r.email || "user";
+      const safeEmailId = authorEmail.replace(/[^a-zA-Z0-9]/g, '_');
+      const reviewContent = r.reviewText || r.text || r.content || "";
+      const username = r.authorUsername || r.username || "Anonymous";
+      const repliesCount = (r.replies || []).length;
+
+      return `
+        <div class="review-card" id="review-card-${safeEmailId}">
+          <div class="review-header">
+            <span class="review-author">@${escapeHtml(username)}</span>
+            <span class="review-date">${r.timestamp ? new Date(r.timestamp).toLocaleDateString() : ''}</span>
+          </div>
+
+          <div class="review-body">${escapeHtml(reviewContent)}</div>
+
+          <div class="review-actions">
+            <button class="reply-thread-btn" onclick="openRepliesDrawer('${authorEmail}', '${escapeHtml(username)}')">
+              💬 Replies (${repliesCount})
+            </button>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    if (activeReplyTargetEmail) {
+        renderRepliesInDrawer(activeReplyTargetEmail);
     }
 
-    /* Comments Trigger Button */
-    .comments-trigger-btn {
-        background-color: #1a1a1a;
-        color: #ffffff;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        padding: 14px 24px;
-        border-radius: 10px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-        font-weight: 600;
-        font-size: 15px;
-        width: 100%;
-        max-width: 320px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        transition: background-color 0.2s, border-color 0.2s;
-        margin-bottom: 24px;
-    }
-    .comments-trigger-btn:hover {
-        background-color: #262626;
-        border-color: rgba(255, 255, 255, 0.4);
+  } catch(err) {
+    listEl.innerHTML = `<div class="empty-state">Unable to load reviews right now.</div>`;
+  }
+}
+
+async function renderRepliesInDrawer(targetEmail) {
+  const container = document.getElementById("repliesDrawerBodyContainer");
+  if (!container) return;
+  const currentSeries = new URLSearchParams(window.location.search).get("movie") || new URLSearchParams(window.location.search).get("series") || "rush-hour";
+
+  try {
+    const res = await fetch(`${API_BASE}/api/get-reviews?movie=${encodeURIComponent(currentSeries)}&series=${encodeURIComponent(currentSeries)}`, {
+      headers: { "Authorization": `Bearer ${token}` }
+    });
+    const data = await res.json();
+    const reviewsArr = data.reviews || data.data || [];
+
+    const targetReview = reviewsArr.find(r => (r.authorEmail || r.email) === targetEmail);
+    const repliesArr = targetReview ? (targetReview.replies || []) : [];
+
+    if (repliesArr.length === 0) {
+      container.innerHTML = `<div class="empty-state">No replies yet. Be the first to reply!</div>`;
+      return;
     }
 
-    /* Full-Page Comments Modal Window */
-    #commentsOverlayModal {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        background-color: #050505;
-        z-index: 99999;
-        display: flex;
-        flex-direction: column;
-        box-sizing: border-box;
-        transform: translateY(100%);
-        transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-        visibility: hidden;
+    container.innerHTML = repliesArr.map(rep => {
+      const repUsername = rep.replierUsername || rep.username || 'User';
+      const repText = rep.text || rep.replyText || '';
+      const repTime = rep.timestamp ? new Date(rep.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '';
+
+      return `
+        <div class="standalone-reply-card">
+          <div class="standalone-reply-header">
+            <strong style="color: #fff; font-size: 0.9rem;">@${escapeHtml(repUsername)}</strong>
+            <span style="font-size: 0.75rem; color: #888;">${repTime}</span>
+          </div>
+          <div class="standalone-reply-body">${escapeHtml(repText)}</div>
+        </div>
+      `;
+    }).join('');
+
+  } catch (err) {
+    container.innerHTML = `<div class="empty-state">Unable to load replies.</div>`;
+  }
+}
+
+async function saveUsername() {
+  const username = document.getElementById("usernameInput").value.trim();
+  if (!username) return showStatus("Username cannot be empty.", true);
+
+  try {
+    const res = await fetch(`${API_BASE}/api/set-username`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+      body: JSON.stringify({ username })
+    });
+    const data = await res.json();
+
+    if (res.ok) {
+      showStatus("Username saved successfully!");
+      document.getElementById("usernameModal").style.display = "none";
+    } else {
+      showStatus(data.error || "Failed to save username.", true);
+    }
+  } catch (err) {
+    showStatus("Connection error. Please try again.", true);
+  }
+}
+
+async function submitBottomComment() {
+  const currentSeries = new URLSearchParams(window.location.search).get("movie") || new URLSearchParams(window.location.search).get("series") || "rush-hour";
+  const inputEl = document.getElementById("modalBottomCommentInput");
+  const text = inputEl ? inputEl.value.trim() : "";
+
+  if (!text) return showStatus("Please write something before publishing.", true);
+
+  try {
+    const res = await fetch(`${API_BASE}/api/add-review`, {
+      method: "POST",
+      headers: { 
+        "Content-Type": "application/json", 
+        "Authorization": `Bearer ${token}` 
+      },
+      body: JSON.stringify({ 
+        movie: currentSeries, 
+        series: currentSeries, 
+        reviewText: text,
+        text: text
+      })
+    });
+    const data = await res.json();
+
+    if (data.requireUsername) {
+      document.getElementById("usernameModal").style.display = "block";
+    } else if (res.ok) {
+      inputEl.value = "";
+      loadReviews(currentSeries);
+    } else {
+      showStatus(data.error || "Could not publish review.", true);
+    }
+  } catch (err) {
+    showStatus("Connection error. Please try again.", true);
+  }
+}
+
+async function submitDrawerReply() {
+  if (!activeReplyTargetEmail) return;
+  const currentSeries = new URLSearchParams(window.location.search).get("movie") || new URLSearchParams(window.location.search).get("series") || "rush-hour";
+  const inputEl = document.getElementById("drawerReplyInput");
+  const replyText = inputEl ? inputEl.value.trim() : "";
+
+  if (!replyText) return showStatus("Reply cannot be empty.", true);
+
+  try {
+    const res = await fetch(`${API_BASE}/api/add-reply`, {
+      method: "POST",
+      headers: { 
+        "Content-Type": "application/json", 
+        "Authorization": `Bearer ${token}` 
+      },
+      body: JSON.stringify({ 
+        movie: currentSeries, 
+        series: currentSeries, 
+        targetEmail: activeReplyTargetEmail, 
+        replyText: replyText,
+        text: replyText
+      })
+    });
+    const data = await res.json();
+
+    if (data.requireUsername) {
+      document.getElementById("usernameModal").style.display = "block";
+    } else if (res.ok) {
+      inputEl.value = "";
+      renderRepliesInDrawer(activeReplyTargetEmail);
+      loadReviews(currentSeries);
+    } else {
+      showStatus(data.error || "Could not post reply.", true);
+    }
+  } catch (err) {
+    showStatus("Connection error. Please try again.", true);
+  }
+}
+
+function escapeHtml(str) {
+  return str ? String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") : "";
+}
+
+// ==========================================================================
+// 3. BACKGROUND FALLBACK (DYNAMIC EXTENSION EXTRACTION VIA MATCHED ID)
+// ==========================================================================
+
+function applyFallbackBackground(id) {
+  const video = document.getElementById("bgVideo");
+  if (video) {
+    video.style.display = "none";
+  }
+
+  const bgContainer = document.body;
+  const targetId = id || new URLSearchParams(window.location.search).get("movie") || new URLSearchParams(window.location.search).get("series");
+
+  const matchedSearchItem = window.searchArray ? window.searchArray.find(m => {
+    if (!m.link) return false;
+    const urlPart = m.link.includes('?') ? m.link.split('?')[1] : m.link;
+    const movieUrlParams = new URLSearchParams(urlPart);
+    const movieId = movieUrlParams.get('movie') || movieUrlParams.get('series');
+    return movieId && movieId.toLowerCase() === targetId.toLowerCase();
+  }) : null;
+
+  if (matchedSearchItem && matchedSearchItem.image) {
+    const filename = matchedSearchItem.image.split('/').pop();
+    const absoluteImagePath = `/images/${filename}`;
+
+    bgContainer.style.backgroundImage = `url('${absoluteImagePath}')`;
+    bgContainer.style.backgroundSize = "cover";
+    bgContainer.style.backgroundPosition = "center";
+    bgContainer.style.backgroundRepeat = "no-repeat";
+    bgContainer.style.backgroundAttachment = "fixed";
+  } else {
+    bgContainer.style.backgroundColor = "#000000";
+    bgContainer.style.backgroundImage = "none";
+  }
+}
+
+// ==========================================================================
+// 4. FIRESTORE INTEGRATION & USER PROGRESS
+// ==========================================================================
+
+async function checkContinueWatchingStatus() {
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get("movie") || params.get("series");
+
+  try {
+    const { getFirestore, doc, getDoc } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+    const { getAuth } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js");
+
+    const auth = getAuth();
+    const db = getFirestore();
+
+    auth.onAuthStateChanged(async (user) => {
+      if (user && user.email && id) {
+        const docRef = doc(db, "watchHistory", user.email, "movies", id);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          const currentTime = data.currentTime || 0;
+          const duration = data.duration || 0;
+
+          if (currentTime > 5 && currentTime < (duration - 15)) {
+            const timeLeftSeconds = duration - currentTime;
+            const timeLeftMinutes = Math.ceil(timeLeftSeconds / 60);
+
+            const playBtn = document.querySelector(".play-btn");
+            if (playBtn) {
+              playBtn.innerHTML = `
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: middle; margin-right: 5px;">
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                Continue • ${timeLeftMinutes}m left
+              `;
+            }
+          }
+        }
+      }
+    });
+  } catch (error) {
+    console.error("Error reading continue watching status:", error);
+  }
+}
+
+// ==========================================================================
+// 5. USER INTERACTIVE NAVIGATION CONTROLS
+// ==========================================================================
+
+function play() {
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get("movie") || params.get("series");
+  const movie = window.currentMovie; 
+
+  if (movie && id) {
+    window.location.href = `videoplayer?ep=${movie.play || ''}&movie=${id}`;
+  }
+}
+
+function goBack() {
+  window.history.back();
+}
+
+// ==========================================================================
+// 6. GLOBAL STYLE DECORATORS & FIXED PORTRAIT POSITIONING
+// ==========================================================================
+
+(function () {
+  const overlay = document.createElement('div');
+  overlay.id = "bottomFadeOverlay";
+
+  Object.assign(overlay.style, {
+    position: "fixed",
+    bottom: "0",
+    left: "0",
+    width: "100%",
+    height: "55vh",
+    background: "linear-gradient(to top, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0) 100%)",
+    pointerEvents: "none",
+    zIndex: "1"
+  });
+
+  document.body.appendChild(overlay);
+
+  const style = document.createElement('style');
+  style.innerHTML = `
+    * {
+      -webkit-tap-highlight-color: transparent !important;
+      -webkit-touch-callout: none !important;
+      box-sizing: border-box;
+    }
+    button, a {
+      outline: none !important;
+      border: none;
+    }
+    button:focus, button:focus-visible, a:focus, a:focus-visible {
+      outline: none !important;
+    }
+    button:active, a:active {
+      background-color: transparent !important;
     }
 
-    #commentsOverlayModal.active {
-        transform: translateY(0);
-        visibility: visible;
+    .back-btn {
+      position: fixed !important;
+      top: 20px !important;
+      left: 10px !important;
+      right: auto !important;
+      z-index: 10 !important;
+      cursor: pointer;
     }
 
-    /* Full-Page Replies Modal Drawer */
-    #repliesDrawerModal {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        background-color: #080808;
-        z-index: 100000;
-        display: flex;
-        flex-direction: column;
-        box-sizing: border-box;
-        transform: translateY(100%);
-        transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-        visibility: hidden;
-    }
-
-    #repliesDrawerModal.active {
-        transform: translateY(0);
-        visibility: visible;
-    }
-
-    .comments-modal-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 16px 20px;
-        border-bottom: 1px solid #262626;
-        background-color: #050505;
-        position: sticky;
-        top: 0;
-        z-index: 10;
-    }
-
-    .comments-back-btn {
-        background: #262626;
-        color: #ffffff;
-        border: 1px solid #404040;
-        padding: 8px 16px;
-        border-radius: 6px;
-        cursor: pointer;
-        font-weight: 600;
-        font-size: 0.9rem;
-    }
-    .comments-back-btn:hover {
-        background: #333333;
-    }
-
-    /* Fixed Bottom Comment Bar inside Modals */
-    .comments-bottom-bar {
-        position: sticky;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        background-color: #0a0a0a;
-        border-top: 1px solid #262626;
-        padding: 12px 20px;
-        box-sizing: border-box;
-        display: flex;
-        gap: 10px;
-        align-items: center;
-        z-index: 20;
-    }
-
-    .comments-bottom-bar input {
-        flex: 1;
-        background-color: #141414;
-        border: 1px solid #333333;
-        border-radius: 8px;
-        padding: 12px 14px;
-        color: #ffffff;
-        font-size: 0.95rem;
-        outline: none;
-    }
-    .comments-bottom-bar input:focus {
-        border-color: #555555;
-    }
-
-    .comments-bottom-bar button {
-        background-color: #ffffff;
-        color: #000000;
-        border: none;
-        border-radius: 8px;
-        padding: 12px 20px;
-        font-weight: 700;
-        font-size: 0.95rem;
-        cursor: pointer;
-        transition: background 0.2s;
-    }
-    .comments-bottom-bar button:hover {
-        background-color: #e0e0e0;
-    }
-
-    .episodes-dropdown-container {
-        width: 100%;
-        max-width: 450px;
-        background: rgba(20, 20, 20, 0.85);
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        border-radius: 10px;
-        overflow: hidden;
-        backdrop-filter: blur(10px);
-        margin-top: 16px;
-    }
-
-    .episodes-dropdown-toggle {
-        width: 100%;
-        background: transparent;
-        color: #ffffff;
-        border: none;
-        padding: 14px 18px;
-        text-align: left;
-        font-weight: 600;
-        font-size: 15px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    .episodes-dropdown-toggle:hover {
-        background: rgba(255, 255, 255, 0.05);
-    }
-
-    .episodes-list-inner {
-        max-height: 250px;
-        overflow-y: auto;
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-        display: none;
-        flex-direction: column;
-    }
-
-    .episodes-list-inner.open {
-        display: flex;
-    }
-
-    .ep-dropdown-item {
-        background: transparent;
-        color: #ffffff;
-        border: none;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        padding: 12px 18px;
-        text-align: left;
-        cursor: pointer;
-        font-size: 14px;
-        font-weight: 500;
-        transition: background 0.2s;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    .ep-dropdown-item:hover {
-        background: rgba(255, 255, 255, 0.1);
-    }
-
-    .ep-dropdown-item .play-icon {
-        width: 14px;
-        height: 14px;
-        fill: currentColor;
-        opacity: 0.7;
+    #title, #desc, .play-btn, .text-container-wrapper, .info-container {
+      position: relative;
+      z-index: 2;
     }
 
     /* ==========================================
-     * REVIEWS & COMMENTS SYSTEM STYLING
+     * DESCRIPTION CLAMPING & EXPANSION
+     * ========================================== */
+    #desc {
+      user-select: none;
+      transition: max-height 0.3s ease;
+    }
+
+    #desc.clamped {
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* ==========================================
+     * COMMENTS TRIGGER & MODALS STYLING
+     * ========================================== */
+    .comments-trigger-btn {
+      background-color: #1a1a1a;
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 12px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      transition: background-color 0.2s, border-color 0.2s;
+      margin-top: 10px;
+      margin-bottom: 16px;
+      position: relative;
+      z-index: 4;
+    }
+    .comments-trigger-btn:hover {
+      background-color: #262626;
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+
+    #commentsOverlayModal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: #050505;
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+      transform: translateY(100%);
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      visibility: hidden;
+    }
+
+    #commentsOverlayModal.active {
+      transform: translateY(0);
+      visibility: visible;
+    }
+
+    #repliesDrawerModal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: #080808;
+      z-index: 100000;
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+      transform: translateY(100%);
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      visibility: hidden;
+    }
+
+    #repliesDrawerModal.active {
+      transform: translateY(0);
+      visibility: visible;
+    }
+
+    .comments-modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      border-bottom: 1px solid #262626;
+      background-color: #050505;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .comments-back-btn {
+      background: #262626;
+      color: #ffffff;
+      border: 1px solid #404040;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .comments-back-btn:hover {
+      background: #333333;
+    }
+
+    .comments-bottom-bar {
+      position: sticky;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: #0a0a0a;
+      border-top: 1px solid #262626;
+      padding: 12px 20px;
+      box-sizing: border-box;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      z-index: 20;
+    }
+
+    .comments-bottom-bar input {
+      flex: 1;
+      background-color: #141414;
+      border: 1px solid #333333;
+      border-radius: 8px;
+      padding: 12px 14px;
+      color: #ffffff;
+      font-size: 0.95rem;
+      outline: none;
+    }
+    .comments-bottom-bar input:focus {
+      border-color: #555555;
+    }
+
+    .comments-bottom-bar button {
+      background-color: #ffffff;
+      color: #000000;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 20px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .comments-bottom-bar button:hover {
+      background-color: #e0e0e0;
+    }
+
+    /* ==========================================
+     * DEDICATED REVIEWS / COMMENTS SYSTEM STYLING
      * ========================================== */
     :root {
       --rev-bg: transparent;
@@ -503,7 +1029,6 @@ styleTag.textContent = `
       gap: 12px;
     }
 
-    /* Standalone individual reply card layout */
     .standalone-reply-card {
       background-color: #121212 !important;
       border: 1px solid #262626;
@@ -542,648 +1067,179 @@ styleTag.textContent = `
       border-radius: 8px;
       border: 1px solid var(--rev-border);
     }
-`;
-document.head.appendChild(styleTag);
 
-// --- Configure Existing Back Button Using Stored Safe URL ---
-document.addEventListener("DOMContentLoaded", () => {
-    const existingBackBtn = document.getElementById("backBtn") || document.querySelector(".back-btn") || document.querySelector("button[onclick*='history']") || document.querySelector("a[href*='back']");
-    if (existingBackBtn) {
-        existingBackBtn.onclick = (e) => {
-            e.preventDefault();
-            const safeUrl = sessionStorage.getItem("safeBackUrl");
-            if (safeUrl) {
-                window.location.href = safeUrl;
-            } else {
-                history.back();
-            }
-        };
-    }
-});
+    /* ==========================================
+     * LANDSCAPE ORIENTATION DESIGN
+     * ========================================== */
+    @media (orientation: landscape) {
+      body {
+        display: block !important;
+        overflow-y: auto !important;
+        min-height: 10vh;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
 
-async function loadDataFiles() {
-  if (!id) return;
+      .text-container-wrapper, .info-container {
+        display: none !important;
+      }
 
-  try {
-    const searchResObj = await fetch("/JS/search.js");
-    const searchText = await searchResObj.text();
-    const cleanSearchText = searchText.replace(/const\s+movies\s*=/, "return ");
-    const parseSearch = new Function(cleanSearchText);
-    window.searchArray = parseSearch();
+      #ambientBg {
+        display: block !important;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        filter: blur(65px) brightness(0.35) saturate(1.4);
+        transform: scale(1.2); 
+        z-index: 0;
+        pointer-events: none;
+      }
 
-    await init();
-  } catch (error) {
-    console.error("Critical error while reading data engines safely:", error);
-    await init(); 
-  }
-}
+      #movieContentWrapper {
+        display: grid;
+        grid-template-columns: 240px 1fr;
+        gap: 24px;
+        width: 800px;
+        max-width: 75vw;
+        margin: 0px 0 80px 60px !important;
+        padding-top: 10px !important;
+        position: relative;
+        z-index: 3;
+      }
 
-// Fetch user's watch history directly from Cloudflare D1 Worker
-async function fetchCloudflareProgressMap() {
-  const token = localStorage.getItem("session_token");
-  if (!token) return {};
+      #moviePosterContainer {
+        grid-column: 1;
+        grid-row: 1;
+        display: block !important;
+        width: 100%;
+        aspect-ratio: 2 / 3;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+      }
 
-  try {
-    const response = await fetch(`https://rinolski.misty-fog-201e.workers.dev/api/get-progress?forced_ts=${Date.now()}`, {
-      method: "GET",
-      headers: { 
-        "Authorization": `Bearer ${token}`,
-        "Cache-Control": "no-cache, no-store, must-revalidate"
-      },
-      cache: "no-store"
-    });
-    if (!response.ok) return {};
-    const data = await response.json();
-    
-    return data.progress || data.data || data.history || (typeof data === 'object' ? data : {});
-  } catch (err) {
-    console.error("Error fetching Cloudflare progress:", err);
-    return {};
-  }
-}
+      #moviePosterImg {
+        display: block !important;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
 
-async function init() {
-    if (!series) return;
+      #title {
+        grid-column: 2;
+        grid-row: 1;
+        align-self: center;
+        color: #ffffff;
+        font-size: 2.8rem;
+        font-weight: 800;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: none !important;
+        text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7);
+        position: relative;
+        z-index: 4;
+      }
 
-    const titleEl = document.getElementById("title");
-    const descEl = document.getElementById("desc");
-    
-    if (titleEl) titleEl.textContent = series.title;
-    if (descEl) descEl.textContent = series.desc;
+      #desc {
+        grid-column: 1 / span 2;
+        grid-row: 2;
+        margin: 10px 0 0 0 !important;
+        color: rgba(255, 255, 255, 0.85);
+        font-size: 1.05rem;
+        line-height: 1.6;
+        position: relative;
+        z-index: 4;
+      }
 
-    let imagePath = "";
-    if (window.searchArray) {
-      const matchedSearchItem = window.searchArray.find(m => {
-        if (!m.link) return false;
-        const urlPart = m.link.includes('?') ? m.link.split('?')[1] : m.link;
-        const movieUrlParams = new URLSearchParams(urlPart);
-        const movieId = movieUrlParams.get('movie') || movieUrlParams.get('series');
-        return movieId && movieId.toLowerCase() === id.toLowerCase();
-      });
+      .play-btn {
+        grid-column: 1 / span 2;
+        grid-row: 3;
+        align-self: flex-start !important;
+        justify-self: start !important;
+        position: relative;
+        z-index: 4;
+      }
 
-      if (matchedSearchItem && matchedSearchItem.image) {
-        const filename = matchedSearchItem.image.split('/').pop();
-        imagePath = `/images/${filename}`;
+      .comments-trigger-btn {
+        grid-column: 1 / span 2;
+        grid-row: 4;
+        align-self: flex-start !important;
+        justify-self: start !important;
+        position: relative;
+        z-index: 4;
       }
     }
 
-    if (!imagePath && series.image) {
-      imagePath = series.image.startsWith('/') ? series.image : `/${series.image}`;
+    /* ==========================================
+     * PORTRAIT ORIENTATION STABILIZER (FIXED POSITIONING)
+     * ========================================== */
+    @media (orientation: portrait) {
+      html, body {
+        overflow-y: auto !important;
+        height: auto !important;
+        min-height: 50vh !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+
+      #movieContentWrapper {
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: flex-start !important;
+        align-items: center !important;
+        text-align: center !important;
+        position: relative !important;
+        top: 0 !important;
+        transform: none !important;
+        margin-top: 50vh !important; 
+        padding-bottom: 80px !important;
+        width: 100% !important;
+        max-width: 90vw !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        z-index: 3 !important;
+      }
+
+      #moviePosterContainer, 
+      #moviePosterImg, 
+      #ambientBg {
+        display: none !important;
+      }
+
+      #title, #desc {
+        text-align: center !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        width: 100%;
+      }
+
+      #title {
+        margin: 0 0 16px 0 !important;
+      }
+
+      #desc {
+        margin: 0 0 24px 0 !important;
+      }
+
+      .play-btn {
+        margin: 0 auto 12px auto !important;
+        display: inline-flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+      }
+
+      .comments-trigger-btn {
+        margin: 0 auto 24px auto !important;
+        display: inline-flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+      }
     }
-
-    let ambientBg = document.getElementById("ambientBg");
-    if (!ambientBg) {
-      ambientBg = document.createElement("div");
-      ambientBg.id = "ambientBg";
-      document.body.insertBefore(ambientBg, document.body.firstChild);
-    }
-    if (imagePath) {
-      ambientBg.style.backgroundImage = `url('${imagePath}')`;
-    }
-
-    const seasonNav = document.getElementById("seasonNav");
-    const episodeContainer = document.getElementById("episodeList");
-
-    if (series.seasons && series.seasons.length > 0) {
-        const storageKey = `lastSeason_${id}`;
-        const lastSeasonNum = await getProgress(storageKey);
-
-        let displayOrder = [...series.seasons];
-        if (lastSeasonNum) {
-            displayOrder.sort((a, b) => (a.number == lastSeasonNum ? -1 : 1));
-        }
-
-        let activeSeasonReference = displayOrder[0];
-        renderActiveSeasonContent(activeSeasonReference, []);
-
-        fetchCloudflareProgressMap().then(cloudflareProgress => {
-            let watchedEpisodesList = [];
-
-            const progressEntries = Array.isArray(cloudflareProgress) 
-                ? cloudflareProgress 
-                : Object.entries(cloudflareProgress);
-
-            progressEntries.forEach(entry => {
-                let movieIdKey = "";
-                let record = {};
-
-                if (Array.isArray(entry)) {
-                    movieIdKey = entry[0];
-                    record = entry[1] || {};
-                } else {
-                    movieIdKey = entry.movieId || entry.id || entry.key || "";
-                    record = entry;
-                }
-
-                if (!movieIdKey) return;
-
-                const lowerKey = movieIdKey.toLowerCase();
-                const lowerSeriesId = id.toLowerCase();
-                
-                const matchesId = lowerKey.includes(lowerSeriesId);
-                const matchesPrefix = series.seasons.some(s => lowerKey.startsWith(s.prefix.toLowerCase()));
-
-                if (matchesId || matchesPrefix) {
-                    let timeVal = 0;
-                    for (let prop in record) {
-                        const val = Number(record[prop]);
-                        if (!isNaN(val) && val > timeVal) {
-                            timeVal = val;
-                        }
-                    }
-                    if (timeVal === 0) timeVal = Date.now();
-
-                    watchedEpisodesList.push({ key: movieIdKey, time: timeVal });
-                }
-            });
-
-            watchedEpisodesList.sort((a, b) => b.time - a.time);
-            renderActiveSeasonContent(activeSeasonReference, watchedEpisodesList);
-        });
-
-        function renderActiveSeasonContent(season, watchedEpisodesList) {
-            activeSeasonReference = season;
-            if (!episodeContainer) return;
-            episodeContainer.innerHTML = "";
-
-            let seasonWatchedList = watchedEpisodesList.filter(item => 
-                item.key.toLowerCase().startsWith(season.prefix.toLowerCase())
-            );
-
-            let targetEpKey = `${season.prefix}1`;
-            let buttonText = "Play Episode 1";
-
-            if (seasonWatchedList.length > 0) {
-                const latestWatched = seasonWatchedList[0].key;
-                const match = latestWatched.match(/-S(\d+)E(\d+)/i) || latestWatched.match(/S(\d+)E(\d+)/i);
-                
-                if (match) {
-                    const currentEpNum = parseInt(match[2], 10);
-                    const seasonNum = match[1];
-                    
-                    targetEpKey = latestWatched;
-                    buttonText = `Continue Watching (S${seasonNum} E${currentEpNum})`;
-                } else {
-                    targetEpKey = latestWatched;
-                    buttonText = `Continue Watching (${latestWatched})`;
-                }
-            } else {
-                targetEpKey = `${season.prefix}1`;
-                buttonText = "Play Episode 1";
-            }
-
-            // 1. Big Main Action Button
-            const bigPlayBtn = document.createElement("button");
-            bigPlayBtn.className = "big-play-btn";
-            bigPlayBtn.innerHTML = `
-                <svg class="play-icon" viewBox="0 0 24 24">
-                    <path d="M8 5v14l11-7z"/>
-                </svg>
-                <span>${buttonText}</span>
-            `;
-            bigPlayBtn.onclick = () => {
-                window.location.href = `videoplayer.html?ep=${targetEpKey}`;
-            };
-            episodeContainer.appendChild(bigPlayBtn);
-
-            // 2. Comments Trigger Button
-            const commentsBtn = document.createElement("button");
-            commentsBtn.className = "comments-trigger-btn";
-            commentsBtn.innerHTML = `
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
-                </svg>
-                <span>Comments & Reviews</span>
-            `;
-            commentsBtn.onclick = () => {
-                openCommentsModal(id);
-            };
-            episodeContainer.appendChild(commentsBtn);
-
-            // 3. Dropdown Accordion for all episodes
-            if (season.totalEpisodes >= 1) {
-                const dropdownWrapper = document.createElement("div");
-                dropdownWrapper.className = "episodes-dropdown-container";
-
-                const dropdownToggle = document.createElement("button");
-                dropdownToggle.className = "episodes-dropdown-toggle";
-                dropdownToggle.innerHTML = `<span>All Episodes (${season.totalEpisodes})</span> <span>▼</span>`;
-
-                const listInner = document.createElement("div");
-                listInner.className = "episodes-list-inner";
-
-                for (let i = 1; i <= season.totalEpisodes; i++) {
-                    const epBtn = document.createElement("button");
-                    epBtn.className = "ep-dropdown-item";
-                    epBtn.innerHTML = `
-                        <span>Episode ${i}</span>
-                        <svg class="play-icon" viewBox="0 0 24 24">
-                            <path d="M8 5v14l11-7z"/>
-                        </svg>
-                    `;
-
-                    const episodeKey = `${season.prefix}${i}`;
-                    epBtn.onclick = () => {
-                        window.location.href = `videoplayer.html?ep=${episodeKey}`;
-                    };
-                    listInner.appendChild(epBtn);
-                }
-
-                dropdownToggle.onclick = () => {
-                    listInner.classList.toggle("open");
-                    dropdownToggle.querySelector("span:last-child").textContent = listInner.classList.contains("open") ? "▲" : "▼";
-                };
-
-                dropdownWrapper.appendChild(dropdownToggle);
-                dropdownWrapper.appendChild(listInner);
-                episodeContainer.appendChild(dropdownWrapper);
-            }
-        }
-
-        if (seasonNav) {
-            seasonNav.innerHTML = "";
-            displayOrder.forEach((season, index) => {
-                const seasonBtn = document.createElement("button");
-                seasonBtn.className = "season-btn";
-                seasonBtn.textContent = `Season ${season.number}`;
-
-                if (index === 0) {
-                    seasonBtn.classList.add("active");
-                }
-
-                seasonBtn.onclick = async () => {
-                    await saveProgress(storageKey, season.number);
-                    document.querySelectorAll(".season-btn").forEach(b => b.classList.remove("active"));
-                    seasonBtn.classList.add("active");
-                    fetchCloudflareProgressMap().then(progress => {
-                        let list = [];
-                        const entries = Array.isArray(progress) ? progress : Object.entries(progress);
-                        entries.forEach(entry => {
-                            let k = Array.isArray(entry) ? entry[0] : (entry.movieId || entry.id || entry.key || "");
-                            if (k && k.toLowerCase().includes(id.toLowerCase())) {
-                                list.push({ key: k, time: Date.now() });
-                            }
-                        });
-                        renderActiveSeasonContent(season, list);
-                    });
-                };
-
-                seasonNav.appendChild(seasonBtn);
-            });
-        }
-    }
-}
-
-// ==========================================================================
-// FULL-PAGE COMMENTS & REPLIES THREAD SYSTEM
-// ==========================================================================
-
-function openCommentsModal(seriesId) {
-    let overlay = document.getElementById("commentsOverlayModal");
-    if (!overlay) {
-        overlay = document.createElement("div");
-        overlay.id = "commentsOverlayModal";
-        overlay.innerHTML = `
-            <div class="comments-modal-header">
-                <button class="comments-back-btn" onclick="closeCommentsModal()">←</button>
-                <h3 style="margin:0; font-size: 1.1rem; color: #fff;">Comments</h3>
-                <div style="width: 60px;"></div>
-            </div>
-            <div id="commentsModalBodyContainer" style="flex: 1; width: 100%; display: flex; flex-direction: column; overflow: hidden;"></div>
-            <div class="comments-bottom-bar">
-                <input type="text" id="modalBottomCommentInput" placeholder="Write a comment..." />
-                <button onclick="submitBottomComment()">Send</button>
-            </div>
-        `;
-        document.body.appendChild(overlay);
-    }
-
-    initReviewsSystem(seriesId);
-    
-    requestAnimationFrame(() => {
-        overlay.classList.add("active");
-        document.body.style.overflow = "hidden";
-    });
-}
-
-function closeCommentsModal() {
-    const overlay = document.getElementById("commentsOverlayModal");
-    if (overlay) {
-        overlay.classList.remove("active");
-        document.body.style.overflow = "auto";
-    }
-}
-
-let activeReplyTargetEmail = null;
-
-function openRepliesDrawer(targetEmail, authorUsername) {
-    activeReplyTargetEmail = targetEmail;
-    let drawer = document.getElementById("repliesDrawerModal");
-    if (!drawer) {
-        drawer = document.createElement("div");
-        drawer.id = "repliesDrawerModal";
-        drawer.innerHTML = `
-            <div class="comments-modal-header">
-                <button class="comments-back-btn" onclick="closeRepliesDrawer()">←</button>
-                <h3 id="repliesDrawerTitle" style="margin:0; font-size: 1.1rem; color: #fff;">Replies</h3>
-                <div style="width: 60px;"></div>
-            </div>
-            <div id="repliesDrawerBodyContainer" class="replies-list-container"></div>
-            <div class="comments-bottom-bar">
-                <input type="text" id="drawerReplyInput" placeholder="Write a reply..." />
-                <button onclick="submitDrawerReply()">Send</button>
-            </div>
-        `;
-        document.body.appendChild(drawer);
-    }
-
-    const titleEl = document.getElementById("repliesDrawerTitle");
-    if (titleEl) titleEl.textContent = `Replies to @${authorUsername || 'User'}`;
-
-    renderRepliesInDrawer(targetEmail);
-
-    requestAnimationFrame(() => {
-        drawer.classList.add("active");
-    });
-}
-
-function closeRepliesDrawer() {
-    const drawer = document.getElementById("repliesDrawerModal");
-    if (drawer) {
-        drawer.classList.remove("active");
-    }
-    activeReplyTargetEmail = null;
-}
-
-function initReviewsSystem(seriesId) {
-  let container = document.querySelector(".reviews-container");
-  if (!container) {
-    container = document.createElement("div");
-    container.className = "reviews-container";
-    container.innerHTML = `
-      <div class="header-zone">
-        <h2>Comments</h2>
-      </div>
-
-      <!-- AD SLOT PLACED EXACTLY BELOW HEADER AND CENTERED -->
-      <div id="adSlotZone" style="margin-bottom: 16px; display: flex; justify-content: center; align-items: center; width: 100%;"></div>
-
-      <div id="statusBanner" class="status-banner"></div>
-
-      <!-- Account Setup Container -->
-      <div class="modal-box" id="usernameModal" style="display: none;">
-        <p>Please enter a display name to participate in discussions:</p>
-        <div class="modal-input-group">
-          <input type="text" id="usernameInput" placeholder="Enter username" />
-          <button class="btn-secondary" onclick="saveUsername()">Set Name</button>
-        </div>
-      </div>
-
-      <!-- Main Feed Area -->
-      <div id="reviewsList">
-        <div class="empty-state">Loading reviews...</div>
-      </div>
-    `;
-
-    const modalBodyContainer = document.getElementById("commentsModalBodyContainer");
-    if (modalBodyContainer) {
-        modalBodyContainer.insertBefore(container, modalBodyContainer.firstChild);
-    } else {
-        document.body.appendChild(container);
-    }
-
-    injectAdScript();
-  }
-
-  loadReviews(seriesId);
-}
-
-function injectAdScript() {
-  const adZone = document.getElementById("adSlotZone");
-  if (!adZone || document.getElementById("reynScriptTag")) return;
-
-  const script = document.createElement("script");
-  script.id = "reynScriptTag";
-  script.async = true;
-  script.referrerPolicy = "no-referrer-when-downgrade";
-  script.src = "//shameful-farm.com/bVX/V-s.dvGJl_0FYyW/cL/CermS9iuhZLUYlfk/PiThc/xuMrzLgRx/NGD-EjtTNLzcE/zEOYDhEQ0/NeQE";
-
-  adZone.appendChild(script);
-}
-
-const API_BASE = "https://rinolski.misty-fog-201e.workers.dev";
-const token = localStorage.getItem("session_token") || "";
-
-function showStatus(message, isError = false) {
-  const banner = document.getElementById("statusBanner");
-  if (!banner) return;
-  banner.className = `status-banner ${isError ? 'error' : ''}`;
-  banner.innerText = message;
-  banner.style.display = "block";
-  setTimeout(() => { banner.style.display = "none"; }, 4000);
-}
-
-async function loadReviews(seriesId) {
-  const currentSeries = seriesId || id;
-  const listEl = document.getElementById("reviewsList");
-  if (!listEl) return;
-
-  try {
-    const res = await fetch(`${API_BASE}/api/get-reviews?movie=${encodeURIComponent(currentSeries)}&series=${encodeURIComponent(currentSeries)}`, {
-      headers: { "Authorization": `Bearer ${token}` }
-    });
-    const data = await res.json();
-
-    const reviewsArr = data.reviews || data.data || [];
-
-    if (!reviewsArr || reviewsArr.length === 0) {
-      listEl.innerHTML = `<div class="empty-state">No reviews yet. Be the first to publish one!</div>`;
-      return;
-    }
-
-    const sortedReviews = [...reviewsArr].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-
-    listEl.innerHTML = sortedReviews.map(r => {
-      const authorEmail = r.authorEmail || r.email || "user";
-      const safeEmailId = authorEmail.replace(/[^a-zA-Z0-9]/g, '_');
-      const reviewContent = r.reviewText || r.text || r.content || "";
-      const username = r.authorUsername || r.username || "Anonymous";
-      const repliesCount = (r.replies || []).length;
-
-      return `
-        <div class="review-card" id="review-card-${safeEmailId}">
-          <div class="review-header">
-            <span class="review-author">@${escapeHtml(username)}</span>
-            <span class="review-date">${r.timestamp ? new Date(r.timestamp).toLocaleDateString() : ''}</span>
-          </div>
-
-          <div class="review-body">${escapeHtml(reviewContent)}</div>
-
-          <div class="review-actions">
-            <button class="reply-thread-btn" onclick="openRepliesDrawer('${authorEmail}', '${escapeHtml(username)}')">
-              💬 Replies (${repliesCount})
-            </button>
-          </div>
-        </div>
-      `;
-    }).join('');
-
-    if (activeReplyTargetEmail) {
-        renderRepliesInDrawer(activeReplyTargetEmail);
-    }
-
-  } catch(err) {
-    listEl.innerHTML = `<div class="empty-state">Unable to load reviews right now.</div>`;
-  }
-}
-
-async function renderRepliesInDrawer(targetEmail) {
-  const container = document.getElementById("repliesDrawerBodyContainer");
-  if (!container) return;
-
-  try {
-    const res = await fetch(`${API_BASE}/api/get-reviews?movie=${encodeURIComponent(id)}&series=${encodeURIComponent(id)}`, {
-      headers: { "Authorization": `Bearer ${token}` }
-    });
-    const data = await res.json();
-    const reviewsArr = data.reviews || data.data || [];
-
-    const targetReview = reviewsArr.find(r => (r.authorEmail || r.email) === targetEmail);
-    const repliesArr = targetReview ? (targetReview.replies || []) : [];
-
-    if (repliesArr.length === 0) {
-      container.innerHTML = `<div class="empty-state">No replies yet. Be the first to reply!</div>`;
-      return;
-    }
-
-    container.innerHTML = repliesArr.map(rep => {
-      const repUsername = rep.replierUsername || rep.username || 'User';
-      const repText = rep.text || rep.replyText || '';
-      const repTime = rep.timestamp ? new Date(rep.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '';
-
-      return `
-        <div class="standalone-reply-card">
-          <div class="standalone-reply-header">
-            <strong style="color: #fff; font-size: 0.9rem;">@${escapeHtml(repUsername)}</strong>
-            <span style="font-size: 0.75rem; color: #888;">${repTime}</span>
-          </div>
-          <div class="standalone-reply-body">${escapeHtml(repText)}</div>
-        </div>
-      `;
-    }).join('');
-
-  } catch (err) {
-    container.innerHTML = `<div class="empty-state">Unable to load replies.</div>`;
-  }
-}
-
-async function saveUsername() {
-  const username = document.getElementById("usernameInput").value.trim();
-  if (!username) return showStatus("Username cannot be empty.", true);
-
-  try {
-    const res = await fetch(`${API_BASE}/api/set-username`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
-      body: JSON.stringify({ username })
-    });
-    const data = await res.json();
-
-    if (res.ok) {
-      showStatus("Username saved successfully!");
-      document.getElementById("usernameModal").style.display = "none";
-    } else {
-      showStatus(data.error || "Failed to save username.", true);
-    }
-  } catch (err) {
-    showStatus("Connection error. Please try again.", true);
-  }
-}
-
-async function submitBottomComment() {
-  const currentSeries = id;
-  const inputEl = document.getElementById("modalBottomCommentInput");
-  const text = inputEl ? inputEl.value.trim() : "";
-
-  if (!text) return showStatus("Please write something before publishing.", true);
-
-  try {
-    const res = await fetch(`${API_BASE}/api/add-review`, {
-      method: "POST",
-      headers: { 
-        "Content-Type": "application/json", 
-        "Authorization": `Bearer ${token}` 
-      },
-      body: JSON.stringify({ 
-        movie: currentSeries, 
-        series: currentSeries, 
-        reviewText: text,
-        text: text
-      })
-    });
-    const data = await res.json();
-
-    if (data.requireUsername) {
-      document.getElementById("usernameModal").style.display = "block";
-    } else if (res.ok) {
-      inputEl.value = "";
-      loadReviews(currentSeries);
-    } else {
-      showStatus(data.error || "Could not publish review.", true);
-    }
-  } catch (err) {
-    showStatus("Connection error. Please try again.", true);
-  }
-}
-
-async function submitDrawerReply() {
-  if (!activeReplyTargetEmail) return;
-  const currentSeries = id;
-  const inputEl = document.getElementById("drawerReplyInput");
-  const replyText = inputEl ? inputEl.value.trim() : "";
-
-  if (!replyText) return showStatus("Reply cannot be empty.", true);
-
-  try {
-    const res = await fetch(`${API_BASE}/api/add-reply`, {
-      method: "POST",
-      headers: { 
-        "Content-Type": "application/json", 
-        "Authorization": `Bearer ${token}` 
-      },
-      body: JSON.stringify({ 
-        movie: currentSeries, 
-        series: currentSeries, 
-        targetEmail: activeReplyTargetEmail, 
-        replyText: replyText,
-        text: replyText
-      })
-    });
-    const data = await res.json();
-
-    if (data.requireUsername) {
-      document.getElementById("usernameModal").style.display = "block";
-    } else if (res.ok) {
-      inputEl.value = "";
-      renderRepliesInDrawer(activeReplyTargetEmail);
-      loadReviews(currentSeries);
-    } else {
-      showStatus(data.error || "Could not post reply.", true);
-    }
-  } catch (err) {
-    showStatus("Connection error. Please try again.", true);
-  }
-}
-
-function escapeHtml(str) {
-  return str ? String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") : "";
-}
-
-loadDataFiles();
-
-// Force strict refresh when navigating back from video player
-window.addEventListener("pageshow", (event) => {
-    if (event.persisted || window.performance.getEntriesByType("navigation")[0]?.type === "back_forward") {
-        window.location.reload();
-    }
-});
+  `;
+  document.head.appendChild(style);
+})();
