@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Comment Notifications</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #000000;
+      color: #ffffff;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    /* Floating Notification Container */
+    .notification-wrapper {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 100000;
+    }
+
+    /* Notification Bell Button */
+    .notification-btn {
+      position: relative;
+      background-color: #1a1a1a;
+      border: 1px solid #333333;
+      color: #ffffff;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+      transition: background-color 0.2s, border-color 0.2s;
+    }
+
+    .notification-btn:hover {
+      background-color: #262626;
+      border-color: #555555;
+    }
+
+    /* Badge Counter */
+    .notification-badge {
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      background-color: #e50914;
+      color: #ffffff;
+      font-size: 0.75rem;
+      font-weight: 700;
+      min-width: 18px;
+      height: 18px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 4px;
+      border: 2px solid #000000;
+      box-sizing: border-box;
+    }
+
+    /* Dropdown Modal Container */
+    .notification-dropdown {
+      position: absolute;
+      top: 58px;
+      right: 0;
+      width: 340px;
+      max-height: 480px;
+      background-color: #0d0d0d;
+      border: 1px solid #262626;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .notification-dropdown.active {
+      display: flex;
+    }
+
+    .dropdown-header {
+      padding: 14px 16px;
+      border-bottom: 1px solid #262626;
+      font-weight: 700;
+      font-size: 0.95rem;
+      background-color: #121212;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .dropdown-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .notification-card {
+      background-color: #161616;
+      border: 1px solid #262626;
+      border-radius: 8px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .notification-series {
+      font-size: 0.75rem;
+      color: #e50914;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .notification-user {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .notification-text {
+      font-size: 0.85rem;
+      color: #cccccc;
+      line-height: 1.3;
+      word-break: break-word;
+    }
+
+    .reply-form {
+      margin-top: 6px;
+      display: flex;
+      gap: 6px;
+    }
+
+    .reply-form input {
+      flex: 1;
+      background-color: #090909;
+      border: 1px solid #333333;
+      border-radius: 6px;
+      padding: 8px 10px;
+      color: #ffffff;
+      font-size: 0.8rem;
+      outline: none;
+    }
+
+    .reply-form input:focus {
+      border-color: #666666;
+    }
+
+    .reply-form button {
+      background-color: #ffffff;
+      color: #000000;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-weight: 700;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+
+    .empty-notifications {
+      text-align: center;
+      padding: 24px 12px;
+      color: #777777;
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating Notification UI -->
+  <div class="notification-wrapper">
+    <button class="notification-btn" id="notifBellBtn" onclick="toggleNotifDropdown()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-2 1H8v-6c0-2.48 1.51-4.5 4-4.5s4 2.02 4 4.5v6z"/>
+      </svg>
+      <div class="notification-badge" id="notifBadge" style="display: none;">0</div>
+    </button>
+
+    <div class="notification-dropdown" id="notifDropdown">
+      <div class="dropdown-header">
+        <span>Replies</span>
+        <span id="notifCountText" style="font-size: 0.75rem; color: #888;">0 new</span>
+      </div>
+      <div class="dropdown-list" id="notifList">
+        <div class="empty-notifications">No new replies</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = "https://rinolski.misty-fog-201e.workers.dev";
+    const token = localStorage.getItem("session_token") || "";
+
+    // Track state locally
+    let userEmail = "";
+    let notificationsList = [];
+
+    function toggleNotifDropdown() {
+      const dropdown = document.getElementById("notifDropdown");
+      dropdown.classList.toggle("active");
+    }
+
+    async function fetchUserIdentity() {
+      if (!token) return;
+      try {
+        const res = await fetch(`${API_BASE}/api/get-username`, {
+          headers: { "Authorization": `Bearer ${token}` }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          userEmail = data.email || data.user?.email || "";
+        }
+      } catch (e) {
+        console.error("Failed to fetch user email:", e);
+      }
+    }
+
+    async function checkForNewReplies() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const currentId = urlParams.get("series") || urlParams.get("movie") || "";
+
+      if (!currentId) return;
+
+      try {
+        const res = await fetch(`${API_BASE}/api/get-reviews?movie=${encodeURIComponent(currentId)}&series=${encodeURIComponent(currentId)}`, {
+          headers: { "Authorization": `Bearer ${token}` }
+        });
+        if (!res.ok) return;
+
+        const data = await res.json();
+        const reviewsArr = data.reviews || data.data || [];
+
+        // Find reviews authored by the current logged-in user
+        const myReviews = reviewsArr.filter(r => (r.authorEmail || r.email) === userEmail);
+
+        notificationsList = [];
+
+        myReviews.forEach(review => {
+          const replies = review.replies || [];
+          replies.forEach(rep => {
+            notificationsList.push({
+              seriesId: currentId,
+              targetEmail: review.authorEmail || review.email,
+              replierUsername: rep.replierUsername || rep.username || "User",
+              text: rep.text || rep.replyText || "",
+              timestamp: rep.timestamp || Date.now()
+            });
+          });
+        });
+
+        // Sort replies newest first
+        notificationsList.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+        renderNotifications(currentId);
+
+      } catch (err) {
+        console.error("Error fetching notifications:", err);
+      }
+    }
+
+    function renderNotifications(seriesId) {
+      const badge = document.getElementById("notifBadge");
+      const listEl = document.getElementById("notifList");
+      const countText = document.getElementById("notifCountText");
+
+      if (notificationsList.length > 0) {
+        badge.textContent = notificationsList.length;
+        badge.style.display = "flex";
+        countText.textContent = `${notificationsList.length} new`;
+
+        listEl.innerHTML = notificationsList.map((item, idx) => `
+          <div class="notification-card">
+            <span class="notification-series">Series / Movie: ${escapeHtml(item.seriesId)}</span>
+            <span class="notification-user">@${escapeHtml(item.replierUsername)} replied:</span>
+            <div class="notification-text">${escapeHtml(item.text)}</div>
+            <div class="reply-form">
+              <input type="text" id="notifReplyInput_${idx}" placeholder="Reply..." />
+              <button onclick="sendNotificationReply('${escapeHtml(item.seriesId)}', '${escapeHtml(item.targetEmail)}', ${idx})">Send</button>
+            </div>
+          </div>
+        `).join('');
+      } else {
+        badge.style.display = "none";
+        countText.textContent = "0 new";
+        listEl.innerHTML = `<div class="empty-notifications">No new replies</div>`;
+      }
+    }
+
+    async function sendNotificationReply(seriesId, targetEmail, idx) {
+      const inputEl = document.getElementById(`notifReplyInput_${idx}`);
+      const replyText = inputEl ? inputEl.value.trim() : "";
+
+      if (!replyText) return;
+
+      try {
+        const res = await fetch(`${API_BASE}/api/add-reply`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            movie: seriesId,
+            series: seriesId,
+            targetEmail: targetEmail,
+            replyText: replyText,
+            text: replyText
+          })
+        });
+
+        if (res.ok) {
+          inputEl.value = "";
+          alert("Reply sent successfully!");
+          checkForNewReplies();
+        } else {
+          alert("Could not send reply.");
+        }
+      } catch (err) {
+        console.error("Error posting reply:", err);
+      }
+    }
+
+    function escapeHtml(str) {
+      return str ? String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") : "";
+    }
+
+    // Initialize Identity and Polling
+    document.addEventListener("DOMContentLoaded", async () => {
+      await fetchUserIdentity();
+      checkForNewReplies();
+      // Poll every 15 seconds for incoming replies
+      setInterval(checkForNewReplies, 15000);
+    });
+  </script>
+</body>
+</html>
