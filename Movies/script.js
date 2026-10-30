@@ -124,8 +124,8 @@ function renderPage(id) {
     checkContinueWatchingStatus();
   }
 
-  // Build and load the reviews system directly under the play button
-  initReviewsSystem(targetId);
+  // Inject the Comments & Reviews trigger button directly under the play button
+  initCommentsTriggerButton(targetId);
 
   // Snap window back to top on initial page render
   window.scrollTo(0, 0);
@@ -186,7 +186,7 @@ function setupLandscapeDOMArchitecture(imagePath) {
 loadDataFiles();
 
 // ==========================================================================
-// 2. FULL-PAGE COMMENTS & REPLIES THREAD SYSTEM (REPLACES REVIEWS)
+// 2. FULL-PAGE COMMENTS & REPLIES THREAD SYSTEM
 // ==========================================================================
 
 function openCommentsModal(seriesId) {
@@ -266,16 +266,32 @@ function closeRepliesDrawer() {
     activeReplyTargetEmail = null;
 }
 
+function initCommentsTriggerButton(seriesId) {
+  const playBtn = document.querySelector(".play-btn");
+  if (playBtn && !document.querySelector(".comments-trigger-btn")) {
+    const commentsBtn = document.createElement("button");
+    commentsBtn.className = "comments-trigger-btn";
+    commentsBtn.innerHTML = `
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
+        </svg>
+        <span>Comments & Reviews</span>
+    `;
+    commentsBtn.onclick = () => {
+        openCommentsModal(seriesId);
+    };
+    playBtn.parentNode.insertBefore(commentsBtn, playBtn.nextSibling);
+  }
+}
+
 function initReviewsSystem(seriesId) {
   let container = document.querySelector(".reviews-container");
+  const modalBodyContainer = document.getElementById("commentsModalBodyContainer");
+
   if (!container) {
     container = document.createElement("div");
     container.className = "reviews-container";
     container.innerHTML = `
-      <div class="header-zone">
-        <h2>Comments</h2>
-      </div>
-
       <!-- AD SLOT PLACED EXACTLY BELOW HEADER AND CENTERED -->
       <div id="adSlotZone" style="margin-bottom: 16px; display: flex; justify-content: center; align-items: center; width: 100%;"></div>
 
@@ -296,32 +312,13 @@ function initReviewsSystem(seriesId) {
       </div>
     `;
 
-    const modalBodyContainer = document.getElementById("commentsModalBodyContainer");
-    if (modalBodyContainer) {
-        modalBodyContainer.insertBefore(container, modalBodyContainer.firstChild);
-    } else {
-        const mainWrapper = document.getElementById("movieContentWrapper") || document.body;
-        mainWrapper.appendChild(container);
-    }
-
     injectAdScript();
   }
 
-  // Append Comment Trigger Button directly under the play button if not already there
-  const playBtn = document.querySelector(".play-btn");
-  if (playBtn && !document.querySelector(".comments-trigger-btn")) {
-    const commentsBtn = document.createElement("button");
-    commentsBtn.className = "comments-trigger-btn";
-    commentsBtn.innerHTML = `
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
-        </svg>
-        <span>Comments & Reviews</span>
-    `;
-    commentsBtn.onclick = () => {
-        openCommentsModal(seriesId);
-    };
-    playBtn.parentNode.insertBefore(commentsBtn, playBtn.nextSibling);
+  // Always make sure container lives inside the modal body container when opened
+  if (modalBodyContainer && !modalBodyContainer.contains(container)) {
+    modalBodyContainer.innerHTML = "";
+    modalBodyContainer.appendChild(container);
   }
 
   loadReviews(seriesId);
