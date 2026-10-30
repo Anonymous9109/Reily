@@ -1179,9 +1179,9 @@
 
     let userWatchHistoryCache = [];
     let userUnwantedCache = []; 
+    let userNotificationsCache = [];
     let lastKnownDataHash = "";
     let activeThreadData = null;
-    let unreadReplyCount = 0;
 
     const profileAvatarsCatalog = {
         1: "https://rinolski.online/images/1.jpg", 
@@ -1725,7 +1725,7 @@
 
                 renderWorkerWatchHistory(userWatchHistoryCache);
                 await fetchUnwantedMoviesCloudflare();
-                checkUnreadNotificationsCount();
+                await fetchUserNotifications();
             }
         } catch (err) {
             if (sessionToken) {
@@ -1967,7 +1967,6 @@
     function updateNotificationBadge(count) {
         const badge = document.getElementById('notification-badge');
         if (!badge) return;
-        unreadReplyCount = count;
         if (count > 0) {
             badge.innerText = count > 99 ? '99+' : count;
             badge.style.display = 'flex';
@@ -1977,32 +1976,15 @@
         }
     }
 
-    async function checkUnreadNotificationsCount() {
-        if (isAppOffline()) return;
-        const token = localStorage.getItem('session_token') || localStorage.getItem('token');
-        if (!token) return;
-
-        try {
-            const res = await fetch(`${WORKER_URL}/api/get-notifications`, {
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
-            if (res.ok) {
-                const data = await res.json();
-                const unread = data.unreadCount || (data.notifications ? data.notifications.length : 0);
-                updateNotificationBadge(unread);
-            }
-        } catch (e) {}
-    }
-
     function openNotificationsModal() {
         resetActiveNavbar();
         const modal = document.getElementById('notificationsModal');
         if (modal) modal.classList.add('open');
         
-        // Hide badge and reset unread count when opened
+        // Hide badge when icon clicked
         updateNotificationBadge(0);
         
-        fetchUserNotifications();
+        renderNotificationsList();
     }
 
     function closeNotificationsModal() {
@@ -2011,6 +1993,64 @@
     }
 
     async function fetchUserNotifications() {
+        if (isAppOffline() || !currentUser) return;
+        const token = localStorage.getItem('session_token') || localStorage.getItem('token');
+        if (!token) return;
+
+        let fetchedNotifications = [];
+
+        try {
+            // 1. Try dedicated endpoint first
+            const res = await fetch(`${WORKER_URL}/api/get-notifications`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (res.ok) {
+                const data = await res.json();
+                fetchedNotifications = data.notifications || data.data || [];
+            }
+        } catch(e) {}
+
+        // 2. Fallback scan if list is empty
+        if (fetchedNotifications.length === 0 && typeof movies !== 'undefined' && currentUser.username) {
+            const currentUsernameLower = currentUser.username.toLowerCase();
+            const emailLower = currentUser.email ? currentUser.email.toLowerCase() : "";
+
+            for (let m of movies) {
+                try {
+                    const revRes = await fetch(`${WORKER_URL}/api/get-reviews?movie=${encodeURIComponent(m.title)}&series=${encodeURIComponent(m.title)}`, {
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+                    if (revRes.ok) {
+                        const revData = await revRes.json();
+                        const reviews = revData.reviews || revData.data || [];
+
+                        reviews.forEach(r => {
+                            const parentEmail = (r.authorEmail || r.email || "").toLowerCase();
+                            const parentUsername = (r.authorUsername || r.username || "").toLowerCase();
+
+                            if (parentEmail === emailLower || parentUsername === currentUsernameLower) {
+                                (r.replies || []).forEach(rep => {
+                                    fetchedNotifications.push({
+                                        series: m.title,
+                                        movie: m.title,
+                                        replierUsername: rep.replierUsername || rep.username || "User",
+                                        replyText: rep.text || rep.replyText || "",
+                                        timestamp: rep.timestamp || Date.now(),
+                                        targetEmail: r.authorEmail || r.email
+                                    });
+                                });
+                            }
+                        });
+                    }
+                } catch(e) {}
+            }
+        }
+
+        userNotificationsCache = fetchedNotifications;
+        updateNotificationBadge(userNotificationsCache.length);
+    }
+
+    function renderNotificationsList() {
         const container = document.getElementById('notifications-list-container');
         if (!container) return;
 
@@ -2019,57 +2059,41 @@
             return;
         }
 
-        const token = localStorage.getItem('session_token') || localStorage.getItem('token');
-        if (!token) {
-            container.innerHTML = `<p style="color: gray; font-size: 14px;">Please sign in to view your notifications.</p>`;
+        if (userNotificationsCache.length === 0) {
+            container.innerHTML = `<p style="color: gray; font-size: 14px;">No replies or notifications yet.</p>`;
             return;
         }
 
-        try {
-            const res = await fetch(`${WORKER_URL}/api/get-notifications`, {
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
-            const data = await res.json();
-            const notifications = data.notifications || data.data || [];
+        container.innerHTML = "";
+        userNotificationsCache.forEach(notif => {
+            const card = document.createElement('div');
+            card.style.cssText = "background: #111111; border: 1px solid #222; border-radius: 8px; padding: 12px; cursor: pointer; transition: background 0.2s;";
+            card.onmouseover = () => card.style.background = "#1a1a1a";
+            card.onmouseout = () => card.style.background = "#111111";
 
-            if (!res.ok || notifications.length === 0) {
-                container.innerHTML = `<p style="color: gray; font-size: 14px;">No new replies or notifications yet.</p>`;
-                return;
-            }
+            const mediaTitle = notif.series || notif.movie || "Title";
+            const replier = notif.replierUsername || "User";
+            const replyText = notif.text || notif.replyText || "";
+            const timeStr = notif.timestamp ? new Date(notif.timestamp).toLocaleDateString() : "Recently";
 
-            container.innerHTML = "";
-            notifications.forEach(notif => {
-                const card = document.createElement('div');
-                card.style.cssText = "background: #111111; border: 1px solid #222; border-radius: 8px; padding: 12px; cursor: pointer; transition: background 0.2s;";
-                card.onmouseover = () => card.style.background = "#1a1a1a";
-                card.onmouseout = () => card.style.background = "#111111";
+            card.onclick = () => openNotificationThreadDrawer(notif);
 
-                const mediaTitle = notif.series || notif.movie || "Title";
-                const replier = notif.replierUsername || "User";
-                const replyText = notif.text || notif.replyText || "";
-                const timeStr = notif.timestamp ? new Date(notif.timestamp).toLocaleDateString() : "Recently";
-
-                card.onclick = () => openNotificationThreadDrawer(notif);
-
-                card.innerHTML = `
-                    <div style="font-size: 12px; color: #e50914; font-weight: bold; margin-bottom: 4px; text-transform: uppercase;">
-                        ${escapeHtml(mediaTitle)}
-                    </div>
-                    <div style="font-size: 13px; color: #ffffff; margin-bottom: 4px;">
-                        <strong>@${escapeHtml(replier)}</strong> replied to your comment
-                    </div>
-                    <div style="font-size: 12px; color: #b3b3b3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                        "${escapeHtml(replyText)}"
-                    </div>
-                    <div style="font-size: 10px; color: #666; margin-top: 6px; text-align: right;">
-                        ${timeStr}
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-        } catch (err) {
-            container.innerHTML = `<p style="color: gray; font-size: 14px;">Unable to fetch notifications.</p>`;
-        }
+            card.innerHTML = `
+                <div style="font-size: 12px; color: #e50914; font-weight: bold; margin-bottom: 4px; text-transform: uppercase;">
+                    ${escapeHtml(mediaTitle)}
+                </div>
+                <div style="font-size: 13px; color: #ffffff; margin-bottom: 4px;">
+                    <strong>@${escapeHtml(replier)}</strong> replied to your comment
+                </div>
+                <div style="font-size: 12px; color: #b3b3b3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                    "${escapeHtml(replyText)}"
+                </div>
+                <div style="font-size: 10px; color: #666; margin-top: 6px; text-align: right;">
+                    ${timeStr}
+                </div>
+            `;
+            container.appendChild(card);
+        });
     }
 
     function openNotificationThreadDrawer(notification) {
