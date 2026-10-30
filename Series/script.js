@@ -841,8 +841,8 @@ function openCommentsModal(seriesId) {
         overlay.id = "commentsOverlayModal";
         overlay.innerHTML = `
             <div class="comments-modal-header">
-                <button class="comments-back-btn" onclick="closeCommentsModal()">← Back</button>
-                <h3 style="margin:0; font-size: 1.1rem; color: #fff;">Discussion Board</h3>
+                <button class="comments-back-btn" onclick="closeCommentsModal()">←</button>
+                <h3 style="margin:0; font-size: 1.1rem; color: #fff;">Comments</h3>
                 <div style="width: 60px;"></div>
             </div>
             <div id="commentsModalBodyContainer" style="flex: 1; width: 100%; display: flex; flex-direction: column; overflow: hidden;"></div>
@@ -880,7 +880,7 @@ function openRepliesDrawer(targetEmail, authorUsername) {
         drawer.id = "repliesDrawerModal";
         drawer.innerHTML = `
             <div class="comments-modal-header">
-                <button class="comments-back-btn" onclick="closeRepliesDrawer()">← Back</button>
+                <button class="comments-back-btn" onclick="closeRepliesDrawer()">←</button>
                 <h3 id="repliesDrawerTitle" style="margin:0; font-size: 1.1rem; color: #fff;">Replies</h3>
                 <div style="width: 60px;"></div>
             </div>
@@ -918,7 +918,7 @@ function initReviewsSystem(seriesId) {
     container.className = "reviews-container";
     container.innerHTML = `
       <div class="header-zone">
-        <h2>Reviews</h2>
+        <h2>Comments</h2>
       </div>
 
       <!-- AD SLOT PLACED EXACTLY BELOW HEADER AND CENTERED -->
