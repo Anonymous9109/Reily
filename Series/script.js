@@ -16,17 +16,19 @@ const profileAvatarsCatalog = {
     10: "https://rinolski.online/images/10.jpg"
 };
 
-function getPfpUrl(pfpVal) {
-    if (pfpVal !== undefined && pfpVal !== null && pfpVal !== "") {
-        const numericId = parseInt(pfpVal, 10);
+function getPfpUrl(itemObj) {
+    // Check all potential keys where the backend might store the avatar/pfp reference
+    const rawVal = itemObj?.pfp ?? itemObj?.avatar ?? itemObj?.userPfp ?? itemObj?.profilePic ?? itemObj?.profile_pic ?? itemObj?.avatarId ?? itemObj?.pfpId;
+    
+    if (rawVal !== undefined && rawVal !== null && rawVal !== "") {
+        const numericId = parseInt(rawVal, 10);
         if (!isNaN(numericId) && profileAvatarsCatalog[numericId]) {
             return profileAvatarsCatalog[numericId];
         }
-        if (typeof pfpVal === 'string' && (pfpVal.startsWith('http://') || pfpVal.startsWith('https://'))) {
-            return pfpVal;
+        if (typeof rawVal === 'string' && (rawVal.startsWith('http://') || rawVal.startsWith('https://'))) {
+            return rawVal;
         }
     }
-    // Default fallback to avatar 1
     return profileAvatarsCatalog[1];
 }
 
@@ -485,6 +487,8 @@ styleTag.textContent = `
     .user-pfp {
       width: 32px;
       height: 32px;
+      min-width: 32px;
+      min-height: 32px;
       border-radius: 50%;
       object-fit: cover;
       background-color: #262626;
@@ -551,7 +555,7 @@ styleTag.textContent = `
       gap: 12px;
     }
 
-    /* Standalone Reply Card Styling preventing cramped layouts */
+    /* Uncramped, individual standalone reply card layout */
     .standalone-reply-card {
       background-color: #121212 !important;
       border: 1px solid #262626;
@@ -579,7 +583,7 @@ styleTag.textContent = `
       color: #dddddd;
       white-space: pre-line;
       word-break: break-word;
-      padding-left: 42px;
+      padding-left: 40px;
     }
 
     .reviews-container .empty-state {
@@ -1059,7 +1063,7 @@ async function loadReviews(seriesId) {
       const reviewContent = r.reviewText || r.text || r.content || "";
       const username = r.authorUsername || r.username || "Anonymous";
       
-      const pfpUrl = getPfpUrl(r.pfp ?? r.avatar ?? r.userPfp ?? r.profilePic);
+      const pfpUrl = getPfpUrl(r);
       const repliesCount = (r.replies || []).length;
 
       return `
@@ -1114,7 +1118,7 @@ async function renderRepliesInDrawer(targetEmail) {
     container.innerHTML = repliesArr.map(rep => {
       const repUsername = rep.replierUsername || rep.username || 'User';
       const repText = rep.text || rep.replyText || '';
-      const repPfp = getPfpUrl(rep.pfp ?? rep.avatar ?? rep.userPfp ?? rep.profilePic);
+      const repPfp = getPfpUrl(rep);
       const repTime = rep.timestamp ? new Date(rep.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '';
 
       return `
@@ -1124,7 +1128,7 @@ async function renderRepliesInDrawer(targetEmail) {
               <img src="${escapeHtml(repPfp)}" class="user-pfp" style="width:28px; height:28px;" alt="PFP" onerror="this.src='https://rinolski.online/images/1.jpg'" />
               <strong style="color: #fff; font-size: 0.9rem;">@${escapeHtml(repUsername)}</strong>
             </div>
-            <span class="reviews-container" style="padding:0; background:none; font-size: 0.75rem; color: #888;">${repTime}</span>
+            <span style="font-size: 0.75rem; color: #888;">${repTime}</span>
           </div>
           <div class="standalone-reply-body">${escapeHtml(repText)}</div>
         </div>
