@@ -875,8 +875,8 @@ function goBack() {
 
     .reviews-container {
       width: 100%;
-      max-width: 800px;
-      margin: 0 auto;
+      max-width: 100%;
+      margin: 5px auto;
       background-color: var(--rev-bg) !important;
       border: none;
       border-radius: 12px;
