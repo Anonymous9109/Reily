@@ -4,15 +4,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   /********** Immediate Auto Fullscreen & Landscape Trigger **********/
   function forceFullscreenLandscape() {
     try {
-      // 1. Request Browser Fullscreen API
       const elem = document.documentElement;
       if (elem.requestFullscreen) {
         elem.requestFullscreen().catch(() => {});
       } else if (elem.webkitRequestFullscreen) {
         elem.webkitRequestFullscreen();
       }
-
-      // 2. Lock Screen Orientation to Landscape
       if (screen.orientation && screen.orientation.lock) {
         screen.orientation.lock("landscape").catch(() => {});
       }
@@ -21,7 +18,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
-  // Trigger instantly upon player load
   forceFullscreenLandscape();
   window.addEventListener("load", forceFullscreenLandscape);
 
@@ -134,11 +130,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     #downloadBtn:hover { background:rgba(255,0,0,0.65); }  
     #downloadBtn svg { width:24px; height:24px; fill:#fff; }  
 
-    /* --- Series / Episode Header Label Styling --- */
     #mediaInfoLabel {
       position: absolute;
       top: 14px;
-      left: 126px; /* Beside download button (70px + 46px width + 10px spacing) */
+      left: 126px;
       height: 46px;
       padding: 0 16px;
       background: rgba(0, 0, 0, 0.55);
@@ -189,7 +184,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     .back-btn { left:12px; }  
     .next-btn { right:12px; }  
 
-    /* --- Next Episode & Watch Credits Overlay Styling --- */
     #nextEpOverlay {
       position: absolute;
       bottom: 3%;
@@ -404,42 +398,43 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   };
 
-  /********** Series Database Lookup Helper (Strict Valid Title Check) **********/
+  /********** Bulletproof Loose Series Lookup Helper **********/
   function getSeriesInfoFromData(paramId) {
-    if (!paramId || !window.seriesData) return null;
+    if (!paramId) return null;
+    
+    // Fallback if seriesData hasn't loaded yet
+    const db = window.seriesData || {};
+    const cleanParam = paramId.trim().toLowerCase();
+    const strippedParam = cleanParam.replace(/[^a-z0-9]/g, "");
 
-    for (const [key, show] of Object.entries(window.seriesData)) {
-      // Must have a valid title property and valid seasons array
-      if (!show.title || !show.seasons || !Array.isArray(show.seasons)) continue;
+    for (const [key, show] of Object.entries(db)) {
+      if (!show || !show.title) continue;
 
-      const matchedSeason = show.seasons.find(season => 
-        season.prefix && paramId.toLowerCase().startsWith(season.prefix.toLowerCase())
-      );
+      const cleanKey = key.toLowerCase();
+      const strippedKey = cleanKey.replace(/[^a-z0-9]/g, "");
+      const strippedTitle = show.title.toLowerCase().replace(/[^a-z0-9]/g, "");
 
-      if (matchedSeason) {
-        const epNumMatch = paramId.match(/E(\d+)$/i);
-        const episodeNumber = epNumMatch ? epNumMatch[1] : "1";
+      // Check if parameter matches key or title directly
+      if (strippedParam.includes(strippedKey) || strippedParam.includes(strippedTitle)) {
+        const seasonMatch = paramId.match(/S(\d+)/i);
+        const epMatch = paramId.match(/E(\d+)/i);
+
+        // Fallback season lookup from seasons array if present
+        let seasonNum = seasonMatch ? seasonMatch[1] : 1;
+        if (!seasonMatch && show.seasons && Array.isArray(show.seasons)) {
+          const matchedSeason = show.seasons.find(s => 
+            s.prefix && cleanParam.startsWith(s.prefix.toLowerCase())
+          );
+          if (matchedSeason) seasonNum = matchedSeason.number;
+        }
 
         return {
           seriesTitle: show.title,
-          seasonNumber: matchedSeason.number,
-          episodeNumber: episodeNumber
+          seasonNumber: seasonNum,
+          episodeNumber: epMatch ? epMatch[1] : "1"
         };
       }
     }
-
-    // Secondary fallback matching object key
-    for (const [key, show] of Object.entries(window.seriesData)) {
-      if (show.title && paramId.toLowerCase().includes(key.toLowerCase())) {
-        const epNumMatch = paramId.match(/E(\d+)$/i);
-        return {
-          seriesTitle: show.title,
-          seasonNumber: 1,
-          episodeNumber: epNumMatch ? epNumMatch[1] : "1"
-        };
-      }
-    }
-
     return null;
   }
 
@@ -480,7 +475,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   const loadingRing = document.createElement("div");
   loadingRing.id = "loadingRing";
 
-  // --- Create Next Episode & Watch Credits Overlay ---
   const nextEpOverlay = document.createElement("div");
   nextEpOverlay.id = "nextEpOverlay";
 
@@ -833,7 +827,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     } catch (err) {
       console.error("Error reading custom series offset:", err);
     }
-    return 120; // Default fallback: 2 minutes
+    return 120;
   }
 
   function triggerNextEpisodeAction() {
@@ -952,7 +946,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   root.addEventListener("click", () => { if(!isDragging) controlsVisible ? hideControls() : showControls(); });
 
-  /********** THE JUMP FIX: TRACK LOADEDMETADATA **********/
   video.addEventListener("loadedmetadata", async () => {
     if (serverTimestamp && serverTimestamp < video.duration - 15) {
       video.currentTime = serverTimestamp;
@@ -990,7 +983,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   })();
 
-  /********** 7) Portrait rotation **********/
   function rotateIfPortrait() {
     const isPortrait = window.innerHeight > window.innerWidth;
     const vw = window.innerWidth, vh = window.innerHeight;
@@ -1015,7 +1007,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   window.addEventListener("resize", rotateIfPortrait);
 });
 
-// Touch event mapping compatibility for non-touch triggers
 (function () {
   const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
   if (isTouchDevice) return;
