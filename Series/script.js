@@ -468,13 +468,61 @@ styleTag.textContent = `
       margin-top: 2px;
     }
 
-    .review-action-buttons {
-      display: flex;
-      gap: 8px;
-      align-items: center;
+    /* Three Dots Dropdown Menu Styles */
+    .comment-menu-wrapper {
+      position: relative;
+      display: inline-block;
     }
 
-    .reply-thread-btn, .edit-comment-btn {
+    .comment-dots-btn {
+      background: transparent;
+      border: none;
+      color: #888888;
+      font-size: 1.2rem;
+      cursor: pointer;
+      padding: 2px 8px;
+      border-radius: 4px;
+      transition: color 0.2s, background 0.2s;
+    }
+    .comment-dots-btn:hover {
+      color: #ffffff;
+      background: #1f1f1f;
+    }
+
+    .comment-dropdown-menu {
+      display: none;
+      position: absolute;
+      right: 0;
+      bottom: 100%;
+      margin-bottom: 4px;
+      background-color: #161616;
+      border: 1px solid #333333;
+      border-radius: 6px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+      z-index: 50;
+      min-width: 100px;
+    }
+    .comment-dropdown-menu.active {
+      display: block;
+    }
+
+    .comment-dropdown-item {
+      background: transparent;
+      color: #dddddd;
+      border: none;
+      width: 100%;
+      padding: 8px 14px;
+      text-align: left;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .comment-dropdown-item:hover {
+      background-color: #262626;
+      color: #ffffff;
+    }
+
+    .reply-thread-btn {
       background-color: #1a1a1a;
       color: #cccccc;
       border: 1px solid var(--rev-border-accent);
@@ -488,7 +536,7 @@ styleTag.textContent = `
       gap: 6px;
       transition: background 0.2s, color 0.2s;
     }
-    .reply-thread-btn:hover, .edit-comment-btn:hover {
+    .reply-thread-btn:hover {
       background-color: #262626;
       color: #ffffff;
     }
@@ -1011,6 +1059,27 @@ function getCurrentUserEmail() {
   }
 }
 
+// Global click handler to close any open three-dots menus when clicking outside
+document.addEventListener("click", (e) => {
+  if (!e.target.closest(".comment-menu-wrapper")) {
+    document.querySelectorAll(".comment-dropdown-menu.active").forEach(menu => {
+      menu.classList.remove("active");
+    });
+  }
+});
+
+function toggleCommentMenu(event, menuId) {
+  event.stopPropagation();
+  // Close all other open menus first
+  document.querySelectorAll(".comment-dropdown-menu.active").forEach(menu => {
+    if (menu.id !== menuId) menu.classList.remove("active");
+  });
+  const menu = document.getElementById(menuId);
+  if (menu) {
+    menu.classList.toggle("active");
+  }
+}
+
 async function loadReviews(seriesId) {
   const currentSeries = seriesId || id;
   const listEl = document.getElementById("reviewsList");
@@ -1032,17 +1101,17 @@ async function loadReviews(seriesId) {
     const sortedReviews = [...reviewsArr].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
     const currentUserEmail = getCurrentUserEmail();
 
-    listEl.innerHTML = sortedReviews.map(r => {
+    listEl.innerHTML = sortedReviews.map((r, idx) => {
       const authorEmail = r.authorEmail || r.email || "user";
-      const safeEmailId = authorEmail.replace(/[^a-zA-Z0-9]/g, '_');
+      const safeEmailId = authorEmail.replace(/[^a-zA-Z0-9]/g, '_') + '_' + idx;
       const reviewContent = r.reviewText || r.text || r.content || "";
       const username = r.authorUsername || r.username || "Anonymous";
       const repliesCount = (r.replies || []).length;
       const isEdited = r.edited || r.isEdited;
       const isOwner = currentUserEmail && authorEmail === currentUserEmail;
 
-      // Format tagged usernames like @username
       const formattedContent = escapeHtml(reviewContent).replace(/@([a-zA-Z0-9_]+)/g, '<span style="color: #4da6ff; font-weight: 600;">@$1</span>');
+      const menuId = `comment-menu-${safeEmailId}`;
 
       return `
         <div class="review-card" id="review-card-${safeEmailId}">
@@ -1051,15 +1120,22 @@ async function loadReviews(seriesId) {
             <span class="review-date">${r.timestamp ? new Date(r.timestamp).toLocaleDateString() : ''}</span>
           </div>
 
-          <div class="review-body" id="review-body-${safeEmailId}">${formattedContent}${isEdited ? '<span class="edited-badge">(edited)</span>' : ''}</div>
+          <div class="review-body">${formattedContent}${isEdited ? '<span class="edited-badge">(edited)</span>' : ''}</div>
 
           <div class="review-actions">
-            <div class="review-action-buttons">
-              ${isOwner ? `<button class="edit-comment-btn" onclick="promptEditReview('${authorEmail}', '${encodeURIComponent(reviewContent)}')">✏️ Edit</button>` : ''}
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <button class="reply-thread-btn" onclick="openRepliesDrawer('${authorEmail}', '${escapeHtml(username)}')">
+                💬 Replies (${repliesCount})
+              </button>
+              ${isOwner ? `
+                <div class="comment-menu-wrapper">
+                  <button class="comment-dots-btn" onclick="toggleCommentMenu(event, '${menuId}')">⋮</button>
+                  <div class="comment-dropdown-menu" id="${menuId}">
+                    <button class="comment-dropdown-item" onclick="promptEditReview('${authorEmail}', '${encodeURIComponent(reviewContent)}')">Edit</button>
+                  </div>
+                </div>
+              ` : ''}
             </div>
-            <button class="reply-thread-btn" onclick="openRepliesDrawer('${authorEmail}', '${escapeHtml(username)}')">
-              💬 Replies (${repliesCount})
-            </button>
           </div>
         </div>
       `;
@@ -1104,6 +1180,7 @@ async function renderRepliesInDrawer(targetEmail) {
       const isOwner = currentUserEmail && repEmail === currentUserEmail;
 
       const formattedReplyText = escapeHtml(repText).replace(/@([a-zA-Z0-9_]+)/g, '<span style="color: #4da6ff; font-weight: 600;">@$1</span>');
+      const menuId = `reply-menu-${index}`;
 
       return `
         <div class="standalone-reply-card">
@@ -1113,7 +1190,14 @@ async function renderRepliesInDrawer(targetEmail) {
           </div>
           <div class="standalone-reply-body">${formattedReplyText}${isEdited ? '<span class="edited-badge">(edited)</span>' : ''}</div>
           <div class="standalone-reply-actions">
-            ${isOwner ? `<button class="edit-comment-btn" onclick="promptEditReply('${targetEmail}', ${index}, '${encodeURIComponent(repText)}')">✏️ Edit</button>` : ''}
+            ${isOwner ? `
+              <div class="comment-menu-wrapper">
+                <button class="comment-dots-btn" onclick="toggleCommentMenu(event, '${menuId}')">⋮</button>
+                <div class="comment-dropdown-menu" id="${menuId}">
+                  <button class="comment-dropdown-item" onclick="promptEditReply('${targetEmail}', ${index}, '${encodeURIComponent(repText)}')">Edit</button>
+                </div>
+              </div>
+            ` : ''}
           </div>
         </div>
       `;
