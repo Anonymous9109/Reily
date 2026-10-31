@@ -314,7 +314,7 @@ desc: "The daughter of a former Hooter's waitress and an ex-pro wrestler, Margo 
     title: "Lucifer",
     desc: "Lucifer Morningstar has decided that he's had enough of being the dutiful servant in Hell and decides to spend some time on Earth to better understand humanity. He settles in Los Angeles--the City of Angels.",
     video: "",
-    nextEpOffset: 8,
+    nextEpOffset: 50,
     seasons: [
       { number: 1, prefix: "Lucifer-S1E", totalEpisodes: 13 }
     ]
