@@ -309,5 +309,14 @@ desc: "The daughter of a former Hooter's waitress and an ex-pro wrestler, Margo 
 { number: 2, prefix: "TheDetour-S2E", totalEpisodes: 12 },
     { number: 3, prefix: "TheDetour-S3E", totalEpisodes: 10 }
   ]
+  },
+  "Lucifer": {
+    title: "Lucifer",
+    desc: "Lucifer Morningstar has decided that he's had enough of being the dutiful servant in Hell and decides to spend some time on Earth to better understand humanity. He settles in Los Angeles--the City of Angels.",
+    video: "",
+    nextEpOffset: 8,
+    seasons: [
+      { number: 1, prefix: "Lucifer-S1E", totalEpisodes: 13 }
+    ]
   }
 };
