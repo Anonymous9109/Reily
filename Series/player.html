@@ -3,19 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Player</title>
+  <title>Player - Rinolski</title>
+  
+  
 </head>
 <body>
 
-  <!-- 1. Series database with episode generation rules -->
-  <script src="series.js"></script>
+  <!-- 1. Load your Series Database FIRST so window.seriesData is populated -->
+  <script src="/JS/series.js"></script>
 
-  <!-- 2. Parameter parser (populates window.videoData, next/back links) -->
-  <script src="player-data.js"></script>
+  <!-- 2. Load your Video/Subtitle Data Dictionary SECOND -->
+  <script src="/JS/videoData.js"></script> <!-- Replace with your actual video sources file path if named differently -->
 
-  <!-- 3. Core Cyrene Player engine -->
-  <script src="player.js"></script>
+  <!-- 3. Load the Player Engine LAST -->
+  <script src="/JS/player.js"></script>
 
 </body>
 </html>
-
