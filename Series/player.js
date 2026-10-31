@@ -404,12 +404,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   };
 
-  /********** Series Database Lookup Helper **********/
+  /********** Series Database Lookup Helper (Strict Valid Title Check) **********/
   function getSeriesInfoFromData(paramId) {
     if (!paramId || !window.seriesData) return null;
 
     for (const [key, show] of Object.entries(window.seriesData)) {
-      if (!show.seasons || !Array.isArray(show.seasons)) continue;
+      // Skip incomplete stub entries that don't have a valid seasons array or title property
+      if (!show.title || !show.seasons || !Array.isArray(show.seasons)) continue;
 
       const matchedSeason = show.seasons.find(season => 
         season.prefix && paramId.toLowerCase().startsWith(season.prefix.toLowerCase())
@@ -427,9 +428,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
     }
 
-    // Secondary fallback matching object key
+    // Secondary fallback: match object key only if it contains a valid title
     for (const [key, show] of Object.entries(window.seriesData)) {
-      if (paramId.toLowerCase().includes(key.toLowerCase())) {
+      if (show.title && paramId.toLowerCase().includes(key.toLowerCase())) {
         const epNumMatch = paramId.match(/E(\d+)$/i);
         return {
           seriesTitle: show.title,
