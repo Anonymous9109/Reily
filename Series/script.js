@@ -462,12 +462,19 @@ styleTag.textContent = `
 
     .reviews-container .review-actions {
       display: flex;
-      justify-content: flex-end;
+      justify-content: space-between;
+      align-items: center;
       width: 100%;
       margin-top: 2px;
     }
 
-    .reply-thread-btn {
+    .review-action-buttons {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .reply-thread-btn, .edit-comment-btn {
       background-color: #1a1a1a;
       color: #cccccc;
       border: 1px solid var(--rev-border-accent);
@@ -481,9 +488,16 @@ styleTag.textContent = `
       gap: 6px;
       transition: background 0.2s, color 0.2s;
     }
-    .reply-thread-btn:hover {
+    .reply-thread-btn:hover, .edit-comment-btn:hover {
       background-color: #262626;
       color: #ffffff;
+    }
+
+    .edited-badge {
+      font-size: 0.7rem;
+      color: #888888;
+      font-style: italic;
+      margin-left: 6px;
     }
 
     .replies-list-container {
@@ -527,6 +541,13 @@ styleTag.textContent = `
       color: #dddddd;
       white-space: pre-line;
       word-break: break-word;
+    }
+
+    .standalone-reply-actions {
+      display: flex;
+      justify-content: flex-end;
+      width: 100%;
+      margin-top: 2px;
     }
 
     .reviews-container .empty-state {
@@ -847,7 +868,7 @@ function openCommentsModal(seriesId) {
             </div>
             <div id="commentsModalBodyContainer" style="flex: 1; width: 100%; display: flex; flex-direction: column; overflow: hidden;"></div>
             <div class="comments-bottom-bar">
-                <input type="text" id="modalBottomCommentInput" placeholder="Write a comment..." />
+                <input type="text" id="modalBottomCommentInput" placeholder="Write a comment... (use @username to tag)" />
                 <button onclick="submitBottomComment()">Send</button>
             </div>
         `;
@@ -886,7 +907,7 @@ function openRepliesDrawer(targetEmail, authorUsername) {
             </div>
             <div id="repliesDrawerBodyContainer" class="replies-list-container"></div>
             <div class="comments-bottom-bar">
-                <input type="text" id="drawerReplyInput" placeholder="Write a reply..." />
+                <input type="text" id="drawerReplyInput" placeholder="Write a reply... (use @username to tag)" />
                 <button onclick="submitDrawerReply()">Send</button>
             </div>
         `;
@@ -979,6 +1000,17 @@ function showStatus(message, isError = false) {
   setTimeout(() => { banner.style.display = "none"; }, 4000);
 }
 
+// Helper to decode current user's email from JWT token if present
+function getCurrentUserEmail() {
+  if (!token) return "";
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload.email || payload.sub || "";
+  } catch (e) {
+    return "";
+  }
+}
+
 async function loadReviews(seriesId) {
   const currentSeries = seriesId || id;
   const listEl = document.getElementById("reviewsList");
@@ -998,6 +1030,7 @@ async function loadReviews(seriesId) {
     }
 
     const sortedReviews = [...reviewsArr].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+    const currentUserEmail = getCurrentUserEmail();
 
     listEl.innerHTML = sortedReviews.map(r => {
       const authorEmail = r.authorEmail || r.email || "user";
@@ -1005,6 +1038,11 @@ async function loadReviews(seriesId) {
       const reviewContent = r.reviewText || r.text || r.content || "";
       const username = r.authorUsername || r.username || "Anonymous";
       const repliesCount = (r.replies || []).length;
+      const isEdited = r.edited || r.isEdited;
+      const isOwner = currentUserEmail && authorEmail === currentUserEmail;
+
+      // Format tagged usernames like @username
+      const formattedContent = escapeHtml(reviewContent).replace(/@([a-zA-Z0-9_]+)/g, '<span style="color: #4da6ff; font-weight: 600;">@$1</span>');
 
       return `
         <div class="review-card" id="review-card-${safeEmailId}">
@@ -1013,9 +1051,12 @@ async function loadReviews(seriesId) {
             <span class="review-date">${r.timestamp ? new Date(r.timestamp).toLocaleDateString() : ''}</span>
           </div>
 
-          <div class="review-body">${escapeHtml(reviewContent)}</div>
+          <div class="review-body" id="review-body-${safeEmailId}">${formattedContent}${isEdited ? '<span class="edited-badge">(edited)</span>' : ''}</div>
 
           <div class="review-actions">
+            <div class="review-action-buttons">
+              ${isOwner ? `<button class="edit-comment-btn" onclick="promptEditReview('${authorEmail}', '${encodeURIComponent(reviewContent)}')">✏️ Edit</button>` : ''}
+            </div>
             <button class="reply-thread-btn" onclick="openRepliesDrawer('${authorEmail}', '${escapeHtml(username)}')">
               💬 Replies (${repliesCount})
             </button>
@@ -1052,10 +1093,17 @@ async function renderRepliesInDrawer(targetEmail) {
       return;
     }
 
-    container.innerHTML = repliesArr.map(rep => {
+    const currentUserEmail = getCurrentUserEmail();
+
+    container.innerHTML = repliesArr.map((rep, index) => {
       const repUsername = rep.replierUsername || rep.username || 'User';
+      const repEmail = rep.replierEmail || rep.email || '';
       const repText = rep.text || rep.replyText || '';
       const repTime = rep.timestamp ? new Date(rep.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '';
+      const isEdited = rep.edited || rep.isEdited;
+      const isOwner = currentUserEmail && repEmail === currentUserEmail;
+
+      const formattedReplyText = escapeHtml(repText).replace(/@([a-zA-Z0-9_]+)/g, '<span style="color: #4da6ff; font-weight: 600;">@$1</span>');
 
       return `
         <div class="standalone-reply-card">
@@ -1063,7 +1111,10 @@ async function renderRepliesInDrawer(targetEmail) {
             <strong style="color: #fff; font-size: 0.9rem;">@${escapeHtml(repUsername)}</strong>
             <span style="font-size: 0.75rem; color: #888;">${repTime}</span>
           </div>
-          <div class="standalone-reply-body">${escapeHtml(repText)}</div>
+          <div class="standalone-reply-body">${formattedReplyText}${isEdited ? '<span class="edited-badge">(edited)</span>' : ''}</div>
+          <div class="standalone-reply-actions">
+            ${isOwner ? `<button class="edit-comment-btn" onclick="promptEditReply('${targetEmail}', ${index}, '${encodeURIComponent(repText)}')">✏️ Edit</button>` : ''}
+          </div>
         </div>
       `;
     }).join('');
@@ -1168,6 +1219,67 @@ async function submitDrawerReply() {
     }
   } catch (err) {
     showStatus("Connection error. Please try again.", true);
+  }
+}
+
+async function promptEditReview(authorEmail, oldTextEncoded) {
+  const oldText = decodeURIComponent(oldTextEncoded);
+  const newText = prompt("Edit your comment:", oldText);
+  if (newText === null || newText.trim() === "" || newText === oldText) return;
+
+  try {
+    const res = await fetch(`${API_BASE}/api/edit-review`, {
+      method: "POST",
+      headers: { 
+        "Content-Type": "application/json", 
+        "Authorization": `Bearer ${token}` 
+      },
+      body: JSON.stringify({ 
+        movie: id, 
+        series: id, 
+        newText: newText.trim() 
+      })
+    });
+    const data = await res.json();
+    if (res.ok) {
+      loadReviews(id);
+    } else {
+      showStatus(data.error || "Could not edit comment.", true);
+    }
+  } catch (err) {
+    showStatus("Connection error.", true);
+  }
+}
+
+async function promptEditReply(targetEmail, replyIndex, oldTextEncoded) {
+  const oldText = decodeURIComponent(oldTextEncoded);
+  const newText = prompt("Edit your reply:", oldText);
+  if (newText === null || newText.trim() === "" || newText === oldText) return;
+
+  try {
+    const res = await fetch(`${API_BASE}/api/edit-reply`, {
+      method: "POST",
+      headers: { 
+        "Content-Type": "application/json", 
+        "Authorization": `Bearer ${token}` 
+      },
+      body: JSON.stringify({ 
+        movie: id, 
+        series: id, 
+        targetEmail: targetEmail,
+        replyIndex: replyIndex,
+        newText: newText.trim() 
+      })
+    });
+    const data = await res.json();
+    if (res.ok) {
+      renderRepliesInDrawer(targetEmail);
+      loadReviews(id);
+    } else {
+      showStatus(data.error || "Could not edit reply.", true);
+    }
+  } catch (err) {
+    showStatus("Connection error.", true);
   }
 }
 
