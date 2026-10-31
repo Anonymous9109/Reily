@@ -743,11 +743,15 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   function getSeriesCustomOffset() {
     try {
-      const currentEpParam = params.get("ep") || "1";
-      const match = currentEpParam.match(/^(.*-S(\d+)E)(\d+)$/i);
-      if (match && window.seriesData) {
-        const seriesKey = match[1].replace(/-S\d+E$/i, "");
-        const foundKey = Object.keys(window.seriesData).find(k => k.toLowerCase() === seriesKey.toLowerCase());
+      const currentEpParam = params.get("ep") || params.get("movie") || params.get("series") || "";
+      let seriesKey = currentEpParam.replace(/-S\d+E\d+$/i, "").replace(/[-_]/g, "").toLowerCase();
+
+      if (window.seriesData) {
+        const foundKey = Object.keys(window.seriesData).find(k => 
+          k.toLowerCase().replace(/[-_]/g, "") === seriesKey ||
+          currentEpParam.toLowerCase().includes(k.toLowerCase())
+        );
+
         if (foundKey && window.seriesData[foundKey].nextEpOffset !== undefined) {
           return window.seriesData[foundKey].nextEpOffset;
         }
@@ -755,7 +759,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     } catch (err) {
       console.error("Error reading custom series offset:", err);
     }
-    return 120; // Default fallback: 2 minutes
+    return 120; // Default fallback: 2 minutes (120 seconds)
   }
 
   function triggerNextEpisodeAction() {
