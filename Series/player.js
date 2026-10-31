@@ -409,7 +409,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (!paramId || !window.seriesData) return null;
 
     for (const [key, show] of Object.entries(window.seriesData)) {
-      // Skip incomplete stub entries that don't have a valid seasons array or title property
+      // Must have a valid title property and valid seasons array
       if (!show.title || !show.seasons || !Array.isArray(show.seasons)) continue;
 
       const matchedSeason = show.seasons.find(season => 
@@ -428,7 +428,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
     }
 
-    // Secondary fallback: match object key only if it contains a valid title
+    // Secondary fallback matching object key
     for (const [key, show] of Object.entries(window.seriesData)) {
       if (show.title && paramId.toLowerCase().includes(key.toLowerCase())) {
         const epNumMatch = paramId.match(/E(\d+)$/i);
@@ -763,7 +763,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       el.style.opacity = "1"; el.style.visibility = "visible";
     }
     
-    // Always show the static next episode overlay when controls are shown
     nextEpOverlay.style.opacity = "1";
     nextEpOverlay.style.visibility = "visible";
     nextEpOverlay.classList.add("show-controls");
@@ -834,7 +833,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     } catch (err) {
       console.error("Error reading custom series offset:", err);
     }
-    return 120; // Default fallback: 2 minutes (120 seconds)
+    return 120; // Default fallback: 2 minutes
   }
 
   function triggerNextEpisodeAction() {
@@ -909,7 +908,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       const timeRemaining = video.duration - video.currentTime;
       const customOffset = getSeriesCustomOffset();
 
-      // Trigger the slide-up and timer based on the series offset
       if (timeRemaining <= customOffset && timeRemaining > 0 && !creditsCancelled) {
         watchCreditsBtn.style.display = "block";
         nextEpOverlay.classList.add("near-end");
