@@ -1080,6 +1080,44 @@ function toggleCommentMenu(event, menuId) {
   }
 }
 
+// --- Client-Side Tag Notification Helper ---
+async function notifyMentionedUsers(text, actorUsername) {
+  if (!text) return;
+
+  const mentionMatches = text.match(/@([a-zA-Z0-9_]+)/g);
+  if (!mentionMatches) return;
+
+  const uniqueUsernames = [...new Set(mentionMatches.map(tag => tag.substring(1)))];
+
+  for (const username of uniqueUsernames) {
+    try {
+      const userRes = await fetch(`${API_BASE}/api/get-user?username=${encodeURIComponent(username)}`, {
+        headers: { "Authorization": `Bearer ${token}` }
+      });
+
+      if (!userRes.ok) continue;
+      const userData = await userRes.json();
+      const targetEmail = userData.email || userData.authorEmail;
+
+      if (!targetEmail) continue;
+
+      // Triggers your email service webhook or notification endpoint
+      await fetch("YOUR_CLIENT_EMAIL_WEBHOOK_OR_SERVICE_URL", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          to: targetEmail,
+          subject: `@${actorUsername} tagged you in a comment`,
+          message: `@${actorUsername} mentioned you: "${text}"`,
+          title: series ? series.title : "a show"
+        })
+      });
+    } catch (err) {
+      console.warn("Failed to notify tagged user:", username, err);
+    }
+  }
+}
+
 async function loadReviews(seriesId) {
   const currentSeries = seriesId || id;
   const listEl = document.getElementById("reviewsList");
@@ -1258,6 +1296,10 @@ async function submitBottomComment() {
       document.getElementById("usernameModal").style.display = "block";
     } else if (res.ok) {
       inputEl.value = "";
+      
+      const currentUsername = data.username || getCurrentUserEmail().split('@')[0] || "Someone";
+      notifyMentionedUsers(text, currentUsername);
+
       loadReviews(currentSeries);
     } else {
       showStatus(data.error || "Could not publish review.", true);
@@ -1296,6 +1338,10 @@ async function submitDrawerReply() {
       document.getElementById("usernameModal").style.display = "block";
     } else if (res.ok) {
       inputEl.value = "";
+
+      const currentUsername = data.username || getCurrentUserEmail().split('@')[0] || "Someone";
+      notifyMentionedUsers(replyText, currentUsername);
+
       renderRepliesInDrawer(activeReplyTargetEmail);
       loadReviews(currentSeries);
     } else {
