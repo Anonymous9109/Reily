@@ -6,7 +6,6 @@ const seriesData = {
     seasons: [
       { number: 1, prefix: "Beef-S1E", totalEpisodes: 8 },
       { number: 0, prefix: "Beef-S2E", totalEpisodes: 8 }
-
     ]
   },
   "AlRawabiSchoolforGirls": {
@@ -17,7 +16,7 @@ const seriesData = {
       { number: 1, prefix: "AlRawabiSchoolforGirls-S1E", totalEpisodes: 6 }
     ]
   },
-    "RegularShowLostTapes": {
+  "RegularShowLostTapes": {
     title: "Regular Show: The Lost Tapes",
     desc: "Reboot or continuation of the classic Cartoon Network series.",
     video: "https://dl.dropboxusercontent.com/scl/fi/adhmb4jgb0aoh30kj5sed/RegularShowLostTapes-E1.mp4?rlkey=3vh17vt6dbxnha78nbi6j3vtu&st=e0mvyawp&dl=1",
@@ -25,15 +24,7 @@ const seriesData = {
       { number: 1, prefix: "RegularShowLostTapes-S1E", totalEpisodes: 5 }
     ]
   },
-  "2BrokeGirls": {
-    title: "2 Broke Girls",
-    desc: "Max and Caroline, two girls in their mid-twenties, work at a Brooklyn restaurant as waitresses. Together, they dream of starting up their cupcake business, but always find themselves without money.",
-    video: "https://dl.dropboxusercontent.com/scl/fi/gxryes0bba60c6v7w7ayj/2.Broke.Girls.S01E01.mkv?rlkey=3vzhsai5cfhgsfzut8jjwctgz&st=d3lruing&dl=1",
-    seasons: [
-      { number: 1, prefix: "2BrokeGirls-S1E", totalEpisodes: 23 }
-    ]
-  },
-    "WidowsBay": {
+  "WidowsBay": {
     title: "Widow's Bay",
     desc: "A New England mayor trying to boost tourism on his island must navigate strange events suggesting it might be cursed.",
     video: "https://dl.dropboxusercontent.com/scl/fi/fm64podc4ph4t7byom9z3/Widow-s-Bay-_-S1E2-2026-.mp4.mkv?rlkey=53aymfhqa8ydwem20em2hoykq&st=6ffygnv8&dl=1",
@@ -41,7 +32,7 @@ const seriesData = {
       { number: 1, prefix: "WidowsBay-S1E", totalEpisodes: 2 }
     ]
   },
-     "ManonFire": {
+  "ManonFire": {
     title: "Man on Fire",
     desc: "Haunted by his past and hunted by his enemies, a Special Forces veteran fights to keep a teenage girl alive on the deadly streets of Rio de Janeiro.",
     video: "https://dl.dropboxusercontent.com/scl/fi/wqnlq7cm794zx9vs3bbco/Man-on-Fire-_-S1E1-2026.mp4?rlkey=dyvajkqmgzrqpjh54qlskn9c7&st=oqzr03m2&dl=1",
@@ -49,7 +40,7 @@ const seriesData = {
       { number: 1, prefix: "ManonFire-S1E", totalEpisodes: 7 }
     ]
   },
-    "Invincible": {
+  "Invincible": {
     title: "Invincible",
     desc: "Seventeen-year-old Mark Grayson is just like every guy his age, except that his father is Omni-Man, the most powerful superhero on the planet. As Mark develops powers of his own, he discovers his father's legacy may not be as heroic as it seems.",
     video: "https://dl.dropboxusercontent.com/scl/fi/1ufzfcrizkgau7kwfvx4k/INVINCIBLE-_-S1E1-2021.mp4?rlkey=nwd97coh7muyc6zit5atbnecw&st=3nxu2i98&dl=1",
@@ -66,10 +57,10 @@ const seriesData = {
     video: "",
     seasons: [
       { number: 1, prefix: "TheBoys-S1E", totalEpisodes: 8 },
-        { number: 2, prefix: "TheBoys-S2E", totalEpisodes: 8 }
+      { number: 2, prefix: "TheBoys-S2E", totalEpisodes: 8 }
     ]
   },
-    "AdventureTimeFionnaandCake": {
+  "AdventureTimeFionnaandCake": {
     title: "Adventure Time: Fionna and Cake",
     desc: "The adventures of Fionna and Cake from the land of Ooo.",
     video: "https://dl.dropboxusercontent.com/scl/fi/l8q45n55esdx76hnamb8i/Adventure-Time_-Fionna-and-Cake-_-S1E1-2023.mp4?rlkey=kfhlkxjfihvcei2lxbj3bjnkc&st=vuq8tfk3&dl=1",
@@ -78,20 +69,12 @@ const seriesData = {
       { number: 2, prefix: "AdventureTimeFionnaandCake-S2E", totalEpisodes: 10 }
     ]
   },
-    "AdventureTime": {
+  "AdventureTime": {
     title: "Adventure Time",
     desc: "Unlikely heroes Finn and Jake are buddies who traverse the mystical Land of Ooo. The best of friends, our heroes always find themselves in the middle of escapades. Finn and Jake depend on each other through thick and thin.",
     video: "https://dl.dropboxusercontent.com/scl/fi/oekobj2r2xkhbx4heg2t7/Adventure-Time-_-S1E9-2010.mp4?rlkey=8aqduks7p3705fgzu2hawa84k&st=ypl5ppji&dl=1",
     seasons: [
       { number: 1, prefix: "AdventureTime-S1E", totalEpisodes: 26 }
-    ]
-  },
-     "RegularShow": {
-    title: "Regular Show",
-    desc: "A blue jay named Mordecai and a raccoon named Rigby work as groundskeepers at a local park and get into surreal misadventures whenever they attempt to slack off.",
-    video: "",
-    seasons: [
-      { number: 1, prefix: "RegularShow-S1E", totalEpisodes: 12 }
     ]
   },
   "BigMistakes": {
@@ -129,8 +112,7 @@ const seriesData = {
       { number: 4, prefix: "From-S4E", totalEpisodes: 5 }
     ]
   },
-
-   "ThePitt": {
+  "ThePitt": {
     title: "The Pitt",
     desc: "A realistic examination of the challenges facing healthcare workers in America as seen through the lens of the frontline heroes working in a modern-day hospital in Pittsburgh, Pennsylvania.",
     video: "https://dl.dropboxusercontent.com/scl/fi/0ish1hyh6kdv6po6yflpo/The.Pitt.S01E01.mkv?rlkey=zupphcaic4nt5wz89x4v2c015&st=h67eshob&dl=1",
@@ -138,44 +120,20 @@ const seriesData = {
       { number: 1, prefix: "ThePitt-S1E", totalEpisodes: 15 } 
     ]
   },
-     "BreakingBad": {
-    title: "Breaking Bad",
-    desc: "Walter White, a chemistry teacher, discovers that he has cancer and decides to get into the meth-making business to repay his medical debts. His priorities begin to change when he partners with Jesse.",
-    video: "https://dl.dropboxusercontent.com/scl/fi/e74dtj384d4l5jcltsa7h/BrBa.S01E01.mkv?rlkey=8e14v9bssahi36jwo1rf3ix85&st=87lcszv7&dl=1",
-    seasons: [
-    { number: 1, prefix: "BreakingBad-S1E", totalEpisodes: 7 }, 
-      
-      { number: 2, prefix: "BreakingBad-S2E", totalEpisodes: 13 },
-      { number: 3, prefix: "BreakingBad-S3E", totalEpisodes: 13 }, 
-      { number: 4, prefix: "BreakingBad-S4E", totalEpisodes: 13 }, 
-      { number: 5, prefix: "BreakingBad-S5E", totalEpisodes: 16 },,
-    { number: 2, prefix: "BreakingBad-S2E", totalEpisodes: 13 }
-  ]
-  },
   "MOBPSYCHO100": {
-title: "モブサイコ100",
-desc: "Eighth-grader Shigeo mob Kageyama Has Tapped Into His Inner Wellspring Of Psychic Prowess At A Young Age. But The Power Quickly Proves To Be A Liability When He Realizes The Pote ...",
-video: "https://dl.dropboxusercontent.com/scl/fi/szum2cunwow64w038m8ba/Mob-Psycho-100-_-S1E1-2016.mp4?rlkey=pg9t3f15vjl7vh2vm2ymaf75x&st=3bavqvv3&dl=1",
-seasons: [
-{ number: 1, prefix: "MOBPSYCHO100-S1E", totalEpisodes: 12 }
-]
-},
-"RezeroKaraHajimeruIsekaiSeikatsu": {
-  title: "Re:ゼロから始める異世界生活 4th season",
-  desc: "In The Deadly Battle At The Watergate City Of Priestella, Subaru And His Allies Barely Emerged Victorious-but Their Triumph Came At A Great Cost. Through The authority Of Gluttony...",
-video: "https://dl.dropboxusercontent.com/scl/fi/t5ji4jgiygafkfod6w2fy/ReZERO_-Starting_Life_in_Another_World-_Season_4-E1-720p.mp4?rlkey=fj6axq0yrr171rplqlfao49s7&st=upm5pp3o&dl=0",
-seasons: [
-{ number: 4, prefix: "RezeroKaraHajimeruIsekaiSeikatsu-S4E", totalEpisodes: 4 }
-
-
-]
-},
-"MargosGotMoneyTroubles":{
-title: "Margo's Got Money Troubles",
-desc: "The daughter of a former Hooter's waitress and an ex-pro wrestler, Margo is a recent college dropout and aspiring writer. Faced with a new baby, mounting pile of bills, and dwindling",
-    video: "https://dl.dropboxusercontent.com/scl/fi/91d7vhdo8h7eymnisymor/Margo-s-Got-Money-Troubles-_-S1E1-2026.mp4?rlkey=iki1lez5edvnmj0ui876npj38&st=b6yg8z7y&dl=1",
+    title: "モブサイコ100",
+    desc: "Eighth-grader Shigeo mob Kageyama Has Tapped Into His Inner Wellspring Of Psychic Prowess At A Young Age. But The Power Quickly Proves To Be A Liability When He Realizes The Pote ...",
+    video: "https://dl.dropboxusercontent.com/scl/fi/szum2cunwow64w038m8ba/Mob-Psycho-100-_-S1E1-2016.mp4?rlkey=pg9t3f15vjl7vh2vm2ymaf75x&st=3bavqvv3&dl=1",
     seasons: [
-      { number: 1, prefix: "MargosGotMoneyTroubles-S1E", totalEpisodes: 8 }
+      { number: 1, prefix: "MOBPSYCHO100-S1E", totalEpisodes: 12 }
+    ]
+  },
+  "RezeroKaraHajimeruIsekaiSeikatsu": {
+    title: "Re:ゼロから始める異世界生活 4th season",
+    desc: "In The Deadly Battle At The Watergate City Of Priestella, Subaru And His Allies Barely Emerged Victorious-but Their Triumph Came At A Great Cost. Through The authority Of Gluttony...",
+    video: "https://dl.dropboxusercontent.com/scl/fi/t5ji4jgiygafkfod6w2fy/ReZERO_-Starting_Life_in_Another_World-_Season_4-E1-720p.mp4?rlkey=fj6axq0yrr171rplqlfao49s7&st=upm5pp3o&dl=0",
+    seasons: [
+      { number: 4, prefix: "RezeroKaraHajimeruIsekaiSeikatsu-S4E", totalEpisodes: 4 }
     ]
   },
   "BetterCallSaul2": {
@@ -223,10 +181,10 @@ desc: "The daughter of a former Hooter's waitress and an ex-pro wrestler, Margo 
     desc: "Ex-con artist Jimmy McGill turns into a small-time attorney and goes through a series of trials and tragedies, as he transforms into his alter ego Saul Goodman, a morally challenged criminal lawyer.",
     video: "",
     seasons: [
-    { number: 1, prefix: "BetterCallSaul-S1E", totalEpisodes: 10 },
-    { number: 2, prefix: "BetterCallSaul-S2E", totalEpisodes: 10 }
-  ]
-  }      ,
+      { number: 1, prefix: "BetterCallSaul-S1E", totalEpisodes: 10 },
+      { number: 2, prefix: "BetterCallSaul-S2E", totalEpisodes: 10 }
+    ]
+  },
   "VisionQuest": {
     title: "VisionQuest",
     desc: "A rebooted Vision has been hiding from those who seek to weaponize him. While laying low he consults the AI personas embedded in his programming to find his true meaning. This quiet life ends when a bounty placed on his head thrusts him on the run.",
@@ -268,7 +226,7 @@ desc: "The daughter of a former Hooter's waitress and an ex-pro wrestler, Margo 
     ]
   },
   "MargosGotMoneyTroubles": {
-    title: "Margos Got Money Troubles",
+    title: "Margo's Got Money Troubles",
     desc: "The daughter of a former Hooter's waitress and an ex-pro wrestler, Margo is a recent college dropout and aspiring writer. Faced with a new baby, mounting pile of bills, and dwindling number of ways to pay them, Margo must find a way forward.",
     video: "",
     seasons: [
@@ -288,7 +246,11 @@ desc: "The daughter of a former Hooter's waitress and an ex-pro wrestler, Margo 
     desc: "Walter White, a chemistry teacher, discovers that he has cancer and decides to get into the meth-making business to repay his medical debts. His priorities begin to change when he partners with Jesse.",
     video: "",
     seasons: [
-      { number: 1, prefix: "BreakingBad-S1E", totalEpisodes: 7 }
+      { number: 1, prefix: "BreakingBad-S1E", totalEpisodes: 7 },
+      { number: 2, prefix: "BreakingBad-S2E", totalEpisodes: 13 },
+      { number: 3, prefix: "BreakingBad-S3E", totalEpisodes: 13 },
+      { number: 4, prefix: "BreakingBad-S4E", totalEpisodes: 13 },
+      { number: 5, prefix: "BreakingBad-S5E", totalEpisodes: 16 }
     ]
   },
   "RegularShow": {
@@ -300,15 +262,15 @@ desc: "The daughter of a former Hooter's waitress and an ex-pro wrestler, Margo 
     ]
   },
   "TheDetour": {
-    nextEpOffset: 10,
     title: "The Detour",
     desc: "Nate and his family go on a road trip from Syracuse to Florida for a vacation. They experience a lot of troubles and intervention during the trip, while also making startling discoveries.",
     video: "",
+    nextEpOffset: 10,
     seasons: [
-    { number: 1, prefix: "TheDetour-S1E", totalEpisodes: 10 },
-{ number: 2, prefix: "TheDetour-S2E", totalEpisodes: 12 },
-    { number: 3, prefix: "TheDetour-S3E", totalEpisodes: 10 }
-  ]
+      { number: 1, prefix: "TheDetour-S1E", totalEpisodes: 10 },
+      { number: 2, prefix: "TheDetour-S2E", totalEpisodes: 12 },
+      { number: 3, prefix: "TheDetour-S3E", totalEpisodes: 10 }
+    ]
   },
   "Lucifer": {
     title: "Lucifer",
