@@ -123,6 +123,38 @@ styleTag.textContent = `
         fill: currentColor;
     }
 
+    /* Favorites Action Button */
+    .favorites-action-btn {
+        background-color: #1a1a1a;
+        color: #ffffff;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 14px 24px;
+        border-radius: 10px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        font-weight: 600;
+        font-size: 15px;
+        width: 100%;
+        max-width: 320px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+        margin-bottom: 12px;
+    }
+    .favorites-action-btn:hover {
+        background-color: #262626;
+        border-color: rgba(255, 255, 255, 0.4);
+    }
+    .favorites-action-btn.favorited {
+        border-color: #e50914;
+        color: #e50914;
+    }
+    .favorites-action-btn.favorited svg {
+        fill: #e50914;
+    }
+
     /* Comments Trigger Button */
     .comments-trigger-btn {
         background-color: #1a1a1a;
@@ -218,7 +250,6 @@ styleTag.textContent = `
         background: #333333;
     }
 
-    /* Fixed Bottom Comment Bar inside Modals */
     .comments-bottom-bar {
         position: sticky;
         bottom: 0;
@@ -332,9 +363,6 @@ styleTag.textContent = `
         opacity: 0.7;
     }
 
-    /* ==========================================
-     * REVIEWS & COMMENTS SYSTEM STYLING
-     * ========================================== */
     :root {
       --rev-bg: transparent;
       --rev-card-bg: #0a0a0a;
@@ -468,7 +496,6 @@ styleTag.textContent = `
       margin-top: 2px;
     }
 
-    /* Three Dots Dropdown Menu Styles */
     .comment-menu-wrapper {
       position: relative;
       display: inline-block;
@@ -561,7 +588,6 @@ styleTag.textContent = `
       gap: 12px;
     }
 
-    /* Standalone individual reply card layout */
     .standalone-reply-card {
       background-color: #121212 !important;
       border: 1px solid #262626;
@@ -643,7 +669,6 @@ async function loadDataFiles() {
   }
 }
 
-// Fetch user's watch history directly from Cloudflare D1 Worker
 async function fetchCloudflareProgressMap() {
   const token = localStorage.getItem("session_token");
   if (!token) return {};
@@ -658,7 +683,6 @@ async function fetchCloudflareProgressMap() {
     });
     if (!response.ok) return {};
     const data = await response.json();
-    
     return data.progress || {};
   } catch (err) {
     console.error("Error fetching Cloudflare progress:", err);
@@ -721,7 +745,6 @@ async function init() {
         renderActiveSeasonContent(activeSeasonReference, []);
 
         fetchCloudflareProgressMap().then(cloudflareProgress => {
-            console.log("D1 Progress Map Fetched:", cloudflareProgress);
             let watchedEpisodesList = [];
 
             for (const [movieIdKey, record] of Object.entries(cloudflareProgress)) {
@@ -745,8 +768,6 @@ async function init() {
                     watchedEpisodesList.push({ key: movieIdKey, time: timeVal });
                 }
             }
-
-            console.log("Matched Watched Episodes for this Series:", watchedEpisodesList);
 
             watchedEpisodesList.sort((a, b) => b.time - a.time);
             renderActiveSeasonContent(activeSeasonReference, watchedEpisodesList);
@@ -797,7 +818,23 @@ async function init() {
             };
             episodeContainer.appendChild(bigPlayBtn);
 
-            // 2. Comments Trigger Button
+            // 2. Add to Favorites Button
+            const favoritesBtn = document.createElement("button");
+            favoritesBtn.className = "favorites-action-btn";
+            favoritesBtn.id = "favoritesActionBtn";
+            favoritesBtn.innerHTML = `
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+                <span>Add to Favorites</span>
+            `;
+            checkFavoriteStatus(id, favoritesBtn);
+            favoritesBtn.onclick = () => {
+                toggleFavoriteItem(id, series.title, imagePath, favoritesBtn);
+            };
+            episodeContainer.appendChild(favoritesBtn);
+
+            // 3. Comments Trigger Button
             const commentsBtn = document.createElement("button");
             commentsBtn.className = "comments-trigger-btn";
             commentsBtn.innerHTML = `
@@ -811,7 +848,7 @@ async function init() {
             };
             episodeContainer.appendChild(commentsBtn);
 
-            // 3. Dropdown Accordion for all episodes
+            // 4. Dropdown Accordion for all episodes
             if (season.totalEpisodes >= 1) {
                 const dropdownWrapper = document.createElement("div");
                 dropdownWrapper.className = "episodes-dropdown-container";
@@ -882,6 +919,71 @@ async function init() {
             });
         }
     }
+}
+
+// ==========================================================================
+// FAVORITES CLIENT HELPERS
+// ==========================================================================
+
+async function checkFavoriteStatus(movieId, btnElement) {
+  const token = localStorage.getItem("session_token");
+  if (!token) return;
+
+  try {
+    const res = await fetch(`${API_BASE}/api/get-favorites`, {
+      method: "GET",
+      headers: { "Authorization": `Bearer ${token}` }
+    });
+    if (!res.ok) return;
+    const data = await res.json();
+    const favorites = data.favorites || {};
+
+    if (favorites[movieId]) {
+      btnElement.classList.add("favorited");
+      btnElement.querySelector("span").textContent = "Favorited";
+      btnElement.querySelector("svg").setAttribute("fill", "currentColor");
+    }
+  } catch (err) {
+    console.error("Error checking favorite status:", err);
+  }
+}
+
+async function toggleFavoriteItem(movieId, movieTitle, posterImage, btnElement) {
+  const token = localStorage.getItem("session_token");
+  if (!token) {
+    showStatus("Please log in to save favorites.", true);
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API_BASE}/api/toggle-favorite`, {
+      method: "POST",
+      headers: { 
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}` 
+      },
+      body: JSON.stringify({ movieId, movieTitle, posterImage })
+    });
+    const data = await res.json();
+
+    if (res.ok) {
+      if (data.isFavorited) {
+        btnElement.classList.add("favorited");
+        btnElement.querySelector("span").textContent = "Favorited";
+        btnElement.querySelector("svg").setAttribute("fill", "currentColor");
+        showStatus("Added to your favorites!");
+      } else {
+        btnElement.classList.remove("favorited");
+        btnElement.querySelector("span").textContent = "Add to Favorites";
+        btnElement.querySelector("svg").setAttribute("fill", "none");
+        showStatus("Removed from your favorites.");
+      }
+    } else {
+      showStatus(data.error || "Failed to update favorites.", true);
+    }
+  } catch (err) {
+    showStatus("Connection error. Try again.", true);
+  }
 }
 
 // ==========================================================================
@@ -974,13 +1076,8 @@ function initReviewsSystem(seriesId) {
       <div class="header-zone">
         <h2>Comments</h2>
       </div>
-
-      <!-- AD SLOT PLACED EXACTLY BELOW HEADER AND CENTERED -->
       <div id="adSlotZone" style="margin-bottom: 16px; display: flex; justify-content: center; align-items: center; width: 100%;"></div>
-
       <div id="statusBanner" class="status-banner"></div>
-
-      <!-- Account Setup Container -->
       <div class="modal-box" id="usernameModal" style="display: none;">
         <p>Please enter a display name to participate in discussions:</p>
         <div class="modal-input-group">
@@ -988,8 +1085,6 @@ function initReviewsSystem(seriesId) {
           <button class="btn-secondary" onclick="saveUsername()">Set Name</button>
         </div>
       </div>
-
-      <!-- Main Feed Area -->
       <div id="reviewsList">
         <div class="empty-state">Loading reviews...</div>
       </div>
@@ -1059,42 +1154,6 @@ function toggleCommentMenu(event, menuId) {
   const menu = document.getElementById(menuId);
   if (menu) {
     menu.classList.toggle("active");
-  }
-}
-
-async function notifyMentionedUsers(text, actorUsername) {
-  if (!text) return;
-
-  const mentionMatches = text.match(/@([a-zA-Z0-9_]+)/g);
-  if (!mentionMatches) return;
-
-  const uniqueUsernames = [...new Set(mentionMatches.map(tag => tag.substring(1)))];
-
-  for (const username of uniqueUsernames) {
-    try {
-      const userRes = await fetch(`${API_BASE}/api/get-user?username=${encodeURIComponent(username)}`, {
-        headers: { "Authorization": `Bearer ${token}` }
-      });
-
-      if (!userRes.ok) continue;
-      const userData = await userRes.json();
-      const targetEmail = userData.email || userData.authorEmail;
-
-      if (!targetEmail) continue;
-
-      await fetch("YOUR_CLIENT_EMAIL_WEBHOOK_OR_SERVICE_URL", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          to: targetEmail,
-          subject: `@${actorUsername} tagged you in a comment`,
-          message: `@${actorUsername} mentioned you: "${text}"`,
-          title: series ? series.title : "a show"
-        })
-      });
-    } catch (err) {
-      console.warn("Failed to notify tagged user:", username, err);
-    }
   }
 }
 
@@ -1276,10 +1335,6 @@ async function submitBottomComment() {
       document.getElementById("usernameModal").style.display = "block";
     } else if (res.ok) {
       inputEl.value = "";
-      
-      const currentUsername = data.username || getCurrentUserEmail().split('@')[0] || "Someone";
-      notifyMentionedUsers(text, currentUsername);
-
       loadReviews(currentSeries);
     } else {
       showStatus(data.error || "Could not publish review.", true);
@@ -1318,10 +1373,6 @@ async function submitDrawerReply() {
       document.getElementById("usernameModal").style.display = "block";
     } else if (res.ok) {
       inputEl.value = "";
-
-      const currentUsername = data.username || getCurrentUserEmail().split('@')[0] || "Someone";
-      notifyMentionedUsers(replyText, currentUsername);
-
       renderRepliesInDrawer(activeReplyTargetEmail);
       loadReviews(currentSeries);
     } else {
@@ -1332,74 +1383,12 @@ async function submitDrawerReply() {
   }
 }
 
-async function promptEditReview(authorEmail, oldTextEncoded) {
-  const oldText = decodeURIComponent(oldTextEncoded);
-  const newText = prompt("Edit your comment:", oldText);
-  if (newText === null || newText.trim() === "" || newText === oldText) return;
-
-  try {
-    const res = await fetch(`${API_BASE}/api/edit-review`, {
-      method: "POST",
-      headers: { 
-        "Content-Type": "application/json", 
-        "Authorization": `Bearer ${token}` 
-      },
-      body: JSON.stringify({ 
-        movie: id, 
-        series: id, 
-        newText: newText.trim() 
-      })
-    });
-    const data = await res.json();
-    if (res.ok) {
-      loadReviews(id);
-    } else {
-      showStatus(data.error || "Could not edit comment.", true);
-    }
-  } catch (err) {
-    showStatus("Connection error.", true);
-  }
-}
-
-async function promptEditReply(targetEmail, replyIndex, oldTextEncoded) {
-  const oldText = decodeURIComponent(oldTextEncoded);
-  const newText = prompt("Edit your reply:", oldText);
-  if (newText === null || newText.trim() === "" || newText === oldText) return;
-
-  try {
-    const res = await fetch(`${API_BASE}/api/edit-reply`, {
-      method: "POST",
-      headers: { 
-        "Content-Type": "application/json", 
-        "Authorization": `Bearer ${token}` 
-      },
-      body: JSON.stringify({ 
-        movie: id, 
-        series: id, 
-        targetEmail: targetEmail,
-        replyIndex: replyIndex,
-        newText: newText.trim() 
-      })
-    });
-    const data = await res.json();
-    if (res.ok) {
-      renderRepliesInDrawer(targetEmail);
-      loadReviews(id);
-    } else {
-      showStatus(data.error || "Could not edit reply.", true);
-    }
-  } catch (err) {
-    showStatus("Connection error.", true);
-  }
-}
-
 function escapeHtml(str) {
   return str ? String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") : "";
 }
 
 loadDataFiles();
 
-// Force strict refresh when navigating back from video player
 window.addEventListener("pageshow", (event) => {
     if (event.persisted || window.performance.getEntriesByType("navigation")[0]?.type === "back_forward") {
         window.location.reload();
