@@ -345,6 +345,13 @@ window.videoData = {
         lang: "ar",
         src: "../subtitles/BridgetoTerabithia/BridgetoTerabithia-arabic.txt"
       }
+    ],
+  "DoYouKnowMe-subs": [
+      {
+        label: "Arabic",
+        lang: "ar",
+        src: "../subtitles/DoYouKnowMe/DoYouKnowMe-arabic.txt"
+      }
     ]
 };
 
