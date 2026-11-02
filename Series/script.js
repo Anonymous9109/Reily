@@ -486,6 +486,10 @@ styleTag.textContent = `
       color: #ffffff !important;
       font-weight: 700;
       font-size: 0.9rem;
+      cursor: pointer;
+    }
+    .reviews-container .review-author:hover {
+      text-decoration: underline;
     }
 
     .reviews-container .review-date {
@@ -646,6 +650,120 @@ styleTag.textContent = `
       background-color: #0a0a0a;
       border-radius: 8px;
       border: 1px solid var(--rev-border);
+    }
+
+    /* Slide-Up User Profile Window Styles */
+    #userProfileSlideModal {
+        position: fixed;
+        bottom: 0;
+        left: 50%;
+        transform: translate(-50%, 100%);
+        width: 100vw;
+        max-width: 500px;
+        background-color: #111111;
+        border-top: 1px solid #262626;
+        border-top-left-radius: 16px;
+        border-top-right-radius: 16px;
+        z-index: 200000;
+        padding: 24px 20px 32px 20px;
+        box-sizing: border-box;
+        transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 0 -10px 30px rgba(0,0,0,0.8);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #userProfileSlideModal.active {
+        transform: translate(-50%, 0);
+    }
+
+    .user-profile-handle {
+        width: 40px;
+        height: 4px;
+        background-color: #404040;
+        border-radius: 2px;
+        margin-bottom: 20px;
+        cursor: pointer;
+    }
+
+    .user-profile-avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background-color: #262626;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 32px;
+        font-weight: bold;
+        color: #ffffff;
+        margin-bottom: 12px;
+        border: 2px solid #404040;
+        overflow: hidden;
+    }
+
+    .user-profile-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .user-profile-username {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #ffffff;
+        margin-bottom: 16px;
+    }
+
+    .user-profile-stats-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        width: 100%;
+        margin-top: 8px;
+    }
+
+    .user-profile-stat-box {
+        background-color: #1a1a1a;
+        border: 1px solid #262626;
+        border-radius: 10px;
+        padding: 14px;
+        text-align: center;
+    }
+
+    .user-profile-stat-label {
+        font-size: 0.75rem;
+        color: #888888;
+        margin-bottom: 4px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .user-profile-stat-value {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #ffffff;
+    }
+
+    /* Backdrop Overlay */
+    #userProfileBackdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(4px);
+        z-index: 199999;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    #userProfileBackdrop.active {
+        opacity: 1;
+        visibility: visible;
     }
 `;
 document.head.appendChild(styleTag);
@@ -959,6 +1077,101 @@ async function init() {
 }
 
 // ==========================================================================
+// USER PROFILE SLIDE-UP WINDOW SYSTEM
+// ==========================================================================
+
+async function openUserProfileModal() {
+    const token = localStorage.getItem("session_token");
+    if (!token) {
+        window.location.replace("https://rinolski.online/");
+        return;
+    }
+
+    let backdrop = document.getElementById("userProfileBackdrop");
+    let modal = document.getElementById("userProfileSlideModal");
+
+    if (!modal) {
+        backdrop = document.createElement("div");
+        backdrop.id = "userProfileBackdrop";
+        backdrop.onclick = closeUserProfileModal;
+        document.body.appendChild(backdrop);
+
+        modal = document.createElement("div");
+        modal.id = "userProfileSlideModal";
+        modal.innerHTML = `
+            <div class="user-profile-handle" onclick="closeUserProfileModal()"></div>
+            <div class="user-profile-avatar" id="modalUserAvatar">U</div>
+            <div class="user-profile-username" id="modalUsername">@Loading...</div>
+            
+            <div class="user-profile-stats-grid">
+                <div class="user-profile-stat-box">
+                    <div class="user-profile-stat-label">Saved Content</div>
+                    <div class="user-profile-stat-value" id="modalSavedCount">-</div>
+                </div>
+                <div class="user-profile-stat-box">
+                    <div class="user-profile-stat-label">Member Since</div>
+                    <div class="user-profile-stat-value" id="modalMemberSince">-</div>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+    }
+
+    // Fetch live user stats from backend
+    try {
+        const res = await fetch(`${API_BASE}/api/user-stats`, {
+            headers: { "Authorization": `Bearer ${token}` }
+        });
+        if (res.ok) {
+            const data = await res.json();
+            
+            const usernameEl = document.getElementById("modalUsername");
+            const avatarEl = document.getElementById("modalUserAvatar");
+            const savedCountEl = document.getElementById("modalSavedCount");
+            const memberSinceEl = document.getElementById("modalMemberSince");
+
+            if (usernameEl) usernameEl.textContent = `@${data.username || "User"}`;
+            if (savedCountEl) savedCountEl.textContent = `${data.savedCount || 0} items`;
+            
+            if (memberSinceEl && data.signupDate) {
+                const dateObj = new Date(data.signupDate);
+                memberSinceEl.textContent = isNaN(dateObj) ? data.signupDate.split('T')[0] : dateObj.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+            }
+
+            if (avatarEl) {
+                if (data.pfp && data.pfp.length > 5) {
+                    avatarEl.innerHTML = `<img src="${data.pfp}" alt="Avatar" />`;
+                } else {
+                    avatarEl.textContent = (data.username ? data.username.charAt(0) : "U").toUpperCase();
+                }
+            }
+        }
+    } catch (err) {
+        console.error("Failed to load user profile metrics:", err);
+    }
+
+    requestAnimationFrame(() => {
+        backdrop.classList.add("active");
+        modal.classList.add("active");
+    });
+}
+
+function closeUserProfileModal() {
+    const backdrop = document.getElementById("userProfileBackdrop");
+    const modal = document.getElementById("userProfileSlideModal");
+    if (backdrop) backdrop.classList.remove("active");
+    if (modal) modal.classList.remove("active");
+}
+
+// Automatically bind click triggers to usernames / authors across the page
+document.addEventListener("click", (e) => {
+    const trigger = e.target.closest(".review-author, .user-profile-trigger, [id*='usernameDisplay']");
+    if (trigger) {
+        openUserProfileModal();
+    }
+});
+
+// ==========================================================================
 // FAVORITES CLIENT HELPERS
 // ==========================================================================
 
@@ -1262,7 +1475,7 @@ async function loadReviews(seriesId) {
       return `
         <div class="review-card" id="review-card-${safeEmailId}">
           <div class="review-header">
-            <span class="review-author">@${escapeHtml(username)}</span>
+            <span class="review-author" onclick="openUserProfileModal()">@${escapeHtml(username)}</span>
             <span class="review-date">${r.timestamp ? new Date(r.timestamp).toLocaleDateString() : ''}</span>
           </div>
 
@@ -1331,7 +1544,7 @@ async function renderRepliesInDrawer(targetEmail) {
       return `
         <div class="standalone-reply-card">
           <div class="standalone-reply-header">
-            <strong style="color: #fff; font-size: 0.9rem;">@${escapeHtml(repUsername)}</strong>
+            <strong class="review-author" onclick="openUserProfileModal()" style="color: #fff; font-size: 0.9rem;">@${escapeHtml(repUsername)}</strong>
             <span style="font-size: 0.75rem; color: #888;">${repTime}</span>
           </div>
           <div class="standalone-reply-body">${formattedReplyText}${isEdited ? '<span class="edited-badge">(edited)</span>' : ''}</div>
