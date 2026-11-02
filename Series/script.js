@@ -649,18 +649,17 @@ async function fetchCloudflareProgressMap() {
   if (!token) return {};
 
   try {
-    const response = await fetch(`https://rinolski.misty-fog-201e.workers.dev/api/get-progress?forced_ts=${Date.now()}`, {
+    const response = await fetch(`${API_BASE}/api/get-progress`, {
       method: "GET",
       headers: { 
         "Authorization": `Bearer ${token}`,
         "Cache-Control": "no-cache, no-store, must-revalidate"
-      },
-      cache: "no-store"
+      }
     });
     if (!response.ok) return {};
     const data = await response.json();
     
-    return data.progress || data.data || data.history || (typeof data === 'object' ? data : {});
+    return data.progress || {};
   } catch (err) {
     console.error("Error fetching Cloudflare progress:", err);
     return {};
@@ -724,23 +723,8 @@ async function init() {
         fetchCloudflareProgressMap().then(cloudflareProgress => {
             let watchedEpisodesList = [];
 
-            const progressEntries = Array.isArray(cloudflareProgress) 
-                ? cloudflareProgress 
-                : Object.entries(cloudflareProgress);
-
-            progressEntries.forEach(entry => {
-                let movieIdKey = "";
-                let record = {};
-
-                if (Array.isArray(entry)) {
-                    movieIdKey = entry[0];
-                    record = entry[1] || {};
-                } else {
-                    movieIdKey = entry.movieId || entry.id || entry.key || "";
-                    record = entry;
-                }
-
-                if (!movieIdKey) return;
+            for (const [movieIdKey, record] of Object.entries(cloudflareProgress)) {
+                if (!movieIdKey) continue;
 
                 const lowerKey = movieIdKey.toLowerCase();
                 const lowerSeriesId = id.toLowerCase();
@@ -749,18 +733,12 @@ async function init() {
                 const matchesPrefix = series.seasons.some(s => lowerKey.startsWith(s.prefix.toLowerCase()));
 
                 if (matchesId || matchesPrefix) {
-                    let timeVal = 0;
-                    for (let prop in record) {
-                        const val = Number(record[prop]);
-                        if (!isNaN(val) && val > timeVal) {
-                            timeVal = val;
-                        }
-                    }
-                    if (timeVal === 0) timeVal = Date.now();
+                    let timeVal = record.updatedAt ? new Date(record.updatedAt).getTime() : 0;
+                    if (!timeVal || isNaN(timeVal)) timeVal = Date.now();
 
                     watchedEpisodesList.push({ key: movieIdKey, time: timeVal });
                 }
-            });
+            }
 
             watchedEpisodesList.sort((a, b) => b.time - a.time);
             renderActiveSeasonContent(activeSeasonReference, watchedEpisodesList);
@@ -783,8 +761,8 @@ async function init() {
                 const match = latestWatched.match(/-S(\d+)E(\d+)/i) || latestWatched.match(/S(\d+)E(\d+)/i);
                 
                 if (match) {
-                    const currentEpNum = parseInt(match[2], 10);
                     const seasonNum = match[1];
+                    const currentEpNum = parseInt(match[2], 10);
                     
                     targetEpKey = latestWatched;
                     buttonText = `Continue Watching (S${seasonNum} E${currentEpNum})`;
@@ -882,13 +860,12 @@ async function init() {
                     seasonBtn.classList.add("active");
                     fetchCloudflareProgressMap().then(progress => {
                         let list = [];
-                        const entries = Array.isArray(progress) ? progress : Object.entries(progress);
-                        entries.forEach(entry => {
-                            let k = Array.isArray(entry) ? entry[0] : (entry.movieId || entry.id || entry.key || "");
+                        for (const [k, rec] of Object.entries(progress)) {
                             if (k && k.toLowerCase().includes(id.toLowerCase())) {
-                                list.push({ key: k, time: Date.now() });
+                                let t = rec.updatedAt ? new Date(rec.updatedAt).getTime() : Date.now();
+                                list.push({ key: k, time: t });
                             }
-                        });
+                        }
                         renderActiveSeasonContent(season, list);
                     });
                 };
@@ -1048,7 +1025,6 @@ function showStatus(message, isError = false) {
   setTimeout(() => { banner.style.display = "none"; }, 4000);
 }
 
-// Helper to decode current user's email from JWT token if present
 function getCurrentUserEmail() {
   if (!token) return "";
   try {
@@ -1059,7 +1035,6 @@ function getCurrentUserEmail() {
   }
 }
 
-// Global click handler to close any open three-dots menus when clicking outside
 document.addEventListener("click", (e) => {
   if (!e.target.closest(".comment-menu-wrapper")) {
     document.querySelectorAll(".comment-dropdown-menu.active").forEach(menu => {
@@ -1070,7 +1045,6 @@ document.addEventListener("click", (e) => {
 
 function toggleCommentMenu(event, menuId) {
   event.stopPropagation();
-  // Close all other open menus first
   document.querySelectorAll(".comment-dropdown-menu.active").forEach(menu => {
     if (menu.id !== menuId) menu.classList.remove("active");
   });
@@ -1080,7 +1054,6 @@ function toggleCommentMenu(event, menuId) {
   }
 }
 
-// --- Client-Side Tag Notification Helper ---
 async function notifyMentionedUsers(text, actorUsername) {
   if (!text) return;
 
@@ -1101,7 +1074,6 @@ async function notifyMentionedUsers(text, actorUsername) {
 
       if (!targetEmail) continue;
 
-      // Triggers your email service webhook or notification endpoint
       await fetch("YOUR_CLIENT_EMAIL_WEBHOOK_OR_SERVICE_URL", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
