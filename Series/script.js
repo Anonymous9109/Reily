@@ -2,6 +2,14 @@ const params = new URLSearchParams(window.location.search);
 const id = params.get("series") || params.get("movie");
 const series = seriesData[id];
 
+// --- INSTANT AUTHENTICATION GUARD ---
+(function() {
+    const token = localStorage.getItem("session_token");
+    if (!token) {
+        window.location.replace("https://rinolski.online/");
+    }
+})();
+
 // --- Save Incoming Page Reference (Avoiding Video Player) ---
 document.addEventListener("DOMContentLoaded", () => {
     const referrer = document.referrer;
@@ -848,7 +856,7 @@ async function init() {
             favoritesBtn.onclick = () => {
                 const token = localStorage.getItem("session_token");
                 if (!token) {
-                    window.location.href = "https://rinolski.online/";
+                    window.location.replace("https://rinolski.online/");
                     return;
                 }
                 toggleFavoriteItem(id, series.title, imagePath, favoritesBtn);
@@ -867,7 +875,7 @@ async function init() {
             commentsBtn.onclick = () => {
                 const token = localStorage.getItem("session_token");
                 if (!token) {
-                    window.location.href = "https://rinolski.online/";
+                    window.location.replace("https://rinolski.online/");
                     return;
                 }
                 openCommentsModal(id);
@@ -993,7 +1001,7 @@ async function checkFavoriteStatusAndCount(movieId, btnElement) {
 async function toggleFavoriteItem(movieId, movieTitle, posterImage, btnElement) {
   const token = localStorage.getItem("session_token");
   if (!token) {
-    window.location.href = "https://rinolski.online/";
+    window.location.replace("https://rinolski.online/");
     return;
   }
 
@@ -1038,7 +1046,7 @@ async function toggleFavoriteItem(movieId, movieTitle, posterImage, btnElement) 
 function openCommentsModal(seriesId) {
     const token = localStorage.getItem("session_token");
     if (!token) {
-        window.location.href = "https://rinolski.online/";
+        window.location.replace("https://rinolski.online/");
         return;
     }
 
@@ -1082,7 +1090,7 @@ let activeReplyTargetEmail = null;
 function openRepliesDrawer(targetEmail, authorUsername) {
     const token = localStorage.getItem("session_token");
     if (!token) {
-        window.location.href = "https://rinolski.online/";
+        window.location.replace("https://rinolski.online/");
         return;
     }
 
@@ -1349,7 +1357,7 @@ async function renderRepliesInDrawer(targetEmail) {
 async function saveUsername() {
   const token = localStorage.getItem("session_token");
   if (!token) {
-      window.location.href = "https://rinolski.online/";
+      window.location.replace("https://rinolski.online/");
       return;
   }
 
@@ -1378,7 +1386,7 @@ async function saveUsername() {
 async function submitBottomComment() {
   const token = localStorage.getItem("session_token");
   if (!token) {
-      window.location.href = "https://rinolski.online/";
+      window.location.replace("https://rinolski.online/");
       return;
   }
 
@@ -1420,7 +1428,7 @@ async function submitBottomComment() {
 async function submitDrawerReply() {
   const token = localStorage.getItem("session_token");
   if (!token) {
-      window.location.href = "https://rinolski.online/";
+      window.location.replace("https://rinolski.online/");
       return;
   }
 
