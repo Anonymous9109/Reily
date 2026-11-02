@@ -721,6 +721,7 @@ async function init() {
         renderActiveSeasonContent(activeSeasonReference, []);
 
         fetchCloudflareProgressMap().then(cloudflareProgress => {
+            console.log("D1 Progress Map Fetched:", cloudflareProgress);
             let watchedEpisodesList = [];
 
             for (const [movieIdKey, record] of Object.entries(cloudflareProgress)) {
@@ -732,13 +733,20 @@ async function init() {
                 const matchesId = lowerKey.includes(lowerSeriesId);
                 const matchesPrefix = series.seasons.some(s => lowerKey.startsWith(s.prefix.toLowerCase()));
 
-                if (matchesId || matchesPrefix) {
-                    let timeVal = record.updatedAt ? new Date(record.updatedAt).getTime() : 0;
-                    if (!timeVal || isNaN(timeVal)) timeVal = Date.now();
+                if (matchesId || matchesPrefix || lowerKey.includes(lowerSeriesId.replace(/-/g, ''))) {
+                    let timeVal = 0;
+                    if (record && record.updatedAt) {
+                        timeVal = new Date(record.updatedAt).getTime();
+                    }
+                    if (!timeVal || isNaN(timeVal)) {
+                        timeVal = Date.now();
+                    }
 
                     watchedEpisodesList.push({ key: movieIdKey, time: timeVal });
                 }
             }
+
+            console.log("Matched Watched Episodes for this Series:", watchedEpisodesList);
 
             watchedEpisodesList.sort((a, b) => b.time - a.time);
             renderActiveSeasonContent(activeSeasonReference, watchedEpisodesList);
