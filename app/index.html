@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -878,7 +877,6 @@
             word-break: break-word;
         }
 
-        /* Offline Notice Banner */
         #offline-notice-banner {
             display: none;
             background: #1c1c1e;
@@ -974,7 +972,6 @@
 </header>
 
 <div id="initialSections">
-    <!-- Offline Notice Banner -->
     <div id="offline-notice-banner">
         <h3>You're currently offline</h3>
         <p>Watch downloaded content.</p>
@@ -1078,8 +1075,9 @@
         <div class="profile-section-heading">Choose Profile Avatar</div>
         <div class="pfp-selector-grid" id="pfpSelectorOptions"></div>
 
-        <div class="profile-section-heading">Watch History</div>
-        <div id="history-container" class="history-list">
+        <!-- REPLACED WATCH HISTORY WITH FAVORITES HERE -->
+        <div class="profile-section-heading">Favorites</div>
+        <div id="favorites-container" class="history-list">
             <div class="loading-ring"></div>
         </div>
     </div>
@@ -1154,7 +1152,6 @@
         updateFooterVisibility();
     }
 
-    // AUTOMATIC RE-HYDRATION ON BACK-FORWARD CACHE OR VISIBILITY RESTORE
     function enforceSessionRehydration() {
         const token = localStorage.getItem('session_token') || localStorage.getItem('token');
         if (token) {
@@ -1635,7 +1632,8 @@
                     return { title: item, watchedAt: exactDate };
                 });
 
-                renderWorkerWatchHistory(userWatchHistoryCache);
+                // Fetch and Display User Favorites in Profile instead of Watch History
+                await fetchAndRenderFavoritesCloudflare();
                 await fetchUnwantedMoviesCloudflare();
             }
         } catch (err) {
@@ -1814,46 +1812,67 @@
         return "https://rinolski.online/" + path.replace(/^\/+/, "");
     }
 
-    function renderWorkerWatchHistory(historyArray) {
-        const historyContainer = document.getElementById('history-container');
-        if (!historyContainer) return;
-        historyContainer.innerHTML = "";
+    // NEW: FETCH AND RENDER USER FAVORITES FROM D1 WORKER
+    async function fetchAndRenderFavoritesCloudflare() {
+        const favoritesContainer = document.getElementById('favorites-container');
+        if (!favoritesContainer) return;
 
-        if(!historyArray || historyArray.length === 0) {
-            historyContainer.innerHTML = `<p style="color: gray; font-size: 14px; padding: 5px; grid-column: span 3;">No movies watched yet.</p>`;
+        const sessionToken = localStorage.getItem('session_token') || localStorage.getItem('token');
+        if (!sessionToken || isAppOffline()) {
+            favoritesContainer.innerHTML = `<p style="color: gray; font-size: 14px; padding: 5px; grid-column: span 3;">No favorites saved.</p>`;
             return;
         }
 
-        historyArray.forEach(item => {
-            const titleStr = typeof item === 'object' ? item.title : item;
-            const watchTimeStr = typeof item === 'object' ? item.watchedAt : "Just Now";
+        try {
+            const res = await fetch(`${WORKER_URL}/api/get-favorites`, {
+                headers: { 'Authorization': 'Bearer ' + sessionToken }
+            });
+            const data = await res.json();
+            const favoritesMap = data.favorites || {};
 
-            if (typeof movies === 'undefined') return;
-            const referenceMovie = movies.find(m => m.title.toLowerCase() === titleStr.toLowerCase());
-            if (!referenceMovie) return;
+            favoritesContainer.innerHTML = "";
 
-            const cardLink = document.createElement('div');
-            cardLink.className = 'history-card-link';
-            const sanitizedTitle = titleStr.replace(/'/g, "\\'");
-            const absLink = resolveAbsoluteUrl(referenceMovie.link).replace(/'/g, "\\'");
-            const absImg = resolveAbsoluteUrl(referenceMovie.image);
-            
-            cardLink.setAttribute('onclick', `navigateToMovie('${sanitizedTitle}', '${absLink}', this.querySelector('.history-item'))`);
-            cardLink.style.cursor = 'pointer';
-            
-            cardLink.innerHTML = `
-                <div class="history-item">
-                    <div class="history-poster-frame">
-                        ${absImg ? `<img src="${absImg}" onerror="this.insertAdjacentHTML('afterend', '<p class=\\'fallback-label\\'>${sanitizedTitle}</p>'); this.style.opacity='0.25';">` : ''}
+            const favEntries = Object.entries(favoritesMap);
+            if (favEntries.length === 0) {
+                favoritesContainer.innerHTML = `<p style="color: gray; font-size: 14px; padding: 5px; grid-column: span 3;">No favorites saved yet.</p>`;
+                return;
+            }
+
+            favEntries.forEach(([movieIdKey, favData]) => {
+                const titleStr = favData.title || movieIdKey;
+                
+                if (typeof movies === 'undefined') return;
+                const referenceMovie = movies.find(m => m.title.toLowerCase() === titleStr.toLowerCase() || (m.link && m.link.toLowerCase().includes(movieIdKey.toLowerCase())));
+                
+                const displayTitle = referenceMovie ? referenceMovie.title : titleStr;
+                const displayLink = referenceMovie ? referenceMovie.link : `/Series/series.html?series=${movieIdKey}`;
+                const displayImg = referenceMovie ? referenceMovie.image : favData.image;
+
+                const cardLink = document.createElement('div');
+                cardLink.className = 'history-card-link';
+                const sanitizedTitle = displayTitle.replace(/'/g, "\\'");
+                const absLink = resolveAbsoluteUrl(displayLink).replace(/'/g, "\\'");
+                const absImg = resolveAbsoluteUrl(displayImg);
+                
+                cardLink.setAttribute('onclick', `navigateToMovie('${sanitizedTitle}', '${absLink}', this.querySelector('.history-item'))`);
+                cardLink.style.cursor = 'pointer';
+                
+                cardLink.innerHTML = `
+                    <div class="history-item">
+                        <div class="history-poster-frame">
+                            ${absImg ? `<img src="${absImg}" onerror="this.insertAdjacentHTML('afterend', '<p class=\\'fallback-label\\'>${sanitizedTitle}</p>'); this.style.opacity='0.25';">` : ''}
+                        </div>
+                        <div class="history-meta-details">
+                            <span class="history-title-text" title="${displayTitle}">${displayTitle}</span>
+                            <span class="history-time">Favorite</span>
+                        </div>
                     </div>
-                    <div class="history-meta-details">
-                        <span class="history-title-text" title="${titleStr}">${titleStr}</span>
-                        <span class="history-time">${watchTimeStr}</span>
-                    </div>
-                </div>
-            `;
-            historyContainer.appendChild(cardLink);
-        });
+                `;
+                favoritesContainer.appendChild(cardLink);
+            });
+        } catch (err) {
+            favoritesContainer.innerHTML = `<p style="color: gray; font-size: 14px; padding: 5px; grid-column: span 3;">Unable to load favorites.</p>`;
+        }
     }
 
     function startCloudflareRealTimeSync() {
@@ -1919,6 +1938,7 @@
         resetActiveNavbar(); profileTrigger.classList.add('active');
         profilePanel.classList.add('open'); searchPanel.classList.remove('open'); offlinePanel.classList.remove('open');
         checkUsernameModalGuard();
+        fetchAndRenderFavoritesCloudflare();
     });
 
     searchBackButton.addEventListener('click', () => {
@@ -2186,14 +2206,12 @@
         } catch (err) { window.location.href = targetUrl; }
     }
 
-    // Seeded Random generator based on 20-minute time blocks
     function getSeededRandom(seedOffset = 0) {
         const timeBlock = Math.floor(Date.now() / (20 * 60 * 1000));
         let x = Math.sin(timeBlock + seedOffset) * 10000;
         return x - Math.floor(x);
     }
 
-    // Deterministic shuffle using a 20-minute seed
     function shuffleArraySeeded(arr, seedOffset = 0) {
         const target = [...arr];
         for (let i = target.length - 1; i > 0; i--) {
@@ -2216,7 +2234,6 @@
 
         const filteredGlobalCatalog = movies.filter(m => !userUnwantedCache.includes(m.title.toLowerCase()));
 
-        // Always update and render the Watch Again (Watch History) row dynamically in exact recent order
         if (userWatchHistoryCache.length > 0) {
             const uniqueTitles = [];
             const watchAgainMovies = [];
@@ -2240,7 +2257,6 @@
             } else { watchAgainContainer.innerHTML = ""; }
         } else { watchAgainContainer.innerHTML = ""; }
 
-        // Skip re-rendering Random Picks and Genres if within the same 20-minute block and already built
         if (lastHomeFeedBuildTimeBlock === currentBlock && randomContainer.children.length > 0) {
             return;
         }
@@ -2281,8 +2297,3 @@
 </script>
 </body>
 </html>
-
-
-        
-        
-  
