@@ -1080,7 +1080,7 @@ async function init() {
 // USER PROFILE SLIDE-UP WINDOW SYSTEM
 // ==========================================================================
 
-async function openUserProfileModal() {
+async function openUserProfileModal(targetUserIdentifier) {
     const token = localStorage.getItem("session_token");
     if (!token) {
         window.location.replace("https://rinolski.online/");
@@ -1117,19 +1117,34 @@ async function openUserProfileModal() {
         document.body.appendChild(modal);
     }
 
-    // Fetch live user stats from backend
+    const usernameEl = document.getElementById("modalUsername");
+    const avatarEl = document.getElementById("modalUserAvatar");
+    const savedCountEl = document.getElementById("modalSavedCount");
+    const memberSinceEl = document.getElementById("modalMemberSince");
+
+    if (usernameEl) usernameEl.textContent = "@Loading...";
+    if (avatarEl) avatarEl.textContent = "U";
+    if (savedCountEl) savedCountEl.textContent = "-";
+    if (memberSinceEl) memberSinceEl.textContent = "-";
+
+    requestAnimationFrame(() => {
+        backdrop.classList.add("active");
+        modal.classList.add("active");
+    });
+
+    // Fetch user stats from backend for the specific user clicked
     try {
-        const res = await fetch(`${API_BASE}/api/user-stats`, {
+        let endpoint = `${API_BASE}/api/user-stats`;
+        if (targetUserIdentifier) {
+            endpoint += `?user=${encodeURIComponent(targetUserIdentifier)}`;
+        }
+
+        const res = await fetch(endpoint, {
             headers: { "Authorization": `Bearer ${token}` }
         });
         if (res.ok) {
             const data = await res.json();
             
-            const usernameEl = document.getElementById("modalUsername");
-            const avatarEl = document.getElementById("modalUserAvatar");
-            const savedCountEl = document.getElementById("modalSavedCount");
-            const memberSinceEl = document.getElementById("modalMemberSince");
-
             if (usernameEl) usernameEl.textContent = `@${data.username || "User"}`;
             if (savedCountEl) savedCountEl.textContent = `${data.savedCount || 0} items`;
             
@@ -1145,15 +1160,13 @@ async function openUserProfileModal() {
                     avatarEl.textContent = (data.username ? data.username.charAt(0) : "U").toUpperCase();
                 }
             }
+        } else {
+            if (usernameEl) usernameEl.textContent = "@User not found";
         }
     } catch (err) {
         console.error("Failed to load user profile metrics:", err);
+        if (usernameEl) usernameEl.textContent = "@Error loading profile";
     }
-
-    requestAnimationFrame(() => {
-        backdrop.classList.add("active");
-        modal.classList.add("active");
-    });
 }
 
 function closeUserProfileModal() {
@@ -1163,14 +1176,6 @@ function closeUserProfileModal() {
     if (modal) modal.classList.remove("active");
 }
 
-// Automatically bind click triggers to usernames / authors across the page
-document.addEventListener("click", (e) => {
-    const trigger = e.target.closest(".review-author, .user-profile-trigger, [id*='usernameDisplay']");
-    if (trigger) {
-        openUserProfileModal();
-    }
-});
-
 // ==========================================================================
 // FAVORITES CLIENT HELPERS
 // ==========================================================================
@@ -1178,7 +1183,6 @@ document.addEventListener("click", (e) => {
 async function checkFavoriteStatusAndCount(movieId, btnElement) {
   const token = localStorage.getItem("session_token");
 
-  // 1. Fetch public count (no auth required)
   try {
     const countRes = await fetch(`${API_BASE}/api/favorite-count?movieId=${encodeURIComponent(movieId)}`);
     if (countRes.ok) {
@@ -1190,7 +1194,6 @@ async function checkFavoriteStatusAndCount(movieId, btnElement) {
     console.error("Error fetching favorite count:", err);
   }
 
-  // 2. Fetch personal state if token exists
   if (!token) return;
 
   try {
@@ -1469,13 +1472,13 @@ async function loadReviews(seriesId) {
       const isEdited = r.edited || r.isEdited;
       const isOwner = currentUserEmail && authorEmail === currentUserEmail;
 
-      const formattedContent = escapeHtml(reviewContent).replace(/@([a-zA-Z0-9_]+)/g, '<span style="color: #4da6ff; font-weight: 600;">@$1</span>');
+      const formattedContent = escapeHtml(reviewContent).replace(/@([a-zA-Z0-9_]+)/g, '<span style="color: #4da6ff; font-weight: 600;" onclick="openUserProfileModal(\'$1\')" style="cursor:pointer;">@$1</span>');
       const menuId = `comment-menu-${safeEmailId}`;
 
       return `
         <div class="review-card" id="review-card-${safeEmailId}">
           <div class="review-header">
-            <span class="review-author" onclick="openUserProfileModal()">@${escapeHtml(username)}</span>
+            <span class="review-author" onclick="openUserProfileModal('${authorEmail}')">@${escapeHtml(username)}</span>
             <span class="review-date">${r.timestamp ? new Date(r.timestamp).toLocaleDateString() : ''}</span>
           </div>
 
@@ -1538,13 +1541,13 @@ async function renderRepliesInDrawer(targetEmail) {
       const isEdited = rep.edited || rep.isEdited;
       const isOwner = currentUserEmail && repEmail === currentUserEmail;
 
-      const formattedReplyText = escapeHtml(repText).replace(/@([a-zA-Z0-9_]+)/g, '<span style="color: #4da6ff; font-weight: 600;">@$1</span>');
+      const formattedReplyText = escapeHtml(repText).replace(/@([a-zA-Z0-9_]+)/g, '<span style="color: #4da6ff; font-weight: 600;" onclick="openUserProfileModal(\'$1\')" style="cursor:pointer;">@$1</span>');
       const menuId = `reply-menu-${index}`;
 
       return `
         <div class="standalone-reply-card">
           <div class="standalone-reply-header">
-            <strong class="review-author" onclick="openUserProfileModal()" style="color: #fff; font-size: 0.9rem;">@${escapeHtml(repUsername)}</strong>
+            <strong class="review-author" onclick="openUserProfileModal('${repEmail}')" style="color: #fff; font-size: 0.9rem;">@${escapeHtml(repUsername)}</strong>
             <span style="font-size: 0.75rem; color: #888;">${repTime}</span>
           </div>
           <div class="standalone-reply-body">${formattedReplyText}${isEdited ? '<span class="edited-badge">(edited)</span>' : ''}</div>
