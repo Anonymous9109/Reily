@@ -1465,18 +1465,18 @@ async function loadReviews(seriesId) {
 
     listEl.innerHTML = sortedReviews.map((r, idx) => {
       const authorEmail = r.authorEmail || r.email || "user";
-      const safeEmailId = authorEmail.replace(/[^a-zA-Z0-9]/g, '_') + '_' + idx;
+      const uniqueId = (r.reviewId || authorEmail).replace(/[^a-zA-Z0-9]/g, '_') + '_' + idx;
       const reviewContent = r.reviewText || r.text || r.content || "";
       const username = r.authorUsername || r.username || "Anonymous";
       const repliesCount = (r.replies || []).length;
       const isEdited = r.edited || r.isEdited;
       const isOwner = currentUserEmail && authorEmail === currentUserEmail;
 
-      const formattedContent = escapeHtml(reviewContent).replace(/@([a-zA-Z0-9_]+)/g, '<span style="color: #4da6ff; font-weight: 600;" onclick="openUserProfileModal(\'$1\')" style="cursor:pointer;">@$1</span>');
-      const menuId = `comment-menu-${safeEmailId}`;
+      const formattedContent = escapeHtml(reviewContent).replace(/@([a-zA-Z0-9_]+)/g, `<span style="color: #4da6ff; font-weight: 600; cursor: pointer;" onclick="openUserProfileModal('$1')">@$1</span>`);
+      const menuId = `comment-menu-${uniqueId}`;
 
       return `
-        <div class="review-card" id="review-card-${safeEmailId}">
+        <div class="review-card" id="review-card-${uniqueId}">
           <div class="review-header">
             <span class="review-author" onclick="openUserProfileModal('${authorEmail}')">@${escapeHtml(username)}</span>
             <span class="review-date">${r.timestamp ? new Date(r.timestamp).toLocaleDateString() : ''}</span>
@@ -1541,7 +1541,7 @@ async function renderRepliesInDrawer(targetEmail) {
       const isEdited = rep.edited || rep.isEdited;
       const isOwner = currentUserEmail && repEmail === currentUserEmail;
 
-      const formattedReplyText = escapeHtml(repText).replace(/@([a-zA-Z0-9_]+)/g, '<span style="color: #4da6ff; font-weight: 600;" onclick="openUserProfileModal(\'$1\')" style="cursor:pointer;">@$1</span>');
+      const formattedReplyText = escapeHtml(repText).replace(/@([a-zA-Z0-9_]+)/g, `<span style="color: #4da6ff; font-weight: 600; cursor: pointer;" onclick="openUserProfileModal('$1')">@$1</span>`);
       const menuId = `reply-menu-${index}`;
 
       return `
