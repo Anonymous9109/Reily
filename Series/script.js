@@ -1302,8 +1302,9 @@ function closeCommentsModal() {
 }
 
 let activeReplyTargetEmail = null;
+let activeReplyReviewId = null;
 
-function openRepliesDrawer(targetEmail, authorUsername) {
+function openRepliesDrawer(targetEmail, authorUsername, reviewId) {
     const token = localStorage.getItem("session_token");
     if (!token) {
         window.location.replace("https://rinolski.online/");
@@ -1311,6 +1312,7 @@ function openRepliesDrawer(targetEmail, authorUsername) {
     }
 
     activeReplyTargetEmail = targetEmail;
+    activeReplyReviewId = reviewId || null;
     let drawer = document.getElementById("repliesDrawerModal");
     if (!drawer) {
         drawer = document.createElement("div");
@@ -1333,7 +1335,7 @@ function openRepliesDrawer(targetEmail, authorUsername) {
     const titleEl = document.getElementById("repliesDrawerTitle");
     if (titleEl) titleEl.textContent = `Replies to @${authorUsername || 'User'}`;
 
-    renderRepliesInDrawer(targetEmail);
+    renderRepliesInDrawer(targetEmail, activeReplyReviewId);
 
     requestAnimationFrame(() => {
         drawer.classList.add("active");
@@ -1346,6 +1348,7 @@ function closeRepliesDrawer() {
         drawer.classList.remove("active");
     }
     activeReplyTargetEmail = null;
+    activeReplyReviewId = null;
 }
 
 function initReviewsSystem(seriesId) {
@@ -1471,6 +1474,7 @@ async function loadReviews(seriesId) {
       const repliesCount = (r.replies || []).length;
       const isEdited = r.edited || r.isEdited;
       const isOwner = currentUserEmail && authorEmail === currentUserEmail;
+      const reviewIdSafe = r.reviewId || "";
 
       const formattedContent = escapeHtml(reviewContent).replace(/@([a-zA-Z0-9_]+)/g, `<span style="color: #4da6ff; font-weight: 600; cursor: pointer;" onclick="openUserProfileModal('$1')">@$1</span>`);
       const menuId = `comment-menu-${uniqueId}`;
@@ -1486,7 +1490,7 @@ async function loadReviews(seriesId) {
 
           <div class="review-actions">
             <div style="display: flex; align-items: center; gap: 8px;">
-              <button class="reply-thread-btn" onclick="openRepliesDrawer('${authorEmail}', '${escapeHtml(username)}')">
+              <button class="reply-thread-btn" onclick="openRepliesDrawer('${authorEmail}', '${escapeHtml(username)}', '${reviewIdSafe}')">
                 💬 Replies (${repliesCount})
               </button>
               ${isOwner ? `
@@ -1504,7 +1508,7 @@ async function loadReviews(seriesId) {
     }).join('');
 
     if (activeReplyTargetEmail) {
-        renderRepliesInDrawer(activeReplyTargetEmail);
+        renderRepliesInDrawer(activeReplyTargetEmail, activeReplyReviewId);
     }
 
   } catch(err) {
@@ -1512,7 +1516,7 @@ async function loadReviews(seriesId) {
   }
 }
 
-async function renderRepliesInDrawer(targetEmail) {
+async function renderRepliesInDrawer(targetEmail, reviewId) {
   const container = document.getElementById("repliesDrawerBodyContainer");
   if (!container) return;
 
@@ -1523,7 +1527,10 @@ async function renderRepliesInDrawer(targetEmail) {
     const data = await res.json();
     const reviewsArr = data.reviews || data.data || [];
 
-    const targetReview = reviewsArr.find(r => (r.authorEmail || r.email) === targetEmail);
+    // Match the exact comment by id; fall back to author email for old comments without an id
+    const targetReview = reviewId
+      ? reviewsArr.find(r => r.reviewId === reviewId)
+      : reviewsArr.find(r => (r.authorEmail || r.email) === targetEmail);
     const repliesArr = targetReview ? (targetReview.replies || []) : [];
 
     if (repliesArr.length === 0) {
@@ -1665,7 +1672,8 @@ async function submitDrawerReply() {
       body: JSON.stringify({ 
         movie: currentSeries, 
         series: currentSeries, 
-        targetEmail: activeReplyTargetEmail, 
+        targetEmail: activeReplyTargetEmail,
+        reviewId: activeReplyReviewId,
         replyText: replyText,
         text: replyText
       })
@@ -1676,7 +1684,7 @@ async function submitDrawerReply() {
       document.getElementById("usernameModal").style.display = "block";
     } else if (res.ok) {
       inputEl.value = "";
-      renderRepliesInDrawer(activeReplyTargetEmail);
+      renderRepliesInDrawer(activeReplyTargetEmail, activeReplyReviewId);
       loadReviews(currentSeries);
     } else {
       showStatus(data.error || "Could not post reply.", true);
