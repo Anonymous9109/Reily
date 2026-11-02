@@ -152,6 +152,18 @@ styleTag.textContent = `
         fill: #e50914;
     }
 
+    .fav-count-badge {
+        background-color: rgba(255, 255, 255, 0.15);
+        padding: 2px 8px;
+        border-radius: 12px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        margin-left: 2px;
+    }
+    .favorites-action-btn.favorited .fav-count-badge {
+        background-color: rgba(229, 9, 20, 0.25);
+    }
+
     /* Comments Trigger Button */
     .comments-trigger-btn {
         background-color: #1a1a1a;
@@ -818,7 +830,7 @@ async function init() {
             const actionButtonsGrid = document.createElement("div");
             actionButtonsGrid.style.cssText = "display: flex; gap: 10px; width: 100%; max-width: 320px; margin-bottom: 24px;";
 
-            // Add to Favorites Button
+            // Add to Favorites Button (With Public Count Badge)
             const favoritesBtn = document.createElement("button");
             favoritesBtn.className = "favorites-action-btn";
             favoritesBtn.id = "favoritesActionBtn";
@@ -828,8 +840,11 @@ async function init() {
                     <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
                 </svg>
                 <span>Favorites</span>
+                <span class="fav-count-badge" id="favCountBadge">0</span>
             `;
-            checkFavoriteStatus(id, favoritesBtn);
+            
+            checkFavoriteStatusAndCount(id, favoritesBtn);
+
             favoritesBtn.onclick = () => {
                 toggleFavoriteItem(id, series.title, imagePath, favoritesBtn);
             };
@@ -929,8 +944,22 @@ async function init() {
 // FAVORITES CLIENT HELPERS
 // ==========================================================================
 
-async function checkFavoriteStatus(movieId, btnElement) {
+async function checkFavoriteStatusAndCount(movieId, btnElement) {
   const token = localStorage.getItem("session_token");
+
+  // 1. Fetch public count (no auth required)
+  try {
+    const countRes = await fetch(`${API_BASE}/api/favorite-count?movieId=${encodeURIComponent(movieId)}`);
+    if (countRes.ok) {
+      const countData = await countRes.json();
+      const badge = btnElement.querySelector("#favCountBadge");
+      if (badge) badge.textContent = countData.totalFavorites || 0;
+    }
+  } catch (err) {
+    console.error("Error fetching favorite count:", err);
+  }
+
+  // 2. Fetch personal state if token exists
   if (!token) return;
 
   try {
@@ -944,7 +973,6 @@ async function checkFavoriteStatus(movieId, btnElement) {
 
     if (favorites[movieId]) {
       btnElement.classList.add("favorited");
-      btnElement.querySelector("span").textContent = "Favorited";
       btnElement.querySelector("svg").setAttribute("fill", "currentColor");
     }
   } catch (err) {
@@ -971,14 +999,17 @@ async function toggleFavoriteItem(movieId, movieTitle, posterImage, btnElement) 
     const data = await res.json();
 
     if (res.ok) {
+      const badge = btnElement.querySelector("#favCountBadge");
+      if (badge && typeof data.totalFavorites !== 'undefined') {
+        badge.textContent = data.totalFavorites;
+      }
+
       if (data.isFavorited) {
         btnElement.classList.add("favorited");
-        btnElement.querySelector("span").textContent = "Favorited";
         btnElement.querySelector("svg").setAttribute("fill", "currentColor");
         showStatus("Added to your favorites!");
       } else {
         btnElement.classList.remove("favorited");
-        btnElement.querySelector("span").textContent = "Favorites";
         btnElement.querySelector("svg").setAttribute("fill", "none");
         showStatus("Removed from your favorites.");
       }
