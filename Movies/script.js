@@ -2,12 +2,16 @@
 // 1. DYNAMIC DATA ARCHITECTURE & DEPENDENCY LOADING (SANDBOXED)
 // ==========================================================================
 
+function getItemId() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get("movie") || params.get("series");
+}
+
 /**
  * Loads text files instead of script tags to bypass global variable conflicts.
  */
 async function loadDataFiles() {
-  const params = new URLSearchParams(window.location.search);
-  const id = params.get("movie") || params.get("series");
+  const id = getItemId();
 
   if (!id) {
     document.body.innerHTML = "<div style='color:white; text-align:center; margin-top:20%; font-family:sans-serif;'>No video ID provided.</div>";
@@ -18,7 +22,6 @@ async function loadDataFiles() {
     // 1. Fetch and parse search.js safely
     const searchResponse = await fetch("/JS/search.js");
     const searchText = await searchResponse.text();
-    // Convert the 'const movies =' declaration to a safe localized object evaluation
     const cleanSearchText = searchText.replace(/const\s+movies\s*=/, "return ");
     const parseSearch = new Function(cleanSearchText);
     window.searchArray = parseSearch();
@@ -26,7 +29,6 @@ async function loadDataFiles() {
     // 2. Fetch and parse movies.js safely
     const moviesResponse = await fetch("/Movies/movies.js");
     const moviesText = await moviesResponse.text();
-    // Convert the 'const movies =' declaration to a safe localized object evaluation
     const cleanMoviesText = moviesText.replace(/const\s+movies\s*=/, "return ");
     const parseMovies = new Function(cleanMoviesText);
     window.movieDetailsDict = parseMovies();
@@ -57,7 +59,7 @@ function renderPage(id) {
   window.currentMovie = movieData;
 
   // Pre-locate structural poster layout images from search array
-  const targetId = id || new URLSearchParams(window.location.search).get("movie") || new URLSearchParams(window.location.search).get("series");
+  const targetId = id || getItemId();
   const matchedSearchItem = window.searchArray ? window.searchArray.find(m => {
     if (!m.link) return false;
     const urlPart = m.link.includes('?') ? m.link.split('?')[1] : m.link;
@@ -71,6 +73,7 @@ function renderPage(id) {
     const filename = matchedSearchItem.image.split('/').pop();
     imagePath = `/images/${filename}`;
   }
+  window.currentImagePath = imagePath;
 
   // Safely prepare layout containers for landscape layout requirements
   setupLandscapeDOMArchitecture(imagePath);
@@ -124,8 +127,8 @@ function renderPage(id) {
     checkContinueWatchingStatus();
   }
 
-  // Inject the Comments & Reviews trigger button directly under the play button
-  initCommentsTriggerButton(targetId);
+  // Inject the Favorites + Reviews buttons directly under the play button
+  initActionButtons(targetId, movieData.title, imagePath);
 
   // Snap window back to top on initial page render
   window.scrollTo(0, 0);
@@ -186,7 +189,247 @@ function setupLandscapeDOMArchitecture(imagePath) {
 loadDataFiles();
 
 // ==========================================================================
-// 2. FULL-PAGE COMMENTS & REPLIES THREAD SYSTEM
+// 2. ACTION BUTTONS (FAVORITES + REVIEWS) & AUTH HELPERS
+// ==========================================================================
+
+const API_BASE = "https://rinolski.misty-fog-201e.workers.dev";
+const token = localStorage.getItem("session_token") || "";
+
+function requireLogin() {
+  if (!localStorage.getItem("session_token")) {
+    window.location.replace("https://rinolski.online/");
+    return false;
+  }
+  return true;
+}
+
+function initActionButtons(itemId, itemTitle, imagePath) {
+  const playBtn = document.querySelector(".play-btn");
+  if (!playBtn || document.querySelector(".action-buttons-row")) return;
+
+  const row = document.createElement("div");
+  row.className = "action-buttons-row";
+
+  // Favorites button (with public count badge)
+  const favoritesBtn = document.createElement("button");
+  favoritesBtn.className = "favorites-action-btn";
+  favoritesBtn.id = "favoritesActionBtn";
+  favoritesBtn.style.cssText = "flex: 1;";
+  favoritesBtn.innerHTML = `
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+      </svg>
+      <span>Favorites</span>
+      <span class="fav-count-badge" id="favCountBadge">0</span>
+  `;
+
+  checkFavoriteStatusAndCount(itemId, favoritesBtn);
+
+  favoritesBtn.onclick = () => {
+    if (!requireLogin()) return;
+    toggleFavoriteItem(itemId, itemTitle, imagePath, favoritesBtn);
+  };
+
+  // Reviews button
+  const commentsBtn = document.createElement("button");
+  commentsBtn.className = "comments-trigger-btn";
+  commentsBtn.style.cssText = "flex: 1;";
+  commentsBtn.innerHTML = `
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
+      </svg>
+      <span>Reviews</span>
+  `;
+  commentsBtn.onclick = () => {
+    if (!requireLogin()) return;
+    openCommentsModal(itemId);
+  };
+
+  row.appendChild(favoritesBtn);
+  row.appendChild(commentsBtn);
+  playBtn.parentNode.insertBefore(row, playBtn.nextSibling);
+}
+
+// ==========================================================================
+// 3. FAVORITES CLIENT HELPERS
+// ==========================================================================
+
+async function checkFavoriteStatusAndCount(movieId, btnElement) {
+  const authToken = localStorage.getItem("session_token");
+
+  try {
+    const countRes = await fetch(`${API_BASE}/api/favorite-count?movieId=${encodeURIComponent(movieId)}`);
+    if (countRes.ok) {
+      const countData = await countRes.json();
+      const badge = btnElement.querySelector("#favCountBadge");
+      if (badge) badge.textContent = countData.totalFavorites || 0;
+    }
+  } catch (err) {
+    console.error("Error fetching favorite count:", err);
+  }
+
+  if (!authToken) return;
+
+  try {
+    const res = await fetch(`${API_BASE}/api/get-favorites`, {
+      method: "GET",
+      headers: { "Authorization": `Bearer ${authToken}` }
+    });
+    if (!res.ok) return;
+    const data = await res.json();
+    const favorites = data.favorites || {};
+
+    if (favorites[movieId]) {
+      btnElement.classList.add("favorited");
+      btnElement.querySelector("svg").setAttribute("fill", "currentColor");
+    }
+  } catch (err) {
+    console.error("Error checking favorite status:", err);
+  }
+}
+
+async function toggleFavoriteItem(movieId, movieTitle, posterImage, btnElement) {
+  const authToken = localStorage.getItem("session_token");
+  if (!authToken) {
+    window.location.replace("https://rinolski.online/");
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API_BASE}/api/toggle-favorite`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${authToken}`
+      },
+      body: JSON.stringify({ movieId, movieTitle, posterImage })
+    });
+    const data = await res.json();
+
+    if (res.ok) {
+      const badge = btnElement.querySelector("#favCountBadge");
+      if (badge && typeof data.totalFavorites !== 'undefined') {
+        badge.textContent = data.totalFavorites;
+      }
+
+      if (data.isFavorited) {
+        btnElement.classList.add("favorited");
+        btnElement.querySelector("svg").setAttribute("fill", "currentColor");
+        showStatus("Added to your favorites!");
+      } else {
+        btnElement.classList.remove("favorited");
+        btnElement.querySelector("svg").setAttribute("fill", "none");
+        showStatus("Removed from your favorites.");
+      }
+    } else {
+      showStatus(data.error || "Failed to update favorites.", true);
+    }
+  } catch (err) {
+    showStatus("Connection error. Try again.", true);
+  }
+}
+
+// ==========================================================================
+// 4. USER PROFILE SLIDE-UP WINDOW SYSTEM
+// ==========================================================================
+
+async function openUserProfileModal(targetUserIdentifier) {
+  const authToken = localStorage.getItem("session_token");
+  if (!authToken) {
+    window.location.replace("https://rinolski.online/");
+    return;
+  }
+
+  let backdrop = document.getElementById("userProfileBackdrop");
+  let modal = document.getElementById("userProfileSlideModal");
+
+  if (!modal) {
+    backdrop = document.createElement("div");
+    backdrop.id = "userProfileBackdrop";
+    backdrop.onclick = closeUserProfileModal;
+    document.body.appendChild(backdrop);
+
+    modal = document.createElement("div");
+    modal.id = "userProfileSlideModal";
+    modal.innerHTML = `
+      <div class="user-profile-handle" onclick="closeUserProfileModal()"></div>
+      <div class="user-profile-avatar" id="modalUserAvatar">U</div>
+      <div class="user-profile-username" id="modalUsername">@Loading...</div>
+
+      <div class="user-profile-stats-grid">
+        <div class="user-profile-stat-box">
+          <div class="user-profile-stat-label">Saved Content</div>
+          <div class="user-profile-stat-value" id="modalSavedCount">-</div>
+        </div>
+        <div class="user-profile-stat-box">
+          <div class="user-profile-stat-label">Member Since</div>
+          <div class="user-profile-stat-value" id="modalMemberSince">-</div>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+  }
+
+  const usernameEl = document.getElementById("modalUsername");
+  const avatarEl = document.getElementById("modalUserAvatar");
+  const savedCountEl = document.getElementById("modalSavedCount");
+  const memberSinceEl = document.getElementById("modalMemberSince");
+
+  if (usernameEl) usernameEl.textContent = "@Loading...";
+  if (avatarEl) avatarEl.textContent = "U";
+  if (savedCountEl) savedCountEl.textContent = "-";
+  if (memberSinceEl) memberSinceEl.textContent = "-";
+
+  requestAnimationFrame(() => {
+    backdrop.classList.add("active");
+    modal.classList.add("active");
+  });
+
+  try {
+    let endpoint = `${API_BASE}/api/user-stats`;
+    if (targetUserIdentifier) {
+      endpoint += `?user=${encodeURIComponent(targetUserIdentifier)}`;
+    }
+
+    const res = await fetch(endpoint, {
+      headers: { "Authorization": `Bearer ${authToken}` }
+    });
+    if (res.ok) {
+      const data = await res.json();
+
+      if (usernameEl) usernameEl.textContent = `@${data.username || "User"}`;
+      if (savedCountEl) savedCountEl.textContent = `${data.savedCount || 0} items`;
+
+      if (memberSinceEl && data.signupDate) {
+        const dateObj = new Date(data.signupDate);
+        memberSinceEl.textContent = isNaN(dateObj) ? data.signupDate.split('T')[0] : dateObj.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+      }
+
+      if (avatarEl) {
+        if (data.pfp && data.pfp.length > 5) {
+          avatarEl.innerHTML = `<img src="${data.pfp}" alt="Avatar" />`;
+        } else {
+          avatarEl.textContent = (data.username ? data.username.charAt(0) : "U").toUpperCase();
+        }
+      }
+    } else {
+      if (usernameEl) usernameEl.textContent = "@User not found";
+    }
+  } catch (err) {
+    console.error("Failed to load user profile metrics:", err);
+    if (usernameEl) usernameEl.textContent = "@Error loading profile";
+  }
+}
+
+function closeUserProfileModal() {
+  const backdrop = document.getElementById("userProfileBackdrop");
+  const modal = document.getElementById("userProfileSlideModal");
+  if (backdrop) backdrop.classList.remove("active");
+  if (modal) modal.classList.remove("active");
+}
+
+// ==========================================================================
+// 5. FULL-PAGE COMMENTS & REPLIES THREAD SYSTEM
 // ==========================================================================
 
 function openCommentsModal(seriesId) {
@@ -202,7 +445,7 @@ function openCommentsModal(seriesId) {
             </div>
             <div id="commentsModalBodyContainer" style="flex: 1; width: 100%; display: flex; flex-direction: column; overflow: hidden;"></div>
             <div class="comments-bottom-bar">
-                <input type="text" id="modalBottomCommentInput" placeholder="Write a comment..." />
+                <input type="text" id="modalBottomCommentInput" placeholder="Write a comment... (use @username to tag)" />
                 <button onclick="submitBottomComment()">Send</button>
             </div>
         `;
@@ -210,7 +453,7 @@ function openCommentsModal(seriesId) {
     }
 
     initReviewsSystem(seriesId);
-    
+
     requestAnimationFrame(() => {
         overlay.classList.add("active");
         document.body.style.overflow = "hidden";
@@ -226,9 +469,13 @@ function closeCommentsModal() {
 }
 
 let activeReplyTargetEmail = null;
+let activeReplyReviewId = null;
 
-function openRepliesDrawer(targetEmail, authorUsername) {
+function openRepliesDrawer(targetEmail, authorUsername, reviewId) {
+    if (!requireLogin()) return;
+
     activeReplyTargetEmail = targetEmail;
+    activeReplyReviewId = reviewId || null;
     let drawer = document.getElementById("repliesDrawerModal");
     if (!drawer) {
         drawer = document.createElement("div");
@@ -241,7 +488,7 @@ function openRepliesDrawer(targetEmail, authorUsername) {
             </div>
             <div id="repliesDrawerBodyContainer" class="replies-list-container"></div>
             <div class="comments-bottom-bar">
-                <input type="text" id="drawerReplyInput" placeholder="Write a reply..." />
+                <input type="text" id="drawerReplyInput" placeholder="Write a reply... (use @username to tag)" />
                 <button onclick="submitDrawerReply()">Send</button>
             </div>
         `;
@@ -251,7 +498,7 @@ function openRepliesDrawer(targetEmail, authorUsername) {
     const titleEl = document.getElementById("repliesDrawerTitle");
     if (titleEl) titleEl.textContent = `Replies to @${authorUsername || 'User'}`;
 
-    renderRepliesInDrawer(targetEmail);
+    renderRepliesInDrawer(targetEmail, activeReplyReviewId);
 
     requestAnimationFrame(() => {
         drawer.classList.add("active");
@@ -264,24 +511,7 @@ function closeRepliesDrawer() {
         drawer.classList.remove("active");
     }
     activeReplyTargetEmail = null;
-}
-
-function initCommentsTriggerButton(seriesId) {
-  const playBtn = document.querySelector(".play-btn");
-  if (playBtn && !document.querySelector(".comments-trigger-btn")) {
-    const commentsBtn = document.createElement("button");
-    commentsBtn.className = "comments-trigger-btn";
-    commentsBtn.innerHTML = `
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
-        </svg>
-        <span>Comments & Reviews</span>
-    `;
-    commentsBtn.onclick = () => {
-        openCommentsModal(seriesId);
-    };
-    playBtn.parentNode.insertBefore(commentsBtn, playBtn.nextSibling);
-  }
+    activeReplyReviewId = null;
 }
 
 function initReviewsSystem(seriesId) {
@@ -292,12 +522,10 @@ function initReviewsSystem(seriesId) {
     container = document.createElement("div");
     container.className = "reviews-container";
     container.innerHTML = `
-      <!-- AD SLOT PLACED EXACTLY BELOW HEADER AND CENTERED -->
       <div id="adSlotZone" style="margin-bottom: 16px; display: flex; justify-content: center; align-items: center; width: 100%;"></div>
 
       <div id="statusBanner" class="status-banner"></div>
 
-      <!-- Account Setup Container -->
       <div class="modal-box" id="usernameModal" style="display: none;">
         <p>Please enter a display name to participate in discussions:</p>
         <div class="modal-input-group">
@@ -306,7 +534,6 @@ function initReviewsSystem(seriesId) {
         </div>
       </div>
 
-      <!-- Main Feed Area -->
       <div id="reviewsList">
         <div class="empty-state">Loading reviews...</div>
       </div>
@@ -340,12 +567,25 @@ function injectAdScript() {
   adZone.appendChild(script);
 }
 
-const API_BASE = "https://rinolski.misty-fog-201e.workers.dev";
-const token = localStorage.getItem("session_token") || "";
-
 function showStatus(message, isError = false) {
-  const banner = document.getElementById("statusBanner");
-  if (!banner) return;
+  let banner = document.getElementById("statusBanner");
+
+  // Comments window not opened yet (e.g. favorites toggled): use a floating toast
+  if (!banner) {
+    banner = document.getElementById("globalStatusToast");
+    if (!banner) {
+      banner = document.createElement("div");
+      banner.id = "globalStatusToast";
+      banner.style.cssText = "position:fixed; bottom:24px; left:50%; transform:translateX(-50%); z-index:300000; background:#0a0a0a; color:#fff; border:1px solid #888; border-radius:6px; padding:10px 14px; font-size:0.875rem; font-weight:500; display:none; font-family:sans-serif;";
+      document.body.appendChild(banner);
+    }
+    banner.innerText = message;
+    banner.style.display = "block";
+    clearTimeout(banner._hideTimer);
+    banner._hideTimer = setTimeout(() => { banner.style.display = "none"; }, 4000);
+    return;
+  }
+
   banner.className = `status-banner ${isError ? 'error' : ''}`;
   banner.innerText = message;
   banner.style.display = "block";
@@ -353,7 +593,7 @@ function showStatus(message, isError = false) {
 }
 
 async function loadReviews(seriesId) {
-  const currentSeries = seriesId || new URLSearchParams(window.location.search).get("movie") || new URLSearchParams(window.location.search).get("series") || "rush-hour";
+  const currentSeries = seriesId || getItemId();
   const listEl = document.getElementById("reviewsList");
   if (!listEl) return;
 
@@ -372,24 +612,27 @@ async function loadReviews(seriesId) {
 
     const sortedReviews = [...reviewsArr].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
-    listEl.innerHTML = sortedReviews.map(r => {
+    listEl.innerHTML = sortedReviews.map((r, idx) => {
       const authorEmail = r.authorEmail || r.email || "user";
-      const safeEmailId = authorEmail.replace(/[^a-zA-Z0-9]/g, '_');
+      const uniqueId = (r.reviewId || authorEmail).replace(/[^a-zA-Z0-9]/g, '_') + '_' + idx;
       const reviewContent = r.reviewText || r.text || r.content || "";
       const username = r.authorUsername || r.username || "Anonymous";
       const repliesCount = (r.replies || []).length;
+      const reviewIdSafe = r.reviewId || "";
+
+      const formattedContent = escapeHtml(reviewContent).replace(/@([a-zA-Z0-9_]+)/g, `<span style="color: #4da6ff; font-weight: 600; cursor: pointer;" onclick="openUserProfileModal('$1')">@$1</span>`);
 
       return `
-        <div class="review-card" id="review-card-${safeEmailId}">
+        <div class="review-card" id="review-card-${uniqueId}">
           <div class="review-header">
-            <span class="review-author">@${escapeHtml(username)}</span>
+            <span class="review-author" onclick="openUserProfileModal('${authorEmail}')">@${escapeHtml(username)}</span>
             <span class="review-date">${r.timestamp ? new Date(r.timestamp).toLocaleDateString() : ''}</span>
           </div>
 
-          <div class="review-body">${escapeHtml(reviewContent)}</div>
+          <div class="review-body">${formattedContent}</div>
 
           <div class="review-actions">
-            <button class="reply-thread-btn" onclick="openRepliesDrawer('${authorEmail}', '${escapeHtml(username)}')">
+            <button class="reply-thread-btn" onclick="openRepliesDrawer('${authorEmail}', '${escapeHtml(username)}', '${reviewIdSafe}')">
               💬 Replies (${repliesCount})
             </button>
           </div>
@@ -398,7 +641,7 @@ async function loadReviews(seriesId) {
     }).join('');
 
     if (activeReplyTargetEmail) {
-        renderRepliesInDrawer(activeReplyTargetEmail);
+        renderRepliesInDrawer(activeReplyTargetEmail, activeReplyReviewId);
     }
 
   } catch(err) {
@@ -406,10 +649,10 @@ async function loadReviews(seriesId) {
   }
 }
 
-async function renderRepliesInDrawer(targetEmail) {
+async function renderRepliesInDrawer(targetEmail, reviewId) {
   const container = document.getElementById("repliesDrawerBodyContainer");
   if (!container) return;
-  const currentSeries = new URLSearchParams(window.location.search).get("movie") || new URLSearchParams(window.location.search).get("series") || "rush-hour";
+  const currentSeries = getItemId();
 
   try {
     const res = await fetch(`${API_BASE}/api/get-reviews?movie=${encodeURIComponent(currentSeries)}&series=${encodeURIComponent(currentSeries)}`, {
@@ -418,7 +661,10 @@ async function renderRepliesInDrawer(targetEmail) {
     const data = await res.json();
     const reviewsArr = data.reviews || data.data || [];
 
-    const targetReview = reviewsArr.find(r => (r.authorEmail || r.email) === targetEmail);
+    // Match the exact comment by id; fall back to author email for old comments without an id
+    const targetReview = reviewId
+      ? reviewsArr.find(r => r.reviewId === reviewId)
+      : reviewsArr.find(r => (r.authorEmail || r.email) === targetEmail);
     const repliesArr = targetReview ? (targetReview.replies || []) : [];
 
     if (repliesArr.length === 0) {
@@ -428,16 +674,19 @@ async function renderRepliesInDrawer(targetEmail) {
 
     container.innerHTML = repliesArr.map(rep => {
       const repUsername = rep.replierUsername || rep.username || 'User';
+      const repEmail = rep.replierEmail || rep.email || '';
       const repText = rep.text || rep.replyText || '';
       const repTime = rep.timestamp ? new Date(rep.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '';
+
+      const formattedReplyText = escapeHtml(repText).replace(/@([a-zA-Z0-9_]+)/g, `<span style="color: #4da6ff; font-weight: 600; cursor: pointer;" onclick="openUserProfileModal('$1')">@$1</span>`);
 
       return `
         <div class="standalone-reply-card">
           <div class="standalone-reply-header">
-            <strong style="color: #fff; font-size: 0.9rem;">@${escapeHtml(repUsername)}</strong>
+            <strong class="review-author" onclick="openUserProfileModal('${repEmail}')" style="color: #fff; font-size: 0.9rem; cursor: pointer;">@${escapeHtml(repUsername)}</strong>
             <span style="font-size: 0.75rem; color: #888;">${repTime}</span>
           </div>
-          <div class="standalone-reply-body">${escapeHtml(repText)}</div>
+          <div class="standalone-reply-body">${formattedReplyText}</div>
         </div>
       `;
     }).join('');
@@ -448,6 +697,8 @@ async function renderRepliesInDrawer(targetEmail) {
 }
 
 async function saveUsername() {
+  if (!requireLogin()) return;
+
   const username = document.getElementById("usernameInput").value.trim();
   if (!username) return showStatus("Username cannot be empty.", true);
 
@@ -471,7 +722,9 @@ async function saveUsername() {
 }
 
 async function submitBottomComment() {
-  const currentSeries = new URLSearchParams(window.location.search).get("movie") || new URLSearchParams(window.location.search).get("series") || "rush-hour";
+  if (!requireLogin()) return;
+
+  const currentSeries = getItemId();
   const inputEl = document.getElementById("modalBottomCommentInput");
   const text = inputEl ? inputEl.value.trim() : "";
 
@@ -480,13 +733,13 @@ async function submitBottomComment() {
   try {
     const res = await fetch(`${API_BASE}/api/add-review`, {
       method: "POST",
-      headers: { 
-        "Content-Type": "application/json", 
-        "Authorization": `Bearer ${token}` 
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
       },
-      body: JSON.stringify({ 
-        movie: currentSeries, 
-        series: currentSeries, 
+      body: JSON.stringify({
+        movie: currentSeries,
+        series: currentSeries,
         reviewText: text,
         text: text
       })
@@ -507,8 +760,10 @@ async function submitBottomComment() {
 }
 
 async function submitDrawerReply() {
+  if (!requireLogin()) return;
+
   if (!activeReplyTargetEmail) return;
-  const currentSeries = new URLSearchParams(window.location.search).get("movie") || new URLSearchParams(window.location.search).get("series") || "rush-hour";
+  const currentSeries = getItemId();
   const inputEl = document.getElementById("drawerReplyInput");
   const replyText = inputEl ? inputEl.value.trim() : "";
 
@@ -517,14 +772,15 @@ async function submitDrawerReply() {
   try {
     const res = await fetch(`${API_BASE}/api/add-reply`, {
       method: "POST",
-      headers: { 
-        "Content-Type": "application/json", 
-        "Authorization": `Bearer ${token}` 
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
       },
-      body: JSON.stringify({ 
-        movie: currentSeries, 
-        series: currentSeries, 
-        targetEmail: activeReplyTargetEmail, 
+      body: JSON.stringify({
+        movie: currentSeries,
+        series: currentSeries,
+        targetEmail: activeReplyTargetEmail,
+        reviewId: activeReplyReviewId,
         replyText: replyText,
         text: replyText
       })
@@ -535,7 +791,7 @@ async function submitDrawerReply() {
       document.getElementById("usernameModal").style.display = "block";
     } else if (res.ok) {
       inputEl.value = "";
-      renderRepliesInDrawer(activeReplyTargetEmail);
+      renderRepliesInDrawer(activeReplyTargetEmail, activeReplyReviewId);
       loadReviews(currentSeries);
     } else {
       showStatus(data.error || "Could not post reply.", true);
@@ -550,7 +806,7 @@ function escapeHtml(str) {
 }
 
 // ==========================================================================
-// 3. BACKGROUND FALLBACK (DYNAMIC EXTENSION EXTRACTION VIA MATCHED ID)
+// 6. BACKGROUND FALLBACK (DYNAMIC EXTENSION EXTRACTION VIA MATCHED ID)
 // ==========================================================================
 
 function applyFallbackBackground(id) {
@@ -560,7 +816,7 @@ function applyFallbackBackground(id) {
   }
 
   const bgContainer = document.body;
-  const targetId = id || new URLSearchParams(window.location.search).get("movie") || new URLSearchParams(window.location.search).get("series");
+  const targetId = id || getItemId();
 
   const matchedSearchItem = window.searchArray ? window.searchArray.find(m => {
     if (!m.link) return false;
@@ -586,12 +842,11 @@ function applyFallbackBackground(id) {
 }
 
 // ==========================================================================
-// 4. FIRESTORE INTEGRATION & USER PROGRESS
+// 7. FIRESTORE INTEGRATION & USER PROGRESS
 // ==========================================================================
 
 async function checkContinueWatchingStatus() {
-  const params = new URLSearchParams(window.location.search);
-  const id = params.get("movie") || params.get("series");
+  const id = getItemId();
 
   try {
     const { getFirestore, doc, getDoc } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
@@ -633,13 +888,12 @@ async function checkContinueWatchingStatus() {
 }
 
 // ==========================================================================
-// 5. USER INTERACTIVE NAVIGATION CONTROLS
+// 8. USER INTERACTIVE NAVIGATION CONTROLS
 // ==========================================================================
 
 function play() {
-  const params = new URLSearchParams(window.location.search);
-  const id = params.get("movie") || params.get("series");
-  const movie = window.currentMovie; 
+  const id = getItemId();
+  const movie = window.currentMovie;
 
   if (movie && id) {
     window.location.href = `videoplayer?ep=${movie.play || ''}&movie=${id}`;
@@ -651,7 +905,7 @@ function goBack() {
 }
 
 // ==========================================================================
-// 6. GLOBAL STYLE DECORATORS & FIXED PORTRAIT POSITIONING
+// 9. GLOBAL STYLE DECORATORS & FIXED PORTRAIT POSITIONING
 // ==========================================================================
 
 (function () {
@@ -720,32 +974,82 @@ function goBack() {
     }
 
     /* ==========================================
-     * COMMENTS TRIGGER & MODALS STYLING
+     * ACTION BUTTONS ROW (FAVORITES + REVIEWS)
      * ========================================== */
+    .action-buttons-row {
+      display: flex;
+      gap: 10px;
+      width: 100%;
+      max-width: 320px;
+      margin-bottom: 24px;
+      position: relative;
+      z-index: 4;
+    }
+
+    .favorites-action-btn {
+      background-color: #1a1a1a;
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 14px 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+    }
+    .favorites-action-btn:hover {
+      background-color: #262626;
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+    .favorites-action-btn.favorited {
+      border-color: #e50914;
+      color: #e50914;
+    }
+    .favorites-action-btn.favorited svg {
+      fill: #e50914;
+    }
+
+    .fav-count-badge {
+      background-color: rgba(255, 255, 255, 0.15);
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-left: 2px;
+    }
+    .favorites-action-btn.favorited .fav-count-badge {
+      background-color: rgba(229, 9, 20, 0.25);
+    }
+
     .comments-trigger-btn {
-        background-color: #1a1a1a;
-        color: #ffffff;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        padding: 14px 24px;
-        border-radius: 10px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-        font-weight: 600;
-        font-size: 15px;
-        width: 100%;
-        max-width: 320px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        transition: background-color 0.2s, border-color 0.2s;
-        margin-bottom: 24px;
+      background-color: #1a1a1a;
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 14px 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      transition: background-color 0.2s, border-color 0.2s;
     }
     .comments-trigger-btn:hover {
       background-color: #262626;
       border-color: rgba(255, 255, 255, 0.4);
     }
 
+    /* ==========================================
+     * COMMENTS & REPLIES MODALS STYLING
+     * ========================================== */
     #commentsOverlayModal {
       position: fixed;
       top: 0;
@@ -874,8 +1178,8 @@ function goBack() {
 
     .reviews-container {
       width: 100%;
-      max-width: 100%;
-      margin: 5px auto;
+      max-width: 800px;
+      margin: 0 auto;
       background-color: var(--rev-bg) !important;
       border: none;
       border-radius: 12px;
@@ -970,6 +1274,10 @@ function goBack() {
       color: #ffffff !important;
       font-weight: 700;
       font-size: 0.9rem;
+      cursor: pointer;
+    }
+    .reviews-container .review-author:hover {
+      text-decoration: underline;
     }
 
     .reviews-container .review-date {
@@ -988,7 +1296,8 @@ function goBack() {
 
     .reviews-container .review-actions {
       display: flex;
-      justify-content: flex-end;
+      justify-content: space-between;
+      align-items: center;
       width: 100%;
       margin-top: 2px;
     }
@@ -1054,7 +1363,8 @@ function goBack() {
       word-break: break-word;
     }
 
-    .reviews-container .empty-state {
+    .reviews-container .empty-state,
+    .replies-list-container .empty-state {
       text-align: center;
       color: var(--rev-text-muted);
       padding: 20px 0;
@@ -1062,6 +1372,122 @@ function goBack() {
       background-color: #0a0a0a;
       border-radius: 8px;
       border: 1px solid var(--rev-border);
+    }
+
+    /* ==========================================
+     * SLIDE-UP USER PROFILE WINDOW
+     * ========================================== */
+    #userProfileSlideModal {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translate(-50%, 100%);
+      width: 100vw;
+      max-width: 500px;
+      background-color: #111111;
+      border-top: 1px solid #262626;
+      border-top-left-radius: 16px;
+      border-top-right-radius: 16px;
+      z-index: 200000;
+      padding: 24px 20px 32px 20px;
+      box-sizing: border-box;
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 -10px 30px rgba(0,0,0,0.8);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: #ffffff;
+    }
+
+    #userProfileSlideModal.active {
+      transform: translate(-50%, 0);
+    }
+
+    .user-profile-handle {
+      width: 40px;
+      height: 4px;
+      background-color: #404040;
+      border-radius: 2px;
+      margin-bottom: 20px;
+      cursor: pointer;
+    }
+
+    .user-profile-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background-color: #262626;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      font-weight: bold;
+      color: #ffffff;
+      margin-bottom: 12px;
+      border: 2px solid #404040;
+      overflow: hidden;
+    }
+
+    .user-profile-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .user-profile-username {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 16px;
+    }
+
+    .user-profile-stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      width: 100%;
+      margin-top: 8px;
+    }
+
+    .user-profile-stat-box {
+      background-color: #1a1a1a;
+      border: 1px solid #262626;
+      border-radius: 10px;
+      padding: 14px;
+      text-align: center;
+    }
+
+    .user-profile-stat-label {
+      font-size: 0.75rem;
+      color: #888888;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .user-profile-stat-value {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #ffffff;
+    }
+
+    #userProfileBackdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 199999;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    #userProfileBackdrop.active {
+      opacity: 1;
+      visibility: visible;
     }
 
     /* ==========================================
@@ -1161,7 +1587,7 @@ function goBack() {
         z-index: 4;
       }
 
-      .comments-trigger-btn {
+      .action-buttons-row {
         grid-column: 1 / span 2;
         grid-row: 4;
         align-self: flex-start !important;
@@ -1229,11 +1655,8 @@ function goBack() {
         align-items: center !important;
       }
 
-      .comments-trigger-btn {
+      .action-buttons-row {
         margin: 0 auto 24px auto !important;
-        display: inline-flex !important;
-        justify-content: center !important;
-        align-items: center !important;
       }
     }
   `;
