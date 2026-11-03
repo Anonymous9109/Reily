@@ -688,6 +688,12 @@ const movies = [
     genres: ["Drama"],
     image: "images/LUCIFER1.jpg",
     link: "Series/series?series=Lucifer"
+  },
+  {
+    title: "Young Sheldon",
+    genres: ["Sitcom"],
+    image: "images/YoungSheldon.jpg",
+    link: "Series/series?series=Young-Sheldon"
   }
 ];
 
