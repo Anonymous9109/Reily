@@ -280,5 +280,13 @@ const seriesData = {
     seasons: [
       { number: 1, prefix: "Lucifer-S1E", totalEpisodes: 13 }
     ]
+  },
+  "Young-Sheldon": {
+    title: "Young Sheldon",
+    desc: "Sheldon Cooper, a bona fide genius, has been promoted four grades. Meanwhile, he struggles to fit in with his unintellectual family in Texas.",
+    video: "",
+    seasons: [
+      { number: 1, prefix: "Young-Sheldon-S1E", totalEpisodes: 22 }
+    ]
   }
 };
