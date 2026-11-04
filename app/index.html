@@ -955,19 +955,50 @@
             margin-bottom: 0;
         }
 
-        .modal-box {
+        /* SLIDE-UP MODAL WINDOW FOR USERNAME EDITING */
+        #username-modal-backdrop {
             position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 90%;
-            max-width: 400px;
-            background-color: #1f1f1f;
-            border: 1px solid #333333;
-            border-radius: 8px;
-            padding: 24px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.9);
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100dvh;
+            background: rgba(0, 0, 0, 0.75);
+            z-index: 8490;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-box.slide-up-panel {
+            position: fixed;
+            top: auto;
+            left: 0;
+            bottom: -100%;
+            transform: none;
+            width: 100%;
+            max-width: 100%;
+            background-color: #141414;
+            border: none;
+            border-top: 1px solid #262626;
+            border-top-left-radius: 16px;
+            border-top-right-radius: 16px;
+            padding: 24px 20px 40px 20px;
+            box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.9);
             z-index: 8500;
+            transition: bottom 0.35s cubic-bezier(0.1, 0.8, 0.3, 1);
+            display: block;
+        }
+
+        .modal-box.slide-up-panel.open {
+            bottom: 0;
+        }
+
+        .sheet-handle {
+            width: 36px;
+            height: 4px;
+            background: #333333;
+            border-radius: 2px;
+            margin: 0 auto 16px auto;
         }
 
         .modal-box p {
@@ -984,10 +1015,10 @@
 
         .modal-input-group input[type="text"] {
             flex: 1;
-            background-color: #2b2b2b;
-            border: 1px solid #404040;
-            border-radius: 4px;
-            padding: 10px 14px;
+            background-color: #0a0a0a;
+            border: 1px solid #333333;
+            border-radius: 6px;
+            padding: 12px 14px;
             color: #ffffff;
             font-size: 0.95rem;
             outline: none;
@@ -1002,8 +1033,8 @@
             background-color: #e50914;
             color: #ffffff;
             border: none;
-            border-radius: 4px;
-            padding: 10px 16px;
+            border-radius: 6px;
+            padding: 12px 18px;
             font-size: 0.95rem;
             font-weight: 600;
             cursor: pointer;
@@ -1062,12 +1093,15 @@
 
 <div id="toast-container"></div>
 
-<!-- Account Setup Container -->
-<div class="modal-box" id="usernameModal" style="display: none;">
-    <p>Please enter a username to be able to access Rinolski</p>
+<!-- Slide-Up Account Setup & Edit Username Panel -->
+<div id="username-modal-backdrop" onclick="toggleUsernameModal(false)"></div>
+<div class="modal-box slide-up-panel" id="usernameModal">
+    <div class="sheet-handle"></div>
+    <p style="font-weight: bold; font-size: 18px; color: #ffffff; margin-bottom: 8px;">Edit Username</p>
+    <p style="color: #a1a1aa; font-size: 14px;">Enter a unique username for your Rinolski account.</p>
     <div class="modal-input-group">
         <input type="text" id="usernameInput" placeholder="Enter username" />
-        <button class="btn-secondary" id="saveBtn" onclick="saveUsername()">Set Name</button>
+        <button class="btn-secondary" id="saveBtn" onclick="saveUsername()">Save Name</button>
     </div>
     <div id="statusBanner" class="status-banner"></div>
 </div>
@@ -1252,7 +1286,6 @@
         <div class="profile-section-heading">Choose Profile Avatar</div>
         <div class="pfp-selector-grid" id="pfpSelectorOptions"></div>
 
-        <!-- REPLACED WATCH HISTORY WITH FAVORITES HERE -->
         <div class="profile-section-heading">Favorites</div>
         <div id="favorites-container" class="history-list">
             <div class="loading-ring"></div>
@@ -1299,7 +1332,7 @@
         const usernameModal = document.getElementById('usernameModal');
         
         const isAuthVisible = authGate && authGate.style.display === 'flex';
-        const isModalVisible = usernameModal && usernameModal.style.display === 'block';
+        const isModalVisible = usernameModal && usernameModal.classList.contains('open');
 
         if (footer) {
             if (isAuthVisible || isModalVisible) {
@@ -1630,17 +1663,13 @@
             return;
         }
 
-        const modal = document.getElementById("usernameModal");
-        const modalInput = document.getElementById("usernameInput");
         const profileContent = document.querySelector("#sliding-profile .profile-content");
         const hasUsername = currentUser && currentUser.username && currentUser.username.trim() !== "";
 
         if (!hasUsername) {
-            if (modal) modal.style.display = "block";
+            toggleUsernameModal(true);
             if (profileContent) profileContent.classList.add("locked-content");
-            if (modalInput) modalInput.focus();
         } else {
-            if (modal) modal.style.display = "none";
             if (profileContent) profileContent.classList.remove("locked-content");
         }
         updateFooterVisibility();
@@ -1648,20 +1677,32 @@
 
     function toggleUsernameModal(forceState = null) {
         if (isAppOffline()) {
-            const modal = document.getElementById("usernameModal");
-            if (modal) modal.style.display = "none";
-            updateFooterVisibility();
-            return;
+            forceState = false;
         }
 
         const modal = document.getElementById("usernameModal");
-        if (!modal) return;
+        const backdrop = document.getElementById("username-modal-backdrop");
+        if (!modal || !backdrop) return;
         showStatus("");
-        if (forceState !== null) {
-            modal.style.display = forceState ? "block" : "none";
+
+        const shouldShow = forceState !== null 
+            ? forceState 
+            : !modal.classList.contains("open");
+
+        if (shouldShow) {
+            backdrop.style.display = "block";
+            setTimeout(() => {
+                backdrop.style.opacity = "1";
+                modal.classList.add("open");
+            }, 10);
+            const modalInput = document.getElementById("usernameInput");
+            if (modalInput) setTimeout(() => modalInput.focus(), 300);
         } else {
-            const isHidden = modal.style.display === "none" || modal.style.display === "";
-            modal.style.display = isHidden ? "block" : "none";
+            modal.classList.remove("open");
+            backdrop.style.opacity = "0";
+            setTimeout(() => {
+                backdrop.style.display = "none";
+            }, 300);
         }
         updateFooterVisibility();
     }
@@ -1717,14 +1758,14 @@
                 if (usernameDisplay) usernameDisplay.innerText = username;
                 if (initialDisplay) initialDisplay.innerText = username.charAt(0).toUpperCase();
 
-                setTimeout(() => { toggleUsernameModal(false); checkUsernameModalGuard(); }, 1000);
+                setTimeout(() => { toggleUsernameModal(false); checkUsernameModalGuard(); }, 800);
             } else {
                 showStatus(data.error || data.message || "Unauthorized access or invalid token.");
             }
         } catch (err) {
             showStatus("Connection error with server.");
         } finally {
-            if (btn) { btn.disabled = false; btn.textContent = "Set Name"; }
+            if (btn) { btn.disabled = false; btn.textContent = "Save Name"; }
         }
     }
 
