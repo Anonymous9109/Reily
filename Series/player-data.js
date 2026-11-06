@@ -1324,5 +1324,89 @@ window.videoData = {
   "komi-cant-communicate-S1E9": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/9Ep.mp4",
   "komi-cant-communicate-S1E10": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/10Ep.mp4",
   "komi-cant-communicate-S1E11": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/11Ep.mp4",
-  "komi-cant-communicate-S1E12": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/12Ep.mp4"
+  "komi-cant-communicate-S1E12": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/12Ep.mp4",
+  "komi-cant-communicate-S1E1-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/komi-cant-communicate/komi-cant-communicate-S1E1-English.txt"
+    }
+  ],
+  "komi-cant-communicate-S1E2-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/komi-cant-communicate/komi-cant-communicate-S1E2-English.txt"
+    }
+  ],
+  "komi-cant-communicate-S1E3-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/komi-cant-communicate/komi-cant-communicate-S1E3-English.txt"
+    }
+  ],
+  "komi-cant-communicate-S1E4-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/komi-cant-communicate/komi-cant-communicate-S1E4-English.txt"
+    }
+  ],
+  "komi-cant-communicate-S1E5-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/komi-cant-communicate/komi-cant-communicate-S1E5-English.txt"
+    }
+  ],
+  "komi-cant-communicate-S1E6-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/komi-cant-communicate/komi-cant-communicate-S1E6-English.txt"
+    }
+  ],
+  "komi-cant-communicate-S1E7-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/komi-cant-communicate/komi-cant-communicate-S1E7-English.txt"
+    }
+  ],
+  "komi-cant-communicate-S1E8-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/komi-cant-communicate/komi-cant-communicate-S1E8-English.txt"
+    }
+  ],
+  "komi-cant-communicate-S1E9-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/komi-cant-communicate/komi-cant-communicate-S1E9-English.txt"
+    }
+  ],
+  "komi-cant-communicate-S1E10-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/komi-cant-communicate/komi-cant-communicate-S1E10-English.txt"
+    }
+  ],
+  "komi-cant-communicate-S1E11-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/komi-cant-communicate/komi-cant-communicate-S1E11-English.txt"
+    }
+  ],
+  "komi-cant-communicate-S1E12-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/komi-cant-communicate/komi-cant-communicate-S1E12-English.txt"
+    }
+  ]
 };
