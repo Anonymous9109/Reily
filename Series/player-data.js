@@ -1330,6 +1330,11 @@ window.videoData = {
       label: "English",
       lang: "en",
       src: "../subtitles/komi-cant-communicate/komi-cant-communicate-S1E1-English.txt"
+    },
+        {
+      label: "Arabic",
+      lang: "ar",
+      src: "../subtitles/komi-cant-communicate/komi-cant-communicate-S1E1-Arabic.txt"
     }
   ],
   "komi-cant-communicate-S1E2-subs": [
@@ -1337,6 +1342,11 @@ window.videoData = {
       label: "English",
       lang: "en",
       src: "../subtitles/komi-cant-communicate/komi-cant-communicate-S1E2-English.txt"
+    },
+        {
+      label: "Arabic",
+      lang: "ar",
+      src: "../subtitles/komi-cant-communicate/komi-cant-communicate-S1E2-Arabic.txt"
     }
   ],
   "komi-cant-communicate-S1E3-subs": [
@@ -1344,6 +1354,11 @@ window.videoData = {
       label: "English",
       lang: "en",
       src: "../subtitles/komi-cant-communicate/komi-cant-communicate-S1E3-English.txt"
+    },
+        {
+      label: "Arabic",
+      lang: "ar",
+      src: "../subtitles/komi-cant-communicate/komi-cant-communicate-S1E3-Arabic.txt"
     }
   ],
   "komi-cant-communicate-S1E4-subs": [
@@ -1351,6 +1366,11 @@ window.videoData = {
       label: "English",
       lang: "en",
       src: "../subtitles/komi-cant-communicate/komi-cant-communicate-S1E4-English.txt"
+    },
+        {
+      label: "Arabic",
+      lang: "ar",
+      src: "../subtitles/komi-cant-communicate/komi-cant-communicate-S1E4-Arabic.txt"
     }
   ],
   "komi-cant-communicate-S1E5-subs": [
@@ -1358,6 +1378,11 @@ window.videoData = {
       label: "English",
       lang: "en",
       src: "../subtitles/komi-cant-communicate/komi-cant-communicate-S1E5-English.txt"
+    },
+        {
+      label: "Arabic",
+      lang: "ar",
+      src: "../subtitles/komi-cant-communicate/komi-cant-communicate-S1E5-Arabic.txt"
     }
   ],
   "komi-cant-communicate-S1E6-subs": [
@@ -1365,6 +1390,11 @@ window.videoData = {
       label: "English",
       lang: "en",
       src: "../subtitles/komi-cant-communicate/komi-cant-communicate-S1E6-English.txt"
+    },
+        {
+      label: "Arabic",
+      lang: "ar",
+      src: "../subtitles/komi-cant-communicate/komi-cant-communicate-S1E6-Arabic.txt"
     }
   ],
   "komi-cant-communicate-S1E7-subs": [
@@ -1372,6 +1402,11 @@ window.videoData = {
       label: "English",
       lang: "en",
       src: "../subtitles/komi-cant-communicate/komi-cant-communicate-S1E7-English.txt"
+    },
+        {
+      label: "Arabic",
+      lang: "ar",
+      src: "../subtitles/komi-cant-communicate/komi-cant-communicate-S1E7-Arabic.txt"
     }
   ],
   "komi-cant-communicate-S1E8-subs": [
@@ -1379,6 +1414,11 @@ window.videoData = {
       label: "English",
       lang: "en",
       src: "../subtitles/komi-cant-communicate/komi-cant-communicate-S1E8-English.txt"
+    },
+        {
+      label: "Arabic",
+      lang: "ar",
+      src: "../subtitles/komi-cant-communicate/komi-cant-communicate-S1E8-Arabic.txt"
     }
   ],
   "komi-cant-communicate-S1E9-subs": [
@@ -1386,6 +1426,11 @@ window.videoData = {
       label: "English",
       lang: "en",
       src: "../subtitles/komi-cant-communicate/komi-cant-communicate-S1E9-English.txt"
+    },
+        {
+      label: "Arabic",
+      lang: "ar",
+      src: "../subtitles/komi-cant-communicate/komi-cant-communicate-S1E9-Arabic.txt"
     }
   ],
   "komi-cant-communicate-S1E10-subs": [
@@ -1393,6 +1438,11 @@ window.videoData = {
       label: "English",
       lang: "en",
       src: "../subtitles/komi-cant-communicate/komi-cant-communicate-S1E10-English.txt"
+    },
+        {
+      label: "Arabic",
+      lang: "ar",
+      src: "../subtitles/komi-cant-communicate/komi-cant-communicate-S1E10-Arabic.txt"
     }
   ],
   "komi-cant-communicate-S1E11-subs": [
@@ -1400,6 +1450,11 @@ window.videoData = {
       label: "English",
       lang: "en",
       src: "../subtitles/komi-cant-communicate/komi-cant-communicate-S1E11-English.txt"
+    },
+        {
+      label: "Arabic",
+      lang: "ar",
+      src: "../subtitles/komi-cant-communicate/komi-cant-communicate-S1E11-Arabic.txt"
     }
   ],
   "komi-cant-communicate-S1E12-subs": [
@@ -1407,6 +1462,11 @@ window.videoData = {
       label: "English",
       lang: "en",
       src: "../subtitles/komi-cant-communicate/komi-cant-communicate-S1E12-English.txt"
+    },
+        {
+      label: "Arabic",
+      lang: "ar",
+      src: "../subtitles/komi-cant-communicate/komi-cant-communicate-S1E12-Arabic.txt"
     }
   ]
 };
