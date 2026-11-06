@@ -288,5 +288,13 @@ const seriesData = {
     seasons: [
       { number: 1, prefix: "Young-Sheldon-S1E", totalEpisodes: 22 }
     ]
+  },
+  "komi-cant-communicate": {
+    title: "Komi Cant Communicate",
+    desc: "At a high school full of unique characters, Tadano helps his shy and unsociable classmate Komi reach her goal of making friends with 100 people.",
+    video: "",
+    seasons: [
+      { number: 1, prefix: "komi-cant-communicate-S1E", totalEpisodes: 12 }
+    ]
   }
 };
