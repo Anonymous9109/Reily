@@ -630,6 +630,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   /********** 5) IndexedDB Subtitles & Appearance Logic **********/
   async function getSubSettings() {
     return new Promise((resolve) => {
+      const localSize = localStorage.getItem("subtitle_size");
+      const defaultMult = localSize === "small" ? 0.8 : (localSize === "large" ? 1.3 : 1.0);
+
       const request = indexedDB.open('SubtitleDB', 1);
       request.onupgradeneeded = (e) => {
           const db = e.target.result;
@@ -641,20 +644,20 @@ document.addEventListener("DOMContentLoaded", async () => {
           const tx = db.transaction('Settings', 'readonly');
           const store = tx.objectStore('Settings');
           const getReq = store.get('prefs');
-          getReq.onsuccess = () => resolve(getReq.result || null);
-          getReq.onerror = () => resolve(null);
-        } catch(err) { resolve(null); }
+          getReq.onsuccess = () => resolve(getReq.result || { fontMultiplier: defaultMult });
+          getReq.onerror = () => resolve({ fontMultiplier: defaultMult });
+        } catch(err) { resolve({ fontMultiplier: defaultMult }); }
       };
-      request.onerror = () => resolve(null);
+      request.onerror = () => resolve({ fontMultiplier: defaultMult });
     });
   }
 
   async function applySubAppearance(el) {
     const s = await getSubSettings();
-    const multiplier = s ? s.fontMultiplier : 1;
-    const color = s ? s.textColor : "#ffffff";
-    const opacity = s ? s.bgOpacity : 0;
-    const edge = s ? s.edgeStyle : "dropShadow"; 
+    const multiplier = s ? (s.fontMultiplier || 1) : 1;
+    const color = s ? (s.textColor || "#ffffff") : "#ffffff";
+    const opacity = s ? (s.bgOpacity !== undefined ? s.bgOpacity : 0) : 0;
+    const edge = s ? (s.edgeStyle || "dropShadow") : "dropShadow"; 
 
     el.style.fontSize = `calc(${multiplier} * 4.5vmin)`;
     el.style.color = color;
