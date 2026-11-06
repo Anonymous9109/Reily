@@ -697,7 +697,7 @@ const movies = [
   },
   {
     title: "Komi Cant Communicate",
-    genres: ["Anime","School story","Sitcom","School Life","Romance","Slice of Life"],
+    genres: ["Anime","Sitcom","Romance"],
     image: "images/komicantcommunicate.jpg",
     link: "Series/series?series=komi-cant-communicate"
   }
