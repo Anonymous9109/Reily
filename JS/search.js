@@ -700,6 +700,12 @@ const movies = [
     genres: ["Anime","Sitcom","Romance"],
     image: "images/komicantcommunicate.jpg",
     link: "Series/series?series=komi-cant-communicate"
+  },
+  {
+    title: "Attack on Titan",
+    genres: ["Anime","Action"],
+    image: "images/AttackonTitan.jpg",
+    link: "Series/series?series=Attack on Titan"
   }
 ];
 
