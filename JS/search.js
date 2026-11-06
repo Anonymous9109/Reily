@@ -694,6 +694,12 @@ const movies = [
     genres: ["Sitcom"],
     image: "images/YoungSheldon.jpg",
     link: "Series/series?series=Young-Sheldon"
+  },
+  {
+    title: "Komi Cant Communicate",
+    genres: ["Anime","School story","Sitcom","School Life","Romance","Slice of Life"],
+    image: "images/komicantcommunicate.jpg",
+    link: "Series/series?series=komi-cant-communicate"
   }
 ];
 
