@@ -503,24 +503,60 @@
             color: #ffffff;
         }
         
+        /* Prominent & Highly Visible Gear Settings Button */
         .gear-settings-btn {
-            color: #b3b3b3;
-            display: flex;
+            color: #ffffff;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            padding: 4px;
-            border-radius: 50%;
-            transition: color 0.2s, background-color 0.2s;
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            cursor: pointer;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
         }
         
         .gear-settings-btn:hover {
+            background: #e50914;
+            border-color: #e50914;
             color: #ffffff;
-            background-color: #1a1a1a;
+            transform: translateY(-1px);
         }
         
         .gear-settings-btn svg {
-            width: 22px;
-            height: 22px;
+            width: 20px;
+            height: 20px;
+        }
+
+        .subtitle-size-options {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .sub-size-btn {
+            flex: 1;
+            padding: 8px 0;
+            background: #1f1f1f;
+            border: 1px solid #333;
+            border-radius: 6px;
+            color: #b3b3b3;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+
+        .sub-size-btn.active, .sub-size-btn:hover {
+            background: #e50914;
+            color: #ffffff;
+            border-color: #e50914;
         }
 
         #settings-popup-backdrop {
@@ -1120,9 +1156,13 @@
 <div id="settings-popup">
     <div class="popup-title">Account Settings</div>
     
-    <div class="popup-option-row" onclick="handleSubtitlesSettings()">
-        <span>Subtitles Setting</span>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="#808080"><path d="M8.5 9.5h-2v1h2v-1zm4 0h-2v1h2v-1zm7.5-5.5H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V6h16v12z"/></svg>
+    <div style="padding: 10px 0; border-bottom: 1px solid #1f1f1f;">
+        <div style="color: #e5e5e5; font-size: 15px; font-weight: 600; margin-bottom: 6px;">Subtitle Font Size</div>
+        <div class="subtitle-size-options">
+            <button class="sub-size-btn" id="sub-size-small" onclick="updateSubtitleSize('small')">Small</button>
+            <button class="sub-size-btn" id="sub-size-medium" onclick="updateSubtitleSize('medium')">Medium</button>
+            <button class="sub-size-btn" id="sub-size-large" onclick="updateSubtitleSize('large')">Large</button>
+        </div>
     </div>
     
     <div class="popup-option-row logout-row" onclick="logOut()">
@@ -1225,7 +1265,7 @@
         s.settings = vfc || {};
         s.src = "\/\/shameful-farm.com\/b.XBVrs\/dyGnl\/0xYBWscQ\/yeCmN9Bu\/ZnUXljk\/PBTecKx\/Mozrg\/xpNFDREwtcNEz\/EpzmODDLEA0SN\/Qp";
         s.async = true;
-        s.referrerPolicy = 'no-referrer-when-downgrade';
+        s.referrerPolicy = 'no-referrer-wait-downgrade';
         l.parentNode.insertBefore(s, l);
         })({})
         </script>
@@ -1266,6 +1306,7 @@
             <div class="profile-details-container">
                 <button class="gear-settings-btn" onclick="openSettingsPopup()" aria-label="Settings Menu">
                     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c-.5.38 1.03.70 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6-3.6z"/></svg>
+                    <span>Settings</span>
                 </button>
                 <div id="username-display-group" style="display: flex; flex-direction: column; align-items: flex-start;">
                     <p style="margin:0; color: #ffffff; font-size:22px; font-weight: bold;" id="profile-username">Loading Account...</p>
@@ -1866,6 +1907,7 @@
                 await fetchAndRenderFavoritesCloudflare();
                 await fetchUnwantedMoviesCloudflare();
                 await checkNotificationsBadge();
+                await fetchSubtitleSizeFromAccount();
             }
         } catch (err) {
             if (sessionToken) {
@@ -1933,7 +1975,85 @@
         setTimeout(() => { backdrop.style.display = 'none'; popup.style.display = 'none'; }, 250);
     }
 
-    function handleSubtitlesSettings() { showToast("Subtitles setup window active."); }
+    const SUB_SIZE_MAP = {
+        small: 0.8,
+        medium: 1.0,
+        large: 1.3
+    };
+
+    async function saveSubtitleSettingsLocally(sizeName) {
+        const mult = SUB_SIZE_MAP[sizeName] || 1.0;
+        localStorage.setItem("subtitle_size", sizeName);
+
+        return new Promise((resolve) => {
+            const req = indexedDB.open('SubtitleDB', 1);
+            req.onupgradeneeded = (e) => {
+                const db = e.target.result;
+                if (!db.objectStoreNames.contains('Settings')) db.createObjectStore('Settings');
+            };
+            req.onsuccess = (e) => {
+                const db = e.target.result;
+                try {
+                    const tx = db.transaction('Settings', 'readwrite');
+                    const store = tx.objectStore('Settings');
+                    store.put({ fontMultiplier: mult, sizeName: sizeName }, 'prefs');
+                    tx.oncomplete = () => resolve(true);
+                } catch(err) { resolve(false); }
+            };
+            req.onerror = () => resolve(false);
+        });
+    }
+
+    function updateActiveSubSizeButtons(sizeName) {
+        document.querySelectorAll('.sub-size-btn').forEach(btn => btn.classList.remove('active'));
+        const target = document.getElementById(`sub-size-${sizeName}`);
+        if (target) target.classList.add('active');
+    }
+
+    async function updateSubtitleSize(sizeName) {
+        updateActiveSubSizeButtons(sizeName);
+        await saveSubtitleSettingsLocally(sizeName);
+
+        const token = localStorage.getItem("session_token") || localStorage.getItem("token");
+        if (token && !isAppOffline()) {
+            try {
+                await fetch(`${WORKER_URL}/api/save-subtitle-size`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ subtitleSize: sizeName })
+                });
+                showToast("Subtitle preference saved to account!");
+            } catch (err) {
+                console.error("Failed to sync subtitle preference:", err);
+            }
+        }
+    }
+
+    async function fetchSubtitleSizeFromAccount() {
+        const token = localStorage.getItem("session_token") || localStorage.getItem("token");
+        const localSize = localStorage.getItem("subtitle_size") || "medium";
+        updateActiveSubSizeButtons(localSize);
+
+        if (token && !isAppOffline()) {
+            try {
+                const res = await fetch(`${WORKER_URL}/api/get-subtitle-size`, {
+                    headers: { "Authorization": `Bearer ${token}` }
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.subtitleSize) {
+                        updateActiveSubSizeButtons(data.subtitleSize);
+                        await saveSubtitleSettingsLocally(data.subtitleSize);
+                    }
+                }
+            } catch (err) {
+                console.error("Error fetching account subtitle size:", err);
+            }
+        }
+    }
 </script>
 
 <script>
