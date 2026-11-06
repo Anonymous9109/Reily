@@ -296,5 +296,13 @@ const seriesData = {
     seasons: [
       { number: 1, prefix: "komi-cant-communicate-S1E", totalEpisodes: 12 }
     ]
+  },
+  "Attack on Titan": {
+    title: "Attack on Titan",
+    desc: "Humankind constructs lofty walls to safeguard itself from immense creatures, the Titans. It battles to regain its land captured by the Titans which is not easy.",
+    video: "",
+    seasons: [
+      { number: 1, prefix: "Attack on Titan-S1E", totalEpisodes: 25 }
+    ]
   }
 };
