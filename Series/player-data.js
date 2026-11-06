@@ -1312,5 +1312,17 @@ window.videoData = {
   "Young-Sheldon-S1E19": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Young.Sheldon.S01E19.mkv",
   "Young-Sheldon-S1E20": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Young.Sheldon.S01E20.mkv",
   "Young-Sheldon-S1E21": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Young.Sheldon.S01E21.mkv",
-  "Young-Sheldon-S1E22": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Young.Sheldon.S01E22.mkv"
+  "Young-Sheldon-S1E22": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/Young.Sheldon.S01E22.mkv",
+  "komi-cant-communicate-S1E1": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/1Ep.mp4",
+  "komi-cant-communicate-S1E2": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/2Ep.mp4",
+  "komi-cant-communicate-S1E3": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/3Ep.mp4",
+  "komi-cant-communicate-S1E4": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/4Ep.mp4",
+  "komi-cant-communicate-S1E5": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/5Ep.mp4",
+  "komi-cant-communicate-S1E6": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/6Ep.mp4",
+  "komi-cant-communicate-S1E7": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/7Ep.mp4",
+  "komi-cant-communicate-S1E8": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/8Ep.mp4",
+  "komi-cant-communicate-S1E9": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/9Ep.mp4",
+  "komi-cant-communicate-S1E10": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/10Ep.mp4",
+  "komi-cant-communicate-S1E11": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/11Ep.mp4",
+  "komi-cant-communicate-S1E12": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/12Ep.mp4"
 };
