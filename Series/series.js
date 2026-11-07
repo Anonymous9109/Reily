@@ -304,5 +304,13 @@ const seriesData = {
     seasons: [
       { number: 1, prefix: "Attack on Titan-S1E", totalEpisodes: 25 }
     ]
+  },
+  "The Quintessential Quintuplets": {
+    title: "The Quintessential Quintuplets",
+    desc: "Desperate to pay off his family's debt, Futaro Uesugi quintuples his troubles when he accepts a new job—tutoring a set of quintuplets!",
+    video: "",
+    seasons: [
+      { number: 1, prefix: "The Quintessential Quintuplets-S1E", totalEpisodes: 12 }
+    ]
   }
 };
