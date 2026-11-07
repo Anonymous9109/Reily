@@ -2155,15 +2155,37 @@
                 return;
             }
 
-            favEntries.forEach(([movieIdKey, favData]) => {
+            let renderedCount = 0;
+
+            for (const [movieIdKey, favData] of favEntries) {
                 const titleStr = favData.title || movieIdKey;
                 
-                if (typeof movies === 'undefined') return;
-                const referenceMovie = movies.find(m => m.title.toLowerCase() === titleStr.toLowerCase() || (m.link && m.link.toLowerCase().includes(movieIdKey.toLowerCase())));
-                
-                const displayTitle = referenceMovie ? referenceMovie.title : titleStr;
-                const displayLink = referenceMovie ? referenceMovie.link : `/Series/series.html?series=${movieIdKey}`;
-                const displayImg = referenceMovie ? referenceMovie.image : favData.image;
+                if (typeof movies === 'undefined' || !Array.isArray(movies)) break;
+
+                const referenceMovie = movies.find(m => {
+                    if (!m) return false;
+                    const matchesTitle = m.title && m.title.toLowerCase() === titleStr.toLowerCase();
+                    const matchesLink = m.link && m.link.toLowerCase().includes(movieIdKey.toLowerCase());
+                    return matchesTitle || matchesLink;
+                });
+
+                // Automatically clean up/purge orphaned favorites if removed from the website catalog
+                if (!referenceMovie) {
+                    fetch(`${WORKER_URL}/api/toggle-favorite`, {
+                        method: "POST",
+                        headers: { 
+                            "Content-Type": "application/json",
+                            "Authorization": `Bearer ${sessionToken}` 
+                        },
+                        body: JSON.stringify({ movieId: movieIdKey, movieTitle: titleStr, posterImage: "" })
+                    }).catch(() => {});
+                    continue;
+                }
+
+                renderedCount++;
+                const displayTitle = referenceMovie.title;
+                const displayLink = referenceMovie.link;
+                const displayImg = referenceMovie.image || favData.image;
 
                 const cardLink = document.createElement('div');
                 cardLink.className = 'history-card-link';
@@ -2186,7 +2208,11 @@
                     </div>
                 `;
                 favoritesContainer.appendChild(cardLink);
-            });
+            }
+
+            if (renderedCount === 0) {
+                favoritesContainer.innerHTML = `<p style="color: gray; font-size: 14px; padding: 5px; grid-column: span 3;">No favorites saved yet.</p>`;
+            }
         } catch (err) {
             favoritesContainer.innerHTML = `<p style="color: gray; font-size: 14px; padding: 5px; grid-column: span 3;">Unable to load favorites.</p>`;
         }
