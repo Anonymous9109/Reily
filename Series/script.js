@@ -1181,6 +1181,11 @@ function closeUserProfileModal() {
 // ==========================================================================
 
 async function checkFavoriteStatusAndCount(movieId, btnElement) {
+  if (typeof seriesData !== 'undefined' && seriesData && !seriesData[movieId]) {
+    btnElement.style.display = "none";
+    return;
+  }
+
   const token = localStorage.getItem("session_token");
 
   try {
@@ -1206,8 +1211,13 @@ async function checkFavoriteStatusAndCount(movieId, btnElement) {
     const favorites = data.favorites || {};
 
     if (favorites[movieId]) {
-      btnElement.classList.add("favorited");
-      btnElement.querySelector("svg").setAttribute("fill", "currentColor");
+      if (typeof seriesData === 'undefined' || !seriesData || seriesData[movieId]) {
+        btnElement.classList.add("favorited");
+        btnElement.querySelector("svg").setAttribute("fill", "currentColor");
+      } else {
+        // Auto-purge orphaned favorite if item no longer exists on website
+        toggleFavoriteItem(movieId, "", "", btnElement);
+      }
     }
   } catch (err) {
     console.error("Error checking favorite status:", err);
