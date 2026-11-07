@@ -700,6 +700,12 @@ const movies = [
     genres: ["Anime","Action"],
     image: "images/AttackonTitan.jpg",
     link: "Series/series?series=Attack on Titan"
+  },
+  {
+    title: "The Quintessential Quintuplets",
+    genres: ["Romance","Harem","Slice-of-Life"],
+    image: "images/TheQuintessentialQuintuplets.jpg",
+    link: "Series/series?series=The Quintessential Quintuplets"
   }
 ];
 
