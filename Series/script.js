@@ -1399,7 +1399,7 @@ function injectAdScript() {
   script.id = "reynScriptTag";
   script.async = true;
   script.referrerPolicy = "no-referrer-when-downgrade";
-  script.src = "//shameful-farm.com/bVX/V-s.dvGJl_0FYyW/cL/CermS9iuhZLUYlfk/PiThc/xuMrzLgRx/NGD-EjtTNLzcE/zEOYDhEQ0/NeQE";
+  script.src = "";
 
   adZone.appendChild(script);
 }
