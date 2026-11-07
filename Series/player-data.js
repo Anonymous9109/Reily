@@ -1493,5 +1493,180 @@ window.videoData = {
   "Attack on Titan-S1E22": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/22Ep.mp4",
   "Attack on Titan-S1E23": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/23Ep.mp4",
   "Attack on Titan-S1E24": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/24Ep.mp4",
-  "Attack on Titan-S1E25": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/25Ep.mp4"
+  "Attack on Titan-S1E25": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/25Ep.mp4",
+  "Attack on Titan-S1E1-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/Attack on Titan/Attack on Titan-S1E1-English.txt"
+    }
+  ],
+  "Attack on Titan-S1E2-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/Attack on Titan/Attack on Titan-S1E2-English.txt"
+    }
+  ],
+  "Attack on Titan-S1E3-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/Attack on Titan/Attack on Titan-S1E3-English.txt"
+    }
+  ],
+  "Attack on Titan-S1E4-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/Attack on Titan/Attack on Titan-S1E4-English.txt"
+    }
+  ],
+  "Attack on Titan-S1E5-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/Attack on Titan/Attack on Titan-S1E5-English.txt"
+    }
+  ],
+  "Attack on Titan-S1E6-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/Attack on Titan/Attack on Titan-S1E6-English.txt"
+    }
+  ],
+  "Attack on Titan-S1E7-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/Attack on Titan/Attack on Titan-S1E7-English.txt"
+    }
+  ],
+  "Attack on Titan-S1E8-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/Attack on Titan/Attack on Titan-S1E8-English.txt"
+    }
+  ],
+  "Attack on Titan-S1E9-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/Attack on Titan/Attack on Titan-S1E9-English.txt"
+    }
+  ],
+  "Attack on Titan-S1E10-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/Attack on Titan/Attack on Titan-S1E10-English.txt"
+    }
+  ],
+  "Attack on Titan-S1E11-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/Attack on Titan/Attack on Titan-S1E11-English.txt"
+    }
+  ],
+  "Attack on Titan-S1E12-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/Attack on Titan/Attack on Titan-S1E12-English.txt"
+    }
+  ],
+  "Attack on Titan-S1E13-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/Attack on Titan/Attack on Titan-S1E13-English.txt"
+    }
+  ],
+  "Attack on Titan-S1E14-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/Attack on Titan/Attack on Titan-S1E14-English.txt"
+    }
+  ],
+  "Attack on Titan-S1E15-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/Attack on Titan/Attack on Titan-S1E15-English.txt"
+    }
+  ],
+  "Attack on Titan-S1E16-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/Attack on Titan/Attack on Titan-S1E16-English.txt"
+    }
+  ],
+  "Attack on Titan-S1E17-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/Attack on Titan/Attack on Titan-S1E17-English.txt"
+    }
+  ],
+  "Attack on Titan-S1E18-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/Attack on Titan/Attack on Titan-S1E18-English.txt"
+    }
+  ],
+  "Attack on Titan-S1E19-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/Attack on Titan/Attack on Titan-S1E19-English.txt"
+    }
+  ],
+  "Attack on Titan-S1E20-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/Attack on Titan/Attack on Titan-S1E20-English.txt"
+    }
+  ],
+  "Attack on Titan-S1E21-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/Attack on Titan/Attack on Titan-S1E21-English.txt"
+    }
+  ],
+  "Attack on Titan-S1E22-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/Attack on Titan/Attack on Titan-S1E22-English.txt"
+    }
+  ],
+  "Attack on Titan-S1E23-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/Attack on Titan/Attack on Titan-S1E23-English.txt"
+    }
+  ],
+  "Attack on Titan-S1E24-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/Attack on Titan/Attack on Titan-S1E24-English.txt"
+    }
+  ],
+  "Attack on Titan-S1E25-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/Attack on Titan/Attack on Titan-S1E25-English.txt"
+    }
+  ]
 };
