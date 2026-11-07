@@ -1680,5 +1680,89 @@ window.videoData = {
   "The Quintessential Quintuplets-S1E9": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/The Quintessential Quintuplets-S1E9-9Ep.mp4",
   "The Quintessential Quintuplets-S1E10": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/The Quintessential Quintuplets-S1E10-10Ep.mp4",
   "The Quintessential Quintuplets-S1E11": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/The Quintessential Quintuplets-S1E11-11Ep.mp4",
-  "The Quintessential Quintuplets-S1E12": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/The Quintessential Quintuplets-S1E12-12Ep.mp4"
+  "The Quintessential Quintuplets-S1E12": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/The Quintessential Quintuplets-S1E12-12Ep.mp4",
+  "The Quintessential Quintuplets-S1E1-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/The Quintessential Quintuplets/The Quintessential Quintuplets-S1E1-English.txt"
+    }
+  ],
+  "The Quintessential Quintuplets-S1E2-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/The Quintessential Quintuplets/The Quintessential Quintuplets-S1E2-English.txt"
+    }
+  ],
+  "The Quintessential Quintuplets-S1E3-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/The Quintessential Quintuplets/The Quintessential Quintuplets-S1E3-English.txt"
+    }
+  ],
+  "The Quintessential Quintuplets-S1E4-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/The Quintessential Quintuplets/The Quintessential Quintuplets-S1E4-English.txt"
+    }
+  ],
+  "The Quintessential Quintuplets-S1E5-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/The Quintessential Quintuplets/The Quintessential Quintuplets-S1E5-English.txt"
+    }
+  ],
+  "The Quintessential Quintuplets-S1E6-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/The Quintessential Quintuplets/The Quintessential Quintuplets-S1E6-English.txt"
+    }
+  ],
+  "The Quintessential Quintuplets-S1E7-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/The Quintessential Quintuplets/The Quintessential Quintuplets-S1E7-English.txt"
+    }
+  ],
+  "The Quintessential Quintuplets-S1E8-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/The Quintessential Quintuplets/The Quintessential Quintuplets-S1E8-English.txt"
+    }
+  ],
+  "The Quintessential Quintuplets-S1E9-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/The Quintessential Quintuplets/The Quintessential Quintuplets-S1E9-English.txt"
+    }
+  ],
+  "The Quintessential Quintuplets-S1E10-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/The Quintessential Quintuplets/The Quintessential Quintuplets-S1E10-English.txt"
+    }
+  ],
+  "The Quintessential Quintuplets-S1E11-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/The Quintessential Quintuplets/The Quintessential Quintuplets-S1E11-English.txt"
+    }
+  ],
+  "The Quintessential Quintuplets-S1E12-subs": [
+    {
+      label: "English",
+      lang: "en",
+      src: "../subtitles/The Quintessential Quintuplets/The Quintessential Quintuplets-S1E12-English.txt"
+    }
+  ]
 };
