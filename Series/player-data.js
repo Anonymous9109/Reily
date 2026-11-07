@@ -1668,5 +1668,17 @@ window.videoData = {
       lang: "en",
       src: "../subtitles/Attack on Titan/Attack on Titan-S1E25-English.txt"
     }
-  ]
+  ],
+  "The Quintessential Quintuplets-S1E1": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/The Quintessential Quintuplets-S1E1-1Ep.mp4",
+  "The Quintessential Quintuplets-S1E2": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/The Quintessential Quintuplets-S1E2-2Ep.mp4",
+  "The Quintessential Quintuplets-S1E3": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/The Quintessential Quintuplets-S1E3-3Ep.mp4",
+  "The Quintessential Quintuplets-S1E4": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/The Quintessential Quintuplets-S1E4-4Ep.mp4",
+  "The Quintessential Quintuplets-S1E5": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/The Quintessential Quintuplets-S1E5-5Ep.mp4",
+  "The Quintessential Quintuplets-S1E6": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/The Quintessential Quintuplets-S1E6-6Ep.mp4",
+  "The Quintessential Quintuplets-S1E7": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/The Quintessential Quintuplets-S1E7-7Ep.mp4",
+  "The Quintessential Quintuplets-S1E8": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/The Quintessential Quintuplets-S1E8-8Ep.mp4",
+  "The Quintessential Quintuplets-S1E9": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/The Quintessential Quintuplets-S1E9-9Ep.mp4",
+  "The Quintessential Quintuplets-S1E10": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/The Quintessential Quintuplets-S1E10-10Ep.mp4",
+  "The Quintessential Quintuplets-S1E11": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/The Quintessential Quintuplets-S1E11-11Ep.mp4",
+  "The Quintessential Quintuplets-S1E12": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Series/The Quintessential Quintuplets-S1E12-12Ep.mp4"
 };
