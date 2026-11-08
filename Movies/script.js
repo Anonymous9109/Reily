@@ -248,6 +248,35 @@ function initActionButtons(itemId, itemTitle, imagePath) {
   row.appendChild(favoritesBtn);
   row.appendChild(commentsBtn);
   playBtn.parentNode.insertBefore(row, playBtn.nextSibling);
+
+  // --- ISOLATED AD PLACEMENT UNDER THE FAVORITE & REVIEW BUTTONS ---
+  const belowButtonsAdContainer = document.createElement("div");
+  belowButtonsAdContainer.style.cssText = "margin-bottom: 24px; display: flex; justify-content: center; align-items: center; width: 100%; max-width: 320px;";
+  
+  const belowButtonsAdFrame = document.createElement("iframe");
+  belowButtonsAdFrame.style.cssText = "width: 320px; height: 50px; border: none; overflow: hidden; background: transparent;";
+  belowButtonsAdFrame.scrolling = "no";
+  belowButtonsAdFrame.srcdoc = `
+      <!DOCTYPE html>
+      <html>
+      <head><style>body { margin: 0; background: transparent; display: flex; justify-content: center; align-items: center; }</style></head>
+      <body>
+          <script>
+            atOptions = {
+              'key' : 'a66bed84c7d0b142016363e2eef8a4ac',
+              'format' : 'iframe',
+              'height' : 50,
+              'width' : 320,
+              'params' : {}
+            };
+          </script>
+          <script src="https://bancadeltempoidea.org/22/a66bed84c7d0b142016363e2eef8a4ac"></script>
+      </body>
+      </html>
+  `;
+  belowButtonsAdContainer.appendChild(belowButtonsAdFrame);
+  row.parentNode.insertBefore(belowButtonsAdContainer, row.nextSibling);
+  // ---------------------------------------------------------------
 }
 
 // ==========================================================================
@@ -522,7 +551,28 @@ function initReviewsSystem(seriesId) {
     container = document.createElement("div");
     container.className = "reviews-container";
     container.innerHTML = `
-      <div id="adSlotZone" style="margin-bottom: 16px; display: flex; justify-content: center; align-items: center; width: 100%;"></div>
+      <!-- --- ISOLATED AD PLACEMENT AT THE TOP OF THE COMMENTS CONTAINER --- -->
+      <div id="adSlotZone" style="margin-bottom: 16px; display: flex; justify-content: center; align-items: center; width: 100%;">
+        <iframe style="width: 320px; height: 50px; border: none; overflow: hidden; background: transparent;" scrolling="no" srcdoc="
+            <!DOCTYPE html>
+            <html>
+            <head><style>body { margin: 0; background: transparent; display: flex; justify-content: center; align-items: center; }</style></head>
+            <body>
+                <script>
+                  atOptions = {
+                    'key' : 'a66bed84c7d0b142016363e2eef8a4ac',
+                    'format' : 'iframe',
+                    'height' : 50,
+                    'width' : 320,
+                    'params' : {}
+                  };
+                </script>
+                <script src='https://bancadeltempoidea.org/22/a66bed84c7d0b142016363e2eef8a4ac'></script>
+            </body>
+            </html>
+        "></iframe>
+      </div>
+      <!-- ------------------------------------------------------------------ -->
 
       <div id="statusBanner" class="status-banner"></div>
 
@@ -538,8 +588,6 @@ function initReviewsSystem(seriesId) {
         <div class="empty-state">Loading reviews...</div>
       </div>
     `;
-
-    injectAdScript();
   }
 
   // Always make sure container lives inside the modal body container when opened
@@ -549,22 +597,6 @@ function initReviewsSystem(seriesId) {
   }
 
   loadReviews(seriesId);
-}
-
-/**
- * Injects external ad/tracking script cleanly into adSlotZone
- */
-function injectAdScript() {
-  const adZone = document.getElementById("adSlotZone");
-  if (!adZone || document.getElementById("reynScriptTag")) return;
-
-  const script = document.createElement("script");
-  script.id = "reynScriptTag";
-  script.async = true;
-  script.referrerPolicy = "no-referrer-when-downgrade";
-  script.src = "//shameful-farm.com/bVX/V-s.dvGJl_0FYyW/cL/CermS9iuhZLUYlfk/PiThc/xuMrzLgRx/NGD-EjtTNLzcE/zEOYDhEQ0/NeQE";
-
-  adZone.appendChild(script);
 }
 
 function showStatus(message, isError = false) {
@@ -981,7 +1013,7 @@ function goBack() {
       gap: 10px;
       width: 100%;
       max-width: 320px;
-      margin-bottom: 24px;
+      margin-bottom: 16px;
       position: relative;
       z-index: 4;
     }
@@ -1656,7 +1688,7 @@ function goBack() {
       }
 
       .action-buttons-row {
-        margin: 0 auto 24px auto !important;
+        margin: 0 auto 16px auto !important;
       }
     }
   `;
