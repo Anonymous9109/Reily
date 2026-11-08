@@ -660,7 +660,7 @@ const movies = [
   },
   {
     title: "The Quintessential Quintuplets",
-    genres: ["Romance","Harem","Slice-of-Life"],
+    genres: ["Romance","Harem","Slice-of-Life","Anime"],
     image: "images/TheQuintessentialQuintuplets.jpg",
     link: "Series/series?series=The Quintessential Quintuplets"
   }
