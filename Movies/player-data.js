@@ -352,6 +352,7 @@ window.videoData = {
         lang: "ar",
         src: "../subtitles/DoYouKnowMe/DoYouKnowMe-arabic.txt"
       }
-    ]
+    ],
+  "The Longest Ride": "https://pub-b29f478625e4425287b674aad515a2ee.r2.dev/Movies/The-Longest-Ride.mp4"
 };
 
