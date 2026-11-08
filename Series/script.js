@@ -1042,23 +1042,30 @@ async function init() {
                 episodeContainer.appendChild(dropdownWrapper);
             }
 
-            // --- AD PLACEMENT UNDER EPISODES CONTAINER ---
-            const adContainerDiv = document.createElement("div");
-            adContainerDiv.style.cssText = "width: 100%; max-width: 320px; display: flex; justify-content: center; margin-top: 16px;";
-            adContainerDiv.innerHTML = `
-                <script>
-                  atOptions = {
-                    'key' : 'a66bed84c7d0b142016363e2eef8a4ac',
-                    'format' : 'iframe',
-                    'height' : 50,
-                    'width' : 320,
-                    'params' : {}
-                  };
-                </script>
-                <script src="https://bancadeltempoidea.org/22/a66bed84c7d0b142016363e2eef8a4ac"></script>
+            // --- FIXED AD PLACEMENT (Via Isolated Iframe Isolation) ---
+            const adFrame = document.createElement("iframe");
+            adFrame.style.cssText = "width: 320px; height: 50px; border: none; overflow: hidden; margin-top: 16px; background: transparent;";
+            adFrame.scrolling = "no";
+            adFrame.srcdoc = `
+                <!DOCTYPE html>
+                <html>
+                <head><style>body { margin: 0; background: transparent; display: flex; justify-content: center; align-items: center; }</style></head>
+                <body>
+                    <script>
+                      atOptions = {
+                        'key' : 'a66bed84c7d0b142016363e2eef8a4ac',
+                        'format' : 'iframe',
+                        'height' : 50,
+                        'width' : 320,
+                        'params' : {}
+                      };
+                    </script>
+                    <script src="https://bancadeltempoidea.org/22/a66bed84c7d0b142016363e2eef8a4ac"></script>
+                </body>
+                </html>
             `;
-            episodeContainer.appendChild(adContainerDiv);
-            // ----------------------------------------------
+            episodeContainer.appendChild(adFrame);
+            // ----------------------------------------------------------
         }
 
         if (seasonNav) {
@@ -1389,20 +1396,28 @@ function initReviewsSystem(seriesId) {
         <h2>Comments</h2>
       </div>
 
-      <!-- --- AD PLACEMENT INSIDE THE COMMENT SECTION --- -->
+      <!-- --- FIXED AD PLACEMENT INSIDE THE COMMENT SECTION (Via Isolated Iframe) --- -->
       <div id="adSlotZone" style="margin-bottom: 16px; display: flex; justify-content: center; align-items: center; width: 100%;">
-        <script>
-          atOptions = {
-            'key' : 'a66bed84c7d0b142016363e2eef8a4ac',
-            'format' : 'iframe',
-            'height' : 50,
-            'width' : 320,
-            'params' : {}
-          };
-        </script>
-        <script src="https://bancadeltempoidea.org/22/a66bed84c7d0b142016363e2eef8a4ac"></script>
+        <iframe style="width: 320px; height: 50px; border: none; overflow: hidden; background: transparent;" scrolling="no" srcdoc="
+            <!DOCTYPE html>
+            <html>
+            <head><style>body { margin: 0; background: transparent; display: flex; justify-content: center; align-items: center; }</style></head>
+            <body>
+                <script>
+                  atOptions = {
+                    'key' : 'a66bed84c7d0b142016363e2eef8a4ac',
+                    'format' : 'iframe',
+                    'height' : 50,
+                    'width' : 320,
+                    'params' : {}
+                  };
+                </script>
+                <script src='https://bancadeltempoidea.org/22/a66bed84c7d0b142016363e2eef8a4ac'></script>
+            </body>
+            </html>
+        "></iframe>
       </div>
-      <!-- ----------------------------------------------- -->
+      <!-- ---------------------------------------------------------------------- -->
 
       <div id="statusBanner" class="status-banner"></div>
 
