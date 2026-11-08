@@ -624,12 +624,6 @@ const movies = [
     image: "images/2BrokeGirls.jpg",
     link: "Series/series?series=2BrokeGirls"
   },
-  {
-    title: "Tulsa King",
-    genres: ["Drama"],
-    image: "images/TulsaKing.jpg",
-    link: "Series/series?series=TulsaKing"
-  },
   
   
   {
