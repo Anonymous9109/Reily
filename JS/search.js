@@ -617,18 +617,7 @@ const movies = [
   },
   
   
-  {
-    title: "Better Call Saul",
-    genres: ["Drama"],
-    image: "images/BetterCallSaul.jpg",
-    link: "Series/series?series=BetterCallSaul"
-  },
-  {
-    title: "VisionQuest",
-    genres: ["Drama"],
-    image: "images/VisionQuest.jpg",
-    link: "Series/series?series=VisionQuest"
-  },
+  
   {
     title: "2 Broke Girls",
     genres: ["Sitcom"],
@@ -641,18 +630,7 @@ const movies = [
     image: "images/TulsaKing.jpg",
     link: "Series/series?series=TulsaKing"
   },
-  {
-    title: "Suits",
-    genres: ["Drama"],
-    image: "images/Suits.jpg",
-    link: "Series/series?series=Suits"
-  },
-  {
-    title: "House of Cards",
-    genres: ["Thriller"],
-    image: "images/HouseofCards.jpg",
-    link: "Series/series?series=HouseofCards"
-  },
+  
   {
     title: "Margos Got Money Troubles",
     genres: ["Comedy","Drama"],
@@ -665,12 +643,7 @@ const movies = [
     image: "images/AdventureTimeFionnaCake.jpg",
     link: "Series/series?series=AdventureTimeFionnaCake"
   },
-  {
-    title: "Breaking Bad",
-    genres: ["Drama"],
-    image: "images/BreakingBad.jpg",
-    link: "Series/series?series=BreakingBad"
-  },
+  
   {
     title: "Regular Show",
     genres: ["Sitcom","Cartoon","Animation"],
@@ -683,18 +656,7 @@ const movies = [
     image: "images/TheDetour.jpg",
     link: "Series/series?series=TheDetour"
   },
-  {
-    title: "Lucifer",
-    genres: ["Drama"],
-    image: "images/LUCIFER1.jpg",
-    link: "Series/series?series=Lucifer"
-  },
-  {
-    title: "Young Sheldon",
-    genres: ["Sitcom"],
-    image: "images/YoungSheldon.jpg",
-    link: "Series/series?series=Young-Sheldon"
-  },
+ 
   {
     title: "Attack on Titan",
     genres: ["Anime","Action"],
