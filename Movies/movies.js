@@ -694,6 +694,12 @@ const movies = {
     desc: "The rambunctious, ridiculous and totally true story of how the Minions conquered Hollywood, became movie stars, lost everything, unleashed monsters upon the world, then banded together to try and save the planet from the mayhem they created.",
     video: "",
     play: "MinionsMonsters"
+  },
+  "the-longest-ride": {
+    title: "The Longest Ride",
+    desc: "The spark between Luke and Sophia fades away owing to their conflicting career paths. Subsequently, an older man, Ira, tries to show them the rewards of resolving relationship barriers.",
+    video: "",
+    play: "The Longest Ride"
   }
 };
 
