@@ -1041,6 +1041,24 @@ async function init() {
                 dropdownWrapper.appendChild(listInner);
                 episodeContainer.appendChild(dropdownWrapper);
             }
+
+            // --- AD PLACEMENT UNDER EPISODES CONTAINER ---
+            const adContainerDiv = document.createElement("div");
+            adContainerDiv.style.cssText = "width: 100%; max-width: 320px; display: flex; justify-content: center; margin-top: 16px;";
+            adContainerDiv.innerHTML = `
+                <script>
+                  atOptions = {
+                    'key' : 'a66bed84c7d0b142016363e2eef8a4ac',
+                    'format' : 'iframe',
+                    'height' : 50,
+                    'width' : 320,
+                    'params' : {}
+                  };
+                </script>
+                <script src="https://bancadeltempoidea.org/22/a66bed84c7d0b142016363e2eef8a4ac"></script>
+            `;
+            episodeContainer.appendChild(adContainerDiv);
+            // ----------------------------------------------
         }
 
         if (seasonNav) {
@@ -1371,7 +1389,20 @@ function initReviewsSystem(seriesId) {
         <h2>Comments</h2>
       </div>
 
-      <div id="adSlotZone" style="margin-bottom: 16px; display: flex; justify-content: center; align-items: center; width: 100%;"></div>
+      <!-- --- AD PLACEMENT INSIDE THE COMMENT SECTION --- -->
+      <div id="adSlotZone" style="margin-bottom: 16px; display: flex; justify-content: center; align-items: center; width: 100%;">
+        <script>
+          atOptions = {
+            'key' : 'a66bed84c7d0b142016363e2eef8a4ac',
+            'format' : 'iframe',
+            'height' : 50,
+            'width' : 320,
+            'params' : {}
+          };
+        </script>
+        <script src="https://bancadeltempoidea.org/22/a66bed84c7d0b142016363e2eef8a4ac"></script>
+      </div>
+      <!-- ----------------------------------------------- -->
 
       <div id="statusBanner" class="status-banner"></div>
 
@@ -1394,24 +1425,9 @@ function initReviewsSystem(seriesId) {
     } else {
         document.body.appendChild(container);
     }
-
-    injectAdScript();
   }
 
   loadReviews(seriesId);
-}
-
-function injectAdScript() {
-  const adZone = document.getElementById("adSlotZone");
-  if (!adZone || document.getElementById("reynScriptTag")) return;
-
-  const script = document.createElement("script");
-  script.id = "reynScriptTag";
-  script.async = true;
-  script.referrerPolicy = "no-referrer-when-downgrade";
-  script.src = "";
-
-  adZone.appendChild(script);
 }
 
 const API_BASE = "https://rinolski.misty-fog-201e.workers.dev";
