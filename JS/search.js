@@ -507,30 +507,15 @@ const movies = [
     image: "images/TheStationAgent.jpg",
     link: "Movies/Movie?movie=the-station-agent"
   },
-  {
-    title: "War Dogs",
-    genres: ["Comedy","Crime"],
-    image: "images/WarDogs.jpg",
-    link: "Movies/Movie?movie=war-dogs"
-  },
+  
   {
     title: "The Shawshank Redemption",
     genres: ["Crime","Drama"],
     image: "images/TheShawshankRedemption.jpg",
     link: "Movies/Movie?movie=the-shawshank-redemption"
   },
-  {
-    title: "The Secret Life of Walter Mitty",
-    genres: ["Adventure","Comedy"],
-    image: "images/a1c0c38081eabbc6cbc01ce823e62081eb934fde7f5fbb5951e44b3df881390d.jpg",
-    link: "Movies/Movie?movie=the-secret-life-of-walter-mitty"
-  },
-  {
-    title: "I Saw the TV Glow",
-    genres: ["Horror","Drama"],
-    image: "images/ISawtheTVGlow.jpg",
-    link: "Movies/Movie?movie=i-saw-the-tv-glow"
-  },
+  
+  
   {
     title: "Seven Pounds",
     genres: ["Thriller","Drama"],
@@ -584,80 +569,13 @@ const movies = [
     genres: ["Comedy","Drama"],
     image: "images/NightSchool.jpg",
     link: "Movies/Movie?movie=night-school"
-  },
-  {
-    title: "Little Women",
-    genres: ["Romance","Drama"],
-    image: "images/LittleWomen.jpg",
-    link: "Movies/Movie?movie=little-women"
-  },
-  {
-    title: "The Sheep Detectives",
-    genres: ["Comedy","Mystery"],
-    image: "images/thesheepdetectives.jpg",
-    link: "Movies/Movie?movie=the-sheep-detectives"
-  },
-  {
-    title: "Spider-Man.Across.The.Spider-Verse",
-    genres: ["Action","Sci-Fi"],
-    image: "images/Spider-Man.Across.The.Spider-Verse.jpg",
-    link: "Movies/Movie?movie=spider-manacrossthespider-verse"
-  },
-  {
-    title: "Obsession",
-    genres: ["Horror"],
-    image: "images/Obsession.jpg",
-    link: "Movies/Movie?movie=obsession"
-  },
-  {
-    title: "Minions & Monsters",
-    genres: ["Comedy","Adventure"],
-    image: "images/MinionsMonsters.jpg",
-    link: "Movies/Movie?movie=minions-monsters"
-  },
+  }
+  
+    
   
   
   
-  {
-    title: "2 Broke Girls",
-    genres: ["Sitcom"],
-    image: "images/2BrokeGirls.jpg",
-    link: "Series/series?series=2BrokeGirls"
-  },
   
-  
-  {
-    title: "Adventure Time Fionna and Cake",
-    genres: ["Action","Cartoon","Animation"],
-    image: "images/AdventureTimeFionnaCake.jpg",
-    link: "Series/series?series=AdventureTimeFionnaCake"
-  },
-  
-  {
-    title: "Regular Show",
-    genres: ["Sitcom","Cartoon","Animation"],
-    image: "images/RegularShow.jpg",
-    link: "Series/series?series=RegularShow"
-  },
-  {
-    title: "The Detour",
-    genres: ["Sitcom","Comedy"],
-    image: "images/TheDetour.jpg",
-    link: "Series/series?series=TheDetour"
-  },
- 
-  {
-    title: "Attack on Titan",
-    genres: ["Anime","Action"],
-    image: "images/AttackonTitan.jpg",
-    link: "Series/series?series=Attack on Titan"
-  },
-  {
-    title: "The Quintessential Quintuplets",
-    genres: ["Romance","Harem","Slice-of-Life","Anime"],
-    image: "images/TheQuintessentialQuintuplets.jpg",
-    link: "Series/series?series=The Quintessential Quintuplets"
-  },
   {
     title: "The Longest Ride",
     genres: ["Drama","Romance"],
